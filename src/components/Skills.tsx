@@ -449,7 +449,7 @@ export function Skills() {
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-xl !bg-transparent border border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all shadow-2xs">
+                        <li key={idx} className="p-2 rounded-[10px] !bg-transparent border border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all shadow-2xs">
                           <div className="flex items-center justify-between text-xs">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -543,7 +543,7 @@ export function Skills() {
                     ].map((opp, idx) => {
                       const IconComp = opp.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-xl skills-glass-card border-purple-200/60 dark:border-purple-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
+                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
                           <div className="w-full flex flex-col items-center">
                             <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 mb-1 shrink-0" />
                             <h4 className="text-[11px] font-bold text-purple-700 dark:text-purple-400 leading-tight">
@@ -737,7 +737,7 @@ export function Skills() {
                     ].map((threat, idx) => {
                       const IconComp = threat.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-xl skills-glass-card border-rose-200/60 dark:border-rose-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
+                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
                           <div className="w-full flex flex-col items-center">
                             <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 mb-1 shrink-0" />
                             <h4 className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">
@@ -907,7 +907,7 @@ export function Skills() {
                     <div>
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                        <h4 className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
+                        <h4 className="font-bold text-xs text-emerald-600 dark:text-emerald-400 leading-tight">
                           Ứng dụng AI đa ngôn ngữ
                         </h4>
                       </div>
