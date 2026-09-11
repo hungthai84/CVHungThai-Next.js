@@ -1,0 +1,1003 @@
+[
+  {
+    "id": "faq-1",
+    "category": "PROFILE",
+    "question": "Chào anh Nguyễn Hùng Thái, anh có thể giới thiệu ngắn gọn về bản thân cũng như hành trình 22 năm trong lĩnh vực chăm sóc khách hàng của mình không?",
+    "alternative_questions": [
+      "Anh Nguyễn Hùng Thái là ai?",
+      "Giới thiệu về anh Nguyễn Hùng Thái",
+      "Hành trình 22 năm kinh nghiệm của anh Thái",
+      "Anh có thể giới thiệu ngắn gọn về bản thân không?"
+    ],
+    "answer": "Trí Nhân xin trân trọng giới thiệu: Anh Nguyễn Hùng Thái (sinh năm 1984) là một chuyên gia thực chiến dày dặn với hơn 22 năm kinh nghiệm trong ngành Dịch vụ và Trải nghiệm Khách hàng (CX/CS). Khởi đầu hành trình từ năm 2002 khi ngành CSKH tại Việt Nam còn rất sơ khai, anh Thái đã nỗ lực đi lên từ vị trí nhân viên tổng đài thế hệ đầu tiên đến các vị trí quản lý, Trưởng phòng CSKH tại các tập đoàn công nghệ và tài chính hàng đầu như MoMo, Prudential, Garena và V247 Telecom.",
+    "keywords": [
+      "giới thiệu",
+      "nguyễn hùng thái",
+      "là ai",
+      "22 năm",
+      "hành trình",
+      "bản thân"
+    ],
+    "priority": 100,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-2",
+    "category": "PROFILE",
+    "question": "Điều gì khiến anh gắn bó lâu dài với lĩnh vực chăm sóc khách hàng đến vậy?",
+    "alternative_questions": [
+      "Tại sao anh gắn bó với nghề CSKH?",
+      "Động lực gắn bó lâu dài với chăm sóc khách hàng",
+      "Lý do yêu nghề CSKH của anh Thái"
+    ],
+    "answer": "Theo chia sẻ từ anh Nguyễn Hùng Thái, niềm đam mê và động lực lớn nhất để anh gắn bó hơn hai thập kỷ với nghề chính là sự trân quý từng lời cảm ơn chân thành từ người dùng. Đối với anh Thái, mỗi cuộc gọi hay khiếu nại khó khăn đều là cơ hội quý báu để thấu hiểu người dùng sâu sắc hơn, hoàn thiện quy trình hệ thống và kiến tạo những trải nghiệm chạm đến cảm xúc khách hàng.",
+    "keywords": [
+      "gắn bó",
+      "lâu dài",
+      "đam mê",
+      "lý do",
+      "yêu nghề",
+      "chăm sóc khách hàng"
+    ],
+    "priority": 95,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-3",
+    "category": "PROFILE",
+    "question": "Thành tựu nào anh cảm thấy tự hào nhất trong sự nghiệp của mình?",
+    "alternative_questions": [
+      "Thành tựu tự hào nhất của anh Thái",
+      "Dự án hoặc thành tích lớn nhất",
+      "Điểm nổi bật nhất trong sự nghiệp"
+    ],
+    "answer": "Thành tựu mà anh Thái tự hào nhất không chỉ dừng lại ở việc trực tiếp xử lý các ca khủng hoảng lớn, mà là khả năng thiết lập, chuẩn hóa 100% hệ thống quy trình vận hành SOP tại mọi đơn vị anh từng công tác. Mục tiêu xuyên suốt của anh là xây dựng nền tảng vững chắc và đào tạo, chuyển giao trọn vẹn năng lực để đội ngũ cấp dưới có thể vận hành xuất sắc và tự chủ phát triển.",
+    "keywords": [
+      "thành tựu",
+      "tự hào",
+      "sự nghiệp",
+      "chuẩn hóa",
+      "chuyển giao",
+      "quy trình"
+    ],
+    "priority": 95,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-4",
+    "category": "PROFILE",
+    "question": "Các lĩnh vực ngành nghề anh từng tham gia và trải nghiệm đa dạng như thế nào?",
+    "alternative_questions": [
+      "Anh Thái từng làm trong những ngành nghề nào?",
+      "Kinh nghiệm đa ngành của anh Thái",
+      "5 mô hình vận hành anh từng trải qua"
+    ],
+    "answer": "Kinh nghiệm thực chiến của anh Nguyễn Hùng Thái trải dài qua 5 mô hình kinh doanh - công nghệ khác biệt:\n1. Viễn thông & Tổng đài Quốc tế: Mobifone và V247 Telecom (vận hành 24/7 thị trường Mỹ - Việt Nam).\n2. Trò chơi trực tuyến & Giải trí số: Garena / VED (quản lý đội ngũ 130+ nhân sự).\n3. Thương mại điện tử: Shopee (hỗ trợ đa kênh cho người mua, người bán và kiểm soát đơn hàng).\n4. Bảo hiểm nhân thọ & Tài chính: Prudential Vietnam (bảo mật nghiêm ngặt và quy chuẩn cao cấp).\n5. Tài chính số & Ví điện tử: MoMo và Finviet (dẫn dắt hệ thống đa kênh, kiểm soát gian lận và tối ưu chi phí).",
+    "keywords": [
+      "lĩnh vực",
+      "ngành nghề",
+      "mô hình",
+      "viễn thông",
+      "garena",
+      "shopee",
+      "momo",
+      "prudential"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-5",
+    "category": "PROFILE",
+    "question": "Nếu muốn tìm hiểu thêm về anh (CV/Hồ sơ năng lực), chúng tôi có thể xem ở đâu?",
+    "alternative_questions": [
+      "Xem CV của anh Thái ở đâu?",
+      "Tải hồ sơ năng lực của anh Hùng Thái",
+      "Kênh thông tin và liên hệ của anh Thái"
+    ],
+    "answer": "Bạn có thể tham khảo toàn bộ hồ sơ năng lực chính thức của anh Nguyễn Hùng Thái qua:\n- Website Portfolio: https://nguyenhungthai.powerservice.one/\n- Hồ sơ năng lực PDF & CV: Bạn có thể nhấn nút 'Tải CV' hoặc 'Thư ngỏ' trực tiếp trên trang này.\n- LinkedIn: https://www.linkedin.com/in/hungthai84/\n- Email liên hệ trực tiếp: hungthai84@gmail.com hoặc hotline / Zalo: 0909097882.",
+    "keywords": [
+      "cv",
+      "hồ sơ",
+      "năng lực",
+      "xem ở đâu",
+      "tải cv",
+      "linkedin",
+      "liên hệ"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-6",
+    "category": "STRATEGY",
+    "question": "Anh hãy mô tả một chiến lược chăm sóc khách hàng thành công mà anh từng triển khai (bối cảnh – giải pháp – kết quả)?",
+    "alternative_questions": [
+      "Chiến lược CSKH thành công tại MoMo",
+      "Case study bối cảnh giải pháp kết quả của anh Thái",
+      "Dự án tái cấu trúc CSKH tại MoMo"
+    ],
+    "answer": "Trí Nhân xin chia sẻ dự án tái cấu trúc tiêu biểu của anh Thái tại Ví điện tử MoMo:\n- Bối cảnh: Lượng người dùng tăng trưởng bùng nổ theo cấp số nhân khiến hệ thống tiếp nhận truyền thống quá tải.\n- Giải pháp: Anh Thái trực tiếp thiết kế lại mô hình quản trị đa kênh Omnichannel, thành lập trung tâm hỗ trợ tập trung kết hợp đối tác BPO Mắt Bảo, đồng thời phối hợp phòng Sản phẩm tích hợp cơ chế Self-service trên app.\n- Kết quả: Chuẩn hóa 100% SOP, nâng tỷ lệ giải quyết ổn định lên 80% và giảm thiểu 40% chi phí cho mỗi lượt tương tác (Cost per Contact).",
+    "keywords": [
+      "chiến lược",
+      "thành công",
+      "bối cảnh",
+      "giải pháp",
+      "kết quả",
+      "momo",
+      "tái cấu trúc"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-7",
+    "category": "STRATEGY",
+    "question": "Theo anh, chăm sóc khách hàng đóng vai trò gì trong toàn bộ vòng đời khách hàng?",
+    "alternative_questions": [
+      "Vai trò của CSKH trong vòng đời khách hàng",
+      "Vị trí của chăm sóc khách hàng trong doanh nghiệp",
+      "Customer Lifecycle và CSKH"
+    ],
+    "answer": "Theo quan điểm của anh Thái, CSKH không đơn thuần là nơi 'giải quyết sự cố' sau bán hàng, mà là 'tuyến phòng thủ giá trị' và 'động cơ thúc đẩy lòng trung thành'. Trải nghiệm chăm sóc vượt trội giúp bảo vệ tỷ lệ giữ chân khách hàng (Retention Rate), gia tăng giá trị trọn đời (CLV - Customer Lifetime Value) và biến người dùng hài lòng thành đại sứ thương hiệu tự nhiên.",
+    "keywords": [
+      "vòng đời",
+      "vai trò",
+      "lifecycle",
+      "giữ chân",
+      "retention",
+      "clv"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-8",
+    "category": "STRATEGY",
+    "question": "Nếu được xây lại hệ thống chăm sóc khách hàng từ đầu, anh sẽ bắt đầu từ đâu: con người, quy trình, công nghệ, hay dữ liệu?",
+    "alternative_questions": [
+      "Xây dựng hệ thống CSKH từ đầu bắt đầu từ đâu?",
+      "Thứ tự ưu tiên con người quy trình công nghệ dữ liệu",
+      "Lộ trình thiết lập Contact Center mới"
+    ],
+    "answer": "Anh Nguyễn Hùng Thái áp dụng công thức 4 trụ cột với lộ trình: 'Con người định hình văn hóa - Quy trình tạo khung chuẩn mực - Công nghệ nâng tầm tự động hóa - Dữ liệu tối ưu liên tục'. Anh sẽ bắt đầu song song từ việc xác định chuẩn mực quy trình (SOP) và tuyển chọn đào tạo đội ngũ hạt nhân, sau đó ứng dụng công nghệ CRM/AI để khuếch đại năng suất và dùng dữ liệu để liên tục cải tiến.",
+    "keywords": [
+      "bắt đầu từ đâu",
+      "xây lại",
+      "con người",
+      "quy trình",
+      "công nghệ",
+      "dữ liệu"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-9",
+    "category": "STRATEGY",
+    "question": "Theo anh, yếu tố quan trọng nhất khi xây dựng phòng Chăm Sóc Khách Hàng là gì?",
+    "alternative_questions": [
+      "Yếu tố cốt lõi xây dựng phòng CSKH",
+      "Điều quan trọng nhất trong vận hành dịch vụ",
+      "Trọng tâm xây dựng phòng CSKH"
+    ],
+    "answer": "Anh Thái khẳng định yếu tố quan trọng nhất chính là 'Sự đồng bộ giữa Tư duy Lấy khách hàng làm trọng tâm (Customer-Centric Mindset) và Khả năng Trao quyền (Empowerment) cho nhân viên tuyến đầu'. Một hệ thống chỉ thực sự mạnh mẽ khi mỗi tổng đài viên đều có đủ thẩm quyền, công cụ và sự thấu cảm để giải quyết vấn đề của khách hàng ngay tại điểm chạm đầu tiên.",
+    "keywords": [
+      "yếu tố quan trọng nhất",
+      "xây dựng phòng",
+      "cốt lõi",
+      "trao quyền",
+      "trọng tâm"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-10",
+    "category": "STRATEGY",
+    "question": "Những chỉ số thành công nào (Chỉ số đo lường lòng trung thành, Mức độ hài lòng, Tỷ lệ nỗ lực của khách hàng…) anh đặc biệt quan tâm trong các chiến lược của mình?",
+    "alternative_questions": [
+      "Các chỉ số đo lường CSKH quan trọng",
+      "SLA CSAT FCR CES NPS",
+      "Bộ KPI chiến lược của anh Thái"
+    ],
+    "answer": "Bộ chỉ số trọng yếu mà anh Thái ưu tiên quản trị bao gồm:\n- FCR (First Contact Resolution > 85%): Tỷ lệ giải quyết dứt điểm ngay từ lần đầu.\n- CSAT (Customer Satisfaction > 92%): Mức độ hài lòng sau phục vụ.\n- CES (Customer Effort Score): Giảm thiểu tối đa số bước người dùng phải thực hiện.\n- NPS (Net Promoter Score): Đo lường lòng trung thành thương hiệu.\n- SLA & Abandonment Rate (< 3%): Đảm bảo tốc độ tiếp nhận nhanh chóng.",
+    "keywords": [
+      "chỉ số",
+      "kpi",
+      "csat",
+      "nps",
+      "fcr",
+      "ces",
+      "sla",
+      "đo lường"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-11",
+    "category": "STRATEGY",
+    "question": "Anh hình dung thế nào về một “hệ sinh thái chăm sóc khách hàng lý tưởng” trong 3–5 năm tới?",
+    "alternative_questions": [
+      "Tầm nhìn 3-5 năm ngành CSKH",
+      "Hệ sinh thái chăm sóc khách hàng lý tưởng",
+      "Xu hướng CX tương lai"
+    ],
+    "answer": "Tầm nhìn của anh Thái về hệ sinh thái CSKH tương lai tập trung vào 'Hyper-Personalized & Proactive CX' (Trải nghiệm cá nhân hóa sâu sắc và Chủ động dự báo). Hệ thống AI sẽ tự động phát hiện nguy cơ lỗi hoặc điểm nghẽn trước khi khách hàng nhận ra, tự động đưa ra giải pháp xử lý, biến CSKH từ một trung tâm chi phí thụ động trở thành động lực gia tăng doanh thu và giá trị bền vững.",
+    "keywords": [
+      "hệ sinh thái lý tưởng",
+      "3-5 năm",
+      "tầm nhìn",
+      "tương lai",
+      "cá nhân hóa",
+      "proactive"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-12",
+    "category": "MANAGEMENT",
+    "question": "Anh từng quản lý đội ngũ bao nhiêu nhân sự, với những cấp độ nào?",
+    "alternative_questions": [
+      "Quy mô đội ngũ anh Thái từng quản lý",
+      "Số lượng nhân sự từng phụ trách",
+      "Cơ cấu quản lý nhân sự"
+    ],
+    "answer": "Anh Nguyễn Hùng Thái từng trực tiếp quản lý và vận hành đội ngũ từ quy mô tinh gọn 20 - 30 nhân sự chuyên sâu đến quy mô lớn trên 130 nhân sự tại Garena (VED), cùng hệ thống BPO mở rộng hơn 150+ nhân sự tại các đối tác. Cơ cấu quản lý bao gồm các cấp: Agent -> Senior/SME -> QA/QC Inspector -> Trainer -> Team Leader -> Operations Supervisor/Manager.",
+    "keywords": [
+      "quy mô",
+      "bao nhiêu nhân sự",
+      "quản lý đội ngũ",
+      "130 người",
+      "cấp bậc"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-13",
+    "category": "MANAGEMENT",
+    "question": "Phong cách lãnh đạo của anh trong vai trò trưởng phòng Chăm Sóc Khách Hàng là gì?",
+    "alternative_questions": [
+      "Phong cách lãnh đạo của anh Thái",
+      "Triết lý quản trị con người",
+      "Cách anh dẫn dắt đội ngũ"
+    ],
+    "answer": "Phong cách lãnh đạo đặc trưng của anh Thái là 'Servant Leadership kết hợp Data-Driven Coaching' (Lãnh đạo phục vụ và Cố vấn dựa trên dữ liệu). Anh luôn đồng hành hỗ trợ gỡ khó cho nhân viên, lắng nghe tuyến đầu, đồng thời dùng các số liệu phân tích khách quan để huấn luyện, khích lệ từng cá nhân phát huy tối đa điểm mạnh.",
+    "keywords": [
+      "phong cách lãnh đạo",
+      "servant leadership",
+      "dẫn dắt",
+      "huấn luyện",
+      "triết lý"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-14",
+    "category": "MANAGEMENT",
+    "question": "Khi xây dựng đội nhóm, anh thường ưu tiên điều gì trước: kỹ năng, thái độ hay văn hóa dịch vụ?",
+    "alternative_questions": [
+      "Tuyển dụng ưu tiên kỹ năng hay thái độ?",
+      "Tiêu chí xây dựng đội ngũ của anh Thái",
+      "Thái độ và văn hóa dịch vụ"
+    ],
+    "answer": "Anh Thái luôn đặt 'Thái độ thấu cảm và Tư duy phụng sự' lên hàng đầu, tiếp theo là 'Khả năng thích ứng văn hóa dịch vụ', và cuối cùng là 'Kỹ năng chuyên môn'. Kỹ năng và quy trình hoàn toàn có thể đào tạo bài bản trong 2 - 4 tuần, nhưng sự chân thành và tinh thần trách nhiệm với khách hàng là phẩm chất nội tại cốt lõi cần tuyển chọn kỹ càng.",
+    "keywords": [
+      "thái độ",
+      "kỹ năng",
+      "văn hóa dịch vụ",
+      "tuyển dụng",
+      "ưu tiên"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-15",
+    "category": "MANAGEMENT",
+    "question": "Anh xử lý ra sao khi nhân viên chăm sóc khách hàng bị khách hàng phàn nàn?",
+    "alternative_questions": [
+      "Cách xử lý khi nhân viên bị khách phàn nàn",
+      "Bảo vệ nhân viên và giải quyết khiếu nại",
+      "Quy trình coaching nhân viên sau sự cố"
+    ],
+    "answer": "Quy trình 3 bước nhân văn của anh Thái:\n1. Bảo vệ tâm lý nhân viên ngay lập tức: Tiếp nhận hỗ trợ ca khó, không phán xét vội vàng trước mặt khách.\n2. Phân tích nguyên nhân khách quan: Cùng nghe lại đoạn ghi âm/đọc log chat dựa trên ma trận QA để xem do quy trình, hệ thống hay kỹ năng giao tiếp.\n3. Huấn luyện 1-1 (Coaching): Biến sự cố thành bài học thực tế, trang bị kỹ năng làm chủ cảm xúc cho nhân viên.",
+    "keywords": [
+      "nhân viên bị phàn nàn",
+      "xử lý phàn nàn",
+      "coaching",
+      "bảo vệ nhân viên"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-16",
+    "category": "MANAGEMENT",
+    "question": "Anh có kinh nghiệm thiết kế lộ trình thăng tiến hoặc khung năng lực cho phòng chăm sóc khách hàng không?",
+    "alternative_questions": [
+      "Khung năng lực và lộ trình thăng tiến CSKH",
+      "Career path cho nhân viên CSKH",
+      "Thiết kế khung năng lực nghề nghiệp"
+    ],
+    "answer": "Anh Thái có bề dày kinh nghiệm thiết kế Khung năng lực đa bậc (Competency Matrix) và Lộ trình thăng tiến 2 nhánh (Chuyên môn SME/QA/Trainer hoặc Quản lý Team Lead/Manager). Đi kèm là các kỳ thi sát hạch định kỳ và chính sách tăng bậc thu nhập rõ ràng, giúp nhân viên gắn bó lâu dài và giảm tỷ lệ nghỉ việc (Turnover) xuống dưới 12%.",
+    "keywords": [
+      "lộ trình thăng tiến",
+      "khung năng lực",
+      "career path",
+      "đào tạo",
+      "gắn bó"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-17",
+    "category": "MANAGEMENT",
+    "question": "Với vai trò lãnh đạo, anh thường truyền động lực cho đội ngũ bằng cách nào?",
+    "alternative_questions": [
+      "Cách truyền động lực cho nhân viên",
+      "Giữ lửa đội ngũ CSKH",
+      "Vinh danh và khích lệ tinh thần"
+    ],
+    "answer": "Để giữ lửa cho đội ngũ CSKH vốn chịu nhiều áp lực, anh Thái áp dụng: 1) Vinh danh minh bạch thông qua giải thưởng 'Star of the Month' & câu chuyện cảm động; 2) Tạo môi trường an toàn tâm lý với các hoạt động chăm sóc tinh thần định kỳ; 3) Giúp mỗi nhân viên hiểu rõ giá trị công việc của họ đóng góp trực tiếp vào thành công và uy tín của toàn công ty.",
+    "keywords": [
+      "truyền động lực",
+      "khích lệ",
+      "động lực",
+      "giữ lửa",
+      "vinh danh"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-18",
+    "category": "CRISIS",
+    "question": "Anh có thể chia sẻ một tình huống khủng hoảng dịch vụ mà anh từng xử lý theo mô hình Tình huống - Nhiệm vụ - Hành động - Kết quả?",
+    "alternative_questions": [
+      "Mô hình STAR xử lý khủng hoảng của anh Thái",
+      "Case study xử lý sự cố diện rộng STAR",
+      "Xử lý khủng hoảng dịch vụ"
+    ],
+    "answer": "Case study mô hình STAR kinh điển của anh Thái:\n- S (Situation): Hệ thống thanh toán gặp sự cố gián đoạn vào giờ cao điểm lễ Tết, hàng nghìn cuộc gọi dồn về tổng đài gây nghẽn mạch.\n- T (Task): Giải tỏa nghẽn trong 10 phút, trấn an người dùng và đảm bảo không thất thoát dữ liệu giao dịch.\n- A (Action): Kích hoạt kịch bản IVR khẩn cấp thông báo sự cố & thời gian hoàn tất, đẩy thông báo in-app, huy động nhóm Back-office tiếp nhận hỗ trợ.\n- R (Result): 95% khách hàng được cập nhật thông tin kịp thời, không xảy ra khủng hoảng truyền thông mạng xã hội.",
+    "keywords": [
+      "star",
+      "tình huống",
+      "nhiệm vụ",
+      "hành động",
+      "kết quả",
+      "khủng hoảng"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-19",
+    "category": "CRISIS",
+    "question": "Tình huống áp lực nhất anh từng xử lý trong Chăm Sóc Khách Hàng là gì?",
+    "alternative_questions": [
+      "Tình huống áp lực nhất của anh Thái",
+      "Sự cố căng thẳng nhất từng giải quyết",
+      "Bài toán khó nhất trong sự nghiệp"
+    ],
+    "answer": "Đó là những sự cố liên quan đến nghi vấn bảo mật tài khoản tài chính hoặc nghẽn giao dịch số lượng lớn trong ngành ví điện tử. Trong tình thế người dùng lo lắng mất tiền và liên tục gọi điện bức xúc, anh Thái đã trực tiếp đứng đầu 'War-room', vừa phối hợp bộ phận An ninh Kỹ thuật xác minh nguồn gốc, vừa trực tiếp trấn an các khách hàng chịu ảnh hưởng nặng nhất để giải ngân bồi hoàn minh bạch.",
+    "keywords": [
+      "áp lực nhất",
+      "sự cố căng thẳng",
+      "war room",
+      "khó khăn nhất"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-20",
+    "category": "CRISIS",
+    "question": "Khi gặp khách hàng VIP tức giận và yêu cầu gặp cấp cao, anh thường giải quyết ra sao?",
+    "alternative_questions": [
+      "Xử lý khách hàng VIP tức giận",
+      "Khiếu nại khách hàng VIP",
+      "Kỹ năng tiếp nhận khách hàng khó tính"
+    ],
+    "answer": "Nguyên tắc xử lý khách VIP của anh Thái gồm 4 bước: 1) Lắng nghe trọn vẹn và không ngắt lời để khách giải tỏa cảm xúc; 2) Thể hiện sự đồng cảm sâu sắc và ghi nhận mức độ nghiêm trọng; 3) Trực tiếp đại diện ban quản lý đưa ra cam kết bằng văn bản với mốc thời gian rõ ràng; 4) Giám sát đôn đốc tiến độ xử lý và trực tiếp gọi điện thông báo kết quả kèm chính sách tri ân đặc biệt.",
+    "keywords": [
+      "khách vip",
+      "tức giận",
+      "gặp cấp cao",
+      "khiếu nại vip",
+      "xử lý"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-21",
+    "category": "CRISIS",
+    "question": "Trong trường hợp hệ thống lỗi diện rộng, anh sẽ truyền thông và giữ uy tín thế nào với khách hàng?",
+    "alternative_questions": [
+      "Hệ thống lỗi diện rộng truyền thông ra sao?",
+      "Xử lý sự cố downtime toàn sàn",
+      "Giữ uy tín khi hệ thống gặp lỗi"
+    ],
+    "answer": "Anh Thái tuân thủ nguyên tắc 'Minh bạch - Kịp thời - Nhất quán': Bật ngay thông báo IVR tự động, đẩy thông báo Broadcast trên App/Web trong vòng 5 phút, cập nhật trạng thái lỗi kèm thời gian dự kiến khắc phục (ETA), cung cấp câu trả lời chuẩn (Master Q&A) cho toàn bộ kênh tương tác và chủ động cập nhật tin vui khi sự cố được khắc phục hoàn toàn.",
+    "keywords": [
+      "lỗi diện rộng",
+      "truyền thông",
+      "giữ uy tín",
+      "downtime",
+      "minh bạch"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-22",
+    "category": "CRISIS",
+    "question": "Nếu có mâu thuẫn gay gắt giữa chăm sóc khách hàng và khách hàng, đâu là nguyên tắc “đỏ” anh luôn tuân thủ?",
+    "alternative_questions": [
+      "Nguyên tắc đỏ khi có mâu thuẫn gay gắt",
+      "Ranh giới xử lý mâu thuẫn với khách hàng",
+      "Quy tắc vàng trong tranh chấp"
+    ],
+    "answer": "Nguyên tắc đỏ bất di bất dịch của anh Thái: 'Không bao giờ đôi co thắng thua với khách hàng, nhưng tuyệt đối không thỏa hiệp với các hành vi xúc phạm danh dự nhân viên hoặc vi phạm pháp luật'. Tập trung vào bản chất sự việc (Issue-focused), bảo vệ phẩm giá nhân sự và giải quyết dựa trên chính sách công bằng, minh bạch.",
+    "keywords": [
+      "nguyên tắc đỏ",
+      "mâu thuẫn gay gắt",
+      "ranh giới",
+      "quy tắc vàng"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-23",
+    "category": "CRISIS",
+    "question": "Bài học lớn nhất anh rút ra từ một sự cố khủng hoảng dịch vụ là gì?",
+    "alternative_questions": [
+      "Bài học lớn nhất từ khủng hoảng",
+      "Kinh nghiệm xương máu qua các sự cố",
+      "Học được gì sau khủng hoảng"
+    ],
+    "answer": "Bài học lớn nhất của anh Thái là: 'Khủng hoảng là chiếc gương phản chiếu chân thực nhất lỗ hổng của quy trình và công nghệ'. Sau mỗi sự cố, anh luôn tổ chức phiên phân tích nguyên nhân gốc rễ (Post-Mortem / 5 Whys), cập nhật ngay vào tài liệu SOP và tối ưu hệ thống cảnh báo sớm để ngăn chặn sự cố tái diễn 100%.",
+    "keywords": [
+      "bài học lớn nhất",
+      "khủng hoảng",
+      "post-mortem",
+      "5 whys",
+      "rút kinh nghiệm"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-24",
+    "category": "TECH",
+    "question": "Anh từng triển khai hoặc cải tiến hệ thống quản trị dữ liệu khách hàng/tiếp nhận yêu cầu nào?",
+    "alternative_questions": [
+      "Các hệ thống CRM và Helpdesk anh Thái từng triển khai",
+      "Zendesk Salesforce CRM",
+      "Kinh nghiệm công nghệ Contact Center"
+    ],
+    "answer": "Anh Nguyễn Hùng Thái có kinh nghiệm triển khai, tích hợp và tối ưu sâu các hệ thống CRM/Helpdesk chuẩn quốc tế hàng đầu: Zendesk, Salesforce Service Cloud, Freshdesk, Cisco Unified Contact Center, Genesys Cloud, Avaya, cùng các hệ thống In-house Ticketing tích hợp dữ liệu người dùng 360 độ.",
+    "keywords": [
+      "crm",
+      "zendesk",
+      "salesforce",
+      "genesys",
+      "cisco",
+      "triển khai hệ thống"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-25",
+    "category": "TECH",
+    "question": "Quan điểm của anh về ứng dụng chuyển đổi số trong Chăm Sóc Khách Hàng?",
+    "alternative_questions": [
+      "Quan điểm chuyển đổi số CSKH",
+      "AI và tự động hóa trong dịch vụ",
+      "Chuyển đổi số ngành CX"
+    ],
+    "answer": "Quan điểm của anh Thái: 'Chuyển đổi số là công cụ đắc lực giải phóng con người khỏi các tác vụ thủ công lặp lại, để nhân sự tập trung 100% vào việc thấu cảm và chăm sóc chuyên sâu'. AI và Tự động hóa giúp xử lý nhanh 60-70% các yêu cầu cơ bản, trong khi con người giải quyết những khúc mắc cần sự ấm áp và thấu hiểu.",
+    "keywords": [
+      "chuyển đổi số",
+      "quan điểm",
+      "ai",
+      "tự động hóa",
+      "công nghệ"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-26",
+    "category": "TECH",
+    "question": "Với một hệ thống chăm sóc khách hàng, theo anh đâu là “mảnh ghép công nghệ” quan trọng nhất?",
+    "alternative_questions": [
+      "Mảnh ghép công nghệ quan trọng nhất",
+      "Hệ thống lõi trong Contact Center",
+      "Công nghệ cốt lõi CSKH"
+    ],
+    "answer": "Theo anh Thái, mảnh ghép cốt lõi nhất chính là 'Nền tảng Dữ liệu Khách hàng Tập trung (Single Source of Truth) kết hợp Cơ chế Định tuyến Thông minh (Smart Routing)'. Khi tổng đài viên nắm bắt toàn bộ lịch sử tương tác 360 độ ngay khi nhấc máy, thời gian xử lý (AHT) giảm mạnh và trải nghiệm của người dùng trở nên liền mạch tuyệt đối.",
+    "keywords": [
+      "mảnh ghép công nghệ",
+      "single source of truth",
+      "dữ liệu tập trung",
+      "smart routing"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-27",
+    "category": "TECH",
+    "question": "Anh thường sử dụng các chỉ số hiệu suất nào để đánh giá hiệu quả dịch vụ?",
+    "alternative_questions": [
+      "Bộ chỉ số đánh giá hiệu quả dịch vụ",
+      "Chỉ số hiệu suất vận hành Contact Center",
+      "Quản trị bằng số liệu"
+    ],
+    "answer": "Anh Thái quản trị hiệu suất toàn diện thông qua ma trận 3 nhóm chỉ số: 1) Nhóm Chất lượng (CSAT, QA Score, NPS); 2) Nhóm Vận hành (FCR, SLA, Abandonment Rate, AHT); 3) Nhóm Tối ưu Chi phí & Năng suất (Cost per Contact, Utilization Rate, Occupancy).",
+    "keywords": [
+      "chỉ số hiệu suất",
+      "đánh giá dịch vụ",
+      "ma trận kpi",
+      "aht",
+      "qa score"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-28",
+    "category": "TECH",
+    "question": "Khi mở rộng quy mô, làm sao để hệ thống chăm sóc khách hàng vẫn cá nhân hóa và ổn định?",
+    "alternative_questions": [
+      "Mở rộng quy mô mà vẫn cá nhân hóa",
+      "Scale up Contact Center hiệu quả",
+      "Cân bằng quy mô và chất lượng"
+    ],
+    "answer": "Anh Thái giải quyết bài toán mở rộng bằng giải pháp 'Mô hình lai Hybrid Resourcing & AI Auto-Tagging': Chuẩn hóa kịch bản phân tầng (Tier 1 Self-Service/AI -> Tier 2 General Agent -> Tier 3 Specialist/Escalation), kết hợp sử dụng Dynamic Customer Profile để tự động gợi ý giải pháp phù hợp theo thói quen từng khách hàng.",
+    "keywords": [
+      "mở rộng quy mô",
+      "scale up",
+      "cá nhân hóa",
+      "hybrid resourcing",
+      "ổn định"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-29",
+    "category": "TECH",
+    "question": "Anh có thể chia sẻ một ví dụ thực tế về việc dùng dữ liệu/Trí tuệ nhân tạo để nâng trải nghiệm khách hàng?",
+    "alternative_questions": [
+      "Ví dụ thực tế dùng AI/Data nâng cao trải nghiệm",
+      "Ứng dụng AI thực tiễn của anh Thái",
+      "Data-driven CX case study"
+    ],
+    "answer": "Tại MoMo và các dự án trước đây, anh Thái đã triển khai hệ thống 'Speech & Text Analytics' để phân tích cảm xúc (Sentiment Analysis) của hàng trăm nghìn lượt hội thoại mỗi ngày. Hệ thống tự động gắn cờ các cuộc gọi có dấu hiệu thất vọng hoặc từ khóa khiếu nại nghiêm trọng, giúp cấp quản lý lập tức can thiệp hỗ trợ trong vòng 15 phút.",
+    "keywords": [
+      "ví dụ thực tế",
+      "ai",
+      "dữ liệu",
+      "sentiment analysis",
+      "speech analytics"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-30",
+    "category": "CULTURE",
+    "question": "Theo anh, thế nào là một “dịch vụ tuyệt hảo”?",
+    "alternative_questions": [
+      "Định nghĩa dịch vụ tuyệt hảo",
+      "Dịch vụ xuất sắc là gì?",
+      "Tiêu chuẩn dịch vụ của anh Thái"
+    ],
+    "answer": "Với anh Nguyễn Hùng Thái, 'Dịch vụ tuyệt hảo không chỉ là giải quyết đúng quy trình, mà là làm cho khách hàng cảm thấy họ được lắng nghe, tôn trọng và đồng hành chân thành'. Đó là khoảnh khắc dịch vụ vượt qua sự mong đợi thông thường để mang lại sự an tâm tuyệt đối.",
+    "keywords": [
+      "dịch vụ tuyệt hảo",
+      "định nghĩa",
+      "xuất sắc",
+      "vượt mong đợi",
+      "an tâm"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-31",
+    "category": "CULTURE",
+    "question": "Làm sao để đo lường được cảm xúc khách hàng ngoài những con số khảo sát?",
+    "alternative_questions": [
+      "Đo lường cảm xúc khách hàng",
+      "Phương pháp lắng nghe khách hàng ngoài khảo sát",
+      "VoC và cảm xúc người dùng"
+    ],
+    "answer": "Anh Thái lắng nghe cảm xúc người dùng qua: 1) Phân tích ngữ nghĩa và tông giọng (Tone of Voice / Sentiment Scoring); 2) Khai phá các bình luận tự nhiên trên mạng xã hội và cộng đồng người dùng; 3) Thiết lập báo cáo định kỳ VoC (Voice of Customer) từ các ý kiến góp ý chi tiết của tuyến đầu.",
+    "keywords": [
+      "đo lường cảm xúc",
+      "ngoài khảo sát",
+      "sentiment",
+      "voc",
+      "tone of voice"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-32",
+    "category": "CULTURE",
+    "question": "Trong đội ngũ, anh nuôi dưỡng “tư duy dịch vụ” bằng cách nào?",
+    "alternative_questions": [
+      "Nuôi dưỡng tư duy dịch vụ cho nhân viên",
+      "Xây dựng văn hóa Customer-Centric trong team",
+      "Truyền lửa tư duy phụng sự"
+    ],
+    "answer": "Anh Thái xây dựng tư duy dịch vụ bằng cách 'Làm gương từ lãnh đạo' (Lead by Example), thường xuyên chia sẻ các câu chuyện thực tế 'Chạm tới trái tim', khuyến khích nhân viên chủ động linh hoạt ra quyết định vì lợi ích khách hàng, và trao giải thưởng tôn vinh những tấm gương chăm sóc khách hàng tận tụy.",
+    "keywords": [
+      "nuôi dưỡng tư duy",
+      "văn hóa dịch vụ",
+      "làm gương",
+      "phụng sự"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-33",
+    "category": "CULTURE",
+    "question": "Anh có câu chuyện nào đáng nhớ về việc thấu cảm với khách hàng một cách ngoài mong đợi không?",
+    "alternative_questions": [
+      "Câu chuyện thấu cảm đáng nhớ của anh Thái",
+      "Kỷ niệm xúc động với khách hàng",
+      "Kỷ niệm nghề nghiệp CSKH"
+    ],
+    "answer": "Một kỷ niệm sâu sắc của anh Thái là khi tiếp nhận ca hỗ trợ một kiều bào cao tuổi ở Mỹ gọi về tổng đài V247 trong đêm vì không thể gọi điện liên lạc với người thân tại quê nhà đang bệnh nặng. Anh Thái đã kiên trì trực tuyến hơn 45 phút hướng dẫn cụ từng thao tác kết nối đường truyền, và khi nghe được tiếng khóc hội ngộ xúc động của hai gia đình, đó chính là khoảnh khắc vô giá khẳng định ý nghĩa cao quý của nghề.",
+    "keywords": [
+      "câu chuyện đáng nhớ",
+      "thấu cảm",
+      "kỷ niệm",
+      "v247",
+      "xúc động"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-34",
+    "category": "CULTURE",
+    "question": "Nếu phải chọn một giá trị cốt lõi duy nhất cho văn hóa dịch vụ của phòng chăm sóc khách hàng, anh sẽ chọn gì?",
+    "alternative_questions": [
+      "Giá trị cốt lõi duy nhất của văn hóa dịch vụ",
+      "Kim chỉ nam trong CSKH",
+      "Giá trị quan trọng nhất"
+    ],
+    "answer": "Anh Thái chọn chữ 'TẬN TÂM / THẤU CẢM' (Genuine Empathy). Khi có sự tận tâm và thấu cảm chân thành, nhân viên sẽ tự khắc tìm mọi giải pháp tối ưu nhất, bảo vệ quyền lợi của khách hàng và mang lại sự ấm áp chân thực nhất.",
+    "keywords": [
+      "giá trị cốt lõi",
+      "tận tâm",
+      "thấu cảm",
+      "empathy",
+      "kim chỉ nam"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-35",
+    "category": "CULTURE",
+    "question": "Kinh nghiệm nuôi dưỡng văn hóa thấu cảm và gắn kết đội ngũ tại môi trường vận hành 24/7 và đa văn hóa của anh Thái là gì?",
+    "alternative_questions": [
+      "Văn hóa đội ngũ môi trường 24/7",
+      "Gắn kết nhân sự trực đêm và ca xoay",
+      "Nuôi dưỡng tinh thần làm việc ca đêm"
+    ],
+    "answer": "Tại các môi trường vận hành 24/7 như V247 Telecom và MoMo, anh Thái áp dụng cơ chế 'Chăm sóc người chăm sóc' (Caring for Caregivers): Bố trí không gian nghỉ ngơi tiện nghi cho ca đêm, chế độ dinh dưỡng bồi dưỡng thể lực, luân phiên ca làm việc khoa học chống kiệt sức (Burnout), và các buổi họp giao ban ấm cúng gắn kết như một gia đình.",
+    "keywords": [
+      "24/7",
+      "đa văn hóa",
+      "gắn kết đội ngũ",
+      "ca đêm",
+      "chăm sóc nhân viên"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-36",
+    "category": "ORGANIZATION",
+    "question": "Nếu chia phòng chăm sóc khách hàng thành các nhóm nhỏ, anh sẽ tổ chức như thế nào?",
+    "alternative_questions": [
+      "Cơ cấu tổ chức phòng CSKH",
+      "Mô hình phân nhóm chức năng CSKH",
+      "Phân tầng đội ngũ Contact Center"
+    ],
+    "answer": "Anh Thái tổ chức phòng CSKH theo mô hình 4 trụ cột tương hỗ:\n1. Frontline Operations (Tuyến đầu đa kênh Hotline/Chat/Email/Social).\n2. Quality Assurance & Training (Đảm bảo chất lượng và Huấn luyện chuyên môn).\n3. Workforce Management & Analytics (Quản trị nhân lực, dự báo lưu lượng và phân tích dữ liệu).\n4. Escalation & Special Care (Xử lý khiếu nại phức tạp và Chăm sóc khách hàng VIP).",
+    "keywords": [
+      "cơ cấu",
+      "tổ chức",
+      "phân nhóm",
+      "mô hình",
+      "frontline",
+      "qa",
+      "wfm"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-37",
+    "category": "ORGANIZATION",
+    "question": "Chăm sóc khách hàng nên phối hợp thế nào với phòng Kinh doanh, Tiếp thị, Sản phẩm để tạo trải nghiệm liền mạch?",
+    "alternative_questions": [
+      "Phối hợp CSKH với Sales Marketing Product",
+      "Liên kết liên phòng ban",
+      "Tạo trải nghiệm khách hàng liền mạch"
+    ],
+    "answer": "Anh Thái thiết lập 'Vòng lặp Phản hồi Khép kín' (Closed-loop Feedback System): CSKH chia sẻ dữ liệu khiếu nại và phản hồi thực tế (VoC) với phòng Sản phẩm để fix lỗi tính năng; phối hợp với Marketing để nắm trước thông điệp khuyến mãi; và liên kết với Sales để hỗ trợ giữ chân khách hàng tiềm năng.",
+    "keywords": [
+      "phối hợp",
+      "sales",
+      "marketing",
+      "product",
+      "liền mạch",
+      "closed-loop"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-38",
+    "category": "ORGANIZATION",
+    "question": "Khi có mâu thuẫn giữa phòng chăm sóc khách hàng và các phòng ban khác, anh thường xử lý thế nào?",
+    "alternative_questions": [
+      "Xử lý mâu thuẫn liên phòng ban",
+      "Giải quyết xung đột nội bộ",
+      "Hài hòa mục tiêu giữa các bộ phận"
+    ],
+    "answer": "Anh Thái luôn dùng 'Dữ liệu khách quan và Lợi ích tối cao của Khách hàng' làm tiêu chuẩn trọng tài. Anh tổ chức các buổi trao đổi giải pháp (Solution-oriented alignment) với SLA nội bộ rõ ràng, cùng nhau nhìn nhận vấn đề trên tinh thần xây dựng và hướng tới thành công chung của toàn công ty.",
+    "keywords": [
+      "mâu thuẫn",
+      "xử lý xung đột",
+      "liên phòng ban",
+      "sla nội bộ"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-39",
+    "category": "ORGANIZATION",
+    "question": "Anh từng tham gia dự án liên phòng ban nào để cải thiện trải nghiệm khách hàng chưa?",
+    "alternative_questions": [
+      "Dự án liên phòng ban tiêu biểu của anh Thái",
+      "Cross-functional project case study",
+      "Cải thiện trải nghiệm toàn diện"
+    ],
+    "answer": "Anh Thái từng dẫn dắt dự án 'Tối ưu hóa hành trình Nạp - Rút - Chuyển tiền' tại MoMo phối hợp cùng Kỹ thuật, Sản phẩm và Vận hành. Nhờ phát hiện các điểm nghẽn giao dịch thông qua phân tích lý do cuộc gọi CSKH, dự án đã giúp giảm 35% khiếu nại kỹ thuật và tăng 20% mức độ hài lòng của người dùng.",
+    "keywords": [
+      "dự án liên phòng ban",
+      "cross-functional",
+      "cải thiện trải nghiệm",
+      "momo"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-40",
+    "category": "ORGANIZATION",
+    "question": "Theo anh, đâu là cơ chế báo cáo – phối hợp hiệu quả nhất giữa chăm sóc khách hàng và lãnh đạo cấp cao?",
+    "alternative_questions": [
+      "Cơ chế báo cáo cho Ban Giám Đốc",
+      "Executive reporting CSKH",
+      "Báo cáo lãnh đạo cấp cao"
+    ],
+    "answer": "Đó là mô hình 'Real-time Executive Dashboard kết hợp Báo cáo Chiến lược VoC hàng tuần'. Thay vì những bảng biểu dài dòng, báo cáo tập trung vào: Các điểm nghẽn trọng yếu, tác động tài chính, chỉ số NPS/CSAT và các khuyến nghị cải tiến cụ thể cho ban điều hành.",
+    "keywords": [
+      "cơ chế báo cáo",
+      "lãnh đạo cấp cao",
+      "executive dashboard",
+      "báo cáo tuần"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-41",
+    "category": "ORGANIZATION",
+    "question": "Kinh nghiệm điều hành tổng đài phục vụ thị trường Mỹ / Quốc tế tại V247 mang lại bài học tổ chức gì cho anh Thái?",
+    "alternative_questions": [
+      "Bài học tổ chức từ V247 Telecom",
+      "Vận hành tổng đài quốc tế 24/7",
+      "Kinh nghiệm phục vụ kiều bào và thị trường Mỹ"
+    ],
+    "answer": "Quản trị tổng đài quốc tế 24/7 tại V247 rèn luyện cho anh Thái năng lực tổ chức chuẩn hóa cao độ: Quản trị ca kíp WFM chính xác theo múi giờ quốc tế, xây dựng tiêu chuẩn giao tiếp song ngữ Anh - Việt chuẩn mực, và năng lực kiểm soát chất lượng dịch vụ nghiêm ngặt đáp ứng tiêu chuẩn khắt khe của thị trường Mỹ.",
+    "keywords": [
+      "v247",
+      "quốc tế",
+      "thị trường mỹ",
+      "tổ chức",
+      "tổng đài 24/7"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-42",
+    "category": "LEADERSHIP",
+    "question": "Nếu nhận vai trò Trưởng phòng chăm sóc khách hàng, 90 ngày đầu tiên anh sẽ tập trung làm gì?",
+    "alternative_questions": [
+      "Kế hoạch 90 ngày đầu tiên của anh Thái",
+      "First 90 days plan",
+      "Lộ trình 30-60-90 ngày"
+    ],
+    "answer": "Kế hoạch 90 ngày chiến lược của anh Thái:\n- 30 ngày đầu: 'Lắng nghe & Khảo sát' - Trực tiếp ngồi nghe cuộc gọi, phỏng vấn nhân sự tuyến đầu và rà soát hệ thống dữ liệu/SOP hiện hữu.\n- 60 ngày tiếp theo: 'Chuẩn hóa & Tối ưu nhanh (Quick-wins)' - Tinh gọn kịch bản xử lý, khắc phục ngay các lỗi nghẽn lớn và thiết lập bộ chỉ số KPI chuẩn.\n- 90 ngày: 'Chiến lược & Tự động hóa' - Đề xuất lộ trình công nghệ AI/CRM, xây dựng khung năng lực và chuyển giao quy trình vận hành bền vững.",
+    "keywords": [
+      "90 ngày đầu tiên",
+      "kế hoạch",
+      "first 90 days",
+      "lộ trình",
+      "quick wins"
+    ],
+    "priority": 90,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-43",
+    "category": "LEADERSHIP",
+    "question": "Tư duy dịch vụ của anh khác gì so với thông thường?",
+    "alternative_questions": [
+      "Điểm khác biệt trong tư duy dịch vụ của anh Thái",
+      "Tư duy đột phá trong CSKH",
+      "Sự khác biệt trong quản trị CX"
+    ],
+    "answer": "Sự khác biệt cốt lõi của anh Thái là: 'Không nhìn nhận CSKH như một trung tâm phát sinh chi phí (Cost Center), mà định vị CSKH là Trung tâm Tạo ra Giá trị và Thúc đẩy Doanh thu (Value & Revenue Driver)'. Mỗi phản hồi của khách hàng đều là dữ liệu vàng để nâng cấp sản phẩm và giữ chân khách hàng trọn đời.",
+    "keywords": [
+      "tư duy khác biệt",
+      "value driver",
+      "cost center",
+      "đột phá"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-44",
+    "category": "LEADERSHIP",
+    "question": "Anh nhìn nhận thế nào về vai trò lãnh đạo: kiểm soát – đồng hành – hay dẫn dắt?",
+    "alternative_questions": [
+      "Vai trò lãnh đạo: kiểm soát đồng hành hay dẫn dắt",
+      "Quan niệm lãnh đạo của anh Thái",
+      "Triết lý lãnh đạo dịch vụ"
+    ],
+    "answer": "Anh Thái tin rằng: 'Kiểm soát chỉ tạo ra sự tuân thủ tối thiểu, Đồng hành tạo ra sự thấu hiểu và tin cậy, còn Dẫn dắt tạo ra nguồn cảm hứng đột phá'. Một người lãnh đạo xuất sắc sẽ khéo léo kết hợp cả ba: Thiết lập chuẩn mực rõ ràng, luôn kề vai sát cánh gỡ khó cho đồng đội, và dẫn lối bằng tầm nhìn chiến lược nhân văn.",
+    "keywords": [
+      "lãnh đạo",
+      "kiểm soát",
+      "đồng hành",
+      "dẫn dắt",
+      "truyền cảm hứng"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-45",
+    "category": "LEADERSHIP",
+    "question": "Theo anh, đâu là sự cân bằng giữa “chi tiết” và “tầm nhìn xa” trong lãnh đạo dịch vụ?",
+    "alternative_questions": [
+      "Cân bằng chi tiết và tầm nhìn xa",
+      "Micro management vs Strategic vision",
+      "Kỹ năng quản trị cân bằng"
+    ],
+    "answer": "Theo anh Thái: 'Chi tiết giúp đảm bảo tính hoàn hảo của từng điểm chạm dịch vụ hôm nay, còn tầm nhìn xa định hình tương lai vững bền của doanh nghiệp ngày mai'. Anh luôn nắm vững từng ngóc ngách của dữ liệu và quy trình tuyến đầu để đưa ra các quyết định chiến lược dài hạn chính xác nhất.",
+    "keywords": [
+      "chi tiết",
+      "tầm nhìn xa",
+      "cân bằng",
+      "chiến lược",
+      "hoàn hảo"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-46",
+    "category": "LEADERSHIP",
+    "question": "Anh Hùng Thái giải quyết xung đột mục tiêu giữa CSKH (chất lượng/bảo vệ) và bộ phận Tăng trưởng (Growth/Acquisition) như thế nào?",
+    "alternative_questions": [
+      "Giải quyết xung đột CSKH và Growth",
+      "Cân bằng tăng trưởng nóng và an toàn vận hành",
+      "Hài hòa giữa kinh doanh và trải nghiệm"
+    ],
+    "answer": "Anh Thái sử dụng dữ liệu thực chứng để chỉ ra rằng: 'Tăng trưởng nóng nếu đánh đổi bằng trải nghiệm tồi sẽ trực tiếp bào mòn tỷ lệ giữ chân khách hàng (Retention Rate) và làm đội chi phí thu hút khách hàng mới'. Anh chủ động thiết lập thỏa thuận cấp dịch vụ nội bộ (Internal SLA) để bộ phận Growth tung chiến dịch thuận lợi mà tuyến đầu vẫn luôn được trang bị kịch bản hỗ trợ kịp thời.",
+    "keywords": [
+      "xung đột",
+      "growth",
+      "tăng trưởng",
+      "retention",
+      "internal sla"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  },
+  {
+    "id": "faq-47",
+    "category": "LEADERSHIP",
+    "question": "Làm thế nào anh Hùng Thái biến hàng triệu tương tác CSKH thành giá trị kinh doanh cụ thể cho công ty?",
+    "alternative_questions": [
+      "Biến tương tác CSKH thành giá trị kinh doanh",
+      "Khai thác giá trị từ dữ liệu VoC",
+      "Data Analytics biến chi phí thành doanh thu"
+    ],
+    "answer": "Anh Thái ứng dụng mô hình Phân tích Nguyên nhân Gốc rễ (Root-Cause Analysis) và Phân cụm Dữ liệu VoC tự động. Hàng tháng, CSKH cung cấp danh sách Top 'Điểm nghẽn gây thất thoát doanh thu' để đội ngũ Công nghệ và Sản phẩm ưu tiên khắc phục ngay, từ đó nâng cao tỷ lệ chuyển đổi và tăng trưởng chỉ số NPS toàn công ty.",
+    "keywords": [
+      "giá trị kinh doanh",
+      "tương tác cskh",
+      "root cause",
+      "voc",
+      "doanh thu",
+      "nps"
+    ],
+    "priority": 85,
+    "voice_enabled": true,
+    "active": true
+  }
+]

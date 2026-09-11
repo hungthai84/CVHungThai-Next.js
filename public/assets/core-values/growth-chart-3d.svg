@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Gradient cho các cột 3D -->
+    <linearGradient id="col1Front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#93C5FD" />
+      <stop offset="100%" stopColor="#60A5FA" />
+    </linearGradient>
+    <linearGradient id="col2Front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#A5B4FC" />
+      <stop offset="100%" stopColor="#818CF8" />
+    </linearGradient>
+    <linearGradient id="col3Front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#C4B5FD" />
+      <stop offset="100%" stopColor="#A78BFA" />
+    </linearGradient>
+    <linearGradient id="col4Front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#E879F9" />
+      <stop offset="100%" stopColor="#C084FC" />
+    </linearGradient>
+    <linearGradient id="col5Front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#F472B6" />
+      <stop offset="100%" stopColor="#A855F7" />
+    </linearGradient>
+
+    <!-- Gradient cho Mũi tên 3D -->
+    <linearGradient id="arrow3DGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stopColor="#F472B6" />
+      <stop offset="60%" stopColor="#EC4899" />
+      <stop offset="100%" stopColor="#C084FC" />
+    </linearGradient>
+    <linearGradient id="arrow3DSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stopColor="#DB2777" />
+      <stop offset="100%" stopColor="#9333EA" />
+    </linearGradient>
+    
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#EC4899" floodOpacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Bóng đổ mặt sàn -->
+  <ellipse cx="140" cy="180" rx="115" ry="14" fill="#000000" opacity="0.06" />
+
+  <!-- CỘT 1 (Thấp nhất) -->
+  <g transform="translate(30, 130)">
+    <!-- Mặt trước -->
+    <rect x="0" y="0" width="22" height="42" rx="2" fill="url(#col1Front)" />
+    <!-- Mặt trên 3D -->
+    <polygon points="0,0 8,-8 30,-8 22,0" fill="#DBEAFE" />
+    <!-- Mặt bên phải 3D -->
+    <polygon points="22,0 30,-8 30,34 22,42" fill="#3B82F6" opacity="0.8" />
+  </g>
+
+  <!-- CỘT 2 -->
+  <g transform="translate(68, 110)">
+    <rect x="0" y="0" width="22" height="62" rx="2" fill="url(#col2Front)" />
+    <polygon points="0,0 8,-8 30,-8 22,0" fill="#E0E7FF" />
+    <polygon points="22,0 30,-8 30,54 22,62" fill="#6366F1" opacity="0.8" />
+  </g>
+
+  <!-- CỘT 3 -->
+  <g transform="translate(106, 88)">
+    <rect x="0" y="0" width="22" height="84" rx="2" fill="url(#col3Front)" />
+    <polygon points="0,0 8,-8 30,-8 22,0" fill="#EDE9FE" />
+    <polygon points="22,0 30,-8 30,76 22,84" fill="#8B5CF6" opacity="0.8" />
+  </g>
+
+  <!-- CỘT 4 -->
+  <g transform="translate(144, 64)">
+    <rect x="0" y="0" width="22" height="108" rx="2" fill="url(#col4Front)" />
+    <polygon points="0,0 8,-8 30,-8 22,0" fill="#FCE7F3" />
+    <polygon points="22,0 30,-8 30,100 22,108" fill="#D946EF" opacity="0.8" />
+  </g>
+
+  <!-- CỘT 5 (Cao nhất) -->
+  <g transform="translate(182, 38)">
+    <rect x="0" y="0" width="24" height="134" rx="2" fill="url(#col5Front)" />
+    <polygon points="0,0 8,-8 32,-8 24,0" fill="#FDF2F8" />
+    <polygon points="24,0 32,-8 32,126 24,134" fill="#A21CAF" opacity="0.85" />
+  </g>
+
+  <!-- MŨI TÊN 3D UỐN LƯỢN VÚT CAO -->
+  <g filter="url(#softGlow)">
+    <!-- Mặt bên 3D của thân mũi tên -->
+    <path d="M 22 152 Q 95 130 160 76 L 208 42 L 206 50 L 158 84 Q 93 138 22 160 Z" 
+          fill="url(#arrow3DSide)" />
+
+    <!-- Mặt trên chính của thân mũi tên uốn lượn -->
+    <path d="M 22 146 Q 95 124 160 70 L 208 36 L 208 42 L 160 76 Q 95 130 22 152 Z" 
+          fill="url(#arrow3DGrad)" />
+
+    <!-- Đầu mũi tên 3D to bản -->
+    <!-- Mặt bên đầu mũi tên -->
+    <polygon points="208,42 258,22 252,66 234,44 208,60" fill="url(#arrow3DSide)" />
+    <!-- Mặt trước đầu mũi tên -->
+    <polygon points="208,36 258,16 252,60 234,38 208,54" fill="url(#arrow3DGrad)" />
+    <!-- Mặt vát sáng đỉnh đầu mũi tên -->
+    <polygon points="208,36 258,16 258,22 208,42" fill="#FDF2F8" opacity="0.8" />
+  </g>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%" fill="none">
+  <!-- Bắt tay góc chéo (Handshake icon) màu xanh lá -->
+  <!-- Bàn tay trái vươn xuống -->
+  <path d="M16 38 L32 26 C35 24 39 25 41 28 L47 36 L34 47 L23 44 L16 38 Z" 
+        fill="#10B981" />
+  
+  <!-- Cổ tay áo bên trái -->
+  <path d="M12 36 L24 27 L20 22 L8 31 Z" 
+        fill="#059669" />
+
+  <!-- Bàn tay phải vươn lên -->
+  <path d="M84 62 L68 74 C65 76 61 75 59 72 L53 64 L66 53 L77 56 L84 62 Z" 
+        fill="#10B981" />
+  
+  <!-- Cổ tay áo bên phải -->
+  <path d="M88 64 L76 73 L80 78 L92 69 Z" 
+        fill="#059669" />
+
+  <!-- Phần đan tay ở giữa (khớp nối các ngón tay nắm) -->
+  <!-- Ngón cái và lòng bàn tay trái -->
+  <path d="M41 33 C45 36 50 43 53 48 L46 54 C42 49 37 43 35 38 Z" 
+        fill="#34D399" />
+  
+  <!-- Các ngón tay bên phải khum lại ôm bàn tay trái -->
+  <path d="M47 38 C52 35 58 39 61 44 L49 56 C46 52 44 45 47 38 Z" 
+        fill="#059669" />
+  
+  <!-- 4 ngón tay gập ôm nhau ở giữa -->
+  <rect x="42" y="44" width="7" height="15" rx="3.5" transform="rotate(-35 42 44)" fill="#10B981" stroke="#047857" stroke-width="1.5" />
+  <rect x="48" y="40" width="7" height="15" rx="3.5" transform="rotate(-35 48 40)" fill="#10B981" stroke="#047857" stroke-width="1.5" />
+  <rect x="54" y="36" width="7" height="15" rx="3.5" transform="rotate(-35 54 36)" fill="#10B981" stroke="#047857" stroke-width="1.5" />
+  <rect x="60" y="32" width="7" height="14" rx="3.5" transform="rotate(-35 60 32)" fill="#10B981" stroke="#047857" stroke-width="1.5" />
+
+  <!-- Viền định hình tay nắm ngoài -->
+  <path d="M32 26 L42 35 C48 40 55 46 62 52 L68 74" 
+        stroke="#047857" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        fill="none" />
+  <path d="M68 74 L58 65 C52 60 45 54 38 48 L32 26" 
+        stroke="#047857" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        fill="none" />
+</svg>
