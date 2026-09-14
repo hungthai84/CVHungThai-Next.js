@@ -28,7 +28,8 @@ import {
   Sparkles,
   Printer,
   Play,
-  Rocket
+  Rocket,
+  Type
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -178,9 +179,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     if (targetTheme) {
       nextTheme = targetTheme;
     } else {
-      if (theme === "glass-dark-neon") nextTheme = "modern-light-glass";
-      else if (theme === "modern-light-glass") nextTheme = "mritech-aurora-glass";
-      else if (theme === "mritech-aurora-glass") nextTheme = "mritech-digital-growth";
+      if (theme === "glass-dark-neon") nextTheme = "mritech-digital-growth";
       else nextTheme = "glass-dark-neon";
     }
     setTheme(nextTheme);
@@ -365,7 +364,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={(e) => {
                     e.stopPropagation();
                     const nextTheme = theme === "glass-dark-neon" 
-                      ? "modern-light-glass" 
+                      ? "mritech-digital-growth" 
                       : "glass-dark-neon";
                     handleThemeToggle(nextTheme);
                   }}
@@ -381,11 +380,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   <span className="truncate">
                     {theme === "glass-dark-neon" 
                       ? (lang === "vi" ? "Glass Tối" : "Dark Neon") 
-                      : theme === "mritech-digital-growth"
-                      ? (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")
-                      : theme === "mritech-aurora-glass"
-                      ? (lang === "vi" ? "Glass Aurora" : "Aurora Glass")
-                      : (lang === "vi" ? "Glass Sáng" : "Light Glass")}
+                      : (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")}
                   </span>
                 </button>
 
@@ -495,11 +490,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         <span className="truncate">
                           {theme === "glass-dark-neon"
                             ? (lang === "vi" ? "Glass Tối Neon" : "Glass Dark Neon")
-                            : theme === "mritech-digital-growth"
-                            ? (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")
-                            : theme === "mritech-aurora-glass"
-                            ? (lang === "vi" ? "Glass Aurora Đa Sắc" : "Aurora Vibrant Glass")
-                            : (lang === "vi" ? "Glass Sáng Đa Sắc" : "Multi-Color Light Glass")}
+                            : (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")}
                         </span>
                       </div>
                       <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform ${isThemeDropdownOpen ? "-rotate-90" : ""}`} />
@@ -534,25 +525,11 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               color: "text-amber-500" 
                             },
                             { 
-                              id: "mritech-aurora-glass", 
-                              label: lang === "vi" ? "Glass Aurora Đa Sắc (Mritech)" : "Aurora Vibrant Glass (Mritech)", 
-                              desc: lang === "vi" ? "Glassmorphism ngọc trai, hiệu ứng lụa sáng & gradient 3 tông" : "Pearl Glassmorphism with radiant silk aura & 3-tone gradient", 
-                              Icon: Sparkles, 
-                              color: "text-rose-500" 
-                            },
-                            { 
                               id: "glass-dark-neon", 
                               label: lang === "vi" ? "Glass Tối Neon (Next Themes)" : "Glass Dark Neon (Next Themes)", 
                               desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
                               Icon: Moon, 
                               color: "text-cyan-400" 
-                            },
-                            { 
-                              id: "modern-light-glass", 
-                              label: lang === "vi" ? "Glass Sáng Đa Sắc (Next Themes)" : "Multi-Color Light Glass (Next Themes)", 
-                              desc: lang === "vi" ? "Glassmorphism nền sáng, màu sắc rực rỡ" : "light Glassmorphism with vibrant colors", 
-                              Icon: Sun, 
-                              color: "text-indigo-500" 
                             }
                           ].map((tItem) => {
                             const isSelected = theme === tItem.id;
@@ -709,7 +686,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                           </div>
 
                           {/* Footer Actions */}
-                          <div className="mt-2.5 pt-2 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+                          <div className="mt-2.5 pt-2 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between gap-2">
                             <button
                               type="button"
                               onClick={(e) => {
@@ -720,7 +697,20 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               className="text-2xs font-semibold text-[var(--color-primary)] hover:underline flex items-center gap-1.5 cursor-pointer py-1"
                             >
                               <Sliders className="w-3.5 h-3.5" />
-                              <span>{lang === "vi" ? "Xem chi tiết Token & Code" : "Token Inspector & CSS"}</span>
+                              <span>{lang === "vi" ? "Token & CSS" : "Token & CSS"}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsColorDropdownOpen(false);
+                                themeContext.openTypographyModal();
+                              }}
+                              className="text-2xs font-semibold text-indigo-500 hover:underline flex items-center gap-1.5 cursor-pointer py-1"
+                            >
+                              <Type className="w-3.5 h-3.5" />
+                              <span>{lang === "vi" ? "Chỉnh Font" : "Typography"}</span>
                             </button>
                           </div>
                         </motion.div>
@@ -822,14 +812,14 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 <button
                   onClick={() => {
                     const nextTheme = theme === "glass-dark-neon" 
-                      ? "modern-light-glass" 
+                      ? "mritech-digital-growth" 
                       : "glass-dark-neon";
                     handleThemeToggle(nextTheme);
                   }}
                   className="flex items-center justify-center w-[38px] h-[38px] sm:w-[40px] sm:h-[40px] rounded-full border border-slate-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 text-slate-800 dark:text-slate-200 active:scale-95 shadow-xs cursor-pointer backdrop-blur-xl"
                   title={
                     theme === "glass-dark-neon"
-                      ? "Chuyển sang Glass Sáng Đa Sắc"
+                      ? "Chuyển sang Giao Diện Số MRITECH"
                       : "Chuyển sang Glass Tối Neon"
                   }
                 >
@@ -921,7 +911,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         })}
                       </div>
 
-                      <div className="mt-2 pt-1.5 border-t border-slate-200/50 dark:border-white/10">
+                      <div className="mt-2 pt-1.5 border-t border-slate-200/50 dark:border-white/10 flex flex-col gap-1">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -931,6 +921,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                           className="w-full text-center text-3xs font-semibold text-[var(--color-primary)] hover:underline py-1 cursor-pointer"
                         >
                           {lang === "vi" ? "Xem chi tiết Token & CSS Code →" : "View Token Details →"}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsColorDropdownOpen(false);
+                            themeContext.openTypographyModal();
+                          }}
+                          className="w-full text-center text-3xs font-semibold text-indigo-500 hover:underline py-1 cursor-pointer"
+                        >
+                          {lang === "vi" ? "Cấu hình Typography & Token Font →" : "Global Typography Settings →"}
                         </button>
                       </div>
                     </motion.div>
@@ -987,14 +987,14 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 {/* Theme options on mobile */}
                 <button
                   onClick={() => {
-                    setTheme("modern-light-glass");
+                    setTheme("mritech-digital-growth");
                   }}
                   className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
-                    theme === "modern-light-glass"
+                    theme === "mritech-digital-growth"
                       ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-400/50 font-black shadow-sm"
                       : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
                   }`}
-                  title="☀️ Sáng"
+                  title="☀️ MRITECH"
                 >
                   <Sun className="w-3 h-3 text-amber-500" />
                   <span>{lang === "vi" ? "Sáng" : "Light"}</span>
@@ -1012,20 +1012,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 >
                   <Sparkles className="w-3 h-3 text-cyan-400" />
                   <span>Neon</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setTheme("modern-light-glass");
-                  }}
-                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
-                    theme === "modern-light-glass"
-                      ? "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-400/50 font-black shadow-sm"
-                      : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
-                  }`}
-                  title="🌈 Glass Sáng"
-                >
-                  <Sparkles className="w-3 h-3 text-indigo-500" />
-                  <span>Glass Sáng</span>
                 </button>
 
                 {/* Divider */}

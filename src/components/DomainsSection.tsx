@@ -453,12 +453,7 @@ export function DomainsSection() {
                       {React.createElement(activeItem.icon || Globe, { className: "w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2]" })}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-caption font-semibold font-mono text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
-                          {activeItem.details.experienceYears}
-                        </span>
-                      </div>
-                      <h3 className="font-play text-h3 sm:text-h2 font-bold tracking-tight mt-1" style={{ color: activeItem.color }}>
+                      <h3 className="font-play text-h3 sm:text-h2 tracking-tight mt-1" style={{ color: activeItem.color }}>
                         {isVi ? activeItem.title : activeItem.titleEn || activeItem.title}
                       </h3>
                       <p className="text-body-sm text-slate-600 dark:text-slate-300 font-medium mt-0.5">
@@ -514,7 +509,7 @@ export function DomainsSection() {
 
                 {/* Reveal Section 2: Key Projects & SOPs */}
                 <div>
-                  <h4 className="text-body font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
+                  <h4 className="text-body-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
                     <Briefcase className="w-4 h-4" style={{ color: activeItem.color }} />
                     <span>{isVi ? "Dự án nòng cốt & Hạng mục vận hành" : "Key Projects & Workflows"}</span>
                   </h4>
@@ -575,7 +570,7 @@ export function DomainsSection() {
                         {activeItem.logos.map((logoObj: BrandLogo, lIdx: number) => (
                           <div
                             key={lIdx}
-                            className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/90 dark:border-slate-700 bg-white p-0 shadow-xs"
+                            className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/50 dark:border-slate-700/50 bg-transparent p-1 shadow-xs"
                             title={logoObj.name}
                           >
                             <img
@@ -583,7 +578,7 @@ export function DomainsSection() {
                               alt={logoObj.name}
                               loading="lazy"
                               decoding="async"
-                              className="h-full w-full object-cover rounded-full"
+                              className="h-full w-full object-contain"
                               onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                 e.currentTarget.style.display = "none";
                               }}
@@ -672,7 +667,7 @@ export function DomainsSection() {
                         item.logos.map((logoObj: BrandLogo, lIdx: number) => (
                           <div
                             key={lIdx}
-                            className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/90 dark:border-slate-700 bg-white p-0 shadow-xs transition-transform duration-300 group-hover:scale-105 hover:!scale-115"
+                            className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/50 dark:border-slate-700/50 bg-transparent p-1 shadow-xs transition-transform duration-300 group-hover:scale-105 hover:!scale-115"
                             title={logoObj.name}
                           >
                             <img
@@ -680,7 +675,7 @@ export function DomainsSection() {
                               alt={logoObj.name}
                               loading="lazy"
                               decoding="async"
-                              className="h-full w-full object-cover rounded-full"
+                              className="h-full w-full object-contain"
                               onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                 e.currentTarget.style.display = "none";
                               }}

@@ -69,7 +69,7 @@ export function CaseStudy6_1_Mindmap({
                   1
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     PHÂN LOẠI & TIÊU CHÍ VIP
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Xếp hạng minh bạch dựa trên dữ liệu giao dịch</span>
@@ -112,7 +112,7 @@ export function CaseStudy6_1_Mindmap({
                   2
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
                     ĐỘI NGŨ CHUYÊN BIỆT (VIP DESK)
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Account Manager riêng biệt & Senior CS Agents</span>
@@ -152,7 +152,7 @@ export function CaseStudy6_1_Mindmap({
                   3
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                     QUY TRÌNH ƯU TIÊN (PRIORITY SLA)
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Định tuyến cuộc gọi tức thì & Xử lý thần tốc</span>
@@ -195,7 +195,7 @@ export function CaseStudy6_1_Mindmap({
                   4
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
                     TRI ÂN & GẮN KẾT (LOYALTY)
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Xây dựng quan hệ bền chặt & Đại sứ thương hiệu</span>
@@ -236,32 +236,32 @@ export function CaseStudy6_1_Mindmap({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/30">
               <TrendingUp className="w-4 h-4 text-amber-600 dark:text-amber-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-amber-700 dark:text-amber-300">+32.6%</div>
+              <div className="text-h6 text-amber-700 dark:text-amber-300">+32.6%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Doanh thu VIP</div>
             </div>
             <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-300">98.2%</div>
+              <div className="text-h6 text-emerald-700 dark:text-emerald-300">98.2%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Giữ chân VIP</div>
             </div>
             <div className="p-3 rounded-2xl bg-yellow-50/60 dark:bg-yellow-950/40 border border-yellow-100 dark:border-yellow-900/30">
               <Star className="w-4 h-4 text-yellow-600 dark:text-yellow-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-yellow-700 dark:text-yellow-300">98.7%</div>
+              <div className="text-h6 text-yellow-700 dark:text-yellow-300">98.7%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">CSAT Hài lòng</div>
             </div>
             <div className="p-3 rounded-2xl bg-orange-50/60 dark:bg-orange-950/40 border border-orange-100 dark:border-orange-900/30">
               <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-orange-700 dark:text-orange-300">&lt; 15s</div>
+              <div className="text-h6 text-orange-700 dark:text-orange-300">&lt; 15s</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Thời gian nhấc máy</div>
             </div>
             <div className="p-3 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/30">
               <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-purple-700 dark:text-purple-300">+88</div>
+              <div className="text-h6 text-purple-700 dark:text-purple-300">+88</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Chỉ số NPS</div>
             </div>
             <div className="p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30">
               <Gem className="w-4 h-4 text-rose-600 dark:text-rose-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-rose-700 dark:text-rose-300">1-on-1</div>
+              <div className="text-h6 text-rose-700 dark:text-rose-300">1-on-1</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Quản lý riêng biệt</div>
             </div>
           </div>

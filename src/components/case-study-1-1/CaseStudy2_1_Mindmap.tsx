@@ -111,7 +111,7 @@ export function CaseStudy2_1_Mindmap({
                 </div>
                 <div>
                   <span className="text-[11px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider">Trụ Cột 01</span>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Phân Tích &amp; Ghi Lại Quy Trình</h4>
+                  <h4 className="text-h6 text-slate-900 dark:text-white">Phân Tích &amp; Ghi Lại Quy Trình</h4>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-sky-500 group-hover:translate-x-1 transition-transform" />
@@ -161,7 +161,7 @@ export function CaseStudy2_1_Mindmap({
                 </div>
                 <div>
                   <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Trụ Cột 02</span>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Thiết Kế Luồng Công Việc &amp; SLA</h4>
+                  <h4 className="text-h6 text-slate-900 dark:text-white">Thiết Kế Luồng Công Việc &amp; SLA</h4>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-indigo-500 group-hover:translate-x-1 transition-transform" />
@@ -216,7 +216,7 @@ export function CaseStudy2_1_Mindmap({
                 </div>
                 <div>
                   <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Trụ Cột 03</span>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Soạn Thảo Bộ Tài Liệu SOP &amp; KMS</h4>
+                  <h4 className="text-h6 text-slate-900 dark:text-white">Soạn Thảo Bộ Tài Liệu SOP &amp; KMS</h4>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
@@ -265,7 +265,7 @@ export function CaseStudy2_1_Mindmap({
                 </div>
                 <div>
                   <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Trụ Cột 04</span>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Đào Tạo &amp; Chu Trình Cập Nhật PDCA</h4>
+                  <h4 className="text-h6 text-slate-900 dark:text-white">Đào Tạo &amp; Chu Trình Cập Nhật PDCA</h4>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-amber-500 group-hover:translate-x-1 transition-transform" />
@@ -313,7 +313,7 @@ export function CaseStudy2_1_Mindmap({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 border-b border-white/20 pb-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-yellow-300 animate-spin" />
-              <h4 className="text-base font-extrabold uppercase tracking-wider">Kết Quả Đột Phá Đạt Được Sau Khi Chuẩn Hóa SOP</h4>
+              <h4 className="text-h6 uppercase tracking-wider">Kết Quả Đột Phá Đạt Được Sau Khi Chuẩn Hóa SOP</h4>
             </div>
             <span className="text-xs bg-white/20 px-3 py-1 rounded-full font-bold flex items-center gap-1">
               Xem bảng số liệu chi tiết <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

@@ -142,7 +142,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
                 <motion.h1
                   layoutId={`section-header-title-${activeSectionId || "default"}`}
                   className={cn(
-                    "text-h1 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    "text-h1 tracking-tight leading-tight flex items-center gap-2",
                     colorStyle
                   )}
                 >
@@ -153,7 +153,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
                 <motion.h2
                   layoutId={`section-header-title-${activeSectionId || "default"}`}
                   className={cn(
-                    "text-h2 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    "text-h2 tracking-tight leading-tight flex items-center gap-2",
                     colorStyle
                   )}
                 >
@@ -164,7 +164,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
                 <motion.h3
                   layoutId={`section-header-title-${activeSectionId || "default"}`}
                   className={cn(
-                    "text-h3 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    "text-h3 tracking-tight leading-tight flex items-center gap-2",
                     colorStyle
                   )}
                 >
@@ -175,7 +175,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
                 <motion.h4
                   layoutId={`section-header-title-${activeSectionId || "default"}`}
                   className={cn(
-                    "text-h4 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    "text-h4 tracking-tight leading-tight flex items-center gap-2",
                     colorStyle
                   )}
                 >
@@ -186,7 +186,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
                 <motion.h5
                   layoutId={`section-header-title-${activeSectionId || "default"}`}
                   className={cn(
-                    "text-h5 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    "text-h5 tracking-tight leading-tight flex items-center gap-2",
                     colorStyle
                   )}
                 >

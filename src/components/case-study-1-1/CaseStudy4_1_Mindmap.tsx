@@ -79,7 +79,7 @@ export function CaseStudy4_1_Mindmap({
                   1
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     XÂY DỰNG KHUNG CHƯƠNG TRÌNH
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Hệ thống hóa module học tập theo lộ trình</span>
@@ -123,7 +123,7 @@ export function CaseStudy4_1_Mindmap({
                   2
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     SỐ HÓA NỘI DUNG ĐA DẠNG
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Micro-learning, video, quiz & tình huống</span>
@@ -166,7 +166,7 @@ export function CaseStudy4_1_Mindmap({
                   3
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     TRIỂN KHAI NỀN TẢNG LMS
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Hệ thống quản lý học tập đa thiết bị</span>
@@ -209,7 +209,7 @@ export function CaseStudy4_1_Mindmap({
                   4
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     TÍCH HỢP LỘ TRÌNH PHÁT TRIỂN
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Gắn kết đào tạo với thăng tiến & nhân sự</span>
@@ -250,32 +250,32 @@ export function CaseStudy4_1_Mindmap({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/30">
               <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-blue-700 dark:text-blue-300">-45%</div>
+              <div className="text-h6 text-blue-700 dark:text-blue-300">-45%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Thời gian & chi phí</div>
             </div>
             <div className="p-3 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30">
               <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-indigo-700 dark:text-indigo-300">96.4%</div>
+              <div className="text-h6 text-indigo-700 dark:text-indigo-300">96.4%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Tỷ lệ hoàn thành</div>
             </div>
             <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-300">100%</div>
+              <div className="text-h6 text-emerald-700 dark:text-emerald-300">100%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Chuẩn hóa SOP</div>
             </div>
             <div className="p-3 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/30">
               <Laptop className="w-4 h-4 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-purple-700 dark:text-purple-300">24/7</div>
+              <div className="text-h6 text-purple-700 dark:text-purple-300">24/7</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Học chủ động</div>
             </div>
             <div className="p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30">
               <Users className="w-4 h-4 text-rose-600 dark:text-rose-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-rose-700 dark:text-rose-300">-60%</div>
+              <div className="text-h6 text-rose-700 dark:text-rose-300">-60%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Tỷ lệ nghỉ việc</div>
             </div>
             <div className="p-3 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/30">
               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-amber-700 dark:text-amber-300">Top 1</div>
+              <div className="text-h6 text-amber-700 dark:text-amber-300">Top 1</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Văn hóa học tập</div>
             </div>
           </div>

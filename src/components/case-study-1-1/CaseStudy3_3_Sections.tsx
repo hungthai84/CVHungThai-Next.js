@@ -95,25 +95,25 @@ export function CaseStudy3_3_Sections({ project }: { project: ProjectCard }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Hợp nhất kênh</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">100% Trên 1 Nền Tảng</p>
+            <p className="text-h6 text-slate-900 dark:text-white">100% Trên 1 Nền Tảng</p>
             <p className="text-xs text-slate-500">Gom toàn bộ Hotline, Chat, Email, Zalo, Fanpage về một Unified Inbox duy nhất.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">Tự động hóa</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">45% Tự Phục Vụ (Self-Service)</p>
+            <p className="text-h6 text-slate-900 dark:text-white">45% Tự Phục Vụ (Self-Service)</p>
             <p className="text-xs text-slate-500">AI Chatbot giải quyết tức thì các yêu cầu tra cứu và câu hỏi thường gặp 24/7.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">Tốc độ phản hồi</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">Giảm 60% Thời Gian FRT</p>
+            <p className="text-h6 text-slate-900 dark:text-white">Giảm 60% Thời Gian FRT</p>
             <p className="text-xs text-slate-500">Tự động định tuyến thông minh (Skill-based Routing) đến đúng chuyên viên phù hợp.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Năng suất nhân sự</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">+40% Sản Lượng Xử Lý</p>
+            <p className="text-h6 text-slate-900 dark:text-white">+40% Sản Lượng Xử Lý</p>
             <p className="text-xs text-slate-500">Giảm tối đa thao tác nhập liệu thủ công nhờ Macro 1-chạm và AI Copilot.</p>
           </div>
         </div>

@@ -93,25 +93,25 @@ export function CaseStudy3_4_Sections({ project }: { project: ProjectCard }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Chuẩn hóa tri thức</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">1.200+ Bài Viết KB</p>
+            <p className="text-h6 text-slate-900 dark:text-white">1.200+ Bài Viết KB</p>
             <p className="text-xs text-slate-500">Số hóa 100% quy trình SOP, chính sách và tài liệu kỹ thuật.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">Độ chính xác AI</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">94% Chuẩn Xác</p>
+            <p className="text-h6 text-slate-900 dark:text-white">94% Chuẩn Xác</p>
             <p className="text-xs text-slate-500">Ứng dụng RAG Pipeline giảm ảo giác xuống dưới 2%.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">Tốc độ tra cứu</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">&lt; 15 Giây / Tra Cứu</p>
+            <p className="text-h6 text-slate-900 dark:text-white">&lt; 15 Giây / Tra Cứu</p>
             <p className="text-xs text-slate-500">Semantic Search giúp nhân viên tìm đúng câu trả lời tức thì.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Tự giải quyết web</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">88% Thành Công</p>
+            <p className="text-h6 text-slate-900 dark:text-white">88% Thành Công</p>
             <p className="text-xs text-slate-500">Khách hàng tự tra cứu thành công trên Cổng Trợ Giúp.</p>
           </div>
         </div>

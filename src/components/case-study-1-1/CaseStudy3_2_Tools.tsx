@@ -310,7 +310,7 @@ export function CaseStudy3_2_Tools() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white/90 dark:bg-slate-900/90 p-6 rounded-3xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-xl">
           <div className="lg:col-span-5 space-y-3">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              <h3 className="text-h6 text-slate-900 dark:text-white mb-1">
                 Phân Bố Chủ Đề Khiếu Nại (Pareto Driver Analysis)
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -348,11 +348,11 @@ export function CaseStudy3_2_Tools() {
                   <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-widest">
                     Chi Tiết Phân Tích Chuyên Sâu
                   </span>
-                  <h4 className="text-base font-extrabold text-slate-900 dark:text-white">
+                  <h4 className="text-h6 text-slate-900 dark:text-white">
                     {driverDetails[selectedDriver].name}
                   </h4>
                 </div>
-                <span className="text-sm font-black px-3 py-1 rounded-xl bg-emerald-600 text-white">
+                <span className="text-h6 px-3 py-1 rounded-xl bg-emerald-600 text-white">
                   Chiếm {driverDetails[selectedDriver].pct}% Tổng Volume
                 </span>
               </div>

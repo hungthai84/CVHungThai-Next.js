@@ -82,7 +82,7 @@ export function CaseStudy1_4_Mindmap({ jumpToSection, project }: { jumpToSection
               <div className="w-12 h-12 mb-2 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md group-hover:bg-white/30 transition shadow-inner">
                 <Cpu className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-base font-black uppercase tracking-tight leading-snug">
+              <h3 className="text-h6 uppercase tracking-tight leading-snug">
                 CHUẨN HÓA &amp; TỰ ĐỘNG HÓA<br/>QUY TRÌNH VẬN HÀNH<br/>
                 <span className="font-normal text-xs text-sky-100">(SOP &amp; Workflow Automation)</span>
               </h3>

@@ -173,7 +173,7 @@ export default function Wallpapers() {
 
   const { lang } = useLanguage();
   const { theme } = useTheme();
-  const isLightMode = theme === 'modern-light-glass';
+  const isLightMode = theme === 'mritech-digital-growth';
 
   const [urlInput, setUrlInput] = useState("");
   const [selectedType, setSelectedType] = useState<'auto' | 'image' | 'video' | 'css' | 'codepen'>('auto');

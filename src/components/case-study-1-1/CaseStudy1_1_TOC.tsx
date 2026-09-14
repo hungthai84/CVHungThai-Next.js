@@ -137,7 +137,7 @@ export function CaseStudy1_1_TOC({
               <BookOpen className="w-4 h-4 text-indigo-500" />
               <span className="text-[10px] font-bold tracking-wider text-indigo-500">Mục lục chi tiết</span>
             </div>
-            <h3 className="text-sm font-black text-slate-900 dark:text-white mt-1 leading-snug font-play">
+            <h3 className="text-h6 text-slate-900 dark:text-white mt-1 leading-snug font-play">
               Case Study {phaseCode}
             </h3>
             <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">

@@ -213,7 +213,7 @@ export function CaseStudy2_3_Tools() {
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
               <div>
                 <span className="text-xs font-bold text-sky-600 uppercase">Cơ Chế 1-Click Macro</span>
-                <h4 className="text-base font-extrabold text-slate-900 dark:text-white">
+                <h4 className="text-h6 text-slate-900 dark:text-white">
                   Tự Động Hóa 5 Thao Tác Thủ Công Thành 1 Click Duy Nhất
                 </h4>
               </div>

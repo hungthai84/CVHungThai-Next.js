@@ -17,37 +17,33 @@ export function cn(...classes: (string | boolean | undefined | null | Record<str
 
 export function getUnifiedSurfaceStyle(theme: string): string {
   switch (theme) {
-    case "mritech-digital-growth":
-      return "bg-white/85 dark:bg-slate-900/85 border border-white/95 dark:border-amber-500/25 shadow-[0_20px_50px_rgba(249,115,22,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] text-slate-900 dark:text-slate-100 backdrop-blur-2xl transition-all duration-300";
-    case "mritech-aurora-glass":
-      return "bg-white/85 dark:bg-slate-900/85 border border-white/90 dark:border-indigo-500/25 shadow-[0_20px_50px_rgba(99,102,241,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] text-slate-900 dark:text-slate-100 backdrop-blur-2xl transition-all duration-300";
     case "glass-dark-neon":
-      return "bg-slate-900/90 dark:bg-slate-900/90 border border-slate-800/90 dark:border-slate-800/90 shadow-[0_8px_30px_rgba(0,0,0,0.35)] text-white backdrop-blur-md transition-all duration-200";
-    case "modern-light-glass":
+      return "bg-[#090D16]/75 dark:bg-[#090D16]/75 border border-white/10 dark:border-white/10 shadow-[0_32px_64px_rgba(0,0,0,0.4),0_0_24px_rgba(0,245,255,0.15)] text-white backdrop-blur-[24px] transition-all duration-200";
+    case "mritech-digital-growth":
     default:
-      return "bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-sm text-slate-900 dark:text-slate-100 backdrop-blur-md transition-all duration-200";
+      return "bg-white/70 dark:bg-slate-900/60 border border-white/80 dark:border-white/15 shadow-[0_32px_64px_rgba(15,23,42,0.06),0_16px_32px_rgba(15,23,42,0.04),inset_0_2px_4px_rgba(255,255,255,0.6)] text-slate-900 dark:text-slate-100 backdrop-blur-[28px] dark:backdrop-blur-[35px] transition-all duration-300";
   }
 }
 
 export function getGlassCardClass(variant: "default" | "blue" | "indigo" | "purple" | "cyan" | "emerald" | "amber" | "rose" = "default"): string {
-  const base = "backdrop-blur-[16px] dark:backdrop-blur-[20px] transition-all duration-200 rounded-[10px] border ";
+  const base = "backdrop-blur-[24px] dark:backdrop-blur-[28px] transition-all duration-300 rounded-2xl md:rounded-[20px] border ";
   switch (variant) {
     case "blue":
-      return `${base} bg-blue-500/10 dark:bg-white/[0.06] border-blue-500/25 dark:border-blue-400/35 shadow-[0_8px_30px_rgba(0,102,255,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-blue-500/40 dark:hover:border-blue-400/60 hover:-translate-y-1`;
+      return `${base} bg-blue-500/8 dark:bg-white/[0.04] border-blue-500/30 dark:border-blue-400/30 shadow-[0_12px_40px_rgba(0,102,255,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-blue-500/50 dark:hover:border-blue-400/50 hover:shadow-[0_20px_50px_rgba(0,102,255,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "indigo":
-      return `${base} bg-indigo-500/10 dark:bg-white/[0.06] border-indigo-500/25 dark:border-indigo-400/35 shadow-[0_8px_30px_rgba(48,79,254,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-indigo-500/40 dark:hover:border-indigo-400/60 hover:-translate-y-1`;
+      return `${base} bg-indigo-500/8 dark:bg-white/[0.04] border-indigo-500/30 dark:border-indigo-400/30 shadow-[0_12px_40px_rgba(91,33,255,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-indigo-500/50 dark:hover:border-indigo-400/50 hover:shadow-[0_20px_50px_rgba(91,33,255,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "purple":
-      return `${base} bg-purple-500/10 dark:bg-white/[0.06] border-purple-500/25 dark:border-purple-400/35 shadow-[0_8px_30px_rgba(91,33,255,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-purple-500/40 dark:hover:border-purple-400/60 hover:-translate-y-1`;
+      return `${base} bg-purple-500/8 dark:bg-white/[0.04] border-purple-500/30 dark:border-purple-400/30 shadow-[0_12px_40px_rgba(123,47,247,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-purple-500/50 dark:hover:border-purple-400/50 hover:shadow-[0_20px_50px_rgba(123,47,247,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "cyan":
-      return `${base} bg-cyan-500/10 dark:bg-white/[0.06] border-cyan-500/25 dark:border-cyan-400/35 shadow-[0_8px_30px_rgba(0,180,219,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-cyan-500/40 dark:hover:border-cyan-400/60 hover:-translate-y-1`;
+      return `${base} bg-cyan-500/8 dark:bg-white/[0.04] border-cyan-500/30 dark:border-cyan-400/30 shadow-[0_12px_40px_rgba(0,180,219,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-cyan-500/50 dark:hover:border-cyan-400/50 hover:shadow-[0_20px_50px_rgba(0,180,219,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "emerald":
-      return `${base} bg-emerald-500/10 dark:bg-white/[0.06] border-emerald-500/25 dark:border-emerald-400/35 shadow-[0_8px_30px_rgba(0,200,83,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-emerald-500/40 dark:hover:border-emerald-400/60 hover:-translate-y-1`;
+      return `${base} bg-emerald-500/8 dark:bg-white/[0.04] border-emerald-500/30 dark:border-emerald-400/30 shadow-[0_12px_40px_rgba(0,200,83,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-emerald-500/50 dark:hover:border-emerald-400/50 hover:shadow-[0_20px_50px_rgba(0,200,83,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "amber":
-      return `${base} bg-amber-500/10 dark:bg-white/[0.06] border-amber-500/25 dark:border-amber-400/35 shadow-[0_8px_30px_rgba(255,179,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-amber-500/40 dark:hover:border-amber-400/60 hover:-translate-y-1`;
+      return `${base} bg-amber-500/8 dark:bg-white/[0.04] border-amber-500/30 dark:border-amber-400/30 shadow-[0_12px_40px_rgba(255,179,0,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-amber-500/50 dark:hover:border-amber-400/50 hover:shadow-[0_20px_50px_rgba(255,179,0,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     case "rose":
-      return `${base} bg-rose-500/10 dark:bg-white/[0.06] border-rose-500/25 dark:border-rose-400/35 shadow-[0_8px_30px_rgba(236,0,140,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-rose-500/40 dark:hover:border-rose-400/60 hover:-translate-y-1`;
+      return `${base} bg-rose-500/8 dark:bg-white/[0.04] border-rose-500/30 dark:border-rose-400/30 shadow-[0_12px_40px_rgba(236,0,140,0.05)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-rose-500/50 dark:hover:border-rose-400/50 hover:shadow-[0_20px_50px_rgba(236,0,140,0.12)] hover:-translate-y-1.5 hover:scale-[1.01]`;
     default:
-      return `${base} bg-white/65 dark:bg-white/[0.06] border-white/65 dark:border-white/12 shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-slate-300/80 dark:hover:border-white/25 hover:-translate-y-1`;
+      return `${base} bg-white/45 dark:bg-white/[0.04] border-white/50 dark:border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] hover:border-white/80 dark:hover:border-white/25 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 hover:scale-[1.01]`;
   }
 }
 

@@ -749,14 +749,6 @@ export function Systems() {
   const [modalSystem, setModalSystem] = useState<SystemItem | null>(null);
   const [toastText, setToastText] = useState<string | null>(null);
 
-  /* Video player states */
-  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
-  const [fullVideoPaused, setFullVideoPaused] = useState<boolean>(false);
-  const [fullVideoMuted, setFullVideoMuted] = useState<boolean>(false);
-
-  const previewVideoRef = useRef<HTMLVideoElement>(null);
-  const fullVideoRef = useRef<HTMLVideoElement>(null);
-
   const t = translations[currentLang];
 
   const showNotification = (msg: string) => {
@@ -765,13 +757,6 @@ export function Systems() {
       setToastText(null);
     }, 3200);
   };
-
-  /* Handle preview video autoplay on mount */
-  useEffect(() => {
-    if (previewVideoRef.current && !isVideoPlaying) {
-      previewVideoRef.current.play().catch(() => {});
-    }
-  }, [isVideoPlaying]);
 
   const handleCardClick = (key: string, e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('.action-btn')) return;
@@ -802,57 +787,6 @@ export function Systems() {
 
   const closeModal = () => {
     setModalSystem(null);
-  };
-
-  /* Full Banner Video Controls */
-  const toggleVideoPlay = () => {
-    if (!isVideoPlaying) {
-      setIsVideoPlaying(true);
-      setFullVideoPaused(false);
-      setTimeout(() => {
-        if (fullVideoRef.current) {
-          fullVideoRef.current.currentTime = 0;
-          fullVideoRef.current.muted = fullVideoMuted;
-          fullVideoRef.current.play().catch(() => {});
-        }
-      }, 50);
-      if (previewVideoRef.current) {
-        previewVideoRef.current.pause();
-      }
-    } else {
-      setIsVideoPlaying(false);
-      setFullVideoPaused(true);
-      if (fullVideoRef.current) {
-        fullVideoRef.current.pause();
-      }
-      if (previewVideoRef.current) {
-        previewVideoRef.current.currentTime = 0;
-        previewVideoRef.current.play().catch(() => {});
-      }
-    }
-  };
-
-  const toggleFullVideoPlayback = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (fullVideoRef.current) {
-      if (fullVideoRef.current.paused) {
-        fullVideoRef.current.play();
-        setFullVideoPaused(false);
-      } else {
-        fullVideoRef.current.pause();
-        setFullVideoPaused(true);
-        // Tạm dừng sẽ thu gọn lại và hiển thị lại các thẻ hệ thống theo yêu cầu
-        setIsVideoPlaying(false);
-      }
-    }
-  };
-
-  const toggleVideoMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (fullVideoRef.current) {
-      fullVideoRef.current.muted = !fullVideoRef.current.muted;
-      setFullVideoMuted(fullVideoRef.current.muted);
-    }
   };
 
   /* Filter Systems based on Category and Search Query */
@@ -1409,64 +1343,17 @@ export function Systems() {
           {/* Header Card Hệ thống (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
           <PageCardHeader
             pageId="systems"
-            actionRight={
-              <div className="flex items-center gap-2 ml-auto shrink-0">
-                <button
-                  type="button"
-                  onClick={toggleVideoPlay}
-                  className={cn(
-                    "relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 shadow-lg transition-all duration-300 active:scale-95 group cursor-pointer focus:outline-none flex items-center justify-center",
-                    isVideoPlaying 
-                      ? "border-amber-500 ring-2 ring-rose-500/50 scale-105" 
-                      : "border-blue-500/40 hover:border-rose-500 dark:border-blue-400/40 dark:hover:border-rose-400 shadow-rose-500/10"
-                  )}
-                  title={isVideoPlaying ? (isVi ? "Tạm dừng & Thu gọn thẻ hệ thống" : "Pause & Collapse Video") : (isVi ? "Phát Video toàn khung hệ thống" : "Play Fullscreen Ecosystem Video")}
-                  aria-label={isVideoPlaying ? t.pause : t.playVideo}
-                >
-                  {/* Technology Looping GIF in background */}
-                  <img
-                    src="https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif"
-                    alt="Ecosystem GIF Preview"
-                    className="absolute inset-0 w-full h-full object-cover brightness-[0.65] group-hover:brightness-[0.8] transition-all duration-300 scale-110 group-hover:scale-100"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-
-                  {/* Play Button at the bottom center of the circle */}
-                  <div className="absolute bottom-1 sm:bottom-1.5 left-1/2 -translate-x-1/2 z-10 bg-rose-600/90 group-hover:bg-rose-500 text-white rounded-full px-2.5 py-0.5 flex items-center justify-center gap-1 shadow-md border border-white/20 transition-all scale-95 group-hover:scale-105 max-w-[95%] truncate">
-                    {isVideoPlaying ? (
-                      <>
-                        <Pause className="w-2.5 h-2.5 fill-current animate-pulse" />
-                        <span className="text-3xs font-black tracking-wider uppercase">{isVi ? "DỪNG" : "PAUSE"}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-2.5 h-2.5 ml-0.5 fill-current" />
-                        <span className="text-3xs font-black tracking-wider uppercase">{isVi ? "PHÁT" : "PLAY"}</span>
-                      </>
-                    )}
-                  </div>
-                </button>
-              </div>
-            }
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-4 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
               <span className="text-caption font-mono font-black text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
                 {isVi ? `${filteredSystems.length} Nền tảng chuyên sâu` : `${filteredSystems.length} Core Platforms`}
               </span>
-              {isVideoPlaying && (
-                <span className="text-caption font-bold text-rose-500 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 animate-pulse flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block" />
-                  Đang phát video giới thiệu hệ sinh thái
-                </span>
-              )}
             </div>
 
-            {/* Category Filter Pills (chỉ hiển thị khi không phát video) */}
-            {!isVideoPlaying && (
-              <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs sm:ml-auto">
-                {(['all', 'platform', 'enterprise', 'growth'] as const).map((cat) => (
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs sm:ml-auto">
+              {(['all', 'platform', 'enterprise', 'growth'] as const).map((cat) => (
                   <button
                     key={cat}
                     type="button"
@@ -1485,93 +1372,7 @@ export function Systems() {
                   </button>
                 ))}
               </div>
-            )}
           </PageCardHeader>
-
-          {/* Khi phát video: Hiện popup video nổi ở góc trên bên phải màn hình hệ thống */}
-          {isVideoPlaying && (
-            <div className="fixed inset-0 z-[1100] flex items-start justify-end p-3 sm:p-6 pt-16 sm:pt-20 pointer-events-none animate-fade-in">
-              <div className="pointer-events-auto relative w-full max-w-sm sm:max-w-md md:max-w-xl rounded-2xl bg-slate-950 border border-rose-500/50 shadow-[0_20px_50px_rgba(225,29,72,0.4)] overflow-hidden flex flex-col justify-between aspect-video group animate-scale-in">
-              {/* Full Video Stream */}
-              <video
-                ref={fullVideoRef}
-                playsInline
-                autoPlay
-                className="w-full h-full object-contain absolute inset-0 z-0 bg-black cursor-pointer"
-                src="https://cdn.scena.ai/project/8606/ac120a105730c378447fd67f5e8b6aeb9557b5e4e8854ac2e21148d5316f780b.mp4"
-                onClick={toggleFullVideoPlayback}
-                onEnded={() => {
-                  setIsVideoPlaying(false);
-                  setFullVideoPaused(true);
-                }}
-              />
-
-              {/* Gradient Vignette Overlays */}
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/80 via-transparent to-black/70 z-10" />
-
-              {/* Top Video Overlay Bar */}
-              <div className="relative z-20 flex items-center justify-between p-3 sm:p-4 bg-gradient-to-b from-black/70 to-transparent">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 border border-rose-500/40 backdrop-blur-md text-white">
-                  <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping"></span>
-                  <span className="text-xs font-black tracking-wider uppercase text-rose-300">
-                    {t.videoIntroTitle} • ECOSYSTEM ARCHITECTURE
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={toggleVideoMute}
-                    className="p-2 rounded-full bg-slate-900/85 hover:bg-slate-800 border border-white/20 text-white text-xs transition-transform active:scale-90 cursor-pointer shadow-md"
-                    title={fullVideoMuted ? "Bật âm thanh" : "Tắt âm thanh"}
-                  >
-                    {fullVideoMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-rose-400" />}
-                  </button>
-
-                  <button
-                    onClick={toggleVideoPlay}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-md"
-                    title="Tạm dừng và trở lại thẻ hệ thống"
-                  >
-                    <Minimize2 className="w-3.5 h-3.5" />
-                    <span>Thu gọn</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Center Play/Pause Indicator Button on Hover */}
-              <div className="relative z-20 flex-1 flex items-center justify-center pointer-events-none">
-                <button
-                  type="button"
-                  onClick={toggleFullVideoPlayback}
-                  className="pointer-events-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 backdrop-blur-md shadow-2xl cursor-pointer border-2 border-white/40 active:scale-90"
-                  title={fullVideoPaused ? t.playVideo : t.pause}
-                >
-                  {fullVideoPaused ? <Play className="w-8 h-8 ml-1 fill-current" /> : <Pause className="w-8 h-8 fill-current" />}
-                </button>
-              </div>
-
-              {/* Bottom Video Info & Control Bar */}
-              <div className="relative z-20 flex items-center justify-between p-3 sm:p-4 bg-gradient-to-t from-black/85 to-transparent">
-                <div className="flex flex-col">
-                  <span className="text-xs sm:text-sm font-black text-white drop-shadow-md">
-                    Hệ sinh thái nền tảng chuyển đổi số toàn diện SDP - ERP - CRM - HRM
-                  </span>
-                  <span className="text-2xs text-white/70">
-                    Nhấn vào video hoặc nút tạm dừng để quay lại danh sách thẻ hệ thống
-                  </span>
-                </div>
-
-                <button
-                  onClick={toggleFullVideoPlayback}
-                  className="px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
-                >
-                  {fullVideoPaused ? <Play className="w-3.5 h-3.5 fill-current text-rose-400" /> : <Pause className="w-3.5 h-3.5 fill-current text-rose-400" />}
-                  <span>{fullVideoPaused ? "Tiếp tục phát" : "Tạm dừng & Thu gọn"}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          )}
 
           <div className="cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 py-2 w-full flex-1 min-h-0 overflow-y-auto">
               {filteredSystems.map((item) => {

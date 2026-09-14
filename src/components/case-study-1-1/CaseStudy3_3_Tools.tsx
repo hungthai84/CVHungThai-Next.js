@@ -201,7 +201,7 @@ export function CaseStudy3_3_Tools() {
             <div>
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">{currentThread.customer}</h4>
+                  <h4 className="text-h6 text-slate-900 dark:text-white">{currentThread.customer}</h4>
                   <p className="text-xs text-slate-500">{currentThread.subject}</p>
                 </div>
                 <span className="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-xl">
@@ -253,7 +253,7 @@ export function CaseStudy3_3_Tools() {
           {/* Controls */}
           <div className="lg:col-span-5 space-y-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              <h3 className="text-h6 text-slate-900 dark:text-white mb-1">
                 Bộ Điều Khiển Quy Trình Thông Minh
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -341,24 +341,24 @@ export function CaseStudy3_3_Tools() {
               <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 uppercase tracking-widest block mb-1">
                 Kết Quả Thực Thi Trigger &amp; Action Tự Động
               </span>
-              <h4 className="text-base font-extrabold text-slate-900 dark:text-white">
+              <h4 className="text-h6 text-slate-900 dark:text-white">
                 Quyết Định Điều Phối Hệ Thống Trong 0.05 Giây
               </h4>
 
               <div className="grid grid-cols-2 gap-3 mt-4 text-xs">
                 <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-purple-200/60">
                   <span className="text-slate-500 block text-[10px]">Độ Ưu Tiên (Priority):</span>
-                  <strong className="text-sm font-bold text-purple-700 dark:text-purple-300">{simResult.priority}</strong>
+                  <strong className="text-h6 text-purple-700 dark:text-purple-300">{simResult.priority}</strong>
                 </div>
 
                 <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-purple-200/60">
                   <span className="text-slate-500 block text-[10px]">Mục Tiêu SLA Giải Quyết:</span>
-                  <strong className="text-sm font-bold text-rose-600">{simResult.slaTarget}</strong>
+                  <strong className="text-h6 text-rose-600">{simResult.slaTarget}</strong>
                 </div>
 
                 <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-purple-200/60 col-span-2">
                   <span className="text-slate-500 block text-[10px]">Nhóm Nhân Viên Được Gán Tự Động:</span>
-                  <strong className="text-sm font-bold text-slate-900 dark:text-white">{simResult.assignedGroup}</strong>
+                  <strong className="text-h6 text-slate-900 dark:text-white">{simResult.assignedGroup}</strong>
                 </div>
 
                 <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-purple-200/60 col-span-2">
@@ -384,7 +384,7 @@ export function CaseStudy3_3_Tools() {
                 <Bot className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">AI Virtual Assistant Sandbox</h4>
+                <h4 className="text-h6 text-slate-900 dark:text-white">AI Virtual Assistant Sandbox</h4>
                 <p className="text-[11px] text-slate-500">Thử nghiệm giải quyết tự động 45% tác vụ &amp; Seamless Handoff</p>
               </div>
             </div>

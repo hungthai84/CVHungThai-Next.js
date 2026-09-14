@@ -234,7 +234,7 @@ export function CaseStudy1_5_Tools() {
                 </h4>
                 <div className="mt-6 text-center">
                   <span className="text-4xl sm:text-5xl font-black text-purple-700 dark:text-purple-300">{totalQaScore}</span>
-                  <span className="text-sm font-bold text-slate-500"> / 100 điểm</span>
+                  <span className="text-h6 text-slate-500"> / 100 điểm</span>
                   <div className="mt-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${totalQaScore >= 90 ? 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300' : totalQaScore >= 80 ? 'bg-sky-500/20 text-sky-800' : 'bg-rose-500/20 text-rose-800'}`}>
                       {totalQaScore >= 90 ? 'Đạt Chuẩn Xuất Sắc (Vượt Chỉ Tiêu)' : totalQaScore >= 80 ? 'Đạt Yêu Cầu Vận Hành' : 'Cần Huấn Luyện Lại (Coaching 1-on-1)'}

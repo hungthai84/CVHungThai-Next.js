@@ -501,19 +501,19 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
               const cq = getConcludingQuote(project.phaseCode);
               if (!cq) return null;
               return (
-                <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-2xl shadow-indigo-500/25 border-2 border-indigo-400/50 relative overflow-hidden space-y-4 mt-4 md:mt-5 clear-both">
-                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-                  <div className="flex items-center gap-3 border-b border-indigo-500/40 pb-3">
-                    <Quote className="w-8 h-8 text-amber-400 shrink-0 animate-pulse" />
-                    <h3 className="text-base sm:text-lg font-bold tracking-wide text-amber-300">
+                <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50/90 via-indigo-50/50 to-slate-50/90 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 text-slate-800 dark:text-white shadow-md dark:shadow-2xl dark:shadow-indigo-500/25 border-2 border-amber-300/80 dark:border-indigo-400/50 relative overflow-hidden space-y-4 mt-4 md:mt-5 clear-both">
+                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-300/10 dark:bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="flex items-center gap-3 border-b border-amber-200 dark:border-indigo-500/40 pb-3">
+                    <Quote className="w-8 h-8 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
+                    <h3 className="text-h6 tracking-wide text-amber-800 dark:text-amber-300">
                       Lời kết & triết lý vận hành
                     </h3>
                   </div>
-                  <blockquote className="text-sm sm:text-base italic text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-400">
+                  <blockquote className="text-sm sm:text-base italic text-slate-700 dark:text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-500 dark:border-amber-400">
                     "{cq.quote}"
                   </blockquote>
                   {cq.author && (
-                    <div className="flex justify-end text-xs font-bold text-indigo-300 tracking-wider">
+                    <div className="flex justify-end text-xs font-bold text-indigo-600 dark:text-indigo-300 tracking-wider">
                       — {cq.author}
                     </div>
                   )}

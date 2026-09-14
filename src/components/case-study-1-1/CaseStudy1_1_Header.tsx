@@ -2,7 +2,6 @@ import React from "react";
 import { Briefcase, CheckCircle2, ArrowLeft } from "lucide-react";
 import { ProjectCard } from "../../data/projectsData";
 import { playUiSound } from "../../lib/sound";
-import { ProjectAudioPlayer } from "../project/ProjectAudioPlayer";
 import { getProjectAudioSlug, getProjectAudioScript } from "../../data/projectPostcards";
 
 export function CaseStudy1_1_Header({ onShowToast, project, onBack }: { onShowToast: (msg: string) => void; project?: ProjectCard; onBack: () => void }) {
@@ -67,17 +66,6 @@ export function CaseStudy1_1_Header({ onShowToast, project, onBack }: { onShowTo
               );
             })}
           </div>
-        </div>
-
-        {/* Integrated Project Audio Player Bar inside Banner */}
-        <div className="relative z-20 pt-2">
-          <ProjectAudioPlayer
-            audioSrc={audioSrc}
-            title={title}
-            voice="Nam Puck"
-            scriptText={scriptText}
-            onToast={onShowToast}
-          />
         </div>
       </header>
     </>

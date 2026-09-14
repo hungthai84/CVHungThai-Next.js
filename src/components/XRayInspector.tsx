@@ -4175,12 +4175,9 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 </div>
               )}
 
-              {/* ================= TAB: TYPOGRAPHY (DISABLED) ================= */}
+              {/* ================= TAB: TYPOGRAPHY (REMOVED) ================= */}
               {false && (
-                <div className={cn(
-                  "p-4 rounded-2xl border space-y-4 animate-in fade-in duration-200 shadow-sm",
-                  isLight ? "bg-amber-50/40 border-amber-200" : "bg-slate-950/90 border-amber-500/30"
-                )}>
+                <div className="hidden">
                   {/* 1. Header & Giới thiệu hệ thống Font Play */}
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-amber-200/80 dark:border-amber-800/60 pb-3">
                     <div className="flex items-center gap-2.5">

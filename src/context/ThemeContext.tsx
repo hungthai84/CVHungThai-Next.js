@@ -3,8 +3,6 @@ import { useTheme as useNextTheme } from "next-themes";
 
 export const THEMES = [
   "glass-dark-neon",
-  "modern-light-glass",
-  "mritech-aurora-glass",
   "mritech-digital-growth"
 ] as const;
 
@@ -506,6 +504,8 @@ export const COLOR_PRESETS: ColorGroupPreset[] = [
 ];
 
 export interface ThemeContextType {
+  fontScale: number;
+  setFontScale: (scale: number) => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
   colorPreset: string;
@@ -520,6 +520,10 @@ export interface ThemeContextType {
   setIsColorModalOpen: (open: boolean) => void;
   openColorModal: () => void;
   closeColorModal: () => void;
+  isTypographyModalOpen: boolean;
+  setIsTypographyModalOpen: (open: boolean) => void;
+  openTypographyModal: () => void;
+  closeTypographyModal: () => void;
 }
 
 const THEME_STORAGE_KEY = "portfolio_theme";
@@ -533,26 +537,59 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
   const [themeSnapshot, setThemeSnapshot] = useState<string | null>(null);
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
+  const [isTypographyModalOpen, setIsTypographyModalOpen] = useState(false);
 
   const openColorModal = () => setIsColorModalOpen(true);
   const closeColorModal = () => setIsColorModalOpen(false);
+  const openTypographyModal = () => setIsTypographyModalOpen(true);
+  const closeTypographyModal = () => setIsTypographyModalOpen(false);
+
+  const [fontScale, setFontScaleState] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("portfolio_font_scale");
+      if (saved && !isNaN(Number(saved))) return Number(saved);
+    } catch {}
+    return 100;
+  });
+
+  const setFontScale = (scale: number) => {
+    setFontScaleState(scale);
+    try {
+      localStorage.setItem("portfolio_font_scale", scale.toString());
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.fontSize = `${16 * (scale / 100)}px`;
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = `${16 * (fontScale / 100)}px`;
+    }
+  }, [fontScale]);
 
   const [theme, setThemeState] = useState<ThemeType>(() => {
     try {
       // 1. Check master prompt storage key 'portfolio_theme'
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-      if (savedTheme && THEMES.includes(savedTheme as ThemeType)) {
-        return savedTheme as ThemeType;
+      if (savedTheme) {
+        if (THEMES.includes(savedTheme as ThemeType)) {
+          return savedTheme as ThemeType;
+        }
+        if (savedTheme === "modern-light-glass" || savedTheme === "mritech-aurora-glass") {
+          localStorage.setItem(THEME_STORAGE_KEY, "mritech-digital-growth");
+          return "mritech-digital-growth";
+        }
       }
 
       // 2. Otherwise, check for legacy values and perform precise migration
       const legacyThemeVal = localStorage.getItem("theme");
       const legacyPrefVal = localStorage.getItem(OLD_THEME_PREF_KEY);
 
-      // light -> modern-light-glass
+      // light -> mritech-digital-growth
       if (legacyThemeVal === "light" || legacyThemeVal === "flat-light") {
-        localStorage.setItem(THEME_STORAGE_KEY, "modern-light-glass");
-        return "modern-light-glass";
+        localStorage.setItem(THEME_STORAGE_KEY, "mritech-digital-growth");
+        return "mritech-digital-growth";
       }
 
       // dark + portfolio_theme_pref = ...
@@ -881,6 +918,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     <ThemeContext.Provider value={{ 
       theme, 
       setTheme, 
+      fontScale,
+      setFontScale,
       colorPreset,
       setColorPreset: handleSetColorPreset,
       activePalette,
@@ -892,7 +931,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       isColorModalOpen,
       setIsColorModalOpen,
       openColorModal,
-      closeColorModal
+      closeColorModal,
+      isTypographyModalOpen,
+      setIsTypographyModalOpen,
+      openTypographyModal,
+      closeTypographyModal
     }}>
       {children}
     </ThemeContext.Provider>
@@ -903,8 +946,10 @@ export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     return {
-      theme: "modern-light-glass",
+      theme: "mritech-digital-growth",
       setTheme: () => {},
+      fontScale: 100,
+      setFontScale: () => {},
       isThemeTransitioning: false,
       themeSnapshot: null,
       isApplyingTheme: false,
@@ -914,6 +959,10 @@ export const useTheme = (): ThemeContextType => {
       setIsColorModalOpen: () => {},
       openColorModal: () => {},
       closeColorModal: () => {},
+      isTypographyModalOpen: false,
+      setIsTypographyModalOpen: () => {},
+      openTypographyModal: () => {},
+      closeTypographyModal: () => {},
       colorPreset: "default",
       setColorPreset: () => {},
       activePalette: LIGHT_GLASS_PALETTE

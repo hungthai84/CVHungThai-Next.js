@@ -273,7 +273,7 @@ export const HeroIntroButton: React.FC<HeroIntroButtonProps> = ({
             </>
           ) : (
             <>
-              <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-bold text-[16px] text-button text-white font-play truncate">
+              <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] text-button text-white truncate">
                 {isVi ? "Giới thiệu" : "Introduction"}
               </span>
               <SparkleWithPlusDot className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
@@ -352,12 +352,12 @@ export const HeroContactButton: React.FC<HeroContactButtonProps> = ({
           }}
           className={cn(
             "flex items-center justify-center gap-1.5 sm:gap-2 px-2 py-0.5 flex-1 min-w-0",
-            "text-white font-extrabold text-xs sm:text-sm tracking-wide transition-all duration-300 cursor-pointer",
+            "text-white transition-all duration-300 cursor-pointer",
             "hover:opacity-90 active:scale-98"
           )}
           title={isVi ? "Chuyển tới phần Liên hệ" : "Go to Contact section"}
         >
-          <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-black text-xs sm:text-sm text-white font-sans tracking-wide truncate">
+          <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] text-button text-white truncate">
             {isVi ? "Liên hệ" : "Contact"}
           </span>
           <SparkleWithPlusDot className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />

@@ -224,7 +224,7 @@ export function CaseStudy5_1_Sections({ project: _project }: { project: ProjectC
         </div>
 
         <div className="p-6 rounded-2xl bg-gradient-to-r from-teal-500/10 via-blue-500/10 to-indigo-500/10 border border-teal-200 dark:border-teal-800/60 space-y-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+          <h3 className="text-h6 text-slate-900 dark:text-white">
             Vòng Lặp Chuyển Giao Liền Mạch (Seamless Deflection & Escalation Loop):
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">

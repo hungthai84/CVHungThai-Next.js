@@ -126,7 +126,7 @@ export default function About() {
                   {isVi ? "Kinh nghiệm CX & CS" : "CX Leadership"}
                 </span>
                 <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(0,245,255,0.4)]">
+                  <span className="text-h6 text-cyan-600 dark:text-cyan-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(0,245,255,0.4)]">
                     22+
                   </span>
                   <span className="text-3xs font-black text-cyan-600 dark:text-cyan-400 tracking-wider uppercase">
@@ -150,7 +150,7 @@ export default function About() {
                   {isVi ? "Quy mô lớn" : "Enterprise"}
                 </span>
                 <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="text-sm sm:text-base font-black text-purple-600 dark:text-purple-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]">
+                  <span className="text-h6 text-purple-600 dark:text-purple-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]">
                     8+
                   </span>
                   <span className="text-3xs font-black text-purple-600 dark:text-purple-400 tracking-wider uppercase">
@@ -174,7 +174,7 @@ export default function About() {
                   {isVi ? "Tự động hóa" : "AI Automation"}
                 </span>
                 <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]">
+                  <span className="text-h6 text-rose-600 dark:text-rose-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]">
                     24/7
                   </span>
                   <span className="text-3xs font-black text-rose-600 dark:text-rose-400 tracking-wider uppercase">
@@ -198,7 +198,7 @@ export default function About() {
                   {isVi ? "Hài lòng KH" : "Satisfaction"}
                 </span>
                 <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]">
+                  <span className="text-h6 text-emerald-600 dark:text-emerald-400 font-sans tracking-tight drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]">
                     99%
                   </span>
                   <span className="text-3xs font-black text-emerald-600 dark:text-emerald-400 tracking-wider uppercase">
@@ -236,7 +236,7 @@ export default function About() {
                   <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
                     <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
                   </div>
-                  <h6 className="text-h6 font-bold tracking-tight text-blue-600 dark:text-cyan-400">
+                  <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
                     {isVi ? "Thông tin cá nhân" : "Personal profile"}
                   </h6>
                 </div>
@@ -249,90 +249,90 @@ export default function About() {
             <div className="grid grid-cols-1 gap-1.5 sm:gap-2 pr-0.5">
               
               {/* 1. Giới tính */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-blue-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-blue-50/40 dark:bg-blue-950/20 border border-blue-100/80 dark:border-blue-900/45 flex items-center gap-2.5 shadow-2xs hover:border-blue-400/60 dark:hover:border-cyan-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-blue-400/30 bg-blue-500/15 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
                   <User className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-blue-600/70 dark:text-cyan-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Giới tính" : "Gender"}
                   </span>
-                  <span className="text-xs font-bold text-blue-700 dark:text-cyan-300 truncate">
+                  <span className="text-xs font-bold text-blue-800 dark:text-cyan-300 truncate">
                     {isVi ? "Nam giới" : "Male"}
                   </span>
                 </div>
               </div>
 
               {/* 2. Dân tộc */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-indigo-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/80 dark:border-indigo-900/45 flex items-center gap-2.5 shadow-2xs hover:border-indigo-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-indigo-400/30 bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
                   <Users className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-indigo-600/70 dark:text-indigo-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Dân tộc" : "Ethnicity"}
                   </span>
-                  <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300 truncate">
+                  <span className="text-xs font-bold text-indigo-800 dark:text-indigo-300 truncate">
                     {isVi ? "Kinh" : "Kinh"}
                   </span>
                 </div>
               </div>
 
               {/* 3. Tình trạng */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-rose-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-rose-50/40 dark:bg-rose-950/20 border border-rose-100/80 dark:border-rose-900/45 flex items-center gap-2.5 shadow-2xs hover:border-rose-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-rose-400/30 bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
                   <Heart className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-rose-600/70 dark:text-rose-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Tình trạng" : "Status"}
                   </span>
-                  <span className="text-xs font-bold text-rose-700 dark:text-rose-300 truncate">
+                  <span className="text-xs font-bold text-rose-800 dark:text-rose-300 truncate">
                     {isVi ? "Độc thân" : "Single"}
                   </span>
                 </div>
               </div>
 
               {/* 4. Sinh nhật */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-amber-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100/80 dark:border-amber-900/45 flex items-center gap-2.5 shadow-2xs hover:border-amber-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-amber-400/30 bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-amber-600/70 dark:text-amber-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Sinh nhật" : "Date of Birth"}
                   </span>
-                  <span className="text-xs font-bold text-amber-700 dark:text-amber-300 truncate">
+                  <span className="text-xs font-bold text-amber-800 dark:text-amber-300 truncate">
                     22/06/1984
                   </span>
                 </div>
               </div>
 
               {/* 5. Tạm trú */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-purple-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-purple-50/40 dark:bg-purple-950/20 border border-purple-100/80 dark:border-purple-900/45 flex items-center gap-2.5 shadow-2xs hover:border-purple-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-purple-400/30 bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-purple-600/70 dark:text-purple-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Tạm trú" : "Temp. Residence"}
                   </span>
-                  <span className="text-xs font-bold text-purple-700 dark:text-purple-300 truncate" title="Q7, Hồ Chí Minh">
+                  <span className="text-xs font-bold text-purple-800 dark:text-purple-300 truncate" title="Q7, Hồ Chí Minh">
                     Q7, Hồ Chí Minh
                   </span>
                 </div>
               </div>
 
               {/* 6. Cư trú */}
-              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5 shadow-2xs hover:border-emerald-400/50 transition-all min-w-0">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/80 dark:border-emerald-900/45 flex items-center gap-2.5 shadow-2xs hover:border-emerald-400/60 transition-all min-w-0">
                 <div className="w-8 h-8 rounded-lg border border-emerald-400/30 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <Home className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+                  <span className="text-3xs font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-wider truncate">
                     {isVi ? "Cư trú" : "Hometown"}
                   </span>
-                  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 truncate" title="Mỹ Tho, Tiền Giang">
+                  <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 truncate" title="Mỹ Tho, Tiền Giang">
                     Mỹ Tho, Tiền Giang
                   </span>
                 </div>
@@ -363,9 +363,9 @@ export default function About() {
                   <Compass className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h5 className="text-h5 font-bold tracking-tight text-blue-600 dark:text-cyan-400">
+                  <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
                     {isVi ? "Chân dung & triết lý vận hành" : "Profile & operational philosophy"}
-                  </h5>
+                  </h6>
                   <p className="text-caption font-semibold text-slate-500 dark:text-slate-400">
                     {isVi ? "Tư duy quản trị & Trụ cột định hướng dịch vụ xuất sắc" : "Executive mindset & core pillars of service excellence"}
                   </p>
@@ -387,15 +387,13 @@ export default function About() {
             <div className="flex flex-col justify-between pt-6 first:pt-0 lg:pt-0 lg:pr-6.5 h-full w-full min-w-0">
               <div className="flex flex-col h-full justify-between w-full space-y-4">
                 <div>
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <div className="w-8 h-8 rounded-xl bg-blue-500/15 dark:bg-cyan-500/20 border border-blue-400/30 dark:border-cyan-400/40 flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0 shadow-2xs">
-                      <User className="w-4 h-4" />
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80 pb-3">
+                    <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
+                      <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
                     </div>
-                    <div className="px-3 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                      <h6 className="text-h6 font-bold text-slate-900 dark:text-white tracking-wide">
-                        {isVi ? "Giới thiệu bản thân tôi" : "About my professional profile"}
-                      </h6>
-                    </div>
+                    <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
+                      {isVi ? "Giới thiệu bản thân tôi" : "About my professional profile"}
+                    </h6>
                   </div>
                   
                   <div className="space-y-3.5 text-body text-slate-700 dark:text-slate-200">
@@ -442,71 +440,47 @@ export default function About() {
                     <Target className="w-4 h-4" />
                   </div>
                   <div className="px-3 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                    <h6 className="text-h6 font-bold text-slate-900 dark:text-white tracking-wide">
+                    <h6 className="text-body-bold text-slate-900 dark:text-white tracking-wide">
                       {isVi ? "Ba trụ cột vận hành" : "Three core operational pillars"}
                     </h6>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-3 flex-1 justify-between">
-                  {/* Pillar 1 Card (Màu xanh dương) */}
-                  <div className="p-3.5 rounded-2xl bg-blue-500/10 dark:bg-blue-950/40 border border-blue-300/60 dark:border-blue-700/60 shadow-2xs backdrop-blur-md flex items-start gap-3.5 hover:border-blue-400 hover:-translate-y-0.5 transition-all duration-200 flex-1 group/p1">
-                    <div className="w-9 h-9 rounded-xl bg-blue-500/20 dark:bg-blue-900/60 border border-blue-400/50 flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0 shadow-2xs group-hover/p1:scale-110 transition-transform">
-                      <Target className="w-4.5 h-4.5" />
+                  {/* Pillar 1 Card (Màu xanh dương - Formatted like Quy trình card) */}
+                  <div className="rounded-2xl p-4 bg-gradient-to-b from-blue-600 via-indigo-600 to-sky-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-blue-300/40 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+                      <Target className="w-5 h-5 text-white" />
                     </div>
-                    <div className="flex flex-col min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="text-body-sm font-bold text-blue-600 dark:text-cyan-400 uppercase tracking-wide">
-                          {isVi ? "01. HIỆU QUẢ" : "01. EFFICIENCY"}
-                        </h4>
-                        <span className="text-caption font-semibold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-cyan-300 border border-blue-400/30">
-                          {isVi ? "Tối ưu & Kết quả" : "Optimization & Results"}
-                        </span>
-                      </div>
-                      <p className="text-body-sub text-slate-700 dark:text-slate-300 mt-1 leading-snug">
-                        {isVi ? "Tối ưu hiệu suất, tạo kết quả đo lường được." : "Optimize performance, create measurable outcomes."}
-                      </p>
-                    </div>
+                    <span className="text-card-title font-bold tracking-normal">{isVi ? "01. HIỆU QUẢ" : "01. EFFICIENCY"}</span>
+                    <span className="text-body-sm sm:text-body font-semibold text-blue-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Tối ưu & Kết quả" : "Optimization & Results"}</span>
+                    <p className="text-xs text-blue-50/90 mt-1.5 leading-snug max-w-[240px]">
+                      {isVi ? "Tối ưu hiệu suất, tạo kết quả đo lường được." : "Optimize performance, create measurable outcomes."}
+                    </p>
                   </div>
 
-                  {/* Pillar 2 Card (Màu hồng đỏ) */}
-                  <div className="p-3.5 rounded-2xl bg-rose-500/10 dark:bg-rose-950/40 border border-rose-300/60 dark:border-rose-700/60 shadow-2xs backdrop-blur-md flex items-start gap-3.5 hover:border-rose-400 hover:-translate-y-0.5 transition-all duration-200 flex-1 group/p2">
-                    <div className="w-9 h-9 rounded-xl bg-rose-500/20 dark:bg-rose-900/60 border border-rose-400/50 flex items-center justify-center text-rose-500 dark:text-rose-400 shrink-0 shadow-2xs group-hover/p2:scale-110 transition-transform">
-                      <Heart className="w-4.5 h-4.5 fill-rose-500/20" />
+                  {/* Pillar 2 Card (Màu hồng đỏ - Formatted like Quy trình card) */}
+                  <div className="rounded-2xl p-4 bg-gradient-to-b from-rose-500 via-pink-600 to-rose-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-rose-500/25 hover:shadow-xl hover:shadow-rose-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-rose-300/40 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+                      <Heart className="w-5 h-5 text-white" />
                     </div>
-                    <div className="flex flex-col min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="text-body-sm font-bold text-rose-500 dark:text-rose-400 uppercase tracking-wide">
-                          {isVi ? "02. NHÂN VĂN" : "02. HUMANITY"}
-                        </h4>
-                        <span className="text-caption font-semibold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-400/30">
-                          {isVi ? "Đồng cảm & Thấu hiểu" : "Empathy & Understanding"}
-                        </span>
-                      </div>
-                      <p className="text-body-sub text-slate-700 dark:text-slate-300 mt-1 leading-snug">
-                        {isVi ? "Lắng nghe, thấu hiểu và đặt con người làm trung tâm." : "Listen, empathize, and place people at the center."}
-                      </p>
-                    </div>
+                    <span className="text-card-title font-bold tracking-normal">{isVi ? "02. NHÂN VĂN" : "02. HUMANITY"}</span>
+                    <span className="text-body-sm sm:text-body font-semibold text-rose-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Đồng cảm & Thấu hiểu" : "Empathy & Understanding"}</span>
+                    <p className="text-xs text-rose-50/90 mt-1.5 leading-snug max-w-[240px]">
+                      {isVi ? "Lắng nghe, thấu hiểu và đặt con người làm trung tâm." : "Listen, empathize, and place people at the center."}
+                    </p>
                   </div>
 
-                  {/* Pillar 3 Card (Màu xanh ngọc) */}
-                  <div className="p-3.5 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-300/60 dark:border-emerald-700/60 shadow-2xs backdrop-blur-md flex items-start gap-3.5 hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-200 flex-1 group/p3">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/20 dark:bg-emerald-900/60 border border-emerald-400/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 shadow-2xs group-hover/p3:scale-110 transition-transform">
-                      <Leaf className="w-4.5 h-4.5 fill-emerald-600/20" />
+                  {/* Pillar 3 Card (Màu xanh ngọc - Formatted like Quy trình card) */}
+                  <div className="rounded-2xl p-4 bg-gradient-to-b from-teal-500 via-emerald-600 to-teal-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-teal-300/40 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+                      <Leaf className="w-5 h-5 text-white" />
                     </div>
-                    <div className="flex flex-col min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="text-body-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
-                          {isVi ? "03. BỀN VỮNG" : "03. SUSTAINABILITY"}
-                        </h4>
-                        <span className="text-caption font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/30">
-                          {isVi ? "Giá trị & Tin cậy" : "Value & Reliability"}
-                        </span>
-                      </div>
-                      <p className="text-body-sub text-slate-700 dark:text-slate-300 mt-1 leading-snug">
-                        {isVi ? "Xây dựng niềm tin và giá trị bền vững." : "Build enduring trust and sustainable value."}
-                      </p>
-                    </div>
+                    <span className="text-card-title font-bold tracking-normal">{isVi ? "03. BỀN VỮNG" : "03. SUSTAINABILITY"}</span>
+                    <span className="text-body-sm sm:text-body font-semibold text-teal-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Giá trị & Tin cậy" : "Value & Reliability"}</span>
+                    <p className="text-xs text-teal-50/90 mt-1.5 leading-snug max-w-[240px]">
+                      {isVi ? "Xây dựng niềm tin và giá trị bền vững." : "Build enduring trust and sustainable value."}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -521,7 +495,7 @@ export default function About() {
                       <Star className="w-4 h-4 fill-amber-500/20" />
                     </div>
                     <div className="px-3 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                      <h6 className="text-h6 font-bold text-slate-900 dark:text-white tracking-wide">
+                      <h6 className="text-body-bold text-slate-900 dark:text-white tracking-wide">
                         {isVi ? "Triết lý và tầm nhìn" : "Core philosophy and vision"}
                       </h6>
                     </div>
@@ -531,7 +505,7 @@ export default function About() {
                     <div>
                       {/* Banner triết lý nổi bật */}
                       <div className="mb-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-amber-500/15 via-blue-500/10 to-cyan-500/15 dark:from-amber-500/20 dark:via-cyan-500/15 dark:to-blue-500/20 border border-amber-400/40 dark:border-cyan-400/40 backdrop-blur-xl text-center shadow-2xs">
-                        <p className="text-body font-bold italic text-blue-700 dark:text-cyan-300 leading-snug drop-shadow-xs">
+                        <p className="text-body-bold italic text-blue-700 dark:text-cyan-300 leading-snug drop-shadow-xs">
                           {isVi 
                             ? "“Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”" 
                             : "“Dedication & Partnership with Customer Experience”"}

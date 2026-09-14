@@ -9,6 +9,7 @@
     "start": "next start -p 3000 -H 0.0.0.0",
     "clean": "rm -rf .next dist",
     "generate:project-audio": "tsx scripts/generate-project-audio.ts",
+    "verify:typography": "tsx scripts/verify-typography.ts",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

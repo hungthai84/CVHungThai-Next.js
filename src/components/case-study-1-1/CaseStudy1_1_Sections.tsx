@@ -90,19 +90,19 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-2xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5 text-sky-500" /> Tên Dự Án
               </span>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">{project.branchTitle}</p>
+              <p className="text-h6 text-slate-900 dark:text-white">{project.branchTitle}</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
               <span className="text-2xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-indigo-500" /> Nhóm & Chuyên Mục
               </span>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">{project.groupTitle} <span className="text-xs font-normal text-slate-500">{project.groupHashtag}</span></p>
+              <p className="text-h6 text-slate-900 dark:text-white">{project.groupTitle} <span className="text-xs font-normal text-slate-500">{project.groupHashtag}</span></p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
               <span className="text-2xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-purple-500" /> Vai Trò & Thời Gian
               </span>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">{project.role} • {project.timeframe} ({project.phase})</p>
+              <p className="text-h6 text-slate-900 dark:text-white">{project.role} • {project.timeframe} ({project.phase})</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-1">
               <span className="text-2xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
@@ -245,7 +245,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
                     </span>
                     <span className={`px-2 py-0.5 rounded-full text-3xs font-extrabold ${st.badgeBg}`}>Thực thi</span>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{act.title}</h3>
+                  <h3 className="text-h6 text-slate-900 dark:text-white">{act.title}</h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">{act.desc}</p>
                   <div className={`p-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 ${st.valBg}`}>
                     <CheckCircle className="w-4 h-4 shrink-0" />
@@ -373,18 +373,18 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
         </section>
 
         {/* CONCLUDING QUOTE BANNER */}
-        <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-2xl shadow-indigo-500/25 border-2 border-indigo-400/50 relative overflow-hidden space-y-4">
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-          <div className="flex items-center gap-3 border-b border-indigo-500/40 pb-3">
-            <Quote className="w-8 h-8 text-amber-400 shrink-0 animate-pulse" />
-            <h3 className="text-base sm:text-lg font-bold tracking-wide text-amber-300">
+        <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50/90 via-indigo-50/50 to-slate-50/90 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 text-slate-800 dark:text-white shadow-md dark:shadow-2xl dark:shadow-indigo-500/25 border-2 border-amber-300/80 dark:border-indigo-400/50 relative overflow-hidden space-y-4">
+          <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-300/10 dark:bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="flex items-center gap-3 border-b border-amber-200 dark:border-indigo-500/40 pb-3">
+            <Quote className="w-8 h-8 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
+            <h3 className="text-h6 tracking-wide text-amber-800 dark:text-amber-300">
               Lời kết & triết lý vận hành
             </h3>
           </div>
-          <blockquote className="text-sm sm:text-base italic text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-400">
+          <blockquote className="text-sm sm:text-base italic text-slate-700 dark:text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-500 dark:border-amber-400">
             "Dịch vụ khách hàng xuất sắc không chỉ dừng lại ở việc giải quyết sự cố, mà là nghệ thuật biến mỗi điểm chạm thành sự gắn kết chân thành và gia tăng giá trị bền vững cho doanh nghiệp."
           </blockquote>
-          <div className="flex justify-end text-xs font-bold text-indigo-300 tracking-wider">
+          <div className="flex justify-end text-xs font-bold text-indigo-600 dark:text-indigo-300 tracking-wider">
             — SENIOR CX ARCHITECT & STRATEGIST
           </div>
         </section>
@@ -411,19 +411,19 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-2xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5 text-sky-500" /> Tên Dự Án
               </span>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">Case Study 1.1: Xây Dựng & Vận Hành Phòng Dịch Vụ Khách Hàng</p>
+              <p className="text-h6 text-slate-900 dark:text-white">Case Study 1.1: Xây Dựng & Vận Hành Phòng Dịch Vụ Khách Hàng</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
               <span className="text-2xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-indigo-500" /> Nhóm & TAGs
               </span>
-              <p className="text-sm font-bold text-sky-700 dark:text-sky-300">🧭 Chiến lược & Quản lý <span className="text-xs font-normal text-slate-500">#CS_Strategy #Structure</span></p>
+              <p className="text-h6 text-sky-700 dark:text-sky-300">🧭 Chiến lược & Quản lý <span className="text-xs font-normal text-slate-500">#CS_Strategy #Structure</span></p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
               <span className="text-2xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-purple-500" /> Vai Trò & Thời Gian
               </span>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">Senior CX Architect • Giai đoạn 1 (Khởi tạo nền tảng)</p>
+              <p className="text-h6 text-slate-900 dark:text-white">Senior CX Architect • Giai đoạn 1 (Khởi tạo nền tảng)</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-1">
               <span className="text-2xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
@@ -577,7 +577,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase flex items-center gap-1.5"><Compass className="w-4 h-4" /> Trụ Cột 01</span>
               <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-sky-500/15 text-sky-700 dark:text-sky-300">Định Hướng</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Tầm Nhìn & Sứ Mệnh CSKH</h3>
+            <h3 className="text-h6 text-slate-900 dark:text-white">Tầm Nhìn & Sứ Mệnh CSKH</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
               Xác định rõ ràng: "CSKH không chỉ giải quyết sự cố mà là đại sứ thương hiệu tạo dựng niềm tin và sự gắn kết trọn đời".
             </p>
@@ -593,7 +593,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-xs font-bold text-purple-800 dark:text-purple-300 uppercase flex items-center gap-1.5"><Network className="w-4 h-4" /> Trụ Cột 02</span>
               <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-purple-500/15 text-purple-700 dark:text-purple-300">Cấu Trúc</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Sơ Đồ Tổ Chức 6 Khối Chuyên Trách</h3>
+            <h3 className="text-h6 text-slate-900 dark:text-white">Sơ Đồ Tổ Chức 6 Khối Chuyên Trách</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
               Phân định rõ 6 khối: Tổng đài Inbound, Xử lý Ticket/Email, Hỗ trợ Chatbot/Livechat, Chăm sóc Khách hàng VIP, Kiểm định Chất lượng (QA) & Đào tạo nội bộ.
             </p>
@@ -609,7 +609,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase flex items-center gap-1.5"><UserPlus className="w-4 h-4" /> Trụ Cột 03</span>
               <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">Con Người</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Khung Năng Lực & Tuyển Dụng 3 Cấp</h3>
+            <h3 className="text-h6 text-slate-900 dark:text-white">Khung Năng Lực & Tuyển Dụng 3 Cấp</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
               Thiết lập bộ tiêu chuẩn năng lực chi tiết cho từng cấp bậc: Tư vấn viên (Agent), Trưởng nhóm (Team Leader) và Quản lý (Manager), kết hợp phỏng vấn theo phương pháp STAR.
             </p>
@@ -625,7 +625,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
               <span className="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase flex items-center gap-1.5"><HeartHandshake className="w-4 h-4" /> Trụ Cột 04</span>
               <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300">Văn Hóa</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Văn Hóa Lấy Khách Hàng Làm Trọng Tâm</h3>
+            <h3 className="text-h6 text-slate-900 dark:text-white">Văn Hóa Lấy Khách Hàng Làm Trọng Tâm</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
               Xây dựng tinh thần "Khách hàng luôn là ưu tiên số một" thông qua chính sách trao quyền giải quyết khiếu nại linh hoạt và vinh danh nhân sự có phản hồi CSAT cao nhất tháng.
             </p>
@@ -752,18 +752,18 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
       </section>
 
       {/* CONCLUDING QUOTE BANNER */}
-      <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-2xl shadow-indigo-500/25 border-2 border-indigo-400/50 relative overflow-hidden space-y-4">
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="flex items-center gap-3 border-b border-indigo-500/40 pb-3">
-          <Quote className="w-8 h-8 text-amber-400 shrink-0 animate-pulse" />
-          <h3 className="text-base sm:text-lg font-bold tracking-wide text-amber-300">
+      <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50/90 via-indigo-50/50 to-slate-50/90 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 text-slate-800 dark:text-white shadow-md dark:shadow-2xl dark:shadow-indigo-500/25 border-2 border-amber-300/80 dark:border-indigo-400/50 relative overflow-hidden space-y-4">
+        <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-300/10 dark:bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="flex items-center gap-3 border-b border-amber-200 dark:border-indigo-500/40 pb-3">
+          <Quote className="w-8 h-8 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
+          <h3 className="text-h6 tracking-wide text-amber-800 dark:text-amber-300">
             Lời kết & triết lý vận hành
           </h3>
         </div>
-        <blockquote className="text-sm sm:text-base italic text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-400">
+        <blockquote className="text-sm sm:text-base italic text-slate-700 dark:text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-500 dark:border-amber-400">
           "Dịch vụ khách hàng xuất sắc không chỉ dừng lại ở việc giải quyết sự cố, mà là nghệ thuật biến mỗi điểm chạm thành sự gắn kết chân thành và gia tăng giá trị bền vững cho doanh nghiệp."
         </blockquote>
-        <div className="flex justify-end text-xs font-bold text-indigo-300 tracking-wider">
+        <div className="flex justify-end text-xs font-bold text-indigo-600 dark:text-indigo-300 tracking-wider">
           — SENIOR CX ARCHITECT & STRATEGIST
         </div>
       </section>

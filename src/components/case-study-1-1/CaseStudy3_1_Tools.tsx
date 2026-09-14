@@ -240,11 +240,11 @@ export function CaseStudy3_1_Tools() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                 <span className="text-[11px] text-slate-500 block">Giá trị vòng đời (CLV)</span>
-                <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400">{currentCustomer.clv}</span>
+                <span className="text-h6 text-blue-600 dark:text-blue-400">{currentCustomer.clv}</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                 <span className="text-[11px] text-slate-500 block">Điểm hài lòng TB</span>
-                <span className="text-sm font-extrabold text-amber-600 dark:text-amber-400">⭐ {currentCustomer.csatScore} / 5.0</span>
+                <span className="text-h6 text-amber-600 dark:text-amber-400">⭐ {currentCustomer.csatScore} / 5.0</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                 <span className="text-[11px] text-slate-500 block">Ticket đang mở</span>
@@ -311,7 +311,7 @@ export function CaseStudy3_1_Tools() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white/90 dark:bg-slate-900/90 p-6 rounded-3xl border border-purple-200/80 dark:border-purple-800/60 shadow-xl">
           <div className="lg:col-span-5 space-y-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              <h3 className="text-h6 text-slate-900 dark:text-white mb-1">
                 Kích Hoạt Sự Kiện Tự Động (Trigger Simulation)
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -417,7 +417,7 @@ export function CaseStudy3_1_Tools() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white/90 dark:bg-slate-900/90 p-6 rounded-3xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-xl">
           <div className="lg:col-span-6 space-y-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              <h3 className="text-h6 text-slate-900 dark:text-white mb-1">
                 Tham Số Dữ Liệu Cũ Cần Chuyển Đổi (Migration Sizing)
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">

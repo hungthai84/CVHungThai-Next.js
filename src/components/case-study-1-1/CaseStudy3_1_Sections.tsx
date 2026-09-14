@@ -96,25 +96,25 @@ export function CaseStudy3_1_Sections({ project }: { project: ProjectCard }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">Góc nhìn 360°</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">Hợp nhất 100% điểm chạm</p>
+            <p className="text-h6 text-slate-900 dark:text-white">Hợp nhất 100% điểm chạm</p>
             <p className="text-xs text-slate-500">Mọi lịch sử giao dịch &amp; tương tác nằm trên 1 màn hình duy nhất.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Tốc độ tra cứu</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">&lt; 3 Giây / Tra cứu</p>
+            <p className="text-h6 text-slate-900 dark:text-white">&lt; 3 Giây / Tra cứu</p>
             <p className="text-xs text-slate-500">CTI Screen Pop-up tự động hiển thị hồ sơ khách hàng ngay khi chuông reo.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">Tự động hóa</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">60% Tác vụ lặp lại</p>
+            <p className="text-h6 text-slate-900 dark:text-white">60% Tác vụ lặp lại</p>
             <p className="text-xs text-slate-500">Macro 1-click, tự động leo thang vi phạm SLA và khảo sát CSAT.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Độ tin cậy dữ liệu</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">99.98% Toàn vẹn</p>
+            <p className="text-h6 text-slate-900 dark:text-white">99.98% Toàn vẹn</p>
             <p className="text-xs text-slate-500">Single Source of Truth cho toàn bộ các phòng ban CSKH, Sales, Marketing.</p>
           </div>
         </div>

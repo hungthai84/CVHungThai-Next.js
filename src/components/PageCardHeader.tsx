@@ -54,7 +54,7 @@ export function PageCardHeader({
               <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
             </div>
           )}
-          <h4 className={cn("text-h4 font-bold tracking-tight", accentClass)}>
+          <h4 className={cn("text-h4 tracking-tight", accentClass)}>
             {displayTitle}
           </h4>
         </div>

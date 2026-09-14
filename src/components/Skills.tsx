@@ -388,7 +388,7 @@ export function Skills() {
             <div className="flex items-center justify-between pb-3 border-b border-blue-200/70 dark:border-blue-800/70 mb-3 w-full select-none">
               <div className="flex items-center gap-2.5">
                 <Gem className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h6 className="text-h6 font-black text-blue-600 dark:text-blue-400 tracking-wide">
+                <h6 className="text-h6 text-blue-600 dark:text-blue-400 tracking-wide">
                   {isVi ? "Điểm Mạnh" : "Strengths"}
                 </h6>
               </div>
@@ -433,7 +433,7 @@ export function Skills() {
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-[10px] !bg-transparent border border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all shadow-2xs text-body">
+                        <li key={idx} className="p-2 rounded-[10px] skills-glass-card border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -483,6 +483,12 @@ export function Skills() {
           <div className="h-full flex flex-col justify-between">
             {/* Header Thẻ O */}
             <div className="flex items-center justify-between pb-3 border-b border-purple-200/70 dark:border-purple-800/70 mb-3 w-full select-none">
+              <div className="flex items-center gap-2.5">
+                <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                <h6 className="text-h6 text-purple-600 dark:text-purple-400 tracking-wide">
+                  {isVi ? "Phát Triển" : "Development & Growth"}
+                </h6>
+              </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
@@ -497,59 +503,54 @@ export function Skills() {
                   <Maximize2 className="w-3.5 h-3.5" />
                 </button>
               </div>
-
-              <div className="flex items-center gap-2.5">
-                <h6 className="text-h6 font-black text-purple-600 dark:text-purple-400 tracking-wide text-right">
-                  {isVi ? "Phát Triển" : "Development & Growth"}
-                </h6>
-                <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-              </div>
             </div>
 
             {/* Nội Dung Thu Gọn / Mở Rộng Thẻ O */}
             <div
-              className={`skills-swot-collapse-grid flex-1 flex flex-col ${
-                collapsedCards["swot-o"] ? "is-collapsed" : ""
+              className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${
+                collapsedCards["swot-o"] ? "is-collapsed" : "h-full"
               }`}
             >
-              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
-                <div>
+              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between h-full">
+                <div className="flex-1 flex flex-col justify-between">
                   <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Làn sóng công nghệ và nhu cầu thị trường mở ra các đòn bẩy lớn để tạo bước nhảy vọt trong sự nghiệp.
                   </p>
 
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-center">
+                  <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Bot, title: "AI & Tự Động Hóa", desc: "Ứng dụng AI, Chatbot và tự động hóa quy trình nghiệp vụ tổng đài nâng cấp trải nghiệm toàn diện.", meter: 95 },
-                      { icon: HeartHandshake, title: "Chiến Lược CX", desc: "Dẫn dắt nâng tầm trải nghiệm đa điểm chạm và tối ưu hóa hành trình khách hàng.", meter: 92 },
-                      { icon: BarChart3, title: "Quản Trị Dữ Liệu CX", desc: "Khai thác dữ liệu sâu & cá nhân hóa trải nghiệm khách hàng hiệu quả.", meter: 88 },
-                      { icon: Monitor, title: "Chuyển Đổi Số", desc: "Thúc đẩy CRM & hệ sinh thái số hiện đại đáp ứng quy mô tăng trưởng.", meter: 90 }
+                      { icon: Bot, title: "AI & Tự Động Hóa Vận Hành Toàn Diện", meter: 95 },
+                      { icon: HeartHandshake, title: "Chiến Lược CX", meter: 92 },
+                      { icon: BarChart3, title: "Quản Trị Dữ Liệu CX", meter: 88 },
+                      { icon: Monitor, title: "Chuyển Đổi Số", meter: 90 }
                     ].map((opp, idx) => {
                       const IconComp = opp.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 flex flex-col justify-between text-left space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
-                          <div className="w-full pt-0.5">
-                            <div className="flex items-center justify-between text-body font-bold text-purple-700 dark:text-purple-300 mb-1.5 px-0.5">
-                              <span className="flex items-center gap-1.5 truncate pr-1 text-left font-bold text-body min-w-0">
-                                <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
-                                <span className="truncate">{opp.title}</span>
-                              </span>
-                              <span className="font-mono font-black shrink-0 text-body ml-2">{opp.meter}%</span>
-                            </div>
-                            <div className="w-full h-1.5 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                whileInView={{ width: `${opp.meter}%` }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
-                                className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"
-                              />
-                            </div>
+                        <li key={idx} className="p-2 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
+                          <div className="flex items-center justify-between text-body">
+                            <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                              <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
+                              <span className="truncate text-body">{opp.title}</span>
+                            </span>
+                            <span className="px-1.5 py-0.5 rounded bg-purple-500/15 dark:bg-purple-500/25 text-purple-800 dark:text-purple-300 font-mono font-black text-xs shrink-0 ml-2">
+                              {opp.meter}%
+                            </span>
                           </div>
-                        </div>
+                          <div className="w-full h-1.5 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${opp.meter}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
+                              className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full relative"
+                            >
+                              <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                            </motion.div>
+                          </div>
+                        </li>
                       );
                     })}
-                  </div>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -577,7 +578,7 @@ export function Skills() {
             <div className="flex items-center justify-between pb-3 border-b border-amber-200/70 dark:border-amber-800/70 mb-3 w-full select-none pr-12">
               <div className="flex items-center gap-2.5">
                 <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h6 className="text-h6 font-black text-amber-600 dark:text-amber-400 tracking-wide">
+                <h6 className="text-h6 text-amber-600 dark:text-amber-400 tracking-wide">
                   {isVi ? "Hoàn Thiện" : "Growth Areas"}
                 </h6>
               </div>
@@ -623,7 +624,7 @@ export function Skills() {
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-xl !bg-transparent border border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all shadow-2xs text-body">
+                        <li key={idx} className="p-2 rounded-[10px] skills-glass-card border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
@@ -690,7 +691,7 @@ export function Skills() {
               </div>
 
               <div className="flex items-center gap-2.5">
-                <h6 className="text-h6 font-black text-rose-600 dark:text-rose-400 tracking-wide text-right">
+                <h6 className="text-h6 text-rose-600 dark:text-rose-400 tracking-wide text-right">
                   {isVi ? "Thách Thức" : "Challenges"}
                 </h6>
                 <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
@@ -709,33 +710,36 @@ export function Skills() {
                     Những yếu tố khách quan từ môi trường kinh doanh đòi hỏi sự chủ động thích ứng và quản trị rủi ro linh hoạt.
                   </p>
 
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-center">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Cpu, title: "AI định hình lại CSKH", desc: "Tự động hóa thay thế các nghiệp vụ cũ, đòi hỏi nâng cấp năng lực liên tục.", meter: 85 },
-                      { icon: BarChart3, title: "Công nghệ đổi mới nhanh", desc: "Công nghệ CX, Dữ liệu và AI liên tục xoay trục với tốc độ cao.", meter: 90 },
-                      { icon: Users, title: "Cạnh tranh nhân sự cao cấp", desc: "Tiêu chuẩn nhân sự lai: Kinh doanh + Công nghệ + Lãnh đạo ngày càng khắt khe.", meter: 88 },
-                      { icon: BadgeDollarSign, title: "Áp lực tối ưu chi phí", desc: "Yêu cầu tạo ra hiệu quả vận hành vượt bậc với chi phí tinh gọn nhất.", meter: 82 }
+                      { icon: Cpu, title: "AI định hình lại CSKH", meter: 85 },
+                      { icon: BarChart3, title: "Công nghệ đổi mới nhanh", meter: 90 },
+                      { icon: Users, title: "Cạnh tranh nhân sự cao cấp", meter: 88 },
+                      { icon: BadgeDollarSign, title: "Áp lực tối ưu chi phí", meter: 82 }
                     ].map((threat, idx) => {
                       const IconComp = threat.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 flex flex-col justify-between text-left space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
-                          <div className="w-full pt-0.5">
-                            <div className="flex items-center justify-between text-body font-bold text-rose-700 dark:text-rose-300 mb-1.5 px-0.5">
-                              <span className="flex items-center gap-1.5 truncate pr-1 text-left font-bold text-body min-w-0">
-                                <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 shrink-0" />
-                                <span className="truncate">{threat.title}</span>
-                              </span>
-                              <span className="font-mono font-black shrink-0 text-body ml-2">{threat.meter}%</span>
-                            </div>
-                            <div className="w-full h-1.5 bg-rose-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                whileInView={{ width: `${threat.meter}%` }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
-                                className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"
-                              />
-                            </div>
+                        <div key={idx} className="p-2 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
+                          <div className="flex items-center justify-between text-body">
+                            <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                              <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 shrink-0" />
+                              <span className="truncate text-body">{threat.title}</span>
+                            </span>
+                            <span className="px-1.5 py-0.5 rounded bg-rose-500/15 dark:bg-rose-500/25 text-rose-800 dark:text-rose-300 font-mono font-black text-xs shrink-0 ml-2">
+                              {threat.meter}%
+                            </span>
+                          </div>
+                          <div className="w-full h-1.5 bg-rose-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${threat.meter}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
+                              className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full relative"
+                              key={idx}
+                            >
+                              <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                            </motion.div>
                           </div>
                         </div>
                       );
@@ -772,12 +776,12 @@ export function Skills() {
                 <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
                   <div className="flex items-center gap-2">
                     <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    <h6 className="text-h6 font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
+                    <h6 className="text-h6 text-emerald-600 dark:text-emerald-400 tracking-wide">
                       {isVi ? "Năng lực ngôn ngữ" : "International language proficiency"}
                     </h6>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-base sm:text-lg font-black font-mono px-3 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shrink-0 shadow-2xs">
+                    <span className="text-h6 font-mono px-3 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shrink-0 shadow-2xs">
                       <span className="text-xs sm:text-sm font-sans font-bold">{isVi ? "3 Ngôn ngữ" : "3 Languages"}</span>
                     </span>
                     <button

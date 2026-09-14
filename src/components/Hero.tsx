@@ -347,13 +347,13 @@ function Hero() {
               </div>
               
               <div className="space-y-0.5">
-                <span className="text-h5 font-bold text-blue-700 dark:text-blue-300 block tracking-wide">
+                <span className="text-h5 text-blue-700 dark:text-blue-300 block tracking-wide">
                   {isVi ? "Xin chào! Tôi là" : "Welcome! I am"}
                 </span>
-                <h1 className="text-h1 font-bold tracking-tight text-slate-900 dark:text-white">
+                <h1 className="text-h1 tracking-tight text-slate-900 dark:text-white">
                   <span className="text-h1 text-blue-700 dark:text-cyan-400">Nguyễn Hùng Thái</span>
                 </h1>
-                <p className="text-h3 font-bold text-slate-800 dark:text-slate-200 leading-tight">
+                <p className="text-h3 text-slate-800 dark:text-slate-200 leading-tight">
                   {isVi 
                     ? "Trưởng phòng Chăm sóc Khách hàng" 
                     : "Head of Customer Support & CX"}

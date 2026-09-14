@@ -442,7 +442,7 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
               </span>
               <span className="text-slate-400 text-xs hidden sm:inline">• Dự án {projectPhase}</span>
             </div>
-            <h3 className="text-sm sm:text-base font-extrabold text-white tracking-wide mt-1">
+            <h3 className="text-h6 text-white tracking-wide mt-1">
               TỔNG QUAN ÂM THANH: {formattedHeadingTitle}
             </h3>
           </div>

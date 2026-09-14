@@ -107,7 +107,7 @@ export function CaseStudy3_2_Mindmap({
                   <div className="w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
                     1
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
                     Dashboard Vận Hành Thời Gian Thực
                   </h4>
                 </div>
@@ -165,7 +165,7 @@ export function CaseStudy3_2_Mindmap({
                   <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
                     2
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     Báo Cáo Hiệu Suất Nhân Viên
                   </h4>
                 </div>
@@ -223,7 +223,7 @@ export function CaseStudy3_2_Mindmap({
                   <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
                     3
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     Báo Cáo Phân Tích Trải Nghiệm (CX)
                   </h4>
                 </div>
@@ -287,7 +287,7 @@ export function CaseStudy3_2_Mindmap({
                   <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
                     4
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     Nguồn Dữ Liệu &amp; Công Cụ BI
                   </h4>
                 </div>

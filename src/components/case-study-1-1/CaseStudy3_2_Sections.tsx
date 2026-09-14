@@ -94,25 +94,25 @@ export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider block">Real-time Wallboard</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">Độ trễ &lt; 2 Giây</p>
+            <p className="text-h6 text-slate-900 dark:text-white">Độ trễ &lt; 2 Giây</p>
             <p className="text-xs text-slate-500">Giám sát liên tục lưu lượng ticket, thời gian chờ, nhân viên online và cảnh báo SLA.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">Báo cáo nhân viên</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">Weekly 360° Scorecard</p>
+            <p className="text-h6 text-slate-900 dark:text-white">Weekly 360° Scorecard</p>
             <p className="text-xs text-slate-500">Tự động xuất bảng xếp hạng và phát hiện nhu cầu đào tạo kèm cặp.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Phân tích CX</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">Pareto Root Cause</p>
+            <p className="text-h6 text-slate-900 dark:text-white">Pareto Root Cause</p>
             <p className="text-xs text-slate-500">Tìm ra 20% nguyên nhân gốc rễ gây ra 80% sự bức xúc của khách hàng.</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-1">
             <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Tự động hóa báo cáo</span>
-            <p className="text-base font-extrabold text-slate-900 dark:text-white">100% Không Excel Thủ Công</p>
+            <p className="text-h6 text-slate-900 dark:text-white">100% Không Excel Thủ Công</p>
             <p className="text-xs text-slate-500">Tiết kiệm 80+ giờ làm việc mỗi tháng cho toàn bộ đội ngũ quản lý.</p>
           </div>
         </div>

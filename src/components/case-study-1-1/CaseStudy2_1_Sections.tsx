@@ -68,19 +68,19 @@ export function CaseStudy2_1_Sections({ project }: { project: ProjectCard }) {
             <span className="text-2xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
               <FileText className="w-3.5 h-3.5 text-sky-500" /> Tên Dự Án
             </span>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">{project.branchTitle}</p>
+            <p className="text-h6 text-slate-900 dark:text-white">{project.branchTitle}</p>
           </div>
           <div className="p-4 rounded-2xl bg-indigo-500/10 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/60 space-y-1">
             <span className="text-2xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
               <Tag className="w-3.5 h-3.5 text-indigo-500" /> Nhóm & Chuyên Mục
             </span>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">{project.groupTitle} <span className="text-xs font-normal text-slate-500">{project.groupHashtag}</span></p>
+            <p className="text-h6 text-slate-900 dark:text-white">{project.groupTitle} <span className="text-xs font-normal text-slate-500">{project.groupHashtag}</span></p>
           </div>
           <div className="p-4 rounded-2xl bg-purple-500/10 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-800/60 space-y-1">
             <span className="text-2xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5 text-purple-500" /> Vai Trò & Thời Gian
             </span>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">{project.role} • {project.timeframe} ({project.phase})</p>
+            <p className="text-h6 text-slate-900 dark:text-white">{project.role} • {project.timeframe} ({project.phase})</p>
           </div>
           <div className="p-4 rounded-2xl bg-blue-500/10 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/60 space-y-1 md:col-span-2 lg:col-span-1">
             <span className="text-2xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
@@ -225,7 +225,7 @@ export function CaseStudy2_1_Sections({ project }: { project: ProjectCard }) {
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-3xs font-extrabold ${st.badgeBg}`}>Thực thi</span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">{act.title}</h3>
+                <h3 className="text-h6 text-slate-900 dark:text-white">{act.title}</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">{act.desc}</p>
                 <div className={`p-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 ${st.valBg}`}>
                   <CheckCircle className="w-4 h-4 shrink-0" />

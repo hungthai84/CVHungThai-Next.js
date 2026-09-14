@@ -110,7 +110,7 @@ export const ColorSystemModal: React.FC = () => {
               {/* Quick Theme Switcher */}
               <button
                 onClick={() => {
-                  setTheme(isDark ? "modern-light-glass" : "glass-dark-neon");
+                  setTheme(isDark ? "mritech-digital-growth" : "glass-dark-neon");
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all active:scale-95 bg-slate-100/80 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 border-slate-200 dark:border-white/15 text-slate-800 dark:text-slate-200"
                 title={isDark ? "Đổi sang Light Glass Theme" : "Đổi sang Dark Neon Glass Theme"}

@@ -3266,242 +3266,80 @@ html.theme-flat-bold body {
 }
 
 /* ==========================================
-   MRITECH AURORA VIBRANT GLASS (Glass UI Mritech Aurora Đa Sắc)
-   ========================================== */
-:root.theme-mritech-aurora-glass,
-html[data-theme="mritech-aurora-glass"],
-.theme-mritech-aurora-glass {
-  --theme-bg: #f0f4fd;
-  --theme-surface: rgba(255, 255, 255, 0.82);
-  --theme-surface-elevated: rgba(255, 255, 255, 0.92);
-  --theme-text-main: #0f172a;
-  --theme-text-muted: #475569;
-  --theme-primary: #2563eb;
-  --theme-accent: #8b5cf6;
-  --theme-border: rgba(255, 255, 255, 0.9);
-  --theme-border-hover: rgba(139, 92, 246, 0.5);
-  --theme-shadow: 0 20px 50px rgba(99, 102, 241, 0.15), 0 4px 16px rgba(236, 72, 153, 0.08);
-  --theme-radius: 10px;
-}
-
-html.theme-mritech-aurora-glass body,
-.theme-mritech-aurora-glass body {
-  background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
-              radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%),
-              radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
-              #f0f4fd !important;
-  color: #0f172a !important;
-  font-family: 'Play', sans-serif !important;
-}
-
-.theme-mritech-aurora-glass header#header,
-.theme-mritech-aurora-glass footer#footer {
-  background: rgba(255, 255, 255, 0.88) !important;
-  backdrop-filter: blur(24px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.92) !important;
-  box-shadow: 0 16px 40px rgba(99, 102, 241, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
-}
-
-.theme-mritech-aurora-glass .glass-card,
-.theme-mritech-aurora-glass .glass-surface,
-.theme-mritech-aurora-glass [id^="header-card-"],
-.theme-mritech-aurora-glass [id^="main-card-"] {
-  background: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.12), 0 4px 14px rgba(236, 72, 153, 0.06) !important;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-}
-
-.theme-mritech-aurora-glass .glass-card:hover,
-.theme-mritech-aurora-glass [id^="header-card-"]:hover {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(255, 255, 255, 1) !important;
-  box-shadow: 0 25px 60px rgba(99, 102, 241, 0.2), 0 8px 24px rgba(236, 72, 153, 0.12) !important;
-}
-
-/* ==========================================
    MRITECH DIGITAL GROWTH GLASS (Giao Diện Thương Hiệu Số MRITECH)
    ========================================== */
 :root.theme-mritech-digital-growth,
 html[data-theme="mritech-digital-growth"],
 .theme-mritech-digital-growth {
   --theme-bg: #f8fafc;
-  --theme-surface: rgba(255, 255, 255, 0.85);
-  --theme-surface-elevated: rgba(255, 255, 255, 0.95);
+  --theme-surface: rgba(255, 255, 255, 0.7);
+  --theme-surface-elevated: rgba(255, 255, 255, 0.85);
   --theme-text-main: #0f172a;
-  --theme-text-muted: #475569;
-  --theme-primary: #2563eb;
-  --theme-accent: #f97316;
-  --theme-highlight: #8b5cf6;
-  --theme-border: rgba(255, 255, 255, 0.95);
-  --theme-border-hover: rgba(249, 115, 22, 0.5);
-  --theme-shadow: 0 20px 50px rgba(37, 99, 235, 0.12), 0 4px 20px rgba(249, 115, 22, 0.1);
-  --theme-radius: 10px;
+  --theme-text-muted: #64748b;
+  --theme-primary: #3b82f6;
+  --theme-accent: #f59e0b;
+  --theme-highlight: #f97316;
+  --theme-border: rgba(255, 255, 255, 0.8);
+  --theme-border-hover: rgba(59, 130, 246, 0.4);
+  --theme-shadow: 0 20px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  --theme-radius: 16px;
 }
 
 html.theme-mritech-digital-growth body,
 .theme-mritech-digital-growth body {
-  background: radial-gradient(circle at 8% 90%, rgba(249, 115, 22, 0.14) 0%, transparent 45%),
-              radial-gradient(circle at 92% 15%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
-              radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 55%),
-              #f8fafc !important;
+  background: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+              radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.12) 0%, transparent 40%),
+              radial-gradient(circle at 75% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 45%),
+              radial-gradient(circle at 20% 85%, rgba(139, 92, 246, 0.1) 0%, transparent 45%),
+              #f1f5f9 !important;
   color: #0f172a !important;
   font-family: 'Play', sans-serif !important;
 }
 
 .theme-mritech-digital-growth header#header,
 .theme-mritech-digital-growth footer#footer {
-  background: rgba(255, 255, 255, 0.88) !important;
-  backdrop-filter: blur(24px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(32px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06), inset 0 2px 4px rgba(255, 255, 255, 0.8) !important;
 }
 
 .theme-mritech-digital-growth .glass-card,
 .theme-mritech-digital-growth .glass-surface,
 .theme-mritech-digital-growth [id^="header-card-"],
 .theme-mritech-digital-growth [id^="main-card-"] {
-  background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
   border-radius: 24px !important;
-  box-shadow: 0 20px 45px rgba(37, 99, 235, 0.1), 0 4px 16px rgba(249, 115, 22, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.03), inset 0 2px 4px rgba(255, 255, 255, 0.6) !important;
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
 
 .theme-mritech-digital-growth .glass-card:hover,
 .theme-mritech-digital-growth [id^="header-card-"]:hover {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: rgba(249, 115, 22, 0.4) !important;
-  box-shadow: 0 25px 60px rgba(37, 99, 235, 0.18), 0 8px 25px rgba(249, 115, 22, 0.18) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08), 0 8px 25px rgba(15, 23, 42, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-2px) !important;
 }
 
-/* 3-Tone Button Gradient from MRITECH image.png (Blue-Purple-Orange) */
+/* 3-Tone Button Gradient from MRITECH image.png (Blue-Orange-Yellow) */
 .theme-mritech-digital-growth .btn-primary,
 .theme-mritech-digital-growth .action-btn-primary,
 .theme-mritech-digital-growth button.bg-gradient-to-r {
-  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 50%, #f97316 100%) !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #f59e0b 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 10px 28px -4px rgba(249, 115, 22, 0.45), 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+  box-shadow: 0 10px 28px -4px rgba(59, 130, 246, 0.45), 0 4px 14px rgba(245, 158, 11, 0.25) !important;
   border: none !important;
 }
 
 .theme-mritech-digital-growth .btn-primary:hover,
 .theme-mritech-digital-growth .action-btn-primary:hover {
-  box-shadow: 0 14px 34px -2px rgba(249, 115, 22, 0.6), 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+  box-shadow: 0 14px 34px -2px rgba(59, 130, 246, 0.6), 0 6px 20px rgba(245, 158, 11, 0.35) !important;
   transform: translateY(-2px) scale(1.02) !important;
-}
-
-/* ==========================================
-   MODERN LIGHT GLASS (Glass UI Sáng Hiện Đại Màu Sắc)
-   ========================================== */
-:root.theme-modern-light-glass,
-html[data-theme="modern-light-glass"],
-.theme-modern-light-glass {
-  --theme-bg: #f8fafc;
-  --theme-surface: rgba(255, 255, 255, 0.85);
-  --theme-surface-elevated: rgba(255, 255, 255, 0.95);
-  --theme-text-main: #0f172a;
-  --theme-text-muted: #475569;
-  --theme-primary: #6366f1;
-  --theme-accent: #ec4899;
-  --theme-border: rgba(226, 232, 240, 0.9);
-  --theme-border-hover: rgba(99, 102, 241, 0.45);
-  --theme-shadow: 0 14px 36px rgba(99, 102, 241, 0.1), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --theme-radius: 10px;
-}
-
-html.theme-modern-light-glass body,
-.theme-modern-light-glass body {
-  background: linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)), url('https://i.ibb.co/JdbWM6K/background.jpg') !important;
-  background-position: center !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-  color: #0f172a !important;
-  font-family: 'Play', sans-serif !important;
-}
-
-.theme-modern-light-glass .glass-surface,
-.theme-modern-light-glass .glass-card,
-.theme-modern-light-glass .glass-main-container,
-.theme-modern-light-glass [id^="header-card-"],
-.theme-modern-light-glass [id^="main-card-"] {
-  background: rgba(255, 255, 255, 0.4) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-  border: 2px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 14px 38px rgba(99, 102, 241, 0.1), 0 4px 14px rgba(236, 72, 153, 0.06) !important;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-}
-
-.theme-modern-light-glass .glass-card:hover,
-.theme-modern-light-glass [id^="header-card-"]:hover {
-  background: rgba(255, 255, 255, 0.5) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.18), 0 8px 20px rgba(236, 72, 153, 0.1) !important;
-}
-
-.theme-modern-light-glass header#header,
-.theme-modern-light-glass footer#footer {
-  background: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1.5px solid rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
-}
-
-/* Custom Global Text Legibility Overrides for Light Mode & Modern Glass */
-.theme-modern-light-glass {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility !important;
-}
-
-.theme-modern-light-glass .text-slate-600,
-.theme-modern-light-glass .text-slate-500,
-.theme-modern-light-glass .text-slate-400,
-.theme-modern-light-glass .text-gray-600,
-.theme-modern-light-glass .text-gray-500,
-.theme-modern-light-glass .text-gray-400,
-.theme-modern-light-glass .text-zinc-600,
-.theme-modern-light-glass .text-zinc-500,
-.theme-modern-light-glass .text-zinc-400,
-.theme-modern-light-glass .text-slate-700,
-.theme-modern-light-glass .text-gray-700,
-.theme-modern-light-glass .text-zinc-700 {
-  color: #1e293b !important; /* Rich, deep slate-800 for absolute reading comfort and high-contrast */
-}
-
-.theme-modern-light-glass .text-slate-300,
-.theme-modern-light-glass .text-gray-300,
-.theme-modern-light-glass .text-zinc-300 {
-  color: #334155 !important; /* Rich slate-700 */
-}
-
-.theme-modern-light-glass .text-slate-200,
-.theme-modern-light-glass .text-gray-200,
-.theme-modern-light-glass .text-zinc-200,
-.theme-modern-light-glass .text-slate-100,
-.theme-modern-light-glass .text-gray-100,
-.theme-modern-light-glass .text-zinc-100 {
-  color: #0f172a !important; /* Rich, dark slate-900 for absolute high-contrast titles */
-}
-
-.theme-modern-light-glass .text-opacity-40,
-.theme-modern-light-glass .text-opacity-50,
-.theme-modern-light-glass .text-opacity-60,
-.theme-modern-light-glass .text-opacity-70,
-.theme-modern-light-glass .opacity-40,
-.theme-modern-light-glass .opacity-50,
-.theme-modern-light-glass .opacity-60,
-.theme-modern-light-glass .opacity-70 {
-  opacity: 0.95 !important; /* Boost visibility of semi-transparent text blocks on light background */
 }
 
 /* ==========================================================================
@@ -4799,6 +4637,20 @@ html.theme-flat-dark body,
   .service-card-desc {
     display: none !important;
   }
+}
+
+/* Chuẩn hóa Typography & Bố cục: Gán token [H6 - Tiêu đề Cấp 6 (Micro Header / Inline Title)] cho tất cả tiêu đề Case Study Section */
+[id^="sec-"] div.flex.items-center h2,
+[id^="sec-"] .flex.items-center h2,
+[id^="sec-"] div.flex.items-center .text-base,
+[id^="sec-"] div.flex.items-center .text-xl,
+[id^="sec-"] div.flex.items-center .text-2xl,
+[id^="sec-"] h2 {
+  font-family: var(--font-family-primary) !important;
+  font-size: var(--font-size-h6) !important;
+  font-weight: 700 !important;
+  line-height: var(--line-height-h6) !important;
+  letter-spacing: 0 !important;
 }
 
 

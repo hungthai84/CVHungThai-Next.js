@@ -74,7 +74,7 @@ export function CaseStudy4_2_Mindmap({
                   1
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     TỪ ĐIỂN NĂNG LỰC ASK
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Attitude (Thái độ) • Skill (Kỹ năng) • Knowledge (Kiến thức)</span>
@@ -114,7 +114,7 @@ export function CaseStudy4_2_Mindmap({
                   2
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     LỘ TRÌNH KÉP (DUAL CAREER LADDER)
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Nhánh Quản lý (Management) & Nhánh Chuyên gia (Specialist)</span>
@@ -155,7 +155,7 @@ export function CaseStudy4_2_Mindmap({
                   3
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     ĐÁNH GIÁ NĂNG LỰC 360°
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Skill Gap Analysis & Cá nhân hóa kế hoạch phát triển (IDP)</span>
@@ -195,7 +195,7 @@ export function CaseStudy4_2_Mindmap({
                   4
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     QUY HOẠCH KẾ THỪA (SUCCESSION)
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Future Leader Fast-track & Giữ chân nhân tài nòng cốt</span>
@@ -236,32 +236,32 @@ export function CaseStudy4_2_Mindmap({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/30">
               <TrendingUp className="w-4 h-4 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-purple-700 dark:text-purple-300">85%</div>
+              <div className="text-h6 text-purple-700 dark:text-purple-300">85%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Bổ nhiệm nội bộ</div>
             </div>
             <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-300">-60%</div>
+              <div className="text-h6 text-emerald-700 dark:text-emerald-300">-60%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Tỷ lệ nhảy việc</div>
             </div>
             <div className="p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/30">
               <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-blue-700 dark:text-blue-300">100%</div>
+              <div className="text-h6 text-blue-700 dark:text-blue-300">100%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Có lộ trình IDP</div>
             </div>
             <div className="p-3 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30">
               <Briefcase className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-indigo-700 dark:text-indigo-300">Dual Track</div>
+              <div className="text-h6 text-indigo-700 dark:text-indigo-300">Dual Track</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Quản lý & Chuyên gia</div>
             </div>
             <div className="p-3 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/30">
               <Star className="w-4 h-4 text-amber-600 dark:text-amber-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-amber-700 dark:text-amber-300">92%</div>
+              <div className="text-h6 text-amber-700 dark:text-amber-300">92%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Gắn kết eNPS</div>
             </div>
             <div className="p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30">
               <Sparkles className="w-4 h-4 text-rose-600 dark:text-rose-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-rose-700 dark:text-rose-300">ASK Matrix</div>
+              <div className="text-h6 text-rose-700 dark:text-rose-300">ASK Matrix</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Định lượng 100%</div>
             </div>
           </div>

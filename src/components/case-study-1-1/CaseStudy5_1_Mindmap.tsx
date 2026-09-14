@@ -75,7 +75,7 @@ export function CaseStudy5_1_Mindmap({
                   1
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                     XÂY DỰNG CƠ SỞ KIẾN THỨC
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Trái tim trung tâm trợ giúp – FAQ & Hướng dẫn</span>
@@ -119,7 +119,7 @@ export function CaseStudy5_1_Mindmap({
                   2
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     CỔNG THÔNG TIN GỬI TICKET
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Gửi yêu cầu & theo dõi tiến độ minh bạch</span>
@@ -159,7 +159,7 @@ export function CaseStudy5_1_Mindmap({
                   3
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     TỐI ƯU HÓA KHẢ NĂNG TÌM KIẾM
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Công cụ tìm kiếm thông minh & Gợi ý từ khóa</span>
@@ -202,7 +202,7 @@ export function CaseStudy5_1_Mindmap({
                   4
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h4 className="text-h6 text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     TÍCH HỢP CÁC KÊNH HỖ TRỢ
                   </h4>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Trải nghiệm liền mạch Chatbot - Agent - Help Center</span>
@@ -243,32 +243,32 @@ export function CaseStudy5_1_Mindmap({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-teal-50/60 dark:bg-teal-950/40 border border-teal-100 dark:border-teal-900/30">
               <TrendingUp className="w-4 h-4 text-teal-600 dark:text-teal-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-teal-700 dark:text-teal-300">-30%</div>
+              <div className="text-h6 text-teal-700 dark:text-teal-300">-30%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Ticket lặp lại</div>
             </div>
             <div className="p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/30">
               <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-blue-700 dark:text-blue-300">24/7</div>
+              <div className="text-h6 text-blue-700 dark:text-blue-300">24/7</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Tự phục vụ tức thì</div>
             </div>
             <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-300">94.8%</div>
+              <div className="text-h6 text-emerald-700 dark:text-emerald-300">94.8%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Độ hài lòng CSAT</div>
             </div>
             <div className="p-3 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/30">
               <DollarSign className="w-4 h-4 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-purple-700 dark:text-purple-300">-45%</div>
+              <div className="text-h6 text-purple-700 dark:text-purple-300">-45%</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Cost per Contact</div>
             </div>
             <div className="p-3 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/30">
               <Users className="w-4 h-4 text-amber-600 dark:text-amber-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-amber-700 dark:text-amber-300">Tập trung</div>
+              <div className="text-h6 text-amber-700 dark:text-amber-300">Tập trung</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Ca khó & VIP</div>
             </div>
             <div className="p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30">
               <Sparkles className="w-4 h-4 text-rose-600 dark:text-rose-400 mx-auto mb-1" />
-              <div className="text-base font-extrabold text-rose-700 dark:text-rose-300">10 Giây</div>
+              <div className="text-h6 text-rose-700 dark:text-rose-300">10 Giây</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Tìm thấy câu trả lời</div>
             </div>
           </div>

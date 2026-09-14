@@ -81,6 +81,7 @@ const ColorSystemModal = lazyWithRetry(() => import("./components/ColorSystemMod
 const CursorSettingsModal = lazyWithRetry(() => import("./components/CursorSettingsModal"));
 const SoundSettingsModal = lazyWithRetry(() => import("./components/SoundSettingsModal"));
 const FooterSettingsModal = lazyWithRetry(() => import("./components/FooterSettingsModal"));
+const TypographySettings = lazyWithRetry(() => import("./components/TypographySettings"));
 const ExecutiveResumeExportModal = lazyWithRetry(() => import("./components/ExecutiveResumeExportModal"));
 const PresentationModeModal = lazyWithRetry(() => import("./components/PresentationModeModal"));
 
@@ -357,7 +358,7 @@ function MainContent() {
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20",
+              "w-full rounded-2xl md:rounded-[24px] lg:rounded-[32px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20",
               isFooterSlidDown 
                 ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
                 : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
@@ -491,6 +492,7 @@ function MainContent() {
           <CursorSettingsModal />
           <SoundSettingsModal />
           <FooterSettingsModal />
+          <TypographySettings />
           <ExecutiveResumeExportModal
             isOpen={isResumeExportOpen}
             onClose={() => setIsResumeExportOpen(false)}

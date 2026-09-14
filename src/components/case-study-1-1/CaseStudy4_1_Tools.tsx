@@ -310,7 +310,7 @@ export function CaseStudy4_1_Tools() {
                           <span className="text-[10px] text-slate-400 font-medium">{m.level}</span>
                         )}
                       </div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
+                      <h4 className="text-h6 text-slate-900 dark:text-white leading-tight">
                         {m.title}
                       </h4>
                       <div className="flex items-center gap-3 mt-2 text-[11px] text-slate-500 dark:text-slate-400">
@@ -547,7 +547,7 @@ export function CaseStudy4_1_Tools() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Controls */}
           <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-5">
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h4 className="text-h6 text-slate-900 dark:text-white flex items-center gap-2">
               <Calculator className="w-4 h-4 text-blue-600" /> Tham Số Quy Mô Đào Tạo
             </h4>
 

@@ -286,7 +286,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
                         <span className="text-xs text-slate-400">Mã bài viết: #KB-0{art.id}84</span>
                       </div>
 
-                      <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-3">
+                      <h3 className="text-h6 text-slate-900 dark:text-white mb-3">
                         {art.title}
                       </h3>
 
@@ -343,7 +343,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
           <div className="lg:col-span-6 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-4 shadow-md">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
               <Send className="w-4 h-4 text-teal-600" />
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Gửi Yêu Cầu Hỗ Trợ 24/7 (Submit Ticket)</h4>
+              <h4 className="text-h6 text-slate-900 dark:text-white">Gửi Yêu Cầu Hỗ Trợ 24/7 (Submit Ticket)</h4>
             </div>
 
             <form onSubmit={handleTicketSubmit} className="space-y-3.5 text-xs">
@@ -460,7 +460,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
       {activeTab === "roi" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-5">
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h4 className="text-h6 text-slate-900 dark:text-white flex items-center gap-2">
               <Calculator className="w-4 h-4 text-teal-600" /> Tham Số Vận Hành Tự Phục Vụ
             </h4>
 

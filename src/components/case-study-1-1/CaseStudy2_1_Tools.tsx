@@ -168,7 +168,7 @@ export function CaseStudy2_1_Tools() {
             <div className="lg:col-span-2 space-y-4">
               <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-sky-200 dark:border-sky-800 space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
-                  <h4 className="text-sm font-extrabold text-sky-700 dark:text-sky-300 flex items-center gap-1.5">
+                  <h4 className="text-h6 text-sky-700 dark:text-sky-300 flex items-center gap-1.5">
                     <Workflow className="w-4 h-4 text-sky-500" />
                     {issueData[selectedIssue].title}
                   </h4>
@@ -208,11 +208,11 @@ export function CaseStudy2_1_Tools() {
                 <div className="grid grid-cols-2 gap-2 text-center">
                   <div className="p-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-sky-200 dark:border-sky-800">
                     <span className="text-[10px] text-slate-400 block font-medium">Phản hồi đầu (FRT)</span>
-                    <span className="text-sm font-black text-sky-600 dark:text-sky-300">{issueData[selectedIssue].slaResponse}</span>
+                    <span className="text-h6 text-sky-600 dark:text-sky-300">{issueData[selectedIssue].slaResponse}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-sky-200 dark:border-sky-800">
                     <span className="text-[10px] text-slate-400 block font-medium">Giải quyết dứt điểm</span>
-                    <span className="text-sm font-black text-emerald-600 dark:text-emerald-300">{issueData[selectedIssue].slaResolve}</span>
+                    <span className="text-h6 text-emerald-600 dark:text-emerald-300">{issueData[selectedIssue].slaResolve}</span>
                   </div>
                 </div>
               </div>

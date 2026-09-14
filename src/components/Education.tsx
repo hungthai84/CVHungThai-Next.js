@@ -1901,7 +1901,7 @@ export default function Education() {
                           <Icons.Sparkles className="w-7 h-7" />
                         </div>
                         <div>
-                          <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-wide font-play">{activeCard.subtitle}</h3>
+                          <h3 className="text-h6 text-slate-900 dark:text-white tracking-wide font-play">{activeCard.subtitle}</h3>
                           <p className="text-3xs mt-1 max-w-[200px] mx-auto italic font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>"Tri thức thực chiến • Dẫn dắt tương lai"</p>
                         </div>
                       </div>
@@ -1947,8 +1947,8 @@ export default function Education() {
                         </div>
 
                         <div className="mb-3">
-                          <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">01</span>
-                          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Nội dung cốt lõi</h3>
+                          <span className="text-h6 text-indigo-600 font-mono leading-none block">01</span>
+                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Nội dung cốt lõi</h3>
                           <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Khám phá 4 mô-đun trọng tâm giúp bạn làm chủ kỹ năng chuyên sâu & truyền cảm hứng.
                           </p>
@@ -2004,8 +2004,8 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">02</span>
-                          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Kết quả & Ứng dụng</h3>
+                          <span className="text-h6 text-indigo-600 font-mono leading-none block">02</span>
+                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Kết quả & Ứng dụng</h3>
                           <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Áp dụng kiến thức vào thực tiễn, tạo ra giá trị cho tổ chức và phát triển sự nghiệp.
                           </p>
@@ -2076,8 +2076,8 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">03</span>
-                          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Hình ảnh khóa học</h3>
+                          <span className="text-h6 text-indigo-600 font-mono leading-none block">03</span>
+                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Hình ảnh khóa học</h3>
                           <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Hình ảnh chứng nhận hoàn thành khóa học chính thức.
                           </p>
@@ -2216,8 +2216,8 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">04</span>
-                          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Bằng cấp & Chứng nhận</h3>
+                          <span className="text-h6 text-indigo-600 font-mono leading-none block">04</span>
+                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Bằng cấp & Chứng nhận</h3>
                           <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Chứng nhận hoàn thành khóa học {activeCard.title} tại {activeCard.subtitle}.
                           </p>
@@ -2362,7 +2362,7 @@ export default function Education() {
                       >
                         <Icons.GraduationCap className="w-6 h-6" />
                       </div>
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-white font-play">HỒ SƠ HỌC VẤN 3D</h3>
+                      <h3 className="text-h6 text-slate-900 dark:text-white font-play">HỒ SƠ HỌC VẤN 3D</h3>
                       <p className="text-3xs font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>Nguyễn Hùng Thái • STU Alumni</p>
                     </div>
                     <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 text-3xs text-slate-500 dark:text-slate-300 font-play">

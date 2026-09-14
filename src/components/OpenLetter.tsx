@@ -490,7 +490,7 @@ export default function OpenLetter() {
             <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-indigo-200/60 dark:border-indigo-800/60 mb-3">
               <div className="flex items-center gap-2 sm:gap-2.5">
                 <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                <h5 className="text-h5 font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">
+                <h5 className="text-h5 text-indigo-600 dark:text-indigo-400 tracking-wide">
                   {isVi ? "Trụ cột cống hiến" : "Four dedication pillars"}
                 </h5>
               </div>
@@ -828,8 +828,8 @@ export default function OpenLetter() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80 dark:divide-slate-800">
             {/* 1. Tận tâm */}
             <div className="flex flex-col items-center text-center px-3 sm:px-4 py-3 sm:py-0 group hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 dark:bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center mb-2.5 text-indigo-600 dark:text-indigo-400 shadow-2xs transition-transform duration-300 group-hover:scale-110">
-                <Heart className="w-6 h-6 fill-indigo-500/20" />
+              <div className="w-12 h-12 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110">
+                <DedicatedHeartIcon className="w-12 h-12" />
               </div>
               <h4 className="text-[16px] font-bold text-indigo-600 dark:text-indigo-400 tracking-normal mb-1">
                 {isVi ? "Tận tâm" : "Dedication"}
@@ -841,8 +841,8 @@ export default function OpenLetter() {
 
             {/* 2. Chuyên nghiệp */}
             <div className="flex flex-col items-center text-center px-3 sm:px-4 py-3 sm:py-0 group hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 dark:bg-purple-500/20 border border-purple-400/30 flex items-center justify-center mb-2.5 text-purple-600 dark:text-purple-400 shadow-2xs transition-transform duration-300 group-hover:scale-110">
-                <Target className="w-6 h-6" />
+              <div className="w-12 h-12 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110">
+                <TargetProfessionalIcon className="w-12 h-12" />
               </div>
               <h4 className="text-sm font-extrabold text-purple-600 dark:text-purple-400 tracking-normal mb-1">
                 {isVi ? "Chuyên nghiệp" : "Professionalism"}
@@ -854,8 +854,8 @@ export default function OpenLetter() {
 
             {/* 3. Đổi mới */}
             <div className="flex flex-col items-center text-center px-3 sm:px-4 py-3 sm:py-0 group hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 dark:bg-amber-500/20 border border-amber-400/30 flex items-center justify-center mb-2.5 text-amber-500 dark:text-amber-400 shadow-2xs transition-transform duration-300 group-hover:scale-110">
-                <Lightbulb className="w-6 h-6 fill-amber-500/20" />
+              <div className="w-12 h-12 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110">
+                <InnovationBulbIcon className="w-12 h-12" />
               </div>
               <h4 className="text-sm font-extrabold text-amber-500 dark:text-amber-400 tracking-normal mb-1">
                 {isVi ? "Đổi mới" : "Innovation"}
@@ -867,8 +867,8 @@ export default function OpenLetter() {
 
             {/* 4. Đồng hành */}
             <div className="flex flex-col items-center text-center px-3 sm:px-4 py-3 sm:py-0 group hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 dark:bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center mb-2.5 text-emerald-600 dark:text-emerald-400 shadow-2xs transition-transform duration-300 group-hover:scale-110">
-                <Handshake className="w-6 h-6" />
+              <div className="w-12 h-12 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110">
+                <PartnershipHandshakeIcon className="w-12 h-12" />
               </div>
               <h4 className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 tracking-normal mb-1">
                 {isVi ? "Đồng hành" : "Partnership"}

@@ -468,14 +468,6 @@ export default function Projects() {
       <div className="w-full flex flex-col gap-4">
         {/* Header Card Dự án (Caption / Label: 12px – 13px) */}
         <PageCardHeader pageId="projects">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
-            <span className="text-caption font-semibold font-mono text-blue-700 dark:text-blue-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
-              <span>{PROJECTS_LIST.length} {isVi ? "Dự án thực thi" : "Active Projects"}</span>
-            </span>
-          </div>
-
           <div className="flex items-center gap-2 sm:ml-auto">
             {/* Filter Dropdown Button: Nhóm bộ lọc thành nút icon trước tìm kiếm */}
             <div className="relative">
@@ -500,8 +492,8 @@ export default function Projects() {
                 {selectedPhase !== "all" ? (
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                 ) : (
-                  <span className="font-mono text-3xs px-1.5 py-0.2 rounded-full bg-slate-200/80 dark:bg-white/20 text-slate-700 dark:text-slate-200 font-bold">
-                    {filteredProjects.length}
+                  <span className="font-sans text-3xs px-2 py-0.5 rounded-full bg-slate-205/90 dark:bg-white/20 text-slate-700 dark:text-slate-200 font-black">
+                    {isVi ? "Nhóm dự án" : "Project Groups"}
                   </span>
                 )}
                 <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", filterDropdownOpen ? "rotate-180" : "")} />
@@ -594,7 +586,7 @@ export default function Projects() {
             {filteredProjects.length === 0 ? (
               <div className="text-center py-12 glass-surface rounded-2xl border border-slate-200/90 dark:border-slate-800 space-y-3 p-6 shadow-sm backdrop-blur-xl">
                 <FolderKanban className="w-10 h-10 text-slate-500 dark:text-slate-400 mx-auto animate-bounce" />
-                <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
+                <h3 className="text-h6 text-slate-800 dark:text-slate-200">
                   {isVi ? "Không tìm thấy dự án phù hợp" : "No matching projects found"}
                 </h3>
                 <p className="text-body-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
@@ -710,14 +702,7 @@ export default function Projects() {
                                 ))}
                               </div>
 
-                              {/* Interactive Action Row */}
-                              <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-2xs font-bold">
-                                {isSelected && (
-                                  <span className="text-3xs font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
-                                    Active
-                                  </span>
-                                )}
-                              </div>
+                              {/* Deleted Interactive Action Row */}
                             </div>
                           </div>
                         </KeyframersTiltCard>

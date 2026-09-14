@@ -325,33 +325,31 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
           {pillars.map((item, idx) => {
             const IconComp = item.icon;
             return (
-              <div key={idx} className="p-2.5 rounded-xl skills-glass-card border-purple-200/70 dark:border-purple-500/30 space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="p-1 rounded-md bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 shrink-0">
-                        <IconComp className="w-3.5 h-3.5" />
-                      </span>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                        {item.title}
-                      </h4>
-                    </div>
-                    <span className="text-3xs font-mono font-black px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-800 dark:text-purple-200 shrink-0">
-                      {item.percent}%
+              <div key={idx} className="p-2.5 sm:p-3 rounded-xl skills-glass-card border-purple-200/70 dark:border-purple-500/30 flex flex-col justify-between space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 shrink-0">
+                      <IconComp className="w-4 h-4" />
                     </span>
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-tight">
+                      {item.title}
+                    </h4>
                   </div>
-
-                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-3">
-                    {item.desc}
-                  </p>
+                  <span className="text-2xs font-mono font-black px-2 py-0.5 rounded bg-purple-500/15 text-purple-800 dark:text-purple-200 shrink-0">
+                    {item.percent}%
+                  </span>
                 </div>
 
-                <div className="w-full h-1 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden mt-2">
+                <p className="text-body-sm text-slate-600 dark:text-slate-300">
+                  {item.desc}
+                </p>
+
+                <div className="w-full h-1 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden mt-1">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${item.percent}%` }}
-                    transition={{ duration: 0.8, delay: idx * 0.08 }}
-                    className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 rounded-full"
+                    transition={{ duration: 1, delay: 0.1 + idx * 0.1, ease: "easeOut" }}
+                    className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"
                   />
                 </div>
               </div>

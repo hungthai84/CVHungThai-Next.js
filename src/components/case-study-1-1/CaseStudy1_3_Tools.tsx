@@ -371,7 +371,7 @@ export function CaseStudy1_3_Tools() {
                 </h4>
                 <div className="mt-6 text-center">
                   <span className="text-4xl sm:text-5xl font-black text-rose-700 dark:text-rose-300">{hearTotal}</span>
-                  <span className="text-sm font-bold text-slate-500"> / 100 điểm</span>
+                  <span className="text-h6 text-slate-500"> / 100 điểm</span>
                   <div className="mt-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${hearTotal >= 85 ? 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300' : 'bg-amber-500/20 text-amber-800'}`}>
                       {hearTotal >= 85 ? 'Đạt Tiêu Chuẩn Phục Hồi Cao Cấp' : 'Cần Huấn Luyện Thêm Về Thấu Cảm'}

@@ -260,7 +260,7 @@ Bước 3: Nếu ngân hàng đã trừ tiền nhưng cổng chưa ghi nhận: G
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
                     {currentArticle.version}
                   </span>
-                  <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-1">
+                  <h4 className="text-h6 text-slate-900 dark:text-white mt-1">
                     {currentArticle.title}
                   </h4>
                   <p className="text-xs text-slate-400 mt-0.5">
@@ -317,7 +317,7 @@ Bước 3: Nếu ngân hàng đã trừ tiền nhưng cổng chưa ghi nhận: G
         <div className="bg-white/90 dark:bg-slate-900/90 p-6 rounded-3xl border border-purple-200/80 dark:border-purple-800/60 shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
             <div>
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+              <h3 className="text-h6 text-slate-900 dark:text-white">
                 Mô Phỏng Đường Ống RAG (Retrieval-Augmented Generation) &amp; Guardrails
               </h3>
               <p className="text-xs text-slate-500">
@@ -396,7 +396,7 @@ Bước 3: Nếu ngân hàng đã trừ tiền nhưng cổng chưa ghi nhận: G
         <div className="bg-white/90 dark:bg-slate-900/90 p-5 rounded-3xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
             <div>
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+              <h3 className="text-h6 text-slate-900 dark:text-white">
                 Phát Hiện Khoảng Trống Tri Thức &amp; Tự Động Đề Xuất Bài Viết
               </h3>
               <p className="text-xs text-slate-500">

@@ -1257,7 +1257,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
         {/* ========================================================================= */}
         <div 
           id="card-career-timeline"
-          className="w-full shrink-0 flex flex-col gap-3 text-left transition-all duration-300 relative rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-slate-50/50 dark:bg-slate-950/40 p-3.5 sm:p-4.5 shadow-xs"
+          className="w-full h-auto rounded-[24px] bg-white/45 dark:bg-white/[0.04] border border-white/50 dark:border-white/12 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-[24px] transition-all duration-300 mb-4"
         >
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
           <div className="w-full flex flex-col gap-1 pb-1">
@@ -1266,7 +1266,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
                   <History className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
-                <h3 className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
+                <h3 className="text-h6 tracking-tight text-slate-900 dark:text-white">
                   {isVi ? "Dòng thời gian sự nghiệp" : "Career roadmap timeline"}
                 </h3>
               </div>
@@ -1652,10 +1652,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           <div className="space-y-2 pb-3.5 border-b border-indigo-100/80 dark:border-slate-800/80">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 text-2xs font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
                               <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                              <span>{isVi ? "Hành trình sự nghiệp & Cột mốc" : "Career Journey & Milestone"}</span>
+                              <span>{current.headerTitle}</span>
                             </div>
-                            <h3 className="text-[16px] sm:text-[18px] font-black text-slate-900 dark:text-white leading-tight">
-                              {current.headerTitle}
+                            <h3 className="text-[18px] sm:text-[20px] font-black text-slate-900 dark:text-white leading-tight">
+                              {isVi ? "Hành trình sự nghiệp & Cột mốc" : "Career Journey & Milestones"}
                             </h3>
                           </div>
 
@@ -1736,7 +1736,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         variants={bentoGridVariants}
                         initial="hidden"
                         animate="visible"
-                        className="w-full columns-1 md:columns-2 lg:columns-3 gap-4 lg:gap-5"
+                        className="w-full columns-1 md:columns-2 gap-4 lg:gap-5"
                       >
                         
                         {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
@@ -1749,17 +1749,9 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">01</span>
                                 <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                <span className="text-xs sm:text-sm font-black text-blue-900 dark:text-blue-200 tracking-wider uppercase">{isVi ? "QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT"}</span>
+                                <span className="text-h6 text-blue-900 dark:text-blue-200 uppercase">{isVi ? "QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT"}</span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(1)}
-                                  className="p-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-950 text-blue-600 dark:text-blue-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <MoreVertical className="w-4 h-4 text-slate-400" />
                               </div>
                             </div>
@@ -1833,19 +1825,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-emerald-600 dark:text-emerald-400">02</span>
                                 <Trophy className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-xs sm:text-sm font-black text-emerald-900 dark:text-emerald-200 tracking-wider uppercase">
+                                <span className="text-h6 text-emerald-900 dark:text-emerald-200 uppercase">
                                   {isVi ? "KẾT QUẢ & KPI" : "RESULTS & KPIS"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(2)}
-                                  className="p-1.5 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-950 text-emerald-600 dark:text-emerald-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <MoreVertical className="w-4 h-4 text-slate-400" />
                               </div>
                             </div>
@@ -1876,19 +1860,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-indigo-600 dark:text-indigo-400">03</span>
                                 <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                <span className="text-xs sm:text-sm font-black text-indigo-900 dark:text-indigo-200 tracking-wider uppercase">
+                                <span className="text-h6 text-indigo-900 dark:text-indigo-200 uppercase">
                                   {isVi ? "CÔNG VIỆC & VẬN HÀNH" : "TASKS & ROLES"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(3)}
-                                  className="p-1.5 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-950 text-indigo-600 dark:text-indigo-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <MoreVertical className="w-4 h-4 text-slate-400" />
                               </div>
                             </div>
@@ -1929,19 +1905,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-amber-600 dark:text-amber-400">04</span>
                                 <FolderKanban className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                                <span className="text-xs sm:text-sm font-black text-amber-900 dark:text-amber-200 tracking-wider uppercase">
+                                <span className="text-h6 text-amber-900 dark:text-amber-200 uppercase">
                                   {isVi ? "DỰ ÁN TRỌNG ĐIỂM" : "PROJECTS"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(4)}
-                                  className="p-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-950 text-amber-600 dark:text-amber-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <MoreVertical className="w-4 h-4 text-slate-400" />
                               </div>
                             </div>
@@ -1970,19 +1938,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-cyan-600 dark:text-cyan-400">05</span>
                                 <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-                                <span className="text-xs sm:text-sm font-black text-cyan-900 dark:text-cyan-200 tracking-wider uppercase">
+                                <span className="text-h6 text-cyan-900 dark:text-cyan-200 uppercase">
                                   {isVi ? "CAM KẾT CHẤT LƯỢNG" : "COMMITMENTS"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(5)}
-                                  className="p-1.5 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-950 text-cyan-600 dark:text-cyan-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <MoreVertical className="w-4 h-4 text-slate-400" />
                               </div>
                             </div>
@@ -2029,19 +1989,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-rose-600 dark:text-rose-400">06</span>
                                 <Camera className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-                                <span className="text-xs sm:text-sm font-black text-rose-900 dark:text-rose-200 tracking-wider uppercase">
+                                <span className="text-h6 text-rose-900 dark:text-rose-200 uppercase">
                                   {isVi ? "KỶ NIỆM THỰC CHIẾN" : "MEMORIES"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveSubCard(6)}
-                                  className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950 text-rose-600 dark:text-rose-400 transition-colors cursor-pointer"
-                                  title={isVi ? "Mở rộng chi tiết" : "Expand details"}
-                                >
-                                  <Maximize2 className="w-4 h-4" />
-                                </button>
                                 <span className="px-3 py-1 rounded-full bg-rose-100/90 dark:bg-rose-900/60 text-caption font-extrabold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shrink-0">
                                   {photos?.length || current.photoCount || 4} {isVi ? "hình ảnh" : "photos"}
                                 </span>
@@ -2093,7 +2045,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-black text-slate-900 dark:text-white">
+                    <h3 className="text-h6 text-slate-900 dark:text-white">
                       {isVi ? "Tạo Thẻ Thêm Vị Trí & Quản Lý" : "Add Role & Management Profile"}
                     </h3>
                     <p className="text-body-sm text-slate-500 dark:text-slate-400">
@@ -2257,7 +2209,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   {activeSubCard === 5 && <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />}
                   {activeSubCard === 6 && <Camera className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
                   <div>
-                    <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                    <h3 className="text-h6 text-slate-900 dark:text-white uppercase tracking-tight">
                       {activeSubCard === 1 && (isVi ? "CHI TIẾT QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT DETAIL")}
                       {activeSubCard === 2 && (isVi ? "CHỈ SỐ HIỆU QUẢ & KPIs CHI TIẾT" : "DETAILED KPIS & METRICS")}
                       {activeSubCard === 3 && (isVi ? "CHI TIẾT NHIỆM VỤ & PHẠM VI TRÁCH NHIỆM" : "DETAILED ROLES & RESPONSIBILITIES")}
@@ -2757,7 +2709,7 @@ export default function Experience() {
                         {selectedMilestoneForDetail.period}
                       </span>
                     </div>
-                    <h3 className="text-sm sm:text-lg font-black text-slate-900 dark:text-white leading-tight truncate">
+                    <h3 className="text-h6 text-slate-900 dark:text-white leading-tight truncate">
                       {selectedMilestoneForDetail.company}
                     </h3>
                   </div>
@@ -3131,7 +3083,7 @@ export default function Experience() {
                     <img src={selectedMilestoneForGallery.logo} alt={selectedMilestoneForGallery.company} className="w-full h-full object-contain rounded-full" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-bold text-white">
+                    <h3 className="text-h6 text-white">
                       {selectedMilestoneForGallery.company} — {isVi ? "Album tư liệu" : "Photo Album"}
                     </h3>
                     <span className="text-xs text-slate-400">

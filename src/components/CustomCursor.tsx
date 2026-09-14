@@ -33,7 +33,7 @@ export default function CustomCursor() {
   const activeColor = (() => {
     if (cursorConfig.colorPreset === "auto") {
       if (theme === "glass-dark-neon") return { normal: "#00f0ff", hover: "#ff007f" };
-      if (theme === "modern-light-glass") return { normal: "#6366f1", hover: "#a855f7" };
+      if (theme === "mritech-digital-growth") return { normal: "#6366f1", hover: "#a855f7" };
       return { normal: "#6366f1", hover: "#a855f7" };
     }
     const found = CURSOR_COLOR_OPTIONS.find((c) => c.id === cursorConfig.colorPreset);
