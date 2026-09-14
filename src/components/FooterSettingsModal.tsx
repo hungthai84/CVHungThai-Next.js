@@ -191,11 +191,11 @@ export default function FooterSettingsModal() {
                 <div>
                   <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2">
                     <span>{currentInfo.title}</span>
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <span className="text-3xs font-black uppercase px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                       v2.5
                     </span>
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                  <p className="text-body-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
                     {currentInfo.desc}
                   </p>
                 </div>
@@ -304,7 +304,7 @@ export default function FooterSettingsModal() {
                             <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
                               {isVi ? opt.nameVi : opt.nameEn}
                             </div>
-                            <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                            <div className="text-2xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
                               {isVi ? opt.descVi : opt.descEn}
                             </div>
                           </div>
@@ -340,7 +340,7 @@ export default function FooterSettingsModal() {
                           )}
                         >
                           <div className="text-xs font-bold">{isVi ? style.nameVi : style.nameEn}</div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-tight">
+                          <div className="text-3xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-tight">
                             {isVi ? style.descVi : style.descEn}
                           </div>
                         </button>
@@ -383,7 +383,7 @@ export default function FooterSettingsModal() {
                             <span>{isVi ? item.labelVi : item.labelEn}</span>
                           </div>
                           <span className={cn(
-                            "px-1.5 py-0.5 rounded text-[10px] font-black uppercase",
+                            "px-1.5 py-0.5 rounded text-3xs font-black uppercase",
                             isChecked ? "bg-purple-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500"
                           )}>
                             {isChecked ? (isVi ? "Hiện" : "Show") : (isVi ? "Ẩn" : "Hide")}
@@ -434,7 +434,7 @@ export default function FooterSettingsModal() {
                             <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
                               {isVi ? opt.nameVi : opt.nameEn}
                             </div>
-                            <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                            <div className="text-2xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
                               {isVi ? opt.descVi : opt.descEn}
                             </div>
                           </div>
@@ -531,7 +531,7 @@ export default function FooterSettingsModal() {
                       >
                         <span>{isVi ? "Vệt sáng theo chuyển động" : "Motion Stardust Trail"}</span>
                         <span className={cn(
-                          "px-2 py-0.5 rounded-md text-[10px] font-black uppercase",
+                          "px-2 py-0.5 rounded-md text-3xs font-black uppercase",
                           cursorConfig.enableTrail ? "bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                         )}>
                           {cursorConfig.enableTrail ? (isVi ? "Bật" : "On") : (isVi ? "Tắt" : "Off")}
@@ -597,7 +597,7 @@ export default function FooterSettingsModal() {
 
                   <div className="grid grid-cols-2 gap-4 pt-1">
                     <div>
-                      <div className="flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
+                      <div className="flex justify-between text-2xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
                         <span>{isVi ? "Âm hiệu ứng (UI)" : "UI Effects"}</span>
                         <span className="font-mono">{Math.round(soundConfig.uiVolume * 100)}%</span>
                       </div>
@@ -613,7 +613,7 @@ export default function FooterSettingsModal() {
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
+                      <div className="flex justify-between text-2xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
                         <span>{isVi ? "Âm môi trường (Ambient)" : "Ambient"}</span>
                         <span className="font-mono">{Math.round(soundConfig.ambientVolume * 100)}%</span>
                       </div>
@@ -640,7 +640,7 @@ export default function FooterSettingsModal() {
                       <button
                         type="button"
                         onClick={playClick}
-                        className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer"
+                        className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-3xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer"
                       >
                         <Play className="w-2.5 h-2.5" />
                         <span>{isVi ? "Thử Click" : "Audition Click"}</span>
@@ -648,7 +648,7 @@ export default function FooterSettingsModal() {
                       <button
                         type="button"
                         onClick={playSuccess}
-                        className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer"
+                        className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-3xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer"
                       >
                         <Play className="w-2.5 h-2.5" />
                         <span>{isVi ? "Thử Chime" : "Audition Chime"}</span>
@@ -675,7 +675,7 @@ export default function FooterSettingsModal() {
                             <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
                               {isVi ? pack.nameVi : pack.nameEn}
                             </div>
-                            <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                            <div className="text-2xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
                               {isVi ? pack.descVi : pack.descEn}
                             </div>
                           </div>
@@ -717,7 +717,7 @@ export default function FooterSettingsModal() {
                         >
                           <span>{isVi ? item.labelVi : item.labelEn}</span>
                           <span className={cn(
-                            "px-1.5 py-0.5 rounded text-[10px] font-black uppercase",
+                            "px-1.5 py-0.5 rounded text-3xs font-black uppercase",
                             isChecked ? "bg-sky-500 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500"
                           )}>
                             {isChecked ? (isVi ? "Bật" : "On") : (isVi ? "Tắt" : "Off")}
@@ -751,7 +751,7 @@ export default function FooterSettingsModal() {
                         >
                           <Icon className="w-5 h-5 mb-1.5" />
                           <span className="text-xs font-bold">{isVi ? ambient.nameVi : ambient.nameEn}</span>
-                          <span className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+                          <span className="text-3xs text-slate-400 mt-0.5 line-clamp-1">
                             {ambient.id === "none" ? (isVi ? "Im lặng" : "Silent") : (isVi ? "Thư thái" : "Calm")}
                           </span>
                         </button>

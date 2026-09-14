@@ -20,6 +20,7 @@ import {
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 
 export function Contact() {
   const { lang } = useLanguage();
@@ -145,7 +146,7 @@ export function Contact() {
         className="w-full flex-1 flex flex-col justify-between gap-2 sm:gap-2.5 relative z-10 min-h-0"
       >
         {selectedSkillTopic && (
-          <div className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-blue-500/15 border border-purple-500/30 flex items-center justify-between gap-2 text-[11px] font-bold text-purple-900 dark:text-purple-200 shadow-2xs shrink-0">
+          <div className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-blue-500/15 border border-purple-500/30 flex items-center justify-between gap-2 text-2xs font-bold text-purple-900 dark:text-purple-200 shadow-2xs shrink-0">
             <div className="flex items-center gap-2 min-w-0">
               <span className="p-1 rounded-lg bg-purple-600 text-white shadow-xs shrink-0">
                 <Sparkles className="w-3 h-3" />
@@ -161,7 +162,7 @@ export function Contact() {
                 sessionStorage.removeItem("contact_selected_skill_topic");
                 setSelectedSkillTopic(null);
               }}
-              className="px-2 py-0.5 rounded-md bg-purple-200/80 dark:bg-purple-900/60 hover:bg-purple-300 dark:hover:bg-purple-800 text-purple-800 dark:text-purple-200 text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0"
+              className="px-2 py-0.5 rounded-md bg-purple-200/80 dark:bg-purple-900/60 hover:bg-purple-300 dark:hover:bg-purple-800 text-purple-800 dark:text-purple-200 text-3xs font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0"
               title="Đóng"
             >
               <X className="w-3 h-3" />
@@ -170,31 +171,16 @@ export function Contact() {
           </div>
         )}
 
-        {/* Header Card Liên hệ - Tối ưu gọn gàng theo chuẩn Bento */}
-        <div className="w-full flex flex-col gap-1 sm:gap-1.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/60 shrink-0">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
-                <Phone className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-              </div>
-              <h2 className="text-base sm:text-lg font-black tracking-tight text-emerald-600 dark:text-emerald-400">
-                {isVi ? "Thông tin liên hệ" : "Contact hub communication portal"}
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                <span>{isVi ? "Trực tuyến 24/7" : "Active 24/7"}</span>
-              </span>
-              <span className="hidden sm:inline-flex text-[11px] font-mono font-black text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                {isVi ? "Đặt lịch trực tiếp" : "Direct Scheduling"}
-              </span>
-            </div>
+        {/* Header Card Liên hệ (Caption / Label: 12px – 13px) */}
+        <PageCardHeader pageId="contact">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+              <span>{isVi ? "Trực tuyến 24/7" : "Active 24/7"}</span>
+            </span>
           </div>
-
-          <div className="h-[1.5px] w-full bg-emerald-500/30 dark:bg-emerald-500/20" />
-        </div>
+        </PageCardHeader>
 
         {/* Lưới Bento Grid Bất Đối Xứng Hiện Đại - Tối ưu Fit To Screen */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 sm:gap-3 items-stretch w-full flex-1 min-h-0 overflow-hidden">
@@ -216,7 +202,7 @@ export function Contact() {
                 </h3>
               </div>
 
-              <span className={cn("px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wide uppercase shrink-0 border", randomColor.badgeBg, randomColor.badgeText, randomColor.badgeBorder)}>
+              <span className={cn("px-2 py-0.5 rounded-full text-3xs font-extrabold tracking-wide uppercase shrink-0 border", randomColor.badgeBg, randomColor.badgeText, randomColor.badgeBorder)}>
                 CX Profile
               </span>
             </div>
@@ -231,17 +217,17 @@ export function Contact() {
                   <span className="font-extrabold text-slate-900 dark:text-white text-xs sm:text-sm block truncate">
                     Nguyễn Hùng Thái
                   </span>
-                  <span className="text-[11px] text-blue-600 dark:text-cyan-400 font-bold block truncate">
+                  <span className="text-2xs text-blue-600 dark:text-cyan-400 font-bold block truncate">
                     Trưởng phòng CSKH (Customer Service Manager)
                   </span>
                 </div>
               </div>
               <div className="hidden sm:flex flex-col items-end text-right shrink-0">
-                <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1 text-3xs font-bold text-slate-600 dark:text-slate-300">
                   <MapPin className="w-3 h-3 text-indigo-500" />
                   <span>TP.HCM & Tiền Giang</span>
                 </div>
-                <span className="text-[9px] text-slate-400 dark:text-slate-500">Việt Nam</span>
+                <span className="text-3xs text-slate-400 dark:text-slate-500">Việt Nam</span>
               </div>
             </div>
 
@@ -254,7 +240,7 @@ export function Contact() {
                     <Phone className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 block leading-tight">
+                    <span className="text-3xs font-bold text-emerald-800 dark:text-emerald-300 block leading-tight">
                       {isVi ? "Hotline / Zalo" : "Hotline / Zalo"}
                     </span>
                     <a 
@@ -294,12 +280,12 @@ export function Contact() {
                     <Mail className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold text-blue-800 dark:text-blue-300 block leading-tight">
+                    <span className="text-3xs font-bold text-blue-800 dark:text-blue-300 block leading-tight">
                       Email
                     </span>
                     <a 
                       href={`mailto:${emailAddr}`}
-                      className="font-extrabold text-slate-900 dark:text-white text-[11px] hover:text-blue-600 dark:hover:text-blue-400 transition-colors block truncate"
+                      className="font-extrabold text-slate-900 dark:text-white text-2xs hover:text-blue-600 dark:hover:text-blue-400 transition-colors block truncate"
                     >
                       hungthai84@gmail.com
                     </a>
@@ -332,14 +318,14 @@ export function Contact() {
                     <Globe className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold text-cyan-800 dark:text-cyan-300 block leading-tight">
+                    <span className="text-3xs font-bold text-cyan-800 dark:text-cyan-300 block leading-tight">
                       Website
                     </span>
                     <a 
                       href={websiteUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-extrabold text-slate-900 dark:text-white text-[11px] hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate"
+                      className="font-extrabold text-slate-900 dark:text-white text-2xs hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate"
                     >
                       powerservice.one
                     </a>
@@ -374,14 +360,14 @@ export function Contact() {
                     <Linkedin className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold text-sky-800 dark:text-sky-300 block leading-tight">
+                    <span className="text-3xs font-bold text-sky-800 dark:text-sky-300 block leading-tight">
                       LinkedIn
                     </span>
                     <a 
                       href={linkedinUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-extrabold text-slate-900 dark:text-white text-[11px] hover:text-sky-600 dark:hover:text-sky-400 transition-colors block truncate"
+                      className="font-extrabold text-slate-900 dark:text-white text-2xs hover:text-sky-600 dark:hover:text-sky-400 transition-colors block truncate"
                     >
                       in/hungthai84
                     </a>
@@ -428,7 +414,7 @@ export function Contact() {
                   </h3>
                 </div>
 
-                <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 shrink-0">
+                <span className="text-3xs font-black px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 shrink-0">
                   Official Zalo
                 </span>
               </div>
@@ -446,7 +432,7 @@ export function Contact() {
                   <span className="text-xs font-black text-blue-600 dark:text-blue-400 block tracking-wide truncate">
                     Zalo: {formattedPhone}
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 block leading-tight">
+                  <span className="text-3xs font-semibold text-slate-600 dark:text-slate-400 block leading-tight">
                     {isVi ? "Quét mã để nhắn tin & trao đổi trực tiếp" : "Scan to chat directly"}
                   </span>
                 </div>
@@ -458,7 +444,7 @@ export function Contact() {
                   href={zaloUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-[11px] flex items-center justify-center gap-1 shadow-xs transition-all active:scale-95 cursor-pointer"
+                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-2xs flex items-center justify-center gap-1 shadow-xs transition-all active:scale-95 cursor-pointer"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span className="truncate">{isVi ? "Chat Zalo" : "Chat Zalo"}</span>
@@ -468,7 +454,7 @@ export function Contact() {
                 <button
                   type="button"
                   onClick={handleCopyZaloLink}
-                  className="py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-[11px] border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-2xs"
+                  className="py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-2xs border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-2xs"
                 >
                   {copiedZaloLink ? (
                     <>
@@ -488,24 +474,24 @@ export function Contact() {
             {/* Thẻ Bento 3: Quick Metric SLA & Professional Commitment Box */}
             <div className="grid grid-cols-2 gap-2 shrink-0">
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-slate-900/80 border border-slate-200/80 dark:border-emerald-400/30 shadow-2xs flex flex-col justify-between backdrop-blur-xl">
-                <div className="flex items-center gap-1 text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                <div className="flex items-center gap-1 text-3xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
                   <Clock className="w-3 h-3 shrink-0" />
                   <span className="truncate">{isVi ? "Phản hồi" : "SLA"}</span>
                 </div>
                 <div className="mt-0.5">
                   <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">&lt; 15 {isVi ? "Phút" : "Mins"}</span>
-                  <p className="text-[9px] text-slate-500 dark:text-slate-400 truncate leading-tight">{isVi ? "Hotline & Zalo" : "Hotline & Zalo"}</p>
+                  <p className="text-3xs text-slate-500 dark:text-slate-400 truncate leading-tight">{isVi ? "Hotline & Zalo" : "Hotline & Zalo"}</p>
                 </div>
               </div>
 
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-slate-900/80 border border-slate-200/80 dark:border-blue-400/30 shadow-2xs flex flex-col justify-between backdrop-blur-xl">
-                <div className="flex items-center gap-1 text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                <div className="flex items-center gap-1 text-3xs font-mono font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                   <ShieldCheck className="w-3 h-3 shrink-0" />
                   <span className="truncate">{isVi ? "Bảo mật" : "Privacy"}</span>
                 </div>
                 <div className="mt-0.5">
                   <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">100% {isVi ? "Bảo mật" : "Confidential"}</span>
-                  <p className="text-[9px] text-slate-500 dark:text-slate-400 truncate leading-tight">{isVi ? "Trao đổi chuyên môn" : "Interviews & Talks"}</p>
+                  <p className="text-3xs text-slate-500 dark:text-slate-400 truncate leading-tight">{isVi ? "Trao đổi chuyên môn" : "Interviews & Talks"}</p>
                 </div>
               </div>
             </div>

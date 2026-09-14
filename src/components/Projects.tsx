@@ -6,11 +6,16 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  Check
+  Check,
+  Menu,
+  Layers,
+  Filter,
+  ChevronDown
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 import { PROJECTS_LIST, ProjectCard } from "../data/projectsData";
 
 const staggerContainerVariants = {
@@ -46,14 +51,6 @@ const staggerCardVariants: any = {
 
 import { ProjectArticle } from "./ProjectArticle";
 
-const PROJECT_PHASE_TABS = [
-  { id: "all", nameVi: "Tất cả", nameEn: "All" },
-  { id: "Giai đoạn 1", nameVi: "Giai đoạn 1", nameEn: "Phase 1" },
-  { id: "Giai đoạn 2", nameVi: "Giai đoạn 2", nameEn: "Phase 2" },
-  { id: "Giai đoạn 3", nameVi: "Giai đoạn 3", nameEn: "Phase 3" },
-  { id: "Xuyên suốt", nameVi: "Xuyên suốt", nameEn: "Continuous" },
-];
-
 /**
  * Keyframers 3D Tilt Card Component with Interactive Dynamic Specular Reflection
  * Inspired by Keyframers (bGdebPM) interactive card animation physics
@@ -72,60 +69,12 @@ function KeyframersTiltCard({
   onClick,
   style,
 }: KeyframersTiltCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const tiltX = ((y - centerY) / centerY) * -6.5;
-    const tiltY = ((x - centerX) / centerX) * 6.5;
-
-    card.style.setProperty("--keyframe-mx", `${(x / rect.width) * 100}%`);
-    card.style.setProperty("--keyframe-my", `${(y / rect.height) * 100}%`);
-    card.style.setProperty("--keyframe-tilt-x", `${tiltX.toFixed(2)}deg`);
-    card.style.setProperty("--keyframe-tilt-y", `${tiltY.toFixed(2)}deg`);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    const card = cardRef.current;
-    if (!card) return;
-    card.style.setProperty("--keyframe-tilt-x", `0deg`);
-    card.style.setProperty("--keyframe-tilt-y", `0deg`);
-    card.style.setProperty("--keyframe-mx", `50%`);
-    card.style.setProperty("--keyframe-my", `50%`);
-  };
-
   return (
     <div
-      ref={cardRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      style={{
-        ...style,
-        transform: isHovered
-          ? "perspective(1000px) rotateX(var(--keyframe-tilt-x, 0deg)) rotateY(var(--keyframe-tilt-y, 0deg)) translateZ(8px)"
-          : "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
-        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease",
-      }}
-      className={cn("relative keyframers-tilt-card group/kfc will-change-transform", className)}
+      style={style}
+      className={cn("relative keyframers-tilt-card group/kfc", className)}
     >
-      {/* Glare and Specular Light Layer from Keyframers */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 group-hover/kfc:opacity-100 transition-opacity duration-300 z-30 overflow-hidden"
-        style={{
-          background:
-            "radial-gradient(600px circle at var(--keyframe-mx, 50%) var(--keyframe-my, 50%), rgba(255, 255, 255, 0.25), transparent 45%)",
-        }}
-      />
       {children}
     </div>
   );
@@ -445,12 +394,28 @@ export default function Projects() {
   };
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePhase, setActivePhase] = useState("all");
+  const [selectedPhase, setSelectedPhase] = useState("all");
+  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
+
+  const phaseCounts = useMemo(() => {
+    const map: Record<string, number> = { all: PROJECTS_LIST.length };
+    PROJECTS_LIST.forEach((card) => {
+      map[card.phase] = (map[card.phase] || 0) + 1;
+    });
+    return map;
+  }, []);
+
+  const PHASE_FILTERS = useMemo(() => [
+    { id: "all", labelVi: "Tất cả dự án", labelEn: "All Projects", shortVi: "Tất cả", count: phaseCounts.all || 0 },
+    { id: "Giai đoạn 1", labelVi: "GĐ 1 · Xây dựng & Vận hành CSKH", labelEn: "Phase 1 · Setup & Operations", shortVi: "Giai đoạn 1", count: phaseCounts["Giai đoạn 1"] || 0 },
+    { id: "Giai đoạn 2", labelVi: "GĐ 2 · Chuẩn hóa & Tối ưu kênh", labelEn: "Phase 2 · Standardization", shortVi: "Giai đoạn 2", count: phaseCounts["Giai đoạn 2"] || 0 },
+    { id: "Giai đoạn 3", labelVi: "GĐ 3 · Quản trị, Dữ liệu & AI", labelEn: "Phase 3 · Governance & AI", shortVi: "Giai đoạn 3", count: phaseCounts["Giai đoạn 3"] || 0 },
+    { id: "Xuyên suốt", labelVi: "Xuyên suốt · Đào tạo & Văn hóa", labelEn: "Continuous · Training", shortVi: "Xuyên suốt", count: phaseCounts["Xuyên suốt"] || 0 },
+  ], [phaseCounts]);
 
   const filteredProjects = useMemo(() => {
     return PROJECTS_LIST.filter((card) => {
-      // Lọc theo giai đoạn (Phase filter)
-      if (activePhase !== "all" && card.phase !== activePhase) {
+      if (selectedPhase !== "all" && card.phase !== selectedPhase) {
         return false;
       }
       // Lọc theo từ khóa tìm kiếm (Search filter)
@@ -465,7 +430,7 @@ export default function Projects() {
         (card.caseStudy?.solutionSummary && card.caseStudy.solutionSummary.toLowerCase().includes(q))
       );
     });
-  }, [searchQuery, activePhase]);
+  }, [selectedPhase, searchQuery]);
 
   const handleCardClick = (card: ProjectCard) => {
     setSelectedCardId(card.id);
@@ -475,7 +440,7 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 md:p-5 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
     >
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
@@ -486,7 +451,7 @@ export default function Projects() {
           backdrop-filter: blur(24px) saturate(140%) !important;
           -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
           border: 1px solid rgba(255, 255, 255, 0.85) !important;
-          border-radius: 1.5rem !important;
+          border-radius: 10px !important;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
@@ -494,24 +459,124 @@ export default function Projects() {
           background: rgba(15, 23, 42, 0.82) !important;
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.2) !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          border-radius: 10px !important;
         }
         `
       }} />
 
       {/* Main Container Dự án */}
-      <div className="w-full flex flex-col gap-[15px]">
+      <div className="w-full flex flex-col gap-4">
+        {/* Header Card Dự án (Caption / Label: 12px – 13px) */}
+        <PageCardHeader pageId="projects">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-blue-700 dark:text-blue-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
+              <span>{PROJECTS_LIST.length} {isVi ? "Dự án thực thi" : "Active Projects"}</span>
+            </span>
+          </div>
 
-      {/* Nội dung hiển thị Dự án */}
-      <div 
-        id="info-card-projects" 
-        style={{ padding: '10px' }}
-        className="w-full max-h-full overflow-y-auto"
-      >
+          <div className="flex items-center gap-2 sm:ml-auto">
+            {/* Filter Dropdown Button: Nhóm bộ lọc thành nút icon trước tìm kiếm */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-bold transition-all border cursor-pointer select-none",
+                  selectedPhase !== "all"
+                    ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                    : "bg-slate-100/80 dark:bg-white/10 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-white/10 hover:bg-slate-200/80 dark:hover:bg-white/15"
+                )}
+                title={isVi ? "Bộ lọc giai đoạn dự án" : "Filter projects"}
+                aria-label="Filter projects"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">
+                  {selectedPhase === "all" 
+                    ? (isVi ? "Bộ lọc" : "Filter") 
+                    : (isVi ? PHASE_FILTERS.find(f => f.id === selectedPhase)?.shortVi : PHASE_FILTERS.find(f => f.id === selectedPhase)?.labelEn)}
+                </span>
+                {selectedPhase !== "all" ? (
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                ) : (
+                  <span className="font-mono text-3xs px-1.5 py-0.2 rounded-full bg-slate-200/80 dark:bg-white/20 text-slate-700 dark:text-slate-200 font-bold">
+                    {filteredProjects.length}
+                  </span>
+                )}
+                <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", filterDropdownOpen ? "rotate-180" : "")} />
+              </button>
+
+              {/* Filter Dropdown Popover */}
+              {filterDropdownOpen && (
+                <div className="absolute right-0 sm:right-0 mt-2 w-72 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-1">
+                  <div className="px-2.5 py-1 text-3xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800/80 mb-1 flex items-center justify-between">
+                    <span>{isVi ? "Giai đoạn dự án" : "Project Phases"}</span>
+                    <span className="font-mono">{filteredProjects.length}/{PROJECTS_LIST.length}</span>
+                  </div>
+                  {PHASE_FILTERS.map((tab) => {
+                    const isActive = selectedPhase === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPhase(tab.id);
+                          setFilterDropdownOpen(false);
+                        }}
+                        className={cn(
+                          "w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between text-left transition-all cursor-pointer",
+                          isActive
+                            ? "bg-blue-600 text-white font-black shadow-xs"
+                            : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                        )}
+                      >
+                        <div className="flex items-center gap-2 truncate pr-2">
+                          <span className={cn("w-2 h-2 rounded-full shrink-0", isActive ? "bg-white" : "bg-blue-500")} />
+                          <span className="truncate">{isVi ? tab.labelVi : tab.labelEn}</span>
+                        </div>
+                        <span
+                          className={cn(
+                            "font-mono text-3xs px-2 py-0.5 rounded-full font-bold shrink-0",
+                            isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+                          )}
+                        >
+                          {tab.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Search input with glow container effect */}
+            <div className="relative flex items-center w-full sm:w-[220px]">
+              <Search className="absolute left-3 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={isVi ? "Tìm dự án..." : "Search projects..."}
+                className="w-full text-caption pl-8.5 pr-3 py-1 rounded-full bg-slate-100/75 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 text-slate-800 dark:text-slate-100 outline-hidden focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 p-0.5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-600 transition cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </div>
+        </PageCardHeader>
+
         {activeCard ? (
           <Suspense fallback={
             <div className="w-full py-20 flex flex-col items-center justify-center gap-3 text-slate-500">
               <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs font-medium">{isVi ? "Đang tải bài viết dự án..." : "Loading project article..."}</p>
+              <p className="text-body-sm font-medium">{isVi ? "Đang tải bài viết dự án..." : "Loading project article..."}</p>
             </div>
           }>
             <ProjectArticle
@@ -525,21 +590,21 @@ export default function Projects() {
             />
           </Suspense>
         ) : (
-          <div className="w-full flex flex-col gap-[15px]">
+          <div className="w-full flex flex-col gap-4">
             {filteredProjects.length === 0 ? (
-              <div className="text-center py-12 glass-surface rounded-3xl border border-slate-200/90 dark:border-slate-800 space-y-3 p-6 shadow-sm backdrop-blur-xl">
+              <div className="text-center py-12 glass-surface rounded-2xl border border-slate-200/90 dark:border-slate-800 space-y-3 p-6 shadow-sm backdrop-blur-xl">
                 <FolderKanban className="w-10 h-10 text-slate-500 dark:text-slate-400 mx-auto animate-bounce" />
                 <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
                   {isVi ? "Không tìm thấy dự án phù hợp" : "No matching projects found"}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+                <p className="text-body-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
                   {isVi ? "Thử điều chỉnh từ khóa tìm kiếm hoặc chọn lại giai đoạn dự án." : "Try adjusting your search query or selecting a different project phase."}
                 </p>
                 <button
                   type="button"
                   onClick={() => {
                     setSearchQuery("");
-                    setActivePhase("all");
+                    setSelectedPhase("all");
                   }}
                   className="px-4 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-full border border-blue-200 dark:border-blue-800/60 transition-all cursor-pointer"
                 >
@@ -549,76 +614,9 @@ export default function Projects() {
             ) : (
               <div 
                 id="card-projects-list-content"
-                className="w-full flex flex-col gap-[15px]"
+                className="w-full flex flex-col gap-4"
               >
-                {/* Tiêu đề thẻ cho Thẻ chứa Danh sách Dự án */}
-                <div className="w-full flex flex-col gap-[8px] pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-                  {/* Dòng chính: Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                        <FolderKanban className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-                      </div>
-                      <h2 className="text-lg sm:text-xl font-black tracking-tight text-blue-600 dark:text-blue-400">
-                        {isVi ? "Danh mục dự án" : "Strategic project portfolio solutions"}
-                      </h2>
-                    </div>
-                  </div>
-
-                  {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-                  <div className="h-[2px] w-full bg-blue-500/30 dark:bg-blue-500/20" />
-
-                  {/* Dòng 4 : Tìm kiếm & Bộ lọc (Tabs) */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-5 bg-blue-600 rounded-full shrink-0" />
-                      <span className="text-xs font-mono font-black text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
-                        {isVi ? `Hiển thị: ${filteredProjects.length} dự án` : `Showing: ${filteredProjects.length} projects`}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-2.5 sm:ml-auto">
-                      {/* Search input with glow container effect */}
-                      <div className="relative flex items-center w-full sm:w-[220px]">
-                        <Search className="absolute left-3 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
-                        <input
-                          type="text"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder={isVi ? "Tìm dự án..." : "Search projects..."}
-                          className="w-full text-xs pl-8.5 pr-3 py-1.5 rounded-full bg-slate-100/75 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 text-slate-800 dark:text-slate-100 outline-hidden focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
-                        />
-                        {searchQuery && (
-                          <button
-                            onClick={() => setSearchQuery("")}
-                            className="absolute right-3 p-0.5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-600 transition cursor-pointer"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Filter Tabs matching Domains layout */}
-                      <div className="flex flex-nowrap sm:flex-wrap gap-1 bg-slate-100/50 dark:bg-white/5 p-1 rounded-full border border-slate-200/50 dark:border-white/5 shadow-2xs max-w-full overflow-x-auto scrollbar-none">
-                        {PROJECT_PHASE_TABS.map((tab) => (
-                          <button
-                            key={tab.id}
-                            onClick={() => setActivePhase(tab.id)}
-                            className={`px-3 py-1 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
-                              activePhase === tab.id
-                                ? "bg-blue-600 text-white shadow-xs scale-102"
-                                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-white/5"
-                            }`}
-                          >
-                            {isVi ? tab.nameVi : tab.nameEn}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="projects-grid-content" style={{ padding: '25px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7 w-full">
+                <div id="projects-grid-content" className="p-1 sm:p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-[15px] w-full">
                   {filteredProjects.map((card, cardIndex) => {
                     const theme = getCardColorTheme(card);
                     const isSelected = selectedCardId === card.id;
@@ -633,7 +631,7 @@ export default function Projects() {
                       <KeyframersTiltCard
                         onClick={() => handleCardClick(card)}
                         className={cn(
-                          "card-item project-card project-edu-glass-card rounded-3xl overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full relative",
+                          "card-item project-card project-edu-glass-card rounded-[10px] overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full relative",
                           isSelected 
                             ? "ring-4 ring-blue-500/60 dark:ring-blue-400/60 shadow-2xl scale-[1.015] border-blue-500 dark:border-blue-400 bg-white/95 dark:bg-slate-900/95 z-20"
                             : cn("hover:shadow-2xl hover:border-blue-400/80 dark:hover:border-blue-500/80", theme.border, theme.ring)
@@ -642,7 +640,7 @@ export default function Projects() {
 
 
                           {/* Media Area - Framed Inside Padded Container */}
-                          <div className={cn("shrink-0", cardIndex === 10 ? "p-[10px]" : "p-3 pb-0")}>
+                          <div className={cn("shrink-0", cardIndex === 10 ? "p-2.5" : "p-3 pb-0")}>
                             <div className={cn(
                               "project-card-media relative w-full aspect-[16/9] overflow-hidden rounded-[10px] border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
@@ -662,14 +660,14 @@ export default function Projects() {
                                 "absolute top-2.5 left-2.5 z-20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border shadow-lg transition-transform duration-300 group-hover/img:scale-110",
                                 isSelected ? "bg-blue-600 text-white border-white/40 shadow-blue-500/40 scale-105" : badgeVariant.bg
                               )}>
-                                <span className={cn("font-mono text-[11px] font-black", isSelected ? "text-white" : badgeVariant.text)}>
+                                <span className={cn("font-mono text-2xs font-black", isSelected ? "text-white" : badgeVariant.text)}>
                                   {formattedIndex}
                                 </span>
                               </div>
 
-                              {/* Group Title Badge (Góc trên cùng bên phải) */}
+                              {/* Group Title Badge (Góc trên cùng bên right) */}
                               <div className="absolute top-2.5 right-2.5 z-20 max-w-[68%] px-2.5 py-1 rounded-full bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700/60 shadow-md">
-                                <span className="font-bold text-[10px] text-slate-800 dark:text-slate-200 truncate block">
+                                <span className="font-bold text-caption text-slate-800 dark:text-slate-200 truncate block">
                                   {card.groupTitle}
                                 </span>
                               </div>
@@ -682,14 +680,14 @@ export default function Projects() {
                             <div className="w-full flex items-start gap-3 pb-2.5 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
                               <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", isSelected ? "bg-blue-600 shadow-md shadow-blue-500/40" : theme.bar)} />
                               <div className="flex-1 min-w-0 text-left">
-                                <h3 className={cn("text-xs sm:text-sm font-extrabold tracking-tight line-clamp-2 leading-snug min-h-[2.25rem] sm:min-h-[2.5rem]", isSelected ? "text-blue-700 dark:text-blue-300 font-black" : theme.title)}>
+                                <h3 className={cn("text-base font-extrabold tracking-tight line-clamp-2 leading-snug min-h-[2.5rem] sm:min-h-[3rem]", isSelected ? "text-blue-700 dark:text-blue-300 font-black" : theme.title)}>
                                   {card.branchTitle}
                                 </h3>
                               </div>
                             </div>
 
                             {/* Project Description Paragraph */}
-                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2 font-medium">
+                            <p className="text-body-sm text-slate-600 dark:text-slate-300 line-clamp-2 font-medium">
                               {card.description}
                             </p>
 
@@ -701,7 +699,7 @@ export default function Projects() {
                                   <span
                                     key={idx}
                                     className={cn(
-                                      "text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md border h-fit flex items-center leading-normal shrink-0 transition-colors",
+                                      "text-3xs font-mono font-semibold px-2 py-0.5 rounded-md border h-fit flex items-center leading-normal shrink-0 transition-colors",
                                       isSelected 
                                         ? "bg-blue-100/90 dark:bg-blue-950/80 text-blue-800 dark:text-blue-200 border-blue-300/80 dark:border-blue-700/60 font-bold"
                                         : theme.tagBg
@@ -713,9 +711,9 @@ export default function Projects() {
                               </div>
 
                               {/* Interactive Action Row */}
-                              <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-bold">
+                              <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-2xs font-bold">
                                 {isSelected && (
-                                  <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
+                                  <span className="text-3xs font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
                                     Active
                                   </span>
                                 )}
@@ -731,7 +729,6 @@ export default function Projects() {
             )}
           </div>
         )}
-      </div>
 
       {/* ================= FULLSCREEN IMAGE PREVIEW MODAL ================= */}
       {previewImage && (

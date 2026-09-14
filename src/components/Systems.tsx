@@ -47,6 +47,7 @@ import { PageLayout } from "./PageLayout";
 import { PageBanner } from "./PageBanner";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 
 // Lazy load SVG moving pattern generator for performance code-splitting
 const CardSystemMovingPattern = lazy(() => import("./SystemsMovingPatterns").then(m => ({ default: m.CardSystemMovingPattern })));
@@ -1311,7 +1312,7 @@ export function Systems() {
           }
 
           .card-code {
-            font-size: 1.45rem;
+            font-size: var(--font-size-h3);
             font-weight: 900;
             color: #ffffff;
             line-height: 1.1;
@@ -1320,7 +1321,7 @@ export function Systems() {
           }
 
           .card-subtext {
-            font-size: 0.75rem;
+            font-size: var(--font-size-caption);
             font-weight: 500;
             color: rgba(255, 255, 255, 0.88);
             margin-top: 3px;
@@ -1334,7 +1335,7 @@ export function Systems() {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.68rem;
+            font-size: var(--font-size-2xs);
             font-weight: 600;
             color: rgba(255, 255, 255, 0.72);
             margin-top: 0px;
@@ -1405,20 +1406,10 @@ export function Systems() {
 
         {/* Container Systems - đem nội dung ra ngoài thẻ chứa */}
         <div id="info-card-systems" className="w-full h-full flex-1 min-h-0 flex flex-col justify-between gap-2 relative z-10 overflow-hidden">
-          {/* Header Card Hệ thống bên trong thẻ chứa */}
-          <div className="w-full shrink-0 flex flex-col gap-1 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-            {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-2 sm:gap-2.5">
-                <div className="flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                  <Cpu className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                </div>
-                <h2 className="text-base sm:text-lg lg:text-xl font-black tracking-tight text-blue-600 dark:text-blue-400">
-                  {isVi ? "Hệ thống công nghệ" : "Enterprise technology systems architecture"}
-                </h2>
-              </div>
-
-              {/* Play / Pause Video Action Button - Circular Popup Style with tech GIF */}
+          {/* Header Card Hệ thống (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
+          <PageCardHeader
+            pageId="systems"
+            actionRight={
               <div className="flex items-center gap-2 ml-auto shrink-0">
                 <button
                   type="button"
@@ -1446,67 +1437,61 @@ export function Systems() {
                     {isVideoPlaying ? (
                       <>
                         <Pause className="w-2.5 h-2.5 fill-current animate-pulse" />
-                        <span className="text-[8px] font-black tracking-wider uppercase">{isVi ? "DỪNG" : "PAUSE"}</span>
+                        <span className="text-3xs font-black tracking-wider uppercase">{isVi ? "DỪNG" : "PAUSE"}</span>
                       </>
                     ) : (
                       <>
                         <Play className="w-2.5 h-2.5 ml-0.5 fill-current" />
-                        <span className="text-[8px] font-black tracking-wider uppercase">{isVi ? "PHÁT" : "PLAY"}</span>
+                        <span className="text-3xs font-black tracking-wider uppercase">{isVi ? "PHÁT" : "PLAY"}</span>
                       </>
                     )}
                   </div>
                 </button>
               </div>
-            </div>
-
-            {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-            <div className="h-[2px] w-full bg-blue-500/30 dark:bg-blue-500/20 my-0.5" />
-
-            {/* Dòng 4 : Tiện ích & Thông số */}
-            <div className="flex flex-wrap items-center justify-between gap-1.5 pt-0.5 w-full">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-4 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
-                <span className="text-[11px] font-mono font-black text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
-                  {isVi ? `${filteredSystems.length} Nền tảng chuyên sâu` : `${filteredSystems.length} Core Platforms`}
+            }
+          >
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-4 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
+              <span className="text-caption font-mono font-black text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
+                {isVi ? `${filteredSystems.length} Nền tảng chuyên sâu` : `${filteredSystems.length} Core Platforms`}
+              </span>
+              {isVideoPlaying && (
+                <span className="text-caption font-bold text-rose-500 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 animate-pulse flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block" />
+                  Đang phát video giới thiệu hệ sinh thái
                 </span>
-                {isVideoPlaying && (
-                  <span className="text-[11px] font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/30 animate-pulse flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block" />
-                    Đang phát video giới thiệu hệ sinh thái
-                  </span>
-                )}
-              </div>
-
-              {/* Category Filter Pills (chỉ hiển thị khi không phát video) */}
-              {!isVideoPlaying && (
-                <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs sm:ml-auto">
-                  {(['all', 'platform', 'enterprise', 'growth'] as const).map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => { setCurrentCategory(cat); }}
-                      className={cn(
-                        "px-2 py-0.5 rounded-lg text-[11px] font-bold tracking-wide transition-all cursor-pointer active:scale-95",
-                        currentCategory === cat
-                          ? "bg-blue-600 text-white shadow-xs"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                      )}
-                    >
-                      {cat === 'all' ? (currentLang === 'vi' ? "Tất cả" : "All") :
-                       cat === 'platform' ? (currentLang === 'vi' ? "Nền tảng" : "Platform") :
-                       cat === 'enterprise' ? (currentLang === 'vi' ? "Quản trị" : "Enterprise") :
-                       (currentLang === 'vi' ? "Tăng trưởng" : "Growth")}
-                    </button>
-                  ))}
-                </div>
               )}
             </div>
-          </div>
 
-          {/* Khi phát video: Hiện popup video nổi ở trung tâm màn hình */}
+            {/* Category Filter Pills (chỉ hiển thị khi không phát video) */}
+            {!isVideoPlaying && (
+              <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs sm:ml-auto">
+                {(['all', 'platform', 'enterprise', 'growth'] as const).map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => { setCurrentCategory(cat); }}
+                    className={cn(
+                      "px-2.5 py-1 rounded-lg text-caption font-bold tracking-wide transition-all cursor-pointer active:scale-95",
+                      currentCategory === cat
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    )}
+                  >
+                    {cat === 'all' ? (currentLang === 'vi' ? "Tất cả" : "All") :
+                     cat === 'platform' ? (currentLang === 'vi' ? "Nền tảng" : "Platform") :
+                     cat === 'enterprise' ? (currentLang === 'vi' ? "Quản trị" : "Enterprise") :
+                     (currentLang === 'vi' ? "Tăng trưởng" : "Growth")}
+                  </button>
+                ))}
+              </div>
+            )}
+          </PageCardHeader>
+
+          {/* Khi phát video: Hiện popup video nổi ở góc trên bên phải màn hình hệ thống */}
           {isVideoPlaying && (
-            <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
-              <div className="relative w-full max-w-4xl rounded-3xl bg-slate-950 border border-rose-500/50 shadow-[0_20px_60px_rgba(225,29,72,0.35)] overflow-hidden flex flex-col justify-between aspect-video max-h-[85vh] group animate-scale-in">
+            <div className="fixed inset-0 z-[1100] flex items-start justify-end p-3 sm:p-6 pt-16 sm:pt-20 pointer-events-none animate-fade-in">
+              <div className="pointer-events-auto relative w-full max-w-sm sm:max-w-md md:max-w-xl rounded-2xl bg-slate-950 border border-rose-500/50 shadow-[0_20px_50px_rgba(225,29,72,0.4)] overflow-hidden flex flex-col justify-between aspect-video group animate-scale-in">
               {/* Full Video Stream */}
               <video
                 ref={fullVideoRef}
@@ -1571,7 +1556,7 @@ export function Systems() {
                   <span className="text-xs sm:text-sm font-black text-white drop-shadow-md">
                     Hệ sinh thái nền tảng chuyển đổi số toàn diện SDP - ERP - CRM - HRM
                   </span>
-                  <span className="text-[11px] text-white/70">
+                  <span className="text-2xs text-white/70">
                     Nhấn vào video hoặc nút tạm dừng để quay lại danh sách thẻ hệ thống
                   </span>
                 </div>
@@ -1619,7 +1604,7 @@ export function Systems() {
                       */
                       <div className="flex flex-col justify-between h-full w-full relative z-10 select-none py-0.5">
                         {/* Dòng 1 : Trang làm việc chính */}
-                        <div className="w-full text-xs sm:text-[13px] font-semibold text-white/95 leading-tight truncate tracking-wide drop-shadow-xs">
+                        <div className="w-full text-xs font-semibold text-white/95 leading-tight truncate tracking-wide drop-shadow-xs">
                           {currentLang === 'vi' ? item.name : item.nameEn}
                         </div>
 
@@ -1634,7 +1619,7 @@ export function Systems() {
                         </div>
 
                         {/* Dòng 3 : Trang làm việc chính */}
-                        <div className="card-status flex items-center gap-1.5 text-[11px] font-medium text-white/80 leading-none">
+                        <div className="card-status flex items-center gap-1.5 text-2xs font-medium text-white/80 leading-none">
                           <span className="status-dot shrink-0" />
                           <span className="truncate">{currentLang === 'vi' ? item.pillTag : item.pillTagEn}</span>
                         </div>
@@ -1657,7 +1642,7 @@ export function Systems() {
                             <div>
                               <div className="flex items-center gap-2">
                                 <span className="card-code text-xl font-black tracking-tight">{item.key}</span>
-                                <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-white/25 border border-white/30 font-bold text-white shadow-xs">
+                                <span className="text-3xs sm:text-xs px-2 py-0.5 rounded-full bg-white/25 border border-white/30 font-bold text-white shadow-xs">
                                   {currentLang === 'vi' ? item.pillTag : item.pillTagEn}
                                 </span>
                               </div>
@@ -1684,11 +1669,11 @@ export function Systems() {
                           transition={{ duration: 0.3, ease: "easeOut" }}
                           className="flex flex-col gap-2.5"
                         >
-                          <p className="text-xs sm:text-sm text-white/95 leading-relaxed bg-black/30 p-3.5 rounded-xl border border-white/15 backdrop-blur-md shadow-inner font-normal">
+                          <p className="text-body-sm text-white/95 bg-black/30 p-3.5 rounded-xl border border-white/15 backdrop-blur-md shadow-inner font-normal">
                             {item.desc}
                           </p>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] sm:text-xs font-medium text-white/90">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-2xs sm:text-xs font-medium text-white/90">
                             {item.features.map((feat, fIdx) => (
                               <div key={fIdx} className="flex items-center gap-1.5">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -1699,7 +1684,7 @@ export function Systems() {
 
                           {/* Footer Action Button */}
                           <div className="flex items-center justify-between pt-2 border-t border-white/15 mt-1">
-                            <span className="text-[11px] text-emerald-300 font-bold flex items-center gap-1">
+                            <span className="text-2xs text-emerald-300 font-bold flex items-center gap-1">
                               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
                               {t.allSystemsOperational}
                             </span>

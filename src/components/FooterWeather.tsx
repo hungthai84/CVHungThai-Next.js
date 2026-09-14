@@ -252,8 +252,8 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           {/* Time & Date Block */}
           {timeString && dateString && (
             <div className="flex flex-col items-start px-2 py-0.5 border-r border-slate-300/50 dark:border-slate-600/50 pr-3 font-['Play',sans-serif]">
-              <span className="text-[13px] sm:text-[15px] font-bold tracking-wider text-blue-600 dark:text-blue-400 font-['Play',sans-serif]">{timeString}</span>
-              <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase font-['Play',sans-serif]">{dateString}</span>
+              <span className="text-xs sm:text-sm font-bold tracking-wider text-blue-600 dark:text-blue-400 font-['Play',sans-serif]">{timeString}</span>
+              <span className="text-3xs sm:text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase font-['Play',sans-serif]">{dateString}</span>
             </div>
           )}
 
@@ -274,7 +274,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             <span className="text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
               {weather.temp}°C
             </span>
-            <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 hidden xs:inline truncate max-w-[80px]">
+            <span className="text-2xs sm:text-xs font-bold text-slate-500 dark:text-slate-400 hidden xs:inline truncate max-w-[80px]">
               • {displayCityShort}
             </span>
           </div>
@@ -296,7 +296,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             <span className="text-xs font-black text-slate-800 dark:text-slate-100">
               {weather.temp}°C
             </span>
-            <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate max-w-[70px]">
+            <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 truncate max-w-[70px]">
               {displayCityShort}
             </span>
           </div>
@@ -324,7 +324,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                 <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
                   {weather.city}
                 </h4>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 dark:text-slate-500 font-medium">
+                <p className="text-3xs text-slate-500 dark:text-slate-400 dark:text-slate-500 font-medium">
                   {lang === "vi" ? `Cập nhật lúc ${weather.time}` : `Updated at ${weather.time}`}
                 </p>
               </div>
@@ -367,7 +367,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
               <p className="text-xs font-bold text-blue-600 dark:text-blue-400">
                 {weatherInfo.text}
               </p>
-              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              <p className="text-3xs font-medium text-slate-500 dark:text-slate-400">
                 {lang === "vi" ? `Cảm giác như: ${weather.feelsLike}°C` : `Feels like: ${weather.feelsLike}°C`}
               </p>
             </div>
@@ -386,7 +386,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             {/* Humidity */}
             <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
               <Droplets className="w-3.5 h-3.5 text-blue-500 mb-0.5" />
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+              <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Độ ẩm" : "Humidity"}
               </span>
               <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
@@ -397,7 +397,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             {/* Wind */}
             <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
               <Wind className="w-3.5 h-3.5 text-teal-500 mb-0.5" />
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+              <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Gió" : "Wind"}
               </span>
               <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
@@ -408,7 +408,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             {/* Precipitation */}
             <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
               <Umbrella className="w-3.5 h-3.5 text-cyan-500 mb-0.5" />
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+              <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Lượng mưa" : "Precip"}
               </span>
               <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
@@ -420,14 +420,14 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           {/* City Selection Pills + GPS Locate Button */}
           <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {lang === "vi" ? "Chọn tỉnh / thành phố" : "Select location"}
               </span>
               <button
                 type="button"
                 onClick={handleGetLocation}
                 disabled={isLocating}
-                className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-3xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                 title={lang === "vi" ? "Lấy vị trí hiện tại qua GPS" : "Use GPS location"}
               >
                 <Navigation className={`w-3 h-3 ${isLocating ? "animate-spin" : ""}`} />
@@ -446,7 +446,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                       setCustomLocationName(null);
                       setSelectedCityId(c.id);
                     }}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                    className={`px-2 py-1 rounded-lg text-3xs font-bold transition-all ${
                       isSelected
                         ? "bg-blue-600 text-white shadow-2xs"
                         : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"

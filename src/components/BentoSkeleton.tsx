@@ -53,14 +53,14 @@ export const BentoSkeleton: React.FC<BentoSkeletonProps> = React.memo(({
       )}
     >
       {/* Shimmer Light Bar Effect */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-[20px]">
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-[10px]">
         <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/15 dark:via-cyan-400/10 to-transparent -skew-x-12 animate-[shimmer_1.4s_infinite_linear]" />
       </div>
 
       {/* Top Banner Skeleton Header (Matches SectionHeader layout) */}
       <motion.div
         variants={cardItemVariants}
-        className="w-full flex items-center justify-between p-4 sm:p-5 rounded-[20px] bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-md shadow-xs"
+        className="w-full flex items-center justify-between p-4 sm:p-5 rounded-[10px] bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-md shadow-xs"
       >
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] bg-slate-300/60 dark:bg-slate-800/80 border border-slate-300/80 dark:border-slate-700/80 shrink-0 animate-pulse" />
@@ -81,7 +81,7 @@ export const BentoSkeleton: React.FC<BentoSkeletonProps> = React.memo(({
           {/* Card 1 - Large / Featured */}
           <motion.div
             variants={cardItemVariants}
-            className="col-span-1 md:col-span-2 rounded-[20px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
+            className="col-span-1 md:col-span-2 rounded-[10px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div className="space-y-2">
@@ -105,7 +105,7 @@ export const BentoSkeleton: React.FC<BentoSkeletonProps> = React.memo(({
           {/* Card 2 */}
           <motion.div
             variants={cardItemVariants}
-            className="col-span-1 rounded-[20px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
+            className="col-span-1 rounded-[10px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
           >
             <div className="flex items-center justify-between">
               <div className="w-28 h-5 rounded-lg bg-slate-300/70 dark:bg-slate-700/70 animate-pulse" />
@@ -122,7 +122,7 @@ export const BentoSkeleton: React.FC<BentoSkeletonProps> = React.memo(({
           {/* Card 3 */}
           <motion.div
             variants={cardItemVariants}
-            className="col-span-1 rounded-[20px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
+            className="col-span-1 rounded-[10px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
           >
             <div className="space-y-2">
               <div className="w-24 h-4 rounded bg-slate-300/70 dark:bg-slate-700/70 animate-pulse" />
@@ -137,7 +137,7 @@ export const BentoSkeleton: React.FC<BentoSkeletonProps> = React.memo(({
           {/* Card 4 */}
           <motion.div
             variants={cardItemVariants}
-            className="col-span-1 md:col-span-2 rounded-[20px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
+            className="col-span-1 md:col-span-2 rounded-[10px] p-5 sm:p-6 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-between space-y-4 shadow-sm"
           >
             <div className="flex items-center justify-between">
               <div className="w-40 h-5 rounded-lg bg-slate-300/70 dark:bg-slate-700/70 animate-pulse" />

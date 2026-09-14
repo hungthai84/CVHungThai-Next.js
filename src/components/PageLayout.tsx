@@ -70,7 +70,7 @@ export function PageLayout({
     <section
       id={id}
       className={cn(
-        "w-full max-w-7xl mx-auto flex flex-col min-h-full px-3 sm:px-6 py-4 sm:py-5",
+        "w-full max-w-7xl mx-auto flex flex-col min-h-full px-4 sm:px-6 py-4 sm:py-6",
         rootClassName
       )}
       style={headerStyle}
@@ -117,7 +117,7 @@ export function PageLayout({
                           {typeof opt.count === "number" && (
                             <span
                               className={cn(
-                                "px-1.5 py-0.2 rounded-full text-[10px] font-extrabold",
+                                "px-1.5 py-0.2 rounded-full text-3xs font-extrabold",
                                 isActive
                                   ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400"
                                   : "bg-slate-200/60 dark:bg-slate-700/60 text-slate-500 dark:text-slate-400"

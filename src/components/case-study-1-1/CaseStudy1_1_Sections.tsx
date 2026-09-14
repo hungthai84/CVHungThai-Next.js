@@ -73,7 +73,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
     const results = cs?.results || [];
 
     return (
-      <div id="article-section" className="space-y-[15px] md:space-y-[20px] flex flex-col gap-[15px] md:gap-[20px] bg-transparent">
+      <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 bg-transparent">
         {/* 01 · Tổng quan dự án & EXECUTIVE OVERVIEW */}
         <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
           <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
@@ -87,31 +87,31 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5 text-sky-500" /> Tên Dự Án
               </span>
               <p className="text-sm font-bold text-slate-900 dark:text-white">{project.branchTitle}</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-indigo-500" /> Nhóm & Chuyên Mục
               </span>
               <p className="text-sm font-bold text-slate-900 dark:text-white">{project.groupTitle} <span className="text-xs font-normal text-slate-500">{project.groupHashtag}</span></p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-purple-500" /> Vai Trò & Thời Gian
               </span>
               <p className="text-sm font-bold text-slate-900 dark:text-white">{project.role} • {project.timeframe} ({project.phase})</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-1">
-              <span className="text-[11px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
                 <Target className="w-3.5 h-3.5 text-blue-500" /> Mục Tiêu Chiến Lược
               </span>
               <p className="text-xs font-medium text-slate-700 dark:text-slate-200">{project.description}</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-2">
-              <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
                 <Globe className="w-3.5 h-3.5 text-emerald-500" /> Phạm Vi & Đối Tượng Hưởng Lợi
               </span>
               <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Toàn bộ máy CSKH đa kênh, Ban Giám đốc, Đội ngũ Tuyển dụng/HR, Tư vấn viên & Khách hàng người dùng trong hệ sinh thái.</p>
@@ -243,7 +243,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
                     <span className={`text-xs font-bold uppercase flex items-center gap-1.5 ${st.titleColor}`}>
                       <Compass className="w-4 h-4" /> Trụ Cột 0{idx + 1}
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${st.badgeBg}`}>Thực thi</span>
+                    <span className={`px-2 py-0.5 rounded-full text-3xs font-extrabold ${st.badgeBg}`}>Thực thi</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white">{act.title}</h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">{act.desc}</p>
@@ -268,12 +268,12 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
             </h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><ClipboardList className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 01</span><div className="font-bold text-xs">Khảo Sát</div></div>
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Layout className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 02</span><div className="font-bold text-xs">Thiết Kế</div></div>
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><UserPlus className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 03</span><div className="font-bold text-xs">Tuyển Dụng</div></div>
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><GraduationCap className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 04</span><div className="font-bold text-xs">Đào Tạo</div></div>
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Gauge className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 05</span><div className="font-bold text-xs">Vận Hành</div></div>
-            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Rocket className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 06</span><div className="font-bold text-xs">Mở Rộng</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><ClipboardList className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 01</span><div className="font-bold text-xs">Khảo Sát</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Layout className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 02</span><div className="font-bold text-xs">Thiết Kế</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><UserPlus className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 03</span><div className="font-bold text-xs">Tuyển Dụng</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><GraduationCap className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 04</span><div className="font-bold text-xs">Đào Tạo</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Gauge className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 05</span><div className="font-bold text-xs">Vận Hành</div></div>
+            <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Rocket className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 06</span><div className="font-bold text-xs">Mở Rộng</div></div>
           </div>
         </section>
 
@@ -321,10 +321,10 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-center">
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center mx-auto mb-1"><BookCheck className="w-5 h-5"/></div><div className="text-xs font-bold">Phương Pháp Chuẩn</div><p className="text-[11px] text-slate-500 font-body">Agile Operations & Standard SOP</p></div>
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center mx-auto mb-1"><Share2 className="w-5 h-5"/></div><div className="text-xs font-bold">Cơ Cấu Quản Trị</div><p className="text-[11px] text-slate-500 font-body">Bảng ma trận chỉ số & OKRs</p></div>
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-600 flex items-center justify-center mx-auto mb-1"><Database className="w-5 h-5"/></div><div className="text-xs font-bold">CRM & Omnichannel</div><p className="text-[11px] text-slate-500 font-body">Tích hợp dữ liệu đa kênh</p></div>
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-600 flex items-center justify-center mx-auto mb-1"><Bot className="w-5 h-5"/></div><div className="text-xs font-bold">AI Bot & Automation</div><p className="text-[11px] text-slate-500 font-body">Tự động hóa luồng hỗ trợ</p></div>
+            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center mx-auto mb-1"><BookCheck className="w-5 h-5"/></div><div className="text-xs font-bold">Phương Pháp Chuẩn</div><p className="text-2xs text-slate-500 font-body">Agile Operations & Standard SOP</p></div>
+            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center mx-auto mb-1"><Share2 className="w-5 h-5"/></div><div className="text-xs font-bold">Cơ Cấu Quản Trị</div><p className="text-2xs text-slate-500 font-body">Bảng ma trận chỉ số & OKRs</p></div>
+            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-600 flex items-center justify-center mx-auto mb-1"><Database className="w-5 h-5"/></div><div className="text-xs font-bold">CRM & Omnichannel</div><p className="text-2xs text-slate-500 font-body">Tích hợp dữ liệu đa kênh</p></div>
+            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-600 flex items-center justify-center mx-auto mb-1"><Bot className="w-5 h-5"/></div><div className="text-xs font-bold">AI Bot & Automation</div><p className="text-2xs text-slate-500 font-body">Tự động hóa luồng hỗ trợ</p></div>
           </div>
 
           <CaseStudy1_1_Tools />
@@ -394,7 +394,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
 
   // Static Case Study 1.1 Content
   return (
-    <div id="article-section" className="space-y-[15px] flex flex-col gap-[15px] bg-transparent">
+    <div id="article-section" className="space-y-4 flex flex-col gap-4 bg-transparent">
         {/* 01 · Tổng quan dự án & EXECUTIVE OVERVIEW */}
         <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
           <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
@@ -408,31 +408,31 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5 text-sky-500" /> Tên Dự Án
               </span>
               <p className="text-sm font-bold text-slate-900 dark:text-white">Case Study 1.1: Xây Dựng & Vận Hành Phòng Dịch Vụ Khách Hàng</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-indigo-500" /> Nhóm & TAGs
               </span>
               <p className="text-sm font-bold text-sky-700 dark:text-sky-300">🧭 Chiến lược & Quản lý <span className="text-xs font-normal text-slate-500">#CS_Strategy #Structure</span></p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1">
-              <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-purple-500" /> Vai Trò & Thời Gian
               </span>
               <p className="text-sm font-bold text-slate-900 dark:text-white">Senior CX Architect • Giai đoạn 1 (Khởi tạo nền tảng)</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-1">
-              <span className="text-[11px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
                 <Target className="w-3.5 h-3.5 text-blue-500" /> Mục Tiêu Chiến Lược
               </span>
               <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Xây dựng bộ máy CSKH chuẩn hóa, chủ động nâng cao trải nghiệm và tạo kết nối bền vững với khách hàng.</p>
             </div>
             <div className="p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-sky-200/80 dark:border-sky-800/60 shadow-xs space-y-1 md:col-span-2 lg:col-span-2">
-              <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-2xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
                 <Globe className="w-3.5 h-3.5 text-emerald-500" /> Phạm Vi & Đối Tượng Hưởng Lợi
               </span>
               <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Toàn bộ máy CSKH đa kênh, Ban Giám đốc, Đội ngũ Tuyển dụng/HR, Tư vấn viên & Khách hàng người dùng trong hệ sinh thái.</p>
@@ -575,7 +575,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-cyan-200 dark:border-cyan-800/60 space-y-2 hover:border-sky-400 transition duration-300">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase flex items-center gap-1.5"><Compass className="w-4 h-4" /> Trụ Cột 01</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/15 text-sky-700 dark:text-sky-300">Định Hướng</span>
+              <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-sky-500/15 text-sky-700 dark:text-sky-300">Định Hướng</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Tầm Nhìn & Sứ Mệnh CSKH</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
@@ -591,7 +591,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-cyan-200 dark:border-cyan-800/60 space-y-2 hover:border-purple-400 transition duration-300">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-purple-800 dark:text-purple-300 uppercase flex items-center gap-1.5"><Network className="w-4 h-4" /> Trụ Cột 02</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-500/15 text-purple-700 dark:text-purple-300">Cấu Trúc</span>
+              <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-purple-500/15 text-purple-700 dark:text-purple-300">Cấu Trúc</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Sơ Đồ Tổ Chức 6 Khối Chuyên Trách</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
@@ -607,7 +607,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-cyan-200 dark:border-cyan-800/60 space-y-2 hover:border-emerald-400 transition duration-300">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase flex items-center gap-1.5"><UserPlus className="w-4 h-4" /> Trụ Cột 03</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">Con Người</span>
+              <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">Con Người</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Khung Năng Lực & Tuyển Dụng 3 Cấp</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
@@ -623,7 +623,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-cyan-200 dark:border-cyan-800/60 space-y-2 hover:border-amber-400 transition duration-300">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase flex items-center gap-1.5"><HeartHandshake className="w-4 h-4" /> Trụ Cột 04</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300">Văn Hóa</span>
+              <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300">Văn Hóa</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Văn Hóa Lấy Khách Hàng Làm Trọng Tâm</h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 font-body leading-relaxed">
@@ -648,12 +648,12 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><ClipboardList className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 01</span><div className="font-bold text-xs">Khảo Sát</div><p className="text-[10px] text-slate-500">Đánh giá hiện trạng & luồng tiếp nhận</p></div>
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Layout className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 02</span><div className="font-bold text-xs">Thiết Kế</div><p className="text-[10px] text-slate-500">Vẽ sơ đồ tổ chức & ma trận phân quyền</p></div>
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><UserPlus className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 03</span><div className="font-bold text-xs">Tuyển Dụng</div><p className="text-[10px] text-slate-500">Thiết lập khung năng lực & lọc hồ sơ</p></div>
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><GraduationCap className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 04</span><div className="font-bold text-xs">Đào Tạo</div><p className="text-[10px] text-slate-500">Huấn luyện kỹ năng & quy trình SOP</p></div>
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Gauge className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 05</span><div className="font-bold text-xs">Vận Hành</div><p className="text-[10px] text-slate-500">Chạy thử nghiệm & tinh chỉnh luồng</p></div>
-          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Rocket className="w-4 h-4"/></div><span className="text-[10px] font-extrabold text-blue-600 uppercase">Bước 06</span><div className="font-bold text-xs">Mở Rộng</div><p className="text-[10px] text-slate-500">Tối ưu hiệu suất & nhân rộng quy mô</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><ClipboardList className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 01</span><div className="font-bold text-xs">Khảo Sát</div><p className="text-3xs text-slate-500">Đánh giá hiện trạng & luồng tiếp nhận</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Layout className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 02</span><div className="font-bold text-xs">Thiết Kế</div><p className="text-3xs text-slate-500">Vẽ sơ đồ tổ chức & ma trận phân quyền</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><UserPlus className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 03</span><div className="font-bold text-xs">Tuyển Dụng</div><p className="text-3xs text-slate-500">Thiết lập khung năng lực & lọc hồ sơ</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><GraduationCap className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 04</span><div className="font-bold text-xs">Đào Tạo</div><p className="text-3xs text-slate-500">Huấn luyện kỹ năng & quy trình SOP</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Gauge className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 05</span><div className="font-bold text-xs">Vận Hành</div><p className="text-3xs text-slate-500">Chạy thử nghiệm & tinh chỉnh luồng</p></div>
+          <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-blue-200 dark:border-blue-800/60 space-y-1.5"><div className="w-8 h-8 mx-auto rounded-xl bg-blue-500/20 text-blue-600 flex items-center justify-center"><Rocket className="w-4 h-4"/></div><span className="text-3xs font-extrabold text-blue-600 uppercase">Bước 06</span><div className="font-bold text-xs">Mở Rộng</div><p className="text-3xs text-slate-500">Tối ưu hiệu suất & nhân rộng quy mô</p></div>
         </div>
       </section>
 
@@ -701,10 +701,10 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-center">
-          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center mx-auto mb-1"><BookCheck className="w-5 h-5"/></div><div className="text-xs font-bold">Phương Pháp Chuẩn</div><p className="text-[11px] text-slate-500 font-body">SOP, Agile CS Operations</p></div>
-          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center mx-auto mb-1"><Share2 className="w-5 h-5"/></div><div className="text-xs font-bold">Cơ Cấu Quản Trị</div><p className="text-[11px] text-slate-500 font-body">Org Chart 3 Tầng & 6 Nhóm</p></div>
-          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-600 flex items-center justify-center mx-auto mb-1"><Database className="w-5 h-5"/></div><div className="text-xs font-bold">CRM & Omnichannel</div><p className="text-[11px] text-slate-500 font-body">Tích hợp dữ liệu khách hàng</p></div>
-          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-600 flex items-center justify-center mx-auto mb-1"><Bot className="w-5 h-5"/></div><div className="text-xs font-bold">AI Bot & LMS</div><p className="text-[11px] text-slate-500 font-body">Sẵn sàng AI Chatbot & E-learning</p></div>
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center mx-auto mb-1"><BookCheck className="w-5 h-5"/></div><div className="text-xs font-bold">Phương Pháp Chuẩn</div><p className="text-2xs text-slate-500 font-body">SOP, Agile CS Operations</p></div>
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center mx-auto mb-1"><Share2 className="w-5 h-5"/></div><div className="text-xs font-bold">Cơ Cấu Quản Trị</div><p className="text-2xs text-slate-500 font-body">Org Chart 3 Tầng & 6 Nhóm</p></div>
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-600 flex items-center justify-center mx-auto mb-1"><Database className="w-5 h-5"/></div><div className="text-xs font-bold">CRM & Omnichannel</div><p className="text-2xs text-slate-500 font-body">Tích hợp dữ liệu khách hàng</p></div>
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 space-y-1.5"><div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-600 flex items-center justify-center mx-auto mb-1"><Bot className="w-5 h-5"/></div><div className="text-xs font-bold">AI Bot & LMS</div><p className="text-2xs text-slate-500 font-body">Sẵn sàng AI Chatbot & E-learning</p></div>
         </div>
 
         <CaseStudy1_1_Tools />

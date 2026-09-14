@@ -29,7 +29,6 @@ const SECTION_ORDER = [
   "letter",
   "about",
   "education",
-  "services",
   "experience",
   "skills",
   "projects",
@@ -132,19 +131,19 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     if (footerConfig.styleVariant === "minimal") {
       return "bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-xl";
     }
-    return cn(getUnifiedSurfaceStyle(theme), "border-none shadow-2xl");
+    return cn(getUnifiedSurfaceStyle(theme), "shadow-xl");
   };
 
-  // Placement class resolver (Xóa khung viền bao quanh thô cứng, bo cong mượt mà 20px)
+  // Placement class resolver (Xóa khung viền bao quanh thô cứng, bo cong mượt mà 10px)
   const getPlacementClass = () => {
     switch (footerConfig.placement) {
       case "floating-pill":
         return cn(
-          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-20px)] sm:w-[92%] md:w-[86%] lg:w-[82%] xl:w-[78%] max-w-[1180px] h-[58px] sm:h-[62px] shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-20px)] sm:w-[92%] md:w-[86%] lg:w-[82%] xl:w-[78%] max-w-[1180px] h-[58px] sm:h-[62px] floating-glass-footer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isPinned
-            ? "bottom-2.5 sm:bottom-3.5 rounded-[20px] translate-y-0 opacity-100 ring-1 ring-black/5 dark:ring-white/10"
+            ? "bottom-2.5 sm:bottom-3.5 rounded-[10px] translate-y-0 opacity-100 ring-1 ring-black/5 dark:ring-white/10"
             : cn(
-                "bottom-0 rounded-t-[20px] rounded-b-none ring-1 ring-black/5 dark:ring-white/10",
+                "bottom-0 rounded-t-[10px] rounded-b-none ring-1 ring-black/5 dark:ring-white/10",
                 isSlidDown 
                   ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100" 
                   : "translate-y-0 opacity-100"
@@ -152,7 +151,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
         );
       case "full-width":
         return cn(
-          "fixed bottom-0 left-0 right-0 z-40 w-full h-[60px] sm:h-[64px] rounded-none shadow-lg transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed bottom-0 left-0 right-0 z-40 w-full h-[60px] sm:h-[64px] rounded-none floating-glass-footer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isSlidDown
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
@@ -161,7 +160,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
       case "fixed-bottom":
       default:
         return cn(
-          "fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] rounded-t-[20px] rounded-b-none ring-1 ring-black/5 dark:ring-white/10 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] rounded-t-[10px] rounded-b-none floating-glass-footer ring-1 ring-black/5 dark:ring-white/10 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isSlidDown
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"

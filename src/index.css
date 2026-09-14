@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=Ubuntu:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=cabinet-grotesk@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&subset=latin,vietnamese&display=swap');
 
 @import "tailwindcss";
 
@@ -9,11 +8,77 @@
   --font-sans: 'Play', sans-serif;
   --font-display: 'Play', sans-serif;
   --font-heading: 'Play', sans-serif;
-  --font-ubuntu: 'Ubuntu', sans-serif;
-  
-  --radius-xl: 20px;
-  --radius-2xl: 20px;
-  --radius-3xl: 20px;
+  --font-ubuntu: 'Play', sans-serif;
+  --font-inter: 'Play', sans-serif;
+  --font-poppins: 'Play', sans-serif;
+  --font-satoshi: 'Play', sans-serif;
+  --font-mono: 'Play', sans-serif;
+  --font-serif: 'Play', sans-serif;
+  --font-body: 'Play', sans-serif;
+  --font-play: 'Play', sans-serif;
+  --font-family-primary: 'Play', sans-serif;
+
+  --text-3xs: var(--font-size-3xs);
+  --text-3xs--line-height: 1.2;
+  --text-2xs: var(--font-size-2xs);
+  --text-2xs--line-height: 1.25;
+  --text-xs: var(--font-size-label);
+  --text-xs--line-height: 1.3;
+  --text-sm: var(--font-size-body-sm);
+  --text-sm--line-height: var(--line-height-body-sm);
+  --text-base: var(--font-size-body);
+  --text-base--line-height: var(--line-height-body);
+  --text-lg: var(--font-size-card-title);
+  --text-lg--line-height: var(--line-height-card-title);
+  --text-h4: var(--font-size-h4);
+  --text-h4--line-height: var(--line-height-h4);
+  --text-h5: var(--font-size-h5);
+  --text-h5--line-height: var(--line-height-h5);
+  --text-xl: var(--font-size-h3);
+  --text-xl--line-height: var(--line-height-h3);
+  --text-2xl: var(--font-size-h2);
+  --text-2xl--line-height: var(--line-height-h2);
+  --text-3xl: var(--font-size-h1);
+  --text-3xl--line-height: var(--line-height-h1);
+  --text-4xl: var(--font-size-display);
+  --text-4xl--line-height: var(--line-height-display);
+  --text-5xl: var(--font-size-display);
+  --text-5xl--line-height: var(--line-height-display);
+  --text-caption: var(--font-size-caption);
+  --text-caption--line-height: var(--line-height-caption);
+  --text-label: var(--font-size-label);
+  --text-label--line-height: var(--line-height-caption);
+  --text-badge: var(--font-size-label);
+  --text-badge--line-height: var(--line-height-caption);
+  --text-card-title: var(--font-size-card-title);
+  --text-card-title--line-height: var(--line-height-card-title);
+  --text-button: var(--font-size-button);
+  --text-button--line-height: var(--line-height-button);
+  --text-stat: var(--font-size-stat);
+  --text-stat--line-height: var(--line-height-stat);
+  --text-display: var(--font-size-display);
+  --text-display--line-height: var(--line-height-display);
+  --text-h1: var(--font-size-h1);
+  --text-h1--line-height: var(--line-height-h1);
+  --text-h2: var(--font-size-h2);
+  --text-h2--line-height: var(--line-height-h2);
+  --text-h3: var(--font-size-h3);
+  --text-h3--line-height: var(--line-height-h3);
+  --text-body: var(--font-size-body);
+  --text-body--line-height: var(--line-height-body);
+  --text-body-sm: var(--font-size-body-sm);
+  --text-body-sm--line-height: var(--line-height-body-sm);
+  --text-nav: var(--font-size-nav);
+  --text-nav--line-height: 1.20;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 10px;
+  --radius-2xl: 10px;
+  --radius-3xl: 10px;
+  --radius: 10px;
 
   --color-brand-bg: var(--theme-bg);
   --color-brand-card: var(--theme-card);
@@ -25,53 +90,231 @@
 }
 
 @layer base {
+  *,
+  *::before,
+  *::after {
+    font-family: 'Play', sans-serif;
+  }
+
+  html,
   body {
     font-family: 'Play', sans-serif !important;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    letter-spacing: var(--letter-spacing-normal);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Play', sans-serif !important;
   }
+
+  h1 {
+    font-size: var(--font-size-h1);
+    font-weight: 700;
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-heading);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+    font-weight: 700;
+    line-height: var(--line-height-h2);
+    letter-spacing: var(--letter-spacing-heading);
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+    font-weight: 700;
+    line-height: var(--line-height-h3);
+    letter-spacing: 0;
+  }
+
+  h4 {
+    font-size: var(--font-size-h4);
+    font-weight: 700;
+    line-height: var(--line-height-h4);
+    letter-spacing: 0;
+  }
+
+  h5 {
+    font-size: var(--font-size-h5);
+    font-weight: 700;
+    line-height: var(--line-height-h5);
+    letter-spacing: 0;
+  }
+
+  h6 {
+    font-size: var(--font-size-h6);
+    font-weight: 700;
+    line-height: var(--line-height-h6);
+    letter-spacing: 0;
+  }
+
+  button, input, select, textarea, optgroup {
+    font-family: 'Play', sans-serif !important;
+  }
+
+  /* Utility classes targeting all font- utility classes to guarantee Play font everywhere */
+  .font-sans,
+  .font-display,
+  .font-heading,
+  .font-ubuntu,
+  .font-inter,
+  .font-poppins,
+  .font-satoshi,
+  .font-mono,
+  .font-serif,
+  .font-body,
+  .font-play {
+    font-family: 'Play', sans-serif !important;
+  }
+
   :root {
-    /* Global Semantic Border Radii Tokens for Visual Consistency across 16 pages - Standard 20px */
-    --theme-radius-xs: 6px;
-    --theme-radius-sm: 8px;
-    --theme-radius-md: 12px;
-    --theme-radius-lg: 16px;
-    --theme-radius-xl: 20px;
-    --theme-radius-2xl: 20px;
-    --theme-radius-3xl: 20px;
+    /* ==========================================================================
+       TYPOGRAPHY DESIGN TOKENS (PLAY FONT UNIFIED SYSTEM)
+       ========================================================================== */
+    --font-family-primary: 'Play', sans-serif;
+
+    /* Responsive Font Sizes (Fluid Clamps conforming to Breakpoints & Hierarchy) */
+    --font-size-display: clamp(1.875rem, 3.5vw + 0.875rem, 3.25rem); /* Mobile 30-36px, Tablet 36-44px, Desktop 40-52px */
+    --font-size-h1: clamp(1.75rem, 2.5vw + 0.75rem, 2.625rem);       /* Mobile 28-32px, Tablet 32-38px, Desktop 36-42px */
+    --font-size-h2: clamp(1.5rem, 1.8vw + 0.75rem, 2.125rem);        /* Mobile 24-28px, Tablet 26-30px, Desktop 28-34px */
+    --font-size-h3: clamp(1.125rem, 1vw + 0.75rem, 1.5rem);           /* Mobile 18-20px, Tablet 19-22px, Desktop 20-24px */
+    --font-size-h4: clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem);         /* H4 / Sub-heading: 18-20px */
+    --font-size-h5: clamp(1rem, 0.25vw + 0.9375rem, 1.125rem);         /* H5 / Section Sub-header: 16-18px */
+    --font-size-h6: clamp(0.9375rem, 0.2vw + 0.875rem, 1rem);          /* H6 / Micro Header: 15-16px */
+    --line-height-h4: 1.30;
+    --line-height-h5: 1.30;
+    --line-height-h6: 1.30;
+
+    --font-size-card-title: clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem); /* Card Title: 18-20px */
+    --font-size-body: clamp(0.9375rem, 0.25vw + 0.875rem, 1rem);        /* Mobile 15px, Desktop 16px */
+    --font-size-body-sm: clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem);  /* Subtitle / Secondary 14-15px */
+    --font-size-caption: 0.8125rem;                                    /* 12-13px */
+    --font-size-label: 0.8125rem;                                      /* 12-13px */
+    --font-size-2xs: 0.6875rem;                                        /* 11px micro badge / label */
+    --font-size-3xs: 0.625rem;                                         /* 10px tiny badge / mono metadata */
+    --font-size-button: clamp(0.9375rem, 0.25vw + 0.875rem, 1rem);     /* 15-16px */
+    --font-size-stat: clamp(1.75rem, 2.5vw + 1rem, 2.5rem);             /* 28-40px */
+    --font-size-nav: clamp(0.875rem, 0.2vw + 0.825rem, 1rem);          /* 14-16px */
+
+    /* Typography Line Heights */
+    --line-height-display: 1.15;
+    --line-height-h1: 1.20;
+    --line-height-h2: 1.20;
+    --line-height-h3: 1.25;
+    --line-height-h4: 1.30;
+    --line-height-card-title: 1.30;
+    --line-height-body: 1.60;
+    --line-height-body-sm: 1.55;
+    --line-height-caption: 1.40;
+    --line-height-button: 1.20;
+    --line-height-stat: 1.10;
+
+    /* Letter Spacing */
+    --letter-spacing-normal: 0;
+    --letter-spacing-heading: -0.01em;
+    --letter-spacing-label: 0.02em;
+
+    /* Spacing Typography Tokens */
+    --spacing-heading-to-sub: 10px;
+    --spacing-sub-to-desc: 12px;
+    --spacing-desc-to-btn: 20px;
+    --spacing-section-to-content: 28px;
+    --spacing-card-title-to-desc: 10px;
+
+    /* Global Border Radius Tokens per Design System */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 10px;
+    --radius-2xl: 10px;
+    --radius-3xl: 10px;
+    --radius-pill: 999px;
+
+    /* Semantic Component Radii */
+    --radius-button: 10px;
+    --radius-small-card: 10px;
+    --radius-card: 10px;
+    --radius-hero-card: 10px;
+    --radius-modal: 10px;
+    --radius-badge: 999px;
+
+    /* Global Semantic Border Radii Tokens for Visual Consistency across 16 pages - Standard 10px */
+    --theme-radius-xs: 4px;
+    --theme-radius-sm: 6px;
+    --theme-radius-md: 8px;
+    --theme-radius-lg: 10px;
+    --theme-radius-xl: 10px;
+    --theme-radius-2xl: 10px;
+    --theme-radius-3xl: 10px;
     --theme-radius-full: 9999px;
 
-    --theme-radius: 20px;
-    --theme-radius-card: 20px;
-    --theme-radius-container: 20px;
-    --theme-radius-inner: 12px;
+    --theme-radius: 10px;
+    --theme-radius-card: 10px;
+    --theme-radius-container: 10px;
+    --theme-radius-inner: 8px;
     --theme-radius-badge: var(--theme-radius-sm);
     --theme-radius-button: var(--theme-radius-md);
     --theme-radius-input: var(--theme-radius-md);
     --theme-radius-pill: var(--theme-radius-full);
-    --theme-radius-modal: 20px;
-    --theme-radius-nav: 20px;
+    --theme-radius-modal: 10px;
+    --theme-radius-nav: 10px;
+
+    /* Spacing System Scale Tokens */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+
+    /* Global Transitions */
+    --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-base: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Global Shadows (Rule 21) */
+    --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.08);
 
     /* ==========================================================================
-       GLASS UI COLOR SYSTEM & DESIGN TOKENS (LIGHT GLASS - 5 MÀU CHỦ ĐẠO)
+       GLASS UI COLOR SYSTEM & DESIGN TOKENS (LIGHT GLASS - RULE 06)
        ========================================================================== */
-    --color-primary: #2563EB;     /* 1. Primary Blue (Button chính, CTA, Active) */
-    --color-secondary: #6366F1;   /* 2. Secondary Indigo (Secondary button, Nav, Selected) */
-    --color-accent: #06B6D4;      /* 3. Accent Cyan (Icon, Link, Info) */
-    --color-highlight: #8B5CF6;   /* 4. Highlight Violet (Highlight, Gradient, Special) */
-    --color-soft: #38BDF8;        /* 5. Soft Sky (Background deco, Hover, Subtle glow) */
+    --color-bg: #F7F9FC;
+    --color-surface: rgba(255, 255, 255, 0.65);
+    --color-text: #0F172A;
+    --color-text-muted: rgba(15, 23, 42, 0.70);
+    --color-border: rgba(255, 255, 255, 0.65);
 
-    --color-primary-rgb: 37, 99, 235;
-    --color-secondary-rgb: 99, 102, 241;
-    --color-accent-rgb: 6, 182, 212;
-    --color-highlight-rgb: 139, 92, 246;
-    --color-soft-rgb: 56, 189, 248;
+    --color-primary: #0066FF;     /* 1. Electric Blue (Primary) */
+    --color-secondary: #5B21FF;   /* 2. Neon Purple */
+    --color-accent: #00B4DB;      /* 3. Aqua Cyan */
+    --color-highlight: #7B2FF7;   /* 4. Cosmic Violet */
+    --color-soft: #0099F7;        /* 5. Ocean Mint / Sky */
 
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --glass-border: rgba(255, 255, 255, 0.85);
-    --glass-shadow: 0 16px 48px -12px rgba(37, 99, 235, 0.14), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+    --color-primary-rgb: 0, 102, 255;
+    --color-secondary-rgb: 91, 33, 255;
+    --color-accent-rgb: 0, 180, 219;
+    --color-highlight-rgb: 123, 47, 247;
+    --color-soft-rgb: 0, 153, 247;
+
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.65);
+    --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    --glass-blur: 16px;
 
     /* Light Mode - Vivid Multi-color Glassmorphism */
     --theme-text-main: #0f172a;
@@ -126,6 +369,19 @@
   [data-theme="dark"],
   [data-theme="glass-dark-neon"],
   .theme-glass-dark-neon {
+    /* Rule 07: DARK GLASS UI TOKENS */
+    --color-bg: #0B1020;
+    --color-surface: rgba(255, 255, 255, 0.06);
+    --color-border: rgba(255, 255, 255, 0.12);
+    --color-text: #FFFFFF;
+    --color-text-muted: rgba(255, 255, 255, 0.70);
+
+    /* Shadows in Dark Mode (Rule 21) */
+    --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.6);
+
     /* ==========================================================================
        GLASS UI COLOR SYSTEM & DESIGN TOKENS (DARK NEON GLASS - 5 MÀU CHỦ ĐẠO)
        ========================================================================== */
@@ -141,9 +397,10 @@
     --color-highlight-rgb: 217, 70, 239;
     --color-soft-rgb: 34, 197, 94;
 
-    --glass-bg: rgba(9, 13, 22, 0.85);
-    --glass-border: rgba(0, 240, 255, 0.45);
-    --glass-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 240, 255, 0.35), 0 0 55px rgba(217, 70, 239, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.22);
+    --glass-bg: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    --glass-blur: 20px;
 
     /* Dark Mode - Vivid Multi-Color Neon Dark Glass UI */
     --theme-text-main: #f8fafc;
@@ -201,7 +458,7 @@
     --bg-gradient-2: #16181f;
     --bg-gradient-3: #1b1e27;
     --theme-shadow: 0 12px 30px -14px rgba(0,0,0,0.75), 0 22px 50px -20px rgba(0,0,0,0.85);
-    --theme-radius: 20px;
+    --theme-radius: 10px;
   }
 
   .theme-navy-dark {
@@ -219,7 +476,7 @@
     --bg-gradient-3: #1e293b;
     --theme-shadow: 8px 8px 16px #020617, -8px -8px 16px rgba(30, 41, 59, 0.4);
     --theme-shadow-inset: inset 6px 6px 12px #020617, inset -6px -6px 12px rgba(30, 41, 59, 0.4);
-    --theme-radius: 20px;
+    --theme-radius: 10px;
   }
 
   .theme-industrial-futurist {
@@ -236,7 +493,7 @@
     --bg-gradient-2: #1e3a8a;
     --bg-gradient-3: #172554;
     --theme-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
-    --theme-radius: 20px;
+    --theme-radius: 10px;
   }
 
   :root.theme-bento-dark,
@@ -286,7 +543,7 @@
   :root.theme-navy-dark,
   html.theme-navy-dark body {
     background-color: #0f172a !important;
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Play', sans-serif !important;
   }
 
   :root.theme-navy-dark h1,
@@ -297,13 +554,13 @@
   :root.theme-navy-dark h6,
   :root.theme-navy-dark .font-display,
   :root.theme-navy-dark .font-heading {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-family: 'Play', sans-serif !important;
   }
 
   /* Typography and background rules for Industrial Futurist */
   html.theme-industrial-futurist,
   html.theme-industrial-futurist * {
-    font-family: 'Satoshi', sans-serif !important;
+    font-family: 'Play', sans-serif !important;
   }
 
   html.theme-industrial-futurist h1,
@@ -320,9 +577,7 @@
   html.theme-industrial-futurist h6 *,
   html.theme-industrial-futurist .font-display,
   html.theme-industrial-futurist .font-heading {
-    font-family: 'Cabinet Grotesk', sans-serif !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.03em !important;
+    font-family: 'Play', sans-serif !important;
   }
 
   @keyframes industrialAurora {
@@ -474,7 +729,7 @@
     --bg-gradient-2: #f5f2fa;
     --bg-gradient-3: #e6e2f3;
     --theme-shadow: 10px 10px 20px rgba(184, 178, 204, 0.5), -10px -10px 20px rgba(255, 255, 255, 0.9);
-    --theme-radius: 20px;
+    --theme-radius: 10px;
   }
 
   .theme-clay {
@@ -490,7 +745,7 @@
     --bg-gradient-2: #eceffb; /* Soft pastel purple/blue background */
     --bg-gradient-3: #f5f7ff;
     --theme-shadow: 0 16px 40px rgba(160, 165, 210, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.02);
-    --theme-radius: 20px;
+    --theme-radius: 10px;
   }
 
   /* ==========================================================================
@@ -601,6 +856,206 @@
     font-family: 'Play', sans-serif !important;
   }
 
+  /* ==========================================================================
+     STANDARDIZED TYPOGRAPHY DESIGN SYSTEM CLASSES & UTILITIES
+     ========================================================================== */
+  .text-display {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-display) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-display) !important;
+    letter-spacing: var(--letter-spacing-heading) !important;
+  }
+
+  .text-h1 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h1) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h1) !important;
+    letter-spacing: var(--letter-spacing-heading) !important;
+  }
+
+  .text-h2 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h2) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h2) !important;
+    letter-spacing: var(--letter-spacing-heading) !important;
+  }
+
+  .text-h3 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h3) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h3) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-h4 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h4) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h4) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-h5 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h5) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h5) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-h6 {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-h6) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-h6) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-card-title {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-card-title) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-card-title) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-body-bold {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-body) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-body) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-body {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-body) !important;
+    font-weight: 400 !important;
+    line-height: var(--line-height-body) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-body-sub,
+  .text-subcontent,
+  .text-body-sm,
+  .text-secondary {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-body-sm) !important;
+    font-weight: 400 !important;
+    line-height: var(--line-height-body-sm) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .text-caption {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-caption) !important;
+    font-weight: 600 !important;
+    line-height: var(--line-height-caption) !important;
+    letter-spacing: var(--letter-spacing-label) !important;
+  }
+
+  .text-label,
+  .text-badge {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-label) !important;
+    font-weight: 600 !important;
+    line-height: var(--line-height-caption) !important;
+    letter-spacing: var(--letter-spacing-label) !important;
+  }
+
+  .text-2xs {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-2xs) !important;
+    line-height: 1.25 !important;
+  }
+
+  .text-3xs {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-3xs) !important;
+    line-height: 1.2 !important;
+  }
+
+  .text-button {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-button) !important;
+    font-weight: 600 !important;
+    line-height: var(--line-height-button) !important;
+    letter-spacing: var(--letter-spacing-label) !important;
+  }
+
+  .text-stat {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-stat) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-stat) !important;
+    letter-spacing: var(--letter-spacing-heading) !important;
+  }
+
+  .text-nav {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-nav) !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+  }
+
+  .text-timeline-year {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-body-sm) !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+
+  .text-timeline-title,
+  .text-project-title {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-card-title) !important;
+    font-weight: 700 !important;
+    line-height: var(--line-height-card-title) !important;
+  }
+
+  .text-modal-title {
+    font-family: var(--font-family-primary) !important;
+    font-size: clamp(1.375rem, 1.5vw + 1rem, 1.75rem) !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+
+  .text-modal-body {
+    font-family: var(--font-family-primary) !important;
+    font-size: clamp(0.9375rem, 0.2vw + 0.9rem, 1rem) !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Universal mapping for Tailwind text-xs to guarantee Play font and token alignment */
+  .text-xs {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-caption) !important;
+    line-height: var(--line-height-caption) !important;
+    letter-spacing: var(--letter-spacing-label) !important;
+  }
+
+  /* Spacing Utility Helpers */
+  .spacing-heading-to-sub {
+    margin-bottom: var(--spacing-heading-to-sub) !important;
+  }
+  .spacing-sub-to-desc {
+    margin-bottom: var(--spacing-sub-to-desc) !important;
+  }
+  .spacing-desc-to-btn {
+    margin-bottom: var(--spacing-desc-to-btn) !important;
+  }
+  .spacing-section-to-content {
+    margin-bottom: var(--spacing-section-to-content) !important;
+  }
+  .spacing-card-title-to-desc {
+    margin-bottom: var(--spacing-card-title-to-desc) !important;
+  }
+
   body {
     @apply font-sans antialiased text-brand-text-light;
     background:
@@ -692,7 +1147,7 @@
 
   /* Global Border Radius Tokens applied to standard container classes */
   .glass-main-container {
-    border-radius: var(--theme-radius-container, 20px);
+    border-radius: var(--theme-radius-container, 10px);
   }
 
   .glass-card,
@@ -702,29 +1157,86 @@
   .skills-glass-card,
   [class*="skills-glass-swot-"],
   .domain-glow-card {
-    border-radius: var(--theme-radius-card, 20px);
+    border-radius: var(--theme-radius-card, 10px);
   }
 
   .glass-inner,
   .card-inner {
-    border-radius: var(--theme-radius-inner, 12px);
+    border-radius: var(--theme-radius-inner, 8px);
   }
 
   .glass-scrim {
-    border-radius: var(--theme-radius-card, 20px);
+    border-radius: var(--theme-radius-card, 10px);
   }
 }
 
 /* ==========================================================================
-   GLASSMORPHISM CORE DEFINITIONS (24px blur, 1px white border, theme radii)
+   GLASSMORPHISM CORE DEFINITIONS (Matching "Xin chào! Tôi là" Greeting Card)
    ========================================================================== */
+/* Tier 1: Floating Glass Header */
+.floating-glass-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.dark .floating-glass-header {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Tier 2: Floating Main Card (No Hover Motion Effect) */
+.floating-glass-main-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  border-radius: 10px !important;
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.dark .floating-glass-main-card {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  border-radius: 10px !important;
+}
+
+/* Tier 3: Floating Glass Footer */
+.floating-glass-footer {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.dark .floating-glass-footer {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
 .glass-main-container {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 16px 48px -12px rgba(99, 102, 241, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
-  border-radius: var(--theme-radius-container, 20px);
+  border-radius: var(--theme-radius-container, 10px);
 }
 
 .dark .glass-main-container {
@@ -733,7 +1245,7 @@
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(0, 245, 255, 0.35);
   box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(0, 245, 255, 0.25), 0 0 35px -5px rgba(255, 0, 127, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 245, 255, 0.12);
-  border-radius: var(--theme-radius-container, 20px);
+  border-radius: var(--theme-radius-container, 10px);
 }
 
 /* Animated shifting gradient border keyframes for Neon Glass Theme */
@@ -772,26 +1284,32 @@
 }
 
 .glass-card,
-.glass-surface {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 16px 48px -12px rgba(99, 102, 241, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
-  border-radius: var(--theme-radius-card, 20px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: lightGlassNeonBorderShift 12s ease-in-out infinite;
+.glass-surface,
+.bento-card {
+  background: var(--glass-bg, rgba(255, 255, 255, 0.65));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.65));
+  box-shadow: var(--glass-shadow, 0 8px 30px rgba(0, 0, 0, 0.06));
+  border-radius: var(--radius-xl, 10px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover,
+.glass-surface:hover,
+.bento-card:hover {
+  transform: translateY(-2px);
 }
 
 .dark .glass-card,
-.dark .glass-surface {
-  background: rgba(9, 13, 22, 0.78);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(0, 245, 255, 0.30);
-  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.85), 0 0 20px -3px rgba(0, 245, 255, 0.22), 0 0 35px -5px rgba(255, 0, 127, 0.15), inset 0 1.5px 2px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 245, 255, 0.1);
-  border-radius: var(--theme-radius-card, 20px);
-  animation: glassNeonBorderShift 10s ease-in-out infinite;
+.dark .glass-surface,
+.dark .bento-card {
+  background: var(--glass-bg, rgba(255, 255, 255, 0.06));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  box-shadow: var(--glass-shadow, 0 8px 30px rgba(0, 0, 0, 0.35));
+  border-radius: var(--radius-xl, 10px);
 }
 
 /* Vivid Multi-color Glassmorphism Utilities */
@@ -801,7 +1319,7 @@
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 16px 40px -10px rgba(99, 102, 241, 0.16), 0 0 20px -4px rgba(6, 182, 212, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
-  border-radius: var(--theme-radius-card, 20px);
+  border-radius: var(--theme-radius-card, 10px);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -811,7 +1329,7 @@
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(0, 245, 255, 0.35);
   box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(0, 245, 255, 0.25), 0 0 38px -5px rgba(255, 0, 127, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 245, 255, 0.12);
-  border-radius: var(--theme-radius-card, 20px);
+  border-radius: var(--theme-radius-card, 10px);
 }
 
 .glass-card-multicolor:hover {
@@ -852,7 +1370,7 @@
   border: 1px solid rgba(6, 182, 212, 0.3);
   box-shadow: 0 10px 30px rgba(6, 182, 212, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-cyan {
@@ -871,7 +1389,7 @@
   border: 1px solid rgba(236, 72, 153, 0.3);
   box-shadow: 0 10px 30px rgba(236, 72, 153, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-magenta {
@@ -890,7 +1408,7 @@
   border: 1px solid rgba(139, 92, 246, 0.3);
   box-shadow: 0 10px 30px rgba(139, 92, 246, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-purple {
@@ -909,7 +1427,7 @@
   border: 1px solid rgba(59, 130, 246, 0.3);
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-blue {
@@ -928,7 +1446,7 @@
   border: 1px solid rgba(16, 185, 129, 0.3);
   box-shadow: 0 10px 30px rgba(16, 185, 129, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-emerald {
@@ -947,7 +1465,7 @@
   border: 1px solid rgba(245, 158, 11, 0.3);
   box-shadow: 0 10px 30px rgba(245, 158, 11, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark .glass-neon-card-amber {
@@ -1014,7 +1532,7 @@
   -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.05) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
   perspective: 1000px !important;
   transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
@@ -1057,7 +1575,7 @@
   --theme-primary: #6366f1;
   --theme-primary-glow: rgba(99, 102, 241, 0.45);
   --theme-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.14), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
-  --theme-radius: 1.25rem;
+  --theme-radius: 10px;
 }
 
 .theme-glass .glass-main-container {
@@ -1103,7 +1621,7 @@
   --theme-primary-dark: #4f46e5;
   --theme-primary-glow: rgba(99, 102, 241, 0.35);
   --theme-shadow: 0 16px 40px 0 rgba(99, 102, 241, 0.12), inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95);
-  --theme-radius: 1.25rem;
+  --theme-radius: 10px;
 }
 
 /* 3. THEME NEC (Soft Neomorphism) */
@@ -1115,7 +1633,7 @@
   --theme-primary: #8b5cf6;
   --theme-primary-glow: rgba(139, 92, 246, 0.4);
   --theme-shadow: 10px 10px 24px rgba(175, 168, 196, 0.45), -10px -10px 24px rgba(255, 255, 255, 0.95);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 .theme-nec .glass-main-container {
@@ -1150,14 +1668,14 @@
   --theme-primary: #6366f1;
   --theme-primary-glow: rgba(99, 102, 241, 0.4);
   --theme-shadow: 0 16px 36px rgba(150, 155, 205, 0.35), inset 0 2px 5px rgba(255, 255, 255, 0.95), inset 0 -2px 5px rgba(130, 135, 185, 0.12);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 .theme-clay .glass-main-container {
   background: rgba(255, 255, 255, 0.92) !important;
   border: 2.5px solid rgba(255, 255, 255, 0.98) !important;
   box-shadow: 0 20px 45px rgba(145, 150, 205, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.98), inset 0 -3px 6px rgba(130, 135, 185, 0.15) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .theme-clay .glass-card,
@@ -1168,7 +1686,7 @@
   background-color: rgba(255, 255, 255, 0.94) !important;
   border: 2px solid rgba(255, 255, 255, 0.98) !important;
   box-shadow: 0 10px 25px rgba(150, 155, 205, 0.28), inset 0 2px 4px rgba(255, 255, 255, 0.95), inset 0 -2px 4px rgba(130, 135, 185, 0.1) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .theme-clay header#header,
@@ -1193,7 +1711,7 @@
   --bg-gradient-2: #38bdf8;
   --bg-gradient-3: #f472b6;
   --theme-shadow: 0 16px 40px 0 rgba(99, 102, 241, 0.12), 0 4px 16px 0 rgba(236, 72, 153, 0.08), inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 html.theme-glass-vivid body,
@@ -1257,7 +1775,7 @@ html.theme-glass-vivid body,
   --bg-gradient-2: #0f172a;
   --bg-gradient-3: #1e1b4b;
   --theme-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 html.theme-glass-dark body,
@@ -1320,7 +1838,7 @@ html.theme-glass-dark body,
   --bg-gradient-2: #f1f5f9;
   --bg-gradient-3: #e2e8f0;
   --theme-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
-  --theme-radius: 1.25rem;
+  --theme-radius: 10px;
 }
 
 html.theme-light body,
@@ -1468,7 +1986,7 @@ html.theme-light body,
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Play', sans-serif;
 }
 
 .domain-glow-card .card-orb {
@@ -1522,7 +2040,7 @@ html.theme-light body,
   width: 100%;
   min-height: 260px;
   background: rgba(255, 255, 255, 0.55);
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.85);
   overflow: hidden;
   display: flex;
@@ -1580,10 +2098,10 @@ html.theme-light body,
 }
 
 .domain-glow-card .glass-pane .glass-footer h2 {
-  font-family: 'Ubuntu', sans-serif;
-  font-weight: 500;
-  font-size: 1.15rem;
-  line-height: 1.3;
+  font-family: 'Play', sans-serif;
+  font-weight: 700;
+  font-size: var(--font-size-card-title);
+  line-height: var(--line-height-card-title);
   color: #1e293b;
   text-align: end;
   width: 100%;
@@ -1594,9 +2112,9 @@ html.theme-light body,
 }
 
 .domain-glow-card .glass-pane .glass-footer h2 i {
-  font-family: 'Ubuntu', sans-serif;
-  font-weight: 300;
-  font-size: 0.75em;
+  font-family: 'Play', sans-serif;
+  font-weight: 400;
+  font-size: var(--font-size-label);
   font-style: normal;
   display: block;
   color: #475569;
@@ -1623,11 +2141,11 @@ html.theme-light body,
 .outer-card {
   padding: 1.5rem !important; /* 24px outer padding */
   gap: 1rem !important;      /* 16px inner gap (Outer >= Inner) */
-  border-radius: 20px !important; /* Standard 20px */
+  border-radius: 10px !important; /* Standard 10px */
 }
 
 .outer-card .inner-element {
-  border-radius: 0.75rem !important; /* 12px = 24px - 12px padding */
+  border-radius: 8px !important;
 }
 
 /* 2. TYPOGRAPHY HIERARCHY & 65-75ch READABILITY */
@@ -1648,7 +2166,9 @@ button span,
 .tag-pill,
 [class*="rounded-full"][class*="text-"],
 [class*="rounded-md"][class*="text-xs"],
-[class*="rounded-lg"][class*="text-[10px]"] {
+[class*="rounded-lg"][class*="text-3xs"],
+[class*="rounded-lg"][class*="text-2xs"],
+[class*="rounded-lg"][class*="text-xs"] {
   white-space: nowrap;
 }
 
@@ -1748,9 +2268,9 @@ button, a, [role="button"], .glass-card {
 
 .glass-drop-wrap h1,
 .glass-sunset-title {
-  font-family: Arial, sans-serif !important;
+  font-family: 'Play', sans-serif !important;
   color: #FFF !important;
-  font-size: clamp(32px, 6vw, 90px);
+  font-size: var(--font-size-display);
   padding: 20px 30px;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.3);
   margin: 0;
@@ -1956,8 +2476,8 @@ button, a, [role="button"], .glass-card {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
+  font-family: 'Play', sans-serif;
+  font-size: var(--font-size-label);
   font-weight: 700;
   white-space: nowrap;
   padding: 5px 12px;
@@ -2145,7 +2665,7 @@ button, a, [role="button"], .glass-card {
   --theme-primary-dark: #1d4ed8;
   --theme-primary-glow: rgba(37, 99, 235, 0.4);
   --theme-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
-  --theme-radius: 12px;
+  --theme-radius: 10px;
 }
 
 /* Base Body background rules for Industrial Futurist */
@@ -2156,7 +2676,7 @@ html.theme-industrial-futurist body,
   background-size: 400% 400% !important;
   animation: industrialGradient 15s ease infinite !important;
   color: #f8fafc !important;
-  font-family: 'Satoshi', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 /* Carbon Fiber Overlay at 20% opacity */
@@ -2224,9 +2744,9 @@ html.theme-industrial-futurist body::after {
 .theme-industrial-futurist h6,
 .theme-industrial-futurist .font-display,
 .theme-industrial-futurist .font-heading {
-  font-family: 'Cabinet Grotesk', sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.03em !important;
+  font-family: 'Play', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
 }
 
 .theme-industrial-futurist body,
@@ -2239,7 +2759,7 @@ html.theme-industrial-futurist body::after {
 .theme-industrial-futurist a,
 .theme-industrial-futurist li,
 .theme-industrial-futurist div {
-  font-family: 'Satoshi', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 /* Primary, Success & Warning colors mapping */
@@ -2327,7 +2847,7 @@ html.theme-industrial-futurist body::after {
   --theme-primary-dark: #d8410f;
   --theme-primary-glow: rgba(242, 82, 27, 0.4);
   --theme-shadow: 0 16px 40px 0 rgba(120, 60, 20, 0.28), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 /* Base Body background rules for Sunrise Glass */
@@ -2342,7 +2862,7 @@ html.theme-sunrise-glass body,
     linear-gradient(to bottom, #fff2e6, #ffd9c4) !important;
   background-attachment: fixed !important;
   color: #1c1512 !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 /* Faint blurred coral/amber bloom layer as background elements */
@@ -2366,9 +2886,9 @@ html.theme-sunrise-glass body::after {
 .theme-sunrise-glass h6,
 .theme-sunrise-glass .font-display,
 .theme-sunrise-glass .font-heading {
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
   font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.01em !important;
   color: #1c1512 !important;
 }
 
@@ -2382,14 +2902,14 @@ html.theme-sunrise-glass body::after {
 .theme-sunrise-glass a,
 .theme-sunrise-glass li,
 .theme-sunrise-glass div {
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
-/* JetBrains Mono with tabular figures for ALL numbers and metrics */
+/* Tabular figures for ALL numbers and metrics using Play font */
 .theme-sunrise-glass .mono-number,
 .theme-sunrise-glass [class*="tabular-nums"],
 .theme-sunrise-glass [class*="font-mono"] {
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: 'Play', sans-serif !important;
   font-variant-numeric: tabular-nums !important;
 }
 
@@ -2406,20 +2926,20 @@ html.theme-sunrise-glass body::after {
   -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
   border: 1px solid rgba(255, 255, 255, 0.78) !important;
   box-shadow: 0 16px 40px 0 rgba(120, 60, 20, 0.28), inset 0 1px 0 0 rgba(255, 255, 255, 0.9) !important;
-  border-radius: 20px !important; /* Standard 20px */
+  border-radius: 10px !important; /* Standard 10px */
 }
 
 /* Rounded 2xl for chips and buttons */
 .theme-sunrise-glass button,
 .theme-sunrise-glass .action-btn,
 .theme-sunrise-glass [class*="rounded-lg"] {
-  border-radius: 16px !important;
+  border-radius: 10px !important;
 }
 
 .theme-sunrise-glass [class*="rounded-xl"],
 .theme-sunrise-glass [class*="rounded-2xl"],
 .theme-sunrise-glass [class*="rounded-3xl"] {
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .theme-sunrise-glass .glass-card:hover {
@@ -2438,7 +2958,7 @@ html.theme-sunrise-glass body::after {
   -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
   border: 1px solid rgba(255, 255, 255, 0.78) !important;
   box-shadow: 0 12px 40px 0 rgba(120, 60, 20, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.9) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 /* Primary, Success & Warning colors mapping */
@@ -2520,7 +3040,7 @@ html[data-theme="navy-neumorphic"] {
 html.theme-navy-neumorphic body {
   background-color: #0f172a !important;
   color: #f8fafc !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 .theme-navy-neumorphic h1,
@@ -2531,13 +3051,13 @@ html.theme-navy-neumorphic body {
 .theme-navy-neumorphic h6,
 .theme-navy-neumorphic .font-display,
 .theme-navy-neumorphic .font-heading {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 .theme-navy-neumorphic .mono-number,
 .theme-navy-neumorphic [class*="tabular-nums"],
 .theme-navy-neumorphic [class*="font-mono"] {
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 /* Neumorphic containers & cards styling */
@@ -2551,7 +3071,7 @@ html.theme-navy-neumorphic body {
   background-color: #0f172a !important;
   border: 1px solid #1e293b !important;
   box-shadow: 8px 8px 16px #020617, -8px -8px 16px rgba(30, 41, 59, 0.4) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .theme-navy-neumorphic .glass-card:hover {
@@ -2565,7 +3085,7 @@ html.theme-navy-neumorphic body {
 .theme-navy-neumorphic [class*="inset-panel"] {
   background-color: #0f172a !important;
   box-shadow: inset 6px 6px 12px #020617, inset -6px -6px 12px rgba(30, 41, 59, 0.4) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 /* Mustard accent mapping */
@@ -2612,15 +3132,15 @@ html[data-theme="glass-black-emerald"] {
   --theme-accent: #34D399;
   --theme-border: rgba(255, 255, 255, 0.10);
   --theme-glass: rgba(255, 255, 255, 0.05);
-  --theme-radius-lg: 20px;
-  --theme-radius-md: 20px;
-  --theme-radius-sm: 16px;
+  --theme-radius-lg: 10px;
+  --theme-radius-md: 10px;
+  --theme-radius-sm: 8px;
 }
 
 html.theme-glass-black-emerald body {
   background: radial-gradient(circle at 70% 20%, rgba(52, 211, 153, 0.08), transparent 35%), linear-gradient(to bottom, #000000 0%, #09090B 50%, #18181B 100%) !important;
   color: #FFFFFF !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 .theme-glass-black-emerald .glass-surface,
@@ -2634,7 +3154,7 @@ html.theme-glass-black-emerald body {
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(255, 255, 255, 0.10) !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .theme-glass-black-emerald .glass-card:hover {
@@ -2683,7 +3203,7 @@ html[data-theme="flat-bold"] {
 html.theme-flat-bold body {
   background-color: #FFFFFF !important;
   color: #111827 !important;
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 .theme-flat-bold .glass-surface,
@@ -2746,6 +3266,138 @@ html.theme-flat-bold body {
 }
 
 /* ==========================================
+   MRITECH AURORA VIBRANT GLASS (Glass UI Mritech Aurora Đa Sắc)
+   ========================================== */
+:root.theme-mritech-aurora-glass,
+html[data-theme="mritech-aurora-glass"],
+.theme-mritech-aurora-glass {
+  --theme-bg: #f0f4fd;
+  --theme-surface: rgba(255, 255, 255, 0.82);
+  --theme-surface-elevated: rgba(255, 255, 255, 0.92);
+  --theme-text-main: #0f172a;
+  --theme-text-muted: #475569;
+  --theme-primary: #2563eb;
+  --theme-accent: #8b5cf6;
+  --theme-border: rgba(255, 255, 255, 0.9);
+  --theme-border-hover: rgba(139, 92, 246, 0.5);
+  --theme-shadow: 0 20px 50px rgba(99, 102, 241, 0.15), 0 4px 16px rgba(236, 72, 153, 0.08);
+  --theme-radius: 10px;
+}
+
+html.theme-mritech-aurora-glass body,
+.theme-mritech-aurora-glass body {
+  background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+              #f0f4fd !important;
+  color: #0f172a !important;
+  font-family: 'Play', sans-serif !important;
+}
+
+.theme-mritech-aurora-glass header#header,
+.theme-mritech-aurora-glass footer#footer {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 16px 40px rgba(99, 102, 241, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+}
+
+.theme-mritech-aurora-glass .glass-card,
+.theme-mritech-aurora-glass .glass-surface,
+.theme-mritech-aurora-glass [id^="header-card-"],
+.theme-mritech-aurora-glass [id^="main-card-"] {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.12), 0 4px 14px rgba(236, 72, 153, 0.06) !important;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.theme-mritech-aurora-glass .glass-card:hover,
+.theme-mritech-aurora-glass [id^="header-card-"]:hover {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 25px 60px rgba(99, 102, 241, 0.2), 0 8px 24px rgba(236, 72, 153, 0.12) !important;
+}
+
+/* ==========================================
+   MRITECH DIGITAL GROWTH GLASS (Giao Diện Thương Hiệu Số MRITECH)
+   ========================================== */
+:root.theme-mritech-digital-growth,
+html[data-theme="mritech-digital-growth"],
+.theme-mritech-digital-growth {
+  --theme-bg: #f8fafc;
+  --theme-surface: rgba(255, 255, 255, 0.85);
+  --theme-surface-elevated: rgba(255, 255, 255, 0.95);
+  --theme-text-main: #0f172a;
+  --theme-text-muted: #475569;
+  --theme-primary: #2563eb;
+  --theme-accent: #f97316;
+  --theme-highlight: #8b5cf6;
+  --theme-border: rgba(255, 255, 255, 0.95);
+  --theme-border-hover: rgba(249, 115, 22, 0.5);
+  --theme-shadow: 0 20px 50px rgba(37, 99, 235, 0.12), 0 4px 20px rgba(249, 115, 22, 0.1);
+  --theme-radius: 10px;
+}
+
+html.theme-mritech-digital-growth body,
+.theme-mritech-digital-growth body {
+  background: radial-gradient(circle at 8% 90%, rgba(249, 115, 22, 0.14) 0%, transparent 45%),
+              radial-gradient(circle at 92% 15%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
+              radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 55%),
+              #f8fafc !important;
+  color: #0f172a !important;
+  font-family: 'Play', sans-serif !important;
+}
+
+.theme-mritech-digital-growth header#header,
+.theme-mritech-digital-growth footer#footer {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+}
+
+.theme-mritech-digital-growth .glass-card,
+.theme-mritech-digital-growth .glass-surface,
+.theme-mritech-digital-growth [id^="header-card-"],
+.theme-mritech-digital-growth [id^="main-card-"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 45px rgba(37, 99, 235, 0.1), 0 4px 16px rgba(249, 115, 22, 0.08) !important;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.theme-mritech-digital-growth .glass-card:hover,
+.theme-mritech-digital-growth [id^="header-card-"]:hover {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(249, 115, 22, 0.4) !important;
+  box-shadow: 0 25px 60px rgba(37, 99, 235, 0.18), 0 8px 25px rgba(249, 115, 22, 0.18) !important;
+}
+
+/* 3-Tone Button Gradient from MRITECH image.png (Blue-Purple-Orange) */
+.theme-mritech-digital-growth .btn-primary,
+.theme-mritech-digital-growth .action-btn-primary,
+.theme-mritech-digital-growth button.bg-gradient-to-r {
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 50%, #f97316 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 28px -4px rgba(249, 115, 22, 0.45), 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+  border: none !important;
+}
+
+.theme-mritech-digital-growth .btn-primary:hover,
+.theme-mritech-digital-growth .action-btn-primary:hover {
+  box-shadow: 0 14px 34px -2px rgba(249, 115, 22, 0.6), 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+/* ==========================================
    MODERN LIGHT GLASS (Glass UI Sáng Hiện Đại Màu Sắc)
    ========================================== */
 :root.theme-modern-light-glass,
@@ -2761,7 +3413,7 @@ html[data-theme="modern-light-glass"],
   --theme-border: rgba(226, 232, 240, 0.9);
   --theme-border-hover: rgba(99, 102, 241, 0.45);
   --theme-shadow: 0 14px 36px rgba(99, 102, 241, 0.1), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 html.theme-modern-light-glass body,
@@ -2772,7 +3424,7 @@ html.theme-modern-light-glass body,
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
   color: #0f172a !important;
-  font-family: 'Outfit', 'Inter', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 .theme-modern-light-glass .glass-surface,
@@ -2874,7 +3526,7 @@ html[data-theme="glass-dark-neon"],
   --theme-border: rgba(0, 240, 255, 0.35);
   --theme-border-hover: rgba(255, 0, 127, 0.55);
   --theme-shadow: 0 16px 48px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 240, 255, 0.25), 0 0 40px rgba(255, 0, 127, 0.16);
-  --theme-radius: 20px;
+  --theme-radius: 10px;
 }
 
 @keyframes neonAmbientPulse {
@@ -2900,7 +3552,7 @@ html.theme-glass-dark-neon body,
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
   color: #f8fafc !important;
-  font-family: 'Outfit', 'Inter', sans-serif !important;
+  font-family: 'Play', sans-serif !important;
 }
 
 /* Carbon / Cyber Mesh overlay for Neon Theme */
@@ -3077,8 +3729,8 @@ footer#footer,
 .footer-bento-container,
 .major-site-wrapper,
 .site-wrapper {
-  border-top-left-radius: 20px !important;
-  border-top-right-radius: 20px !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
   overflow: hidden !important;
 }
 
@@ -3087,8 +3739,8 @@ footer#footer,
   .footer-bento-container,
   .major-site-wrapper,
   .site-wrapper {
-    border-top-left-radius: 20px !important;
-    border-top-right-radius: 20px !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
   }
 }
 
@@ -3097,8 +3749,8 @@ footer#footer,
   .footer-bento-container,
   .major-site-wrapper,
   .site-wrapper {
-    border-top-left-radius: 20px !important;
-    border-top-right-radius: 20px !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
   }
 }
 
@@ -3139,7 +3791,7 @@ footer#footer,
    ========================================================================== */
 .bento-section-card {
   padding: 16px !important;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
   border-width: 1px !important;
   backdrop-filter: blur(20px) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08) !important;
@@ -3149,7 +3801,7 @@ footer#footer,
 @media (min-width: 768px) {
   .bento-section-card {
     padding: 24px !important;
-    border-radius: 20px !important;
+    border-radius: 10px !important;
   }
 }
 
@@ -3175,14 +3827,14 @@ footer#footer,
     "footer footer";
   gap: 1rem;
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 @media (min-width: 768px) {
   .bento-grid-dashboard {
     gap: 1.5rem;
     padding: 24px;
-    border-radius: 20px;
+    border-radius: 10px;
   }
 }
 
@@ -3201,7 +3853,7 @@ html[data-theme="flat-light"],
   --theme-border: var(--border, #E5E7EB);
   --theme-border-hover: var(--primary, #2563EB);
   --theme-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --theme-radius: 0.5rem;
+  --theme-radius: 10px;
 }
 
 html.theme-flat-light body,
@@ -3258,7 +3910,7 @@ html[data-theme="flat-dark"],
   --theme-border: #334155;
   --theme-border-hover: #38BDF8;
   --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
-  --theme-radius: 0.5rem;
+  --theme-radius: 10px;
   
   --color-primary: #38BDF8;
   --color-secondary: #818CF8;
@@ -3396,7 +4048,7 @@ html.theme-flat-dark body,
   position: relative;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -3488,10 +4140,10 @@ html.theme-flat-dark body,
 /* Huy hiệu Tag */
 .tag {
   align-self: flex-start;
-  font-family: var(--font-mono, monospace);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-family: 'Play', sans-serif !important;
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
   padding: 4px 10px;
   border-radius: 9999px;
   z-index: 3;
@@ -3712,6 +4364,15 @@ html.theme-flat-dark body,
    ========================================================================== */
 
 /* Uniform icon color inheritance inside section headers */
+[id^="sec-01"] h2, [id^="sec-02"] h2, [id^="sec-03"] h2, [id^="sec-04"] h2,
+[id^="sec-05"] h2, [id^="sec-06"] h2, [id^="sec-07"] h2, [id^="sec-08"] h2,
+[id^="sec-09"] h2, [id^="sec-10"] h2, [id^="sec-11"] h2, [id^="sec-12"] h2,
+[id^="sec-01"] h3, [id^="sec-02"] h3, [id^="sec-03"] h3, [id^="sec-04"] h3 {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+}
+
 [id^="sec-01"] h2 svg, [id^="sec-02"] h2 svg, [id^="sec-03"] h2 svg, [id^="sec-04"] h2 svg,
 [id^="sec-05"] h2 svg, [id^="sec-06"] h2 svg, [id^="sec-07"] h2 svg, [id^="sec-08"] h2 svg,
 [id^="sec-09"] h2 svg, [id^="sec-10"] h2 svg, [id^="sec-11"] h2 svg, [id^="sec-12"] h2 svg,
@@ -4123,6 +4784,21 @@ html.theme-flat-dark body,
   background-color: transparent !important;
   background: transparent !important;
   box-shadow: none !important;
+}
+
+/* Quy tắc hiển thị mô tả cho Thẻ Dịch vụ (Service Card Description) */
+/* Kích thước trên hoặc bằng 1646px x 881px: Hiển thị mô tả */
+@media (min-width: 1646px) {
+  .service-card-desc {
+    display: block !important;
+  }
+}
+
+/* Kích thước dưới hoặc bằng 1106px x 785px: Không hiển thị mô tả */
+@media (max-width: 1645px) {
+  .service-card-desc {
+    display: none !important;
+  }
 }
 
 

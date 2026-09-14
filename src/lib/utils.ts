@@ -17,33 +17,37 @@ export function cn(...classes: (string | boolean | undefined | null | Record<str
 
 export function getUnifiedSurfaceStyle(theme: string): string {
   switch (theme) {
+    case "mritech-digital-growth":
+      return "bg-white/85 dark:bg-slate-900/85 border border-white/95 dark:border-amber-500/25 shadow-[0_20px_50px_rgba(249,115,22,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] text-slate-900 dark:text-slate-100 backdrop-blur-2xl transition-all duration-300";
+    case "mritech-aurora-glass":
+      return "bg-white/85 dark:bg-slate-900/85 border border-white/90 dark:border-indigo-500/25 shadow-[0_20px_50px_rgba(99,102,241,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] text-slate-900 dark:text-slate-100 backdrop-blur-2xl transition-all duration-300";
     case "glass-dark-neon":
-      return "bg-[#090D16]/85 dark:bg-[#090D16]/85 border border-cyan-400/50 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_35px_rgba(0,240,255,0.35),0_0_55px_rgba(217,70,239,0.25),inset_0_1.5px_2px_rgba(255,255,255,0.22)] text-slate-100 backdrop-blur-[40px] transition-all duration-300";
+      return "bg-slate-900/90 dark:bg-slate-900/90 border border-slate-800/90 dark:border-slate-800/90 shadow-[0_8px_30px_rgba(0,0,0,0.35)] text-white backdrop-blur-md transition-all duration-200";
     case "modern-light-glass":
     default:
-      return "bg-white/80 border border-white/80 dark:border-cyan-400/30 shadow-[0_16px_48px_rgba(99,102,241,0.14),0_4px_16px_rgba(6,182,212,0.08),inset_0_1.5px_2px_rgba(255,255,255,0.95)] text-slate-900 dark:text-slate-100 backdrop-blur-[40px] transition-all duration-300";
+      return "bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-sm text-slate-900 dark:text-slate-100 backdrop-blur-md transition-all duration-200";
   }
 }
 
 export function getGlassCardClass(variant: "default" | "blue" | "indigo" | "purple" | "cyan" | "emerald" | "amber" | "rose" = "default"): string {
-  const base = "backdrop-blur-[40px] transition-all duration-300 rounded-2xl border ";
+  const base = "backdrop-blur-[16px] dark:backdrop-blur-[20px] transition-all duration-200 rounded-[10px] border ";
   switch (variant) {
     case "blue":
-      return `${base} bg-blue-500/10 dark:bg-slate-900/85 border-blue-500/30 dark:border-blue-400/50 shadow-[0_10px_30px_rgba(37,99,235,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(59,130,246,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-blue-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(59,130,246,0.55)]`;
+      return `${base} bg-blue-500/10 dark:bg-white/[0.06] border-blue-500/25 dark:border-blue-400/35 shadow-[0_8px_30px_rgba(0,102,255,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-blue-500/40 dark:hover:border-blue-400/60 hover:-translate-y-1`;
     case "indigo":
-      return `${base} bg-indigo-500/10 dark:bg-slate-900/85 border-indigo-500/30 dark:border-indigo-400/50 shadow-[0_10px_30px_rgba(99,102,241,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(99,102,241,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-indigo-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(99,102,241,0.55)]`;
+      return `${base} bg-indigo-500/10 dark:bg-white/[0.06] border-indigo-500/25 dark:border-indigo-400/35 shadow-[0_8px_30px_rgba(48,79,254,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-indigo-500/40 dark:hover:border-indigo-400/60 hover:-translate-y-1`;
     case "purple":
-      return `${base} bg-purple-500/10 dark:bg-slate-900/85 border-purple-500/30 dark:border-purple-400/50 shadow-[0_10px_30px_rgba(168,85,247,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(168,85,247,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-purple-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(168,85,247,0.55)]`;
+      return `${base} bg-purple-500/10 dark:bg-white/[0.06] border-purple-500/25 dark:border-purple-400/35 shadow-[0_8px_30px_rgba(91,33,255,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-purple-500/40 dark:hover:border-purple-400/60 hover:-translate-y-1`;
     case "cyan":
-      return `${base} bg-cyan-500/10 dark:bg-slate-900/85 border-cyan-500/30 dark:border-cyan-400/60 shadow-[0_10px_30px_rgba(6,182,212,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(0,245,255,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-cyan-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_45px_rgba(0,245,255,0.6)]`;
+      return `${base} bg-cyan-500/10 dark:bg-white/[0.06] border-cyan-500/25 dark:border-cyan-400/35 shadow-[0_8px_30px_rgba(0,180,219,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-cyan-500/40 dark:hover:border-cyan-400/60 hover:-translate-y-1`;
     case "emerald":
-      return `${base} bg-emerald-500/10 dark:bg-slate-900/85 border-emerald-500/30 dark:border-emerald-400/60 shadow-[0_10px_30px_rgba(16,185,129,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(0,255,136,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-emerald-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_45px_rgba(0,255,136,0.6)]`;
+      return `${base} bg-emerald-500/10 dark:bg-white/[0.06] border-emerald-500/25 dark:border-emerald-400/35 shadow-[0_8px_30px_rgba(0,200,83,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-emerald-500/40 dark:hover:border-emerald-400/60 hover:-translate-y-1`;
     case "amber":
-      return `${base} bg-amber-500/10 dark:bg-slate-900/85 border-amber-500/30 dark:border-amber-400/60 shadow-[0_10px_30px_rgba(245,158,11,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(255,184,0,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-amber-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_45px_rgba(255,184,0,0.6)]`;
+      return `${base} bg-amber-500/10 dark:bg-white/[0.06] border-amber-500/25 dark:border-amber-400/35 shadow-[0_8px_30px_rgba(255,179,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-amber-500/40 dark:hover:border-amber-400/60 hover:-translate-y-1`;
     case "rose":
-      return `${base} bg-rose-500/10 dark:bg-slate-900/85 border-rose-500/30 dark:border-rose-400/60 shadow-[0_10px_30px_rgba(244,63,94,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(255,0,127,0.35),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-rose-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_45px_rgba(255,0,127,0.6)]`;
+      return `${base} bg-rose-500/10 dark:bg-white/[0.06] border-rose-500/25 dark:border-rose-400/35 shadow-[0_8px_30px_rgba(236,0,140,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-rose-500/40 dark:hover:border-rose-400/60 hover:-translate-y-1`;
     default:
-      return `${base} bg-white/75 dark:bg-slate-900/85 border-white/80 dark:border-cyan-400/50 shadow-[0_10px_30px_rgba(99,102,241,0.08),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(0,245,255,0.3),inset_0_1.5px_2px_rgba(255,255,255,0.2)] hover:dark:border-cyan-300 hover:dark:shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(0,245,255,0.5)]`;
+      return `${base} bg-white/65 dark:bg-white/[0.06] border-white/65 dark:border-white/12 shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-slate-300/80 dark:hover:border-white/25 hover:-translate-y-1`;
   }
 }
 

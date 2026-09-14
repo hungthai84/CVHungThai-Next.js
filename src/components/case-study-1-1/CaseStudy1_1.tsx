@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Maximize2, X, Info, Quote } from "lucide-react";
 import { CaseStudy1_1_Header } from "./CaseStudy1_1_Header";
-import { ProjectPostcard } from "../project/ProjectPostcard";
 import { CaseStudy1_1_Mindmap } from "./CaseStudy1_1_Mindmap";
 import { CaseStudy1_1_Sections } from "./CaseStudy1_1_Sections";
 import { CaseStudy1_2_Mindmap } from "./CaseStudy1_2_Mindmap";
@@ -226,7 +225,7 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
   };
 
   return (
-    <div className="relative font-sans animate-fadeIn min-h-screen text-slate-800 dark:text-slate-100 w-full overflow-x-hidden">
+    <div className="relative font-sans animate-fadeIn min-h-screen text-slate-800 dark:text-slate-100 w-full overflow-x-hidden bg-transparent border-0 shadow-none">
       <style dangerouslySetInnerHTML={{ __html: `
         .glass-base {
             backdrop-filter: blur(20px) saturate(190%);
@@ -367,7 +366,6 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
 
       {/* Main Card Wrapper removed, contents brought directly outside */}
         <CaseStudy1_1_Header onShowToast={showToast} project={project} onBack={onBack} />
-        <ProjectPostcard project={project} />
         
         {viewMode === "mindmap" && (
           <>
@@ -503,7 +501,7 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
               const cq = getConcludingQuote(project.phaseCode);
               if (!cq) return null;
               return (
-                <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-2xl shadow-indigo-500/25 border-2 border-indigo-400/50 relative overflow-hidden space-y-4 mt-[15px] md:mt-[20px] clear-both">
+                <section id="sec-concluding-quote" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-2xl shadow-indigo-500/25 border-2 border-indigo-400/50 relative overflow-hidden space-y-4 mt-4 md:mt-5 clear-both">
                   <div className="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
                   <div className="flex items-center gap-3 border-b border-indigo-500/40 pb-3">
                     <Quote className="w-8 h-8 text-amber-400 shrink-0 animate-pulse" />
@@ -514,9 +512,11 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
                   <blockquote className="text-sm sm:text-base italic text-slate-200 font-serif leading-relaxed pl-2 border-l-2 border-amber-400">
                     "{cq.quote}"
                   </blockquote>
-                  <div className="flex justify-end text-xs font-bold text-indigo-300 tracking-wider">
-                    — {cq.author}
-                  </div>
+                  {cq.author && (
+                    <div className="flex justify-end text-xs font-bold text-indigo-300 tracking-wider">
+                      — {cq.author}
+                    </div>
+                  )}
                 </section>
               );
             })()}
@@ -542,7 +542,7 @@ function getConcludingQuote(phaseCode: string) {
     case "1.2":
       return {
         quote: "Chỉ số không chỉ để đo lường, mà để định hướng. Ma trận KPI & OKR hiệu quả là khi mỗi nhân viên thấu hiểu nỗ lực của họ đóng góp trực tiếp thế nào vào sự thịnh vượng của doanh nghiệp.",
-        author: "SENIOR PERFORMANCE & OKR ARCHITECT"
+        author: ""
       };
     case "1.3":
       return {

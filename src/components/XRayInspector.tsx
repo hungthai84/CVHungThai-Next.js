@@ -69,11 +69,339 @@ import {
   Search,
   Eye,
   Grid,
-  List
+  List,
+  Type,
+  Baseline,
+  SlidersHorizontal,
+  Columns,
+  AlignLeft,
+  Heading
 } from "lucide-react";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
 
+export interface TypographyTokenDef {
+  id: string;
+  level: string;
+  variable: string;
+  cssClass: string;
+  labelVi: string;
+  labelEn: string;
+  targetElements: string;
+  rangePx: string;
+  clampValue: string;
+  defaultWeight: string;
+  defaultLineHeight: string;
+  defaultLetterSpacing: string;
+  desc: string;
+}
+
+export const GLOBAL_TYPOGRAPHY_TOKENS: TypographyTokenDef[] = [
+  {
+    id: "display",
+    level: "Display",
+    variable: "--font-size-display",
+    cssClass: ".text-display",
+    labelVi: "Tiêu đề Lớn (Hero Display)",
+    labelEn: "Display Title",
+    targetElements: "Tên chính Hero, Số lớn mở màn",
+    rangePx: "40–52px",
+    clampValue: "clamp(1.875rem, 3.5vw + 0.875rem, 3.25rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.15",
+    defaultLetterSpacing: "-0.01em",
+    desc: "Mobile 30-36px, Tablet 36-44px, Desktop 40-52px. Dành riêng cho Tên Nguyễn Hùng Thái và số ấn tượng."
+  },
+  {
+    id: "h1",
+    level: "H1",
+    variable: "--font-size-h1",
+    cssClass: ".text-h1",
+    labelVi: "Tiêu đề Cấp 1 (Section Title)",
+    labelEn: "Heading 1",
+    targetElements: "<h1>, Tiêu đề chính các Section",
+    rangePx: "36–42px",
+    clampValue: "clamp(1.75rem, 2.5vw + 0.75rem, 2.625rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.2",
+    defaultLetterSpacing: "-0.01em",
+    desc: "Mobile 28-32px, Tablet 32-38px, Desktop 36-42px. Tiêu đề các trang Thư Ngỏ, Học Vấn, Kinh Nghiệm..."
+  },
+  {
+    id: "h2",
+    level: "H2",
+    variable: "--font-size-h2",
+    cssClass: ".text-h2",
+    labelVi: "Tiêu đề Cấp 2 (Group / Sub-header)",
+    labelEn: "Heading 2",
+    targetElements: "<h2>, Tiêu đề nhóm, Sub-headers",
+    rangePx: "28–34px",
+    clampValue: "clamp(1.5rem, 1.8vw + 0.75rem, 2.125rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.2",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 24-28px, Tablet 26-30px, Desktop 28-34px. Nhóm nội dung và các phần phân loại."
+  },
+  {
+    id: "h3",
+    level: "H3",
+    variable: "--font-size-h3",
+    cssClass: ".text-h3",
+    labelVi: "Tiêu đề Cấp 3 (Sub-section / Bento)",
+    labelEn: "Heading 3",
+    targetElements: "<h3>, Tiêu đề phụ, Tiêu đề Modal lớn",
+    rangePx: "20–24px",
+    clampValue: "clamp(1.125rem, 1vw + 0.75rem, 1.5rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.25",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 18-20px, Tablet 19-22px, Desktop 20-24px. Dùng cho tiêu đề phụ trong các khối bento."
+  },
+  {
+    id: "h4",
+    level: "H4",
+    variable: "--font-size-h4",
+    cssClass: ".text-h4",
+    labelVi: "Tiêu đề Cấp 4 (Sub-heading / Micro Header)",
+    labelEn: "Heading 4",
+    targetElements: "<h4>, Tiêu đề mục nhỏ, Thẻ chi tiết",
+    rangePx: "18–20px",
+    clampValue: "clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.3",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 17-18px, Desktop 18-20px. Dành cho các tiểu mục, phân đoạn chi tiết trong Bento card và modal."
+  },
+  {
+    id: "h5",
+    level: "H5",
+    variable: "--font-size-h5",
+    cssClass: ".text-h5",
+    labelVi: "Tiêu đề Cấp 5 (Section Sub-header / Small Title)",
+    labelEn: "Heading 5",
+    targetElements: "<h5>, Tiêu đề phụ cấp 5, Thẻ bổ trợ",
+    rangePx: "16–18px",
+    clampValue: "clamp(1rem, 0.25vw + 0.9375rem, 1.125rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.3",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 16px, Tablet 17px, Desktop 18px. Tiêu đề cấp 5 cho các phân đoạn nội dung nhỏ."
+  },
+  {
+    id: "h6",
+    level: "H6",
+    variable: "--font-size-h6",
+    cssClass: ".text-h6",
+    labelVi: "Tiêu đề Cấp 6 (Micro Header / Inline Title)",
+    labelEn: "Heading 6",
+    targetElements: "<h6>, Tiêu đề vi mô, Tiêu đề nội dòng",
+    rangePx: "15–16px",
+    clampValue: "clamp(0.9375rem, 0.2vw + 0.875rem, 1rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.3",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 15px, Desktop 16px. Tiêu đề cấp 6 cho nhãn thông số và tiêu đề nội dòng."
+  },
+  {
+    id: "card-title",
+    level: "Card Title",
+    variable: "--font-size-card-title",
+    cssClass: ".text-card-title",
+    labelVi: "Tiêu đề Thẻ (Card / Bento Header)",
+    labelEn: "Card Title",
+    targetElements: "Bento Box Title, Project Card, Timeline Job Title",
+    rangePx: "18–20px",
+    clampValue: "clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.3",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 17-18px, Desktop 18-20px. Tiêu đề các khối card dự án, kinh nghiệm, học vấn."
+  },
+  {
+    id: "body-bold",
+    level: "Body Bold",
+    variable: "--font-size-body",
+    cssClass: ".text-body-bold",
+    labelVi: "Tiêu đề Văn bản Chính (in đậm chữ)",
+    labelEn: "Main Body Title (Bold)",
+    targetElements: "<p> bold, Tiêu đề đoạn văn chính, Điểm nhấn nội dung",
+    rangePx: "15–16px",
+    clampValue: "clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.55",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 15px, Desktop 16px. Font-weight 700. Dành cho tiêu đề các đoạn văn chính và điểm nhấn in đậm nội dung."
+  },
+  {
+    id: "body",
+    level: "Body",
+    variable: "--font-size-body",
+    cssClass: ".text-body",
+    labelVi: "Văn bản Chính (Body Paragraph)",
+    labelEn: "Body Text",
+    targetElements: "<p>, Đoạn văn câu chuyện, Lời giới thiệu",
+    rangePx: "15–16px",
+    clampValue: "clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)",
+    defaultWeight: "400",
+    defaultLineHeight: "1.6",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 15px, Desktop 16px. Chiều cao dòng 1.6 đảm bảo trải nghiệm đọc tối ưu, không mỏi mắt."
+  },
+  {
+    id: "body-sub",
+    level: "Sub Content",
+    variable: "--font-size-body-sm",
+    cssClass: ".text-body-sub, .text-subcontent",
+    labelVi: "Nội dung Văn bản Phụ (Sub-content / Secondary Text)",
+    labelEn: "Sub-content Text",
+    targetElements: "Đoạn văn phụ, Nội dung bổ trợ, Ghi chú chi tiết card",
+    rangePx: "14–15px",
+    clampValue: "clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem)",
+    defaultWeight: "400",
+    defaultLineHeight: "1.5",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 14px, Desktop 15px. Dành cho nội dung văn bản phụ, giải thích chi tiết bổ trợ dưới các tiêu đề."
+  },
+  {
+    id: "body-sm",
+    level: "Body Small",
+    variable: "--font-size-body-sm",
+    cssClass: ".text-body-sm",
+    labelVi: "Văn bản Phụ / Tagline (Subtitle / Note)",
+    labelEn: "Body Small",
+    targetElements: "Subtitle, Tagline, Mô tả ngắn card, KPI detail",
+    rangePx: "14–15px",
+    clampValue: "clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem)",
+    defaultWeight: "400",
+    defaultLineHeight: "1.55",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 14px, Desktop 15px. Dùng cho các mô tả bổ trợ, ghi chú kinh nghiệm, phụ đề section."
+  },
+  {
+    id: "caption",
+    level: "Caption / Label",
+    variable: "--font-size-caption",
+    cssClass: ".text-caption, .text-label",
+    labelVi: "Chú thích & Nhãn (Caption / Label / Tag)",
+    labelEn: "Caption / Label",
+    targetElements: "Tags, Chips, Eyebrows, Form Labels, Timestamps",
+    rangePx: "12–13px",
+    clampValue: "0.8125rem",
+    defaultWeight: "600",
+    defaultLineHeight: "1.4",
+    defaultLetterSpacing: "0.02em",
+    desc: "Nhãn phân loại, tag kỹ năng, nhãn công ty, ngày tháng, mã metadata."
+  },
+  {
+    id: "button",
+    level: "Button",
+    variable: "--font-size-button",
+    cssClass: ".text-button",
+    labelVi: "Nút Bấm & Thao tác (Button / Action)",
+    labelEn: "Button Text",
+    targetElements: "<button>, CTA links, Action pills",
+    rangePx: "15–16px",
+    clampValue: "clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)",
+    defaultWeight: "600",
+    defaultLineHeight: "1.2",
+    defaultLetterSpacing: "0.01em",
+    desc: "Mobile 15px, Desktop 16px (15-16px). Nút bấm tương tác, chiều cao tối thiểu 44px, padding 2x vertical padding."
+  },
+  {
+    id: "stat",
+    level: "Statistic",
+    variable: "--font-size-stat",
+    cssClass: ".text-stat",
+    labelVi: "Chỉ số / Số liệu (Metric & Statistic)",
+    labelEn: "Statistic Number",
+    targetElements: "Numbers (22+, 100+, 98%), Big KPI metrics",
+    rangePx: "28–40px",
+    clampValue: "clamp(1.75rem, 2.5vw + 1rem, 2.5rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.1",
+    defaultLetterSpacing: "-0.01em",
+    desc: "Số liệu thành tích, metric quan trọng, tự động căn chỉnh tabular-nums."
+  },
+  {
+    id: "nav",
+    level: "Navigation",
+    variable: "--font-size-nav",
+    cssClass: ".text-nav",
+    labelVi: "Menu Điều Hướng (Navigation Items)",
+    labelEn: "Navigation",
+    targetElements: "Header Nav, Floating Dock items",
+    rangePx: "14–16px",
+    clampValue: "clamp(0.875rem, 0.2vw + 0.825rem, 1rem)",
+    defaultWeight: "500",
+    defaultLineHeight: "1.2",
+    defaultLetterSpacing: "0",
+    desc: "Các mục menu điều hướng chính, không đổi font-size khi active."
+  }
+];
+
+export interface ElementComputedTypography {
+  fontSize: string;
+  fontSizePx: number;
+  fontWeight: string;
+  lineHeight: string;
+  letterSpacing: string;
+  fontFamily: string;
+  color: string;
+  matchedToken?: TypographyTokenDef;
+}
+
+export const getElementTypography = (el?: HTMLElement | null): ElementComputedTypography | null => {
+  if (!el || typeof window === "undefined") return null;
+  try {
+    const style = window.getComputedStyle(el);
+    const fontSize = style.fontSize || "16px";
+    const fontSizePx = parseFloat(fontSize) || 16;
+    
+    // Find closest matching token by pixel size
+    let closestToken: TypographyTokenDef | undefined;
+    let minDiff = Infinity;
+    
+    GLOBAL_TYPOGRAPHY_TOKENS.forEach(tok => {
+      // Estimate approximate pixel reference for matching
+      const refPx = 
+        tok.id === "display" ? 44 :
+        tok.id === "h1" ? 38 :
+        tok.id === "h2" ? 30 :
+        tok.id === "h3" ? 22 :
+        tok.id === "h4" ? 19 :
+        tok.id === "h5" ? 17 :
+        tok.id === "h6" ? 15.5 :
+        tok.id === "card-title" ? 19 :
+        tok.id === "body-bold" ? 16 :
+        tok.id === "body" ? 16 :
+        tok.id === "body-sub" ? 14.5 :
+        tok.id === "body-sm" ? 14.5 :
+        tok.id === "caption" ? 13 :
+        tok.id === "button" ? 15.5 :
+        tok.id === "stat" ? 32 :
+        tok.id === "nav" ? 15 : 16;
+
+      const diff = Math.abs(fontSizePx - refPx);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestToken = tok;
+      }
+    });
+
+    return {
+      fontSize,
+      fontSizePx,
+      fontWeight: style.fontWeight || "400",
+      lineHeight: style.lineHeight || "normal",
+      letterSpacing: style.letterSpacing || "normal",
+      fontFamily: style.fontFamily || "'Play', sans-serif",
+      color: style.color || "",
+      matchedToken: closestToken
+    };
+  } catch {
+    return null;
+  }
+};
 
 interface ElementInfo {
   tag: string;
@@ -88,7 +416,7 @@ interface ElementInfo {
   fullSelector: string;
 }
 
-type InspectorMode = "site_structure" | "element" | "tree" | "full_website";
+type InspectorMode = "site_structure" | "element" | "tree" | "full_website" | "typography";
 
 export interface SiteStructureNode {
   id: string;
@@ -493,20 +821,6 @@ const DEFAULT_PAGE_STRUCTURE: TreeItem[] = [
       { id: "a-profile", sectionId: "about", sectionName: "Giới thiệu", title: "Thẻ Chân dung & Thông tin cá nhân", tag: "div", type: "Profile Card", selector: "#about .profile-card" },
       { id: "a-values", sectionId: "about", sectionName: "Giới thiệu", title: "Khối 4 Giá trị cốt lõi (Tận tâm, Thấu cảm, Hiệu quả, Sáng tạo)", tag: "div", type: "Grid", selector: "#about .values-grid" },
       { id: "a-bio", sectionId: "about", sectionName: "Giới thiệu", title: "Đoạn văn tóm tắt quá trình phát triển sự nghiệp", tag: "p", type: "Text", selector: "#about .bio-text" }
-    ]
-  },
-  {
-    id: "sec-services",
-    sectionId: "services",
-    sectionName: "Dịch vụ (Services)",
-    title: "Dịch vụ Tư vấn & Triển khai CX",
-    tag: "section",
-    type: "Section",
-    selector: "#services",
-    children: [
-      { id: "srv-packages", sectionId: "services", sectionName: "Dịch vụ", title: "Danh mục Gói dịch vụ tư vấn Contact Center, AI & QA", tag: "div", type: "Bento Grid", selector: "#services .service-card" },
-      { id: "srv-estimator", sectionId: "services", sectionName: "Dịch vụ", title: "Bộ công cụ Dự tính Quy mô & Ngân sách Dự án", tag: "div", type: "Estimator", selector: "#services .estimator-box" },
-      { id: "srv-workflow", sectionId: "services", sectionName: "Dịch vụ", title: "Quy trình triển khai 5 bước chuẩn hóa", tag: "div", type: "Timeline", selector: "#services .workflow-grid" }
     ]
   },
   {
@@ -986,6 +1300,14 @@ export default function XRayInspector() {
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
   const [inspectorOpen, setInspectorOpen] = useState<boolean>(false);
+
+  // Typography Tab States
+  const [typographyScope, setTypographyScope] = useState<"single_element" | "global_layout">("single_element");
+  const [typographyScaleArchetype, setTypographyScaleArchetype] = useState<"major_second" | "major_third" | "perfect_fourth">("major_third");
+  const [typographyBaseSize, setTypographyBaseSize] = useState<number>(16);
+  const [typographyHeadingWeight, setTypographyHeadingWeight] = useState<string>("700");
+  const [typographyBodyLineHeight, setTypographyBodyLineHeight] = useState<string>("1.6");
+  const [typographySelectedToken, setTypographySelectedToken] = useState<string>("body");
 
   // Site Structure Hierarchy Tab States
   const [siteNodes, setSiteNodes] = useState<SiteStructureNode[]>([]);
@@ -1482,7 +1804,7 @@ export default function XRayInspector() {
       if (
         ["section", "header", "footer", "nav", "main"].includes(tag) ||
         idAttr.startsWith("sec") ||
-        ["home", "about", "skills", "contact", "projects", "services", "education"].includes(idAttr)
+        ["home", "about", "skills", "contact", "projects", "education"].includes(idAttr)
       ) {
         category = "section";
       } else if (["button", "a", "input", "select", "textarea"].includes(tag) || el.getAttribute("role") === "button") {
@@ -1677,7 +1999,7 @@ export default function XRayInspector() {
             {getCategoryIcon(node.category)}
 
             <span className={cn(
-              "px-1.5 py-0.2 rounded text-[10px] font-black shrink-0 font-mono",
+              "px-1.5 py-0.2 rounded text-3xs font-black shrink-0 font-mono",
               node.depth === 1
                 ? "bg-sky-500 text-white"
                 : node.depth === 2
@@ -1694,25 +2016,25 @@ export default function XRayInspector() {
             </span>
 
             {node.idAttr && (
-              <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700 shrink-0 font-mono">
+              <span className="px-1.5 py-0.2 rounded text-3xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700 shrink-0 font-mono">
                 #{node.idAttr}
               </span>
             )}
 
             {node.rect.width > 0 && (
-              <span className="text-[10px] font-mono text-slate-400 shrink-0 hidden sm:inline">
+              <span className="text-3xs font-mono text-slate-400 shrink-0 hidden sm:inline">
                 {node.rect.width}×{node.rect.height}px
               </span>
             )}
 
             {node.textSnippet && (
-              <span className="text-slate-600 dark:text-slate-300 truncate text-[11px] font-medium max-w-[160px] sm:max-w-[240px]">
+              <span className="text-slate-600 dark:text-slate-300 truncate text-2xs font-medium max-w-[160px] sm:max-w-[240px]">
                 "{node.textSnippet}"
               </span>
             )}
 
             {node.childrenCount > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 shrink-0">
+              <span className="px-1.5 py-0.2 rounded-full text-3xs font-bold bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 shrink-0">
                 {node.childrenCount} thẻ con
               </span>
             )}
@@ -1741,7 +2063,7 @@ export default function XRayInspector() {
                   setGeneratedPrompt("");
                 }
               }}
-              className="px-2 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 dark:text-emerald-300 text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 dark:text-emerald-300 text-3xs font-bold transition-all flex items-center gap-1 cursor-pointer"
               title="Soi và phân tích chi tiết phần tử này"
             >
               <Crosshair className="w-3 h-3" />
@@ -1756,7 +2078,7 @@ export default function XRayInspector() {
                 showToast("Đã chép Selector vào bộ nhớ tạm!");
                 setTimeout(() => setCopiedNodeId(null), 2000);
               }}
-              className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-3xs font-bold transition-all cursor-pointer"
               title="Chép Selector CSS"
             >
               {copiedNodeId === node.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -1881,9 +2203,9 @@ export default function XRayInspector() {
       actionDesc = `Định dạng giao diện [${selectedTreeItem.title}] giống chuẩn mẫu tham chiếu [${styleSource}]. ${actionDesc}`;
     } else if (modalActionType === "delete") {
       if (deleteMode === "wrapper_only") {
-        actionDesc = `Xóa bỏ khung bọc ngoài [${selectedTreeItem.title}] (Selector: \`${selectedTreeItem.selector}\`), giữ nguyên tất cả đối tượng và nội dung bên trong. ${actionDesc}`;
+        actionDesc = `Xóa bỏ khung bọc ngoài [${selectedTreeItem.title}] (Selector: \`${selectedTreeItem.selector}\`), giữ nguyên tất cả đối tượng và nội dung bên trong, tìm và xóa file code liên quan. ${actionDesc}`;
       } else {
-        actionDesc = `Xóa toàn bộ đối tượng [${selectedTreeItem.title}] (Selector: \`${selectedTreeItem.selector}\`) cùng tất cả các phần tử con bên trong. ${actionDesc}`;
+        actionDesc = `Xóa toàn bộ đối tượng [${selectedTreeItem.title}] (Selector: \`${selectedTreeItem.selector}\`) cùng tất cả các phần tử con bên trong, tìm và xóa file code liên quan. ${actionDesc}`;
       }
     } else if (modalActionType === "edit") {
       if (editPreset) {
@@ -2095,9 +2417,10 @@ Vui lòng thực thi chính xác vào từng component.`;
 
       let actionDetailText = "";
       if (elementActionMode === "delete") {
+        const extraNote = userInstruction.trim() ? ` - Yêu cầu bổ sung: ${userInstruction.trim()}` : "";
         actionDetailText = deleteMode === "wrapper_only"
-          ? "Xóa đối tượng đem nội dung bên trong ra ngoài (giữ lại các phần tử con)"
-          : "Xóa toàn bộ đối tượng cùng tất cả phần tử con bên trong";
+          ? `Xóa đối tượng đem nội dung bên trong ra ngoài (giữ lại các phần tử con), tìm và xóa file code liên quan${extraNote}`
+          : `Xóa toàn bộ đối tượng cùng tất cả phần tử con bên trong, tìm và xóa file code liên quan${extraNote}`;
       } else if (elementActionMode === "clone_format") {
         actionDetailText = `Định dạng giống mẫu: Áp dụng phong cách thiết kế, màu sắc, typography tương tự mẫu [${styleSource}]`;
       } else if (elementActionMode === "add") {
@@ -2124,6 +2447,71 @@ Vui lòng thực thi chính xác vào từng component.`;
         : activePresetObj && isEditMode
           ? `${activePresetObj.titleVi} (${selectedElement.componentType})`
           : `Phần tử ${selectedElement.componentType} (${selectedElement.sectionName})`;
+    } else if (mode === "typography") {
+      const isGlobal = typographyScope === "global_layout";
+      const selectedTokenObj = GLOBAL_TYPOGRAPHY_TOKENS.find(t => t.id === typographySelectedToken);
+      
+      if (isGlobal) {
+        const scaleRatioName = 
+          typographyScaleArchetype === "major_second" ? "Major Second (1.125 - Ứng dụng & Dense UI)" :
+          typographyScaleArchetype === "perfect_fourth" ? "Perfect Fourth (1.333 - Tương phản cao Executive / Editorial)" :
+          "Major Third (1.25 - Cân bằng Portfolio & Brand)";
+
+        finalPrompt = `[CHỈ THỊ CẬP NHẬT TYPOGRAPHY & ĐỒNG BỘ BỐ CỤC CHUNG TOÀN WEBSITE]
+🌐 Phạm vi: Toàn bộ hệ thống giao diện website (Global Layout & Typography Architecture)
+${selectedElement ? `🎯 Đối tượng tham chiếu: ${selectedElement.componentType} (<${selectedElement.tag}> - ${selectedElement.sectionName})\n` : ""}
+📐 THÔNG SỐ HỆ THỐNG PHÂN CẤP TYPOGRAPHY CẤU HÌNH:
+- Font Family độc quyền: 'Play', sans-serif !important (áp dụng toàn bộ website, không sử dụng font khác).
+- Tỷ lệ bước nhảy (Step Ratio): ${scaleRatioName}.
+- Base Font Size: ${typographyBaseSize}px (${typographyBaseSize === 15 ? 'Gọn / Compact' : typographyBaseSize === 17 ? 'Thoáng / Spacious' : 'Chuẩn / Standard Golden'}).
+- Line-height: Tiêu đề Headings 1.15–1.20 | Văn bản Body ${typographyBodyLineHeight} | Chú thích Caption 1.40–1.50.
+- Letter-spacing: Headings -0.01em | Label 0.02em–0.04em | Body 0.
+- Weight Matrix: Headings ${typographyHeadingWeight} | Buttons/Labels 600 | Body 400 | Navigation 500.
+${presetText}
+${codeAnalysisBlock}
+📋 BẢNG THIẾT LẬP TOKENS KÍCH THƯỚC CHUẨN TOÀN BỘ BỐ CỤC:
+• Display (Hero): 40–52px (clamp(1.875rem, 3.5vw + 0.875rem, 3.25rem)) - 700 - Line-height: 1.15
+• H1 (Section Title): 36–42px (clamp(1.75rem, 2.5vw + 0.75rem, 2.625rem)) - 700 - Line-height: 1.20
+• H2 (Group Header): 28–34px (clamp(1.5rem, 1.8vw + 0.75rem, 2.125rem)) - 700 - Line-height: 1.20
+• H3 (Sub-section): 20–24px (clamp(1.125rem, 1vw + 0.75rem, 1.5rem)) - 700 - Line-height: 1.25
+• H4 (Sub-heading): 18–20px (clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem)) - 700 - Line-height: 1.30
+• H5 (Section Sub-header): 16–18px (clamp(1rem, 0.25vw + 0.9375rem, 1.125rem)) - 700 - Line-height: 1.30
+• H6 (Micro Header): 15–16px (clamp(0.9375rem, 0.2vw + 0.875rem, 1rem)) - 700 - Line-height: 1.30
+• Card Title: 18–20px (clamp(1.0625rem, 0.4vw + 0.9rem, 1.25rem)) - 700 - Line-height: 1.30
+• Body Bold (Tiêu đề văn bản chính): 15–16px (clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)) - 700 - Line-height: 1.55
+• Body (Văn bản chính): 15–16px (clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)) - 400 - Line-height: ${typographyBodyLineHeight}
+• Sub Content (Nội dung văn bản phụ): 14–15px (clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem)) - 400 - Line-height: 1.50
+• Body Small: 14–15px (clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem)) - 400/500 - Line-height: 1.55
+• Caption / Label: 12–13px (0.8125rem) - 600 - Line-height: 1.40 - Spacing: 0.02em
+• Button (Nút bấm): 15–16px (clamp(0.9375rem, 0.25vw + 0.875rem, 1rem)) - 600 - Line-height: 1.20
+• Statistic / Number: 28–40px (clamp(1.75rem, 2.5vw + 1rem, 2.5rem)) - 700 - Line-height: 1.10
+• Navigation: 14–16px - 500 - Line-height: 1.20
+
+⚡ HƯỚNG DẪN CẬP NHẬT BỐ CỤC CHUNG:
+1. Đồng bộ lại các biến CSS :root trong file styles/typography toàn cục (src/index.css) theo đúng bảng tokens và tỷ lệ trên.
+2. Cập nhật các class tiện ích .text-display, .text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6, .text-card-title, .text-body-bold, .text-body, .text-body-sub, .text-body-sm, .text-caption, .text-label, .text-button, .text-stat.
+3. Rà soát xóa bỏ triệt để các class hardcoded (text-xs, text-2xs, text-[..px], style={{fontSize:...}}) trên toàn bộ 14 trang.
+4. Đảm bảo nhịp điệu khoảng cách (Vertical Rhythm) và cấu trúc responsive trên Desktop (≥1200px), Tablet (768–1199px), Mobile (<768px).
+5. Đảm bảo 100% hiển thị hoàn hảo dấu tiếng Việt, không bị cắt dấu, không lỗi font fallback, đạt chuẩn tương phản WCAG AA.
+${userInstruction.trim() ? `\n📌 YÊU CẦU BỔ SUNG CHI TIẾT TỪ NGƯỜI DÙNG: ${userInstruction.trim()}\n` : ""}`;
+
+        promptTitle = "Đồng bộ Typography & Bố cục chung toàn website";
+      } else {
+        if (selectedElement) {
+          const condensedSnippet = cleanSnippet(selectedElement.textSnippet, 40);
+          const tokenDesc = selectedTokenObj 
+            ? `Gán cấp bậc font [${selectedTokenObj.level} - ${selectedTokenObj.labelVi}] (${selectedTokenObj.cssClass}, range: ${selectedTokenObj.rangePx}, clamp: ${selectedTokenObj.clampValue}, weight: ${selectedTokenObj.defaultWeight})`
+            : `Chuẩn hóa kích thước font chữ theo hệ thống cấu hình chung`;
+
+          finalPrompt = `- Tại trang: ${selectedElement.sectionName || "Hiện tại"} - Phần tử chỉnh sửa: ${selectedElement.componentType} (<${selectedElement.tag}> - Selector: \`${selectedElement.fullSelector}\`${condensedSnippet ? ` - Nội dung: "${condensedSnippet}"` : ''}) - Thực hiện: ${tokenDesc}${userInstruction.trim() ? ` - ${userInstruction.trim()}` : ''} - Phạm vi áp dụng: Riêng đối tượng này`;
+          promptTitle = `Chỉnh font ${selectedElement.componentType} (${selectedElement.sectionName})`;
+        } else {
+          finalPrompt = `[CHỈ THỊ CẬP NHẬT TYPOGRAPHY CHO PHẦN TỬ]
+⚡ Yêu cầu: Chuẩn hóa font chữ theo Token [${selectedTokenObj?.level || "Body"}] của hệ thống Design System.
+${userInstruction.trim() ? `Ghi chú: ${userInstruction.trim()}` : ''}`;
+          promptTitle = "Chỉnh sửa Font phần tử";
+        }
+      }
     } else {
       // Full Website Mode with selected checkboxes
       const selectedNames = DEFAULT_PAGE_STRUCTURE
@@ -2200,7 +2588,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
               setInspectorOpen(true);
             }}
             onMouseEnter={() => playUiSound("hover")}
-            className="px-3 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-[11px] font-bold flex items-center gap-1 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 hover:shadow-md hover:shadow-sky-500/10"
+            className="px-3 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-2xs font-bold flex items-center gap-1 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 hover:shadow-md hover:shadow-sky-500/10"
           >
             <Globe className="w-3.5 h-3.5" />
             <span>Toàn Bộ Website</span>
@@ -2259,42 +2647,42 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
           <div className="space-y-3.5 relative z-10 text-xs">
             {/* Tag/Section Row */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="px-2 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-bold text-[10px]">
+              <span className="px-2 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-bold text-3xs">
                 {floatingPopupElement.componentType}
               </span>
-              <span className="px-2 py-0.5 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-300 font-mono text-[10px]">
+              <span className="px-2 py-0.5 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-300 font-mono text-3xs">
                 &lt;{floatingPopupElement.tag}&gt;
               </span>
-              <span className="px-2 py-0.5 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 text-3xs font-bold">
                 {floatingPopupElement.sectionName}
               </span>
             </div>
 
             {/* Element properties inside simplified columns */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[11px] pb-1 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex justify-between items-center text-2xs pb-1 border-b border-slate-100 dark:border-slate-800">
                 <span className="text-slate-400">Kích thước</span>
                 <span className="font-mono font-bold text-slate-700 dark:text-slate-300">
                   {Math.round(floatingPopupElement.rect.width)} × {Math.round(floatingPopupElement.rect.height)} px
                 </span>
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-bold text-slate-400">Bộ chọn CSS Selector</span>
-                <p className="font-mono text-[10px] bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl break-all select-all text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+                <span className="text-3xs font-bold text-slate-400">Bộ chọn CSS Selector</span>
+                <p className="font-mono text-3xs bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl break-all select-all text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
                   {floatingPopupElement.fullSelector}
                 </p>
               </div>
             </div>
 
             {floatingPopupElement.textSnippet && (
-              <div className="text-[11px] p-2.5 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-150 dark:border-slate-800 italic text-slate-500 dark:text-slate-400 leading-relaxed">
+              <div className="text-2xs p-2.5 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-150 dark:border-slate-800 italic text-slate-500 dark:text-slate-400 leading-relaxed">
                 "{floatingPopupElement.textSnippet}"
               </div>
             )}
 
             {/* Action buttons inside Popup */}
             <div className="space-y-2 pt-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Thao tác nhanh</span>
+              <span className="text-3xs font-bold text-slate-400 uppercase tracking-wide">Thao tác nhanh</span>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => {
@@ -2376,7 +2764,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-emerald-300" />
 
             <div 
-              className="absolute -top-10 left-0 bg-slate-50/95 dark:bg-slate-950/95 text-slate-900 dark:text-white border border-emerald-400/80 px-2.5 py-1 rounded-lg text-[11px] font-mono shadow-2xl flex items-center gap-2 whitespace-nowrap z-50 backdrop-blur-md"
+              className="absolute -top-10 left-0 bg-slate-50/95 dark:bg-slate-950/95 text-slate-900 dark:text-white border border-emerald-400/80 px-2.5 py-1 rounded-lg text-2xs font-mono shadow-2xl flex items-center gap-2 whitespace-nowrap z-50 backdrop-blur-md"
               style={{
                 top: hoveredElement.rect.top < 45 ? "100%" : "-36px"
               }}
@@ -2386,7 +2774,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
               <span className="text-amber-300 font-semibold">{hoveredElement.componentType}</span>
               <span className="text-slate-500">•</span>
               <span className="text-sky-300">&lt;{hoveredElement.tag}&gt;</span>
-              <span className="text-slate-500 dark:text-slate-400 text-[10px]">
+              <span className="text-slate-500 dark:text-slate-400 text-3xs">
                 {Math.round(hoveredElement.rect.width)}x{Math.round(hoveredElement.rect.height)}px
               </span>
             </div>
@@ -2418,9 +2806,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                     ? "bg-indigo-500/20 text-indigo-500 border-indigo-500/30"
                     : mode === "full_website"
                       ? "bg-sky-500/20 text-sky-500 border-sky-500/30"
-                      : "bg-emerald-500/20 text-emerald-500 border-emerald-500/30"
+                      : mode === "typography"
+                        ? "bg-amber-500/20 text-amber-500 border-amber-500/30"
+                        : "bg-emerald-500/20 text-emerald-500 border-emerald-500/30"
                 )}>
-                  {mode === "tree" ? <FolderTree className="w-5 h-5" /> : mode === "full_website" ? <Globe className="w-5 h-5" /> : <Scan className="w-5 h-5" />}
+                  {mode === "tree" ? <FolderTree className="w-5 h-5" /> : mode === "full_website" ? <Globe className="w-5 h-5" /> : mode === "typography" ? <Type className="w-5 h-5" /> : <Scan className="w-5 h-5" />}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -2428,7 +2818,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       X-Ray Inspector • Trình Quản Lý & Xuất Lệnh AI
                     </h3>
                     <span className={cn(
-                      "px-2 py-0.5 rounded-full text-[10px] font-bold border",
+                      "px-2 py-0.5 rounded-full text-3xs font-bold border",
                       isLight ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-indigo-950/60 text-indigo-300 border-indigo-500/30"
                     )}>
                       v3.0 Pro
@@ -2439,7 +2829,9 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       ? "Cấu trúc cây đối tượng: Xem danh sách, Chỉnh / Xóa / Thêm / Chuyển và Xuất Prompt"
                       : mode === "full_website"
                         ? "Tạo chỉ thị và prompt tổng thể áp dụng cho toàn bộ cấu trúc website"
-                        : "Định danh chính xác phần tử và tạo prompt thay đổi riêng biệt"}
+                        : mode === "typography"
+                          ? "Quản lý và chỉnh sửa kích thước font chữ, chuẩn hóa typography và đồng bộ bố cục chung"
+                          : "Định danh chính xác phần tử và tạo prompt thay đổi riêng biệt"}
                   </p>
                 </div>
               </div>
@@ -2478,7 +2870,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
               </div>
             </div>
 
-            {/* Scope Selection Tabs: Phần tử đã chọn & Toàn bộ Website */}
+            {/* Scope Selection Tabs: Phần tử đã chọn & Chỉnh sửa Font & Toàn bộ Website */}
             <div className={cn(
               "flex items-center border-b p-1.5 sm:p-2 gap-2 transition-colors",
               isLight ? "bg-slate-100/90 border-slate-200" : "bg-slate-950/70 border-slate-800"
@@ -2504,10 +2896,36 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 <span>Phần tử đã chọn</span>
                 {selectedElement && (
                   <span className={cn(
-                    "text-[10px] px-2 py-0.5 rounded font-mono font-bold",
+                    "text-3xs px-2 py-0.5 rounded font-mono font-bold",
                     isLight ? "bg-emerald-100 text-emerald-800" : "bg-emerald-500/30 text-emerald-300"
                   )}>
                     &lt;{selectedElement.tag}&gt;
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  playUiSound("click");
+                  setMode("typography");
+                  setGeneratedPrompt("");
+                }}
+                className={cn(
+                  "flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs",
+                  mode === "typography"
+                    ? isLight
+                      ? "bg-white text-amber-700 border border-amber-300 ring-2 ring-amber-500/20"
+                      : "bg-amber-500/20 text-amber-300 border border-amber-500/40 ring-2 ring-amber-500/30"
+                    : isLight
+                      ? "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                )}
+              >
+                <Type className="w-4 h-4 text-amber-500" />
+                <span>Chỉnh sửa Font</span>
+                {typographyScope === "global_layout" && (
+                  <span className="text-3xs px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">
+                    Toàn bố cục
                   </span>
                 )}
               </button>
@@ -2551,7 +2969,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                           <h4 className="text-xs font-black tracking-tight text-purple-900 dark:text-purple-200">
                             Cấu Trúc Site Phân Cấp Dữ Liệu Thực Tế
                           </h4>
-                          <p className="text-[11px] text-purple-700/80 dark:text-purple-300/70">
+                          <p className="text-2xs text-purple-700/80 dark:text-purple-300/70">
                             Quét và hiển thị đầy đủ các thẻ HTML theo thứ tự cha - con từ cấp cao nhất đến các thẻ nút, văn bản, media
                           </p>
                         </div>
@@ -2644,7 +3062,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               setSiteCategoryFilter(f.id);
                             }}
                             className={cn(
-                              "px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer border",
+                              "px-2.5 py-1 rounded-lg text-2xs font-bold whitespace-nowrap transition-all cursor-pointer border",
                               siteCategoryFilter === f.id
                                 ? "bg-purple-600 text-white border-purple-500 shadow-xs"
                                 : isLight
@@ -2771,7 +3189,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             playUiSound("click");
                             setActionQueue([]);
                           }}
-                          className="text-[11px] font-bold text-rose-500 hover:underline"
+                          className="text-2xs font-bold text-rose-500 hover:underline"
                         >
                           Xóa tất cả thao tác
                         </button>
@@ -2787,7 +3205,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             )}
                           >
                             <span className={cn(
-                              "px-1.5 py-0.2 rounded text-[10px] font-bold uppercase",
+                              "px-1.5 py-0.2 rounded text-3xs font-bold uppercase",
                               act.type === "edit" ? "bg-amber-500/20 text-amber-600 dark:text-amber-300" :
                               act.type === "delete" ? "bg-rose-500/20 text-rose-600 dark:text-rose-300" :
                               act.type === "add" ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300" :
@@ -2796,7 +3214,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               {act.type === "edit" ? "Chỉnh" : act.type === "delete" ? "Xóa" : act.type === "add" ? "Thêm" : "Chuyển"}
                             </span>
                             <span className="font-semibold">{act.targetTitle}</span>
-                            <span className="text-slate-500 dark:text-slate-400 text-[11px]">({act.sectionName})</span>
+                            <span className="text-slate-500 dark:text-slate-400 text-2xs">({act.sectionName})</span>
                             <button
                               onClick={() => handleRemoveAction(act.id)}
                               className="text-slate-500 dark:text-slate-400 hover:text-rose-500 p-0.5"
@@ -2843,12 +3261,12 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                 {section.sectionName}
                               </span>
                               <span className={cn(
-                                "text-[10px] px-1.5 py-0.2 rounded font-mono hidden sm:inline",
+                                "text-3xs px-1.5 py-0.2 rounded font-mono hidden sm:inline",
                                 isLight ? "bg-slate-100 text-slate-600 border border-slate-200" : "bg-slate-800 text-slate-400 border border-slate-700"
                               )}>
                                 #{section.sectionId}
                               </span>
-                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">
+                              <span className="text-2xs text-slate-500 dark:text-slate-400 font-normal">
                                 ({section.children?.length || 0} đối tượng)
                               </span>
                             </div>
@@ -2858,7 +3276,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <button
                                 onClick={() => handleOpenActionModal(section, "edit")}
                                 title="Chỉnh sửa toàn bộ trang này"
-                                className="p-1.5 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                                className="p-1.5 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
                               >
                                 <Edit3 className="w-3 h-3" />
                                 <span className="hidden sm:inline">Chỉnh</span>
@@ -2867,7 +3285,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <button
                                 onClick={() => handleOpenActionModal(section, "delete")}
                                 title="Xóa toàn bộ trang này"
-                                className="p-1.5 px-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                                className="p-1.5 px-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
                               >
                                 <Trash2 className="w-3 h-3" />
                                 <span className="hidden sm:inline">Xóa</span>
@@ -2876,7 +3294,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <button
                                 onClick={() => handleOpenActionModal(section, "add")}
                                 title="Thêm đối tượng mới vào trang này"
-                                className="p-1.5 px-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                                className="p-1.5 px-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
                               >
                                 <PlusCircle className="w-3 h-3" />
                                 <span className="hidden sm:inline">Thêm</span>
@@ -2885,7 +3303,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <button
                                 onClick={() => handleOpenActionModal(section, "clone_format")}
                                 title="Định dạng giống trang/mẫu tham chiếu"
-                                className="p-1.5 px-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                                className="p-1.5 px-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
                               >
                                 <Palette className="w-3 h-3" />
                                 <span className="hidden sm:inline">Giống mẫu</span>
@@ -2894,7 +3312,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <button
                                 onClick={() => handleNavigateToSection(section.sectionId)}
                                 title="Nhảy tới xem trang này"
-                                className="p-1.5 px-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                                className="p-1.5 px-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
                               >
                                 <ExternalLink className="w-3 h-3" />
                                 <span className="hidden sm:inline">Xem</span>
@@ -2922,7 +3340,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                       <p className="text-xs font-semibold truncate text-slate-800 dark:text-slate-200">
                                         {child.title}
                                       </p>
-                                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">
+                                      <p className="text-3xs text-slate-500 dark:text-slate-400 font-mono truncate">
                                         &lt;{child.tag}&gt; {child.selector} • <span className="text-indigo-500 font-medium">{child.type}</span>
                                       </p>
                                     </div>
@@ -2932,7 +3350,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                   <div className="flex items-center gap-1 self-end sm:self-center shrink-0">
                                     <button
                                       onClick={() => handleOpenActionModal(child, "edit")}
-                                      className="p-1 px-2 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-[10px] font-bold flex items-center gap-1"
+                                      className="p-1 px-2 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-3xs font-bold flex items-center gap-1"
                                       title="Chỉnh sửa nội dung / kiểu dáng của đối tượng này"
                                     >
                                       <Edit3 className="w-3 h-3" />
@@ -2941,7 +3359,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
                                     <button
                                       onClick={() => handleOpenActionModal(child, "delete")}
-                                      className="p-1 px-2 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-[10px] font-bold flex items-center gap-1"
+                                      className="p-1 px-2 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-3xs font-bold flex items-center gap-1"
                                       title="Xóa đối tượng này"
                                     >
                                       <Trash2 className="w-3 h-3" />
@@ -2950,7 +3368,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
                                     <button
                                       onClick={() => handleOpenActionModal(child, "add")}
-                                      className="p-1 px-2 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-[10px] font-bold flex items-center gap-1"
+                                      className="p-1 px-2 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-3xs font-bold flex items-center gap-1"
                                       title="Thêm đối tượng con bên trong"
                                     >
                                       <PlusCircle className="w-3 h-3" />
@@ -2959,7 +3377,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
                                     <button
                                       onClick={() => handleOpenActionModal(child, "move")}
-                                      className="p-1 px-2 rounded-md bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-[10px] font-bold flex items-center gap-1"
+                                      className="p-1 px-2 rounded-md bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-3xs font-bold flex items-center gap-1"
                                       title="Chuyển qua trang khác hoặc đổi vị trí"
                                     >
                                       <ArrowRightLeft className="w-3 h-3" />
@@ -2968,7 +3386,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
                                     <button
                                       onClick={() => handleOpenActionModal(child, "clone_format")}
-                                      className="p-1 px-2 rounded-md bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-300 border border-pink-500/30 text-[10px] font-bold flex items-center gap-1"
+                                      className="p-1 px-2 rounded-md bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-300 border border-pink-500/30 text-3xs font-bold flex items-center gap-1"
                                       title="Định dạng giống mẫu chuẩn"
                                     >
                                       <Palette className="w-3 h-3" />
@@ -3038,7 +3456,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             </span>
                           </div>
 
-                          <div className="text-[11px] font-mono text-slate-500">
+                          <div className="text-2xs font-mono text-slate-500">
                             Kích thước: {Math.round(selectedElement.rect.width)}x{Math.round(selectedElement.rect.height)} px
                           </div>
                         </div>
@@ -3051,6 +3469,50 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             </span>
                           </div>
                         )}
+
+                        {/* CẤU HÌNH TYPOGRAPHY & FONT ĐO ĐƯỢC CỦA ĐỐI TƯỢNG */}
+                        {(() => {
+                          const typo = getElementTypography(selectedElement.element);
+                          if (!typo) return null;
+                          return (
+                            <div className={cn(
+                              "mt-2 p-2.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-xs",
+                              isLight ? "bg-amber-50/70 border-amber-200 text-amber-950" : "bg-amber-950/30 border-amber-500/30 text-amber-200"
+                            )}>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="font-bold flex items-center gap-1 text-amber-700 dark:text-amber-400">
+                                  <Type className="w-3.5 h-3.5" />
+                                  Font hiện tại:
+                                </span>
+                                <span className="font-mono px-2 py-0.5 rounded bg-white/80 dark:bg-slate-900 border border-amber-300/50 dark:border-amber-700/50 font-bold text-amber-800 dark:text-amber-300">
+                                  {typo.fontSize} (Weight: {typo.fontWeight})
+                                </span>
+                                {typo.matchedToken && (
+                                  <span className="px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-400/30 flex items-center gap-1">
+                                    <Tag className="w-3 h-3" />
+                                    Khớp Token: {typo.matchedToken.level} ({typo.matchedToken.rangePx})
+                                  </span>
+                                )}
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  if (typo.matchedToken) {
+                                    setTypographySelectedToken(typo.matchedToken.id);
+                                  }
+                                  setMode("typography");
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-3xs flex items-center gap-1 shadow-xs transition-all cursor-pointer active:scale-95"
+                                title="Mở tab chuyên sâu Chỉnh sửa Font cho đối tượng này"
+                              >
+                                <SlidersHorizontal className="w-3 h-3" />
+                                <span>Tùy chỉnh Font này</span>
+                              </button>
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* 2. ÁP DỤNG CHO (SCOPE SELECTION - NGẮN GỌN) */}
@@ -3105,7 +3567,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                 <span>{sc.label}</span>
                               </div>
                               <p className={cn(
-                                "text-[10px] leading-tight",
+                                "text-3xs leading-tight",
                                 elementAppScope === sc.id ? "text-purple-100" : "text-slate-500 dark:text-slate-400"
                               )}>
                                 {sc.desc}
@@ -3212,7 +3674,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                     playUiSound("click");
                                     setSelectedPreset(null);
                                   }}
-                                  className="text-[11px] font-bold text-rose-500 hover:underline cursor-pointer flex items-center gap-1"
+                                  className="text-2xs font-bold text-rose-500 hover:underline cursor-pointer flex items-center gap-1"
                                 >
                                   <X className="w-3 h-3" />
                                   <span>Bỏ chọn mẫu</span>
@@ -3260,11 +3722,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                       <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                                       <span>Đang áp dụng: {PRESET_TEMPLATES.find(p => p.id === selectedPreset)?.label}</span>
                                     </div>
-                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-mono">
+                                    <span className="text-3xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-mono">
                                       Preset #{selectedPreset}
                                     </span>
                                   </div>
-                                  <p className="text-[11px] font-mono text-slate-600 dark:text-slate-300 whitespace-pre-line bg-white/50 dark:bg-black/30 p-2.5 rounded-lg border border-indigo-200/50 dark:border-indigo-800/40">
+                                  <p className="text-2xs font-mono text-slate-600 dark:text-slate-300 whitespace-pre-line bg-white/50 dark:bg-black/30 p-2.5 rounded-lg border border-indigo-200/50 dark:border-indigo-800/40">
                                     {PRESET_TEMPLATES.find(p => p.id === selectedPreset)?.promptSnippet}
                                   </p>
                                 </div>
@@ -3276,7 +3738,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                       <Code2 className="w-4 h-4 text-indigo-500" />
                                       <span>Khu vực nhập code (Phân tích và áp dụng vào phần tử):</span>
                                     </span>
-                                    <span className="text-[10px] bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full font-bold">
+                                    <span className="text-3xs bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full font-bold">
                                       Phân tích mã nguồn
                                     </span>
                                   </label>
@@ -3286,14 +3748,14 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                     placeholder="Dán hoặc viết đoạn code (React TSX, HTML/CSS, Tailwind, CodePen...) tại đây để hệ thống phân tích và tạo prompt tích hợp..."
                                     rows={4}
                                     className={cn(
-                                      "w-full border rounded-xl p-3 font-mono text-[11px] placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-y min-h-[90px]",
+                                      "w-full border rounded-xl p-3 font-mono text-2xs placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-y min-h-[90px]",
                                       isLight
                                         ? "bg-white border-slate-300 text-slate-900 focus:border-indigo-500 focus:ring-indigo-200"
                                         : "bg-slate-950 border-slate-700 text-slate-100 focus:border-indigo-500 focus:ring-indigo-900/40"
                                     )}
                                   />
                                   {presetCodeInput.trim() && (
-                                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                    <p className="text-3xs text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                                       <Check className="w-3.5 h-3.5 text-emerald-500" />
                                       <span>Hệ thống đã nhận diện được {presetCodeInput.trim().split("\n").length} dòng code và sẽ tự động tạo prompt tích hợp.</span>
                                     </p>
@@ -3334,7 +3796,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                   <span>Xóa đối tượng đem nội dung bên trong ra ngoài</span>
                                 </div>
                                 <p className={cn(
-                                  "text-[10px] leading-relaxed",
+                                  "text-3xs leading-relaxed",
                                   deleteMode === "wrapper_only" ? "text-rose-100" : "text-slate-500 dark:text-slate-400"
                                 )}>
                                   Bỏ thẻ khung bọc ngoài ({selectedElement.tag}), bảo toàn nguyên vẹn toàn bộ các phần tử con và nội dung văn bản bên trong.
@@ -3359,7 +3821,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                   <span>Xóa đối tượng toàn bộ nội dung bên trong</span>
                                 </div>
                                 <p className={cn(
-                                  "text-[10px] leading-relaxed",
+                                  "text-3xs leading-relaxed",
                                   deleteMode === "full" ? "text-rose-100" : "text-slate-500 dark:text-slate-400"
                                 )}>
                                   Xóa sạch triệt để thẻ này cùng toàn bộ tất cả nội dung và phần tử con nằm bên trong.
@@ -3481,7 +3943,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                               <div className="space-y-1">
-                                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                <label className="text-2xs font-bold text-slate-700 dark:text-slate-300">
                                   Tên/Tiêu đề của đối tượng mới:
                                 </label>
                                 <input
@@ -3497,7 +3959,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               </div>
 
                               <div className="space-y-1">
-                                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                <label className="text-2xs font-bold text-slate-700 dark:text-slate-300">
                                   Thẻ HTML (&lt;tag&gt;):
                                 </label>
                                 <select
@@ -3533,7 +3995,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                 <ShieldCheck className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                                 <span>5 Mẫu làm sạch & rà soát mã nguồn chuyên dụng:</span>
                               </label>
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-700 dark:text-cyan-300">
+                              <span className="text-3xs font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-700 dark:text-cyan-300">
                                 Chuẩn hóa mã nguồn
                               </span>
                             </div>
@@ -3567,7 +4029,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                       <span className="truncate">{tmpl.title}</span>
                                     </div>
                                     <p className={cn(
-                                      "text-[10px] leading-tight line-clamp-2",
+                                      "text-3xs leading-tight line-clamp-2",
                                       isSelected ? "text-cyan-100" : "text-slate-500 dark:text-slate-400"
                                     )}>
                                       {tmpl.desc}
@@ -3597,7 +4059,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                         playUiSound("click");
                                         setUserInstruction(prev => prev ? `${prev}\n\n${activeClean.promptText}` : activeClean.promptText);
                                       }}
-                                      className="px-2 py-0.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+                                      className="px-2 py-0.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-700 dark:text-cyan-300 text-3xs font-bold transition-all flex items-center gap-1 cursor-pointer"
                                       title="Chèn nội dung mẫu này vào ô yêu cầu"
                                     >
                                       <PlusCircle className="w-3 h-3" />
@@ -3605,11 +4067,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                     </button>
                                   </div>
 
-                                  <pre className="text-[11px] font-mono whitespace-pre-wrap p-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 leading-relaxed overflow-x-auto">
+                                  <pre className="text-2xs font-mono whitespace-pre-wrap p-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 leading-relaxed overflow-x-auto">
                                     {activeClean.snippet}
                                   </pre>
 
-                                  <p className="text-[10px] text-slate-500 dark:text-slate-400 italic">
+                                  <p className="text-3xs text-slate-500 dark:text-slate-400 italic">
                                     💡 {activeClean.promptText}
                                   </p>
                                 </div>
@@ -3620,6 +4082,477 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       </div>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* ================= TAB: TYPOGRAPHY (CHỈNH SỬA FONT & BỐ CỤC CHUNG) ================= */}
+              {mode === "typography" && (
+                <div className={cn(
+                  "p-4 rounded-2xl border space-y-4 animate-in fade-in duration-200 shadow-sm",
+                  isLight ? "bg-amber-50/40 border-amber-200" : "bg-slate-950/90 border-amber-500/30"
+                )}>
+                  {/* 1. Header & Giới thiệu hệ thống Font Play */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-amber-200/80 dark:border-amber-800/60 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shadow-xs">
+                        <Type className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                          <span>Hệ Thống Phân Cấp Typography & Chuẩn Hóa Bố Cục</span>
+                          <span className="px-2 py-0.5 rounded-full text-3xs font-bold bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-400/40">
+                            Font 'Play' Độc Quyền
+                          </span>
+                        </h4>
+                        <p className="text-2xs text-slate-500 dark:text-slate-400">
+                          Toàn bộ website sử dụng duy nhất font 'Play', không dùng xen kẽ font khác. Quản lý 11 token kích thước, clamp() responsive và đồng bộ bố cục chung.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-3xs font-mono px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold">
+                        100% Tiếng Việt • Chuẩn WCAG AA
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 2. Thông tin phần tử đang chọn vs Cấu hình chung hệ thống */}
+                  {selectedElement ? (
+                    <div className={cn(
+                      "p-3.5 rounded-2xl border space-y-2.5",
+                      isLight ? "bg-white border-amber-200 shadow-xs" : "bg-slate-900/90 border-amber-500/30"
+                    )}>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded-lg bg-purple-500/15 text-purple-700 dark:text-purple-300 font-bold text-xs flex items-center gap-1">
+                            <Crosshair className="w-3.5 h-3.5" />
+                            Đối tượng đang chọn:
+                          </span>
+                          <span className="font-bold text-xs text-slate-900 dark:text-white">
+                            {selectedElement.componentType}
+                          </span>
+                          <span className="font-mono text-2xs text-slate-500">
+                            &lt;{selectedElement.tag}&gt;
+                          </span>
+                          <span className="text-2xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">
+                            {selectedElement.sectionName}
+                          </span>
+                        </div>
+
+                        <div className="text-3xs text-slate-500 italic">
+                          Selector: {selectedElement.fullSelector}
+                        </div>
+                      </div>
+
+                      {/* Đo lường Typography thực tế */}
+                      {(() => {
+                        const typo = getElementTypography(selectedElement.element);
+                        if (!typo) return null;
+                        const matched = typo.matchedToken;
+                        return (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
+                            <div className={cn(
+                              "p-2.5 rounded-xl border flex flex-col justify-between",
+                              isLight ? "bg-amber-50/60 border-amber-200/80" : "bg-slate-950 border-slate-800"
+                            )}>
+                              <span className="text-3xs font-semibold text-slate-500 dark:text-slate-400">Kích thước đo được:</span>
+                              <div className="flex items-baseline gap-1 mt-1">
+                                <span className="text-base font-black text-amber-700 dark:text-amber-400 font-mono">
+                                  {typo.fontSize}
+                                </span>
+                                <span className="text-3xs text-slate-500">({typo.fontSizePx}px)</span>
+                              </div>
+                              <span className="text-3xs text-slate-500 mt-1">Weight: {typo.fontWeight}</span>
+                            </div>
+
+                            <div className={cn(
+                              "p-2.5 rounded-xl border flex flex-col justify-between",
+                              isLight ? "bg-emerald-50/60 border-emerald-200/80" : "bg-slate-950 border-slate-800"
+                            )}>
+                              <span className="text-3xs font-semibold text-slate-500 dark:text-slate-400">Cấu hình chung khớp nhất:</span>
+                              <div className="flex items-baseline gap-1 mt-1">
+                                <span className="text-sm font-black text-emerald-700 dark:text-emerald-400">
+                                  {matched?.level || "Custom"}
+                                </span>
+                                <span className="text-3xs text-slate-500">({matched?.rangePx || "N/A"})</span>
+                              </div>
+                              <span className="text-3xs font-mono text-emerald-600 dark:text-emerald-400 truncate mt-1">
+                                {matched?.cssClass || "--"}
+                              </span>
+                            </div>
+
+                            <div className={cn(
+                              "p-2.5 rounded-xl border flex flex-col justify-between",
+                              isLight ? "bg-indigo-50/60 border-indigo-200/80" : "bg-slate-950 border-slate-800"
+                            )}>
+                              <span className="text-3xs font-semibold text-slate-500 dark:text-slate-400">Line Height / Spacing:</span>
+                              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 mt-1 font-mono">
+                                LH: {typo.lineHeight}
+                              </span>
+                              <span className="text-3xs text-slate-500 mt-1 font-mono">LS: {typo.letterSpacing}</span>
+                            </div>
+
+                            <div className={cn(
+                              "p-2.5 rounded-xl border flex flex-col justify-between",
+                              isLight ? "bg-purple-50/60 border-purple-200/80" : "bg-slate-950 border-slate-800"
+                            )}>
+                              <span className="text-3xs font-semibold text-slate-500 dark:text-slate-400">Font Family đang render:</span>
+                              <span className="text-xs font-bold text-purple-700 dark:text-purple-400 mt-1 truncate" title={typo.fontFamily}>
+                                {typo.fontFamily.includes("Play") ? "✓ Play (Chuẩn Master)" : typo.fontFamily}
+                              </span>
+                              <span className="text-3xs text-slate-500 mt-1">Fallback: sans-serif</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  ) : (
+                    <div className={cn(
+                      "p-3 rounded-xl border flex items-center justify-between gap-3 text-xs",
+                      isLight ? "bg-white border-slate-200 text-slate-700" : "bg-slate-900 border-slate-800 text-slate-300"
+                    )}>
+                      <div className="flex items-center gap-2">
+                        <Baseline className="w-4 h-4 text-amber-500 shrink-0" />
+                        <span>Chưa chọn đối tượng cụ thể. Bạn có thể chọn trực tiếp token bên dưới để xuất prompt chuẩn hóa hoặc chuyển sang chế độ Toàn bố cục.</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playUiSound("click");
+                          setTypographyScope("global_layout");
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-3xs shrink-0 cursor-pointer shadow-xs"
+                      >
+                        Bật Toàn Bố Cục
+                      </button>
+                    </div>
+                  )}
+
+                  {/* 3. PHẠM VI ÁP DỤNG (SCOPE SELECTION) */}
+                  <div className={cn(
+                    "p-3 rounded-2xl border space-y-2",
+                    isLight ? "bg-white border-amber-200" : "bg-slate-900 border-amber-500/30"
+                  )}>
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-black text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                        <Target className="w-4 h-4 text-amber-500" />
+                        <span>Phạm vi áp dụng chỉnh sửa Typography:</span>
+                      </label>
+                      <span className="text-3xs font-bold text-slate-500">
+                        {typographyScope === "global_layout" ? "Đang mở rộng Cột Bố Cục Toàn Cục" : "Áp dụng riêng lẻ"}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playUiSound("click");
+                          setTypographyScope("single_element");
+                        }}
+                        className={cn(
+                          "p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5",
+                          typographyScope === "single_element"
+                            ? "bg-amber-600 text-white border-amber-500 shadow-md ring-2 ring-amber-400/50"
+                            : isLight
+                              ? "bg-slate-50 hover:bg-amber-50 text-slate-800 border-slate-200"
+                              : "bg-slate-950 hover:bg-amber-950/60 text-slate-200 border-slate-800"
+                        )}
+                      >
+                        <Crosshair className={cn("w-4 h-4 shrink-0", typographyScope === "single_element" ? "text-white" : "text-amber-500")} />
+                        <div>
+                          <div className="text-xs font-bold">🎯 Riêng đối tượng này</div>
+                          <div className={cn("text-3xs", typographyScope === "single_element" ? "text-amber-100" : "text-slate-500")}>
+                            Gán một Token kích thước cụ thể cho phần tử đang chọn
+                          </div>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playUiSound("click");
+                          setTypographyScope("global_layout");
+                        }}
+                        className={cn(
+                          "p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5",
+                          typographyScope === "global_layout"
+                            ? "bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-400/50"
+                            : isLight
+                              ? "bg-slate-50 hover:bg-indigo-50 text-slate-800 border-slate-200"
+                              : "bg-slate-950 hover:bg-indigo-950/60 text-slate-200 border-slate-800"
+                        )}
+                      >
+                        <Columns className={cn("w-4 h-4 shrink-0", typographyScope === "global_layout" ? "text-white" : "text-indigo-500")} />
+                        <div>
+                          <div className="text-xs font-bold flex items-center gap-1.5">
+                            <span>🌐 Áp dụng cho toàn bố cục</span>
+                            <span className="text-3xs px-1.5 py-0.2 rounded bg-indigo-400/30 text-indigo-100 font-bold">
+                              + Mở thêm Cột Cấu Hình
+                            </span>
+                          </div>
+                          <div className={cn("text-3xs", typographyScope === "global_layout" ? "text-indigo-100" : "text-slate-500")}>
+                            Hiển thị cột thiết lập hệ thống tỷ lệ, kích thước cơ sở và xuất hướng dẫn đồng bộ toàn website
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 4. MAIN WORKSPACE: NẾU BẬT TOÀN BỐ CỤC SẼ XUẤT HIỆN 2 CỘT SONG SONG! */}
+                  <div className={cn(
+                    "grid gap-3.5",
+                    typographyScope === "global_layout" ? "grid-cols-1 lg:grid-cols-12" : "grid-cols-1"
+                  )}>
+                    {/* CỘT TRÁI: DANH SÁCH 11 TYPOGRAPHY TOKENS (6 hoặc 12 CỘT TÙY SCOPE) */}
+                    <div className={cn(
+                      "space-y-2.5",
+                      typographyScope === "global_layout" ? "lg:col-span-7" : "w-full"
+                    )}>
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                          <Heading className="w-4 h-4 text-amber-500" />
+                          <span>Bảng {GLOBAL_TYPOGRAPHY_TOKENS.length} Cấp Bậc Typography Tokens Chuẩn:</span>
+                        </label>
+                        <span className="text-3xs text-slate-500">Nhấp chọn token để xem hoặc gán</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[380px] overflow-y-auto pr-1 custom-scrollbar">
+                        {GLOBAL_TYPOGRAPHY_TOKENS.map((token) => {
+                          const isSelected = typographySelectedToken === token.id;
+                          return (
+                            <button
+                              key={token.id}
+                              type="button"
+                              onClick={() => {
+                                playUiSound("click");
+                                setTypographySelectedToken(token.id);
+                              }}
+                              className={cn(
+                                "p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 relative group",
+                                isSelected
+                                  ? "bg-amber-500/15 border-amber-500 text-amber-950 dark:text-amber-100 shadow-sm ring-2 ring-amber-400/40"
+                                  : isLight
+                                    ? "bg-white hover:bg-amber-50/50 border-slate-200 text-slate-800"
+                                    : "bg-slate-900 hover:bg-slate-800/80 border-slate-800 text-slate-200"
+                              )}
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-1.5">
+                                  <span className={cn(
+                                    "px-1.5 py-0.5 rounded text-3xs font-black uppercase font-mono",
+                                    isSelected 
+                                      ? "bg-amber-500 text-white" 
+                                      : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                                  )}>
+                                    {token.level}
+                                  </span>
+                                  <span className="text-xs font-bold truncate max-w-[120px]">
+                                    {token.labelVi.split("(")[0]}
+                                  </span>
+                                </div>
+
+                                <span className="font-mono text-xs font-black text-amber-600 dark:text-amber-400">
+                                  {token.rangePx}
+                                </span>
+                              </div>
+
+                              {/* Sample Live Typography Rendering */}
+                              <div className="py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 overflow-hidden">
+                                <div 
+                                  className="font-play truncate leading-tight"
+                                  style={{
+                                    fontSize: token.id === "display" ? "20px" : token.id === "h1" ? "18px" : token.id === "h2" ? "16px" : token.id === "h3" ? "15px" : token.id === "h4" ? "14px" : token.id === "h5" ? "13.5px" : token.id === "h6" ? "13px" : "13px",
+                                    fontWeight: token.defaultWeight,
+                                    letterSpacing: token.defaultLetterSpacing
+                                  }}
+                                >
+                                  Nguyễn Hùng Thái — {token.level}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between text-3xs text-slate-500 dark:text-slate-400 pt-0.5 border-t border-slate-100 dark:border-slate-800">
+                                <span className="font-mono truncate max-w-[130px]">{token.cssClass}</span>
+                                <span>LH: {token.defaultLineHeight} • W: {token.defaultWeight}</span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* CỘT PHẢI (CỘT XUẤT HIỆN KHI CHỌN "ÁP DỤNG CHO TOÀN BỐ CỤC") */}
+                    {typographyScope === "global_layout" && (
+                      <div className="lg:col-span-5 space-y-3 p-3.5 rounded-2xl border bg-indigo-50/40 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-800/50 animate-in fade-in slide-in-from-right-4 duration-200">
+                        <div className="flex items-center justify-between border-b border-indigo-200 dark:border-indigo-800 pb-2">
+                          <label className="text-xs font-black text-indigo-900 dark:text-indigo-200 flex items-center gap-1.5">
+                            <SlidersHorizontal className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <span>Cột Cấu Hình Bố Cục Toàn Cục</span>
+                          </label>
+                          <span className="text-3xs font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">
+                            Global Layout Matrix
+                          </span>
+                        </div>
+
+                        {/* 1. Tỷ lệ bước nhảy (Step Scale Ratio) */}
+                        <div className="space-y-1.5">
+                          <span className="text-2xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                            <span>1. Tỷ lệ bước nhảy (Step Ratio):</span>
+                            <span className="font-mono text-3xs text-indigo-600 dark:text-indigo-400 font-bold">
+                              {typographyScaleArchetype === "major_second" ? "1.125 (Dense UI)" : typographyScaleArchetype === "perfect_fourth" ? "1.333 (High Contrast)" : "1.25 (Standard)"}
+                            </span>
+                          </span>
+                          <div className="grid grid-cols-3 gap-1.5">
+                            {[
+                              { id: "major_second", label: "Major 2nd", ratio: "1.125", desc: "Ứng dụng" },
+                              { id: "major_third", label: "Major 3rd", ratio: "1.250", desc: "Portfolio" },
+                              { id: "perfect_fourth", label: "Perf 4th", ratio: "1.333", desc: "Executive" }
+                            ].map((scale) => (
+                              <button
+                                key={scale.id}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setTypographyScaleArchetype(scale.id as any);
+                                }}
+                                className={cn(
+                                  "p-1.5 rounded-xl border text-center transition-all cursor-pointer",
+                                  typographyScaleArchetype === scale.id
+                                    ? "bg-indigo-600 text-white border-indigo-500 shadow-xs font-bold"
+                                    : isLight
+                                      ? "bg-white hover:bg-indigo-50 text-slate-700 border-slate-200 text-xs"
+                                      : "bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800 text-xs"
+                                )}
+                              >
+                                <div className="text-2xs font-bold">{scale.label}</div>
+                                <div className="text-3xs opacity-80">{scale.ratio}</div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 2. Kích thước cơ sở (Base Font Size) */}
+                        <div className="space-y-1.5">
+                          <span className="text-2xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                            <span>2. Kích thước cơ sở (Base Size):</span>
+                            <span className="font-mono text-3xs text-indigo-600 dark:text-indigo-400 font-bold">
+                              {typographyBaseSize}px
+                            </span>
+                          </span>
+                          <div className="grid grid-cols-3 gap-1.5">
+                            {[
+                              { size: 15, label: "15px", desc: "Gọn gàng" },
+                              { size: 16, label: "16px", desc: "Chuẩn Golden" },
+                              { size: 17, label: "17px", desc: "Thoáng mắt" }
+                            ].map((b) => (
+                              <button
+                                key={b.size}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setTypographyBaseSize(b.size);
+                                }}
+                                className={cn(
+                                  "p-1.5 rounded-xl border text-center transition-all cursor-pointer",
+                                  typographyBaseSize === b.size
+                                    ? "bg-indigo-600 text-white border-indigo-500 shadow-xs font-bold"
+                                    : isLight
+                                      ? "bg-white hover:bg-indigo-50 text-slate-700 border-slate-200 text-xs"
+                                      : "bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800 text-xs"
+                                )}
+                              >
+                                <div className="text-2xs font-bold">{b.label}</div>
+                                <div className="text-3xs opacity-80">{b.desc}</div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 3. Chiều cao dòng văn bản (Body Line-height) */}
+                        <div className="space-y-1.5">
+                          <span className="text-2xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                            <span>3. Chiều cao dòng Body (Line-height):</span>
+                            <span className="font-mono text-3xs text-indigo-600 dark:text-indigo-400 font-bold">
+                              {typographyBodyLineHeight}
+                            </span>
+                          </span>
+                          <div className="grid grid-cols-3 gap-1.5">
+                            {[
+                              { lh: "1.55", label: "1.55", desc: "Đặc vừa" },
+                              { lh: "1.6", label: "1.60", desc: "Chuẩn Master" },
+                              { lh: "1.65", label: "1.65", desc: "Rộng thoáng" }
+                            ].map((l) => (
+                              <button
+                                key={l.lh}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setTypographyBodyLineHeight(l.lh);
+                                }}
+                                className={cn(
+                                  "p-1.5 rounded-xl border text-center transition-all cursor-pointer",
+                                  typographyBodyLineHeight === l.lh
+                                    ? "bg-indigo-600 text-white border-indigo-500 shadow-xs font-bold"
+                                    : isLight
+                                      ? "bg-white hover:bg-indigo-50 text-slate-700 border-slate-200 text-xs"
+                                      : "bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800 text-xs"
+                                )}
+                              >
+                                <div className="text-2xs font-bold">{l.label}</div>
+                                <div className="text-3xs opacity-80">{l.desc}</div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 4. Quick Action Presets chèn vào Prompt hướng dẫn */}
+                        <div className="space-y-1.5 pt-1">
+                          <span className="text-2xs font-bold text-indigo-900 dark:text-indigo-200">
+                            Chỉ dẫn nhanh chèn vào Prompt:
+                          </span>
+                          <div className="grid grid-cols-2 gap-1.5">
+                            {[
+                              {
+                                label: "Đồng bộ CSS :root",
+                                text: "Đồng bộ toàn bộ biến CSS :root typography trong src/index.css theo đúng 11 token Design System."
+                              },
+                              {
+                                label: "Xóa Hardcoded Font",
+                                text: "Rà soát và loại bỏ toàn bộ inline style fontSize và các class text-[..px] trên toàn bộ 14 trang."
+                              },
+                              {
+                                label: "Chuẩn hóa Font 'Play'",
+                                text: "Đảm bảo 100% website sử dụng font-family: 'Play', sans-serif, không fallback sai lệch."
+                              },
+                              {
+                                label: "Nhịp điệu dòng (Rhythm)",
+                                text: "Chuẩn hóa khoảng cách theo nhịp điệu Typography: Heading -> Subtitle 8-12px, Subtitle -> Body 8-16px, Body -> Button 16-24px."
+                              }
+                            ].map((preset, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setUserInstruction(prev => prev ? `${prev}\n- ${preset.text}` : `- ${preset.text}`);
+                                }}
+                                className={cn(
+                                  "p-1.5 rounded-lg border text-left text-3xs font-semibold transition-all cursor-pointer active:scale-95 flex items-center gap-1",
+                                  isLight 
+                                    ? "bg-white hover:bg-indigo-100/70 border-indigo-200 text-indigo-950" 
+                                    : "bg-slate-900 hover:bg-indigo-950 border-indigo-800 text-indigo-200"
+                                )}
+                              >
+                                <PlusCircle className="w-3 h-3 text-indigo-500 shrink-0" />
+                                <span className="truncate">{preset.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -3639,11 +4572,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                         <div>
                           <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
                             <span>Toàn bộ trang & phân hệ website</span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-300/40">
+                            <span className="px-2 py-0.5 rounded-full text-3xs font-bold bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-300/40">
                               {selectedSections.length}/{discoveredPagesList.length} Trang được chọn
                             </span>
                           </h4>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                          <p className="text-2xs text-slate-500 dark:text-slate-400">
                             Hiển thị toàn bộ các trang đang có trong website. Nhấp chọn trang để tạo prompt đồng bộ hoặc xuất yêu cầu tùy biến.
                           </p>
                         </div>
@@ -3676,7 +4609,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             setWebsiteViewMode("bento");
                           }}
                           className={cn(
-                            "px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer",
+                            "px-2 py-1 rounded-md text-2xs font-bold transition-all flex items-center gap-1 cursor-pointer",
                             websiteViewMode === "bento"
                               ? "bg-indigo-600 text-white shadow-xs"
                               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -3693,7 +4626,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             setWebsiteViewMode("compact");
                           }}
                           className={cn(
-                            "px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer",
+                            "px-2 py-1 rounded-md text-2xs font-bold transition-all flex items-center gap-1 cursor-pointer",
                             websiteViewMode === "compact"
                               ? "bg-indigo-600 text-white shadow-xs"
                               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -3727,7 +4660,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             setWebsiteCategoryFilter(cat.id);
                           }}
                           className={cn(
-                            "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1",
+                            "px-2.5 py-1 rounded-lg text-3xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1",
                             websiteCategoryFilter === cat.id
                               ? "bg-indigo-600 text-white shadow-xs"
                               : isLight
@@ -3737,7 +4670,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                         >
                           <span>{cat.label}</span>
                           <span className={cn(
-                            "px-1 py-0.2 rounded text-[9px]",
+                            "px-1 py-0.2 rounded text-3xs",
                             websiteCategoryFilter === cat.id ? "bg-white/20 text-white" : "text-slate-400"
                           )}>
                             {cat.count}
@@ -3756,7 +4689,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                           onChange={(e) => setWebsiteSearchQuery(e.target.value)}
                           placeholder="Tìm trang, selector..."
                           className={cn(
-                            "w-full pl-7 pr-2.5 py-1 rounded-lg text-[11px] font-medium border focus:outline-none focus:ring-1 focus:ring-indigo-500",
+                            "w-full pl-7 pr-2.5 py-1 rounded-lg text-2xs font-medium border focus:outline-none focus:ring-1 focus:ring-indigo-500",
                             isLight ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-slate-800 text-slate-100"
                           )}
                         />
@@ -3764,7 +4697,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                           <button
                             type="button"
                             onClick={() => setWebsiteSearchQuery("")}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px]"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-3xs"
                           >
                             ×
                           </button>
@@ -3778,7 +4711,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             playUiSound("click");
                             setSelectedSections(discoveredPagesList.map(s => s.sectionId));
                           }}
-                          className="px-2 py-1 rounded-lg text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
+                          className="px-2 py-1 rounded-lg text-3xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
                         >
                           Chọn hết
                         </button>
@@ -3789,7 +4722,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             playUiSound("click");
                             setSelectedSections([]);
                           }}
-                          className="px-2 py-1 rounded-lg text-[10px] font-bold text-rose-500 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors"
+                          className="px-2 py-1 rounded-lg text-3xs font-bold text-rose-500 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors"
                         >
                           Bỏ chọn
                         </button>
@@ -3854,7 +4787,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                 <IconComp className={cn("w-3.5 h-3.5 shrink-0", isChecked ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400")} />
                                 <div className="min-w-0 flex-1">
                                   <div className="truncate text-xs">{page.sectionName}</div>
-                                  <div className="text-[10px] text-slate-400 font-mono truncate">{page.selector}</div>
+                                  <div className="text-3xs text-slate-400 font-mono truncate">{page.selector}</div>
                                 </div>
                               </label>
                             );
@@ -3909,32 +4842,32 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                       <label htmlFor={`page-check-${page.id}`} className="font-bold text-xs cursor-pointer truncate text-slate-900 dark:text-slate-100 hover:text-indigo-600 block">
                                         {page.sectionName}
                                       </label>
-                                      <div className="text-[10px] font-mono text-slate-400 truncate">
+                                      <div className="text-3xs font-mono text-slate-400 truncate">
                                         {page.selector}
                                       </div>
                                     </div>
                                   </div>
 
-                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0 border border-slate-200 dark:border-slate-700">
+                                  <span className="px-1.5 py-0.5 rounded-md text-3xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0 border border-slate-200 dark:border-slate-700">
                                     {page.categoryVi}
                                   </span>
                                 </div>
 
                                 {/* Description */}
-                                <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2 pt-0.5">
+                                <p className="text-2xs leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2 pt-0.5">
                                   {page.descriptionVi}
                                 </p>
                               </div>
 
                               {/* Card Footer: Metadata & Jump Link */}
                               <div className="flex items-center justify-between gap-2 pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/80">
-                                <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
+                                <div className="flex items-center gap-2 text-3xs text-slate-500 dark:text-slate-400">
                                   <span className="flex items-center gap-1 font-medium">
                                     <Boxes className="w-3 h-3 text-indigo-500" />
                                     <span>{page.childCount} thành phần</span>
                                   </span>
                                   {page.isActive && (
-                                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[9px]">
+                                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-3xs">
                                       ● Đang xem
                                     </span>
                                   )}
@@ -3943,7 +4876,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                                 <button
                                   type="button"
                                   onClick={() => handleNavigateToPage(page.sectionId, page.sectionName)}
-                                  className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-950/60 text-slate-700 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-300 text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+                                  className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-950/60 text-slate-700 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-300 text-3xs font-bold transition-all flex items-center gap-1 cursor-pointer"
                                   title="Chuyển màn hình xem trang này"
                                 >
                                   <Eye className="w-3 h-3" />
@@ -4062,13 +4995,13 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                               <span>{tmpl.title}</span>
                             </div>
-                            <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                            <p className="text-2xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                               {tmpl.content}
                             </p>
                           </div>
 
                           <div className="flex items-center gap-1 shrink-0">
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                            <span className="text-3xs font-bold px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                               Chọn
                             </span>
                             {tmpl.isCustom && (
@@ -4222,7 +5155,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                     {generatedPrompt}
                   </pre>
                   
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 italic flex items-center gap-1">
+                  <p className="text-2xs text-slate-500 dark:text-slate-400 italic flex items-center gap-1">
                     <Info className="w-3 h-3 text-indigo-500 shrink-0" />
                     Prompt đã tự động lưu vào danh sách. Nhấn "Sao chép Prompt" và dán trực tiếp vào khung chat để AI cập nhật trang web cho bạn ngay lập tức!
                   </p>
@@ -4286,7 +5219,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                      modalActionType === "clone_format" ? "Áp Dụng Định Dạng Giống Mẫu" : "Chuyển Đối Tượng Sang Trang Khác"}
                   </h4>
                   <p className={cn(
-                    "text-[11px] truncate max-w-[280px]",
+                    "text-2xs truncate max-w-[280px]",
                     isLight ? "text-slate-500" : "text-slate-400"
                   )}>
                     {selectedTreeItem.title} ({selectedTreeItem.sectionName})
@@ -4332,7 +5265,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                   ))}
                 </select>
                 {editPreset && (
-                  <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-700 dark:text-amber-300">
+                  <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-2xs text-amber-700 dark:text-amber-300">
                     ✨ <strong>{PRESET_TEMPLATES.find(p => p.id === editPreset)?.label}:</strong> {PRESET_TEMPLATES.find(p => p.id === editPreset)?.shortDesc}
                   </div>
                 )}
@@ -4365,7 +5298,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <span className={cn("w-2 h-2 rounded-full", deleteMode === "wrapper_only" ? "bg-indigo-500" : "bg-slate-400")} />
                       <span>Chỉ đối tượng này (Nội dung giữ nguyên)</span>
                     </div>
-                    <p className="text-[10px] opacity-80 font-normal">
+                    <p className="text-3xs opacity-80 font-normal">
                       Chỉ xóa bỏ khung bọc ngoài, giữ nguyên toàn bộ đối tượng và nội dung bên trong.
                     </p>
                   </button>
@@ -4387,7 +5320,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <span className={cn("w-2 h-2 rounded-full", deleteMode === "full" ? "bg-rose-500" : "bg-slate-400")} />
                       <span>Xóa toàn bộ</span>
                     </div>
-                    <p className="text-[10px] opacity-80 font-normal">
+                    <p className="text-3xs opacity-80 font-normal">
                       Xóa sạch đối tượng này cùng tất cả các phần tử con bên trong.
                     </p>
                   </button>
@@ -4429,7 +5362,10 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                     >
                       <option value="div">&lt;div&gt; - Khối chứa (Box/Card)</option>
                       <option value="button">&lt;button&gt; - Nút bấm (Button)</option>
+                      <option value="h1">&lt;h1&gt; - Tiêu đề chính (Heading H1)</option>
+                      <option value="h2">&lt;h2&gt; - Tiêu đề lớn (Heading H2)</option>
                       <option value="h3">&lt;h3&gt; - Tiêu đề (Heading H3)</option>
+                      <option value="h4">&lt;h4&gt; - Tiêu đề phụ (Heading H4)</option>
                       <option value="p">&lt;p&gt; - Đoạn văn (Paragraph)</option>
                       <option value="img">&lt;img&gt; - Hình ảnh (Image Media)</option>
                       <option value="a">&lt;a&gt; - Thẻ liên kết (Anchor Link)</option>
@@ -4562,7 +5498,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                   <button
                     type="button"
                     onClick={() => setActionDescription("")}
-                    className="text-[11px] font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1 cursor-pointer px-2 py-0.5 rounded bg-rose-500/10"
+                    className="text-2xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1 cursor-pointer px-2 py-0.5 rounded bg-rose-500/10"
                   >
                     <X className="w-3 h-3" />
                     <span>Xóa</span>
@@ -4793,16 +5729,16 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             {item.title}
                           </span>
                           {item.presetName && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30">
+                            <span className="px-2 py-0.5 rounded-full text-3xs font-bold bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30">
                               {item.presetName}
                             </span>
                           )}
                         </div>
-                        <span className="text-[10px] text-slate-500 font-mono">{item.time}</span>
+                        <span className="text-3xs text-slate-500 font-mono">{item.time}</span>
                       </div>
 
                       <pre className={cn(
-                        "p-2.5 rounded-xl text-[11px] font-mono max-h-28 overflow-y-auto custom-scrollbar border",
+                        "p-2.5 rounded-xl text-2xs font-mono max-h-28 overflow-y-auto custom-scrollbar border",
                         isLight ? "bg-white text-slate-800 border-slate-200" : "bg-slate-900 text-slate-200 border-slate-800"
                       )}>
                         {item.prompt}
@@ -4862,20 +5798,20 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                             <span>Bản ghi gom nhóm ({hist.uniqueTasksCount} tác vụ, {hist.itemCount} lệnh gốc)</span>
                           </span>
                         </div>
-                        <span className="text-[10px] text-slate-500 font-mono">{hist.time}</span>
+                        <span className="text-3xs text-slate-500 font-mono">{hist.time}</span>
                       </div>
 
                       {/* Grouped Tasks Tags */}
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
                         {hist.groupedTasks.map((t, i) => (
-                          <span key={i} className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20">
+                          <span key={i} className="px-2 py-0.5 rounded-lg text-3xs font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20">
                             {t.title} ({t.promptCount} lệnh)
                           </span>
                         ))}
                       </div>
 
                       <pre className={cn(
-                        "p-2.5 rounded-xl text-[11px] font-mono max-h-36 overflow-y-auto custom-scrollbar border whitespace-pre-wrap",
+                        "p-2.5 rounded-xl text-2xs font-mono max-h-36 overflow-y-auto custom-scrollbar border whitespace-pre-wrap",
                         isLight ? "bg-white text-slate-800 border-slate-200" : "bg-slate-900 text-slate-200 border-slate-800"
                       )}>
                         {hist.content}

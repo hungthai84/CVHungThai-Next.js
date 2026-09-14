@@ -120,7 +120,7 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
             <h2 className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400 tracking-wide">
               {isVi ? "Điểm Mạnh (S - Strengths)" : "Strengths (S)"}
             </h2>
-            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-200 border border-blue-300 dark:border-blue-700 shadow-2xs">
+            <span className="text-2xs font-black px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-200 border border-blue-300 dark:border-blue-700 shadow-2xs">
               91% {isVi ? "Năng lực" : "Capacity"}
             </span>
           </div>
@@ -129,7 +129,7 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
             <button
               type="button"
               onClick={onContact}
-              className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-2xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <Send className="w-3 h-3" />
               <span>{isVi ? "Liên hệ" : "Contact"}</span>
@@ -137,7 +137,7 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
             <button
               type="button"
               onClick={onClose}
-              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-[11px] font-bold px-2.5"
+              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-2xs font-bold px-2.5"
               title={isVi ? "Thu nhỏ (ESC)" : "Collapse (ESC)"}
             >
               <X className="w-3.5 h-3.5" />
@@ -162,12 +162,12 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
                         {item.title}
                       </h4>
                     </div>
-                    <span className="text-[11px] font-mono font-black px-2 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-200 shrink-0">
+                    <span className="text-2xs font-mono font-black px-2 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-200 shrink-0">
                       {item.percent}%
                     </span>
                   </div>
 
-                  <p className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-600 dark:text-slate-300">
                     {item.desc}
                   </p>
 
@@ -190,24 +190,24 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
             <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div className="p-2 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-blue-200/50 dark:border-blue-700/50 text-center">
                 <div className="text-sm font-black text-blue-600 dark:text-blue-400">92%+</div>
-                <div className="text-[10px] font-bold text-slate-700 dark:text-slate-300">CSAT TB</div>
+                <div className="text-3xs font-bold text-slate-700 dark:text-slate-300">CSAT TB</div>
               </div>
               <div className="p-2 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-blue-200/50 dark:border-blue-700/50 text-center">
                 <div className="text-sm font-black text-blue-600 dark:text-blue-400">88%+</div>
-                <div className="text-[10px] font-bold text-slate-700 dark:text-slate-300">FCR Lần Đầu</div>
+                <div className="text-3xs font-bold text-slate-700 dark:text-slate-300">FCR Lần Đầu</div>
               </div>
               <div className="p-2 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-blue-200/50 dark:border-blue-700/50 text-center">
                 <div className="text-sm font-black text-blue-600 dark:text-blue-400">+24%</div>
-                <div className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Duy Trì KH</div>
+                <div className="text-3xs font-bold text-slate-700 dark:text-slate-300">Duy Trì KH</div>
               </div>
               <div className="p-2 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-blue-200/50 dark:border-blue-700/50 text-center">
                 <div className="text-sm font-black text-blue-600 dark:text-blue-400">&lt;15%</div>
-                <div className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Thôi Việc</div>
+                <div className="text-3xs font-bold text-slate-700 dark:text-slate-300">Thôi Việc</div>
               </div>
             </div>
 
             {/* Tech Stack Chips (6 cols) */}
-            <div className="lg:col-span-6 p-2 rounded-xl skills-glass-card border-blue-200/70 dark:border-blue-500/30 flex items-center flex-wrap gap-1.5 text-[10.5px]">
+            <div className="lg:col-span-6 p-2 rounded-xl skills-glass-card border-blue-200/70 dark:border-blue-500/30 flex items-center flex-wrap gap-1.5 text-2xs">
               <span className="font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1 shrink-0 mr-1">
                 <Cpu className="w-3 h-3 text-blue-500" />
                 <span>Tech Stack:</span>
@@ -223,7 +223,7 @@ export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCard
       </div>
 
       {/* Bottom Action Controls */}
-      <div className="pt-2.5 mt-2.5 border-t border-blue-200/80 dark:border-blue-800/80 flex flex-wrap items-center justify-between gap-2 text-[10.5px]">
+      <div className="pt-2.5 mt-2.5 border-t border-blue-200/80 dark:border-blue-800/80 flex flex-wrap items-center justify-between gap-2 text-2xs">
         <div className="flex flex-wrap gap-1 font-semibold text-blue-800 dark:text-blue-300">
           <span className="px-2 py-0.5 rounded-md bg-blue-100/70 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800">QuanTriCRM</span>
           <span className="px-2 py-0.5 rounded-md bg-blue-100/70 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800">DuLieuKhachHang</span>
@@ -294,7 +294,7 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
             <h2 className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-wide">
               {isVi ? "Cơ hội phát triển (O - Opportunities)" : "Growth Opportunities (O)"}
             </h2>
-            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-200 border border-purple-300 dark:border-purple-700 shadow-2xs">
+            <span className="text-2xs font-black px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-200 border border-purple-300 dark:border-purple-700 shadow-2xs">
               91% {isVi ? "Tiềm năng" : "Potential"}
             </span>
           </div>
@@ -303,7 +303,7 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
             <button
               type="button"
               onClick={onContact}
-              className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-2xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <Send className="w-3 h-3" />
               <span>{isVi ? "Liên hệ" : "Contact"}</span>
@@ -311,7 +311,7 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
             <button
               type="button"
               onClick={onClose}
-              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-[11px] font-bold px-2.5"
+              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-2xs font-bold px-2.5"
               title={isVi ? "Thu nhỏ (ESC)" : "Collapse (ESC)"}
             >
               <X className="w-3.5 h-3.5" />
@@ -336,12 +336,12 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
                         {item.title}
                       </h4>
                     </div>
-                    <span className="text-[10px] font-mono font-black px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-800 dark:text-purple-200 shrink-0">
+                    <span className="text-3xs font-mono font-black px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-800 dark:text-purple-200 shrink-0">
                       {item.percent}%
                     </span>
                   </div>
 
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug line-clamp-3">
+                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-3">
                     {item.desc}
                   </p>
                 </div>
@@ -361,32 +361,32 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
 
         {/* 4-Stage Compact Roadmap Banner */}
         <div className="mt-2.5 p-2.5 rounded-xl skills-glass-card border-purple-200/80 dark:border-purple-500/30 bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-transparent">
-          <h4 className="text-[11px] font-black text-purple-900 dark:text-purple-200 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <h4 className="text-2xs font-black text-purple-900 dark:text-purple-200 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
             <span>{isVi ? "Lộ trình triển khai 4 giai đoạn" : "4-Phase Transformation Roadmap"}</span>
           </h4>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-center text-[10.5px]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-center text-2xs">
             <div className="p-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-purple-200/50 dark:border-purple-800/50">
               <div className="font-bold text-purple-700 dark:text-purple-300">P1: Thử Nghiệm AI</div>
-              <div className="text-[9.5px] text-slate-500 dark:text-slate-400">PoC 30 ngày</div>
+              <div className="text-3xs text-slate-500 dark:text-slate-400">PoC 30 ngày</div>
             </div>
             <div className="p-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-purple-200/50 dark:border-purple-800/50">
               <div className="font-bold text-purple-700 dark:text-purple-300">P2: Tích Hợp Đa Kênh</div>
-              <div className="text-[9.5px] text-slate-500 dark:text-slate-400">Hotline, Zalo, App</div>
+              <div className="text-3xs text-slate-500 dark:text-slate-400">Hotline, Zalo, App</div>
             </div>
             <div className="p-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-purple-200/50 dark:border-purple-800/50">
               <div className="font-bold text-purple-700 dark:text-purple-300">P3: VoC &amp; Data AI</div>
-              <div className="text-[9.5px] text-slate-500 dark:text-slate-400">Real-time Alert</div>
+              <div className="text-3xs text-slate-500 dark:text-slate-400">Real-time Alert</div>
             </div>
             <div className="p-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-purple-200/50 dark:border-purple-800/50">
               <div className="font-bold text-purple-700 dark:text-purple-300">P4: Chuẩn Hóa Cấp Tập Đoàn</div>
-              <div className="text-[9.5px] text-slate-500 dark:text-slate-400">Nhân rộng quy mô</div>
+              <div className="text-3xs text-slate-500 dark:text-slate-400">Nhân rộng quy mô</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="pt-2.5 mt-2.5 border-t border-purple-200/80 dark:border-purple-800/80 flex flex-wrap items-center justify-between gap-2 text-[10.5px]">
+      <div className="pt-2.5 mt-2.5 border-t border-purple-200/80 dark:border-purple-800/80 flex flex-wrap items-center justify-between gap-2 text-2xs">
         <div className="flex flex-wrap gap-1 font-semibold text-purple-800 dark:text-purple-300">
           <span className="px-2 py-0.5 rounded-md bg-purple-100/70 dark:bg-purple-950/70 border border-purple-200 dark:border-purple-800">TriTueNhanTao</span>
           <span className="px-2 py-0.5 rounded-md bg-purple-100/70 dark:bg-purple-950/70 border border-purple-200 dark:border-purple-800">ChienLuocCX</span>
@@ -474,7 +474,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
             <h2 className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 tracking-wide">
               {isVi ? "Hoàn Thiện (W - Growth Areas)" : "Growth Areas (W)"}
             </h2>
-            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shadow-2xs">
+            <span className="text-2xs font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shadow-2xs">
               84% {isVi ? "Mục tiêu" : "Target"}
             </span>
           </div>
@@ -483,7 +483,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
             <button
               type="button"
               onClick={onContact}
-              className="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-2xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <Send className="w-3 h-3" />
               <span>{isVi ? "Liên hệ" : "Contact"}</span>
@@ -491,7 +491,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
             <button
               type="button"
               onClick={onClose}
-              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-[11px] font-bold px-2.5"
+              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-2xs font-bold px-2.5"
               title={isVi ? "Thu nhỏ (ESC)" : "Collapse (ESC)"}
             >
               <X className="w-3.5 h-3.5" />
@@ -516,12 +516,12 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
                         {item.label}
                       </h4>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 shrink-0">
+                    <span className="text-3xs font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 shrink-0">
                       {item.percent}% → {item.target}%
                     </span>
                   </div>
 
-                  <p className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-600 dark:text-slate-300">
                     {item.desc}
                   </p>
 
@@ -539,7 +539,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
           </div>
 
           {/* Upskilling Plan Strip */}
-          <div className="p-2 rounded-xl skills-glass-card border-amber-200/80 dark:border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent flex items-center flex-wrap gap-2 text-[10.5px]">
+          <div className="p-2 rounded-xl skills-glass-card border-amber-200/80 dark:border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent flex items-center flex-wrap gap-2 text-2xs">
             <span className="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1 shrink-0 mr-1">
               <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span>{isVi ? "Kế hoạch nâng cấp:" : "Upskilling Plan:"}</span>
@@ -560,7 +560,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
       </div>
 
       {/* Bottom Footer */}
-      <div className="pt-2.5 mt-2.5 border-t border-amber-200/80 dark:border-amber-800/80 flex flex-wrap items-center justify-between gap-2 text-[10.5px]">
+      <div className="pt-2.5 mt-2.5 border-t border-amber-200/80 dark:border-amber-800/80 flex flex-wrap items-center justify-between gap-2 text-2xs">
         <div className="flex flex-wrap gap-1 font-semibold text-amber-800 dark:text-amber-300">
           <span className="px-2 py-0.5 rounded-md bg-amber-100/70 dark:bg-amber-950/70 border border-amber-200 dark:border-amber-800">TuDuyChienLuoc</span>
           <span className="px-2 py-0.5 rounded-md bg-amber-100/70 dark:bg-amber-950/70 border border-amber-200 dark:border-amber-800">TuDongHoa</span>
@@ -643,7 +643,7 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
             <h2 className="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 tracking-wide">
               {isVi ? "Thách Thức (T - External Risks)" : "Challenges (T)"}
             </h2>
-            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-700 shadow-2xs">
+            <span className="text-2xs font-black px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-700 shadow-2xs">
               86% {isVi ? "Tác động" : "Impact"}
             </span>
           </div>
@@ -652,7 +652,7 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
             <button
               type="button"
               onClick={onContact}
-              className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-2xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <Send className="w-3 h-3" />
               <span>{isVi ? "Liên hệ" : "Contact"}</span>
@@ -660,7 +660,7 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
             <button
               type="button"
               onClick={onClose}
-              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-[11px] font-bold px-2.5"
+              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-2xs font-bold px-2.5"
               title={isVi ? "Thu nhỏ (ESC)" : "Collapse (ESC)"}
             >
               <X className="w-3.5 h-3.5" />
@@ -685,21 +685,21 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
                         {item.title}
                       </h4>
                     </div>
-                    <span className="text-[10px] font-mono font-black px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-800 dark:text-rose-200 shrink-0">
+                    <span className="text-3xs font-mono font-black px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-800 dark:text-rose-200 shrink-0">
                       {item.impact}%
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 text-[10.5px]">
+                  <div className="space-y-1.5 text-2xs">
                     <div className="p-1.5 rounded-lg bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200/50 dark:border-rose-800/50">
-                      <span className="font-black text-rose-800 dark:text-rose-300 block mb-0.5 text-[10px]">
+                      <span className="font-black text-rose-800 dark:text-rose-300 block mb-0.5 text-3xs">
                         {isVi ? "⚠️ Rủi ro:" : "⚠️ Risk:"}
                       </span>
                       <p className="text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">{item.risk}</p>
                     </div>
 
                     <div className="p-1.5 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/50">
-                      <span className="font-black text-emerald-800 dark:text-emerald-300 block mb-0.5 text-[10px]">
+                      <span className="font-black text-emerald-800 dark:text-emerald-300 block mb-0.5 text-3xs">
                         {isVi ? "🛡️ Giải pháp:" : "🛡️ Solution:"}
                       </span>
                       <p className="text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">{item.mitigation}</p>
@@ -722,7 +722,7 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
       </div>
 
       {/* Footer */}
-      <div className="pt-2.5 mt-2.5 border-t border-rose-200/80 dark:border-rose-800/80 flex flex-wrap items-center justify-between gap-2 text-[10.5px]">
+      <div className="pt-2.5 mt-2.5 border-t border-rose-200/80 dark:border-rose-800/80 flex flex-wrap items-center justify-between gap-2 text-2xs">
         <div className="flex flex-wrap gap-1 font-semibold text-rose-800 dark:text-rose-300">
           <span className="px-2 py-0.5 rounded-md bg-rose-100/70 dark:bg-rose-950/70 border border-rose-200 dark:border-rose-800">TacDongAI</span>
           <span className="px-2 py-0.5 rounded-md bg-rose-100/70 dark:bg-rose-950/70 border border-rose-200 dark:border-rose-800">BienDongCongNghe</span>
@@ -791,7 +791,7 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
             <h2 className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
               {isVi ? "Năng lực ngôn ngữ & Giao tiếp quốc tế" : "International Language & AI Proficiency"}
             </h2>
-            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700 shadow-2xs">
+            <span className="text-2xs font-black px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700 shadow-2xs">
               {isVi ? "3 Trụ cột" : "3 Pillars"}
             </span>
           </div>
@@ -800,7 +800,7 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
             <button
               type="button"
               onClick={onContact}
-              className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-2xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <Send className="w-3 h-3" />
               <span>{isVi ? "Liên hệ" : "Contact"}</span>
@@ -808,7 +808,7 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
             <button
               type="button"
               onClick={onClose}
-              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-[11px] font-bold px-2.5"
+              className="p-1 rounded-lg bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1 text-2xs font-bold px-2.5"
               title={isVi ? "Thu nhỏ (ESC)" : "Collapse (ESC)"}
             >
               <X className="w-3.5 h-3.5" />
@@ -861,13 +861,13 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
                         >
                           {item.title}
                         </h4>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                        <p className="text-3xs text-slate-500 dark:text-slate-400 truncate">
                           {item.subtitle}
                         </p>
                       </div>
                     </div>
                     <span
-                      className={`text-[11px] font-mono font-black px-1.5 py-0.5 rounded shrink-0 ${
+                      className={`text-2xs font-mono font-black px-1.5 py-0.5 rounded shrink-0 ${
                         isRose
                           ? "bg-rose-500/15 text-rose-800 dark:text-rose-200"
                           : isSky
@@ -879,7 +879,7 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
                     </span>
                   </div>
 
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug line-clamp-3">
+                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-3">
                     {item.desc}
                   </p>
                 </div>
@@ -905,7 +905,7 @@ export function ExpandedCardLanguages({ isVi, onClose, onContact }: ExpandedCard
       </div>
 
       {/* Footer */}
-      <div className="pt-2.5 mt-2.5 border-t border-emerald-200/80 dark:border-emerald-800/80 flex flex-wrap items-center justify-between gap-2 text-[10.5px]">
+      <div className="pt-2.5 mt-2.5 border-t border-emerald-200/80 dark:border-emerald-800/80 flex flex-wrap items-center justify-between gap-2 text-2xs">
         <div className="flex flex-wrap gap-1 font-semibold text-emerald-800 dark:text-emerald-300">
           <span className="px-2 py-0.5 rounded-md bg-emerald-100/70 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800">TiengVietBanXu</span>
           <span className="px-2 py-0.5 rounded-md bg-emerald-100/70 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800">TiengAnhChuyenNghiep</span>

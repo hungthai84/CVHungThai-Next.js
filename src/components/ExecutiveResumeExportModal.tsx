@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Printer, Download, Sparkles, CheckCircle, Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Award, ShieldCheck } from "lucide-react";
+import { X, Printer, Download, Sparkles, CheckCircle, Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Award, ShieldCheck, FileText } from "lucide-react";
 import { useLanguage } from "../i18n";
+import DataValidationAuditModal from "./DataValidationAuditModal";
 
 interface ExecutiveResumeExportModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
   const { lang } = useLanguage();
   const isVi = lang === "vi";
   const printRef = useRef<HTMLDivElement>(null);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -19,57 +21,85 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
     window.print();
   };
 
+  const handleOpenAudit = () => {
+    setIsAuditModalOpen(true);
+  };
+
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ duration: 0.25 }}
-          className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-indigo-500/30 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
-        >
-          {/* Header Bar */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
-                <Sparkles className="w-5 h-5" />
+    <>
+      <AnimatePresence>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ duration: 0.25 }}
+            className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-indigo-500/30 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
+          >
+            {/* Header Bar */}
+            <div className="flex flex-wrap items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80 gap-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black tracking-tight">
+                    {isVi ? "Xuất Hồ sơ & Dữ liệu Hệ thống" : "Executive Resume & Data Export"}
+                  </h3>
+                  <p className="text-body-sm text-slate-400">
+                    {isVi ? "Tải bản tóm tắt PDF hoặc Xuất toàn bộ dữ liệu (.txt) qua kiểm định tự động" : "Export executive PDF or download full dataset (.txt) with automated verification"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-black tracking-tight">
-                  {isVi ? "Xuất Hồ sơ Điều hành (Executive Resume)" : "Executive Resume Export"}
-                </h3>
-                <p className="text-xs text-slate-400">
-                  {isVi ? "Bản tóm tắt năng lực dạng Bento Grid chuẩn hóa chuyên nghiệp" : "Professional executive Bento grid overview"}
-                </p>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleOpenAudit}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 flex items-center gap-2 cursor-pointer transition border border-emerald-400/40"
+                  title="Xuất toàn bộ dữ liệu website ra file .txt kèm quy trình kiểm tra tự động"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>{isVi ? "Xuất dữ liệu (.txt)" : "Export Data (.txt)"}</span>
+                  <span className="px-1.5 py-0.2 text-caption bg-slate-950/40 text-emerald-300 rounded font-mono">
+                    .TXT
+                  </span>
+                </button>
+
+                <button
+                  onClick={handlePrint}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-black shadow-lg shadow-indigo-500/30 flex items-center gap-2 cursor-pointer transition"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>{isVi ? "In / Tải PDF" : "Print / Export PDF"}</span>
+                </button>
+
+                <button
+                  onClick={onClose}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handlePrint}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-black shadow-lg shadow-indigo-500/30 flex items-center gap-2 cursor-pointer transition"
-              >
-                <Printer className="w-4 h-4" />
-                <span>{isVi ? "In / Tải PDF" : "Print / Export PDF"}</span>
-              </button>
+            {/* Printable Resume Canvas */}
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar bg-slate-950 space-y-4">
+              {/* Floating Header info on top of Preview Container */}
+              <div className="sticky top-0 z-20 w-full max-w-3xl mx-auto p-2.5 px-4 rounded-2xl bg-slate-900/95 border border-slate-800 backdrop-blur-md shadow-lg flex items-center justify-between gap-3 print:hidden">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>Bản xem trước tóm tắt hồ sơ & dữ liệu website</span>
+                </div>
+                <div className="text-2xs text-slate-400 font-medium">
+                  {isVi ? "Dữ liệu định dạng chuẩn Executive" : "Standard Executive format"}
+                </div>
+              </div>
 
-              <button
-                onClick={onClose}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+              <div
+                ref={printRef}
+                id="printable-executive-resume"
+                className="w-full max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white text-slate-900 shadow-xl space-y-6 font-sans print:shadow-none print:p-0"
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Printable Resume Canvas */}
-          <div className="p-6 overflow-y-auto flex-1 custom-scrollbar bg-slate-950">
-            <div
-              ref={printRef}
-              id="printable-executive-resume"
-              className="w-full max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white text-slate-900 shadow-xl space-y-6 font-sans print:shadow-none print:p-0"
-            >
               {/* Header Info */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-6 gap-4">
                 <div>
@@ -105,19 +135,19 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                   <h4 className="text-xs font-black uppercase text-indigo-700 tracking-wider mb-1">Quy mô Quản trị</h4>
                   <p className="text-lg font-black text-slate-900">1,200+ Nhân sự</p>
-                  <p className="text-[11px] text-slate-600 mt-0.5">Hệ thống Contact Center & BPO đa chi nhánh</p>
+                  <p className="text-2xs text-slate-600 mt-0.5">Hệ thống Contact Center & BPO đa chi nhánh</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                   <h4 className="text-xs font-black uppercase text-indigo-700 tracking-wider mb-1">Hiệu quả Tối ưu</h4>
                   <p className="text-lg font-black text-slate-900">CSAT 98%+</p>
-                  <p className="text-[11px] text-slate-600 mt-0.5">Chuẩn hóa chất lượng dịch vụ & SLA</p>
+                  <p className="text-2xs text-slate-600 mt-0.5">Chuẩn hóa chất lượng dịch vụ & SLA</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                   <h4 className="text-xs font-black uppercase text-indigo-700 tracking-wider mb-1">Công nghệ AI</h4>
                   <p className="text-lg font-black text-slate-900">Omni-Channel AI</p>
-                  <p className="text-[11px] text-slate-600 mt-0.5">Tích hợp CRM, BI Reports & Auto Chatbot</p>
+                  <p className="text-2xs text-slate-600 mt-0.5">Tích hợp CRM, BI Reports & Auto Chatbot</p>
                 </div>
               </div>
 
@@ -135,7 +165,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                       <span className="text-indigo-600 font-mono">2021 - 2024</span>
                     </div>
                     <p className="text-xs text-slate-600 font-medium">BPO & CSKH Enterprise Solutions</p>
-                    <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                    <p className="text-2xs text-slate-600 mt-1 leading-relaxed">
                       Lãnh đạo toàn bộ khối vận hành 1,000+ tổng đài viên, triển khai hệ thống AI Chatbot, CRM Omni-Channel và quy trình BCP ứng phó rủi ro vận hành.
                     </p>
                   </div>
@@ -146,7 +176,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                       <span className="text-indigo-600 font-mono">2013 - 2021</span>
                     </div>
                     <p className="text-xs text-slate-600 font-medium">Prudential Việt Nam & Tập đoàn Tài chính</p>
-                    <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                    <p className="text-2xs text-slate-600 mt-1 leading-relaxed">
                       Quản trị rủi ro vận hành, xây dựng kịch bản duy trì kinh doanh liên tục (BCP), tối ưu hóa chỉ số hài lòng khách hàng CSAT vượt kỳ vọng.
                     </p>
                   </div>
@@ -157,7 +187,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                       <span className="text-indigo-600 font-mono">2003 - 2013</span>
                     </div>
                     <p className="text-xs text-slate-600 font-medium">STU, Nhất Nghệ & MobiFone</p>
-                    <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                    <p className="text-2xs text-slate-600 mt-1 leading-relaxed">
                       Hoàn thành Cử nhân CNTT STU, Chứng chỉ Cisco CCNA, Microsoft MCSA, làm nền tảng vững chắc cho hạ tầng kỹ thuật tổng đài.
                     </p>
                   </div>
@@ -174,19 +204,19 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                     <p className="font-bold text-slate-900">Cử nhân CNTT - STU (2007)</p>
-                    <p className="text-[11px] text-slate-600">Lập trình Software & Hệ thống</p>
+                    <p className="text-2xs text-slate-600">Lập trình Software & Hệ thống</p>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                     <p className="font-bold text-slate-900">Quản lý Cấp cao Dale Carnegie (2015)</p>
-                    <p className="text-[11px] text-slate-600">Lãnh đạo & Quản trị tổ chức</p>
+                    <p className="text-2xs text-slate-600">Lãnh đạo & Quản trị tổ chức</p>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                     <p className="font-bold text-slate-900">Big Data & BI Reports (2019)</p>
-                    <p className="text-[11px] text-slate-600">Phân tích dữ liệu báo cáo quản trị</p>
+                    <p className="text-2xs text-slate-600">Phân tích dữ liệu báo cáo quản trị</p>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                     <p className="font-bold text-slate-900">Cisco CCNA & Microsoft MCSA</p>
-                    <p className="text-[11px] text-slate-600">Quản trị mạng & Máy chủ doanh nghiệp</p>
+                    <p className="text-2xs text-slate-600">Quản trị mạng & Máy chủ doanh nghiệp</p>
                   </div>
                 </div>
               </div>
@@ -195,5 +225,12 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
         </motion.div>
       </div>
     </AnimatePresence>
+
+    {/* Automatic Data Integrity Audit Modal */}
+    <DataValidationAuditModal
+      isOpen={isAuditModalOpen}
+      onClose={() => setIsAuditModalOpen(false)}
+    />
+  </>
   );
 }

@@ -32,7 +32,7 @@ import { CaseStudy3_2_Tools } from "./CaseStudy3_2_Tools";
 
 export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
   return (
-    <div id="article-section" className="space-y-[15px] md:space-y-[20px] flex flex-col gap-[15px] md:gap-[20px] animate-fadeIn">
+    <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 animate-fadeIn">
       {/* SECTION 01: BỐI CẢNH & VẤN ĐỀ */}
       <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-sky-100 dark:border-sky-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300">
         <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-sky-600 uppercase">Tầng 1: Vận Hành (Operational)</span>
-              <span className="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-mono">Real-time</span>
+              <span className="text-3xs bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-mono">Real-time</span>
             </div>
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">Chỉ Số Sức Khỏe Hàng Đợi</h4>
             <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
@@ -147,7 +147,7 @@ export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-purple-600 uppercase">Tầng 2: Nhân Sự (Agent KPI)</span>
-              <span className="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-mono">Weekly</span>
+              <span className="text-3xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-mono">Weekly</span>
             </div>
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">Chỉ Số Năng Suất &amp; Chất Lượng</h4>
             <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
@@ -161,7 +161,7 @@ export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-emerald-600 uppercase">Tầng 3: Trải Nghiệm (Strategic CX)</span>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono">Monthly</span>
+              <span className="text-3xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono">Monthly</span>
             </div>
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">Chỉ Số Cảm Xúc &amp; Lòng Trung Thành</h4>
             <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">

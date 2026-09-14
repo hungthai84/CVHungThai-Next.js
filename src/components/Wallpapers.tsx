@@ -31,6 +31,7 @@ import { useBackground, PRESET_BACKGROUNDS, INITIAL_WALLPAPERS_FROM_JSON } from 
 import { BackgroundItem } from "../types/background";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
+import { PageCardHeader } from "./PageCardHeader";
 
 // Helper to format scoped CSS for preview containers
 function formatScopedCss(cssCode: string, scopeClass: string): string {
@@ -178,7 +179,6 @@ export default function Wallpapers() {
   const [selectedType, setSelectedType] = useState<'auto' | 'image' | 'video' | 'css' | 'codepen'>('auto');
   const [inputError, setInputError] = useState("");
   const [successToast, setSuccessToast] = useState("");
-  const [isFetchingCodePenCollection, setIsFetchingCodePenCollection] = useState(false);
 
   // CODEPEN PRESETS
   const CODEPEN_PRESETS = [
@@ -188,50 +188,6 @@ export default function Wallpapers() {
     { name: "Synthwave Grid", url: "https://codepen.io/P1N34PPL3/pen/eYpYmOp" },
     { name: "Particle Network", url: "https://codepen.io/juliangarnier/pen/LpWpbe" },
   ];
-
-  // Fetch CodePen collection visual assets mechanism
-  const handleFetchCodePenCollection = async (collectionId: string = "OJMejWJ") => {
-    setIsFetchingCodePenCollection(true);
-    try {
-      const res = await fetch(`https://codepen.io/api/v1/collections/${collectionId}`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.pens && Array.isArray(data.pens)) {
-          data.pens.forEach((pen: any) => {
-            if (pen.link) {
-              addBackgroundLink(pen.link, 'codepen', pen.title || "CodePen Visual Asset", "codepen");
-            }
-          });
-        }
-      } else {
-        const curatedCollection = [
-          { name: "CodePen Aurora Shader", url: "https://codepen.io/yuhomyan/pen/OJMejWJ" },
-          { name: "CodePen Plasma Fluid", url: "https://codepen.io/RAFA-R3/pen/JjXbWwo" },
-          { name: "CodePen Synthwave Grid", url: "https://codepen.io/P1N34PPL3/pen/eYpYmOp" },
-          { name: "CodePen Particle Network", url: "https://codepen.io/juliangarnier/pen/LpWpbe" },
-          { name: "CodePen Holographic Matrix", url: "https://codepen.io/kevinpowell/pen/eYvBqKx" },
-          { name: "CodePen WebGL Fluid Spheres", url: "https://codepen.io/dorey/pen/aYePry" },
-        ];
-        curatedCollection.forEach((item) => {
-          addBackgroundLink(item.url, 'codepen', item.name, "codepen");
-        });
-      }
-      showToast(lang === "vi" ? "Đã nạp bộ sưu tập CodePen vào Bento Grid!" : "CodePen collection loaded into Bento Grid!");
-    } catch (err) {
-      const curatedCollection = [
-        { name: "CodePen Aurora Shader", url: "https://codepen.io/yuhomyan/pen/OJMejWJ" },
-        { name: "CodePen Plasma Fluid", url: "https://codepen.io/RAFA-R3/pen/JjXbWwo" },
-        { name: "CodePen Synthwave Grid", url: "https://codepen.io/P1N34PPL3/pen/eYpYmOp" },
-        { name: "CodePen Particle Network", url: "https://codepen.io/juliangarnier/pen/LpWpbe" }
-      ];
-      curatedCollection.forEach((item) => {
-        addBackgroundLink(item.url, 'codepen', item.name, "codepen");
-      });
-      showToast(lang === "vi" ? "Đã tải bộ sưu tập CodePen!" : "CodePen collection loaded!");
-    } finally {
-      setIsFetchingCodePenCollection(false);
-    }
-  };
 
   // CSS Code Wallpaper state
   const [cssNameInput, setCssNameInput] = useState("");
@@ -366,30 +322,15 @@ export default function Wallpapers() {
         className="hidden"
       />
       {/* Main Card Hình nền */}
-      <div className="w-full bg-transparent flex flex-col gap-[15px]">
+      <div className="w-full bg-transparent flex flex-col gap-4">
 
         {/* Container Hình nền - đem nội dung ra ngoài thẻ chứa */}
         <div 
           id="info-card-wallpapers" 
           className="w-full flex flex-col gap-6 relative z-10"
         >
-          {/* Header Card Hình nền (Chuẩn 4 dòng Bento Grid giống format các thẻ khác: tiêu đề 4 chữ & không có sub tiêu đề) */}
-          <div className="w-full flex flex-col gap-[8px] pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-            {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0">
-                  <ImageIcon className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-                </div>
-                <h2 className="text-lg sm:text-xl font-black tracking-tight text-sky-600 dark:text-sky-400">
-                  {lang === "vi" ? "Thư viện hình nền" : "Branding wallpaper visual collection"}
-                </h2>
-              </div>
-            </div>
-
-            {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-            <div className="h-[2px] w-full bg-sky-500/30 dark:bg-sky-500/20" />
-
+          {/* Header Card Hình nền */}
+          <PageCardHeader pageId="wallpapers">
             {/* Dòng 4: Header Action Bar & Thống kê */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1 w-full">
               <div className="flex items-center gap-2">
@@ -397,73 +338,67 @@ export default function Wallpapers() {
                 <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-xs">
                   <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
                     <ImageIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                    <span className="text-xs font-black text-slate-800 dark:text-white">{totalImages}</span>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">{lang === "vi" ? "ảnh" : "img"}</span>
+                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalImages}</span>
+                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">{lang === "vi" ? "ảnh" : "img"}</span>
                   </div>
                   <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
                     <VideoIcon className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                    <span className="text-xs font-black text-slate-800 dark:text-white">{totalVideos}</span>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">vid</span>
+                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalVideos}</span>
+                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">vid</span>
                   </div>
                   <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
                     <Code className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-black text-slate-800 dark:text-white">{totalCss}</span>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">CSS</span>
+                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalCss}</span>
+                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CSS</span>
                   </div>
                   <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
-                    <span className="text-xs font-black text-slate-800 dark:text-white">{totalCodePen}</span>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">CodePen</span>
+                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalCodePen}</span>
+                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CodePen</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 md:justify-end ml-auto">
-              <button
-                onClick={() => {
-                  setShowAddControls(!showAddControls);
-                }}
-                className={`py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border ${
-                  showAddControls 
-                    ? "bg-blue-600 text-white border-blue-500 shadow-blue-500/30" 
-                    : "bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-                }`}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>{lang === "vi" ? "Thêm nền" : "Add"}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddControls(!showAddControls);
+                  }}
+                  className={`py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border ${
+                    showAddControls 
+                      ? "bg-blue-600 text-white border-blue-500 shadow-blue-500/30" 
+                      : "bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+                  }`}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{lang === "vi" ? "Thêm nền" : "Add"}</span>
+                </button>
 
-              <button
-                onClick={() => {
-                  fileInputRef.current?.click();
-                }}
-                className="py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-              >
-                <Upload className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-                <span>{lang === "vi" ? "Nhập JSON" : "Import"}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    fileInputRef.current?.click();
+                  }}
+                  className="py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+                >
+                  <Upload className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                  <span>{lang === "vi" ? "Nhập JSON" : "Import"}</span>
+                </button>
 
-              <button
-                onClick={() => {
-                  downloadJsonFile();
-                }}
-                className="py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-              >
-                <Download className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-                <span>{lang === "vi" ? "Xuất JSON" : "Export"}</span>
-              </button>
-
-              <button
-                onClick={() => handleFetchCodePenCollection()}
-                disabled={isFetchingCodePenCollection}
-                className="py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/30"
-              >
-                <Sparkles className={`w-3.5 h-3.5 ${isFetchingCodePenCollection ? 'animate-spin' : ''}`} />
-                <span>{isFetchingCodePenCollection ? (lang === "vi" ? "Đang nạp..." : "Fetching...") : (lang === "vi" ? "Nạp CodePen" : "CodePen")}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    downloadJsonFile();
+                  }}
+                  className="py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+                >
+                  <Download className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+                  <span>{lang === "vi" ? "Xuất JSON" : "Export"}</span>
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
+          </PageCardHeader>
           {/* Toast Alert */}
         {successToast && (
           <div className="bg-emerald-500/15 border border-emerald-500/30 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-2.5 shadow-sm animate-fadeIn">
@@ -480,7 +415,7 @@ export default function Wallpapers() {
             <div className="lg:col-span-7 glass-card p-5 sm:p-6 rounded-3xl border border-brand-border/60 shadow-md space-y-4">
               <div className="flex items-center justify-end">
                 {/* Type Switcher */}
-                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-brand-border/40 text-[11px] font-semibold">
+                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-brand-border/40 text-2xs font-semibold">
                   <button
                     type="button"
                     onClick={() => setSelectedType('auto')}
@@ -551,7 +486,7 @@ export default function Wallpapers() {
                 <form onSubmit={handleAddLink} className="space-y-3">
                   {/* Preset chips */}
                   <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-brand-text-muted flex items-center gap-1">
+                    <span className="text-2xs font-bold text-brand-text-muted flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-amber-400" />
                       <span>{lang === "vi" ? "Mẫu CSS nền có sẵn (nhấp để nạp code):" : "CSS Wallpaper Presets (click to load):"}</span>
                     </span>
@@ -564,7 +499,7 @@ export default function Wallpapers() {
                             setCssNameInput(tpl.name);
                             setCssCodeInput(tpl.code);
                           }}
-                          className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20 transition-all cursor-pointer"
+                          className="px-2.5 py-1 rounded-lg text-2xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20 transition-all cursor-pointer"
                         >
                           {tpl.name}
                         </button>
@@ -594,7 +529,7 @@ export default function Wallpapers() {
                     </div>
                     {/* Live mini preview */}
                     <div className="sm:col-span-4 flex flex-col gap-1">
-                      <span className="text-[10px] font-bold text-brand-text-muted">Live Preview:</span>
+                      <span className="text-3xs font-bold text-brand-text-muted">Live Preview:</span>
                       <div className="w-full h-24 rounded-xl border border-brand-border/60 overflow-hidden relative shadow-inner bg-slate-950">
                         <style dangerouslySetInnerHTML={{ __html: `
                           .quick-preview-css-box {
@@ -649,7 +584,7 @@ export default function Wallpapers() {
                 </form>
               )}
 
-              <div className="flex items-center justify-between text-[11px] text-brand-text-muted pt-1">
+              <div className="flex items-center justify-between text-2xs text-brand-text-muted pt-1">
                 <span>💡 {lang === "vi" ? "Hệ thống tự động lưu vĩnh viễn vào bộ nhớ trình duyệt." : "Auto-saved permanently in browser storage."}</span>
                 <button 
                   type="button" 
@@ -835,10 +770,10 @@ export default function Wallpapers() {
 
             {/* Hover Tooltip Overlay */}
             <div className="absolute inset-0 bg-white/95 dark:bg-slate-950/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 pointer-events-none z-10 backdrop-blur-xs">
-              <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
+              <span className="text-3xs font-black text-slate-900 dark:text-white truncate">
                 {lang === "vi" ? "Mặc định (Gradient)" : "Default Gradient"}
               </span>
-              <span className="text-[8.5px] text-blue-600 dark:text-blue-300 font-extrabold">
+              <span className="text-3xs text-blue-600 dark:text-blue-300 font-extrabold">
                 {lang === "vi" ? "Nháy đúp để áp dụng" : "Double click to set"}
               </span>
             </div>
@@ -889,7 +824,7 @@ export default function Wallpapers() {
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-950 via-slate-900 to-black p-3 text-center">
                           <Sparkles className="w-6 h-6 text-amber-400 mb-1 animate-pulse" />
-                          <span className="text-[10px] font-bold text-amber-300">CodePen Live</span>
+                          <span className="text-3xs font-bold text-amber-300">CodePen Live</span>
                         </div>
                       )}
                     </div>
@@ -922,7 +857,7 @@ export default function Wallpapers() {
                   )}
 
                   {/* Type Badge top left (very tiny) */}
-                  <div className={`absolute top-1 left-1 px-1 py-0.2 rounded backdrop-blur-xs text-[7px] font-black scale-90 origin-top-left z-10 ${
+                  <div className={`absolute top-1 left-1 px-1 py-0.2 rounded backdrop-blur-xs text-3xs font-black scale-90 origin-top-left z-10 ${
                     item.type === 'css'
                       ? 'bg-emerald-600/90 text-white shadow-xs'
                       : item.type === 'codepen'
@@ -961,13 +896,13 @@ export default function Wallpapers() {
 
                   {/* Hover Tooltip Overlay with Title */}
                   <div className="absolute inset-0 bg-white/95 dark:bg-slate-950/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 pointer-events-none z-10 backdrop-blur-xs">
-                    <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
+                    <span className="text-3xs font-black text-slate-900 dark:text-white truncate">
                       {item.name || `Wallpaper #${idx + 1}`}
                     </span>
-                    <span className="text-[8.5px] text-slate-600 dark:text-slate-300 font-semibold capitalize truncate">
+                    <span className="text-3xs text-slate-600 dark:text-slate-300 font-semibold capitalize truncate">
                       {item.category || "custom"} • {item.type}
                     </span>
-                    <span className="text-[8.5px] text-blue-600 dark:text-blue-300 font-extrabold">
+                    <span className="text-3xs text-blue-600 dark:text-blue-300 font-extrabold">
                       {lang === "vi" ? "Nháy đúp để áp dụng" : "Double click to set"}
                     </span>
                   </div>
@@ -1014,7 +949,7 @@ export default function Wallpapers() {
 
             {/* Code Block */}
             <div className="space-y-1">
-              <span className="text-[11px] font-bold text-slate-400">CSS Code:</span>
+              <span className="text-2xs font-bold text-slate-400">CSS Code:</span>
               <pre className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto max-h-48 whitespace-pre-wrap">
                 {inspectingCssItem.cssCode}
               </pre>

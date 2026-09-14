@@ -9,7 +9,7 @@ import { CaseStudy5_1_Tools } from "./CaseStudy5_1_Tools";
 
 export function CaseStudy5_1_Sections({ project: _project }: { project: ProjectCard }) {
   return (
-    <div id="article-section" className="space-y-[15px] md:space-y-[20px] flex flex-col gap-[15px] md:gap-[20px] max-w-5xl mx-auto text-slate-800 dark:text-slate-100">
+    <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 max-w-5xl mx-auto text-slate-800 dark:text-slate-100">
       
       {/* SECTION 1: BỐI CẢNH & THÁCH THỨC */}
       <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-sky-100 dark:border-sky-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300">
@@ -309,7 +309,7 @@ export function CaseStudy5_1_Sections({ project: _project }: { project: ProjectC
               </tr>
             </tbody>
           </table>
-          <div className="p-3 bg-slate-50 dark:bg-slate-900/60 text-[10px] text-slate-500 flex gap-4">
+          <div className="p-3 bg-slate-50 dark:bg-slate-900/60 text-3xs text-slate-500 flex gap-4">
             <span><strong>R:</strong> Responsible (Thực hiện)</span>
             <span><strong>A:</strong> Accountable (Chịu trách nhiệm)</span>
             <span><strong>C:</strong> Consulted (Tham vấn)</span>

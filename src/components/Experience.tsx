@@ -75,6 +75,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 import { MEMORIES_DATA } from "./Memories";
 
 // Component video giới thiệu dành cho cột mốc 2026+
@@ -119,7 +120,7 @@ export const MilestoneVideoPlayer = ({ isVi }: { isVi: boolean }) => {
       
       {/* Controls bar */}
       <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs z-10">
-        <span className="font-semibold text-[11px] flex items-center gap-1.5 drop-shadow">
+        <span className="font-semibold text-2xs flex items-center gap-1.5 drop-shadow">
           <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
           {isVi ? "Video giới thiệu chiến lược 2026+" : "Strategy 2026+ intro video"}
         </span>
@@ -185,6 +186,7 @@ export interface MilestoneData {
   tagCategory: "telecom" | "gaming" | "ecommerce" | "insurance" | "fintech" | "strategy";
   tagColor: string;
   logo: string;
+  bannerUrl?: string;
   headerTitle: string;
   highlightText: string;
   cardDescription: string;
@@ -222,6 +224,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "telecom",
     tagColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800",
     logo: "https://i.ibb.co/hxHm9TsZ/Mobifone.png",
+    bannerUrl: "https://i.ibb.co/KzryKQHx/Mobifone.png",
     headerTitle: "Năm 2003 – Khởi đầu tại MobiFone",
     highlightText: "Tôi bắt đầu sự nghiệp tại MobiFone, nơi tôi được đào tạo bài bản về dịch vụ khách hàng, quản lý tổng đài, xử lý sự cố và xây dựng quy trình phục vụ theo tiêu chuẩn ngành viễn thông. Đây là nền tảng giúp tôi hình thành tư duy lấy khách hàng làm trung tâm và hiểu rõ tầm quan trọng của quy trình trong vận hành dịch vụ.",
     cardDescription: "Tôi bắt đầu sự nghiệp tại MobiFone, nơi tôi được đào tạo bài bản về dịch vụ khách hàng, quản lý tổng đài, xử lý sự cố và xây dựng quy trình phục vụ theo tiêu chuẩn ngành viễn thông. Đây là nền tảng giúp tôi hình thành tư duy lấy khách hàng làm trung tâm và hiểu rõ tầm quan trọng của quy trình trong vận hành dịch vụ.",
@@ -276,6 +279,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "telecom",
     tagColor: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800",
     logo: "https://i.ibb.co/QvtbdnfP/V247.png",
+    bannerUrl: "https://i.ibb.co/bMZKjMhX/v247.png",
     headerTitle: "Năm 2007 – Phát triển năng lực quản lý tại Viễn Liên V247",
     highlightText: "Gia nhập Viễn Liên V247, tôi tiếp tục phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ và tối ưu hiệu quả vận hành của trung tâm chăm sóc khách hàng. Giai đoạn này giúp tôi tích lũy kinh nghiệm quản lý hoạt động với quy mô lớn và xây dựng các chỉ số đánh giá chất lượng dịch vụ.",
     cardDescription: "Gia nhập Viễn Liên V247, tôi tiếp tục phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ và tối ưu hiệu quả vận hành của trung tâm chăm sóc khách hàng. Giai đoạn này giúp tôi tích lũy kinh nghiệm quản lý hoạt động với quy mô lớn và xây dựng các chỉ số đánh giá chất lượng dịch vụ.",
@@ -333,6 +337,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "telecom",
     tagColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
     logo: "https://i.ibb.co/R4YXWyzF/LBC.png",
+    bannerUrl: "https://i.ibb.co/Mykxzbbz/LBC.png",
     headerTitle: "Năm 2011 – Bước ngoặt tại LBC – Truyền hình Cáp HTV",
     highlightText: "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng. Từ một nhà quản lý vận hành, tôi chuyển mình trở thành một nhà quản trị toàn diện. Tôi trực tiếp điều hành hoạt động của phòng ban, xây dựng và chuẩn hóa quy trình, phát triển đội ngũ, thiết lập hệ thống KPI, đồng thời phối hợp với nhiều đơn vị nhằm nâng cao chất lượng dịch vụ và hiệu quả vận hành. Chính giai đoạn này đã giúp tôi hình thành tư duy quản trị hệ thống và phát triển con người song song với mục tiêu kinh doanh.",
     cardDescription: "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng. Từ một nhà quản lý vận hành, tôi chuyển mình trở thành một nhà quản trị toàn diện. Tôi trực tiếp điều hành hoạt động của phòng ban, xây dựng và chuẩn hóa quy trình, phát triển đội ngũ, thiết lập hệ thống KPI, đồng thời phối hợp với nhiều đơn vị nhằm nâng cao chất lượng dịch vụ và hiệu quả vận hành. Chính giai đoạn này đã giúp tôi hình thành tư duy quản trị hệ thống và phát triển con người song song với mục tiêu kinh doanh.",
@@ -396,6 +401,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "gaming",
     tagColor: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800",
     logo: "https://i.ibb.co/fYPJLfbw/VED.png",
+    bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
     headerTitle: "Năm 2013 – Garena và hành trình chuyển đổi số",
     highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Đặc biệt, việc tham gia vào giai đoạn phát triển ban đầu của Shopee giúp tôi tiếp cận tư duy quản trị thương mại điện tử hiện đại, từ hành trình khách hàng, trải nghiệm đa kênh, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
     cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Đặc biệt, việc tham gia vào giai đoạn phát triển ban đầu của Shopee giúp tôi tiếp cận tư duy quản trị thương mại điện tử hiện đại, từ hành trình khách hàng, trải nghiệm đa kênh, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
@@ -465,6 +471,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "insurance",
     tagColor: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800",
     logo: "https://i.ibb.co/XfpQphWF/Prudential.png",
+    bannerUrl: "https://i.ibb.co/whFY0YV0/Prudentinal.png",
     headerTitle: "Năm 2016 – Prudential Việt Nam",
     highlightText: "Tại Prudential, tôi có cơ hội làm việc trong lĩnh vực bảo hiểm – một ngành dịch vụ đòi hỏi tính chính xác, minh bạch và mức độ tin cậy rất cao. Thời gian này giúp tôi hiểu sâu hơn về quản trị trải nghiệm khách hàng, quản lý chất lượng dịch vụ và xây dựng niềm tin bền vững thông qua quy trình chuyên nghiệp và sự đồng cảm trong từng điểm chạm với khách hàng.",
     cardDescription: "Tại Prudential, tôi có cơ hội làm việc trong lĩnh vực bảo hiểm – một ngành dịch vụ đòi hỏi tính chính xác, minh bạch và mức độ tin cậy rất cao. Thời gian này giúp tôi hiểu sâu hơn về quản trị trải nghiệm khách hàng, quản lý chất lượng dịch vụ và xây dựng niềm tin bền vững thông qua quy trình chuyên nghiệp và sự đồng cảm trong từng điểm chạm với khách hàng.",
@@ -522,6 +529,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "fintech",
     tagColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
     logo: "https://i.ibb.co/k2QtrgTw/Momo.png",
+    bannerUrl: "https://i.ibb.co/GQLRGwrw/Momo.png",
     headerTitle: "Năm 2018 – MoMo",
     highlightText: "Gia nhập MoMo, tôi tiếp tục mở rộng kinh nghiệm trong lĩnh vực tài chính số. Tôi tập trung tối ưu quy trình hỗ trợ khách hàng, nâng cao hiệu quả vận hành, ứng dụng công nghệ vào quản trị dịch vụ và cải thiện trải nghiệm khách hàng trên nền tảng số.",
     cardDescription: "Gia nhập MoMo, tôi tiếp tục mở rộng kinh nghiệm trong lĩnh vực tài chính số. Tôi tập trung tối ưu quy trình hỗ trợ khách hàng, nâng cao hiệu quả vận hành, ứng dụng công nghệ vào quản trị dịch vụ và cải thiện trải nghiệm khách hàng trên nền tảng số.",
@@ -589,6 +597,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "fintech",
     tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
     logo: "https://i.ibb.co/7NtSSz4d/Finviet.png",
+    bannerUrl: "https://i.ibb.co/cSXPhWcp/Finviet.png",
     headerTitle: "Năm 2023 – Ví ECO",
     highlightText: "Tại Ví ECO, tôi tiếp tục phát triển chuyên môn trong lĩnh vực tài chính, nơi mọi hoạt động đều đặt yêu cầu cao về tính chính xác, minh bạch và sự tin cậy. Giai đoạn này giúp tôi hoàn thiện hơn tư duy xây dựng hệ thống dịch vụ khách hàng hiện đại, kết hợp giữa quy trình, công nghệ và trải nghiệm người dùng.",
     cardDescription: "Tại Ví ECO, tôi tiếp tục phát triển chuyên môn trong lĩnh vực tài chính, nơi mọi hoạt động đều đặt yêu cầu cao về tính chính xác, minh bạch và sự tin cậy. Giai đoạn này giúp tôi hoàn thiện hơn tư duy xây dựng hệ thống dịch vụ khách hàng hiện đại, kết hợp giữa quy trình, công nghệ và trải nghiệm người dùng.",
@@ -658,6 +667,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "strategy",
     tagColor: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800",
     logo: "https://i.ibb.co/G4QnNzWb/Power-Service.png",
+    bannerUrl: "https://i.ibb.co/fYVwSxRW/T-m-C-h-i.png",
     headerTitle: "Năm 2026 – Sẵn sàng cho thử thách mới",
     highlightText: "Sẵn sàng đảm nhận vị trí Trưởng phòng Dịch vụ Khách hàng (Head of CS) hoặc Giám đốc Trải nghiệm Khách hàng (CS Director) tại các doanh nghiệp Công nghệ, FinTech, Bảo hiểm. Định hướng ứng dụng AI Bot, tự động hóa CRM và nâng tầm trải nghiệm khách hàng xuất sắc.",
     cardDescription: "Sẵn sàng đảm nhận vị trí Trưởng phòng Dịch vụ Khách hàng (Head of CS) hoặc Giám đốc Trải nghiệm Khách hàng (CS Director) tại các doanh nghiệp Công nghệ, FinTech, Bảo hiểm. Định hướng ứng dụng AI Bot, tự động hóa CRM và nâng tầm trải nghiệm khách hàng xuất sắc.",
@@ -792,7 +802,7 @@ const INFOGRAPHIC_TIMELINE_ITEMS: InfographicTimelineItem[] = [
     yearLabel: "2023",
     hexColor: "#059669",
     underlineColor: "#059669",
-    companyName: "Finviet / ECO",
+    companyName: "Finviet",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     description: "Tối ưu quy trình chuẩn hóa, ứng dụng công nghệ tự động AI.",
     iconType: "finviet"
@@ -996,7 +1006,7 @@ const TeamHeadcountCanvas = ({ count, isVi }: { count: number; isVi: boolean }) 
   return (
     <div className="w-full h-[120px] rounded-xl overflow-hidden bg-slate-950/85 dark:bg-black/90 border border-slate-200/40 dark:border-slate-800/60 relative shadow-inner">
       <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
-      <div className="absolute bottom-1.5 right-2 text-[9px] font-mono text-slate-400 select-none bg-slate-900/70 px-1.5 py-0.5 rounded backdrop-blur-xs">
+      <div className="absolute bottom-1.5 right-2 text-3xs font-mono text-slate-400 select-none bg-slate-900/70 px-1.5 py-0.5 rounded backdrop-blur-xs">
         {isVi ? `Bản đồ mạng lưới: ${count} nhân sự` : `Teammate network map: ${count} members`}
       </div>
     </div>
@@ -1016,7 +1026,6 @@ interface TimelineRoadmapViewProps {
   setIsAutoScale: React.Dispatch<React.SetStateAction<boolean>>;
   timelineWrapperRef: React.RefObject<HTMLDivElement>;
   getGalleryPhotosForMilestone: (milestone: MilestoneData) => Array<{ src: string; title?: string; alt?: string }>;
-  layoutMode: "masonry" | "list";
 }
 
 const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
@@ -1030,8 +1039,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
   isAutoScale,
   setIsAutoScale,
   timelineWrapperRef,
-  getGalleryPhotosForMilestone,
-  layoutMode
+  getGalleryPhotosForMilestone
 }) => {
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [activeSubCard, setActiveSubCard] = useState<number | null>(null);
@@ -1242,10 +1250,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
       {/* Container nhóm Dòng thời gian sự nghiệp & Cột mốc quản trị - đem nội dung ra ngoài thẻ chứa */}
       <div 
         id="info-card-experience"
-        className="w-full flex flex-col gap-2 relative transition-all duration-300"
+        className="w-full flex flex-col gap-3 relative transition-all duration-300"
       >
-
-
         {/* ========================================================================= */}
         {/* DÒNG THỜI GIAN SỰ NGHIỆP (CAREER ROADMAP TIMELINE) - HIỂN THỊ ĐẦY ĐỦ 100% */}
         {/* ========================================================================= */}
@@ -1254,7 +1260,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
           className="w-full shrink-0 flex flex-col gap-3 text-left transition-all duration-300 relative rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-slate-50/50 dark:bg-slate-950/40 p-3.5 sm:p-4.5 shadow-xs"
         >
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
-          <div className="w-full flex flex-col gap-1 pb-1 border-b border-slate-200/60 dark:border-slate-800/60">
+          <div className="w-full flex flex-col gap-1 pb-1">
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
@@ -1295,7 +1301,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   type="button"
                   onClick={handleToggleAutoScale}
                   className={cn(
-                    "flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer select-none",
+                    "flex items-center gap-1 px-2 py-0.5 rounded-lg text-2xs font-bold transition-all cursor-pointer select-none",
                     isAutoScale 
                       ? "bg-blue-600 text-white shadow-2xs" 
                       : "bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600"
@@ -1442,8 +1448,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           className={cn(
                             "select-none transition-all duration-300 font-sans tracking-tight whitespace-nowrap leading-none text-center",
                             isSelected 
-                              ? "text-[10px] xs:text-xs sm:text-sm md:text-base font-black text-cyan-500 dark:text-cyan-400 drop-shadow-[0_0_8px_rgba(0,245,255,0.4)]" 
-                              : "text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-bold text-slate-600 dark:text-slate-300 group-hover:text-cyan-400"
+                              ? "text-caption sm:text-[13px] font-black text-cyan-500 dark:text-cyan-400 drop-shadow-[0_0_8px_rgba(0,245,255,0.4)]" 
+                              : "text-caption sm:text-[13px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-cyan-400"
                           )}
                         >
                           <span className="hidden sm:inline">{isVi ? "Năm " : "Year "}</span>
@@ -1532,14 +1538,44 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   height: "fit-content",
                 }}
               >
-                {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD HEADER (Optimized: Removed nested card borders) */}
+                {/* 0. THẺ BANNER HÌNH ẢNH DOANH NGHIỆP / CỘT MỐC (BENTO BANNER) */}
+                {current.bannerUrl && (
+                  <div 
+                    id="card-job-banner"
+                    className="w-full h-36 xs:h-44 sm:h-52 md:h-64 rounded-2xl sm:rounded-3xl overflow-hidden relative shadow-md border border-slate-200/80 dark:border-slate-800/80 bg-slate-100 dark:bg-slate-900 group/banner select-none transition-all duration-300"
+                  >
+                    <img
+                      src={current.bannerUrl}
+                      alt={`${current.company} Banner`}
+                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/banner:scale-105"
+                      referrerPolicy="no-referrer"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent pointer-events-none" />
+                    
+                    {/* Floating Quick Badges on Banner */}
+                    <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-5 flex items-center gap-2 flex-wrap z-10">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white border border-white/20 text-caption font-bold font-mono shadow-sm">
+                        <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                        {current.cardYearLabel || current.year}
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white backdrop-blur-md border border-slate-200/60 dark:border-slate-700/60 text-caption font-bold shadow-sm">
+                        <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
+                        {current.tag}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD HEADER (Tạo thẻ chuẩn Bento Design System) */}
                 <div 
-                  className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300"
+                  id="card-job-header"
+                  className="w-full rounded-2xl sm:rounded-3xl bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-4 sm:p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
                 >
                   {/* Left Column: Badge + Company Avatar & Titles */}
                   <div className="flex flex-col gap-3 min-w-0 flex-1">
                     {/* Period Badge */}
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50 text-xs font-extrabold shadow-2xs self-start">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50 text-caption font-bold shadow-2xs self-start">
                       <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                       <span>{current.period || `Từ Năm ${current.cardYearLabel}`}</span>
                     </div>
@@ -1568,11 +1604,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           }
                           return (
                             <div>
-                              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                              <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900 dark:text-white leading-tight">
                                 {mainCompany}
                               </h2>
                               {subComp && (
-                                <p className="text-sm sm:text-base font-bold text-slate-500 dark:text-slate-400 mt-0.5">
+                                <p className="text-[16px] sm:text-[18px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                                   {subComp}
                                 </p>
                               )}
@@ -1581,14 +1617,14 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         })()}
  
                         <div className="mt-2 flex items-center gap-2 flex-wrap">
-                          <span className="inline-block px-3 py-1 rounded-full bg-indigo-100/90 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-extrabold text-xs">
+                          <span className="inline-block px-3 py-1 rounded-full bg-indigo-100/90 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-caption">
                             {current.tag}
                           </span>
-                          <span className="inline-block px-3 py-1 rounded-full bg-emerald-100/90 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs">
+                          <span className="inline-block px-3 py-1 rounded-full bg-emerald-100/90 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-caption">
                             {current.cardRoleTitle || current.role}
                           </span>
                           {/* Số lượng nhân sự quản lý */}
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 font-bold text-xs border border-blue-200 dark:border-blue-800/60 shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 font-bold text-caption border border-blue-200 dark:border-blue-800/60 shadow-2xs">
                             <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                             <span>{current.managementHeadcount || `${current.headcount} nhân sự quản lý`}</span>
                           </span>
@@ -1614,11 +1650,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         <div className="space-y-3.5 p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md">
                           {/* Header với tag chủ đề & tiêu đề điểm nhấn đưa vào trong thẻ */}
                           <div className="space-y-2 pb-3.5 border-b border-indigo-100/80 dark:border-slate-800/80">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 text-[11px] font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 text-2xs font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
                               <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
                               <span>{isVi ? "Hành trình sự nghiệp & Cột mốc" : "Career Journey & Milestone"}</span>
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                            <h3 className="text-[16px] sm:text-[18px] font-black text-slate-900 dark:text-white leading-tight">
                               {current.headerTitle}
                             </h3>
                           </div>
@@ -1656,7 +1692,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     <Quote className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                                     <span>{isVi ? "Triết lý Quản trị & Đúc kết Cốt lõi:" : "Core Management Philosophy:"}</span>
                                   </div>
-                                  <p className="text-sm sm:text-[15px] font-semibold text-slate-800 dark:text-slate-200 leading-relaxed italic">
+                                  <p className="text-body font-semibold text-slate-800 dark:text-slate-200 leading-relaxed italic">
                                     {renderFormattedText(p)}
                                   </p>
                                 </div>
@@ -1668,7 +1704,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               return (
                                 <div 
                                   key={pIdx}
-                                  className="p-4 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/70 dark:border-indigo-900/40 text-sm sm:text-[15px] text-slate-800 dark:text-slate-200 font-medium leading-relaxed flex items-start gap-3"
+                                  className="p-4 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/70 dark:border-indigo-900/40 text-body text-slate-800 dark:text-slate-200 font-medium leading-relaxed flex items-start gap-3"
                                 >
                                   <div className="w-2.5 h-2.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mt-1.5 shrink-0 shadow-xs" />
                                   <div className="flex-1">
@@ -1682,7 +1718,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             return (
                               <div 
                                 key={pIdx}
-                                className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/70 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 text-sm text-slate-700 dark:text-slate-300 leading-relaxed hover:border-indigo-200 dark:hover:border-indigo-800/60 transition-colors"
+                                className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/70 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 text-body text-slate-700 dark:text-slate-300 leading-relaxed hover:border-indigo-200 dark:hover:border-indigo-800/60 transition-colors"
                               >
                                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2 shrink-0" />
                                 <div className="flex-1">
@@ -1694,24 +1730,19 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         </div>
                       </div>
 
-                      {/* BENTO MASONRY GRID 6 THẺ SUB CARD JOB (LAYOUT MASONRY TỰ NHIÊN NGHỆ THUẬT) */}
+                      {/* BENTO MASONRY GRID 6 THẺ SUB CARD JOB (LAYOUT MASONRY PINTEREST TỰ NHIÊN NGHỆ THUẬT) */}
                       <motion.div 
                         id="card-milestone-detail-grid" 
                         variants={bentoGridVariants}
                         initial="hidden"
                         animate="visible"
-                        className={cn(
-                          "w-full gap-5",
-                          layoutMode === "masonry" 
-                            ? "columns-1 sm:columns-2 lg:columns-3 space-y-5" 
-                            : "flex flex-col gap-5"
-                        )}
+                        className="w-full columns-1 md:columns-2 lg:columns-3 gap-4 lg:gap-5"
                       >
                         
                         {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-blue-400/80 dark:hover:border-blue-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-blue-400/80 dark:hover:border-blue-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-blue-100/80 dark:border-blue-900/40">
@@ -1740,11 +1771,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 <div className="w-8 h-8 rounded-xl bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                                   <User className="w-4 h-4 stroke-[2.5]" />
                                 </div>
-                                <div className="text-xs min-w-0 flex-1">
-                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-[11px] mb-0.5">
+                                <div className="min-w-0 flex-1">
+                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-caption mb-0.5">
                                     {isVi ? "Chức danh quản trị:" : "Administrative role:"}
                                   </span>
-                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-xs sm:text-sm">
+                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-body">
                                     {current.cardRoleTitle || current.role}
                                   </span>
                                 </div>
@@ -1755,11 +1786,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 <div className="w-8 h-8 rounded-xl bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                                   <Users className="w-4 h-4 stroke-[2.5]" />
                                 </div>
-                                <div className="text-xs min-w-0 flex-1">
-                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-[11px] mb-0.5">
+                                <div className="min-w-0 flex-1">
+                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-caption mb-0.5">
                                     {isVi ? "Quy mô nhân sự quản lý:" : "Team size managed:"}
                                   </span>
-                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-xs sm:text-sm">
+                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-body">
                                     {current.managementHeadcount || `${current.headcount} nhân sự trực thuộc`}
                                   </span>
                                 </div>
@@ -1770,19 +1801,19 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           {/* Danh sách vị trí tùy chỉnh đã thêm nếu có */}
                           {customPositions.filter(p => p.milestoneKey === current.key).length > 0 && (
                             <div className="space-y-2 pt-3 mt-3 border-t border-slate-200/80 dark:border-slate-800">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                              <span className="text-caption font-bold uppercase tracking-wider text-slate-500 block">
                                 {isVi ? "Vị trí & nhiệm vụ bổ sung:" : "Additional added roles:"}
                               </span>
                               <div className="space-y-1.5">
                                 {customPositions
                                   .filter(p => p.milestoneKey === current.key)
                                   .map(cp => (
-                                    <div key={cp.id} className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 text-xs flex items-center justify-between">
+                                    <div key={cp.id} className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 text-body flex items-center justify-between">
                                       <div>
-                                        <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block">{cp.title}</span>
-                                        <span className="text-[11px] text-slate-500">{cp.department} • {cp.headcount}</span>
+                                        <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block text-body">{cp.title}</span>
+                                        <span className="text-caption text-slate-500">{cp.department} • {cp.headcount}</span>
                                       </div>
-                                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
+                                      <span className="text-caption font-mono font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
                                         {cp.level}
                                       </span>
                                     </div>
@@ -1795,7 +1826,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 02 | KẾT QUẢ & KPI (Metrics Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/80 dark:hover:border-emerald-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/80 dark:hover:border-emerald-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-emerald-100/80 dark:border-emerald-900/40">
@@ -1822,7 +1853,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               {current.kpis && current.kpis.map((kpi, kIdx) => (
                                 <div key={kIdx} className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-100/80 dark:border-emerald-900/40 space-y-2">
-                                  <div className="flex items-center justify-between text-xs font-bold">
+                                  <div className="flex items-center justify-between text-body font-bold">
                                     <span className="text-slate-800 dark:text-slate-200 truncate pr-1">{kpi.label}</span>
                                     <span className="font-mono text-emerald-700 dark:text-emerald-400 font-black">{kpi.percent}%</span>
                                   </div>
@@ -1838,7 +1869,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 03 | CÔNG VIỆC (Tasks Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/80 dark:hover:border-indigo-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/80 dark:hover:border-indigo-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-indigo-100/80 dark:border-indigo-900/40">
@@ -1864,21 +1895,21 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
 
                             <div className="space-y-2.5">
                               {/* Thẻ thành phần mới - Tổng quan phạm vi nhiệm vụ */}
-                              <div className="p-3.5 rounded-2xl bg-indigo-100/70 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/60 flex items-center justify-between text-xs font-bold text-indigo-950 dark:text-indigo-200 shadow-2xs">
+                              <div className="p-3.5 rounded-2xl bg-indigo-100/70 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/60 flex items-center justify-between text-body font-bold text-indigo-950 dark:text-indigo-200 shadow-2xs">
                                 <div className="flex items-center gap-2.5">
                                   <div className="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                                     <Sparkles className="w-3.5 h-3.5" />
                                   </div>
                                   <span>{isVi ? "Phạm vi nhiệm vụ & Trọng tâm chuẩn hóa:" : "Task Scope & Standardized Focus:"}</span>
                                 </div>
-                                <span className="px-2.5 py-1 rounded-full bg-indigo-200/80 dark:bg-indigo-900/80 text-[11px] font-mono font-black text-indigo-800 dark:text-indigo-200">
+                                <span className="px-2.5 py-1 rounded-full bg-indigo-200/80 dark:bg-indigo-900/80 text-caption font-mono font-black text-indigo-800 dark:text-indigo-200">
                                   {current.tasks?.length || 0} {isVi ? "Hạng mục" : "Items"}
                                 </span>
                               </div>
 
                               {current.tasks && current.tasks.map((task, tIdx) => (
-                                <div key={tIdx} className="p-3 px-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100/80 dark:border-indigo-900/40 text-xs sm:text-[13px] font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-3 leading-relaxed">
-                                  <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                                <div key={tIdx} className="p-3 px-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100/80 dark:border-indigo-900/40 text-body font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-3 leading-relaxed">
+                                  <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-caption flex items-center justify-center shrink-0 mt-0.5">
                                     {tIdx + 1}
                                   </span>
                                   <span className="pt-0.5">{task}</span>
@@ -1891,7 +1922,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 04 | DỰ ÁN (Projects Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-amber-100/80 dark:border-amber-900/40">
@@ -1917,7 +1948,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
 
                             <div className="space-y-2">
                               {current.projects && current.projects.map((proj, pIdx) => (
-                                <div key={pIdx} className="p-3 px-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100/80 dark:border-amber-900/40 text-xs sm:text-[13px] font-bold text-amber-950 dark:text-amber-100 flex items-center justify-between gap-2 hover:bg-amber-100/70 dark:hover:bg-amber-900/50 transition-colors">
+                                <div key={pIdx} className="p-3 px-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100/80 dark:border-amber-900/40 text-body font-bold text-amber-950 dark:text-amber-100 flex items-center justify-between gap-2 hover:bg-amber-100/70 dark:hover:bg-amber-900/50 transition-colors">
                                   <div className="flex items-center gap-2.5 min-w-0">
                                     <FolderKanban className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                                     <span className="truncate">{proj}</span>
@@ -1932,7 +1963,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 05 | CAM KẾT (Commitments Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-cyan-400/80 dark:hover:border-cyan-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-cyan-400/80 dark:hover:border-cyan-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-cyan-100/80 dark:border-cyan-900/40">
@@ -1958,20 +1989,20 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
 
                             <div className="space-y-2.5">
                               {/* Thẻ thành phần mới - Tiêu chuẩn & Nguyên tắc thực thi */}
-                              <div className="p-3.5 rounded-2xl bg-cyan-100/70 dark:bg-cyan-950/50 border border-cyan-200/80 dark:border-cyan-800/60 flex items-center justify-between text-xs font-bold text-cyan-950 dark:text-cyan-200 shadow-2xs">
+                              <div className="p-3.5 rounded-2xl bg-cyan-100/70 dark:bg-cyan-950/50 border border-cyan-200/80 dark:border-cyan-800/60 flex items-center justify-between text-body font-bold text-cyan-950 dark:text-cyan-200 shadow-2xs">
                                 <div className="flex items-center gap-2.5">
                                   <div className="w-7 h-7 rounded-xl bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                                     <ShieldCheck className="w-3.5 h-3.5" />
                                   </div>
                                   <span>{isVi ? "Tiêu chuẩn & Nguyên tắc thực thi cốt lõi:" : "Standards & Core Execution Principles:"}</span>
                                 </div>
-                                <span className="px-2.5 py-1 rounded-full bg-cyan-200/80 dark:bg-cyan-900/80 text-[11px] font-mono font-black text-cyan-800 dark:text-cyan-200">
+                                <span className="px-2.5 py-1 rounded-full bg-cyan-200/80 dark:bg-cyan-900/80 text-caption font-mono font-black text-cyan-800 dark:text-cyan-200">
                                   100% SLA
                                 </span>
                               </div>
 
                               {current.commitments && current.commitments.map((cmt, cIdx) => (
-                                <div key={cIdx} className="p-3.5 rounded-2xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/80 dark:border-cyan-900/40 text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-relaxed">
+                                <div key={cIdx} className="p-3.5 rounded-2xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/80 dark:border-cyan-900/40 text-body font-bold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-relaxed">
                                   <CheckCircle2 className="w-4.5 h-4.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
                                   <span>{cmt}</span>
                                 </div>
@@ -1991,7 +2022,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               }
                             }
                           }}
-                          className="break-inside-avoid w-full rounded-3xl bg-slate-50/70 dark:bg-slate-900/50 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between"
+                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-rose-100/80 dark:border-rose-900/40">
@@ -2011,7 +2042,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 >
                                   <Maximize2 className="w-4 h-4" />
                                 </button>
-                                <span className="px-3 py-1 rounded-full bg-rose-100/90 dark:bg-rose-900/60 text-[10px] sm:text-[11px] font-extrabold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shrink-0">
+                                <span className="px-3 py-1 rounded-full bg-rose-100/90 dark:bg-rose-900/60 text-caption font-extrabold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shrink-0">
                                   {photos?.length || current.photoCount || 4} {isVi ? "hình ảnh" : "photos"}
                                 </span>
                               </div>
@@ -2025,7 +2056,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-                              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white font-bold">
+                              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-body text-white font-bold">
                                 <span className="flex items-center gap-2">
                                   <ImageIcon className="w-4 h-4 text-rose-300" />
                                   <span>{isVi ? "Khoảnh khắc & tư liệu hình ảnh" : "Moments & Archive"}</span>
@@ -2065,7 +2096,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     <h3 className="text-base font-black text-slate-900 dark:text-white">
                       {isVi ? "Tạo Thẻ Thêm Vị Trí & Quản Lý" : "Add Role & Management Profile"}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-body-sm text-slate-500 dark:text-slate-400">
                       {current.company} ({current.cardYearLabel})
                     </p>
                   </div>
@@ -2234,7 +2265,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       {activeSubCard === 5 && (isVi ? "CAM KẾT CHẤT LƯỢNG & TIÊU CHUẨN VẬN HÀNH" : "QUALITY COMMITMENT & SLA STANDARDS")}
                       {activeSubCard === 6 && (isVi ? "KỶ NIỆM THỰC CHIẾN & TƯ LIỆU HÌNH ẢNH" : "TEAM MOMENTS & ARCHIVE GALLERY")}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-body-sm text-slate-500 dark:text-slate-400">
                       {current.company} ({current.cardYearLabel || current.period})
                     </p>
                   </div>
@@ -2256,14 +2287,14 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/60 dark:border-blue-900/40 flex items-start gap-3">
                         <User className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-[11px] font-bold text-slate-400 block uppercase tracking-wider">{isVi ? "Vị trí quản trị" : "Administrative Role"}</span>
+                          <span className="text-2xs font-bold text-slate-400 block uppercase tracking-wider">{isVi ? "Vị trí quản trị" : "Administrative Role"}</span>
                           <span className="font-extrabold text-slate-900 dark:text-white block text-sm mt-0.5">{current.cardRoleTitle || current.role}</span>
                         </div>
                       </div>
                       <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/60 dark:border-blue-900/40 flex items-start gap-3">
                         <Users className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-[11px] font-bold text-slate-400 block uppercase tracking-wider">{isVi ? "Quy mô nhân sự quản lý" : "Managed Headcount"}</span>
+                          <span className="text-2xs font-bold text-slate-400 block uppercase tracking-wider">{isVi ? "Quy mô nhân sự quản lý" : "Managed Headcount"}</span>
                           <span className="font-extrabold text-slate-900 dark:text-white block text-sm mt-0.5">{current.managementHeadcount || `${current.headcount} nhân sự trực thuộc`}</span>
                         </div>
                       </div>
@@ -2291,10 +2322,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             <div key={cp.id} className="p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/60 dark:border-emerald-900/40 space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="font-extrabold text-emerald-950 dark:text-emerald-200 text-sm">{cp.title}</span>
-                                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">{cp.level}</span>
+                                <span className="text-3xs font-mono font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">{cp.level}</span>
                               </div>
-                              <p className="text-xs text-slate-500"><strong>{isVi ? "Bộ phận: " : "Department: "}</strong> {cp.department} • <strong>{isVi ? "Quy mô: " : "Scale: "}</strong> {cp.headcount}</p>
-                              <p className="text-xs italic text-slate-600 dark:text-slate-400">"{cp.scope}"</p>
+                              <p className="text-body-sm text-slate-500"><strong>{isVi ? "Bộ phận: " : "Department: "}</strong> {cp.department} • <strong>{isVi ? "Quy mô: " : "Scale: "}</strong> {cp.headcount}</p>
+                              <p className="text-body-sm italic text-slate-600 dark:text-slate-400">"{cp.scope}"</p>
                             </div>
                           ))}
                         </div>
@@ -2317,7 +2348,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             <div className="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                               <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" style={{ width: `${kpi.percent}%` }} />
                             </div>
-                            <p className="text-xs text-slate-500 font-normal pt-1">
+                            <p className="text-body-sm text-slate-500 font-normal pt-1">
                               {isVi 
                                 ? `Đạt mức hoàn thành ${kpi.percent}% so với chỉ tiêu ban đầu. Điều này khẳng định năng lực tối ưu quy trình và duy trì cam kết phục vụ ổn định chất lượng cao.`
                                 : `Successfully achieved ${kpi.percent}% of target expectations. This demonstrates strong discipline in process optimization and maintaining high service quality.`}
@@ -2350,10 +2381,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       <div className="space-y-2.5">
                         {current.tasks && current.tasks.map((task, tIdx) => (
                           <div key={tIdx} className="p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3 shadow-2xs">
-                            <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">{tIdx + 1}</span>
+                            <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-2xs flex items-center justify-center shrink-0 mt-0.5">{tIdx + 1}</span>
                             <div className="flex-1">
                               <span className="font-semibold text-slate-800 dark:text-slate-200 block">{task}</span>
-                              <span className="text-[11px] text-slate-500 block mt-0.5">
+                              <span className="text-2xs text-slate-500 block mt-0.5">
                                 {isVi 
                                   ? "Thiết lập quy chuẩn hóa hoạt động, lập biên bản vận hành SOP và giám sát kết quả thực tế hàng ngày."
                                   : "Standardized through Standard Operating Procedures (SOPs) with daily outcome monitoring."}
@@ -2377,7 +2408,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <FolderKanban className="w-4 h-4 shrink-0" />
                               <span className="truncate text-xs sm:text-sm">{proj}</span>
                             </div>
-                            <p className="text-xs text-slate-500 font-normal leading-relaxed">
+                            <p className="text-body-sm text-slate-500 font-normal">
                               {isVi 
                                 ? `Dự án chiến lược nhằm cải tiến tự động hóa quy trình nghiệp vụ, số hóa cơ sở dữ liệu khách hàng và đồng bộ hóa đa kênh phục vụ.`
                                 : `A strategic initiative centered on workflow automation, customer database digitization, and omnichannel synchronization.`}
@@ -2408,7 +2439,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
                             <div>
                               <span className="font-bold text-slate-800 dark:text-slate-100 block">{cmt}</span>
-                              <span className="text-[11px] text-slate-500 block mt-0.5">
+                              <span className="text-2xs text-slate-500 block mt-0.5">
                                 {isVi 
                                   ? "Cam kết tuân thủ 100% tiêu chuẩn, rà soát chất lượng ghi âm cuộc gọi và quy trình nghiệp vụ ngẫu nhiên định kỳ."
                                   : "Backed by 100% audit strictness, regular random QA evaluations, and thorough performance reviews."}
@@ -2439,7 +2470,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 p-2 flex items-end">
-                                <span className="text-[10px] text-white font-bold truncate">
+                                <span className="text-3xs text-white font-bold truncate">
                                   {photo.title || `Photo ${pIdx + 1}`}
                                 </span>
                               </div>
@@ -2447,7 +2478,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           ))}
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-500 text-center py-6">{isVi ? "Không có hình ảnh tư liệu cho cột mốc này." : "No visual records stored for this milestone."}</p>
+                        <p className="text-caption text-slate-500 text-center py-6">{isVi ? "Không có hình ảnh tư liệu cho cột mốc này." : "No visual records stored for this milestone."}</p>
                       )}
                     </div>
                   </div>
@@ -2481,7 +2512,6 @@ export default function Experience() {
   const [timelineScale, setTimelineScale] = useState<number>(1);
   const [isAutoScale, setIsAutoScale] = useState<boolean>(true);
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [layoutMode, setLayoutMode] = useState<"masonry" | "list">("masonry");
   const timelineWrapperRef = React.useRef<HTMLDivElement>(null);
   
   // Interactive Modals & Drawers
@@ -2598,14 +2628,14 @@ export default function Experience() {
             {/* KPIs Card */}
             {item.kpis && item.kpis.length > 0 && (
               <div className="space-y-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 transition-all">
-                <h4 className="text-[11px] font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                <h4 className="text-2xs font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{isVi ? "Chỉ số hiệu quả hoạt động (KPIs)" : "Key performance indicators"}</span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {item.kpis.map((kpi, idx) => (
                     <div key={idx} className="p-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800/80 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold">
+                      <div className="flex items-center justify-between text-2xs font-semibold">
                         <span className="text-slate-700 dark:text-slate-300 truncate max-w-[80%]">{kpi.label}</span>
                         <span className="text-emerald-600 dark:text-emerald-400 font-black shrink-0">{kpi.percent}%</span>
                       </div>
@@ -2624,7 +2654,7 @@ export default function Experience() {
             {/* Tasks Card */}
             {item.tasks && item.tasks.length > 0 && (
               <div className="space-y-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 transition-all">
-                <h4 className="text-[11px] font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                <h4 className="text-2xs font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
                   <span>{isVi ? "Nhiệm vụ & trách nhiệm chính" : "Key responsibilities & tasks"}</span>
                 </h4>
@@ -2642,7 +2672,7 @@ export default function Experience() {
             {/* Key Projects Card */}
             {item.projects && item.projects.length > 0 && (
               <div className="space-y-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 transition-all">
-                <h4 className="text-[11px] font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                <h4 className="text-2xs font-extrabold text-slate-600 dark:text-slate-400 tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-slate-200 dark:border-slate-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
                   <span>{isVi ? "Dự án tiêu biểu" : "Notable projects"}</span>
                 </h4>
@@ -2667,67 +2697,16 @@ export default function Experience() {
       id="experience"
       className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
     >
-      {/* Tiêu đề thẻ cho thẻ chính */}
-      <div className="w-full shrink-0 flex flex-col gap-1 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-        {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          <div className="flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-            <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-          </div>
-          <h2 className="text-base sm:text-lg lg:text-xl font-black tracking-tight text-blue-600 dark:text-blue-400">
-            {isVi ? "Hành trình phát triển sự nghiệp" : "Career development journey"}
-          </h2>
-        </div>
-
-        {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-        <div className="h-[2px] w-full bg-blue-500/30 dark:bg-blue-500/20 my-0.5" />
-
-        {/* Dòng 4 : Huy hiệu và chỉ báo phân mục */}
-        <div className="flex flex-wrap items-center justify-between gap-1.5 pt-0.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-500/10 dark:bg-blue-400/10 text-blue-700 dark:text-blue-400 rounded-full text-[11px] font-bold w-fit border border-blue-500/20 shadow-2xs">
-            <Target className="w-3 h-3" />
+      {/* Header Card Kinh nghiệm (Caption / Label: 12px – 13px) */}
+      <PageCardHeader pageId="experience">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
+          <span className="text-caption font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
+            <Target className="w-3.5 h-3.5" />
             <span>{isVi ? "Từ vận hành đến quản trị cấp cao" : "From hands-on operations to senior management"}</span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {/* Accessibility Layout Switcher */}
-            <div className="inline-flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
-              <button
-                type="button"
-                onClick={() => setLayoutMode("masonry")}
-                className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase transition-all cursor-pointer",
-                  layoutMode === "masonry"
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                    : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
-                )}
-                title={isVi ? "Bố cục nghệ thuật Masonry" : "Artistic Masonry Layout"}
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span>{isVi ? "Bố cục Masonry" : "Masonry Layout"}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setLayoutMode("list")}
-                className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase transition-all cursor-pointer",
-                  layoutMode === "list"
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                    : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
-                )}
-                title={isVi ? "Bố cục Danh sách Tiếp cận" : "Accessible List View"}
-              >
-                <List className="w-3.5 h-3.5" />
-                <span>{isVi ? "Danh sách dọc" : "Vertical List"}</span>
-              </button>
-            </div>
-
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
-              {isVi ? "9 Cột mốc thực chiến" : "9 Milestones"}
-            </span>
-          </div>
+          </span>
         </div>
-      </div>
+      </PageCardHeader>
 
       <TimelineRoadmapView
         isVi={isVi}
@@ -2741,7 +2720,6 @@ export default function Experience() {
         setIsAutoScale={setIsAutoScale}
         timelineWrapperRef={timelineWrapperRef}
         getGalleryPhotosForMilestone={getGalleryPhotosForMilestone}
-        layoutMode={layoutMode}
       />
 
       {/* ================= 4. MILESTONE FULL REPORT MODAL ================= */}
@@ -2755,10 +2733,10 @@ export default function Experience() {
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200">
             <div 
               className={cn(
-                "relative w-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-[20px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
+                "relative w-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-[10px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
                 isDetailModalFullscreen 
-                  ? "h-full max-h-[96vh] rounded-[20px]" 
-                  : "h-auto max-h-[88vh] rounded-[20px]"
+                  ? "h-full max-h-[96vh] rounded-[10px]" 
+                  : "h-auto max-h-[88vh] rounded-[10px]"
               )}
             >
               
@@ -2772,10 +2750,10 @@ export default function Experience() {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10px] sm:text-xs font-mono font-black">
+                      <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-3xs sm:text-xs font-mono font-black">
                         #{String(milestoneNumber).padStart(2, "0")} / {String(totalMilestones).padStart(2, "0")}
                       </span>
-                      <span className="text-[11px] sm:text-xs text-blue-600 dark:text-blue-400 font-bold">
+                      <span className="text-2xs sm:text-xs text-blue-600 dark:text-blue-400 font-bold">
                         {selectedMilestoneForDetail.period}
                       </span>
                     </div>
@@ -2798,7 +2776,7 @@ export default function Experience() {
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
-                    <span className="text-[11px] font-mono font-bold px-1 text-slate-600 dark:text-slate-400">
+                    <span className="text-2xs font-mono font-bold px-1 text-slate-600 dark:text-slate-400">
                       {milestoneNumber}/{totalMilestones}
                     </span>
                     <button
@@ -2841,7 +2819,21 @@ export default function Experience() {
               <div className="p-4 sm:p-6 md:p-8 space-y-6 overflow-y-auto flex-1 custom-scrollbar text-left">
                 
                 {/* Detailed Job Card inside Modal */}
-                <div className="rounded-[20px] bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 shadow-xl relative overflow-hidden text-left">
+                <div className="rounded-[10px] bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 shadow-xl relative overflow-hidden text-left">
+                  {/* Job Banner inside Modal */}
+                  {selectedMilestoneForDetail.bannerUrl && (
+                    <div className="w-full h-36 sm:h-48 md:h-60 rounded-xl overflow-hidden relative shadow-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 group/modal-banner -mt-1 mb-2">
+                      <img
+                        src={selectedMilestoneForDetail.bannerUrl}
+                        alt={`${selectedMilestoneForDetail.company} Banner`}
+                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/modal-banner:scale-105"
+                        referrerPolicy="no-referrer"
+                        loading="eager"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                  )}
+
                   {/* Job Card Top Bar */}
                   <div className="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -2884,7 +2876,7 @@ export default function Experience() {
 
                   {/* Role Title */}
                   <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-transparent border border-blue-500/20">
-                    <span className="text-[10px] font-bold tracking-wider text-slate-500 dark:text-slate-400 block mb-0.5">
+                    <span className="text-3xs font-bold tracking-wider text-slate-500 dark:text-slate-400 block mb-0.5">
                       {isVi ? "Vị trí đảm nhận" : "Position & title"}
                     </span>
                     <h2 className="text-base sm:text-xl font-black text-slate-900 dark:text-white leading-tight">
@@ -2893,7 +2885,7 @@ export default function Experience() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  <p className="text-body text-slate-600 dark:text-slate-300 font-normal">
                     {selectedMilestoneForDetail.cardDescription || selectedMilestoneForDetail.highlightText}
                   </p>
 
@@ -2903,7 +2895,7 @@ export default function Experience() {
                       {selectedMilestoneForDetail.cardTags.map((tagText, tagIdx) => (
                         <span 
                           key={tagIdx}
-                          className="px-2.5 sm:px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap"
+                          className="px-2.5 sm:px-3 py-1 rounded-full text-2xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap"
                         >
                           {tagText}
                         </span>
@@ -2915,7 +2907,7 @@ export default function Experience() {
                 {/* 4-Card Quick Metrics Grid */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
                   <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
                       {isVi ? "Thời gian làm việc" : "Timeline"}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-blue-600 dark:text-blue-400 mt-0.5 block">
@@ -2923,7 +2915,7 @@ export default function Experience() {
                     </span>
                   </div>
                   <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
                       {isVi ? "Quy mô quản lý" : "Team Scale"}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 mt-0.5 block">
@@ -2931,7 +2923,7 @@ export default function Experience() {
                     </span>
                   </div>
                   <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
                       {isVi ? "Lĩnh vực chuyên môn" : "Domain Focus"}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-purple-600 dark:text-purple-400 mt-0.5 block truncate">
@@ -2939,7 +2931,7 @@ export default function Experience() {
                     </span>
                   </div>
                   <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
                       {isVi ? "Hình ảnh tư liệu" : "Photo Records"}
                     </span>
                     <span className="text-xs sm:text-sm font-black text-pink-600 dark:text-pink-400 mt-0.5 block">
@@ -3004,7 +2996,7 @@ export default function Experience() {
                     </h4>
                     <div className="grid grid-cols-1 gap-2.5">
                       {selectedMilestoneForDetail.tasks.map((task, idx) => (
-                        <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xs">
+                        <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-300 p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xs">
                           <Check className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                           <span>{task}</span>
                         </div>
@@ -3065,7 +3057,7 @@ export default function Experience() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
-                            <span className="text-[10px] text-white font-bold truncate">
+                            <span className="text-3xs text-white font-bold truncate">
                               {photo.title || `Photo ${pIdx + 1}`}
                             </span>
                           </div>
@@ -3191,7 +3183,7 @@ export default function Experience() {
               {/* Caption & Thumbnail Strip */}
               <div className="p-4 border-t border-slate-800 bg-slate-900/90 space-y-3">
                 {currentPhoto && (
-                  <p className="text-xs sm:text-sm font-medium text-slate-300 text-center">
+                  <p className="text-caption font-medium text-slate-300 text-center">
                     {currentPhoto.title || currentPhoto.description || selectedMilestoneForGallery.highlightText}
                   </p>
                 )}

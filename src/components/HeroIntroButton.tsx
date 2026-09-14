@@ -273,7 +273,7 @@ export const HeroIntroButton: React.FC<HeroIntroButtonProps> = ({
             </>
           ) : (
             <>
-              <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-black text-xs sm:text-sm text-white font-sans truncate">
+              <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-bold text-[16px] text-button text-white font-play truncate">
                 {isVi ? "Giới thiệu" : "Introduction"}
               </span>
               <SparkleWithPlusDot className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />

@@ -31,7 +31,7 @@ import { CaseStudy3_4_Tools } from "./CaseStudy3_4_Tools";
 
 export function CaseStudy3_4_Sections({ project }: { project: ProjectCard }) {
   return (
-    <div id="article-section" className="space-y-[15px] md:space-y-[20px] flex flex-col gap-[15px] md:gap-[20px] animate-fadeIn">
+    <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 animate-fadeIn">
       {/* SECTION 01: BỐI CẢNH & VẤN ĐỀ */}
       <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-sky-100 dark:border-sky-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300">
         <div className="flex items-center gap-2">

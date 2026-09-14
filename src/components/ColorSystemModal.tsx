@@ -94,11 +94,11 @@ export const ColorSystemModal: React.FC = () => {
                   <h2 className="text-base sm:text-lg font-black tracking-tight">
                     {isVi ? "Hệ Thống Màu Sắc & Design Tokens" : "Color System & Design Tokens"}
                   </h2>
-                  <span className="text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-md bg-[var(--color-primary)] text-white shadow-xs">
+                  <span className="text-3xs uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-md bg-[var(--color-primary)] text-white shadow-xs">
                     {isDark ? "Dark Neon Glass" : "Light Glass"}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <p className="text-body-sm text-slate-500 dark:text-slate-400 font-medium">
                   {isDark 
                     ? (isVi ? "5 màu chủ đạo tối tân: Electric Blue, Cyan, Violet, Magenta, Green" : "5 Cyber Neon Tokens: Electric Blue, Cyan, Violet, Magenta, Green")
                     : (isVi ? "5 màu chủ đạo thanh lịch: Primary Blue, Indigo, Cyan, Violet, Sky" : "5 Premium Tokens: Primary Blue, Indigo, Cyan, Violet, Sky")}
@@ -183,7 +183,7 @@ export const ColorSystemModal: React.FC = () => {
                         {isVi ? "Chọn Nhóm Màu Sắc (Color Preset):" : "Choose Color Preset:"}
                       </span>
                     </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                    <span className="text-3xs text-slate-500 dark:text-slate-400">
                       {isVi ? "Thay đổi đồng bộ toàn hệ thống UI" : "Syncs across the entire UI"}
                     </span>
                   </div>
@@ -216,10 +216,10 @@ export const ColorSystemModal: React.FC = () => {
                             {isSelected && <Check className="w-3.5 h-3.5 text-[var(--color-primary)]" />}
                           </div>
                           <div className="space-y-0.5">
-                            <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate block">
+                            <span className="text-2xs font-bold text-slate-800 dark:text-slate-200 truncate block">
                               {isVi ? preset.nameVi : preset.name}
                             </span>
-                            <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate block">
+                            <span className="text-3xs font-mono text-slate-500 dark:text-slate-400 truncate block">
                               {preset.descriptionVi}
                             </span>
                           </div>
@@ -236,11 +236,11 @@ export const ColorSystemModal: React.FC = () => {
                       <span className="text-xs font-black uppercase tracking-wider text-[var(--color-primary)]">
                         {isDark ? "Theme: Dark Neon Glass" : "Theme: Light Glass"}
                       </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                      <span className="text-3xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
                         Đúng 5 Màu Chuẩn
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
+                    <p className="text-body-sm text-slate-600 dark:text-slate-300 font-medium">
                       {isDark
                         ? (isVi ? "Phong cách: Dark, Futuristic, AI Cyber, Neon Glass glow vừa phải." : "Style: Dark, Futuristic, AI Cyber, Controlled Neon Glass glow.")
                         : (isVi ? "Phong cách: Bright, Clean, Premium, Apple-like, Soft Glass tinh tế." : "Style: Bright, Clean, Premium, Apple-like, Refined Soft Glass.")}
@@ -268,10 +268,10 @@ export const ColorSystemModal: React.FC = () => {
                           className="w-full h-20 rounded-xl relative overflow-hidden flex items-end justify-between p-2 shadow-inner border border-white/20"
                           style={{ backgroundColor: color.hex }}
                         >
-                          <span className="text-[10px] font-black font-mono text-white px-1.5 py-0.5 rounded bg-black/40 backdrop-blur-xs">
+                          <span className="text-3xs font-black font-mono text-white px-1.5 py-0.5 rounded bg-black/40 backdrop-blur-xs">
                             #{index + 1}
                           </span>
-                          <span className="text-[11px] font-black font-mono text-white px-2 py-0.5 rounded bg-black/50 backdrop-blur-xs">
+                          <span className="text-2xs font-black font-mono text-white px-2 py-0.5 rounded bg-black/50 backdrop-blur-xs">
                             {color.hex}
                           </span>
                         </div>
@@ -281,10 +281,10 @@ export const ColorSystemModal: React.FC = () => {
                           <h3 className="text-xs font-black tracking-tight text-slate-900 dark:text-white">
                             {color.name}
                           </h3>
-                          <div className="text-[11px] font-semibold text-[var(--color-primary)] font-mono">
+                          <div className="text-2xs font-semibold text-[var(--color-primary)] font-mono">
                             {color.variable}
                           </div>
-                          <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 pt-0.5">
+                          <p className="text-caption text-slate-600 dark:text-slate-400 line-clamp-2 pt-0.5">
                             {isVi ? color.roleVi : color.role}
                           </p>
                         </div>
@@ -294,7 +294,7 @@ export const ColorSystemModal: React.FC = () => {
                       <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-1">
                         <button
                           onClick={() => handleCopy(color.hex, `${color.id}-hex`)}
-                          className="flex-1 py-1 px-1.5 text-[10px] font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors flex items-center justify-center gap-1"
+                          className="flex-1 py-1 px-1.5 text-3xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors flex items-center justify-center gap-1"
                           title="Sao chép mã màu Hex"
                         >
                           {copiedToken === `${color.id}-hex` ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
@@ -302,7 +302,7 @@ export const ColorSystemModal: React.FC = () => {
                         </button>
                         <button
                           onClick={() => handleCopy(`var(${color.variable})`, `${color.id}-var`)}
-                          className="flex-1 py-1 px-1.5 text-[10px] font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors flex items-center justify-center gap-1"
+                          className="flex-1 py-1 px-1.5 text-3xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors flex items-center justify-center gap-1"
                           title="Sao chép biến CSS"
                         >
                           {copiedToken === `${color.id}-var` ? <Check className="w-3 h-3 text-emerald-500" /> : <Code2 className="w-3 h-3" />}
@@ -322,15 +322,15 @@ export const ColorSystemModal: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                     <div className="p-2.5 rounded-xl bg-white/60 dark:bg-slate-800/40 border border-slate-200/50 dark:border-white/5">
                       <span className="font-bold text-slate-900 dark:text-white">60% Neutral & Background</span>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Màu nền dịu mắt, bề mặt canvas tối ưu thị giác.</p>
+                      <p className="text-caption text-slate-500 dark:text-slate-400 mt-0.5">Màu nền dịu mắt, bề mặt canvas tối ưu thị giác.</p>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white/60 dark:bg-slate-800/40 border border-slate-200/50 dark:border-white/5">
                       <span className="font-bold text-slate-900 dark:text-white">30% Glass & Surface</span>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Khối kính mờ, backdrop blur, viền mờ 1px specular.</p>
+                      <p className="text-caption text-slate-500 dark:text-slate-400 mt-0.5">Khối kính mờ, backdrop blur, viền mờ 1px specular.</p>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white/60 dark:bg-slate-800/40 border border-slate-200/50 dark:border-white/5">
                       <span className="font-bold text-[var(--color-primary)]">10% Brand Tokens</span>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">5 màu chủ đạo phân bổ chuẩn vai trò, không lạm dụng.</p>
+                      <p className="text-caption text-slate-500 dark:text-slate-400 mt-0.5">5 màu chủ đạo phân bổ chuẩn vai trò, không lạm dụng.</p>
                     </div>
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export const ColorSystemModal: React.FC = () => {
                     <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                       1. Standard Buttons (Primary & Secondary)
                     </h3>
-                    <span className="text-[10px] font-mono text-slate-500">PrimaryButton.tsx</span>
+                    <span className="text-3xs font-mono text-slate-500">PrimaryButton.tsx</span>
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
                     <PrimaryButton icon={<MousePointerClick className="w-4 h-4" />}>
@@ -383,19 +383,19 @@ export const ColorSystemModal: React.FC = () => {
                       </h3>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(var(--color-accent-rgb),0.15)] text-[var(--color-accent)] border border-[rgba(var(--color-accent-rgb),0.3)]">
+                      <span className="px-2.5 py-0.5 rounded-full text-3xs font-bold bg-[rgba(var(--color-accent-rgb),0.15)] text-[var(--color-accent)] border border-[rgba(var(--color-accent-rgb),0.3)]">
                         Accent Cyan
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(var(--color-highlight-rgb),0.15)] text-[var(--color-highlight)] border border-[rgba(var(--color-highlight-rgb),0.3)]">
+                      <span className="px-2.5 py-0.5 rounded-full text-3xs font-bold bg-[rgba(var(--color-highlight-rgb),0.15)] text-[var(--color-highlight)] border border-[rgba(var(--color-highlight-rgb),0.3)]">
                         Highlight Violet
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(var(--color-soft-rgb),0.15)] text-[var(--color-soft)] border border-[rgba(var(--color-soft-rgb),0.3)]">
+                      <span className="px-2.5 py-0.5 rounded-full text-3xs font-bold bg-[rgba(var(--color-soft-rgb),0.15)] text-[var(--color-soft)] border border-[rgba(var(--color-soft-rgb),0.3)]">
                         Soft Status
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-600 dark:text-slate-300">
                     Khối Glass UI với hiệu ứng tán xạ ánh sáng, viền specular mỏng nhẹ và chiều sâu tự nhiên. Bề mặt tự thích ứng hoàn toàn giữa chế độ sáng & tối Neon.
                   </p>
 
@@ -417,7 +417,7 @@ export const ColorSystemModal: React.FC = () => {
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                      <label className="text-2xs font-bold text-slate-700 dark:text-slate-300">
                         {isVi ? "Ô nhập liệu với Focus State chuẩn Token" : "Sample Input with Token Focus"}
                       </label>
                       <input
@@ -427,7 +427,7 @@ export const ColorSystemModal: React.FC = () => {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                      <label className="text-2xs font-bold text-slate-700 dark:text-slate-300">
                         {isVi ? "Thanh tiến độ (Progress Token)" : "Progress Bar Token"}
                       </label>
                       <div className="h-[34px] flex items-center">
@@ -460,7 +460,7 @@ export const ColorSystemModal: React.FC = () => {
                   </button>
                 </div>
 
-                <pre className="p-4 rounded-2xl bg-slate-950 text-slate-200 font-mono text-[11px] sm:text-xs overflow-x-auto border border-slate-800 leading-relaxed shadow-inner">
+                <pre className="p-4 rounded-2xl bg-slate-950 text-slate-200 font-mono text-2xs sm:text-xs overflow-x-auto border border-slate-800 leading-relaxed shadow-inner">
                   {isDark ? `/* DARK NEON GLASS — 5 MÀU CHỦ ĐẠO (Futuristic, AI, Cyber, Premium) */
 [data-theme="dark"],
 [data-theme="glass-dark-neon"],

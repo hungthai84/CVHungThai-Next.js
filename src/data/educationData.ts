@@ -41,8 +41,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2024",
     type: "tech",
     image: "https://i.ibb.co/ch0b9mfY/Thi-t-k-website.png",
-    courseImg: "https://i.ibb.co/Z6G0SmwN/Thi-t-k-Website.png",
-    certImg: "https://i.ibb.co/JRm9qQbC/Thi-t-k-Website.png",
+    courseImg: "https://i.ibb.co/ch0b9mfY/Thi-t-k-website.png",
+    certImg: "https://i.ibb.co/ch0b9mfY/Thi-t-k-website.png",
     speakerImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
     desc: "Được trang bị kiến thức về phát triển website hiện đại với HTML5, CSS3, JavaScript, PHP và C++, đồng thời nâng cao kỹ năng thiết kế giao diện Responsive, tối ưu trải nghiệm người dùng (UI/UX) và ứng dụng AI trong phát triển website.",
     learned: [
@@ -68,7 +68,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#WebDesign", "#Frontend", "#UIUX", "#TailwindCSS", "#TypeScript", "#Responsive", "#AIIntegration"],
     gallery: [
       "https://i.ibb.co/ch0b9mfY/Thi-t-k-website.png",
-      "https://i.ibb.co/JRm9qQbC/Thi-t-k-Website.png",
       "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=600&q=80"
     ],
@@ -80,12 +79,11 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     id: 2,
     title: "Phân tích Dữ liệu Big Data",
     subtitle: "Phát triển chuyên môn",
-    major: "Phân tích Big Data & BI",
     year: "Năm 2019",
     type: "tech",
     image: "https://i.ibb.co/tMsL6zYH/Ph-n-t-ch-d-li-u.png",
-    courseImg: "https://i.ibb.co/bj6CYy2L/Ph-n-t-ch-d-li-u.png",
-    certImg: "https://i.ibb.co/cKyZRpCt/Ph-n-t-ch-d-li-u.png",
+    courseImg: "https://i.ibb.co/tMsL6zYH/Ph-n-t-ch-d-li-u.png",
+    certImg: "https://i.ibb.co/tMsL6zYH/Ph-n-t-ch-d-li-u.png",
     speakerImg: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển năng lực phân tích dữ liệu lớn, trực quan hóa dữ liệu và xây dựng hệ thống KPI/Dashboard nhằm hỗ trợ quản trị, nhận diện xu hướng khách hàng và ra quyết định dựa trên dữ liệu.",
     learned: [
@@ -117,7 +115,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#BigData", "#DataAnalytics", "#DataDriven", "#KPI", "#Dashboard", "#BusinessIntelligence", "#CustomerAnalytics", "#DataDrivenManagement"],
     gallery: [
       "https://i.ibb.co/tMsL6zYH/Ph-n-t-ch-d-li-u.png",
-      "https://i.ibb.co/cKyZRpCt/Ph-n-t-ch-d-li-u.png",
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
     ],
@@ -133,8 +130,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2017",
     type: "management",
     image: "https://i.ibb.co/zhGPcgVM/Quan-l-rui-ro.png",
-    courseImg: "https://i.ibb.co/d48JsC4S/Quan-l-rui-ro.png",
-    certImg: "https://i.ibb.co/nN5wcyDy/Qu-n-l-r-i-ro.png",
+    courseImg: "https://i.ibb.co/zhGPcgVM/Quan-l-rui-ro.png",
+    certImg: "https://i.ibb.co/zhGPcgVM/Quan-l-rui-ro.png",
     speakerImg: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển năng lực nhận diện, đánh giá, kiểm soát và ứng phó với rủi ro trong hoạt động vận hành và dự án, hướng đến tư duy quản trị chủ động và phòng ngừa.",
     learned: [
@@ -164,7 +161,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#RiskManagement", "#RiskAssessment", "#RiskMatrix", "#RiskControl", "#RiskPrevention", "#BusinessRisk", "#OperationalRisk"],
     gallery: [
       "https://i.ibb.co/zhGPcgVM/Quan-l-rui-ro.png",
-      "https://i.ibb.co/nN5wcyDy/Qu-n-l-r-i-ro.png",
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80"
     ],
@@ -180,8 +176,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2016",
     type: "management",
     image: "https://i.ibb.co/nq6921Zf/Qu-n-l-d-n.png",
-    courseImg: "https://i.ibb.co/ZpBZTHjD/Qu-n-l-d-n.png",
-    certImg: "https://i.ibb.co/4ZBDkbHp/Qu-n-l-d-n.png",
+    courseImg: "https://i.ibb.co/nq6921Zf/Qu-n-l-d-n.png",
+    certImg: "https://i.ibb.co/nq6921Zf/Qu-n-l-d-n.png",
     speakerImg: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80",
     desc: "Trang bị năng lực lập kế hoạch, điều phối nguồn lực, kiểm soát tiến độ, chi phí, chất lượng và rủi ro nhằm triển khai dự án hiệu quả trong môi trường đa phòng ban.",
     learned: [
@@ -213,8 +209,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#ProjectManagement", "#ProjectPlanning", "#PMO", "#ProjectCoordination", "#RiskManagement", "#StakeholderManagement", "#DigitalTransformation", "#CRM"],
     gallery: [
       "https://i.ibb.co/nq6921Zf/Qu-n-l-d-n.png",
-      "https://i.ibb.co/DH9qKGJ2/Qu-n-l-d-n.png",
-      "https://i.ibb.co/4ZBDkbHp/Qu-n-l-d-n.png",
       "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "briefcase",
@@ -229,8 +223,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2015",
     type: "management",
     image: "https://i.ibb.co/ymVcsfvC/Qu-n-l-c-p-cao.png",
-    courseImg: "https://i.ibb.co/LdvTgHdt/Qu-n-l-c-p-cao.png",
-    certImg: "https://i.ibb.co/zT5MVFmt/Qu-n-l-c-p-cao.png",
+    courseImg: "https://i.ibb.co/ymVcsfvC/Qu-n-l-c-p-cao.png",
+    certImg: "https://i.ibb.co/ymVcsfvC/Qu-n-l-c-p-cao.png",
     speakerImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển năng lực lãnh đạo, quản trị chiến lược, xây dựng đội ngũ và ra quyết định, hướng tới khả năng điều hành các bộ phận và tổ chức có quy mô lớn.",
     learned: [
@@ -262,8 +256,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#Leadership", "#SeniorManagement", "#StrategicManagement", "#TeamLeadership", "#ChangeManagement", "#DecisionMaking", "#PeopleManagement"],
     gallery: [
       "https://i.ibb.co/ymVcsfvC/Qu-n-l-c-p-cao.png",
-      "https://i.ibb.co/qYxHgVYs/Qu-n-l-c-p-cao.png",
-      "https://i.ibb.co/zT5MVFmt/Qu-n-l-c-p-cao.png",
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "award",
@@ -278,8 +270,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2014",
     type: "management",
     image: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
-    courseImg: "https://i.ibb.co/zh13J5nw/Qu-n-l-c-p-trung.png",
-    certImg: "https://i.ibb.co/v6JvfyR4/Qu-n-l-c-p-trung.png",
+    courseImg: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
+    certImg: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
     speakerImg: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển kỹ năng quản lý đội nhóm, phân công công việc, giám sát hiệu suất, coaching và đào tạo nhân viên trong môi trường vận hành thực tế.",
     learned: [
@@ -310,8 +302,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#MiddleManagement", "#TeamManagement", "#Coaching", "#Mentoring", "#KPI", "#Teamwork", "#PeopleDevelopment"],
     gallery: [
       "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
-      "https://i.ibb.co/d0SNgcWy/Qu-n-l-c-p-trung.png",
-      "https://i.ibb.co/v6JvfyR4/Qu-n-l-c-p-trung.png",
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "users",
@@ -326,9 +316,9 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2013",
     type: "management",
     image: "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
-    courseImg: "https://i.ibb.co/TDD9zdST/o-t-o-Thuy-t-tr-nh.png",
-    certImg: "https://i.ibb.co/GQ3gFt3S/Thuy-t-tr-nh.png",
-    certImg2: "https://i.ibb.co/p6J0BqTb/o-t-o.png",
+    courseImg: "https://i.ibb.co/GQVw12Vb/o-t-o.png",
+    certImg: "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
+    certImg2: "https://i.ibb.co/GQVw12Vb/o-t-o.png",
     speakerImg: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển năng lực xây dựng chương trình đào tạo, thiết kế nội dung, thuyết trình và chuyển hóa kinh nghiệm thực tế thành kiến thức có thể đào tạo cho đội ngũ.",
     learned: [
@@ -357,8 +347,7 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#Training", "#Presentation", "#Trainer", "#PublicSpeaking", "#LearningDevelopment", "#CustomerServiceTraining"],
     gallery: [
       "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
-      "https://i.ibb.co/GQ3gFt3S/Thuy-t-tr-nh.png",
-      "https://i.ibb.co/p6J0BqTb/o-t-o.png",
+      "https://i.ibb.co/GQVw12Vb/o-t-o.png",
       "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80"
     ],
     icon: "presentation",
@@ -372,9 +361,9 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     major: "Phỏng vấn & Đánh giá Năng lực",
     year: "Năm 2013",
     type: "management",
-    image: "https://i.ibb.co/jkHkZ1pd/Ph-ng-v-n.png",
-    courseImg: "https://i.ibb.co/q3Fk9RXh/Ph-ng-v-n.png",
-    certImg: "https://i.ibb.co/0RhVggb5/Ph-ng-v-n.png",
+    image: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
+    courseImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
+    certImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
     speakerImg: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
     desc: "Phát triển năng lực tham gia tuyển dụng, xây dựng tiêu chí đánh giá và phỏng vấn nhằm lựa chọn nhân sự phù hợp với yêu cầu công việc và văn hóa đội ngũ.",
     learned: [
@@ -402,9 +391,7 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     ],
     hashtags: ["#Recruitment", "#InterviewSkills", "#TalentAcquisition", "#CandidateAssessment", "#PeopleManagement", "#Hiring"],
     gallery: [
-      "https://i.ibb.co/jkHkZ1pd/Ph-ng-v-n.png",
-      "https://i.ibb.co/W4pgFcq7/Ph-ng-v-n.png",
-      "https://i.ibb.co/0RhVggb5/Ph-ng-v-n.png",
+      "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
       "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "user-check",
@@ -419,8 +406,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2007",
     type: "tech",
     image: "https://i.ibb.co/YBWVsjDs/C-nh-n-CNTT.png",
-    courseImg: "https://i.ibb.co/tpNF0Bqw/C-nh-n-CNTT.png",
-    certImg: "https://i.ibb.co/m5YgnJ9r/C-nh-n-CNTT.png",
+    courseImg: "https://i.ibb.co/YBWVsjDs/C-nh-n-CNTT.png",
+    certImg: "https://i.ibb.co/YBWVsjDs/C-nh-n-CNTT.png",
     speakerImg: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600&q=80",
     desc: "Nền tảng học thuật về Công nghệ Thông tin, giúp hình thành tư duy hệ thống, phân tích nghiệp vụ và khả năng kết nối giữa công nghệ với hoạt động quản trị doanh nghiệp.",
     learned: [
@@ -451,7 +438,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#InformationTechnology", "#IT", "#SoftwareDevelopment", "#Database", "#SystemAnalysis", "#SystemDesign", "#Technology", "#DigitalTransformation"],
     gallery: [
       "https://i.ibb.co/YBWVsjDs/C-nh-n-CNTT.png",
-      "https://i.ibb.co/m5YgnJ9r/C-nh-n-CNTT.png",
       "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80"
     ],
@@ -467,8 +453,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2007",
     type: "management",
     image: "https://i.ibb.co/49h4XHh/T-ng-i-vi-n-Mobifone.png",
-    courseImg: "https://i.ibb.co/cX8KThxQ/T-ng-i-vi-n-Mobifone.png",
-    certImg: "https://i.ibb.co/vCKQGYB2/T-ng-i-vi-n-Mobifone.png",
+    courseImg: "https://i.ibb.co/49h4XHh/T-ng-i-vi-n-Mobifone.png",
+    certImg: "https://i.ibb.co/49h4XHh/T-ng-i-vi-n-Mobifone.png",
     speakerImg: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
     desc: "Nền tảng chuyên môn đầu tiên trong lĩnh vực Contact Center, trực tiếp hình thành kỹ năng giao tiếp, lắng nghe, xử lý vấn đề và chăm sóc khách hàng qua điện thoại.",
     learned: [
@@ -500,8 +486,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#ContactCenter", "#CallCenter", "#CustomerService", "#CustomerExperience", "#Telecom", "#CallCenterOperations", "#CustomerCare"],
     gallery: [
       "https://i.ibb.co/49h4XHh/T-ng-i-vi-n-Mobifone.png",
-      "https://i.ibb.co/2YM0K35d/T-ng-i-vi-n-Mobifone.png",
-      "https://i.ibb.co/vCKQGYB2/T-ng-i-vi-n-Mobifone.png",
       "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "phone-call",
@@ -516,8 +500,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2006",
     type: "tech",
     image: "https://i.ibb.co/chHTpBJL/CCNA.png",
-    courseImg: "https://i.ibb.co/DPVsnrfj/CCNA.png",
-    certImg: "https://i.ibb.co/jZr4051t/CCNA.png",
+    courseImg: "https://i.ibb.co/chHTpBJL/CCNA.png",
+    certImg: "https://i.ibb.co/chHTpBJL/CCNA.png",
     speakerImg: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80",
     desc: "Trang bị kiến thức nền tảng về mạng máy tính và hạ tầng Cisco, hỗ trợ khả năng hiểu, phân tích và phối hợp xử lý các vấn đề liên quan đến hạ tầng CNTT doanh nghiệp.",
     learned: [
@@ -547,8 +531,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#CCNA", "#Networking", "#Cisco", "#TCPIP", "#Routing", "#Switching", "#NetworkAdministration", "#ITInfrastructure"],
     gallery: [
       "https://i.ibb.co/chHTpBJL/CCNA.png",
-      "https://i.ibb.co/FkxNtH4d/CCNA.png",
-      "https://i.ibb.co/jZr4051t/CCNA.png",
       "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "network",
@@ -563,8 +545,8 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     year: "Năm 2005",
     type: "tech",
     image: "https://i.ibb.co/Jwf4rb4G/MCSA.png",
-    courseImg: "https://i.ibb.co/ZRp6cDRz/MCSA.png",
-    certImg: "https://i.ibb.co/VYMs5kRq/MCSA.png",
+    courseImg: "https://i.ibb.co/Jwf4rb4G/MCSA.png",
+    certImg: "https://i.ibb.co/Jwf4rb4G/MCSA.png",
     speakerImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
     desc: "Trang bị kiến thức quản trị hệ thống Windows Server và hạ tầng CNTT doanh nghiệp, tạo nền tảng kỹ thuật để hiểu sâu hơn về hệ thống ứng dụng và Contact Center.",
     learned: [
@@ -595,8 +577,6 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     hashtags: ["#MCSA", "#WindowsServer", "#SystemAdministration", "#ActiveDirectory", "#ITInfrastructure", "#ServerManagement", "#CyberSecurity"],
     gallery: [
       "https://i.ibb.co/Jwf4rb4G/MCSA.png",
-      "https://i.ibb.co/DPHDw2Pf/MCSA.png",
-      "https://i.ibb.co/VYMs5kRq/MCSA.png",
       "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80"
     ],
     icon: "server",

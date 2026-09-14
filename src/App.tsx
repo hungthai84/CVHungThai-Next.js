@@ -15,8 +15,8 @@ import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
 import OpenLetter from "./components/OpenLetter";
 import About from "./components/About";
+import DomainsSection from "./components/DomainsSection";
 import Education from "./components/Education";
-import Services from "./components/Services";
 import Skills from "./components/Skills";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
@@ -91,7 +91,7 @@ const SECTIONS: SectionMeta[] = [
   { id: "home", labelKey: "nav.home", Icon: Monitor, Component: MemoHero, padding: "p-0 overflow-hidden" },
   { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: OpenLetter, padding: "p-0 overflow-y-auto" },
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
-  { id: "services", labelKey: "nav.services", Icon: Headphones, Component: Services, padding: "p-0 overflow-y-auto" },
+  { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: DomainsSection, padding: "p-0 overflow-y-auto" },
   { id: "skills", labelKey: "nav.skills", Icon: Brain, Component: Skills, padding: "p-0 overflow-y-auto" },
   { id: "education", labelKey: "nav.education", Icon: GraduationCap, Component: Education, padding: "p-0 overflow-y-auto" },
   { id: "experience", labelKey: "nav.experience", Icon: Briefcase, Component: Experience, padding: "p-0 overflow-y-auto" },
@@ -161,6 +161,8 @@ function MainContent() {
       "theme-light",
       "theme-glass-dark-neon",
       "theme-modern-light-glass",
+      "theme-mritech-aurora-glass",
+      "theme-mritech-digital-growth",
       "theme-dark"
     ];
 
@@ -231,7 +233,7 @@ function MainContent() {
       "2": { id: "letter", nameVi: "Thư ngỏ", nameEn: "Open Letter" },
       "3": { id: "about", nameVi: "Giới thiệu", nameEn: "About" },
       "4": { id: "education", nameVi: "Học vấn & Bằng cấp", nameEn: "Education" },
-      "5": { id: "services", nameVi: "Dịch vụ tư vấn & Triển khai", nameEn: "Services" },
+      "5": { id: "skills", nameVi: "Kỹ năng chuyên môn", nameEn: "Skills" },
       "6": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
       "7": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
       "8": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
@@ -355,7 +357,7 @@ function MainContent() {
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full backdrop-blur-2xl rounded-[20px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20",
               isFooterSlidDown 
                 ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
                 : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
@@ -439,7 +441,7 @@ function MainContent() {
               <div key={sec.id} className="relative group/step flex items-center justify-center py-0.5">
                 {/* Tooltip Badge (Slide to the Left with Theme Glassmorphism) */}
                 <div className={cn(
-                  "absolute right-9 px-3 py-1.5 rounded-xl border text-[11px] font-black tracking-wide whitespace-nowrap opacity-0 translate-x-3 scale-95 group-hover/step:opacity-100 group-hover/step:translate-x-0 group-hover/step:scale-100 transition-all duration-200 pointer-events-none flex items-center gap-2 backdrop-blur-md shadow-2xl",
+                  "absolute right-9 px-3 py-1.5 rounded-xl border text-2xs font-black tracking-wide whitespace-nowrap opacity-0 translate-x-3 scale-95 group-hover/step:opacity-100 group-hover/step:translate-x-0 group-hover/step:scale-100 transition-all duration-200 pointer-events-none flex items-center gap-2 backdrop-blur-md shadow-2xl",
                   theme === "glass-dark-neon"
                     ? "bg-slate-950/95 border-indigo-500/40 text-white shadow-indigo-950/50"
                     : "bg-white/95 dark:bg-slate-900/95 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white"
@@ -448,7 +450,7 @@ function MainContent() {
                     <Icon className="w-3.5 h-3.5 animate-pulse" />
                   </div>
                   <span>{t(sec.labelKey)}</span>
-                  <span className="text-[9px] text-blue-600 dark:text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded-md">({idx + 1}/{SECTIONS.length})</span>
+                  <span className="text-3xs text-blue-600 dark:text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded-md">({idx + 1}/{SECTIONS.length})</span>
                 </div>
                 
                 {/* Target Indicator Button with Vertical Bars (Dấu gạch dọc) */}
@@ -514,7 +516,7 @@ function MainContent() {
                 {shortcutToast.key}
               </div>
               <div className="flex flex-col text-left min-w-0">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-cyan-300 flex items-center gap-1">
+                <span className="text-3xs uppercase font-bold tracking-wider text-cyan-300 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
                   {lang === "vi" ? "Phím tắt chuyển trang" : "Shortcut Jump"}
                 </span>
@@ -548,7 +550,7 @@ function MainContent() {
                 <button
                   type="button"
                   onClick={handleScrollReminderClick}
-                  className="relative z-10 px-5 py-2 sm:py-2.5 rounded-full bg-slate-900/90 dark:bg-slate-950/90 border border-white/10 text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-md cursor-pointer flex items-center justify-center gap-1.5"
+                  className="relative z-10 px-5 py-2 sm:py-2.5 rounded-full bg-slate-900/90 dark:bg-slate-950/90 border border-white/10 text-white font-extrabold text-3xs sm:text-xs uppercase tracking-wider backdrop-blur-md cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>

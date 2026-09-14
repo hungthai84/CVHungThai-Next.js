@@ -25,6 +25,7 @@ import {
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { Masonry } from "./Masonry";
+import { PageCardHeader } from "./PageCardHeader";
 
 export interface MemoryPhoto {
   id: string;
@@ -483,7 +484,7 @@ export default function Memories() {
     { id: "ved", labelVi: "VED / Garena (4)", labelEn: "VED / Garena (4)", count: 4 },
     { id: "htvc", labelVi: "HTVC (4)", labelEn: "HTVC (4)", count: 4 },
     { id: "mobifone", labelVi: "MobiFone (3)", labelEn: "MobiFone (3)", count: 3 },
-    { id: "finviet", labelVi: "Finviet / ECO (1)", labelEn: "Finviet / ECO (1)", count: 1 },
+    { id: "finviet", labelVi: "Finviet (1)", labelEn: "Finviet (1)", count: 1 },
   ];
 
   // Filter Photos
@@ -546,64 +547,46 @@ export default function Memories() {
       className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100"
     >
       {/* Main Card Kỷ niệm */}
-      <div className="w-full bg-transparent flex flex-col gap-[15px]">
+      <div className="w-full bg-transparent flex flex-col gap-4">
 
         {/* Container Kỷ niệm - đem nội dung ra ngoài thẻ chứa */}
         <div 
           id="info-card-memories" 
           className="w-full flex flex-col gap-6 relative z-10"
         >
-          {/* Header Card Kỷ niệm (Chuẩn 4 dòng Bento Grid giống format Học vấn) */}
-          <div className="w-full flex flex-col gap-[8px] pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-            {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="flex items-center justify-center text-pink-600 dark:text-pink-400 shrink-0">
-                  <Camera className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-                </div>
-                <h2 className="text-lg sm:text-xl font-black tracking-tight text-pink-600 dark:text-pink-400">
-                  {lang === "vi" ? "Khoảnh khắc kỷ niệm" : "Memories and milestones gallery"}
-                </h2>
-              </div>
+          {/* Header Card Kỷ niệm (Caption / Label: 12px – 13px) */}
+          <PageCardHeader pageId="memories">
+            {/* Thống kê số lượng khoảnh khắc bên trái */}
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-pink-600 dark:bg-pink-400 rounded-full shrink-0" />
+              <span className="text-caption font-mono font-black text-pink-700 dark:text-pink-400 bg-pink-500/15 px-2.5 py-0.5 rounded-full border border-pink-500/30 shadow-2xs">
+                {lang === "vi" ? `Hiển thị ${filteredPhotos.length} khoảnh khắc` : `Displaying ${filteredPhotos.length} moments`}
+              </span>
             </div>
 
-            {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-            <div className="h-[2px] w-full bg-pink-500/30 dark:bg-pink-500/20" />
-
-            {/* Dòng 4 : Bộ lọc tổ chức nằm dưới đường line tiêu đề & Thống kê */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-1 w-full">
-              {/* Thống kê số lượng khoảnh khắc bên trái */}
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-5 bg-pink-600 dark:bg-pink-400 rounded-full shrink-0" />
-                <span className="text-xs font-mono font-black text-pink-700 dark:text-pink-400 bg-pink-500/15 px-2.5 py-0.5 rounded-full border border-pink-500/30 shadow-2xs">
-                  {lang === "vi" ? `Hiển thị ${filteredPhotos.length} khoảnh khắc` : `Displaying ${filteredPhotos.length} moments`}
-                </span>
-              </div>
-
-              {/* Category Filter Pills hoán đổi qua bên phải */}
-              <div className="flex flex-wrap items-center gap-1.5 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs sm:ml-auto">
-                {categories.map((cat) => {
-                  const isActive = selectedCompany === cat.id;
-                  return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedCompany(cat.id);
-                      }}
-                      className={`px-2.5 py-1 rounded-xl text-[11px] font-bold tracking-wide transition-all cursor-pointer active:scale-95 ${
-                        isActive
-                          ? "bg-pink-600 text-white shadow-md shadow-pink-500/30"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                      }`}
-                    >
-                      {lang === "vi" ? cat.labelVi.split(" (")[0] : cat.labelEn.split(" (")[0]}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Category Filter Pills hoán đổi qua bên phải */}
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs sm:ml-auto">
+              {categories.map((cat) => {
+                const isActive = selectedCompany === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCompany(cat.id);
+                    }}
+                    className={`px-3 py-1 rounded-xl text-caption font-bold tracking-wide transition-all cursor-pointer active:scale-95 ${
+                      isActive
+                        ? "bg-pink-600 text-white shadow-md shadow-pink-500/30"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    {lang === "vi" ? cat.labelVi.split(" (")[0] : cat.labelEn.split(" (")[0]}
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </PageCardHeader>
 
           {filteredPhotos.length > 0 ? (
             <Masonry<MemoryPhoto>
@@ -645,7 +628,7 @@ export default function Memories() {
 
                     {/* Top Floating Badges (Trượt xuống khi hover) */}
                     <div className="absolute top-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-[-10px] group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
-                      <span className="px-2.5 py-0.5 rounded-md glass-surface backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-extrabold shadow-sm">
+                      <span className="px-2.5 py-0.5 rounded-md glass-surface backdrop-blur-md text-slate-900 dark:text-white text-3xs font-extrabold shadow-sm">
                         {photo.year}
                       </span>
                       <button
@@ -664,15 +647,15 @@ export default function Memories() {
                     {/* Bottom Floating Info on Hover (Trượt từ dưới lên kèm nội dung chi tiết) */}
                     <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 text-white space-y-1.5">
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border truncate ${photo.tagColor}`}>
+                        <span className={`text-3xs font-extrabold px-2 py-0.5 rounded-md border truncate ${photo.tagColor}`}>
                           {photo.tag}
                         </span>
-                        <span className="text-[10px] font-bold text-slate-300 shrink-0">
+                        <span className="text-3xs font-bold text-slate-300 shrink-0">
                           {photo.year}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-sky-300">
+                      <div className="flex items-center gap-1.5 text-3xs font-bold text-sky-300">
                         <Building2 className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate uppercase tracking-wider">{photo.company}</span>
                       </div>
@@ -681,7 +664,7 @@ export default function Memories() {
                         {photo.title}
                       </h4>
 
-                      <p className="text-[11px] text-slate-200 line-clamp-3 leading-relaxed font-medium">
+                      <p className="text-caption text-slate-200 line-clamp-3 font-medium">
                         {photo.description}
                       </p>
                     </div>
@@ -700,7 +683,7 @@ export default function Memories() {
             <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
               {lang === "vi" ? "Không tìm thấy hình ảnh phù hợp" : "No memories found"}
             </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-body-sm text-slate-500 max-w-sm mx-auto">
               {lang === "vi" 
                 ? `Không có kết quả nào cho "${searchQuery}". Vui lòng thử tìm kiếm với từ khóa khác.` 
                 : `No results matching "${searchQuery}". Please try another keyword.`}
@@ -860,17 +843,17 @@ export default function Memories() {
             top: mouseCoords.y + 18 
           }}
         >
-          <div className="flex items-center gap-1.5 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+          <div className="flex items-center gap-1.5 text-3xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
             <Building2 className="w-3.5 h-3.5" />
             <span>{hoveredPhoto.company}</span>
           </div>
           <h4 className="text-xs font-extrabold text-slate-900 dark:text-white leading-snug">
             {hoveredPhoto.title}
           </h4>
-          <p className="text-[10px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          <p className="text-3xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
             {hoveredPhoto.description}
           </p>
-          <div className="flex items-center justify-between mt-0.5 pt-1.5 border-t border-slate-200 dark:border-white/10 text-[9px] font-bold text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between mt-0.5 pt-1.5 border-t border-slate-200 dark:border-white/10 text-3xs font-bold text-slate-500 dark:text-slate-400">
             <span>Mốc: {hoveredPhoto.year}</span>
             <span className="px-1.5 py-0.5 rounded-md bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/20">{hoveredPhoto.tag}</span>
           </div>

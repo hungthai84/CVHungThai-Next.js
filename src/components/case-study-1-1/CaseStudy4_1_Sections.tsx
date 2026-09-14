@@ -28,7 +28,7 @@ import { CaseStudy4_1_Tools } from "./CaseStudy4_1_Tools";
 
 export function CaseStudy4_1_Sections({ project }: { project: ProjectCard }) {
   return (
-    <div id="article-section" className="space-y-[15px] md:space-y-[20px] flex flex-col gap-[15px] md:gap-[20px] max-w-5xl mx-auto text-slate-800 dark:text-slate-100">
+    <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 max-w-5xl mx-auto text-slate-800 dark:text-slate-100">
       
       {/* SECTION 1: BỐI CẢNH & THÁCH THỨC */}
       <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-sky-100 dark:border-sky-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300">
@@ -276,30 +276,30 @@ export function CaseStudy4_1_Sections({ project }: { project: ProjectCard }) {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50 space-y-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold">Giai đoạn 1</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-3xs font-bold">Giai đoạn 1</span>
             <h3 className="font-bold text-slate-900 dark:text-white text-xs">Khảo Sát & Khung Năng Lực</h3>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400">
+            <p className="text-2xs text-slate-600 dark:text-slate-400">
               Xác định khoảng cách kỹ năng (Skill Gap), chuẩn hóa từ điển năng lực và thiết kế đề cương 5 module.
             </p>
           </div>
           <div className="p-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50 space-y-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold">Giai đoạn 2</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-3xs font-bold">Giai đoạn 2</span>
             <h3 className="font-bold text-slate-900 dark:text-white text-xs">Số Hóa & Triển Khai LMS</h3>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400">
+            <p className="text-2xs text-slate-600 dark:text-slate-400">
               Sản xuất video bài giảng, đóng gói SCORM, triển khai máy chủ LMS và kiểm thử bảo mật người dùng.
             </p>
           </div>
           <div className="p-4 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/50 space-y-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-purple-600 text-white text-[10px] font-bold">Giai đoạn 3</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-purple-600 text-white text-3xs font-bold">Giai đoạn 3</span>
             <h3 className="font-bold text-slate-900 dark:text-white text-xs">Thử Nghiệm & Tích Hợp HR</h3>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400">
+            <p className="text-2xs text-slate-600 dark:text-slate-400">
               Chạy thí điểm cho 2 khóa tân tuyển, hiệu chuẩn nội dung và liên kết tín chỉ học tập với quy chế tăng lương/thăng chức.
             </p>
           </div>
           <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50 space-y-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold">Giai đoạn 4</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-3xs font-bold">Giai đoạn 4</span>
             <h3 className="font-bold text-slate-900 dark:text-white text-xs">Vận Hành Toàn Diện</h3>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400">
+            <p className="text-2xs text-slate-600 dark:text-slate-400">
               Mở rộng 100% phòng ban, thiết lập văn hóa học tập tự nguyện và định kỳ cập nhật bài giảng hàng tháng.
             </p>
           </div>
@@ -375,7 +375,7 @@ export function CaseStudy4_1_Sections({ project }: { project: ProjectCard }) {
               </tr>
             </tbody>
           </table>
-          <div className="p-3 bg-slate-50 dark:bg-slate-900/60 text-[10px] text-slate-500 flex gap-4">
+          <div className="p-3 bg-slate-50 dark:bg-slate-900/60 text-3xs text-slate-500 flex gap-4">
             <span><strong>R:</strong> Responsible (Thực hiện)</span>
             <span><strong>A:</strong> Accountable (Chịu trách nhiệm)</span>
             <span><strong>C:</strong> Consulted (Tham vấn)</span>

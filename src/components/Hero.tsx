@@ -54,6 +54,11 @@ const IDLE_2_URL =
 const INTRO_2_URL =
   "https://cdn.scena.ai/project/8606/87d892c1c37f70cfae99aa55e5888f93ea6b7015050fe44e5d1f54418f0b06b9.mp4";
 
+const IDLE_3_URL =
+  "https://cdn.scena.ai/project/10169/eae59f7007421658e611c298c206755ca060c878d07087694c06935208b9d8f9.mp4";
+const INTRO_3_URL =
+  "https://cdn.scena.ai/project/10169/0f6e39f01533134c70012f61be38d29126100c0300c9c0ea607adb305b5f7102.mp4";
+
 const TRANSITION_1_TO_2_URL =
   "https://cdn.scena.ai/project/10124/2c5df2cd27cd1bcaa6fdf3b3aca254988d34a2933c461281b1332dabd1d1c89b.mp4";
 const TRANSITION_2_TO_1_URL =
@@ -65,7 +70,11 @@ type VideoState =
   | "transition_1_to_2"
   | "idle_2"
   | "intro_2"
-  | "transition_2_to_1";
+  | "transition_2_to_1"
+  | "transition_2_to_3"
+  | "idle_3"
+  | "intro_3"
+  | "transition_3_to_1";
 
 function Hero() {
   const { t, lang } = useLanguage();
@@ -141,7 +150,10 @@ function Hero() {
       case "transition_1_to_2": return TRANSITION_1_TO_2_URL;
       case "idle_2": return IDLE_2_URL;
       case "intro_2": return INTRO_2_URL;
-      case "transition_2_to_1": return TRANSITION_2_TO_1_URL;
+      case "transition_2_to_3": return IDLE_3_URL;
+      case "idle_3": return IDLE_3_URL;
+      case "intro_3": return INTRO_3_URL;
+      case "transition_3_to_1": return TRANSITION_2_TO_1_URL;
     }
   };
 
@@ -164,7 +176,9 @@ function Hero() {
   };
 
   const handlePlayIntroVideo = () => {
-    if (videoState === "idle_2" || videoState === "intro_2") {
+    if (videoState === "idle_3" || videoState === "intro_3") {
+      changeVideoState("intro_3");
+    } else if (videoState === "idle_2" || videoState === "intro_2") {
       changeVideoState("intro_2");
     } else {
       changeVideoState("intro_1");
@@ -176,14 +190,18 @@ function Hero() {
       changeVideoState("idle_1");
     } else if (videoState === "intro_2") {
       changeVideoState("idle_2");
+    } else if (videoState === "intro_3") {
+      changeVideoState("idle_3");
     }
   };
 
   const handleVideoEnded = () => {
-    if (videoState === "intro_1" || videoState === "transition_2_to_1") {
+    if (videoState === "intro_1" || videoState === "transition_3_to_1") {
       changeVideoState("idle_1");
     } else if (videoState === "intro_2" || videoState === "transition_1_to_2") {
       changeVideoState("idle_2");
+    } else if (videoState === "intro_3" || videoState === "transition_2_to_3") {
+      changeVideoState("idle_3");
     }
   };
 
@@ -232,88 +250,110 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-transparent pointer-events-none" />
       </div>
 
-      {/* 2. Top Controls & Identity Bar (Floating over video) */}
-      <div className="relative z-20 w-full flex items-center justify-between p-3.5 sm:p-5 lg:p-6 pointer-events-none">
-        {/* Floating Top Left Live Status Pill */}
-        <div className="pointer-events-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 dark:bg-slate-950/80 border border-white/20 dark:border-cyan-500/30 text-white shadow-xl backdrop-blur-md">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-wider text-cyan-300">
-            {isVi ? "LIVE PORTFOLIO • CX ARCHITECT & AI INNOVATOR" : "LIVE PORTFOLIO • CX ARCHITECT & AI INNOVATOR"}
-          </span>
-        </div>
+      {/* 2. Middle-Left Screen Navigation Button (Chuyển qua Màn hình 3) - Glass 50% Opacity Centered Left */}
+      <div className="absolute top-1/2 left-3 sm:left-4 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 group/nav-left-btn">
+        <MagneticButton
+          id="hero-screen-nav-left-btn"
+          onClick={() => {
+            if (videoState.includes("3")) {
+              changeVideoState("transition_3_to_1");
+            } else {
+              changeVideoState("transition_2_to_3");
+            }
+          }}
+          strength={0.45}
+          textStrength={0.25}
+          glowColor="rgba(168, 85, 247, 0.7)"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/50 dark:border-white/30 bg-white/50 dark:bg-slate-900/50 hover:bg-white/80 dark:hover:bg-slate-900/80 text-slate-900 dark:text-purple-300 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md opacity-50 hover:opacity-100 transition-all duration-300 active:scale-90 flex items-center justify-center cursor-pointer"
+          title={
+            videoState.includes("3")
+              ? (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")
+              : (isVi ? "Chuyển sang Màn hình 3" : "Switch to Screen 3")
+          }
+        >
+          {videoState.includes("3") ? (
+            <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+          ) : (
+            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+          )}
+        </MagneticButton>
+        <span className="text-3xs sm:text-2xs font-bold px-2.5 py-1 rounded-full bg-slate-900/90 dark:bg-white/95 text-white dark:text-slate-900 shadow-lg backdrop-blur-md opacity-0 group-hover/nav-left-btn:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
+          {videoState.includes("3")
+            ? (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")
+            : (isVi ? "Chuyển sang Màn hình 3" : "Switch to Screen 3")}
+        </span>
       </div>
 
-      {/* 3. Middle-Right Screen Navigation Arrow (Chuyển màn hình 1 / 2) - Glass 50% Opacity Centered Right */}
-      <div className="absolute top-1/2 right-3 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 group/nav-btn">
+      {/* 3. Middle-Right Screen Navigation Button (Chuyển qua Màn hình 2) - Glass 50% Opacity Centered Right */}
+      <div className="absolute top-1/2 right-3 sm:right-4 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 group/nav-right-btn">
         <MagneticButton
-          id="hero-screen-navigation-btn"
+          id="hero-screen-nav-right-btn"
           onClick={() => {
-            changeVideoState(
-              videoState === "idle_1" || videoState === "intro_1"
-                ? "transition_1_to_2"
-                : "transition_2_to_1"
-            );
+            if (videoState.includes("2")) {
+              changeVideoState("transition_2_to_1");
+            } else {
+              changeVideoState("transition_1_to_2");
+            }
           }}
           strength={0.45}
           textStrength={0.25}
           glowColor="rgba(59, 130, 246, 0.7)"
           className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/50 dark:border-white/30 bg-white/50 dark:bg-slate-900/50 hover:bg-white/80 dark:hover:bg-slate-900/80 text-slate-900 dark:text-cyan-300 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md opacity-50 hover:opacity-100 transition-all duration-300 active:scale-90 flex items-center justify-center cursor-pointer"
           title={
-            videoState.includes("1")
-              ? (isVi ? "Chuyển sang Màn hình 2" : "Switch to Screen 2")
-              : (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")
+            videoState.includes("2")
+              ? (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")
+              : (isVi ? "Chuyển sang Màn hình 2" : "Switch to Screen 2")
           }
         >
-          {videoState.includes("1") ? (
-            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+          {videoState.includes("2") ? (
+            <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
           ) : (
-            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
           )}
         </MagneticButton>
-        <span className="text-[9.5px] sm:text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-slate-900/90 dark:bg-white/95 text-white dark:text-slate-900 shadow-lg backdrop-blur-md opacity-0 group-hover/nav-btn:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
-          {videoState.includes("1") ? (isVi ? "Chuyển sang Màn hình 2" : "Switch to Screen 2") : (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")}
+        <span className="text-3xs sm:text-2xs font-bold px-2.5 py-1 rounded-full bg-slate-900/90 dark:bg-white/95 text-white dark:text-slate-900 shadow-lg backdrop-blur-md opacity-0 group-hover/nav-right-btn:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
+          {videoState.includes("2")
+            ? (isVi ? "Quay lại Màn hình 1" : "Back to Screen 1")
+            : (isVi ? "Chuyển sang Màn hình 2" : "Switch to Screen 2")}
         </span>
       </div>
 
-      {/* 4. Bottom Welcome Note Card (Nằm phía dưới bên phải / responsive, thiết kế tối ưu) */}
-      <div className="relative z-20 w-full flex justify-end items-end p-3 sm:p-5 lg:p-6 pointer-events-none mt-auto">
-        <div className="w-fit max-w-[480px] sm:max-w-[540px] pointer-events-auto">
+      {/* 4. Bottom Welcome Note Card (Nằm phía dưới bên phải / responsive, kích thước tự động co giãn theo nội dung bên trong) */}
+      <div className="relative z-20 w-full flex justify-end items-end p-2.5 sm:p-4 lg:p-5 pointer-events-none mt-auto">
+        <div className="w-fit max-w-fit pointer-events-auto">
           <div 
             id="hero-intro-card"
             className={cn(
-              "w-fit max-w-full group relative p-4 sm:p-5 rounded-2xl transition-all duration-300 overflow-hidden flex flex-col items-stretch gap-3.5",
+              "w-fit max-w-fit h-auto group relative p-3 sm:p-3.5 rounded-xl transition-all duration-300 overflow-hidden flex flex-col items-stretch gap-2",
               "glass-surface backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/90 bg-white/95 dark:bg-slate-900/95",
-              "shadow-[0_16px_40px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-slate-900 dark:text-white",
-              "hover:border-blue-500/70 dark:hover:border-cyan-400/70 hover:shadow-[0_20px_48px_rgba(37,99,235,0.28)]"
+              "shadow-[0_12px_32px_rgba(0,0,0,0.14),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.12)] text-slate-900 dark:text-white",
+              "hover:border-blue-500/70 dark:hover:border-cyan-400/70 hover:shadow-[0_16px_36px_rgba(37,99,235,0.22)]"
             )}
           >
             {/* Glowing Ambient Light */}
-            <div className="absolute -top-10 -right-10 w-28 h-28 bg-gradient-to-br from-blue-500/20 to-cyan-500/0 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+            <div className="absolute -top-10 -right-10 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-cyan-500/0 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
 
-            {/* Text Content Area */}
-            <div className="relative z-20 w-full space-y-2 text-left">
+            {/* Text Content Area - Giảm 1/2 font size */}
+            <div className="relative z-20 w-full space-y-1 text-left">
               {/* Header Badges */}
-              <div className="flex items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[10px] shadow-xs">
-                  <Sparkles className="w-3 h-3 fill-current shrink-0" />
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-3xs shadow-xs">
+                  <Sparkles className="w-2.5 h-2.5 fill-current shrink-0" />
                   <span className="truncate font-play">{isVi ? "Giới thiệu" : "Introduction"}</span>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-blue-800 dark:text-cyan-300 bg-blue-50 dark:bg-cyan-950/60 px-2 py-0.5 rounded-full border border-blue-200/80 dark:border-cyan-600/40 shadow-2xs">
+                <span className="text-3xs font-mono font-bold text-blue-800 dark:text-cyan-300 bg-blue-50 dark:bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-blue-200/80 dark:border-cyan-600/40 shadow-2xs">
                   {isVi ? "22+ Năm kinh nghiệm" : "22+ Years exp"}
                 </span>
               </div>
               
               <div className="space-y-0.5">
-                <span className="text-[11px] font-bold text-blue-700 dark:text-blue-300 block tracking-wide">
+                <span className="text-h5 font-bold text-blue-700 dark:text-blue-300 block tracking-wide">
                   {isVi ? "Xin chào! Tôi là" : "Welcome! I am"}
                 </span>
-                <h2 className="text-base sm:text-xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
-                  <span className="text-blue-700 dark:text-cyan-400">Nguyễn Hùng Thái</span>
-                </h2>
-                <p className="text-xs sm:text-[13px] font-bold text-slate-900 dark:text-slate-100 leading-snug">
+                <h1 className="text-h1 font-bold tracking-tight text-slate-900 dark:text-white">
+                  <span className="text-h1 text-blue-700 dark:text-cyan-400">Nguyễn Hùng Thái</span>
+                </h1>
+                <p className="text-h3 font-bold text-slate-800 dark:text-slate-200 leading-tight">
                   {isVi 
                     ? "Trưởng phòng Chăm sóc Khách hàng" 
                     : "Head of Customer Support & CX"}
@@ -322,9 +362,9 @@ function Hero() {
             </div>
 
             {/* Actions Area - Bottom Row with Action Buttons */}
-            <div className="relative z-20 flex flex-row flex-wrap items-center justify-end gap-2 sm:gap-2.5 w-full shrink-0 pt-2.5 border-t border-slate-200/90 dark:border-slate-800/90">
+            <div className="relative z-20 flex flex-row flex-wrap items-center justify-end gap-1.5 sm:gap-2 w-full shrink-0 pt-2 border-t border-slate-200/90 dark:border-slate-800/90">
               <HeroIntroButton
-                className="w-auto max-w-fit shrink-0 min-h-[44px]"
+                className="w-auto max-w-fit shrink-0 min-h-[38px] text-xs"
                 isPlayingIntro={isIntro}
                 isAudioOn={isVideoAudioOn}
                 onToggleAudio={() => {
@@ -336,7 +376,7 @@ function Hero() {
               />
               
               <HeroContactButton 
-                className="w-auto max-w-fit shrink-0 min-h-[44px]"
+                className="w-auto max-w-fit shrink-0 min-h-[38px] text-xs"
                 onContact={() => {
                   scrollTo('contact');
                 }}

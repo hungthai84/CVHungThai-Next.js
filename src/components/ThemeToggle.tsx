@@ -1,0 +1,86 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { Sun, Moon, Sparkles } from 'lucide-react';
+
+interface ThemeToggleProps {
+  className?: string;
+  showLabel?: boolean;
+}
+
+/**
+ * Reusable ThemeToggle Component
+ * - Powered by next-themes
+ * - Uses mounted guard to prevent Next.js hydration mismatch
+ * - Instant toggle between Light ('modern-light-glass') and Dark Neon ('glass-dark-neon')
+ * - Supports keyboard navigation and accessibility (aria-label)
+ */
+export function ThemeToggle({ className = '', showLabel = false }: ThemeToggleProps) {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch: render placeholder until mounted on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div
+        className={`w-9 h-9 rounded-xl border border-slate-200/20 bg-slate-100/10 animate-pulse ${className}`}
+        aria-hidden="true"
+      />
+    );
+  }
+
+  const isDark = theme === 'glass-dark-neon' || resolvedTheme === 'dark' || theme === 'dark';
+
+  const toggleTheme = () => {
+    const nextTheme = isDark ? 'modern-light-glass' : 'glass-dark-neon';
+    setTheme(nextTheme);
+
+    // Keep data-theme in sync for custom CSS selectors
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      if (nextTheme === 'glass-dark-neon') {
+        document.documentElement.classList.add('dark', 'theme-glass-dark-neon');
+        document.documentElement.classList.remove('theme-modern-light-glass');
+      } else {
+        document.documentElement.classList.remove('dark', 'theme-glass-dark-neon');
+        document.documentElement.classList.add('theme-modern-light-glass');
+      }
+    }
+  };
+
+  return (
+    <button
+      id="theme-toggle-btn"
+      type="button"
+      onClick={toggleTheme}
+      aria-label={`Chuyển sang giao diện ${isDark ? 'Sáng (Light Glass)' : 'Tối Neon (Dark Neon)'}`}
+      title={isDark ? 'Chuyển sang Giao diện Sáng' : 'Chuyển sang Giao diện Tối Neon'}
+      className={`relative inline-flex items-center justify-center gap-2 p-2 rounded-xl border transition-all duration-300 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
+        isDark
+          ? 'bg-slate-900/80 border-cyan-500/30 text-cyan-400 hover:border-cyan-400/60 shadow-[0_0_15px_rgba(0,240,255,0.2)]'
+          : 'bg-white/80 border-slate-200/80 text-amber-600 hover:border-amber-400/80 shadow-sm'
+      } ${className}`}
+    >
+      <span className="relative flex items-center justify-center w-5 h-5">
+        {isDark ? (
+          <Sparkles className="w-4 h-4 text-cyan-400 transition-transform duration-300 hover:rotate-45" />
+        ) : (
+          <Sun className="w-4 h-4 text-amber-500 transition-transform duration-300 hover:rotate-90" />
+        )}
+      </span>
+
+      {showLabel && (
+        <span className="text-xs font-semibold select-none pr-1">
+          {isDark ? 'Neon Dark' : 'Light Glass'}
+        </span>
+      )}
+    </button>
+  );
+}
+
+export default ThemeToggle;

@@ -7,6 +7,7 @@ import {
   Layers,
   Gamepad2,
   Briefcase,
+  Compass,
   ExternalLink,
   ChevronLeft,
   ChevronRight,
@@ -21,6 +22,7 @@ import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { cn } from "../lib/utils";
 import { useLanguage } from "../i18n";
 import { playUiSound } from "../lib/sound";
+import { PageCardHeader } from "./PageCardHeader";
 
 interface BrandLogo {
   name: string;
@@ -73,7 +75,7 @@ const CARD_THEME_STYLES: Record<
     iconBgClass: "bg-emerald-100/80 dark:bg-emerald-950/70 border-emerald-200/90 dark:border-emerald-800/80 text-emerald-600 dark:text-emerald-400",
     dotColor: "#059669",
   },
-  "Thanh toán điện tử": {
+  "Ví điện tử": {
     accentColor: "#d97706",
     bgGradient: "bg-gradient-to-b from-amber-100/70 via-white/95 to-amber-50/40 dark:from-amber-950/35 dark:via-slate-900/90 dark:to-amber-950/25",
     borderClass: "border-amber-200/90 dark:border-amber-800/70 hover:border-amber-400 dark:hover:border-amber-500",
@@ -118,17 +120,17 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
     titleEn: "Mobile Telecom",
     category: "telecom",
     image: "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=800&q=80",
-    desc: "Hơn 10 năm kinh nghiệm trong ngành viễn thông, từ mạng di động đến dịch vụ gọi quốc tế, nhắn tin và giải pháp kết nối toàn diện.",
-    descEn: "Over 10 years of experience in telecom, from mobile networks to international calling services, building a solid foundation in large-scale CX operations.",
+    desc: "Hơn 10 năm kinh nghiệm trong ngành viễn thông, từ mạng di động đến dịch vụ gọi quốc tế, tạo nền tảng vững chắc về vận hành và Chăm Sóc Khách Hàng quy mô lớn.",
+    descEn: "Over 10 years of experience in telecom, from mobile networks to international calling services, creating a solid foundation in large-scale CX operations.",
     logos: [
-      { name: "Mobifone", url: "https://i.ibb.co/VWVjVj5T/Mobifone.png", color: "#005baa" },
-      { name: "Vinaphone", url: "https://i.ibb.co/21kP4Z5b/Vinaphone.png", color: "#00a1e4" },
-      { name: "Viettel", url: "https://i.ibb.co/JFF3sR4P/Viettel.png", color: "#ee0000" },
-      { name: "FPT Telecom", url: "https://i.ibb.co/Z68H14v6/FPT.png", color: "#f37021" },
+      { name: "MobiFone", url: "https://i.ibb.co/hxHm9TsZ/Mobifone.png", color: "#005baa" },
+      { name: "V247", url: "https://i.ibb.co/QvtbdnfP/V247.png", color: "#2563eb" },
+      { name: "HTVC", url: "https://i.ibb.co/1fNw0hBq/HTVC.png", color: "#0284c7" },
+      { name: "LBC", url: "https://i.ibb.co/R4YXWyzF/LBC.png", color: "#f59e0b" },
     ],
     details: {
       tagline: "Nền tảng vận hành & Chăm sóc khách hàng quy mô lớn tiêu chuẩn tập đoàn",
-      experienceYears: "10+ Năm",
+      experienceYears: "10+ Năm kinh nghiệm",
       headcountScope: "50 - 130+ Nhân sự",
       keyProjects: [
         "1.1 · Xây dựng và vận hành Phòng Dịch vụ Khách hàng",
@@ -151,15 +153,15 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
     titleEn: "E-Commerce",
     category: "fintech",
     image: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80",
-    desc: "Vận hành Chăm Sóc Khách Hàng cho các sàn thương mại điện tử hàng đầu, xử lý khiếu nại đơn hàng, vận chuyển và hoàn tiền.",
-    descEn: "Driving CX operations for top-tier E-commerce platforms, orchestrating high-volume dispute resolutions, logistics SLAs, and buyer protection.",
+    desc: "Tham gia giai đoạn bùng nổ của thương mại điện tử và ví điện tử, xây dựng nền tảng vận hành, xử lý khiếu nại, kiểm soát gian lận và Chăm Sóc Khách Hàng đa kênh.",
+    descEn: "Participated in the boom of e-commerce and digital wallets, building operational foundations, dispute resolution, fraud control, and omnichannel CS.",
     logos: [
       { name: "Shopee", url: "https://i.ibb.co/BSVS4xf/Shopee.png", color: "#ee4d2d" },
-      { name: "Finviet", url: "https://i.ibb.co/7NtSSz4d/Finviet.png", color: "#eab308" },
+      { name: "ShopeePay", url: "https://i.ibb.co/LdYv3TJy/Shopee-Paye.png", color: "#ee4d2d" },
     ],
     details: {
       tagline: "Xử lý hàng triệu tương tác khách hàng & đối tác bán hàng trong các mùa Mega Sale",
-      experienceYears: "4+ Năm",
+      experienceYears: "6+ Năm kinh nghiệm",
       headcountScope: "30 - 80+ Nhân sự",
       keyProjects: [
         "3.1 · Ứng dụng AI phân tích giọng nói và cảm xúc",
@@ -171,7 +173,7 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
         "Giảm 35% thời gian phản hồi tin nhắn Live Chat cho người mua",
       ],
       techStack: ["Zendesk", "Shopee Internal CRM", "LiveChat Engine", "AI NLP Parser"],
-      coreRole: "E-Commerce Customer Support Operations Manager",
+      coreRole: "E-Commerce & Payment CS Operations Manager",
     },
   },
   {
@@ -181,14 +183,14 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
     titleEn: "Life Insurance",
     category: "insurance",
     image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
-    desc: "Quản lý tổng đài và triển khai các dự án tích hợp hệ thống Call Center, tối ưu quy trình vận hành và nâng cao trải nghiệm khách hàng.",
-    descEn: "Managing contact centers and implementing integrated Call Center projects, optimizing workflows, and elevating customer experience.",
+    desc: "Quản lý tổng đài, triển khai dự án tích hợp Call Center, tối ưu quy trình vận hành, nâng cao chất lượng tư vấn, cải thiện trải nghiệm và hiệu quả phục vụ khách hàng toàn diện.",
+    descEn: "Managing contact centers, implementing integrated Call Center projects, optimizing workflows, elevating advice quality, and improving overall service efficiency.",
     logos: [
       { name: "Prudential", url: "https://i.ibb.co/XfpQphWF/Prudential.png", color: "#dc2626" },
     ],
     details: {
       tagline: "Chuẩn mực bảo mật & dịch vụ khách hàng tài chính cá nhân khắt khe bậc nhất",
-      experienceYears: "3+ Năm",
+      experienceYears: "3+ Năm kinh nghiệm",
       headcountScope: "20 - 50+ Chuyên viên",
       keyProjects: [
         "1.1 · Xây dựng và vận hành Phòng Dịch vụ Khách hàng",
@@ -207,19 +209,20 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
     color: "#059669",
     icon: Gamepad2,
     title: "Thể thao điện tử",
-    titleEn: "eSports & Gaming",
+    titleEn: "Gaming & eSports",
     category: "fintech",
     image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
-    desc: "Xây dựng và quản lý bộ phận Chăm Sóc Khách Hàng cho nhà phát hành game, vận hành hệ thống game và cộng đồng người chơi.",
-    descEn: "Building and managing Customer Support for top game publishers, operating large-scale ticket desks and accompanying major eSports tournaments.",
+    desc: "Xây dựng, quản lý bộ phận Chăm Sóc Khách Hàng cho nhà phát hành game, vận hành hệ thống hỗ trợ quy mô lớn và đồng hành cùng các sự kiện thể thao điện tử chuyên nghiệp hiệu quả.",
+    descEn: "Building and managing Customer Support for game publishers, operating large-scale support systems, and effectively accompanying professional eSports events.",
     logos: [
       { name: "Garena", url: "https://i.ibb.co/h1Md65yV/Garena.png", color: "#df2027" },
-      { name: "VED", url: "https://i.ibb.co/fYPJLfbw/VED.png", color: "#ef4444" },
       { name: "GCafe", url: "https://i.ibb.co/FkWk3s4W/GCafe.png", color: "#ff6600" },
+      { name: "VED", url: "https://i.ibb.co/fYPJLfbw/VED.png", color: "#e11d48" },
+      { name: "Logo VED", url: "https://i.ibb.co/BKHcWL5R/Logo-VED.gif", color: "#6366f1" },
     ],
     details: {
       tagline: "Chăm sóc cộng đồng game thủ hàng chục triệu người chơi & hỗ trợ giải đấu eSports đỉnh cao",
-      experienceYears: "5+ Năm",
+      experienceYears: "5+ Năm kinh nghiệm",
       headcountScope: "40 - 100+ Game Masters",
       keyProjects: [
         "1.3 · Xây dựng cơ chế phối hợp liên phòng ban",
@@ -237,19 +240,20 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
   {
     color: "#d97706",
     icon: Wallet,
-    title: "Thanh toán điện tử",
-    titleEn: "Digital Payments & FinTech",
+    title: "Ví điện tử",
+    titleEn: "Digital Wallets & FinTech",
     category: "fintech",
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
-    desc: "Am hiểu vận hành Chăm Sóc Khách Hàng trong lĩnh vực FinTech, từ xác minh người dùng đến xử lý giao dịch và khiếu nại.",
-    descEn: "Deep expertise in FinTech CS operations, spanning eKYC identity verification, transaction resolution, risk control, and merchant support.",
+    desc: "Am hiểu vận hành Chăm Sóc Khách Hàng trong lĩnh vực FinTech, từ xác minh người dùng, xử lý giao dịch đến kiểm soát rủi ro và hỗ trợ đối tác tài chính hiệu quả, bền vững.",
+    descEn: "Deep expertise in FinTech CS operations, spanning user verification, transaction processing, risk control, and sustainable financial partner support.",
     logos: [
-      { name: "MoMo", url: "https://i.ibb.co/k2QtrgTw/Momo.png", color: "#ec4899" },
+      { name: "Ví MoMo", url: "https://i.ibb.co/k2QtrgTw/Momo.png", color: "#ec4899" },
+      { name: "Finviet", url: "https://i.ibb.co/7NtSSz4d/Finviet.png", color: "#eab308" },
       { name: "ShopeePay", url: "https://i.ibb.co/LdYv3TJy/Shopee-Paye.png", color: "#ee4d2d" },
     ],
     details: {
       tagline: "Vận hành hệ thống hỗ trợ giao dịch số, xác thực eKYC & an toàn thanh toán ngân hàng",
-      experienceYears: "3+ Năm",
+      experienceYears: "5+ Năm kinh nghiệm",
       headcountScope: "25 - 60+ Chuyên viên",
       keyProjects: [
         "3.1 · Ứng dụng AI phân tích giọng nói và cảm xúc",
@@ -260,7 +264,7 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
         "Thiết lập quy trình xử lý tra soát khiếu nại tài chính trong vòng 2 giờ",
         "Đạt tỷ lệ đánh giá dịch vụ CSAT 98.2% trên các kênh hỗ trợ số",
       ],
-      techStack: ["MoMo Admin CRM", "ShopeePay Merchant Portal", "FinTech Security Gateway"],
+      techStack: ["MoMo Admin CRM", "Finviet Merchant Portal", "FinTech Security Gateway"],
       coreRole: "FinTech Customer Care Operations Lead",
     },
   },
@@ -268,18 +272,19 @@ const DOMAINS_DATA: ServiceCardConfig[] = [
     color: "#e11d48",
     icon: Layers,
     title: "Xây dựng hệ thống",
-    titleEn: "System Architecture & CX",
+    titleEn: "System Architecture & Consulting",
     category: "insurance",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
-    desc: "Tư vấn xây dựng và tối ưu hệ thống Chăm Sóc Khách Hàng toàn diện, từ quy trình, nhân sự đến công nghệ và dữ liệu.",
-    descEn: "Consulting on end-to-end Customer Care system setup, from SOP processes and staffing to CRM and AI automation for enterprise efficiency.",
+    desc: "Tư vấn xây dựng, tối ưu hệ thống Chăm Sóc Khách Hàng toàn diện, từ quy trình, nhân sự đến công nghệ và tự động hóa, nâng cao hiệu quả vận hành doanh nghiệp trên tổng thể thực tiễn.",
+    descEn: "Consulting on building and optimizing end-to-end Customer Care systems, from processes and staffing to technology and automation for overall enterprise efficiency.",
     logos: [
       { name: "Power Service", url: "https://i.ibb.co/G4QnNzWb/Power-Service.png", color: "#16a34a" },
-      { name: "Logo-VED", url: "https://i.ibb.co/BKHcWL5R/Logo-VED.gif", color: "#ef4444" },
+      { name: "LBC", url: "https://i.ibb.co/R4YXWyzF/LBC.png", color: "#f59e0b" },
+      { name: "VED", url: "https://i.ibb.co/BKHcWL5R/Logo-VED.gif", color: "#6366f1" },
     ],
     details: {
       tagline: "Tư vấn giải pháp toàn diện từ con người, quy trình đến chuyển đổi số",
-      experienceYears: "22+ Năm",
+      experienceYears: "22+ Năm kinh nghiệm",
       headcountScope: "Tư vấn Doanh nghiệp",
       keyProjects: [
         "1.2 · Thiết lập mục tiêu và chỉ tiêu hoạt động",
@@ -375,314 +380,327 @@ export function DomainsSection() {
   return (
     <div
       id="domains"
-      className="w-full flex flex-col gap-3.5 pt-4 pb-2 border-t border-slate-200/60 dark:border-slate-800/60 animate-fadeIn select-none"
+      className="w-full flex flex-col gap-3.5 p-[25px] border-t border-slate-200/60 dark:border-slate-800/60 animate-fadeIn select-none"
+      style={{ padding: "25px" }}
     >
-      {/* Header Lĩnh vực chuyên môn */}
-      <div className="w-full flex flex-col gap-2 pb-2.5 border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
-              <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-            </div>
-            <h2 className="text-base sm:text-lg font-black tracking-tight text-emerald-600 dark:text-emerald-400">
-              {isVi ? "Lĩnh vực chuyên môn" : "Core Domains & Industry Expertise"}
-            </h2>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-black text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-              {isVi ? "6 Ngành thực chiến" : "6 Key Industries"}
-            </span>
-            <span className="hidden sm:inline-flex text-xs font-mono font-black text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs">
-              {isVi ? `Hiển thị ${filteredItems.length} lĩnh vực` : `Showing ${filteredItems.length} domains`}
-            </span>
-          </div>
+      {/* Header Thẻ chính Lĩnh vực */}
+      <PageCardHeader pageId="domains" id="card-domains-list-content">
+        {/* Cụm trái: Chỉ báo chuyên môn & số lượng (Caption / Label: 12px – 13px) */}
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+          <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+            {isVi ? "6 Ngành thực chiến" : "6 Key Industries"}
+          </span>
         </div>
 
-        {/* Categories Bar */}
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-            {INDUSTRY_CATEGORIES.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              const label = isVi ? cat.titleVi : cat.titleEn;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    playUiSound("click");
-                    setSelectedCategory(cat.id);
-                  }}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
-                    isActive
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400"
-                  }`}
-                >
-                  <span>{label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* 6 Cards Bento Grid with Distinct Color per Card */}
-      <LayoutGroup>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 py-1">
-          {filteredItems.map((item) => {
-            const Icon = item.icon || Globe;
-            const theme = CARD_THEME_STYLES[item.title] || {
-              accentColor: item.color,
-              bgGradient: "bg-white dark:bg-slate-900",
-              borderClass: "border-slate-200 dark:border-slate-800",
-              iconBgClass: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
-              dotColor: item.color,
-            };
-            const accentColor = theme.accentColor;
-
+        {/* Cụm phải: Bộ lọc Categories */}
+        <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs sm:ml-auto">
+          {INDUSTRY_CATEGORIES.map((cat) => {
+            const isActive = selectedCategory === cat.id;
+            const label = isVi ? cat.titleVi : cat.titleEn;
             return (
-              <div
-                key={item.title}
-                tabIndex={0}
-                role="button"
-                aria-label={item.title}
-                onClick={() => handleCardClick(item.title)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleCardClick(item.title);
-                  }
+              <button
+                key={cat.id}
+                onClick={() => {
+                  playUiSound("click");
+                  setSelectedCategory(cat.id);
                 }}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onMouseEnter={() => playUiSound("hover")}
-                className={cn(
-                  "group relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl border-2 transition-all duration-300 select-none cursor-pointer shadow-xs hover:shadow-xl hover:-translate-y-1 backdrop-blur-xl",
-                  theme.bgGradient,
-                  theme.borderClass
-                )}
-                style={{
-                  transform:
-                    "perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))",
-                  transformStyle: "preserve-3d",
-                }}
+                className={`px-3 py-1.5 rounded-lg text-caption font-semibold tracking-wide transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
+                  isActive
+                    ? "bg-emerald-600 text-white shadow-xs font-bold"
+                    : "text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400"
+                }`}
               >
-                {/* 1. Top Circular Icon Badge */}
-                <div
-                  className={cn(
-                    "w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110 shadow-xs",
-                    theme.iconBgClass
-                  )}
-                >
-                  <Icon className="w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2]" />
-                </div>
-
-                {/* 2. Main Title with Distinct Accent Color */}
-                <h3
-                  className="font-play font-black text-base sm:text-lg tracking-tight leading-snug"
-                  style={{ color: accentColor }}
-                >
-                  {isVi ? item.title : item.titleEn || item.title}
-                </h3>
-
-                {/* 3. Experience Years Subtitle */}
-                <div className="text-[11px] sm:text-xs font-bold text-slate-700 dark:text-slate-300 mt-0.5">
-                  {item.details.experienceYears} {isVi ? "kinh nghiệm" : "experience"}
-                </div>
-
-                {/* 4. Center Dot Divider */}
-                <div className="flex items-center justify-center gap-1.5 my-2">
-                  <div className="w-4 h-[1.5px] rounded-full opacity-30" style={{ backgroundColor: accentColor }} />
-                  <div className="w-1.5 h-1.5 rounded-full opacity-80" style={{ backgroundColor: accentColor }} />
-                  <div className="w-4 h-[1.5px] rounded-full opacity-30" style={{ backgroundColor: accentColor }} />
-                </div>
-
-                {/* 5. Description */}
-                <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed line-clamp-2 px-1">
-                  {isVi ? item.desc : item.descEn || item.desc}
-                </p>
-
-                {/* 6. Projects Divider */}
-                <div className="w-full flex items-center gap-2 my-2.5">
-                  <div className="h-[1px] flex-1 opacity-25" style={{ backgroundColor: accentColor }} />
-                  <span className="text-[10px] font-bold tracking-wide shrink-0" style={{ color: accentColor }}>
-                    {isVi ? "Dự án tiêu biểu" : "Featured Projects"}
-                  </span>
-                  <div className="h-[1px] flex-1 opacity-25" style={{ backgroundColor: accentColor }} />
-                </div>
-
-                {/* 7. Brand Logos */}
-                <div className="flex items-center justify-center flex-wrap gap-2 max-w-full mt-auto pt-1">
-                  {item.logos &&
-                    item.logos.map((logoObj: BrandLogo, lIdx: number) => (
-                      <div
-                        key={lIdx}
-                        className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/90 dark:border-slate-700 bg-white p-0 shadow-xs transition-transform duration-300 group-hover:scale-105 hover:!scale-115"
-                        title={logoObj.name}
-                      >
-                        <img
-                          src={logoObj.url}
-                          alt={logoObj.name}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover rounded-full"
-                          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                            e.currentTarget.style.display = "none";
-                          }}
-                        />
-                      </div>
-                    ))}
-                </div>
-              </div>
+                <span>{label}</span>
+              </button>
             );
           })}
         </div>
-      </LayoutGroup>
+      </PageCardHeader>
 
-      {/* Expanded Modal View with Full Detail */}
-      <AnimatePresence>
-        {activeItem && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md"
-            onClick={() => {
-              playUiSound("close");
-              setExpandedItemTitle(null);
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-900 border-2 rounded-2xl shadow-2xl p-5 sm:p-6 flex flex-col gap-4 text-left"
-              style={{
-                borderColor: activeItem.color,
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                    style={{ backgroundColor: activeItem.color }}
-                  >
-                    {React.createElement(activeItem.icon || Globe, { className: "w-6 h-6 stroke-[2.5]" })}
-                  </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black" style={{ color: activeItem.color }}>
-                      {isVi ? activeItem.title : activeItem.titleEn || activeItem.title}
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                      {activeItem.details.tagline}
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playUiSound("close");
-                    setExpandedItemTitle(null);
-                  }}
-                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-all cursor-pointer shrink-0"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Quick Metrics */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex flex-col">
-                  <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">
-                    {isVi ? "Thời gian" : "Experience"}
-                  </span>
-                  <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">
-                    {activeItem.details.experienceYears}
-                  </span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex flex-col">
-                  <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">
-                    {isVi ? "Quy mô quản lý" : "Team Scope"}
-                  </span>
-                  <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-0.5 truncate">
-                    {activeItem.details.headcountScope}
-                  </span>
-                </div>
-                <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex flex-col">
-                  <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">
-                    {isVi ? "Vai trò nòng cốt" : "Core Role"}
-                  </span>
-                  <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 truncate">
-                    {activeItem.details.coreRole}
-                  </span>
-                </div>
-              </div>
-
-              {/* Achievements */}
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" style={{ color: activeItem.color }} />
-                  <span>{isVi ? "Thành tựu vận hành tiêu biểu" : "Key Operational Milestones"}</span>
-                </h4>
-                <ul className="space-y-1.5">
-                  {activeItem.details.achievements.map((ach, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: activeItem.color }} />
-                      <span>{ach}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tech Stack */}
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-2">
-                  {isVi ? "Hệ thống & Công nghệ" : "Tech Stack & Systems"}
-                </h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {activeItem.details.techStack.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700"
+      {/* 6 Cards Bento Grid or Full In-Place Expanded Card (Kích thước bằng 6 thẻ cộng lại, các thẻ khác tạm ẩn) */}
+      <LayoutGroup>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 py-1">
+          <AnimatePresence mode="wait">
+            {expandedItemTitle && activeItem ? (
+              /* Khi click vào thẻ dịch vụ: tăng kích thước thẻ bằng kích thước 6 thẻ dịch vụ cộng lại, các thẻ khác tạm ẩn đi */
+              <motion.div
+                key={`expanded-${activeItem.title}`}
+                layoutId={`domain-card-${activeItem.title}`}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className={cn(
+                  "col-span-1 sm:col-span-2 lg:col-span-3 w-full relative p-5 sm:p-7 rounded-2xl border-2 transition-all duration-300 shadow-xl backdrop-blur-xl flex flex-col gap-4.5 select-none",
+                  CARD_THEME_STYLES[activeItem.title]?.bgGradient || "bg-white dark:bg-slate-900",
+                  CARD_THEME_STYLES[activeItem.title]?.borderClass || "border-slate-200 dark:border-slate-800"
+                )}
+                style={{
+                  borderColor: activeItem.color,
+                }}
+              >
+                {/* Header with Icon, Title, Experience, Navigation & Close */}
+                <div className="flex items-start justify-between gap-3 pb-4 border-b border-slate-200/80 dark:border-slate-800/80">
+                  <div className="flex items-center gap-3.5 flex-wrap">
+                    <div
+                      className={cn(
+                        "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md ring-2 ring-white/20",
+                        CARD_THEME_STYLES[activeItem.title]?.iconBgClass || ""
+                      )}
+                      style={{ backgroundColor: activeItem.color }}
                     >
-                      {tech}
-                    </span>
-                  ))}
+                      {React.createElement(activeItem.icon || Globe, { className: "w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2]" })}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-caption font-semibold font-mono text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
+                          {activeItem.details.experienceYears}
+                        </span>
+                      </div>
+                      <h3 className="font-play text-h3 sm:text-h2 font-bold tracking-tight mt-1" style={{ color: activeItem.color }}>
+                        {isVi ? activeItem.title : activeItem.titleEn || activeItem.title}
+                      </h3>
+                      <p className="text-body-sm text-slate-600 dark:text-slate-300 font-medium mt-0.5">
+                        {activeItem.details.tagline}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Thu gọn Action */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playUiSound("close");
+                        setExpandedItemTitle(null);
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-caption font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                      title={isVi ? "Thu gọn về 6 thẻ" : "Collapse back to 6 cards"}
+                    >
+                      <X className="w-4 h-4" />
+                      <span className="hidden sm:inline">{isVi ? "Thu gọn thẻ" : "Collapse"}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Modal Footer CTA */}
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playUiSound("close");
-                    setExpandedItemTitle(null);
-                  }}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-all cursor-pointer"
-                >
-                  {isVi ? "Đóng" : "Close"}
-                </button>
+                {/* Reveal Section 1: Quick Metrics Dashboard */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex flex-col">
+                    <span className="text-caption uppercase font-semibold text-slate-500 dark:text-slate-400">
+                      {isVi ? "Thời gian tích lũy" : "Experience"}
+                    </span>
+                    <span className="text-body font-bold text-slate-900 dark:text-white mt-0.5">
+                      {activeItem.details.experienceYears}
+                    </span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex flex-col">
+                    <span className="text-caption uppercase font-semibold text-slate-500 dark:text-slate-400">
+                      {isVi ? "Quy mô quản lý" : "Team Scope"}
+                    </span>
+                    <span className="text-body font-bold text-slate-900 dark:text-white mt-0.5">
+                      {activeItem.details.headcountScope}
+                    </span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex flex-col">
+                    <span className="text-caption uppercase font-semibold text-slate-500 dark:text-slate-400">
+                      {isVi ? "Vai trò nòng cốt" : "Core Role"}
+                    </span>
+                    <span className="text-body font-bold text-slate-900 dark:text-white mt-0.5">
+                      {activeItem.details.coreRole}
+                    </span>
+                  </div>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    playUiSound("click");
-                    setExpandedItemTitle(null);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="px-4 py-2 rounded-xl text-white text-xs font-black transition-all cursor-pointer shadow-md flex items-center gap-1.5 active:scale-95"
-                  style={{ backgroundColor: activeItem.color }}
-                >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Liên hệ trao đổi ngay" : "Contact About This Domain"}</span>
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+                {/* Reveal Section 2: Key Projects & SOPs */}
+                <div>
+                  <h4 className="text-body font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
+                    <Briefcase className="w-4 h-4" style={{ color: activeItem.color }} />
+                    <span>{isVi ? "Dự án nòng cốt & Hạng mục vận hành" : "Key Projects & Workflows"}</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {activeItem.details.keyProjects.map((proj, pIdx) => (
+                      <div 
+                        key={pIdx}
+                        className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/80 text-body-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2"
+                      >
+                        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: activeItem.color }} />
+                        <span>{proj}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Reveal Section 3: Operational Achievements */}
+                <div>
+                  <h4 className="text-body font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4" style={{ color: activeItem.color }} />
+                    <span>{isVi ? "Thành tựu vận hành tiêu biểu" : "Key Operational Milestones"}</span>
+                  </h4>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {activeItem.details.achievements.map((ach, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-body-sm text-slate-600 dark:text-slate-300 bg-slate-50/60 dark:bg-slate-800/30 p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-800">
+                        <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: activeItem.color }} />
+                        <span>{ach}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Reveal Section 4: Tech Stack & Brand Logos */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
+                  <div>
+                    <h4 className="text-caption uppercase font-semibold text-slate-500 dark:text-slate-400 mb-1.5">
+                      {isVi ? "Hệ thống & Công nghệ vận hành" : "Tech Stack & Systems"}
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {activeItem.details.techStack.map((tech, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2.5 py-1 rounded-lg text-caption font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 shadow-2xs"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Brand Logos */}
+                  {activeItem.logos && activeItem.logos.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-caption uppercase font-semibold text-slate-500 dark:text-slate-400 mr-1 hidden sm:inline">
+                        {isVi ? "Thương hiệu:" : "Brands:"}
+                      </span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {activeItem.logos.map((logoObj: BrandLogo, lIdx: number) => (
+                          <div
+                            key={lIdx}
+                            className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/90 dark:border-slate-700 bg-white p-0 shadow-xs"
+                            title={logoObj.name}
+                          >
+                            <img
+                              src={logoObj.url}
+                              alt={logoObj.name}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-full w-full object-cover rounded-full"
+                              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                e.currentTarget.style.display = "none";
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ) : (
+              filteredItems.map((item) => {
+                const Icon = item.icon || Globe;
+                const theme = CARD_THEME_STYLES[item.title] || {
+                  accentColor: item.color,
+                  bgGradient: "bg-white dark:bg-slate-900",
+                  borderClass: "border-slate-200 dark:border-slate-800",
+                  iconBgClass: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
+                  dotColor: item.color,
+                };
+                const accentColor = theme.accentColor;
+
+                return (
+                  <motion.div
+                    key={item.title}
+                    layoutId={`domain-card-${item.title}`}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={item.title}
+                    onClick={() => handleCardClick(item.title)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleCardClick(item.title);
+                      }
+                    }}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseEnter={() => playUiSound("hover")}
+                    className={cn(
+                      "group relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl border-2 transition-all duration-300 select-none cursor-pointer shadow-xs hover:shadow-xl hover:-translate-y-1 backdrop-blur-xl overflow-hidden",
+                      theme.bgGradient,
+                      theme.borderClass
+                    )}
+                    style={{
+                      transform:
+                        "perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))",
+                      transformStyle: "preserve-3d",
+                    }}
+                  >
+
+                    {/* 1. Top Circular Icon Badge */}
+                    <div
+                      className={cn(
+                        "w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110 shadow-xs",
+                        theme.iconBgClass
+                      )}
+                    >
+                      <Icon className="w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2]" />
+                    </div>
+
+                    {/* 2. Main Title with Distinct Accent Color - Card Title / H6: 15px – 16px */}
+                    <h3
+                      className="font-play text-card-title text-[15px] sm:text-[16px] font-bold tracking-tight leading-snug"
+                      style={{ color: accentColor }}
+                    >
+                      {isVi ? item.title : item.titleEn || item.title}
+                    </h3>
+
+                    {/* 3. Experience Years Subtitle */}
+                    <div className="text-body-sm font-semibold text-slate-700 dark:text-slate-300 mt-0.5">
+                      {item.details.experienceYears.includes("kinh nghiệm") || item.details.experienceYears.includes("experience")
+                        ? item.details.experienceYears
+                        : `${item.details.experienceYears} ${isVi ? "kinh nghiệm" : "experience"}`}
+                    </div>
+
+                    {/* 3.5. Service Card Description (Mô tả thẻ dịch vụ) */}
+                    <p className="service-card-desc text-body-sm text-slate-600 dark:text-slate-300 mt-2 text-center line-clamp-3 leading-relaxed font-normal px-1">
+                      {isVi ? item.desc : item.descEn || item.desc}
+                    </p>
+
+                    {/* 4. Brand Logos */}
+                    <div className="flex items-center justify-center flex-wrap gap-2 max-w-full mt-auto pt-3">
+                      {item.logos &&
+                        item.logos.map((logoObj: BrandLogo, lIdx: number) => (
+                          <div
+                            key={lIdx}
+                            className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/90 dark:border-slate-700 bg-white p-0 shadow-xs transition-transform duration-300 group-hover:scale-105 hover:!scale-115"
+                            title={logoObj.name}
+                          >
+                            <img
+                              src={logoObj.url}
+                              alt={logoObj.name}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-full w-full object-cover rounded-full"
+                              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                e.currentTarget.style.display = "none";
+                              }}
+                            />
+                          </div>
+                        ))}
+                    </div>
+
+                    {/* Hover Reveal Glow Overlay */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none rounded-2xl"
+                      style={{ backgroundColor: accentColor }}
+                    />
+                  </motion.div>
+                );
+              })
+            )}
+          </AnimatePresence>
+        </div>
+      </LayoutGroup>
     </div>
   );
 }

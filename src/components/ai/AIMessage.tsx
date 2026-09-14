@@ -34,12 +34,12 @@ export const AIMessage: React.FC<AIMessageProps> = ({
     if (!message.source) return null;
     switch (message.source) {
       case 'faq':
-        return <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">✓ Câu trả lời cấu hình sẵn (FAQ)</span>;
+        return <span className="text-caption px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">✓ Câu trả lời cấu hình sẵn (FAQ)</span>;
       case 'knowledge':
-        return <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-medium">✓ Hồ sơ cá nhân</span>;
+        return <span className="text-caption px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-medium">✓ Hồ sơ cá nhân</span>;
       case 'synthesis':
       case 'api':
-        return <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 font-medium">✦ AI Tổng hợp</span>;
+        return <span className="text-caption px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 font-medium">✦ AI Tổng hợp</span>;
       default:
         return null;
     }
@@ -69,7 +69,7 @@ export const AIMessage: React.FC<AIMessageProps> = ({
         {isAI && (
           <div className="flex items-center gap-1.5 mb-1 px-1">
             <Sparkles className="w-3 h-3 text-indigo-500 dark:text-cyan-400" />
-            <span className="text-[11px] font-bold text-indigo-600 dark:text-cyan-400 font-mono tracking-tight">
+            <span className="text-caption font-bold text-indigo-600 dark:text-cyan-400 font-mono tracking-tight">
               Trí Nhân trợ lý
             </span>
           </div>
@@ -91,7 +91,7 @@ export const AIMessage: React.FC<AIMessageProps> = ({
             <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 flex-wrap">
                 {getSourceBadge()}
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">{message.timestamp}</span>
+                <span className="text-caption text-slate-500 dark:text-slate-400">{message.timestamp}</span>
               </div>
 
               <div className="flex items-center gap-1">

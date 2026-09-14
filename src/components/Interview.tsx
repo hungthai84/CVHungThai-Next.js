@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 import { motion, AnimatePresence } from "motion/react";
 
 import {
@@ -146,44 +147,36 @@ export function Interview() {
   return (
     <section 
       id="interview" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3.5 sm:p-5 md:p-6 lg:p-[25px] font-sans text-slate-800 dark:text-slate-100"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-3.5 sm:p-5 md:p-6 lg:p-6 font-sans text-slate-800 dark:text-slate-100"
     >
       {/* Main Card Phỏng Vấn */}
-      <div className="w-full bg-transparent flex flex-col gap-3 sm:gap-[15px]">
+      <div className="w-full bg-transparent flex flex-col gap-3 sm:gap-4">
 
         {/* Container Phỏng Vấn - đem nội dung ra ngoài thẻ chứa */}
         <div 
           id="info-card-interview" 
           className="relative z-10 w-full flex flex-col gap-4 sm:gap-5 md:gap-6"
         >
-          {/* Header Card Phỏng vấn */}
-          <div className="w-full flex flex-col gap-1.5 sm:gap-[8px] pb-2.5 sm:pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-            {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
-                <div className="flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
-                  <Video className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 stroke-[2.5]" />
-                </div>
-                <h2 className="text-base sm:text-lg md:text-xl font-black tracking-tight text-indigo-600 dark:text-indigo-400">
-                  {isVi ? "Tọa đàm phỏng vấn" : "Executive interview dialogues series"}
-                </h2>
-              </div>
+          {/* Header Card Phỏng vấn (Caption / Label: 12px – 13px) */}
+          <PageCardHeader pageId="interview">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-cyan-600 dark:bg-cyan-400 rounded-full shrink-0" />
+              <span className="text-caption font-semibold font-mono text-cyan-700 dark:text-cyan-300 bg-cyan-500/15 px-2.5 py-0.5 rounded-full border border-cyan-500/30 shadow-2xs">
+                {isInterviewPlaying ? (isVi ? "Đang phát phỏng vấn trực tiếp" : "Playing Live Interview") : (isVi ? "8 Câu hỏi phỏng vấn chuyên sâu" : "8 Key Interview Questions")}
+              </span>
             </div>
-
-            {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-            <div className="h-[2px] w-full bg-indigo-500/30 dark:bg-indigo-500/20" />
-          </div>
+          </PageCardHeader>
 
 
 
           {/* ========================================================================= */}
-          {/* THẺ VIDEO VÀ THẺ CHI TIẾT PHỎNG VẤN (NẰM PHÍA DƯỚI TIMELINE) */}
+          {/* THẺ VIDEO VÀ THẺ CHI TIẾT PHỎNG VẤN (KHÓA CHIỀU CAO TRÁNH TRƯỢT LÊN XUỐNG) */}
           {/* ========================================================================= */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 md:gap-6 w-full items-stretch">
 
             {/* BENTO CARD 1: Video Player Hero Card (8 columns on lg) */}
-            <div className="w-full lg:col-span-8 flex flex-col h-full">
-              <div className="relative w-full h-full min-h-[260px] xs:min-h-[320px] sm:min-h-[380px] md:min-h-[440px] rounded-[16px] sm:rounded-[20px] overflow-hidden border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-xl transition-all duration-300 bg-slate-950 group flex flex-col">
+            <div className="w-full lg:col-span-8 flex flex-col h-[320px] xs:h-[380px] sm:h-[460px] lg:h-[540px]">
+              <div className="relative w-full h-full rounded-[10px] overflow-hidden border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-xl transition-all duration-300 bg-slate-950 group flex flex-col">
                 <video
                   ref={videoRef}
                   controls={isInterviewPlaying}
@@ -200,7 +193,7 @@ export function Interview() {
 
                 {/* Top Left Status Badge */}
                 <div className="pointer-events-none absolute left-2.5 sm:left-4 top-2.5 sm:top-4 z-20 flex items-center gap-2 max-w-[calc(100%-80px)]">
-                  <div className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/85 border border-white/20 backdrop-blur-md text-[10px] sm:text-[11px] font-bold text-white shadow-md truncate">
+                  <div className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/85 border border-white/20 backdrop-blur-md text-3xs sm:text-2xs font-bold text-white shadow-md truncate">
                     <span className={cn("w-2 h-2 rounded-full shrink-0", isInterviewPlaying ? "bg-emerald-400 animate-ping" : "bg-indigo-400")} />
                     <span className="truncate">
                       {isInterviewPlaying 
@@ -266,21 +259,21 @@ export function Interview() {
                         }}
                         className={cn(
                           "flex items-center justify-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 py-0.5 flex-1 min-w-0",
-                          "text-white font-extrabold text-[11px] sm:text-xs md:text-sm tracking-wide transition-all duration-300 cursor-pointer",
+                          "text-white font-extrabold text-2xs sm:text-xs md:text-sm tracking-wide transition-all duration-300 cursor-pointer",
                           "hover:opacity-90 active:scale-98"
                         )}
                         title={isInterviewPlaying ? (isVi ? "Dừng phỏng vấn" : "Stop interview") : (isVi ? "Phát phỏng vấn" : "Play interview")}
                       >
                         {isInterviewPlaying ? (
                           <>
-                            <span className="drop-shadow-sm font-extrabold text-[10px] sm:text-xs uppercase tracking-wider truncate">
+                            <span className="drop-shadow-sm font-extrabold text-3xs sm:text-xs uppercase tracking-wider truncate">
                               {isVi ? "Dừng phỏng vấn" : "Stop interview"}
                             </span>
                             <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 fill-current text-white" />
                           </>
                         ) : (
                           <>
-                            <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-black text-[11px] sm:text-xs md:text-sm text-white font-sans truncate">
+                            <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] font-black text-2xs sm:text-xs md:text-sm text-white font-sans truncate">
                               {isVi ? "Phát phỏng vấn" : "Play interview"}
                             </span>
                             <SparkleWithPlusDot className="w-3.5 h-3.5 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
@@ -294,8 +287,8 @@ export function Interview() {
             </div>
 
             {/* BENTO CARD 2: Active Question & Answer Detail Card (4 columns on lg = 1/3 width) */}
-            <div className="w-full lg:col-span-4 flex flex-col h-[550px]">
-              <div className="w-full h-[550px] rounded-[16px] sm:rounded-[20px] border border-slate-200/60 dark:border-cyan-400/35 bg-white/95 dark:bg-slate-900/80 p-3 xs:p-4 sm:p-5 md:p-6 backdrop-blur-2xl shadow-md dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(0,240,255,0.2),0_0_35px_rgba(217,70,239,0.15),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:shadow-xl hover:dark:border-cyan-400/60 transition-all duration-300 text-left flex flex-col justify-between gap-3 sm:gap-4">
+            <div className="w-full lg:col-span-4 flex flex-col h-[480px] sm:h-[520px] lg:h-[540px]">
+              <div className="w-full h-full rounded-[10px] border border-slate-200/60 dark:border-cyan-400/35 bg-white/95 dark:bg-slate-900/80 p-3 xs:p-4 sm:p-5 md:p-6 backdrop-blur-2xl shadow-md dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(0,240,255,0.2),0_0_35px_rgba(217,70,239,0.15),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:shadow-xl hover:dark:border-cyan-400/60 transition-all duration-300 text-left flex flex-col justify-between gap-3 sm:gap-4 overflow-hidden">
                 <div className="space-y-2.5 sm:space-y-3 flex-1 flex flex-col min-h-0">
                   {/* Header */}
                   <div className="flex items-center justify-between pb-2 sm:pb-3 border-b border-slate-200/60 dark:border-slate-800/60 mb-1 shrink-0">
@@ -310,16 +303,16 @@ export function Interview() {
                   {/* Header: STT, Timestamp, and Summary Badge */}
                   <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 bg-indigo-50/60 dark:bg-indigo-950/40 p-2 sm:p-2.5 rounded-xl border border-indigo-100 dark:border-indigo-900/40 shrink-0">
                     <div className="flex items-center gap-1.5 sm:gap-2">
-                      <span className="flex h-5.5 w-5.5 sm:h-6 sm:w-6 items-center justify-center rounded-lg bg-indigo-600 text-[11px] sm:text-xs font-black text-white shadow-2xs">
+                      <span className="flex h-5.5 w-5.5 sm:h-6 sm:w-6 items-center justify-center rounded-lg bg-indigo-600 text-2xs sm:text-xs font-black text-white shadow-2xs">
                         {currentQ.stt}
                       </span>
-                      <span className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-indigo-950/80 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                      <span className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-indigo-950/80 px-2 sm:px-2.5 py-0.5 text-3xs sm:text-xs font-bold text-indigo-700 dark:text-indigo-300 font-mono">
                         <Clock size={11} />
-                        {currentQ.timestamp} ({currentQ.startSec}s)
+                        {currentQ.timestamp} ({currentQ.startSec}s – {currentQ.endSec}s)
                       </span>
                     </div>
 
-                    <span className="rounded-full border border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-black text-amber-800 dark:text-amber-300 shadow-2xs truncate max-w-[180px] xs:max-w-[220px] sm:max-w-none">
+                    <span className="rounded-full border border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-2 sm:px-2.5 py-0.5 text-3xs sm:text-xs font-black text-amber-800 dark:text-amber-300 shadow-2xs truncate max-w-[180px] xs:max-w-[220px] sm:max-w-none">
                       {isVi ? "Cốt lõi: " : "Core: "}
                       {isVi ? currentQ.summaryVi : currentQ.summaryEn}
                     </span>
@@ -329,7 +322,7 @@ export function Interview() {
                   <div className="space-y-1.5 shrink-0 min-h-[50px] sm:min-h-[56px]">
                     <div className="flex items-center gap-1.5">
                       <span className={cn(
-                        "text-[10px] font-extrabold px-2 py-0.5 rounded-md border",
+                        "text-3xs font-extrabold px-2 py-0.5 rounded-md border",
                         (currentQ.askerVi === "Ứng viên")
                           ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
                           : "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30"
@@ -348,7 +341,7 @@ export function Interview() {
                   <div className="flex-1 py-1 space-y-1.5 flex flex-col justify-start min-h-[140px] sm:min-h-[160px] overflow-y-auto custom-scrollbar">
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className={cn(
-                        "text-[10px] font-extrabold px-2 py-0.5 rounded-md border",
+                        "text-3xs font-extrabold px-2 py-0.5 rounded-md border",
                         (currentQ.answererVi === "Nhà tuyển dụng")
                           ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30"
                           : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
@@ -358,7 +351,7 @@ export function Interview() {
                           : `${currentQ.answererEn || "Respondent"}`}
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 text-justify">
+                    <p className="text-body text-slate-700 dark:text-slate-300 text-justify">
                       {isVi ? currentQ.answerVi : currentQ.answerEn}
                     </p>
                   </div>
@@ -375,7 +368,7 @@ export function Interview() {
                     ← {isVi ? "Câu trước" : "Previous"}
                   </button>
 
-                  <span className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 font-mono">
+                  <span className="text-2xs font-extrabold text-slate-500 dark:text-slate-400 font-mono">
                     {currentQuestionIndex + 1} / {INTERVIEW_QUESTIONS.length}
                   </span>
 

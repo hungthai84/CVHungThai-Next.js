@@ -178,9 +178,8 @@ export function ProjectAudioPlayer({
           setPlayerState("playing");
           onToast?.("Đang phát Audio Postcard (Giọng đọc: Nam Puck)");
         })
-        .catch((err) => {
-          console.warn("Static MP3 not available or blocked, switching to speech fallback:", err);
-          // Fallback to VoiceEngine TTS (Nam Puck)
+        .catch(() => {
+          // Smooth fallback to VoiceEngine TTS (Nam Puck)
           setUsingSpeechFallback(true);
           voiceEngine.setGeminiVoice("Puck");
           setPlayerState("playing");
@@ -231,7 +230,7 @@ export function ProjectAudioPlayer({
       <audio
         ref={audioRef}
         src={audioSrc}
-        preload="metadata"
+        preload="none"
         onLoadedMetadata={() => {
           if (audioRef.current) {
             setDuration(audioRef.current.duration);
@@ -243,9 +242,9 @@ export function ProjectAudioPlayer({
           }
         }}
         onEnded={() => setPlayerState("ended")}
-        onError={() => {
-          // If error loading static MP3 asset, allow fallback
-          console.warn("Audio file missing or failed to load:", audioSrc);
+        onError={(e) => {
+          // Graceful fallback to speech engine when static audio is unavailable
+          setUsingSpeechFallback(true);
         }}
       />
 
@@ -254,13 +253,13 @@ export function ProjectAudioPlayer({
         
         {/* Source Selector Tab Row */}
         <div className="flex items-center justify-between gap-2 bg-slate-200/50 dark:bg-slate-950/40 p-1 rounded-xl border border-slate-300/30 dark:border-slate-800/60 mb-1">
-          <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 px-1.5">Nguồn đọc:</span>
+          <span className="text-caption font-mono font-bold text-slate-500 dark:text-slate-400 px-1.5">Nguồn đọc:</span>
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() => setSpeakMode("mp3")}
               className={cn(
-                "px-2 py-1 rounded-lg text-[10px] font-extrabold uppercase transition-all duration-200 cursor-pointer flex items-center gap-1",
+                "px-2 py-1 rounded-lg text-caption font-extrabold uppercase transition-all duration-200 cursor-pointer flex items-center gap-1",
                 speakMode === "mp3"
                   ? "bg-white dark:bg-slate-800 text-sky-600 dark:text-sky-400 shadow-sm border border-slate-200 dark:border-slate-700/60"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-transparent"
@@ -273,7 +272,7 @@ export function ProjectAudioPlayer({
               type="button"
               onClick={() => setSpeakMode("browser")}
               className={cn(
-                "px-2 py-1 rounded-lg text-[10px] font-extrabold uppercase transition-all duration-200 cursor-pointer flex items-center gap-1",
+                "px-2 py-1 rounded-lg text-caption font-extrabold uppercase transition-all duration-200 cursor-pointer flex items-center gap-1",
                 speakMode === "browser"
                   ? "bg-white dark:bg-slate-800 text-sky-600 dark:text-sky-400 shadow-sm border border-slate-200 dark:border-slate-700/60"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-transparent"
@@ -328,11 +327,11 @@ export function ProjectAudioPlayer({
           {/* Voice Badge & Title */}
           <div className="flex flex-col min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="px-2 py-0.5 rounded-md bg-sky-100 dark:bg-sky-500/20 border border-sky-200 dark:border-sky-400/30 text-sky-600 dark:text-sky-300 font-mono text-[10px] font-bold flex items-center gap-1 shrink-0">
+              <span className="px-2 py-0.5 rounded-md bg-sky-100 dark:bg-sky-500/20 border border-sky-200 dark:border-sky-400/30 text-sky-600 dark:text-sky-300 font-mono text-caption font-bold flex items-center gap-1 shrink-0">
                 <Mic className="w-3 h-3 text-sky-500 dark:text-sky-400" />
                 {speakMode === "browser" ? "TTS" : voice}
               </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate hidden xs:inline">
+              <span className="text-caption text-slate-500 dark:text-slate-400 font-mono truncate hidden xs:inline">
                 • {speakMode === "browser" ? "Browser TTS" : "60-90s Narrative"}
               </span>
             </div>
@@ -357,7 +356,7 @@ export function ProjectAudioPlayer({
         {/* Progress Timeline Bar */}
         {speakMode === "mp3" && !usingSpeechFallback && duration > 0 && (
           <div className="flex items-center gap-2 pt-1 border-t border-slate-200 dark:border-slate-800/80">
-            <span className="text-[10px] font-mono font-bold text-sky-600 dark:text-sky-300 shrink-0 w-9 text-right">
+            <span className="text-caption font-mono font-bold text-sky-600 dark:text-sky-300 shrink-0 w-9 text-right">
               {formatTime(currentTime)}
             </span>
             <input
@@ -368,7 +367,7 @@ export function ProjectAudioPlayer({
               onChange={handleSeek}
               className="flex-1 h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400"
             />
-            <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 shrink-0 w-9">
+            <span className="text-caption font-mono font-bold text-slate-500 dark:text-slate-400 shrink-0 w-9">
               {formatTime(duration)}
             </span>
           </div>

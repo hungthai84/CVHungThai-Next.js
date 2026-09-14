@@ -42,6 +42,7 @@ const ExpandedCardLanguages = lazy(() => import("./SkillCardExpandedViews").then
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
+import { PageCardHeader } from "./PageCardHeader";
 
 type CardKey = "swot-s" | "swot-o" | "swot-w" | "swot-t";
 export type SkillCardKey = "swot-s" | "swot-o" | "swot-w" | "swot-t" | "languages";
@@ -122,7 +123,7 @@ export function Skills() {
       className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
     >
       {/* Main Container Kỹ năng */}
-      <div className="w-full flex flex-col gap-[15px]">
+      <div className="w-full flex flex-col gap-4">
         {/* Component Specific Style Injector for Pixel-Exact Glassmorphism & Animations */}
       <style>{`
         /* Hiệu ứng Kính Mờ (Glassmorphism) chuẩn đồng bộ với Education */
@@ -229,12 +230,16 @@ export function Skills() {
           box-shadow: none !important;
         }
 
-        #swot-s li.p-2.rounded-xl,
-        #swot-w li.p-2.rounded-xl {
+        #swot-s li.p-2,
+        #swot-w li.p-2 {
           background: transparent !important;
           background-color: transparent !important;
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
+        }
+
+        #swot-s li.p-2 span {
+          font-size: 16px !important;
         }
 
         .skills-hover-lift {
@@ -284,72 +289,51 @@ export function Skills() {
         }
       `}</style>
 
-      {/* Tiêu đề thẻ cho thẻ chính kỹ năng */}
-      <div className="w-full flex flex-col gap-[8px] pb-3 border-b border-slate-200/60 dark:border-slate-800/60 font-['Play',sans-serif]">
-          {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon & Nút thu gọn tất cả bên phải */}
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
-                <Brain className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-              </div>
-              <h2 className="text-lg sm:text-xl font-black tracking-tight text-purple-600 dark:text-purple-400">
-                {isVi ? "Kỹ năng chuyên môn" : "Core competencies skill matrix"}
-              </h2>
-            </div>
-
-            {/* Nút thu gọn / mở rộng tất cả bên phải tiêu đề chính */}
-            {!expandedSkillCardKey && (
-              <button
-                type="button"
-                onClick={() => {
-                  playUiSound("toggle");
-                  toggleAllCards();
-                }}
-                className="px-3 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95"
-              >
-                <ChevronsUpDown className="w-3.5 h-3.5 text-purple-500" />
-                <span>
-                  {areAllCollapsed
-                    ? (isVi ? "Mở rộng tất cả" : "Expand all")
-                    : (isVi ? "Thu gọn tất cả" : "Collapse all")}
-                </span>
-              </button>
-            )}
-          </div>
-
-          {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-          <div className="h-[2px] w-full bg-purple-500/30 dark:bg-purple-500/20" />
-
-          {/* Dòng 4 : Tiện ích hiển thị: Chỉ báo khối SWOT & Ngôn ngữ */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-            {/* Cụm trái: Chỉ báo chuyên đề */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-5 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
-                <span className="text-xs font-mono font-black text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
-                  {isVi ? "4 Khối SWOT & 3 Ngôn ngữ" : "4 SWOT Quadrants & 3 Languages"}
-                </span>
-              </div>
-            </div>
-
-            {/* Cụm phải: Nút hoàn tác khi phóng to thẻ */}
-            {expandedSkillCardKey && (
-              <div className="flex items-center gap-2 ml-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playUiSound("click");
-                    setExpandedSkillCardKey(null);
-                  }}
-                  className="px-3 py-1 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95"
-                >
-                  <Minimize2 className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Thu nhỏ về 5 thẻ (ESC)" : "Restore 5 cards (ESC)"}</span>
-                </button>
-              </div>
-            )}
-          </div>
+      {/* Tiêu đề thẻ cho thẻ chính kỹ năng (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
+      <PageCardHeader pageId="skills">
+        {/* Cụm trái: Chỉ báo chuyên đề (Caption / Label: 12px – 13px) */}
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-5 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
+          <span className="text-caption font-semibold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
+            {isVi ? "4 Khối SWOT & 3 Ngôn ngữ" : "4 SWOT Quadrants & 3 Languages"}
+          </span>
         </div>
+
+        {/* Nút thu gọn tất cả nằm dưới đường line bên phải */}
+        <div className="flex items-center gap-2 ml-auto">
+          {!expandedSkillCardKey && (
+            <button
+              type="button"
+              onClick={() => {
+                playUiSound("toggle");
+                toggleAllCards();
+              }}
+              className="px-3 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-caption font-bold text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 shrink-0"
+            >
+              <ChevronsUpDown className="w-3.5 h-3.5 text-purple-500" />
+              <span>
+                {areAllCollapsed
+                  ? (isVi ? "Mở rộng tất cả" : "Expand all")
+                  : (isVi ? "Thu gọn tất cả" : "Collapse all")}
+              </span>
+            </button>
+          )}
+
+          {expandedSkillCardKey && (
+            <button
+              type="button"
+              onClick={() => {
+                playUiSound("click");
+                setExpandedSkillCardKey(null);
+              }}
+              className="px-3 py-1 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-caption font-black transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 shrink-0"
+            >
+              <Minimize2 className="w-3.5 h-3.5" />
+              <span>{isVi ? "Thu nhỏ về 5 thẻ (ESC)" : "Restore 5 cards (ESC)"}</span>
+            </button>
+          )}
+        </div>
+      </PageCardHeader>
 
       {/* SWOT Sub-Section */}
       {(selectedCategory === "all" || selectedCategory === "swot") && (!expandedSkillCardKey || expandedSkillCardKey !== "languages") && (
@@ -404,9 +388,9 @@ export function Skills() {
             <div className="flex items-center justify-between pb-3 border-b border-blue-200/70 dark:border-blue-800/70 mb-3 w-full select-none">
               <div className="flex items-center gap-2.5">
                 <Gem className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-black text-blue-600 dark:text-blue-400 tracking-wide">
+                <h6 className="text-h6 font-black text-blue-600 dark:text-blue-400 tracking-wide">
                   {isVi ? "Điểm Mạnh" : "Strengths"}
-                </h3>
+                </h6>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
@@ -433,11 +417,11 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between h-full">
                 <div className="flex-1 flex flex-col justify-between">
-                  <p className="text-[10px] xs:text-xs text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Những thế mạnh vượt trội đã được chứng minh và khẳng định qua thực tiễn quản lý, vận hành hệ thống.
                   </p>
 
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 xs:gap-2 text-[10px] xs:text-xs font-medium">
+                  <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
                       { icon: Database, label: "CRM & Contact Center", percent: 95 },
                       { icon: BarChart3, label: "Phân tích Dữ liệu CX", percent: 90 },
@@ -449,13 +433,13 @@ export function Skills() {
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-[10px] !bg-transparent border border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all shadow-2xs">
-                          <div className="flex items-center justify-between text-xs">
+                        <li key={idx} className="p-2 rounded-[10px] !bg-transparent border border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all shadow-2xs text-body">
+                          <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
-                              <IconComp className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-                              <span className="truncate">{skill.label}</span>
+                              <IconComp className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                              <span className="truncate text-body">{skill.label}</span>
                             </span>
-                            <span className="px-1.5 py-0.5 rounded bg-blue-500/15 dark:bg-blue-500/25 text-blue-800 dark:text-blue-300 font-mono font-black text-[11px] shrink-0 ml-2">
+                            <span className="px-1.5 py-0.5 rounded bg-blue-500/15 dark:bg-blue-500/25 text-blue-800 dark:text-blue-300 font-mono font-black text-xs shrink-0 ml-2">
                               {skill.percent}%
                             </span>
                           </div>
@@ -515,9 +499,9 @@ export function Skills() {
               </div>
 
               <div className="flex items-center gap-2.5">
-                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-black text-purple-600 dark:text-purple-400 tracking-wide text-right">
+                <h6 className="text-h6 font-black text-purple-600 dark:text-purple-400 tracking-wide text-right">
                   {isVi ? "Phát Triển" : "Development & Growth"}
-                </h3>
+                </h6>
                 <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
               </div>
             </div>
@@ -530,11 +514,11 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
                 <div>
-                  <p className="text-[10px] xs:text-xs text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Làn sóng công nghệ và nhu cầu thị trường mở ra các đòn bẩy lớn để tạo bước nhảy vọt trong sự nghiệp.
                   </p>
 
-                  <div className="grid grid-cols-2 gap-1.5 xs:gap-2 text-center">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-center">
                     {[
                       { icon: Bot, title: "AI & Tự Động Hóa", desc: "Ứng dụng AI, Chatbot và tự động hóa quy trình nghiệp vụ tổng đài nâng cấp trải nghiệm toàn diện.", meter: 95 },
                       { icon: HeartHandshake, title: "Chiến Lược CX", desc: "Dẫn dắt nâng tầm trải nghiệm đa điểm chạm và tối ưu hóa hành trình khách hàng.", meter: 92 },
@@ -543,19 +527,16 @@ export function Skills() {
                     ].map((opp, idx) => {
                       const IconComp = opp.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
-                          <div className="w-full flex flex-col items-center">
-                            <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 mb-1 shrink-0" />
-                            <h4 className="text-[11px] font-bold text-purple-700 dark:text-purple-400 leading-tight">
-                              {opp.title}
-                            </h4>
-                          </div>
-                          <div className="w-full pt-1">
-                            <div className="flex items-center justify-between text-[9.5px] font-mono font-bold text-purple-700 dark:text-purple-300 mb-0.5 px-0.5">
-                              <span>Tiềm năng</span>
-                              <span>{opp.meter}%</span>
+                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 flex flex-col justify-between text-left space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
+                          <div className="w-full pt-0.5">
+                            <div className="flex items-center justify-between text-body font-bold text-purple-700 dark:text-purple-300 mb-1.5 px-0.5">
+                              <span className="flex items-center gap-1.5 truncate pr-1 text-left font-bold text-body min-w-0">
+                                <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
+                                <span className="truncate">{opp.title}</span>
+                              </span>
+                              <span className="font-mono font-black shrink-0 text-body ml-2">{opp.meter}%</span>
                             </div>
-                            <div className="w-full h-1 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
+                            <div className="w-full h-1.5 bg-purple-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 whileInView={{ width: `${opp.meter}%` }}
@@ -596,9 +577,9 @@ export function Skills() {
             <div className="flex items-center justify-between pb-3 border-b border-amber-200/70 dark:border-amber-800/70 mb-3 w-full select-none pr-12">
               <div className="flex items-center gap-2.5">
                 <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-black text-amber-600 dark:text-amber-400 tracking-wide">
+                <h6 className="text-h6 font-black text-amber-600 dark:text-amber-400 tracking-wide">
                   {isVi ? "Hoàn Thiện" : "Growth Areas"}
-                </h3>
+                </h6>
               </div>
 
               {/* Nút thu/mở rộng */}
@@ -626,11 +607,11 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
                 <div>
-                  <p className="text-[10px] xs:text-xs text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed font-semibold">
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed font-semibold">
                     Mục tiêu hoàn thiện các năng lực chiến lược vượt trội nhằm xây dựng chân dung nhà quản trị vận hành toàn diện.
                   </p>
 
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 xs:gap-2 text-[10px] xs:text-xs font-medium">
+                  <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
                       { icon: Target, label: "Tư duy chiến lược & Hoạch định", percent: 80 },
                       { icon: FolderKanban, label: "Quản trị dự án chuyển đổi số", percent: 80 },
@@ -642,13 +623,13 @@ export function Skills() {
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-xl !bg-transparent border border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all shadow-2xs">
-                          <div className="flex items-center justify-between text-xs">
+                        <li key={idx} className="p-2 rounded-xl !bg-transparent border border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all shadow-2xs text-body">
+                          <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                              <span className="truncate">{skill.label}</span>
+                              <span className="truncate text-body">{skill.label}</span>
                             </span>
-                            <span className="px-1.5 py-0.5 rounded bg-amber-500/15 dark:bg-amber-500/25 text-amber-800 dark:text-amber-300 font-mono font-black text-[11px] shrink-0 ml-2">
+                            <span className="px-1.5 py-0.5 rounded bg-amber-500/15 dark:bg-amber-500/25 text-amber-800 dark:text-amber-300 font-mono font-black text-xs shrink-0 ml-2">
                               {skill.percent}%
                             </span>
                           </div>
@@ -709,9 +690,9 @@ export function Skills() {
               </div>
 
               <div className="flex items-center gap-2.5">
-                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-black text-rose-600 dark:text-rose-400 tracking-wide text-right">
+                <h6 className="text-h6 font-black text-rose-600 dark:text-rose-400 tracking-wide text-right">
                   {isVi ? "Thách Thức" : "Challenges"}
-                </h3>
+                </h6>
                 <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
               </div>
             </div>
@@ -724,11 +705,11 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
                 <div>
-                  <p className="text-[10px] xs:text-xs text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Những yếu tố khách quan từ môi trường kinh doanh đòi hỏi sự chủ động thích ứng và quản trị rủi ro linh hoạt.
                   </p>
 
-                  <div className="grid grid-cols-2 gap-1.5 xs:gap-2 text-center">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-center">
                     {[
                       { icon: Cpu, title: "AI định hình lại CSKH", desc: "Tự động hóa thay thế các nghiệp vụ cũ, đòi hỏi nâng cấp năng lực liên tục.", meter: 85 },
                       { icon: BarChart3, title: "Công nghệ đổi mới nhanh", desc: "Công nghệ CX, Dữ liệu và AI liên tục xoay trục với tốc độ cao.", meter: 90 },
@@ -737,19 +718,16 @@ export function Skills() {
                     ].map((threat, idx) => {
                       const IconComp = threat.icon;
                       return (
-                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 flex flex-col items-center justify-between text-center space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
-                          <div className="w-full flex flex-col items-center">
-                            <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 mb-1 shrink-0" />
-                            <h4 className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">
-                              {threat.title}
-                            </h4>
-                          </div>
-                          <div className="w-full pt-1">
-                            <div className="flex items-center justify-between text-[9.5px] font-mono font-bold text-rose-700 dark:text-rose-300 mb-0.5 px-0.5">
-                              <span>Tác động</span>
-                              <span>{threat.meter}%</span>
+                        <div key={idx} className="p-2.5 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 flex flex-col justify-between text-left space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs">
+                          <div className="w-full pt-0.5">
+                            <div className="flex items-center justify-between text-body font-bold text-rose-700 dark:text-rose-300 mb-1.5 px-0.5">
+                              <span className="flex items-center gap-1.5 truncate pr-1 text-left font-bold text-body min-w-0">
+                                <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 shrink-0" />
+                                <span className="truncate">{threat.title}</span>
+                              </span>
+                              <span className="font-mono font-black shrink-0 text-body ml-2">{threat.meter}%</span>
                             </div>
-                            <div className="w-full h-1 bg-rose-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
+                            <div className="w-full h-1.5 bg-rose-100/80 dark:bg-slate-800/80 rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 whileInView={{ width: `${threat.meter}%` }}
@@ -794,9 +772,9 @@ export function Skills() {
                 <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
                   <div className="flex items-center gap-2">
                     <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    <h3 className="text-base font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
+                    <h6 className="text-h6 font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
                       {isVi ? "Năng lực ngôn ngữ" : "International language proficiency"}
-                    </h3>
+                    </h6>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-base sm:text-lg font-black font-mono px-3 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shrink-0 shadow-2xs">
@@ -817,105 +795,109 @@ export function Skills() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-[10px]">
-                  <div className="skills-glass-card rounded-xl p-3 flex items-center gap-3 skills-hover-lift shadow-sm">
-                    <div className="relative w-13 h-13 flex-shrink-0 flex items-center justify-center font-bold text-sm text-rose-600 dark:text-rose-400">
-                      <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-rose-600 dark:text-rose-500 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="90, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-xs font-bold text-rose-600 dark:text-rose-400">90%</span>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
                         <Languages className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-                        <h4 className="font-bold text-xs text-rose-700 dark:text-rose-300">Tiếng Việt</h4>
+                        <h4 className="font-bold text-body text-rose-700 dark:text-rose-300">Tiếng Việt</h4>
+                        <span className="text-body-sm text-slate-600 dark:text-slate-400">(Ngôn ngữ bản xứ)</span>
                       </div>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400">(Ngôn ngữ bản xứ)</p>
-                      <span className="text-[10px] text-rose-700 dark:text-rose-400 font-semibold flex items-center gap-1 mt-0.5">
-                        <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />
+                      <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-rose-600 dark:text-rose-400">
+                        <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                          <path
+                            className="text-slate-200 dark:text-slate-800 stroke-current"
+                            strokeWidth="3.5"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                          <path
+                            className="text-rose-600 dark:text-rose-500 stroke-current"
+                            strokeWidth="3.5"
+                            strokeDasharray="90, 100"
+                            strokeLinecap="round"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                        </svg>
+                        <span className="absolute text-2xs font-bold text-rose-600 dark:text-rose-400">90%</span>
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t border-rose-100/70 dark:border-rose-900/40 flex items-center justify-between">
+                      <span className="text-body-sm text-rose-700 dark:text-rose-400 font-semibold flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                         Thành thạo chuyên sâu
                       </span>
                     </div>
                   </div>
 
-                  <div className="skills-glass-card rounded-xl p-3 flex items-center gap-3 skills-hover-lift shadow-sm">
-                    <div className="relative w-13 h-13 flex-shrink-0 flex items-center justify-center font-bold text-sm text-sky-600 dark:text-sky-400">
-                      <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-sky-600 dark:text-sky-500 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="60, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-xs font-bold text-sky-600 dark:text-sky-400">60%</span>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
+                  <div className="skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
                         <Globe className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
-                        <h4 className="font-bold text-xs text-sky-700 dark:text-sky-300">Tiếng Anh</h4>
+                        <h4 className="font-bold text-body text-sky-700 dark:text-sky-300">Tiếng Anh</h4>
+                        <span className="text-body-sm text-slate-600 dark:text-slate-400">(Giao tiếp chuyên nghiệp)</span>
                       </div>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400">(Giao tiếp chuyên nghiệp)</p>
-                      <span className="text-[10px] text-sky-700 dark:text-sky-400 font-semibold flex items-center gap-1 mt-0.5">
-                        <Award className="w-2.5 h-2.5 shrink-0" />
+                      <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-sky-600 dark:text-sky-400">
+                        <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                          <path
+                            className="text-slate-200 dark:text-slate-800 stroke-current"
+                            strokeWidth="3.5"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                          <path
+                            className="text-sky-600 dark:text-sky-500 stroke-current"
+                            strokeWidth="3.5"
+                            strokeDasharray="60, 100"
+                            strokeLinecap="round"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                        </svg>
+                        <span className="absolute text-2xs font-bold text-sky-600 dark:text-sky-400">60%</span>
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t border-sky-100/70 dark:border-sky-900/40 flex items-center justify-between">
+                      <span className="text-body-sm text-sky-700 dark:text-sky-400 font-semibold flex items-center gap-1.5">
+                        <Award className="w-3.5 h-3.5 shrink-0" />
                         Làm việc môi trường quốc tế
                       </span>
                     </div>
                   </div>
 
-                  <div className="skills-glass-card rounded-xl p-3 flex items-center gap-3 skills-hover-lift shadow-sm">
-                    <div className="relative w-13 h-13 flex-shrink-0 flex items-center justify-center font-bold text-sm text-emerald-700 dark:text-emerald-400">
-                      <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-emerald-600 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="85, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-xs font-bold text-emerald-600 dark:text-emerald-400">85%</span>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
+                  <div className="skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
                         <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                        <h4 className="font-bold text-xs text-emerald-600 dark:text-emerald-400 leading-tight">
-                          Ứng dụng AI đa ngôn ngữ
+                        <h4 className="font-bold text-body text-emerald-600 dark:text-emerald-400 leading-tight">
+                          Ứng dụng AI
                         </h4>
+                        <span className="text-body-sm text-slate-600 dark:text-slate-400">(Hỗ trợ trao đổi &amp; họp đa quốc gia)</span>
                       </div>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
-                        Hỗ trợ trao đổi &amp; họp đa quốc gia
-                      </p>
-                      <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-                        <Sparkles className="w-2.5 h-2.5 shrink-0" />
+                      <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-emerald-700 dark:text-emerald-400">
+                        <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                          <path
+                            className="text-slate-200 dark:text-slate-800 stroke-current"
+                            strokeWidth="3.5"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                          <path
+                            className="text-emerald-600 stroke-current"
+                            strokeWidth="3.5"
+                            strokeDasharray="85, 100"
+                            strokeLinecap="round"
+                            fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                        </svg>
+                        <span className="absolute text-2xs font-bold text-emerald-600 dark:text-emerald-400">85%</span>
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t border-emerald-100/70 dark:border-emerald-900/40 flex items-center justify-between">
+                      <span className="text-body-sm text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 shrink-0" />
                         Dịch thuật &amp; Trợ lý thời gian thực
                       </span>
                     </div>

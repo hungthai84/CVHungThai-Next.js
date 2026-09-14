@@ -28,7 +28,7 @@ import {
   Sparkles,
   Printer,
   Play,
-  Headphones
+  Rocket
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -178,7 +178,10 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     if (targetTheme) {
       nextTheme = targetTheme;
     } else {
-      nextTheme = theme === "modern-light-glass" ? "glass-dark-neon" : "modern-light-glass";
+      if (theme === "glass-dark-neon") nextTheme = "modern-light-glass";
+      else if (theme === "modern-light-glass") nextTheme = "mritech-aurora-glass";
+      else if (theme === "mritech-aurora-glass") nextTheme = "mritech-digital-growth";
+      else nextTheme = "glass-dark-neon";
     }
     setTheme(nextTheme);
     setIsStackPinned(true);
@@ -190,17 +193,17 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
     { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "services", num: "05", labelVi: "Dịch vụ", labelEn: "Services", Icon: Headphones, key: "5" },
-    { id: "skills", num: "06", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
-    { id: "education", num: "07", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
-    { id: "experience", num: "08", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
-    { id: "projects", num: "09", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
-    { id: "interview", num: "10", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
-    { id: "tuvi", num: "11", labelVi: "Tử Vi & Hệ thống", labelEn: "TuVi & Systems", Icon: Sparkles, key: "9" },
-    { id: "memories", num: "12", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "0" },
-    { id: "systems", num: "13", labelVi: "Hệ thống", labelEn: "Tech Systems", Icon: LayoutGrid, key: "S" },
-    { id: "contact", num: "14", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
-    { id: "wallpapers", num: "15", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
+    { id: "domains", num: "04", labelVi: "Trang dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
+    { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
+    { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+    { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
+    { id: "projects", num: "07", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
+    { id: "interview", num: "08", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
+    { id: "tuvi", num: "09", labelVi: "Tử Vi & Hệ thống", labelEn: "TuVi & Systems", Icon: Sparkles, key: "9" },
+    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "0" },
+    { id: "systems", num: "11", labelVi: "Hệ thống", labelEn: "Tech Systems", Icon: LayoutGrid, key: "S" },
+    { id: "contact", num: "12", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
+    { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
   ];
 
   // Navigation Items for Top Header Center
@@ -208,7 +211,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", label: t("nav.home"), Icon: Monitor },
     { id: "letter", label: t("nav.letter"), Icon: FileText },
     { id: "about", label: t("nav.about"), Icon: User },
-    { id: "services", label: t("nav.services"), Icon: Headphones },
+    { id: "domains", label: t("nav.domains"), Icon: Compass },
     { id: "skills", label: t("nav.skills"), Icon: Brain },
     { id: "education", label: t("nav.education"), Icon: GraduationCap },
     { id: "experience", label: t("nav.experience"), Icon: Briefcase },
@@ -242,12 +245,12 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     <>
       <header 
         id="header"
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] border-t-0 rounded-b-[20px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-500 ease-in-out ${getHeaderContainerStyle()}`}
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-500 ease-in-out floating-glass-header ${getHeaderContainerStyle()}`}
         style={{
           borderTopLeftRadius: "0px",
           borderTopRightRadius: "0px",
-          borderBottomLeftRadius: "20px",
-          borderBottomRightRadius: "20px"
+          borderBottomLeftRadius: "10px",
+          borderBottomRightRadius: "10px"
         }}
       >
         {/* Hidden dummy svg to satisfy selector verification while keeping menu icons active */}
@@ -376,7 +379,13 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     </div>
                   </div>
                   <span className="truncate">
-                    {theme === "glass-dark-neon" ? (lang === "vi" ? "Glass Tối" : "Dark Neon") : (lang === "vi" ? "Glass Sáng" : "Light Glass")}
+                    {theme === "glass-dark-neon" 
+                      ? (lang === "vi" ? "Glass Tối" : "Dark Neon") 
+                      : theme === "mritech-digital-growth"
+                      ? (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")
+                      : theme === "mritech-aurora-glass"
+                      ? (lang === "vi" ? "Glass Aurora" : "Aurora Glass")
+                      : (lang === "vi" ? "Glass Sáng" : "Light Glass")}
                   </span>
                 </button>
 
@@ -437,7 +446,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   className="absolute top-full right-0 mt-2 p-2.5 rounded-2xl bg-transparent backdrop-blur-md border border-slate-200/40 dark:border-white/10 shadow-none z-[90] flex flex-col gap-1.5 min-w-[195px] sm:min-w-[210px]"
                 >
                   {/* Header mini của khung */}
-                  <div className="flex items-center justify-between px-2 py-0.5 pb-1 text-[9.5px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200/40 dark:border-white/10 mb-0.5">
+                  <div className="flex items-center justify-between px-2 py-0.5 pb-1 text-3xs font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200/40 dark:border-white/10 mb-0.5">
                     <span>{lang === "vi" ? "Tùy chỉnh nhanh" : "Quick Settings"}</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
@@ -458,7 +467,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                       </div>
                       <span className="truncate">{lang === "vi" ? "Ngôn ngữ" : "Language"}</span>
                     </div>
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white dark:bg-white dark:text-slate-950 uppercase shrink-0">
+                    <span className="text-3xs font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white dark:bg-white dark:text-slate-950 uppercase shrink-0">
                       {lang === "vi" ? "VI" : "EN"}
                     </span>
                   </button>
@@ -486,6 +495,10 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         <span className="truncate">
                           {theme === "glass-dark-neon"
                             ? (lang === "vi" ? "Glass Tối Neon" : "Glass Dark Neon")
+                            : theme === "mritech-digital-growth"
+                            ? (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")
+                            : theme === "mritech-aurora-glass"
+                            ? (lang === "vi" ? "Glass Aurora Đa Sắc" : "Aurora Vibrant Glass")
                             : (lang === "vi" ? "Glass Sáng Đa Sắc" : "Multi-Color Light Glass")}
                         </span>
                       </div>
@@ -502,19 +515,43 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                           transition={{ duration: 0.2 }}
                           className="absolute right-full top-0 mr-2 w-72 sm:w-80 rounded-2xl bg-white/95 dark:bg-slate-950/95 border border-slate-200/80 dark:border-white/15 p-2.5 shadow-2xl z-[70] backdrop-blur-2xl"
                         >
+                          <div className="flex items-center justify-between px-3 py-1 mb-1.5 border-b border-slate-200/60 dark:border-white/10 text-caption font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                            <span className="flex items-center gap-1.5">
+                              <Sparkles className="w-3 h-3 text-cyan-400" />
+                              <span>{lang === "vi" ? "Next Themes Giao Diện" : "Next Themes Engine"}</span>
+                            </span>
+                            <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-mono text-caption font-bold">
+                              v15.0 Next.js
+                            </span>
+                          </div>
+
                           {[
                             { 
-                              id: "glass-dark-neon", 
-                              label: lang === "vi" ? "Glass Tối Neon" : "Glass Dark Neon", 
-                              desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
+                              id: "mritech-digital-growth", 
+                              label: lang === "vi" ? "Glass MRITECH Digital Growth 🚀" : "MRITECH Digital Growth Glass 🚀", 
+                              desc: lang === "vi" ? "Giao diện Thương hiệu Số: Nền Pearl, Nút Gradient 3 tông (Xanh-Tím-Cam) & Bo góc 24px" : "Digital Brand Theme: Pearl Glass canvas, 3-tone CTA gradient (Blue-Purple-Orange) & 24px Glass", 
+                              Icon: Rocket, 
+                              color: "text-amber-500" 
+                            },
+                            { 
+                              id: "mritech-aurora-glass", 
+                              label: lang === "vi" ? "Glass Aurora Đa Sắc (Mritech)" : "Aurora Vibrant Glass (Mritech)", 
+                              desc: lang === "vi" ? "Glassmorphism ngọc trai, hiệu ứng lụa sáng & gradient 3 tông" : "Pearl Glassmorphism with radiant silk aura & 3-tone gradient", 
                               Icon: Sparkles, 
+                              color: "text-rose-500" 
+                            },
+                            { 
+                              id: "glass-dark-neon", 
+                              label: lang === "vi" ? "Glass Tối Neon (Next Themes)" : "Glass Dark Neon (Next Themes)", 
+                              desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
+                              Icon: Moon, 
                               color: "text-cyan-400" 
                             },
                             { 
                               id: "modern-light-glass", 
-                              label: lang === "vi" ? "Glass Sáng Đa Sắc" : "Multi-Color Light Glass", 
+                              label: lang === "vi" ? "Glass Sáng Đa Sắc (Next Themes)" : "Multi-Color Light Glass (Next Themes)", 
                               desc: lang === "vi" ? "Glassmorphism nền sáng, màu sắc rực rỡ" : "light Glassmorphism with vibrant colors", 
-                              Icon: Sparkles, 
+                              Icon: Sun, 
                               color: "text-indigo-500" 
                             }
                           ].map((tItem) => {
@@ -529,14 +566,14 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                 }}
                                 className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-start gap-2.5 cursor-pointer mb-1 last:mb-0 ${
                                   isSelected
-                                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold"
+                                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold shadow-xs"
                                     : "text-slate-700 dark:text-slate-300 hover:bg-slate-100/60 dark:hover:bg-white/10"
                                 }`}
                               >
                                 <tItem.Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isSelected ? "text-white dark:text-slate-950" : tItem.color}`} />
                                 <div className="flex-1 min-w-0 flex flex-col text-left">
                                   <span className="text-xs font-bold leading-tight">{tItem.label}</span>
-                                  <span className={`text-[10px] mt-0.5 leading-normal ${isSelected ? "text-slate-300 dark:text-slate-400" : "text-slate-500 dark:text-slate-400"}`}>
+                                  <span className={`text-caption mt-0.5 leading-normal ${isSelected ? "text-slate-300 dark:text-slate-400" : "text-slate-500 dark:text-slate-400"}`}>
                                     {tItem.desc}
                                   </span>
                                 </div>
@@ -544,8 +581,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               </button>
                             );
                           })}
-
-
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -598,16 +633,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                 {lang === "vi" ? "Chọn Nhóm Màu Sắc" : "Select Color Group"}
                               </span>
                             </div>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] border border-[var(--color-primary)]/20">
+                            <span className="text-3xs font-bold px-2 py-0.5 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] border border-[var(--color-primary)]/20">
                               {theme === "glass-dark-neon" ? "Dark Neon ⚡" : "Light Glass ☀️"}
                             </span>
                           </div>
 
                           {/* Current 5 Colors Preview Bar */}
                           <div className="p-2 mb-2 rounded-xl bg-slate-100/70 dark:bg-white/5 border border-slate-200/40 dark:border-white/5">
-                            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                            <div className="text-3xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
                               <span>{lang === "vi" ? "Bộ 5 Màu Đang Dùng:" : "Current 5 Colors:"}</span>
-                              <span className="font-mono text-[9px] text-[var(--color-primary)] font-bold">5 Tokens</span>
+                              <span className="font-mono text-3xs text-[var(--color-primary)] font-bold">5 Tokens</span>
                             </div>
                             <div className="grid grid-cols-5 gap-1.5">
                               {themeContext.activePalette.map((tok) => (
@@ -617,7 +652,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                     style={{ backgroundColor: tok.hex }}
                                     title={`${tok.nameVi} (${tok.hex})`}
                                   />
-                                  <span className="text-[8px] font-mono text-slate-400 truncate w-full text-center">
+                                  <span className="text-3xs font-mono text-slate-400 truncate w-full text-center">
                                     {tok.hex}
                                   </span>
                                 </div>
@@ -658,7 +693,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                       <div className="font-semibold text-xs truncate flex items-center gap-1.5">
                                         <span>{lang === "vi" ? preset.nameVi : preset.name}</span>
                                       </div>
-                                      <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                      <div className="text-3xs text-slate-500 dark:text-slate-400 truncate">
                                         {preset.descriptionVi}
                                       </div>
                                     </div>
@@ -682,7 +717,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                 setIsColorDropdownOpen(false);
                                 themeContext.openColorModal();
                               }}
-                              className="text-[11px] font-semibold text-[var(--color-primary)] hover:underline flex items-center gap-1.5 cursor-pointer py-1"
+                              className="text-2xs font-semibold text-[var(--color-primary)] hover:underline flex items-center gap-1.5 cursor-pointer py-1"
                             >
                               <Sliders className="w-3.5 h-3.5" />
                               <span>{lang === "vi" ? "Xem chi tiết Token & Code" : "Token Inspector & CSS"}</span>
@@ -735,7 +770,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                       </div>
                       <span className="truncate font-bold">{lang === "vi" ? "Trình chiếu Slide" : "Slideshow"}</span>
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-300">
+                    <span className="text-3xs font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-300">
                       AUTO
                     </span>
                   </button>
@@ -844,7 +879,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                             {lang === "vi" ? "Nhóm Màu Chọn" : "Color Presets"}
                           </span>
                         </div>
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                        <span className="text-3xs font-bold px-1.5 py-0.5 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
                           {theme === "glass-dark-neon" ? "Dark Neon ⚡" : "Light Glass ☀️"}
                         </span>
                       </div>
@@ -874,7 +909,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                                   <span className="w-3 h-3 rounded-full border border-white/60 dark:border-slate-900" style={{ backgroundColor: c.secondary }} />
                                   <span className="w-3 h-3 rounded-full border border-white/60 dark:border-slate-900" style={{ backgroundColor: c.accent }} />
                                 </div>
-                                <span className="font-semibold text-[11px] truncate">
+                                <span className="font-semibold text-2xs truncate">
                                   {lang === "vi" ? preset.nameVi : preset.name}
                                 </span>
                               </div>
@@ -893,7 +928,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                             setIsColorDropdownOpen(false);
                             themeContext.openColorModal();
                           }}
-                          className="w-full text-center text-[10px] font-semibold text-[var(--color-primary)] hover:underline py-1 cursor-pointer"
+                          className="w-full text-center text-3xs font-semibold text-[var(--color-primary)] hover:underline py-1 cursor-pointer"
                         >
                           {lang === "vi" ? "Xem chi tiết Token & CSS Code →" : "View Token Details →"}
                         </button>
@@ -945,7 +980,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           {/* Menu Items */}
           <div className="space-y-2 pt-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between px-3 pb-2 gap-2 border-b border-slate-200/10 dark:border-white/10 mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand-primary/80">
+              <span className="text-2xs font-bold uppercase tracking-wider text-brand-primary/80">
                 {lang === "vi" ? "Giao diện & Bố cục" : "Themes & Layout"}
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -954,7 +989,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={() => {
                     setTheme("modern-light-glass");
                   }}
-                  className={`flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
+                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
                     theme === "modern-light-glass"
                       ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-400/50 font-black shadow-sm"
                       : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
@@ -968,7 +1003,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={() => {
                     setTheme("glass-dark-neon");
                   }}
-                  className={`flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
+                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
                     theme === "glass-dark-neon"
                       ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/50 font-black shadow-sm shadow-cyan-500/20"
                       : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
@@ -982,7 +1017,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={() => {
                     setTheme("modern-light-glass");
                   }}
-                  className={`flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
+                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
                     theme === "modern-light-glass"
                       ? "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-400/50 font-black shadow-sm"
                       : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
@@ -998,7 +1033,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
 
                 <button
                   onClick={toggleOrientation}
-                  className="flex items-center gap-1 text-[11px] font-bold text-indigo-400 bg-indigo-500/15 border border-indigo-500/30 px-2.5 py-1 rounded-full active:scale-95 cursor-pointer"
+                  className="flex items-center gap-1 text-2xs font-bold text-indigo-400 bg-indigo-500/15 border border-indigo-500/30 px-2.5 py-1 rounded-full active:scale-95 cursor-pointer"
                 >
                   <Columns3 className="w-3.5 h-3.5" />
                   <span>{isHorizontal ? (lang === "vi" ? "Ngang" : "Horiz") : (lang === "vi" ? "Dọc" : "Vert")}</span>
@@ -1031,7 +1066,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         <span className="text-sm font-semibold truncate">
                           {lang === "vi" ? item.labelVi : item.labelEn}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">
+                        <span className="text-3xs text-slate-400 font-mono">
                           #{item.num} {item.key ? `[Phím ${item.key}]` : ""}
                         </span>
                       </div>

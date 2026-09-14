@@ -51,16 +51,6 @@ const PRESENTATION_SLIDES = [
     gradient: "from-amber-600 via-orange-600 to-red-600",
   },
   {
-    id: "services",
-    titleVi: "05. Dịch Vụ Tư Vấn & Triển Khai",
-    titleEn: "05. Consulting & Advisory Services",
-    descVi: "Gói giải pháp toàn diện: Kiến trúc Contact Center, Chuyển đổi số AI CX, Đào tạo QA/QC và Tối ưu chi phí BPO.",
-    descEn: "Turnkey solutions: Contact Center Setup, AI CX Digital Transformation, QA Coaching, and BPO Cost Optimization.",
-    highlightVi: "Cam kết KPI • Bảo mật NDA • Chuyển giao 100% Tri thức",
-    highlightEn: "Committed KPIs • Strict NDA • 100% Knowledge Transfer",
-    gradient: "from-blue-600 via-indigo-600 to-cyan-600",
-  },
-  {
     id: "experience",
     titleVi: "06. Cột mốc Kinh nghiệm Làm việc",
     titleEn: "06. Career Experience Timeline",
@@ -192,7 +182,7 @@ export default function PresentationModeModal({ isOpen, onClose, onNavigate }: P
                 <span>{isVi ? "Chế độ Trình chiếu Điều hành" : "Executive Presentation Mode"}</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-body-sm text-slate-400">
                 {isVi ? "Tự động trình chiếu thông tin tổng quan phục vụ xem báo cáo" : "Auto-advancing presentation view"}
               </p>
             </div>

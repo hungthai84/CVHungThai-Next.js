@@ -1,8 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useTheme as useNextTheme } from "next-themes";
 
 export const THEMES = [
   "glass-dark-neon",
-  "modern-light-glass"
+  "modern-light-glass",
+  "mritech-aurora-glass",
+  "mritech-digital-growth"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -526,6 +529,7 @@ const COLOR_PRESET_STORAGE_KEY = "portfolio_color_preset";
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const nextThemeContext = useNextTheme();
   const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
   const [themeSnapshot, setThemeSnapshot] = useState<string | null>(null);
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
@@ -587,6 +591,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       "theme-dark",
       "theme-glass-dark-neon",
       "theme-modern-light-glass",
+      "theme-mritech-aurora-glass",
+      "theme-mritech-digital-growth",
       "theme-flat-light",
       "theme-flat-dark"
     );
@@ -737,6 +743,36 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  const safeStartViewTransition = (callback: () => void) => {
+    if (typeof document !== "undefined" && typeof (document as any).startViewTransition === "function") {
+      try {
+        const transition = (document as any).startViewTransition(() => {
+          try {
+            callback();
+          } catch (e) {
+            console.error("View transition callback error", e);
+          }
+        });
+
+        if (transition) {
+          if (typeof transition.ready?.catch === "function") {
+            transition.ready.catch(() => {});
+          }
+          if (typeof transition.finished?.catch === "function") {
+            transition.finished.catch(() => {});
+          }
+          if (typeof transition.updateCallbackDone?.catch === "function") {
+            transition.updateCallbackDone.catch(() => {});
+          }
+        }
+      } catch {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   const setTheme = async (newTheme: ThemeType) => {
     if (newTheme === theme) return;
 
@@ -748,9 +784,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setThemeSnapshot(snapshotUrl);
     }
 
-    // 2. Trigger native View Transition API if supported
+    // 2. Trigger safe View Transition API if supported
     const executeThemeChange = () => {
       setThemeState(newTheme);
+      try {
+        if (nextThemeContext && nextThemeContext.setTheme) {
+          nextThemeContext.setTheme(newTheme);
+        }
+      } catch {}
       applyThemeToDOM(newTheme);
       applyColorsToDOM(newTheme, colorPreset);
 
@@ -763,13 +804,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     };
 
-    if (typeof (document as any).startViewTransition === "function") {
-      (document as any).startViewTransition(() => {
-        executeThemeChange();
-      });
-    } else {
-      executeThemeChange();
-    }
+    safeStartViewTransition(executeThemeChange);
 
     // 3. Keep snapshot dissolving over 450ms then clear
     setTimeout(() => {
@@ -797,13 +832,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     };
 
-    if (typeof (document as any).startViewTransition === "function") {
-      (document as any).startViewTransition(() => {
-        executePresetChange();
-      });
-    } else {
-      executePresetChange();
-    }
+    safeStartViewTransition(executePresetChange);
 
     setTimeout(() => {
       setIsThemeTransitioning(false);
@@ -815,6 +844,38 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     applyThemeToDOM(theme);
     applyColorsToDOM(theme, colorPreset);
   }, [theme, colorPreset]);
+
+  useEffect(() => {
+    if (nextThemeContext?.theme) {
+      const incomingTheme = nextThemeContext.theme;
+      if (incomingTheme === "glass-dark-neon" || incomingTheme === "modern-light-glass") {
+        if (incomingTheme !== theme) {
+          setThemeState(incomingTheme as ThemeType);
+          applyThemeToDOM(incomingTheme as ThemeType);
+          applyColorsToDOM(incomingTheme as ThemeType, colorPreset);
+        }
+      }
+    }
+  }, [nextThemeContext?.theme, colorPreset]);
+
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      if (
+        reason &&
+        (reason.name === "AbortError" ||
+          reason.name === "InvalidStateError" ||
+          (typeof reason.message === "string" && reason.message.includes("Transition was")))
+      ) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    return () => {
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+    };
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ 

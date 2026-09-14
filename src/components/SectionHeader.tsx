@@ -24,6 +24,7 @@ export interface SectionHeaderProps {
   gradient?: string;
   glowColor?: string;
   unwrap?: boolean;
+  level?: "h1" | "h2" | "h3" | "h4" | "h5";
 }
 
 /**
@@ -44,6 +45,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
   className,
   accentColorClass,
   flat = true,
+  level = "h2",
 }) => {
   const { theme } = useTheme();
   const sectionCtx = useSection();
@@ -90,7 +92,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
       layoutId={`section-header-card-${activeSectionId || "default"}`}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "relative rounded-[20px] py-3.5 px-4 sm:py-4 sm:px-6 overflow-hidden transition-all duration-300 group flex flex-col justify-between w-full mb-4 sm:mb-6 select-none",
+        "relative rounded-[10px] py-3.5 px-4 sm:py-4 sm:px-6 overflow-hidden transition-all duration-300 group flex flex-col justify-between w-full mb-4 sm:mb-6 select-none",
         getGlassStyle(),
         className
       )}
@@ -136,18 +138,64 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
 
             {/* Title & Tag */}
             <div className="flex items-center gap-2.5 flex-wrap">
-              <motion.h2
-                layoutId={`section-header-title-${activeSectionId || "default"}`}
-                className={cn(
-                  "text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-tight flex items-center gap-2",
-                  colorStyle
-                )}
-              >
-                <span>{formattedTitle}</span>
-              </motion.h2>
+              {level === "h1" && (
+                <motion.h1
+                  layoutId={`section-header-title-${activeSectionId || "default"}`}
+                  className={cn(
+                    "text-h1 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    colorStyle
+                  )}
+                >
+                  <span>{formattedTitle}</span>
+                </motion.h1>
+              )}
+              {level === "h2" && (
+                <motion.h2
+                  layoutId={`section-header-title-${activeSectionId || "default"}`}
+                  className={cn(
+                    "text-h2 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    colorStyle
+                  )}
+                >
+                  <span>{formattedTitle}</span>
+                </motion.h2>
+              )}
+              {level === "h3" && (
+                <motion.h3
+                  layoutId={`section-header-title-${activeSectionId || "default"}`}
+                  className={cn(
+                    "text-h3 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    colorStyle
+                  )}
+                >
+                  <span>{formattedTitle}</span>
+                </motion.h3>
+              )}
+              {level === "h4" && (
+                <motion.h4
+                  layoutId={`section-header-title-${activeSectionId || "default"}`}
+                  className={cn(
+                    "text-h4 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    colorStyle
+                  )}
+                >
+                  <span>{formattedTitle}</span>
+                </motion.h4>
+              )}
+              {level === "h5" && (
+                <motion.h5
+                  layoutId={`section-header-title-${activeSectionId || "default"}`}
+                  className={cn(
+                    "text-h5 font-bold tracking-tight leading-tight flex items-center gap-2",
+                    colorStyle
+                  )}
+                >
+                  <span>{formattedTitle}</span>
+                </motion.h5>
+              )}
 
               {tag && (
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-300/80 dark:border-slate-700/80">
+                <span className="inline-block px-2.5 py-0.5 rounded-full text-3xs font-black uppercase tracking-wider bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-300/80 dark:border-slate-700/80">
                   {tag}
                 </span>
               )}

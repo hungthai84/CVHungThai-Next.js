@@ -5,6 +5,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { DEFAULT_EDUCATION_CARDS, EducationCard } from "../data/educationData";
 import { cn } from "../lib/utils";
+import { PageCardHeader } from "./PageCardHeader";
 
 // Bento Grid Container & Card Motion Variants for Smooth Entry Animations
 const bentoContainerVariants = {
@@ -632,9 +633,9 @@ export default function Education() {
     switch (themeName) {
       case "flat-light":
         return {
-          containerClass: "font-play text-slate-900 relative flex flex-col justify-between p-[25px] overflow-hidden transition-all duration-300 rounded-lg bg-white border border-slate-200 shadow-none hover:border-blue-600",
+          containerClass: "font-play text-slate-900 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-lg bg-white border border-slate-200 shadow-none hover:border-blue-600",
           containerStyle: { background: "#ffffff", borderColor: "#e2e8f0" },
-          badgeYearClass: "text-[11px] font-mono font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded border border-amber-300",
+          badgeYearClass: "text-2xs font-mono font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded border border-amber-300",
           badgeProfileStyle: { background: "#f1f5f9", borderColor: "#cbd5e1", color: "#2563eb" },
           stackedBg1: "bg-slate-50 border border-slate-200",
           stackedBg2: "bg-slate-100 border border-slate-300",
@@ -651,9 +652,9 @@ export default function Education() {
         };
       case "flat-dark":
         return {
-          containerClass: "font-play text-slate-100 relative flex flex-col justify-between p-[25px] overflow-hidden transition-all duration-300 rounded-lg bg-[#1e293b] border border-slate-700 shadow-none hover:border-sky-400",
+          containerClass: "font-play text-slate-100 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-lg bg-[#1e293b] border border-slate-700 shadow-none hover:border-sky-400",
           containerStyle: { background: "#1e293b", borderColor: "#334155" },
-          badgeYearClass: "text-[11px] font-mono font-bold text-amber-200 bg-amber-950 px-2.5 py-0.5 rounded border border-amber-700",
+          badgeYearClass: "text-2xs font-mono font-bold text-amber-200 bg-amber-950 px-2.5 py-0.5 rounded border border-amber-700",
           badgeProfileStyle: { background: "#334155", borderColor: "#475569", color: "#38bdf8" },
           stackedBg1: "bg-slate-800/80 border border-slate-700",
           stackedBg2: "bg-slate-900/90 border border-slate-700",
@@ -670,12 +671,12 @@ export default function Education() {
         };
       case "glass-dark-neon":
         return {
-          containerClass: "font-play text-white relative flex flex-col justify-between p-[25px] overflow-hidden transition-all duration-300 rounded-[20px] border backdrop-blur-xl shadow-lg hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] bg-slate-950/70 border-indigo-500/20 hover:border-indigo-400/40",
+          containerClass: "font-play text-white relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-[10px] border backdrop-blur-xl shadow-lg hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] bg-slate-950/70 border-indigo-500/20 hover:border-indigo-400/40",
           containerStyle: {
             background: `linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 27, 75, 0.6) 100%)`,
             borderColor: coverTheme.borderColor
           },
-          badgeYearClass: "text-[11px] font-mono font-black text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-400/40 shadow-xs",
+          badgeYearClass: "text-2xs font-mono font-black text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-400/40 shadow-xs",
           badgeProfileStyle: {
             background: coverTheme.badgeBg,
             borderColor: coverTheme.badgeBorder,
@@ -699,11 +700,11 @@ export default function Education() {
       default:
         // Modern colorful light glassmorphism
         return {
-          containerClass: "font-play text-slate-800 relative flex flex-col justify-between p-[25px] overflow-hidden transition-all duration-300 rounded-[20px] border backdrop-blur-md shadow-md hover:shadow-xl bg-white/75 dark:bg-slate-900/75 border-white/40 dark:border-white/10 hover:border-indigo-200/50 dark:hover:border-indigo-800/50",
+          containerClass: "font-play text-slate-800 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-[10px] border backdrop-blur-md shadow-md hover:shadow-xl bg-white/75 dark:bg-slate-900/75 border-white/40 dark:border-white/10 hover:border-indigo-200/50 dark:hover:border-indigo-800/50",
           containerStyle: {
             boxShadow: `0 8px 32px 0 rgba(31, 38, 135, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.4)`
           },
-          badgeYearClass: "text-[11px] font-mono font-black text-amber-600 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-2xs",
+          badgeYearClass: "text-2xs font-mono font-black text-amber-600 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-2xs",
           badgeProfileStyle: {
             background: "rgba(99, 102, 241, 0.08)",
             borderColor: "rgba(99, 102, 241, 0.15)",
@@ -1412,7 +1413,7 @@ export default function Education() {
           display: flex;
           align-items: center;
           gap: 4px;
-          font-size: 10px;
+          font-size: var(--font-size-3xs);
           font-weight: 700;
           cursor: pointer;
           padding: 3px 8px;
@@ -1522,98 +1523,80 @@ export default function Education() {
       {/* Content Area Học Vấn */}
       {/* DẠNG VIEW THẺ NHƯ CARD (DESKTOP: 4 CỘT, DƯỚI DESKTOP: 3 CỘT - FLUID GRID) */}
       {viewMode === "grid" && (
-        <div id="card-education-list-content" className="w-full flex flex-col gap-[15px]">
-          {/* Tiêu đề thẻ cho Thẻ chứa Danh mục Học vấn & Bằng cấp */}
-          <div className="w-full flex flex-col gap-[8px] pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-            {/* Dòng 1 : Icon tiêu đề thẻ & Tiêu đề H2 cùng màu icon */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
-                  <Icons.GraduationCap className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-                </div>
-                <h2 className="text-lg sm:text-xl font-black tracking-tight text-emerald-600 dark:text-emerald-400">
-                  {isVi ? "Hồ sơ học vấn" : "Academic credentials certification records"}
-                </h2>
-              </div>
+        <div id="card-education-list-content" className="w-full flex flex-col gap-4">
+          {/* Header Card Học vấn (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
+          <PageCardHeader pageId="education">
+            {/* Cụm trái: Số lượng học phần */}
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+              <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+                {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
+              </span>
             </div>
 
-            {/* Dòng 3 : Đường line Gạch màu như màu icon */}
-            <div className="h-[2px] w-full bg-emerald-500/30 dark:bg-emerald-500/20" />
-
-            {/* Dòng 4 : Tiện ích hiển thị: Bộ lọc chủ đề học phần, số lượng & chuyển đổi dạng xem */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-              {/* Cụm trái: Bộ lọc chuyên đề học phần */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-                  <span className="text-xs font-mono font-black text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-                    {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-                    {(["all", "tech", "management"] as const).map((cat) => {
-                      const isActive = categoryFilter === cat;
-                      const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
-                      return (
-                        <button
-                          key={cat}
-                          onClick={() => {
-                            safePlay("toggle");
-                            setCategoryFilter(cat);
-                          }}
-                          className={`px-3 sm:px-3.5 py-1 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 cursor-pointer ${
-                            isActive
-                              ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                              : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+            {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
+            <div className="flex items-center gap-2 ml-auto flex-wrap">
+              {/* Nút lọc danh mục */}
+              <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+                {(["all", "tech", "management"] as const).map((cat) => {
+                  const isActive = categoryFilter === cat;
+                  const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        safePlay("toggle");
+                        setCategoryFilter(cat);
+                      }}
+                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption font-bold tracking-wide transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
+                          : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Cụm phải: Chuyển đổi dạng xem (Dạng lưới / Sách 3D) */}
-              <div className="flex items-center gap-2 ml-auto flex-wrap">
-                {/* Chuyển đổi dạng xem (Dạng lưới / Sách 3D) */}
-                <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-                  <button
-                    onClick={() => {
-                      safePlay("toggle");
-                      setViewMode("grid");
-                    }}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                      viewMode === "grid"
-                        ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                        : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
-                    }`}
-                  >
-                    <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      safePlay("bookOpen");
-                      setViewMode("book");
-                      setIsBookOpen(true);
-                    }}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                      (viewMode as any) === "book"
-                        ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                        : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
-                    }`}
-                  >
-                    <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>{isVi ? "Sách 3D" : "3D Book"}</span>
-                  </button>
-                </div>
+              {/* Nút chuyển đổi chế độ xem */}
+              <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    safePlay("toggle");
+                    setViewMode("grid");
+                  }}
+                  className={`px-3 py-1 rounded-lg text-caption font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                    viewMode === "grid"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
+                  }`}
+                >
+                  <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    safePlay("bookOpen");
+                    setViewMode("book");
+                    setIsBookOpen(true);
+                  }}
+                  className={`px-3 py-1 rounded-lg text-caption font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                    (viewMode as any) === "book"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
+                  }`}
+                >
+                  <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{isVi ? "Sách 3D" : "3D Book"}</span>
+                </button>
               </div>
             </div>
-          </div>
+          </PageCardHeader>
 
           <motion.div
             key={`bento-grid-${categoryFilter}`}
@@ -1644,7 +1627,7 @@ export default function Education() {
                   onMouseLeave={handleMouseLeave}
                   onMouseEnter={() => safePlay("hover")}
                   className={cn(
-                    "group relative flex flex-col justify-between p-3.5 rounded-[20px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1",
+                    "group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1",
                     "bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100"
                   )}
                   style={{
@@ -1652,9 +1635,9 @@ export default function Education() {
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  {/* Banner Image - Clear Clean Banner Image Style */}
+                  {/* Banner Image - Clear Clean Banner Image Style without border */}
                   <div 
-                    className="relative w-full aspect-[16/10] overflow-hidden rounded-[10px] border border-slate-200/60 dark:border-slate-800/60 mb-3 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 group-hover:border-indigo-500/40 dark:group-hover:border-indigo-400/40 transition-colors duration-300 shadow-xs"
+                    className="relative w-full aspect-[16/10] overflow-hidden rounded-[10px] border-0 mb-3 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300 shadow-xs"
                   >
                     {/* Course Thumbnail Image */}
                     {card.image && (
@@ -1678,44 +1661,33 @@ export default function Education() {
                       style={{ color: coverTheme.textAccent }}
                     />
                     <h3 
-                      className="font-play font-bold leading-tight tracking-tight text-sm sm:text-[15px] truncate line-clamp-1"
+                      className="font-play font-bold leading-tight tracking-tight text-card-title truncate line-clamp-1"
                       style={{ color: coverTheme.textAccent }}
                     >
                       {card.title}
                     </h3>
                   </div>
 
-                  {/* Metadata List - Flat Direct Rows */}
-                  <div className="space-y-1.5 text-xs text-left mb-3">
+                  {/* Metadata List - Flat Direct Rows with Caption / Label: 12px – 13px */}
+                  <div className="space-y-1.5 text-caption text-left mb-3">
                     {/* 1. Học tại / Institution */}
                     <div className="flex items-start gap-1.5 text-left">
-                      <span className="w-[58px] shrink-0 font-bold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                      <span className="w-[76px] shrink-0 font-bold text-caption text-slate-500 dark:text-slate-400 flex items-center gap-1 whitespace-nowrap">
                         <Icons.School className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
-                        <span>{isVi ? "Học tại:" : "School:"}</span>
+                        <span className="whitespace-nowrap">{isVi ? "Học tại:" : "School:"}</span>
                       </span>
-                      <span className="font-semibold text-xs truncate flex-1 text-slate-700 dark:text-slate-200">
+                      <span className="font-semibold text-caption truncate flex-1 text-slate-700 dark:text-slate-200">
                         {card.subtitle}
-                      </span>
-                    </div>
-
-                    {/* 2. Ngành / Major */}
-                    <div className="flex items-start gap-1.5 text-left">
-                      <span className="w-[58px] shrink-0 font-bold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                        <Icons.GraduationCap className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
-                        <span>{isVi ? "Ngành:" : "Major:"}</span>
-                      </span>
-                      <span className="font-medium text-xs line-clamp-1 flex-1 text-slate-700 dark:text-slate-200">
-                        {card.major || (isVi ? "Năng lực chuyên môn & Kỹ năng quản trị" : "Professional Skills & Leadership")}
                       </span>
                     </div>
 
                     {/* 3. Mô tả / Key Summary */}
                     <div className="flex items-start gap-1.5 text-left">
-                      <span className="w-[58px] shrink-0 font-bold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                      <span className="w-[76px] shrink-0 font-bold text-caption text-slate-500 dark:text-slate-400 flex items-center gap-1 whitespace-nowrap">
                         <Icons.FileText className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
-                        <span>{isVi ? "Mô tả:" : "Desc:"}</span>
+                        <span className="whitespace-nowrap">{isVi ? "Mô tả:" : "Desc:"}</span>
                       </span>
-                      <span className="font-normal text-[11.5px] line-clamp-2 leading-tight flex-1 text-slate-600 dark:text-slate-400">
+                      <span className="font-normal text-caption line-clamp-2 leading-snug flex-1 text-slate-600 dark:text-slate-400">
                         {card.desc}
                       </span>
                     </div>
@@ -1725,7 +1697,7 @@ export default function Education() {
 
                   {/* Bottom Year Badge */}
                   <div className="flex items-center justify-between pt-2.5 mt-auto border-t border-slate-100 dark:border-slate-800/80 w-full">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-500/20">
+                    <span className="inline-flex items-center gap-1 text-2xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-500/20">
                       <Icons.Calendar className="w-3 h-3 opacity-80" />
                       <span>{card.year}</span>
                     </span>
@@ -1746,7 +1718,7 @@ export default function Education() {
             
             {/* Bộ chọn Hồ sơ - Chuyển qua Trái */}
             <div className="flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/80 p-1.5 rounded-xl border border-slate-200 dark:border-slate-850 shadow-xs shrink-0 w-full sm:w-auto justify-between sm:justify-start">
-              <span className="text-[11px] sm:text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase px-1 whitespace-nowrap shrink-0">
+              <span className="text-2xs sm:text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase px-1 whitespace-nowrap shrink-0">
                 {isVi ? "Chọn hồ sơ:" : "Profile:"}
               </span>
               <select
@@ -1767,7 +1739,7 @@ export default function Education() {
             </div>
 
             {/* Nhãn hướng dẫn tương tác */}
-            <div className="hidden md:flex items-center gap-1.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 italic">
+            <div className="hidden md:flex items-center gap-1.5 text-2xs font-bold text-slate-500 dark:text-slate-400 italic">
               <Icons.Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
               <span>{isVi ? "Click bìa hoặc Cuộn chuột (Scroll) để lật trang sách" : "Click cover or scroll mouse to flip book"}</span>
             </div>
@@ -1777,15 +1749,15 @@ export default function Education() {
               onClick={() => { safePlay("click"); setViewMode(lastViewMode || "grid"); }}
               className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-extrabold border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-300 transform hover:translate-x-1 shrink-0"
             >
-              <span>{isVi ? "Quay lại danh sách" : "Back to list"}</span>
-              <Icons.ArrowRight className="w-4 h-4 text-rose-500 stroke-[2.5]" />
+              <Icons.ArrowLeft className="w-4 h-4 text-rose-500 stroke-[2.5]" />
+              <span>{isVi ? "Quay lại thẻ học vấn" : "Back to education cards"}</span>
             </button>
           </div>
 
           {/* ================= MIDDLE SECTION: PURE 3D LEAF-FLIP BOOK ================= */}
           <div 
             ref={bookContainerRef}
-            className="w-full flex-1 min-h-0 flex justify-center items-center py-1 sm:py-2 rounded-[20px] overflow-hidden relative" 
+            className="w-full flex-1 min-h-0 flex justify-center items-center py-1 sm:py-2 rounded-[10px] overflow-hidden relative" 
           >
             <div className="book-stage-outer relative w-full h-full flex items-center justify-center">
               <div 
@@ -1816,7 +1788,7 @@ export default function Education() {
 
                     {/* FRONT COVER FACE (Font 'Play') */}
                     <div 
-                      className="cover-front font-play text-slate-900 dark:text-white relative flex flex-col justify-between h-full p-4 sm:p-5 overflow-hidden transition-all duration-500 rounded-[20px] shadow-xl cursor-pointer"
+                      className="cover-front font-play text-slate-900 dark:text-white relative flex flex-col justify-between h-full p-4 sm:p-5 overflow-hidden transition-all duration-500 rounded-[10px] shadow-xl cursor-pointer"
                       style={{
                         background: getBookCoverTheme(activeCard.id).frontBg,
                         border: `2px solid ${getBookCoverTheme(activeCard.id).borderColor}`
@@ -1827,17 +1799,8 @@ export default function Education() {
                         <div>
                           {/* Header year badge & indicator (Top of cover) */}
                           <div className="flex items-center justify-between mb-2 pb-1 border-b border-slate-300/40 dark:border-white/20">
-                            <span className="text-[11px] font-mono font-black text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-xs">
+                            <span className="text-2xs font-mono font-black text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-xs">
                               {activeCard.year}
-                            </span>
-                            <span 
-                              className="text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full border text-slate-800 dark:text-white font-play"
-                              style={{
-                                background: getBookCoverTheme(activeCard.id).badgeBg,
-                                borderColor: getBookCoverTheme(activeCard.id).badgeBorder
-                              }}
-                            >
-                              STU Digitized Profile
                             </span>
                           </div>
 
@@ -1873,7 +1836,7 @@ export default function Education() {
                           </div>
 
                           {/* Unified Metadata Grid matching Education Card - Bằng nhau chiều ngang, bỏ khung icon */}
-                          <div className="space-y-2 text-xs sm:text-[13px] mt-2 font-play">
+                          <div className="space-y-2 text-xs mt-2 font-play">
                             <div className="flex items-start gap-2">
                               <span className="text-slate-600 dark:text-slate-300 w-[94px] shrink-0 font-medium flex items-center gap-1">
                                 <Icons.School className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0" />
@@ -1902,7 +1865,7 @@ export default function Education() {
                         </div>
 
                         {/* Footer */}
-                        <div className="pt-2 border-t border-slate-300/40 dark:border-white/10 flex items-center justify-between text-[9px] mt-2 font-play">
+                        <div className="pt-2 border-t border-slate-300/40 dark:border-white/10 flex items-center justify-between text-3xs mt-2 font-play">
                           <span className="text-slate-600 dark:text-slate-300 font-semibold">Chủ sở hữu: Nguyễn Hùng Thái</span>
                           <span className="font-bold flex items-center gap-1 animate-pulse" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>
                             <span>Nhấp mở sách</span>
@@ -1914,14 +1877,14 @@ export default function Education() {
 
                     {/* BACK COVER FACE (Font 'Play') */}
                     <div 
-                      className="cover-back font-play text-slate-900 dark:text-white flex flex-col justify-between items-center text-center transition-all duration-500 cursor-pointer rounded-[20px]"
+                      className="cover-back font-play text-slate-900 dark:text-white flex flex-col justify-between items-center text-center transition-all duration-500 cursor-pointer rounded-[10px]"
                       style={{
                         background: getBookCoverTheme(activeCard.id).backBg,
                         border: `2px solid ${getBookCoverTheme(activeCard.id).borderColor}`
                       }}
                       onClick={() => jumpToBookPage(1)}
                     >
-                      <div className="w-full flex justify-between items-center text-[8px] text-slate-500 dark:text-slate-300 font-play">
+                      <div className="w-full flex justify-between items-center text-3xs text-slate-500 dark:text-slate-300 font-play">
                         <span>❖ {activeCard.title}</span>
                         <span>BÌA TRONG</span>
                       </div>
@@ -1939,11 +1902,11 @@ export default function Education() {
                         </div>
                         <div>
                           <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-wide font-play">{activeCard.subtitle}</h3>
-                          <p className="text-[9.5px] mt-1 max-w-[200px] mx-auto italic font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>"Tri thức thực chiến • Dẫn dắt tương lai"</p>
+                          <p className="text-3xs mt-1 max-w-[200px] mx-auto italic font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>"Tri thức thực chiến • Dẫn dắt tương lai"</p>
                         </div>
                       </div>
 
-                      <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 flex items-center justify-between text-[9px] text-slate-600 dark:text-slate-300 font-bold font-play">
+                      <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 flex items-center justify-between text-3xs text-slate-600 dark:text-slate-300 font-bold font-play">
                         <span 
                           className="btn-page-nav prev cursor-pointer flex items-center gap-1" 
                           style={{ color: getBookCoverTheme(activeCard.id).textAccent }} 
@@ -1968,7 +1931,7 @@ export default function Education() {
                     {/* TRANG 01 • NỘI DUNG CỐT LÕI */}
                     <div className="front-page">
                       <div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(1); }}
@@ -1986,7 +1949,7 @@ export default function Education() {
                         <div className="mb-3">
                           <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">01</span>
                           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Nội dung cốt lõi</h3>
-                          <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Khám phá 4 mô-đun trọng tâm giúp bạn làm chủ kỹ năng chuyên sâu & truyền cảm hứng.
                           </p>
                         </div>
@@ -1997,10 +1960,10 @@ export default function Education() {
                               <div className="w-7 h-7 rounded-lg bg-indigo-100/70 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-1.5">
                                 <DynamicIcon name={mod.icon || "book-open"} className="w-4 h-4" />
                               </div>
-                              <h4 className="text-[10px] font-bold text-slate-800 dark:text-slate-200 leading-snug line-clamp-2 min-h-[26px]">
+                              <h4 className="text-3xs font-bold text-slate-800 dark:text-slate-200 leading-snug line-clamp-2 min-h-[26px]">
                                 {mod.title}
                               </h4>
-                              <p className="text-[8px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight mt-1">
+                              <p className="text-3xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight mt-1">
                                 {mod.focus}
                               </p>
                             </div>
@@ -2008,7 +1971,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
                         <span>CHỦ HỒ SƠ: NGUYỄN HÙNG THÁI</span>
                         <span 
                           className="btn-page-nav next cursor-pointer"
@@ -2025,7 +1988,7 @@ export default function Education() {
                     {/* TRANG 02 • KẾT QUẢ & ỨNG DỤNG */}
                     <div className="back-page">
                       <div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(2); }}
@@ -2043,7 +2006,7 @@ export default function Education() {
                         <div className="mb-2.5">
                           <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">02</span>
                           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Kết quả & Ứng dụng</h3>
-                          <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Áp dụng kiến thức vào thực tiễn, tạo ra giá trị cho tổ chức và phát triển sự nghiệp.
                           </p>
                         </div>
@@ -2052,7 +2015,7 @@ export default function Education() {
                           {activeCard.results.map((res, i) => (
                             <div key={i} className="flex items-start gap-1.5 py-1 border-b border-dashed border-slate-100 dark:border-slate-800/60 last:border-0">
                               <span className="text-indigo-500 dark:text-indigo-400 font-extrabold text-xs leading-none select-none">•</span>
-                              <p className="text-[9px] font-semibold text-slate-700 dark:text-slate-300 leading-relaxed">
+                              <p className="text-3xs font-semibold text-slate-700 dark:text-slate-300 leading-relaxed">
                                 {res}
                               </p>
                             </div>
@@ -2062,7 +2025,7 @@ export default function Education() {
 
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2097,7 +2060,7 @@ export default function Education() {
                     {/* TRANG 03 • HÌNH ẢNH KHÓA HỌC */}
                     <div className="front-page">
                       <div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(2); }}
@@ -2115,7 +2078,7 @@ export default function Education() {
                         <div className="mb-2.5">
                           <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">03</span>
                           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Hình ảnh khóa học</h3>
-                          <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Hình ảnh chứng nhận hoàn thành khóa học chính thức.
                           </p>
                         </div>
@@ -2138,7 +2101,7 @@ export default function Education() {
                             }}
                           />
                           <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2 py-1 rounded-lg border border-white/20">
-                            <span className="text-[9px] text-white font-medium">Hình khóa học</span>
+                            <span className="text-3xs text-white font-medium">Hình khóa học</span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2153,7 +2116,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2178,7 +2141,7 @@ export default function Education() {
                     {/* TRANG XÁC THỰC SỐ */}
                     <div className="back-page">
                       <div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(3); }}
@@ -2199,10 +2162,10 @@ export default function Education() {
                           </div>
                           <div>
                             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100">XÁC THỰC BẰNG CẤP CHÍNH THỨC</h4>
-                            <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Chứng nhận đã được thẩm định tính xác thực và công nhận trên toàn hệ thống hồ sơ số hóa.</p>
+                            <p className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">Chứng nhận đã được thẩm định tính xác thực và công nhận trên toàn hệ thống hồ sơ số hóa.</p>
                           </div>
 
-                          <div className="p-2 rounded-[8px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[8.5px] text-slate-600 dark:text-slate-300 space-y-1 text-left">
+                          <div className="p-2 rounded-[8px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-3xs text-slate-600 dark:text-slate-300 space-y-1 text-left">
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Đơn vị đào tạo:</span><span className="font-bold text-indigo-700 dark:text-indigo-400">{activeCard.subtitle}</span></div>
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Chủ sở hữu:</span><span className="font-bold text-slate-800 dark:text-slate-100">Nguyễn Hùng Thái</span></div>
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Mã định danh:</span><span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">STU-VERIFIED-X{activeCard.id}89</span></div>
@@ -2210,7 +2173,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2237,7 +2200,7 @@ export default function Education() {
                     {/* TRANG 04 • BẰNG CẤP */}
                     <div className="front-page">
                       <div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(3); }}
@@ -2255,7 +2218,7 @@ export default function Education() {
                         <div className="mb-2.5">
                           <span className="text-base font-extrabold text-indigo-600 font-mono leading-none block">04</span>
                           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Bằng cấp & Chứng nhận</h3>
-                          <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
                             Chứng nhận hoàn thành khóa học {activeCard.title} tại {activeCard.subtitle}.
                           </p>
                         </div>
@@ -2269,7 +2232,7 @@ export default function Education() {
                                 setCertIndex(0);
                               }}
                               className={cn(
-                                "px-2 py-0.5 rounded text-[8px] font-bold cursor-pointer transition-colors",
+                                "px-2 py-0.5 rounded text-3xs font-bold cursor-pointer transition-colors",
                                 certIndex === 0
                                   ? "bg-indigo-600 text-white shadow-xs"
                                   : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200"
@@ -2283,7 +2246,7 @@ export default function Education() {
                                 setCertIndex(1);
                               }}
                               className={cn(
-                                "px-2 py-0.5 rounded text-[8px] font-bold cursor-pointer transition-colors",
+                                "px-2 py-0.5 rounded text-3xs font-bold cursor-pointer transition-colors",
                                 certIndex === 1
                                   ? "bg-indigo-600 text-white shadow-xs"
                                   : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200"
@@ -2337,7 +2300,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2361,7 +2324,7 @@ export default function Education() {
 
                     {/* LÓT BÌA SAU TRONG */}
                     <div 
-                      className="back-page bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950 text-slate-900 dark:text-white flex flex-col justify-between font-play cursor-pointer shadow-2xl border border-slate-200 dark:border-none rounded-[20px]"
+                      className="back-page bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950 text-slate-900 dark:text-white flex flex-col justify-between font-play cursor-pointer shadow-2xl border border-slate-200 dark:border-none rounded-[10px]"
                       onClick={(e) => {
                         e.stopPropagation();
                         jumpToBookPage(0);
@@ -2370,15 +2333,15 @@ export default function Education() {
                       <div className="text-center py-6">
                         <Icons.Bookmark className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mx-auto mb-2" />
                         <h4 className="text-xs font-bold text-slate-900 dark:text-slate-200 font-play">HỒ SƠ NĂNG LỰC SỐ HÓA</h4>
-                        <p className="text-[9px] text-slate-600 dark:text-slate-400 mt-1 max-w-[200px] mx-auto font-play">"Học tập suốt đời • Làm chủ công nghệ • Lãnh đạo bằng sự thấu cảm"</p>
+                        <p className="text-3xs text-slate-600 dark:text-slate-400 mt-1 max-w-[200px] mx-auto font-play">"Học tập suốt đời • Làm chủ công nghệ • Lãnh đạo bằng sự thấu cảm"</p>
                       </div>
-                      <div className="text-[8px] text-slate-500 dark:text-slate-400 text-center font-play">BẢN QUYỀN THUỘC VỀ NGUYỄN HÙNG THÁI</div>
+                      <div className="text-3xs text-slate-500 dark:text-slate-400 text-center font-play">BẢN QUYỀN THUỘC VỀ NGUYỄN HÙNG THÁI</div>
                     </div>
                   </div>
 
                   {/* 5. BACK COVER (Font 'Play') */}
                   <div 
-                    className="back-cover font-play flex flex-col justify-between items-center text-center text-slate-900 dark:text-white cursor-pointer p-[20px] rounded-[20px]"
+                    className="back-cover font-play flex flex-col justify-between items-center text-center text-slate-900 dark:text-white cursor-pointer p-5 rounded-[10px]"
                     style={{
                       background: getBookCoverTheme(activeCard.id).backCoverBg,
                       border: `2px solid ${getBookCoverTheme(activeCard.id).borderColor}`
@@ -2386,7 +2349,7 @@ export default function Education() {
                     onClick={() => jumpToBookPage(0)}
                   >
                     <div className="w-full flex justify-end">
-                      <span className="text-[8px] font-mono font-bold" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>STU • 2026</span>
+                      <span className="text-3xs font-mono font-bold" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>STU • 2026</span>
                     </div>
                     <div className="space-y-2">
                       <div 
@@ -2400,9 +2363,9 @@ export default function Education() {
                         <Icons.GraduationCap className="w-6 h-6" />
                       </div>
                       <h3 className="text-sm font-bold text-slate-900 dark:text-white font-play">HỒ SƠ HỌC VẤN 3D</h3>
-                      <p className="text-[9.5px] font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>Nguyễn Hùng Thái • STU Alumni</p>
+                      <p className="text-3xs font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>Nguyễn Hùng Thái • STU Alumni</p>
                     </div>
-                    <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 text-[8px] text-slate-500 dark:text-slate-300 font-play">
+                    <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 text-3xs text-slate-500 dark:text-slate-300 font-play">
                       <span>BÌA SAU</span>
                     </div>
                   </div>
@@ -2484,7 +2447,7 @@ export default function Education() {
       {/* ================= EDIT PROFILE BANNER MODAL ================= */}
       {isBannerModalOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-[20px] glass-card-bright p-5 shadow-2xl space-y-3 bg-white dark:bg-slate-900 border border-white dark:border-slate-800">
+          <div className="w-full max-w-md rounded-[10px] glass-card-bright p-5 shadow-2xl space-y-3 bg-white dark:bg-slate-900 border border-white dark:border-slate-800">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
               <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center gap-2">
                 <Icons.UserCog className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -2537,7 +2500,7 @@ export default function Education() {
       {/* ================= AI ASSISTANT MODAL (GEMINI 2.5 FLASH) ================= */}
       {isAiModalOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-xl rounded-[20px] glass-card-bright p-5 shadow-2xl space-y-3.5 bg-white dark:bg-slate-900 border border-white dark:border-slate-800">
+          <div className="w-full max-w-xl rounded-[10px] glass-card-bright p-5 shadow-2xl space-y-3.5 bg-white dark:bg-slate-900 border border-white dark:border-slate-800">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-pink-500 to-indigo-600 flex items-center justify-center text-white">
@@ -2545,7 +2508,7 @@ export default function Education() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">Trợ Lý Phân Tích Năng Lực AI (Gemini 2.5)</h3>
-                  <p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold">Tự động tổng hợp ma trận năng lực & lộ trình phát triển</p>
+                  <p className="text-3xs text-indigo-600 dark:text-indigo-400 font-semibold">Tự động tổng hợp ma trận năng lực & lộ trình phát triển</p>
                 </div>
               </div>
               <button onClick={() => setIsAiModalOpen(false)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
@@ -2568,19 +2531,19 @@ export default function Education() {
             <div className="flex flex-wrap gap-1.5">
               <button
                 onClick={() => { safePlay("click"); setAiPromptInput("Đánh giá ma trận Kỹ thuật & Quản trị"); }}
-                className="text-[10px] px-2 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 font-medium transition border border-indigo-100 dark:border-indigo-900 cursor-pointer"
+                className="text-3xs px-2 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 font-medium transition border border-indigo-100 dark:border-indigo-900 cursor-pointer"
               >
                 Đánh giá ma trận Kỹ thuật & Quản trị
               </button>
               <button
                 onClick={() => { safePlay("click"); setAiPromptInput("Năng lực Đào tạo & Truyền cảm hứng đội ngũ"); }}
-                className="text-[10px] px-2 py-1 rounded-md bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 hover:bg-purple-100 font-medium transition border border-purple-100 dark:border-purple-900 cursor-pointer"
+                className="text-3xs px-2 py-1 rounded-md bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 hover:bg-purple-100 font-medium transition border border-purple-100 dark:border-purple-900 cursor-pointer"
               >
                 Năng lực Đào tạo & Truyền cảm hứng đội ngũ
               </button>
               <button
                 onClick={() => { safePlay("click"); setAiPromptInput("Tóm tắt năng lực nổi bật cho hồ sơ Lãnh đạo"); }}
-                className="text-[10px] px-2 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-medium transition border border-emerald-100 dark:border-emerald-900 cursor-pointer"
+                className="text-3xs px-2 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-medium transition border border-emerald-100 dark:border-emerald-900 cursor-pointer"
               >
                 Tóm tắt năng lực nổi bật cho hồ sơ Lãnh đạo
               </button>
@@ -2593,7 +2556,7 @@ export default function Education() {
                   <Icons.Cpu className="w-3.5 h-3.5" />
                   <span>KẾT QUẢ PHÂN TÍCH TỪ AI:</span>
                 </div>
-                <div className="text-[11px] whitespace-pre-wrap">{aiResponseText}</div>
+                <div className="text-2xs whitespace-pre-wrap">{aiResponseText}</div>
               </div>
             )}
 
@@ -2627,7 +2590,7 @@ export default function Education() {
           onClick={() => setIsCropModalOpen(false)}
         >
           <div
-            className="relative max-w-xl w-full bg-white dark:bg-slate-900 rounded-[20px] p-5 shadow-2xl border border-white/80 dark:border-slate-800 flex flex-col space-y-4 glass-card-bright"
+            className="relative max-w-xl w-full bg-white dark:bg-slate-900 rounded-[10px] p-5 shadow-2xl border border-white/80 dark:border-slate-800 flex flex-col space-y-4 glass-card-bright"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-full flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
@@ -2637,7 +2600,7 @@ export default function Education() {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm">Cắt Hình & Chọn Làm Banner Thẻ</h4>
-                  <p className="text-[10px] text-slate-500 truncate max-w-[320px]">{cropTitle}</p>
+                  <p className="text-3xs text-slate-500 truncate max-w-[320px]">{cropTitle}</p>
                 </div>
               </div>
               <button
@@ -2658,7 +2621,7 @@ export default function Education() {
                       key={ratio}
                       onClick={() => { safePlay("click"); setCropAspectRatio(ratio); }}
                       className={cn(
-                        "px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer border",
+                        "px-2.5 py-1 rounded-lg text-3xs font-bold transition cursor-pointer border",
                         cropAspectRatio === ratio
                           ? "bg-amber-500 text-slate-950 border-amber-300 shadow-xs"
                           : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700"
@@ -2688,7 +2651,7 @@ export default function Education() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 border-2 border-dashed border-amber-400/60 pointer-events-none rounded-[14px] m-2"></div>
-                <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono font-bold text-amber-300 border border-white/20">
+                <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-3xs font-mono font-bold text-amber-300 border border-white/20">
                   Tỷ lệ: {cropAspectRatio} | Zoom: {cropZoom.toFixed(1)}x
                 </div>
               </div>
@@ -2737,7 +2700,7 @@ export default function Education() {
           onClick={() => setIsPreviewModalOpen(false)}
         >
           <div
-            className="relative max-w-3xl w-full max-h-[90vh] bg-white/95 dark:bg-slate-900/95 rounded-[20px] p-4 shadow-2xl border border-white/80 dark:border-slate-800 flex flex-col items-center glass-card-bright"
+            className="relative max-w-3xl w-full max-h-[90vh] bg-white/95 dark:bg-slate-900/95 rounded-[10px] p-4 shadow-2xl border border-white/80 dark:border-slate-800 flex flex-col items-center glass-card-bright"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-full flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2 mb-3">
@@ -2817,7 +2780,7 @@ export default function Education() {
 
             {/* Body */}
             <div className="flex flex-col space-y-3">
-              <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
+              <label className="text-3xs font-mono uppercase tracking-wider text-slate-500 block">
                 {isVi ? "CẤU TRÚC JSON HỌC PHẦN" : "JSON COURSE DATA STRUCTURE"}
               </label>
               <div className="relative w-full rounded-xl bg-black/50 border border-white/5 p-4 overflow-auto max-h-[300px] text-left">

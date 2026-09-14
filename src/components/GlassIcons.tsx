@@ -165,26 +165,6 @@ export const GlassIconSvg: React.FC<{ name: string; size?: number | string; clas
         </svg>
       );
 
-    case "services":
-      return (
-        <svg {...svgProps}>
-          <defs>
-            <linearGradient id="serv-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8B5CF6" />
-              <stop offset="100%" stopColor="#6D28D9" />
-            </linearGradient>
-          </defs>
-          <rect x="10" y="10" width="44" height="18" rx="6" fill="#8B5CF6" fillOpacity="0.3" stroke="url(#serv-grad)" strokeWidth="2" />
-          <rect x="10" y="36" width="44" height="18" rx="6" fill="#8B5CF6" fillOpacity="0.3" stroke="url(#serv-grad)" strokeWidth="2" />
-          <circle cx="18" cy="19" r="3" fill="#10B981" />
-          <circle cx="26" cy="19" r="3" fill="#3B82F6" />
-          <circle cx="18" cy="45" r="3" fill="#10B981" />
-          <circle cx="26" cy="45" r="3" fill="#F59E0B" />
-          <path d="M14 14H48" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
-          <path d="M14 40H48" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
-        </svg>
-      );
-
     case "memories":
     case "camera":
     case "gallery":
