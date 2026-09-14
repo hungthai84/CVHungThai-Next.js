@@ -676,7 +676,7 @@ export default function OpenLetter() {
                         )}
 
                         <div 
-                          className="highlight-box p-2.5 rounded-lg border-l-4 text-caption font-semibold leading-relaxed bg-slate-100/90 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 text-left mt-auto border border-slate-200/60 dark:border-slate-700/60 shadow-2xs"
+                          className="highlight-box p-2.5 rounded-lg border-l-4 text-body font-normal leading-relaxed bg-slate-100/90 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 text-left mt-auto border border-slate-200/60 dark:border-slate-700/60 shadow-2xs"
                           style={{ borderLeftColor: item.color }}
                         >
                           {isVi ? item.highlightVi : item.highlightEn}

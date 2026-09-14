@@ -1756,8 +1756,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               </div>
                             </div>
 
-                            {/* Chuyển thành 1 cột 2 hàng */}
-                            <div className="flex flex-col gap-3">
+                            {/* Chuyển thành view 2 cột */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               {/* Hàng 1: Chức danh quản trị */}
                               <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100/80 dark:border-blue-900/40 flex items-start gap-3">
                                 <div className="w-8 h-8 rounded-xl bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">

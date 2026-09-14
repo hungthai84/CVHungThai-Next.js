@@ -1,6 +1,5 @@
 import React from 'react';
 import '../src/index.css';
-import { NextThemeProvider } from '../src/components/NextThemeProvider';
 
 export const metadata = {
   title: 'Remix Nguyễn Hùng Thái Portfolio - React - Đẩy Github',
@@ -25,20 +24,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&subset=latin,vietnamese&display=swap" rel="stylesheet" />
       </head>
       <body suppressHydrationWarning>
-        <NextThemeProvider
-          attribute="class"
-          defaultTheme="glass-dark-neon"
-          themes={['glass-dark-neon', 'modern-light-glass']}
-          value={{
-            'glass-dark-neon': 'dark',
-            'modern-light-glass': 'light',
-          }}
-          storageKey="portfolio_theme"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
           {children}
-        </NextThemeProvider>
       </body>
     </html>
   );

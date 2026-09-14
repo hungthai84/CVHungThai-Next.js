@@ -1,0 +1,45 @@
+const fs = require('fs');
+let code = fs.readFileSync('src/components/Projects.tsx', 'utf-8');
+const lines = code.split('\n');
+
+lines[711] = '      {previewImage && (';
+lines[712] = '        <div';
+lines[713] = '          role="dialog"';
+lines[714] = '          aria-modal="true"';
+lines[715] = '          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn"';
+lines[716] = '          onClick={() => setPreviewImage(null)}';
+lines[717] = '        >';
+lines[718] = '          <div';
+lines[719] = '            className="relative max-w-5xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white rounded-3xl overflow-hidden shadow-2xl flex flex-col"';
+lines[720] = '            onClick={(e) => e.stopPropagation()}';
+lines[721] = '          >';
+lines[722] = '            <div className="p-3 bg-slate-100 dark:bg-slate-950 flex items-center justify-between border-b border-slate-200 dark:border-white/10 px-4">';
+lines[723] = '              <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate max-w-[80vw]">';
+lines[724] = '                {previewImage.title}';
+lines[725] = '              </span>';
+lines[726] = '              <button';
+lines[727] = '                onClick={() => setPreviewImage(null)}';
+lines[728] = '                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"';
+lines[729] = '              >';
+lines[730] = '                <X className="w-4 h-4" />';
+lines[731] = '              </button>';
+lines[732] = '            </div>';
+lines[733] = '            <div className="p-2 sm:p-4 overflow-auto flex items-center justify-center">';
+lines[734] = '              <img';
+lines[735] = '                src={previewImage.src}';
+lines[736] = '                alt={previewImage.title}';
+lines[737] = '                decoding="async"';
+lines[738] = '                className="max-w-full max-h-[75vh] object-contain rounded-xl shadow-lg"';
+lines[739] = '              />';
+lines[740] = '            </div>';
+lines[741] = '          </div>';
+lines[742] = '        </div>';
+lines[743] = '      )}';
+lines[744] = '      </div>';
+lines[745] = '    </section>';
+lines[746] = '  );';
+lines[747] = '}';
+// truncate the rest
+lines.length = 748;
+
+fs.writeFileSync('src/components/Projects.tsx', lines.join('\n'));

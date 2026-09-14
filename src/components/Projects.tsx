@@ -490,21 +490,17 @@ export default function Projects() {
                     : (isVi ? PHASE_FILTERS.find(f => f.id === selectedPhase)?.shortVi : PHASE_FILTERS.find(f => f.id === selectedPhase)?.labelEn)}
                 </span>
                 {selectedPhase !== "all" ? (
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                ) : (
-                  <span className="font-sans text-3xs px-2 py-0.5 rounded-full bg-slate-205/90 dark:bg-white/20 text-slate-700 dark:text-slate-200 font-black">
-                    {isVi ? "Nhóm dự án" : "Project Groups"}
-                  </span>
-                )}
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                ) : null}
                 <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", filterDropdownOpen ? "rotate-180" : "")} />
               </button>
+
+              {/* Filter Dropdown Popover */}
 
               {/* Filter Dropdown Popover */}
               {filterDropdownOpen && (
                 <div className="absolute right-0 sm:right-0 mt-2 w-72 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-1">
                   <div className="px-2.5 py-1 text-3xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800/80 mb-1 flex items-center justify-between">
-                    <span>{isVi ? "Giai đoạn dự án" : "Project Phases"}</span>
-                    <span className="font-mono">{filteredProjects.length}/{PROJECTS_LIST.length}</span>
                   </div>
                   {PHASE_FILTERS.map((tab) => {
                     const isActive = selectedPhase === tab.id;
@@ -525,14 +521,11 @@ export default function Projects() {
                       >
                         <div className="flex items-center gap-2 truncate pr-2">
                           <span className={cn("w-2 h-2 rounded-full shrink-0", isActive ? "bg-white" : "bg-blue-500")} />
-                          <span className="truncate">{isVi ? tab.labelVi : tab.labelEn}</span>
+                          <span className="font-bold text-caption">
+                            {isVi ? tab.labelVi : tab.labelEn}
+                          </span>
                         </div>
-                        <span
-                          className={cn(
-                            "font-mono text-3xs px-2 py-0.5 rounded-full font-bold shrink-0",
-                            isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
-                          )}
-                        >
+                        <span className={cn("font-mono text-3xs px-2 py-0.5 rounded-full font-bold shrink-0", isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400")} >
                           {tab.count}
                         </span>
                       </button>
@@ -701,7 +694,6 @@ export default function Projects() {
                                   </span>
                                 ))}
                               </div>
-
                               {/* Deleted Interactive Action Row */}
                             </div>
                           </div>
@@ -715,6 +707,7 @@ export default function Projects() {
           </div>
         )}
 
+      {/* ================= FULLSCREEN IMAGE PREVIEW MODAL ================= */}
       {/* ================= FULLSCREEN IMAGE PREVIEW MODAL ================= */}
       {previewImage && (
         <div

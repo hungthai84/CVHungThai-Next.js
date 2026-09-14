@@ -1529,7 +1529,7 @@ export default function Education() {
             {/* Cụm trái: Số lượng học phần */}
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-              <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+              <span className="text-body-sub text-subcontent font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
                 {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
               </span>
             </div>
@@ -1549,7 +1549,7 @@ export default function Education() {
                         safePlay("toggle");
                         setCategoryFilter(cat);
                       }}
-                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption font-bold tracking-wide transition-all duration-300 cursor-pointer ${
+                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-body-sub text-subcontent font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
                         isActive
                           ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
                           : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"

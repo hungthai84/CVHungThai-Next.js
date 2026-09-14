@@ -81,7 +81,7 @@ export function PageCardHeader({
 
       {/* Dòng 3 : Nội dung / Tiện ích / Phân mục bên dưới line (Caption / Label: 12px – 13px) */}
       {children && (
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 w-full text-caption">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 w-full text-body-sub text-subcontent font-normal">
           {children}
         </div>
       )}

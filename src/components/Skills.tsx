@@ -415,7 +415,7 @@ export function Skills() {
                 collapsedCards["swot-s"] ? "is-collapsed" : "h-full"
               }`}
             >
-              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between h-full">
+              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
                 <div className="flex-1 flex flex-col justify-between">
                   <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Những thế mạnh vượt trội đã được chứng minh và khẳng định qua thực tiễn quản lý, vận hành hệ thống.
@@ -511,7 +511,7 @@ export function Skills() {
                 collapsedCards["swot-o"] ? "is-collapsed" : "h-full"
               }`}
             >
-              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between h-full">
+              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
                 <div className="flex-1 flex flex-col justify-between">
                   <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
                     Làn sóng công nghệ và nhu cầu thị trường mở ra các đòn bẩy lớn để tạo bước nhảy vọt trong sự nghiệp.

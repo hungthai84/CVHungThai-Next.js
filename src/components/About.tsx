@@ -366,14 +366,7 @@ export default function About() {
                   <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
                     {isVi ? "Chân dung & triết lý vận hành" : "Profile & operational philosophy"}
                   </h6>
-                  <p className="text-caption font-semibold text-slate-500 dark:text-slate-400">
-                    {isVi ? "Tư duy quản trị & Trụ cột định hướng dịch vụ xuất sắc" : "Executive mindset & core pillars of service excellence"}
-                  </p>
                 </div>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-500/10 dark:bg-cyan-500/15 border border-blue-400/30 dark:border-cyan-400/30 text-blue-700 dark:text-cyan-300 text-caption font-bold shadow-2xs self-start sm:self-center">
-                <Sparkles className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-300 animate-pulse" />
-                <span>{isVi ? "Định hướng khách hàng" : "Customer-Centricity"}</span>
               </div>
             </div>
             <div className="h-[2px] w-full bg-gradient-to-r from-blue-500/40 via-cyan-400/30 to-transparent dark:from-cyan-400/50 dark:via-blue-500/30 dark:to-transparent mt-1.5 rounded-full" />

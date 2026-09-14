@@ -805,10 +805,10 @@ export function Systems() {
   return (
     <section 
       id="systems" 
-      className="relative w-full h-full max-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 overflow-hidden"
+      className="relative w-full h-auto flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 overflow-hidden"
     >
       {/* Hệ thống - Bố cục trực quan không khung bọc ngoài, giữ nguyên cấu trúc và nội dung */}
-      <div className="w-full h-full flex flex-col gap-2 overflow-hidden">
+      <div className="w-full h-auto flex flex-col gap-2 overflow-hidden">
         <style>{`
           /* Ambient Background Orbs for Glassmorphism Effect */
           .bg-orb {

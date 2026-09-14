@@ -668,7 +668,7 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
         </div>
 
         {/* Threats 4-Column / 2-Column Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
           {threats.map((item, idx) => {
             const IconComp = item.icon;
             return (
@@ -676,10 +676,10 @@ export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardPr
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="p-1 rounded-md bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 shrink-0">
+                      <span className="p-1.5 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 shrink-0">
                         <IconComp className="w-3.5 h-3.5" />
                       </span>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-tight">
                         {item.title}
                       </h4>
                     </div>
