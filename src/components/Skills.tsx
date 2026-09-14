@@ -370,7 +370,10 @@ export function Skills() {
         {/* 1. ĐIỂM MẠNH (S - Strengths) */}
         <section
           id="swot-s"
-          onClick={() => handleExpandCard("swot-s")}
+          onMouseEnter={() => {
+            playUiSound("hover");
+            setExpandedSkillCardKey("swot-s");
+          }}
           className={`skills-glass-swot-blue rounded-2xl p-3 xs:p-3.5 sm:p-4.5 md:p-5 lg:p-6 flex flex-col justify-between skills-hover-lift relative overflow-hidden group cursor-pointer transition-all duration-300 w-full ${
             collapsedCards["swot-s"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
           }`}
@@ -386,11 +389,11 @@ export function Skills() {
           <div className="h-full flex flex-col justify-between">
             {/* Header Thẻ S */}
             <div className="flex items-center justify-between pb-3 border-b border-blue-200/70 dark:border-blue-800/70 mb-3 w-full select-none">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 text-card-title font-bold">
                 <Gem className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h6 className="text-h6 text-blue-600 dark:text-blue-400 tracking-wide">
+                <h4 className="text-card-title font-bold text-blue-600 dark:text-blue-400 tracking-wide">
                   {isVi ? "Điểm Mạnh" : "Strengths"}
-                </h6>
+                </h4>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
@@ -417,19 +420,18 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
                 <div className="flex-1 flex flex-col justify-between">
-                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
-                    Những thế mạnh vượt trội đã được chứng minh và khẳng định qua thực tiễn quản lý, vận hành hệ thống.
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
+                    Nền tảng vận hành &amp; lãnh đạo — Những năng lực cốt lõi đã được chứng minh qua thực tiễn quản lý, vận hành và phát triển hệ thống Dịch vụ Khách hàng.
                   </p>
 
                   <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Database, label: "CRM & Contact Center", percent: 95 },
-                      { icon: BarChart3, label: "Phân tích Dữ liệu CX", percent: 90 },
-                      { icon: Workflow, label: "SOPs & QA/QC", percent: 90 },
-                      { icon: UserCheck, label: "Tư duy Customer-Centric", percent: 90 },
-                      { icon: Users, label: "Quản lý Đội ngũ", percent: 90 },
-                      { icon: ShieldCheck, label: "Xử lý Khủng hoảng", percent: 90 },
-                      { icon: HeartHandshake, label: "Quản trị Trải nghiệm CX", percent: 90 }
+                      { icon: HeartHandshake, label: "Customer-Centric & CX", percent: 98 },
+                      { icon: Database, label: "CRM & Contact Center", percent: 96 },
+                      { icon: BarChart3, label: "Quản trị Hiệu suất", percent: 96 },
+                      { icon: Users, label: "Lãnh đạo & Đội ngũ", percent: 95 },
+                      { icon: Workflow, label: "SOP & Chuẩn hóa", percent: 95 },
+                      { icon: ShieldCheck, label: "Xử lý Khủng hoảng", percent: 94 }
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
@@ -437,7 +439,7 @@ export function Skills() {
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                              <span className="truncate text-body">{skill.label}</span>
+                              <span className="truncate text-body text-blue-700 dark:text-blue-300 font-bold">{skill.label}</span>
                             </span>
                             <span className="px-1.5 py-0.5 rounded bg-blue-500/15 dark:bg-blue-500/25 text-blue-800 dark:text-blue-300 font-mono font-black text-xs shrink-0 ml-2">
                               {skill.percent}%
@@ -467,12 +469,15 @@ export function Skills() {
         {/* 2. CƠ HỘI (O - Opportunities) */}
         <section
           id="swot-o"
-          onClick={() => handleExpandCard("swot-o")}
+          onMouseEnter={() => {
+            playUiSound("hover");
+            setExpandedSkillCardKey("swot-o");
+          }}
           className={`skills-glass-swot-purple rounded-2xl p-3 xs:p-3.5 sm:p-4.5 md:p-5 lg:p-6 flex flex-col justify-between skills-hover-lift relative overflow-hidden group cursor-pointer transition-all duration-300 w-full ${
             collapsedCards["swot-o"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
           }`}
         >
-          {/* Góc Phần Tư O */}
+          {/* Góc Phần Tư O (Dưới Trái) */}
           <div
             className="absolute bottom-0 left-0 w-12 h-12 sm:w-14 sm:h-14 rounded-tr-full rounded-bl-2xl bg-gradient-to-bl from-purple-500/30 via-purple-500/50 to-purple-600/70 dark:from-purple-500/35 dark:via-purple-500/50 dark:to-purple-600/70 border-t-2 border-r-2 border-purple-400/70 dark:border-purple-400/70 backdrop-blur-md flex items-center justify-center pr-2 pt-2 text-purple-900 dark:text-purple-100 font-extrabold text-sm sm:text-base shadow-sm select-none z-10 transition-transform duration-300 group-hover:scale-105"
             title="O - Cơ Hội"
@@ -482,55 +487,43 @@ export function Skills() {
 
           <div className="h-full flex flex-col justify-between">
             {/* Header Thẻ O */}
-            <div className="flex items-center justify-between pb-3 border-b border-purple-200/70 dark:border-purple-800/70 mb-3 w-full select-none">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between pb-3 border-b border-purple-200/70 dark:border-purple-800/70 mb-3 w-full select-none flex-row-reverse">
+              <div className="flex items-center gap-2.5 text-card-title font-bold">
                 <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h6 className="text-h6 text-purple-600 dark:text-purple-400 tracking-wide">
+                <h4 className="text-card-title font-bold text-purple-600 dark:text-purple-400 tracking-wide">
                   {isVi ? "Phát Triển" : "Development & Growth"}
-                </h6>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleExpandCard("swot-o");
-                  }}
-                  className="p-1 rounded-full bg-purple-100/80 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/80 transition-all duration-200 hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer shadow-2xs"
-                  title={isVi ? "Mở rộng kích thước 5 thẻ (các thẻ khác tạm ẩn)" : "Expand to 5-card view (hide others)"}
-                  aria-label="Mở rộng 5 thẻ"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
+                </h4>
               </div>
             </div>
 
             {/* Nội Dung Thu Gọn / Mở Rộng Thẻ O */}
             <div
-              className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${
-                collapsedCards["swot-o"] ? "is-collapsed" : "h-full"
+              className={`skills-swot-collapse-grid flex-1 flex flex-col ${
+                collapsedCards["swot-o"] ? "is-collapsed" : ""
               }`}
             >
-              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
-                <div className="flex-1 flex flex-col justify-between">
-                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
-                    Làn sóng công nghệ và nhu cầu thị trường mở ra các đòn bẩy lớn để tạo bước nhảy vọt trong sự nghiệp.
+              <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
+                <div>
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
+                    Công nghệ &amp; chuyển đổi dịch vụ — Những năng lực tạo đòn bẩy để nâng cao hiệu quả vận hành, tối ưu nguồn lực và chuyển đổi mô hình Dịch vụ Khách hàng trong thời đại số.
                   </p>
 
-                  <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Bot, title: "AI & Tự Động Hóa Vận Hành Toàn Diện", meter: 95 },
-                      { icon: HeartHandshake, title: "Chiến Lược CX", meter: 92 },
-                      { icon: BarChart3, title: "Quản Trị Dữ Liệu CX", meter: 88 },
-                      { icon: Monitor, title: "Chuyển Đổi Số", meter: 90 }
+                      { icon: Bot, title: "AI & Tự động hóa", meter: 94 },
+                      { icon: Sparkles, title: "Cải tiến liên tục", meter: 94 },
+                      { icon: BadgeDollarSign, title: "Tối ưu Chi phí", meter: 93 },
+                      { icon: Monitor, title: "Chuyển đổi Số", meter: 92 },
+                      { icon: BarChart3, title: "Quản trị Dữ liệu", meter: 91 },
+                      { icon: Workflow, title: "Thiết kế Hệ thống", meter: 87 }
                     ].map((opp, idx) => {
                       const IconComp = opp.icon;
                       return (
-                        <li key={idx} className="p-2 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
+                        <div key={idx} className="p-2 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body">
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
-                              <span className="truncate text-body">{opp.title}</span>
+                              <span className="truncate text-body text-purple-700 dark:text-purple-300 font-bold">{opp.title}</span>
                             </span>
                             <span className="px-1.5 py-0.5 rounded bg-purple-500/15 dark:bg-purple-500/25 text-purple-800 dark:text-purple-300 font-mono font-black text-xs shrink-0 ml-2">
                               {opp.meter}%
@@ -547,10 +540,10 @@ export function Skills() {
                               <div className="absolute inset-0 bg-white/20 animate-pulse" />
                             </motion.div>
                           </div>
-                        </li>
+                        </div>
                       );
                     })}
-                  </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -560,7 +553,10 @@ export function Skills() {
         {/* 3. ĐIỂM CẦN PHÁT TRIỂN (W - Weaknesses) */}
         <section
           id="swot-w"
-          onClick={() => handleExpandCard("swot-w")}
+          onMouseEnter={() => {
+            playUiSound("hover");
+            setExpandedSkillCardKey("swot-w");
+          }}
           className={`skills-glass-swot-amber rounded-2xl p-3 xs:p-3.5 sm:p-4.5 md:p-5 lg:p-6 flex flex-col justify-between skills-hover-lift relative overflow-hidden group cursor-pointer transition-all duration-300 w-full ${
             collapsedCards["swot-w"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
           }`}
@@ -574,32 +570,6 @@ export function Skills() {
           </div>
 
           <div className="h-full flex flex-col justify-between">
-            {/* Header Thẻ W định dạng chuẩn thẻ Chi tiết phỏng vấn */}
-            <div className="flex items-center justify-between pb-3 border-b border-amber-200/70 dark:border-amber-800/70 mb-3 w-full select-none pr-12">
-              <div className="flex items-center gap-2.5">
-                <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                <h6 className="text-h6 text-amber-600 dark:text-amber-400 tracking-wide">
-                  {isVi ? "Hoàn Thiện" : "Growth Areas"}
-                </h6>
-              </div>
-
-              {/* Nút thu/mở rộng */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleExpandCard("swot-w");
-                  }}
-                  className="p-1 rounded-full bg-amber-100/80 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800/80 transition-all duration-200 hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer shadow-2xs"
-                  title={isVi ? "Mở rộng kích thước 5 thẻ (các thẻ khác tạm ẩn)" : "Expand to 5-card view (hide others)"}
-                  aria-label="Mở rộng 5 thẻ"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
             {/* Nội Dung Thu Gọn / Mở Rộng Thẻ W */}
             <div
               className={`skills-swot-collapse-grid flex-1 flex flex-col ${
@@ -608,19 +578,18 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
                 <div>
-                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed font-semibold">
-                    Mục tiêu hoàn thiện các năng lực chiến lược vượt trội nhằm xây dựng chân dung nhà quản trị vận hành toàn diện.
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2 font-semibold">
+                    Nâng cao năng lực quản trị — Những năng lực cần tiếp tục hoàn thiện để nâng tầm vai trò quản lý từ vận hành hiệu quả sang quản trị chiến lược và phát triển bền vững.
                   </p>
 
                   <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Target, label: "Tư duy chiến lược & Hoạch định", percent: 80 },
-                      { icon: FolderKanban, label: "Quản trị dự án chuyển đổi số", percent: 80 },
-                      { icon: Globe, label: "Cổng tự phục vụ Self-Service", percent: 85 },
-                      { icon: Cpu, label: "Tự động hóa quy trình (RPA/AI)", percent: 85 },
-                      { icon: TrendingUp, label: "Quản trị hiệu suất (KPIs/OKRs)", percent: 85 },
-                      { icon: MessageSquare, label: "Thương thuyết & Khủng hoảng", percent: 85 },
-                      { icon: Zap, label: "Đón đầu công nghệ mới (AI Agent)", percent: 85 }
+                      { icon: HeartHandshake, label: "Service Mindset", percent: 92 },
+                      { icon: MessageSquare, label: "Giao tiếp & Đàm phán", percent: 90 },
+                      { icon: Target, label: "Tư duy Chiến lược", percent: 88 },
+                      { icon: FolderKanban, label: "Quản trị Dự án", percent: 88 },
+                      { icon: Cpu, label: "Công nghệ & Đổi mới", percent: 86 },
+                      { icon: Monitor, label: "Thiết kế & Lập trình", percent: 78 }
                     ].map((skill, idx) => {
                       const IconComp = skill.icon;
                       return (
@@ -628,7 +597,7 @@ export function Skills() {
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                              <span className="truncate text-body">{skill.label}</span>
+                              <span className="truncate text-body text-amber-700 dark:text-amber-300 font-bold">{skill.label}</span>
                             </span>
                             <span className="px-1.5 py-0.5 rounded bg-amber-500/15 dark:bg-amber-500/25 text-amber-800 dark:text-amber-300 font-mono font-black text-xs shrink-0 ml-2">
                               {skill.percent}%
@@ -652,13 +621,26 @@ export function Skills() {
                 </div>
               </div>
             </div>
+
+            {/* Header Thẻ W at bottom */}
+            <div className="flex items-center justify-between pt-3 mt-3 border-t border-amber-200/70 dark:border-amber-800/70 w-full select-none">
+              <div className="flex items-center gap-2.5 text-card-title font-bold">
+                <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                <h4 className="text-card-title font-bold text-amber-600 dark:text-amber-400 tracking-wide">
+                  {isVi ? "Hoàn Thiện" : "Growth Areas"}
+                </h4>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* 4. THÁCH THỨC & RỦI RO (T - Threats) */}
         <section
           id="swot-t"
-          onClick={() => handleExpandCard("swot-t")}
+          onMouseEnter={() => {
+            playUiSound("hover");
+            setExpandedSkillCardKey("swot-t");
+          }}
           className={`skills-glass-swot-rose rounded-2xl p-3 xs:p-3.5 sm:p-4.5 md:p-5 lg:p-6 flex flex-col justify-between skills-hover-lift relative overflow-hidden group cursor-pointer transition-all duration-300 w-full ${
             collapsedCards["swot-t"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
           }`}
@@ -672,32 +654,6 @@ export function Skills() {
           </div>
 
           <div className="h-full flex flex-col justify-between">
-            {/* Header Thẻ T định dạng chuẩn thẻ Chi tiết phỏng vấn */}
-            <div className="flex items-center justify-between pb-3 border-b border-rose-200/70 dark:border-rose-800/70 mb-3 w-full select-none pl-12">
-              {/* Nút thu/mở rộng */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleExpandCard("swot-t");
-                  }}
-                  className="p-1 rounded-full bg-rose-100/80 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300 hover:bg-rose-200 dark:hover:bg-rose-800/80 transition-all duration-200 hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer shadow-2xs"
-                  title={isVi ? "Mở rộng kích thước 5 thẻ (các thẻ khác tạm ẩn)" : "Expand to 5-card view (hide others)"}
-                  aria-label="Mở rộng 5 thẻ"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <h6 className="text-h6 text-rose-600 dark:text-rose-400 tracking-wide text-right">
-                  {isVi ? "Thách Thức" : "Challenges"}
-                </h6>
-                <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-              </div>
-            </div>
-
             {/* Nội Dung Thu Gọn / Mở Rộng Thẻ T */}
             <div
               className={`skills-swot-collapse-grid flex-1 flex flex-col ${
@@ -706,16 +662,18 @@ export function Skills() {
             >
               <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
                 <div>
-                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed">
-                    Những yếu tố khách quan từ môi trường kinh doanh đòi hỏi sự chủ động thích ứng và quản trị rủi ro linh hoạt.
+                  <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
+                    Thích ứng &amp; quản trị biến động — Những yếu tố bên ngoài tác động trực tiếp đến chất lượng dịch vụ, nhân sự và hiệu quả vận hành, đòi hỏi khả năng thích ứng và quản trị chủ động.
                   </p>
 
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                     {[
-                      { icon: Cpu, title: "AI định hình lại CSKH", meter: 85 },
-                      { icon: BarChart3, title: "Công nghệ đổi mới nhanh", meter: 90 },
-                      { icon: Users, title: "Cạnh tranh nhân sự cao cấp", meter: 88 },
-                      { icon: BadgeDollarSign, title: "Áp lực tối ưu chi phí", meter: 82 }
+                      { icon: BadgeDollarSign, title: "Tối ưu Chi phí", meter: 94 },
+                      { icon: Cpu, title: "AI & Thay đổi CSKH", meter: 92 },
+                      { icon: BarChart3, title: "Công nghệ Đổi mới", meter: 90 },
+                      { icon: ShieldAlert, title: "Quản trị Rủi ro", meter: 90 },
+                      { icon: Users, title: "Cạnh tranh Nhân sự", meter: 88 },
+                      { icon: Workflow, title: "Phối hợp Liên phòng", meter: 86 }
                     ].map((threat, idx) => {
                       const IconComp = threat.icon;
                       return (
@@ -723,7 +681,7 @@ export function Skills() {
                           <div className="flex items-center justify-between text-body">
                             <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                               <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 shrink-0" />
-                              <span className="truncate text-body">{threat.title}</span>
+                              <span className="truncate text-body text-rose-700 dark:text-rose-300 font-bold">{threat.title}</span>
                             </span>
                             <span className="px-1.5 py-0.5 rounded bg-rose-500/15 dark:bg-rose-500/25 text-rose-800 dark:text-rose-300 font-mono font-black text-xs shrink-0 ml-2">
                               {threat.meter}%
@@ -746,6 +704,16 @@ export function Skills() {
                     })}
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Header Thẻ T at bottom */}
+            <div className="flex items-center justify-between pt-3 mt-3 border-t border-rose-200/70 dark:border-rose-800/70 w-full select-none">
+              <div className="flex items-center gap-2.5 text-card-title font-bold">
+                <h4 className="text-card-title font-bold text-rose-600 dark:text-rose-400 tracking-wide text-left">
+                  {isVi ? "Thách Thức" : "Challenges"}
+                </h4>
+                <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
               </div>
             </div>
           </div>
@@ -776,14 +744,11 @@ export function Skills() {
                 <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
                   <div className="flex items-center gap-2">
                     <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    <h6 className="text-h6 text-emerald-600 dark:text-emerald-400 tracking-wide">
+                    <h4 className="text-card-title font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
                       {isVi ? "Năng lực ngôn ngữ" : "International language proficiency"}
-                    </h6>
+                    </h4>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-h6 font-mono px-3 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shrink-0 shadow-2xs">
-                      <span className="text-xs sm:text-sm font-sans font-bold">{isVi ? "3 Ngôn ngữ" : "3 Languages"}</span>
-                    </span>
                     <button
                       type="button"
                       onClick={(e) => {

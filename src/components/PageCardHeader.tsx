@@ -64,11 +64,16 @@ export function PageCardHeader({
           {actionRight}
           {displayQuote && (
             <div
-              className="px-3.5 py-1.5 rounded-full bg-slate-100/90 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 text-body-sm font-bold text-slate-800 dark:text-slate-200 italic shadow-2xs flex items-center gap-2 max-w-full"
+              className={cn(
+                "px-3.5 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 text-body-sm font-bold italic flex items-center gap-2 max-w-full transition-colors",
+                accentClass
+              )}
               title={displayQuote}
             >
-              <Quote className={cn("w-3.5 h-3.5 shrink-0 not-italic", accentClass)} />
-              <span className="truncate max-w-[260px] xs:max-w-[320px] sm:max-w-[420px] md:max-w-[540px] lg:max-w-[660px]">
+              <div className="w-5 h-5 rounded-full bg-slate-200/80 dark:bg-slate-800/80 flex items-center justify-center shrink-0">
+                <Quote className={cn("w-3 h-3 not-italic stroke-[2.5]", accentClass)} />
+              </div>
+              <span className={cn("truncate font-bold max-w-[260px] xs:max-w-[320px] sm:max-w-[420px] md:max-w-[540px] lg:max-w-[660px]", accentClass)}>
                 {displayQuote}
               </span>
             </div>
@@ -79,9 +84,9 @@ export function PageCardHeader({
       {/* Dòng 2 : Đường line gạch ngang phân cách cùng màu icon */}
       <div className={cn("h-[2px] w-full", lineClass)} />
 
-      {/* Dòng 3 : Nội dung / Tiện ích / Phân mục bên dưới line (Caption / Label: 12px – 13px) */}
+      {/* Dòng 3 : Nội dung / Tiện ích / Phân mục bên dưới line (Caption / Label Token: 12px – 13px) */}
       {children && (
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 w-full text-body-sub text-subcontent font-normal">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 w-full text-caption text-label font-semibold text-subcontent">
           {children}
         </div>
       )}

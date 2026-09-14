@@ -40,60 +40,52 @@ interface ExpandedCardProps {
 export function ExpandedCardStrengths({ isVi, onClose, onContact }: ExpandedCardProps) {
   const competencies = [
     {
+      icon: HeartHandshake,
+      title: isVi ? "Customer-Centric & CX" : "Customer-Centric & CX Leadership",
+      percent: 98,
+      desc: isVi 
+        ? "Lắng nghe tiếng nói khách hàng (Voice of Customer), thấu cảm các điểm chạm đau (pain-points) và biến khiếu nại thành cơ hội gắn kết lâu dài."
+        : "Leveraged Voice of Customer (VoC) analytics to turn customer friction points into loyalty moments."
+    },
+    {
       icon: Database,
-      title: isVi ? "CRM & Contact Center" : "CRM & Omnichannel Contact Center Systems",
-      percent: 95,
+      title: isVi ? "CRM & Contact Center" : "CRM & Contact Center Systems",
+      percent: 96,
       desc: isVi 
         ? "Vận hành và tối ưu hóa Salesforce Service Cloud, Zendesk, Genesys Cloud, Asterisk/FreePBX. Quản trị dữ liệu khách hàng 360 độ và điều phối luồng cuộc gọi thông minh."
         : "Operational mastery in Salesforce, Zendesk, Genesys, and Asterisk PBX with unified 360-degree customer profiling."
     },
     {
       icon: BarChart3,
-      title: isVi ? "Phân tích Dữ liệu CX" : "Customer Data Mining & CX Analytics",
-      percent: 90,
+      title: isVi ? "Quản trị Hiệu suất" : "Performance Governance & Analytics",
+      percent: 96,
       desc: isVi 
         ? "Thiết lập hệ thống báo cáo thời gian thực, đo lường toàn diện các chỉ số CSAT, FCR, NPS, AHT, SLA và Churn Rate bằng SQL, Power BI và Python."
         : "Real-time dashboard architectures measuring CSAT, FCR, NPS, AHT, and retention rates via SQL, Power BI and Python."
     },
     {
+      icon: Users,
+      title: isVi ? "Lãnh đạo & Đội ngũ" : "Team Leadership & Talent Coaching",
+      percent: 95,
+      desc: isVi 
+        ? "Trực tiếp tuyển dụng, huấn luyện và truyền cảm hứng cho 100+ nhân sự. Xây dựng lộ trình thăng tiến minh bạch, giữ tỷ lệ thôi việc dưới 15%."
+        : "Coached 100+ personnel, designed career tracks, and maintained an attrition rate well below 15%."
+    },
+    {
       icon: Workflow,
-      title: isVi ? "SOPs & QA/QC" : "Service Process Standardization & SOPs",
-      percent: 90,
+      title: isVi ? "SOP & Chuẩn hóa" : "SOP & Service Standardization",
+      percent: 95,
       desc: isVi 
         ? "Soạn thảo và ban hành hơn 50+ bộ SOPs vận hành, khung kiểm soát chất lượng (QA/QC) và kịch bản xử lý khiếu nại phức tạp đa cấp độ."
         : "Authored 50+ enterprise SOPs, quality assurance frameworks, and multi-tier escalation protocols."
     },
     {
-      icon: UserCheck,
-      title: isVi ? "Tư duy Customer-Centric" : "Customer-Centric Mindset & Culture",
-      percent: 90,
-      desc: isVi 
-        ? "Lắng nghe tiếng nói khách hàng (Voice of Customer), thấu cảm các điểm chạm đau (pain-points) và biến khiếu nại thành cơ hội gắn kết lâu dài."
-        : "Leveraged Voice of Customer (VoC) analytics to turn customer friction points into loyalty moments."
-    },
-    {
-      icon: Users,
-      title: isVi ? "Quản lý Đội ngũ" : "Large-Scale Team Leadership & Coaching",
-      percent: 90,
-      desc: isVi 
-        ? "Trực tiếp tuyển dụng, huấn luyện và truyền cảm hứng cho 100+ nhân sự. Xây dựng lộ trình thăng tiến minh bạch, giảm tỷ lệ thôi việc xuống dưới 15%."
-        : "Coached 100+ personnel, designed career tracks, and maintained an attrition rate well below 15%."
-    },
-    {
       icon: ShieldCheck,
-      title: isVi ? "Xử lý Khủng hoảng" : "Crisis Management & Complex Problem Solving",
-      percent: 90,
+      title: isVi ? "Xử lý Khủng hoảng" : "Crisis Management & Resolution",
+      percent: 94,
       desc: isVi 
         ? "Xử lý thành công các khủng hoảng vận hành, lỗi hệ thống diện rộng và khiếu nại khách hàng VIP với tỷ lệ giải quyết thành công đạt 98%."
         : "Successfully mitigated operational outages and critical VIP escalations with a 98% resolution rate."
-    },
-    {
-      icon: HeartHandshake,
-      title: isVi ? "Quản trị Trải nghiệm CX" : "Total Customer Experience (CX) Governance",
-      percent: 90,
-      desc: isVi 
-        ? "Thiết kế và tối ưu bản đồ hành trình khách hàng (Journey Mapping), bảo đảm tính nhất quán trên mọi điểm chạm online lẫn offline."
-        : "Architected omni-channel customer journeys guaranteeing consistent excellence across digital and physical touchpoints."
     }
   ];
 
@@ -240,35 +232,51 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
   const pillars = [
     {
       icon: Bot,
-      title: isVi ? "AI & Tự Động Hóa Vận Hành Toàn Diện" : "Comprehensive AI & Workflow Automation",
-      percent: 95,
+      title: isVi ? "AI & Tự động hóa" : "AI & Workflow Automation",
+      percent: 94,
       desc: isVi 
-        ? "Triển khai GenAI Agents hỗ trợ tóm tắt cuộc gọi, phân loại ticket tự động và soạn câu trả lời chuẩn xác trong 3 giây. Giảm tải 40%+ ticket lặp lại cho đội ngũ tư vấn."
-        : "Deploy GenAI copilots to summarize calls, route tickets, and suggest instant accurate responses, deflecting 40%+ repetitive volume."
+        ? "Triển khai GenAI Agents hỗ trợ tóm tắt cuộc gọi, phân loại ticket tự động và soạn câu trả lời chuẩn xác trong 3 giây."
+        : "Deploy GenAI copilots to summarize calls, route tickets, and suggest instant accurate responses."
     },
     {
-      icon: HeartHandshake,
-      title: isVi ? "Chiến Lược CX Đa Điểm Chạm & Cá Nhân Hóa Sâu" : "Omnichannel CX Strategy & Deep Personalization",
-      percent: 92,
+      icon: Sparkles,
+      title: isVi ? "Cải tiến liên tục" : "Kaizen & Continuous Improvement",
+      percent: 94,
       desc: isVi 
-        ? "Đồng bộ hóa trải nghiệm xuyên suốt qua Hotline, Zalo OA, Web/App chat và Email. Xây dựng chân dung khách hàng 360 độ để chủ động phục vụ trước khi có khiếu nại."
-        : "Unified customer identity across Hotline, Zalo, In-app chat, and Email with proactive care models before escalations arise."
+        ? "Áp dụng triết lý Kaizen trong cải tiến quy trình dịch vụ, loại bỏ lãng phí và liên tục nâng cao trải nghiệm khách hàng."
+        : "Applying Kaizen methodologies to streamline service workflows and minimize operational waste."
     },
     {
-      icon: BarChart3,
-      title: isVi ? "Khai Thác Dữ Liệu Chuyên Sâu & Real-time VoC" : "Deep CX Analytics & Real-Time VoC",
-      percent: 88,
+      icon: BadgeDollarSign,
+      title: isVi ? "Tối ưu Chi phí" : "OPEX Optimization & Efficiency",
+      percent: 93,
       desc: isVi 
-        ? "Phân tích cảm xúc cuộc gọi thời gian thực (Real-time Speech & Sentiment Analytics), xây dựng mô hình dự báo rời bỏ (Churn Prediction) giúp tối ưu doanh thu giữ chân."
-        : "Real-time acoustic & sentiment analytics combined with predictive churn prevention algorithms."
+        ? "Tối ưu hóa ngân sách vận hành CSKH bằng mô hình chuyển đổi số và công nghệ tự động hóa tinh gọn."
+        : "Optimizing CSKH operating budgets via digital transformation and lean automation models."
     },
     {
       icon: Monitor,
-      title: isVi ? "Chuyển Đổi Số & Tối Ưu Chi Phí Vận Hành" : "Digital Transformation & OPEX Optimization",
-      percent: 90,
+      title: isVi ? "Chuyển đổi Số" : "Digital Transformation & Cloud CX",
+      percent: 92,
       desc: isVi 
-        ? "Chuyển dịch toàn bộ hạ tầng tổng đài truyền thống sang Cloud Contact Center linh hoạt, giảm từ 20-30% chi phí vận hành cố định hàng năm."
-        : "Migrate legacy on-premise infrastructure to cloud contact centers, reducing operating expenditures by 20-30%."
+        ? "Chuyển dịch hạ tầng tổng đài truyền thống sang Cloud Contact Center linh hoạt, đáp ứng xu hướng làm việc đa kênh."
+        : "Migrating legacy call center infrastructure to agile Cloud Contact Center solutions."
+    },
+    {
+      icon: BarChart3,
+      title: isVi ? "Quản trị Dữ liệu" : "CX Data Governance & VoC Analytics",
+      percent: 91,
+      desc: isVi 
+        ? "Xây dựng hệ thống quản trị dữ liệu trải nghiệm khách hàng 360 độ và phân tích VoC thời gian thực."
+        : "Building 360-degree customer experience data governance and real-time VoC analytics."
+    },
+    {
+      icon: Workflow,
+      title: isVi ? "Thiết kế Hệ thống" : "Service Architecture & System Design",
+      percent: 87,
+      desc: isVi 
+        ? "Thiết kế kiến trúc hệ thống dịch vụ đa điểm chạm, bảo đảm khả năng mở rộng linh hoạt theo quy mô doanh nghiệp."
+        : "Architecting multi-touchpoint service systems built for enterprise scalability."
     }
   ];
 
@@ -400,53 +408,46 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
 export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCardProps) {
   const growthAreas = [
     {
+      icon: HeartHandshake,
+      label: isVi ? "Service Mindset" : "Service Mindset & Customer Empathy",
+      percent: 92,
+      target: 98,
+      desc: isVi ? "Nâng tầm văn hóa phục vụ từ giải quyết vấn đề sang chủ động tạo giá trị cảm xúc cho khách hàng." : "Elevating service culture from problem solving to proactive emotional value creation."
+    },
+    {
+      icon: MessageSquare,
+      label: isVi ? "Giao tiếp & Đàm phán" : "Executive Communication & Negotiation",
+      percent: 90,
+      target: 95,
+      desc: isVi ? "Rèn giũa kỹ năng thương thuyết với các đối tác lớn và đàm phán giải quyết khiếu nại cấp cao." : "Sharpening high-stakes negotiations and C-level escalation resolution."
+    },
+    {
       icon: Target,
-      label: isVi ? "Tư Duy Chiến Lược & Hoạch Định Dài Hạn" : "Strategic Vision & Long-Term Planning",
-      percent: 80,
-      target: 90,
+      label: isVi ? "Tư duy Chiến lược" : "Strategic Thinking & Governance",
+      percent: 88,
+      target: 95,
       desc: isVi ? "Nâng cao năng lực gắn kết mục tiêu CX với chiến lược tăng trưởng doanh thu và lợi nhuận cấp tập đoàn." : "Aligning CX roadmaps directly with corporate P&L and revenue growth strategies."
     },
     {
       icon: FolderKanban,
-      label: isVi ? "Quản Trị Dự Án Chuyển Đổi Số (Agile / PMP)" : "Digital Transformation & Project Governance",
-      percent: 80,
-      target: 90,
-      desc: isVi ? "Chuẩn hóa phương pháp quản trị dự án theo chuẩn Agile/Scrum và chứng chỉ PMP quốc tế." : "Standardizing project management according to international Agile/Scrum & PMP practices."
-    },
-    {
-      icon: Globe,
-      label: isVi ? "Phát Triển Cổng Tự Phục Vụ Đa Nền Tảng (Self-Service)" : "Cross-Platform Self-Service Portals",
-      percent: 85,
-      target: 92,
-      desc: isVi ? "Làm chủ các framework hiện đại để chủ động chỉ đạo xây dựng cổng tự phục vụ (Self-service Portal)." : "Mastering modern web stacks to oversee responsive self-service customer portals."
+      label: isVi ? "Quản trị Dự án" : "Project Management & Execution",
+      percent: 88,
+      target: 95,
+      desc: isVi ? "Chuẩn hóa phương pháp quản trị dự án theo chuẩn Agile/Scrum và kiểm soát tiến độ chuyển đổi số." : "Standardizing project management according to Agile/Scrum and digital transformation practices."
     },
     {
       icon: Cpu,
-      label: isVi ? "Tự Động Hóa Quy Trình Chuyên Sâu (RPA & AI Pipelines)" : "Deep RPA & AI Automation Pipelines",
-      percent: 85,
-      target: 92,
-      desc: isVi ? "Xây dựng các luồng tự động hóa liên phòng ban không cần can thiệp thủ công (Zero-touch Workflows)." : "Architecting zero-touch cross-departmental automation pipelines."
-    },
-    {
-      icon: TrendingUp,
-      label: isVi ? "Quản Trị Hiệu Suất Theo Mục Tiêu (KPIs & OKRs)" : "Performance Governance (KPIs & OKRs)",
-      percent: 85,
-      target: 92,
-      desc: isVi ? "Hoàn thiện khung đánh giá theo Balanced Scorecard, thúc đẩy văn hóa tự chịu trách nhiệm." : "Refining balanced scorecard models to cultivate high-performance ownership."
-    },
-    {
-      icon: MessageSquare,
-      label: isVi ? "Giao Tiếp Cấp Cao & Thương Thuyết Phức Tạp" : "Executive Communication & High-Stakes Negotiation",
-      percent: 85,
-      target: 90,
-      desc: isVi ? "Rèn giũa kỹ năng thương thuyết với đối tác quốc tế và xử lý khủng hoảng cấp hội đồng quản trị." : "Sharpening high-stakes negotiations with global partners and board-level crisis resolution."
-    },
-    {
-      icon: Zap,
-      label: isVi ? "Tốc Độ Đón Đầu & Ứng Dụng Công Nghệ Mới" : "Mastery & Adoption Speed of Emerging Tech",
-      percent: 85,
+      label: isVi ? "Công nghệ & Đổi mới" : "Technology & Innovation Adoption",
+      percent: 86,
       target: 95,
-      desc: isVi ? "Liên tục cập nhật các mô hình AI Agents, Cloud Native và tiêu chuẩn an toàn dữ liệu ISO/IEC." : "Rapidly onboarding AI agentic systems and ISO data privacy standards."
+      desc: isVi ? "Cập nhật và tích hợp liên tục các công nghệ mới như GenAI, Cloud Native và tự động hóa quy trình." : "Continuous integration of emerging technologies like GenAI, Cloud Native, and workflow automation."
+    },
+    {
+      icon: Monitor,
+      label: isVi ? "Thiết kế & Lập trình" : "Design & Software Engineering",
+      percent: 78,
+      target: 90,
+      desc: isVi ? "Phát triển năng lực lập trình và thiết kế giao diện ứng dụng web/mobile phục vụ quản trị dịch vụ." : "Building coding and UI design capabilities for custom service management applications."
     }
   ];
 
@@ -574,48 +575,70 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
 export function ExpandedCardThreats({ isVi, onClose, onContact }: ExpandedCardProps) {
   const threats = [
     {
-      icon: Cpu,
-      title: isVi ? "AI Định Hình Lại Ngành CSKH" : "AI Disruption in Customer Support",
-      impact: 85,
+      icon: BadgeDollarSign,
+      title: isVi ? "Tối ưu Chi phí" : "OPEX Optimization Pressures",
+      impact: 94,
       risk: isVi 
-        ? "AI tự động hóa thay thế các nghiệp vụ tổng đài cấp 1, tạo áp lực tái cấu trúc tổ chức và định biên nhân sự." 
-        : "AI automation displacing tier-1 operations, requiring immediate workforce restructuring.",
+        ? "Kinh tế biến động đòi hỏi thắt chặt ngân sách và nâng cao hiệu suất trên từng chi phí bỏ ra." 
+        : "Macroeconomic pressures demand tight budget controls and maximized cost efficiency.",
       mitigation: isVi 
-        ? "Đào tạo nâng chuẩn nhân sự thành Chuyên viên tư vấn trải nghiệm (CX Specialist) tập trung vào các trường hợp khó và cảm xúc." 
-        : "Upskilling agents into CX specialists focused on high-touch, empathetic complex scenarios."
+        ? "Chuẩn hóa quy trình tinh gọn (Lean CX) và tự động hóa thông minh giúp tối ưu ngân sách." 
+        : "Deploying Lean CX principles and intelligent automation to optimize budget allocation."
+    },
+    {
+      icon: Cpu,
+      title: isVi ? "AI & Thay đổi CSKH" : "AI Disruption in CSKH",
+      impact: 92,
+      risk: isVi 
+        ? "Sự bùng nổ của AI thay thế các tác vụ lặp lại, đòi hỏi nhân sự và hệ thống phải liên tục thích ứng." 
+        : "Rapid AI proliferation replacing repetitive tasks, demanding fast organizational adaptation.",
+      mitigation: isVi 
+        ? "Đào tạo nâng chuẩn nhân sự thành Chuyên viên tư vấn trải nghiệm (CX Specialist) cao cấp." 
+        : "Upskilling workforce into high-touch CX specialists handling complex emotional cases."
     },
     {
       icon: BarChart3,
-      title: isVi ? "Công Nghệ Đổi Mới Nhanh Chóng" : "Rapid Technological Obsolescence",
+      title: isVi ? "Công nghệ Đổi mới" : "Rapid Technological Obsolescence",
       impact: 90,
       risk: isVi 
-        ? "Các công nghệ CRM, AI và Cloud liên tục xoay trục, hệ thống cồng kềnh dễ bị lỗi thời nếu không thích ứng kịp thời." 
-        : "Rapid paradigm shifts in CRM, AI, and Cloud architectures risk rendering monolithic setups obsolete.",
+        ? "Các nền tảng CRM, AI và Cloud tiến hóa nhanh chóng, nguy cơ tụt hậu nếu không nâng cấp kịp thời." 
+        : "Fast-evolving CRM and AI stacks risking technology lag without timely updates.",
       mitigation: isVi 
-        ? "Ứng dụng kiến trúc mô-đun linh hoạt (Composable Architecture), tổ chức các sprint thử nghiệm công nghệ định kỳ 30 ngày." 
-        : "Adopting agile modular architectures and rolling 30-day technology pilot sprints."
+        ? "Xây dựng kiến trúc mô-đun linh hoạt (Composable Architecture) và thử nghiệm công nghệ định kỳ." 
+        : "Building agile modular architectures and running regular technology validation pilots."
+    },
+    {
+      icon: ShieldAlert,
+      title: isVi ? "Quản trị Rủi ro" : "Operational Risk Governance",
+      impact: 90,
+      risk: isVi 
+        ? "Rủi ro gián đoạn dịch vụ, sự cố bảo mật dữ liệu và biến động vận hành không lường trước." 
+        : "Service downtime risks, data security vulnerabilities, and unforeseen operational disruptions.",
+      mitigation: isVi 
+        ? "Thiết lập kế hoạch liên tục kinh doanh (BCP) và các kịch bản ứng phó sự cố khẩn cấp." 
+        : "Establishing robust Business Continuity Plans (BCP) and emergency response playbooks."
     },
     {
       icon: Users,
-      title: isVi ? "Cạnh Tranh Nhân Sự Lãnh Đạo Lai" : "Talent Competition for Hybrid Leaders",
+      title: isVi ? "Cạnh tranh Nhân sự" : "Talent Competition & Retention",
       impact: 88,
       risk: isVi 
-        ? "Thị trường đòi hỏi lãnh đạo am hiểu cả Vận hành CSKH + Công nghệ + Phân tích Dữ liệu, cạnh tranh thu hút người tài gay gắt." 
-        : "Intense market demand for rare hybrid leaders combining CX operations, software tech, and data science.",
+        ? "Cạnh tranh thu hút nhân sự quản lý và chuyên gia CSKH chất lượng cao ngày càng gay gắt." 
+        : "Heightened competition for top-tier CSKH operational leaders and specialists.",
       mitigation: isVi 
-        ? "Xây dựng văn hóa học tập liên tục, giữ chân nhân tài bằng lộ trình phát triển rõ ràng và cơ chế ghi nhận xứng đáng." 
-        : "Cultivating a continuous learning culture, competitive incentive structures, and clear leadership tracks."
+        ? "Xây dựng văn hóa làm việc minh bạch, chính sách đãi ngộ linh hoạt và lộ trình thăng tiến rõ ràng." 
+        : "Cultivating transparent workplace culture, flexible benefits, and clear promotion pathways."
     },
     {
-      icon: BadgeDollarSign,
-      title: isVi ? "Áp Lực Tối Ưu Chi Phí Vận Hành" : "Intense OPEX Optimization Pressures",
-      impact: 82,
+      icon: Workflow,
+      title: isVi ? "Phối hợp Liên phòng" : "Cross-Departmental Alignment",
+      impact: 86,
       risk: isVi 
-        ? "Kinh tế biến động khiến doanh nghiệp thắt chặt ngân sách, đòi hỏi nâng cao chất lượng dịch vụ mà không tăng chi phí." 
-        : "Budget contractions requiring elevated service metrics with flat or reduced headcount.",
+        ? "Rào cản giao tiếp và thiếu đồng bộ quy trình giữa CSKH với Product, Marketing và Operations." 
+        : "Siloed communication and misaligned SLAs between CSKH, Product, Marketing, and Operations.",
       mitigation: isVi 
-        ? "Chuẩn hóa quy trình tinh gọn (Lean CX) và tự động hóa thông minh giúp tăng 30% năng suất với chi phí cố định tối thiểu." 
-        : "Deploying Lean CX principles and intelligent deflection to boost throughput by 30% without expanding headcount."
+        ? "Chuẩn hóa SLA liên phòng ban và thiết lập cơ chế phản hồi thông tin hai chiều thời gian thực." 
+        : "Standardizing inter-departmental SLAs and establishing real-time feedback loops."
     }
   ];
 

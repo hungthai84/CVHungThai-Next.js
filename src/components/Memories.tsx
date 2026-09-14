@@ -20,7 +20,8 @@ import {
   Heart,
   Camera,
   Layers,
-  Award
+  Award,
+  Sliders
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
@@ -442,12 +443,22 @@ export const MEMORIES_DATA: MemoryPhoto[] = [
 
 export default function Memories() {
   const { lang } = useLanguage();
+  const { borderRadius, setBorderRadius } = useTheme();
+  const [customImageRadius, setCustomImageRadius] = useState<number>(() => 0);
   const [selectedCompany, setSelectedCompany] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activePhoto, setActivePhoto] = useState<MemoryPhoto | null>(null);
   const [likedPhotos, setLikedPhotos] = useState<Record<string, boolean>>({});
   const [hoveredPhoto, setHoveredPhoto] = useState<MemoryPhoto | null>(null);
   const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (borderRadius !== undefined && borderRadius !== null) {
+      setCustomImageRadius(borderRadius);
+    }
+  }, [borderRadius]);
+
+  const imageRadiusStyle = customImageRadius === 999 ? "9999px" : `${customImageRadius}px`;
 
   // Deterministic delay map to support randomized fly-up animation of photos on load or filter
   const randomDelayMap = useMemo(() => {
@@ -610,21 +621,29 @@ export default function Memories() {
                   onClick={() => setActivePhoto(photo)}
                   onMouseMove={(e) => handleMouseMove(e, photo)}
                   onMouseLeave={handleMouseLeave}
-                  className="min-w-0 group relative rounded-2xl overflow-hidden glass-surface border-2 border-indigo-200/90 dark:border-slate-800 shadow-md hover:shadow-2xl hover:border-pink-500/80 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                  style={{ borderRadius: imageRadiusStyle }}
+                  className="min-w-0 group relative overflow-hidden glass-surface border-2 border-indigo-200/90 dark:border-slate-800 shadow-md hover:shadow-2xl hover:border-pink-500/80 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 >
                   {/* Photo Container - Thẻ chỉ hiển thị hình ảnh ban đầu */}
-                  <div className="relative overflow-hidden w-full bg-slate-100 dark:bg-slate-800">
+                  <div 
+                    style={{ borderRadius: imageRadiusStyle }}
+                    className="relative overflow-hidden w-full bg-slate-100 dark:bg-slate-800"
+                  >
                     <img
                       src={photo.src}
                       alt={photo.alt}
                       loading="lazy"
                       decoding="async"
+                      style={{ borderRadius: imageRadiusStyle }}
                       className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                       referrerPolicy="no-referrer"
                     />
 
                     {/* Gradient Overlay on Hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3.5 z-10" />
+                    <div 
+                      style={{ borderRadius: imageRadiusStyle }}
+                      className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3.5 z-10" 
+                    />
 
                     {/* Top Floating Badges (Trượt xuống khi hover) */}
                     <div className="absolute top-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-[-10px] group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
@@ -713,7 +732,8 @@ export default function Memories() {
         >
           {/* Modal Container */}
           <div 
-            className="relative w-full max-w-5xl max-h-[95vh] rounded-2xl sm:rounded-3xl glass-surface border-2 border-indigo-200 dark:border-slate-800 text-slate-900 dark:text-white overflow-hidden shadow-2xl flex flex-col md:flex-row"
+            style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
+            className="relative w-full max-w-5xl max-h-[95vh] glass-surface border-2 border-indigo-200 dark:border-slate-800 text-slate-900 dark:text-white overflow-hidden shadow-2xl flex flex-col md:flex-row"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -749,7 +769,8 @@ export default function Memories() {
                 src={activePhoto.src}
                 alt={activePhoto.alt}
                 decoding="async"
-                className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+                style={{ borderRadius: imageRadiusStyle }}
+                className="max-w-full max-h-full object-contain shadow-2xl"
                 referrerPolicy="no-referrer"
               />
             </div>

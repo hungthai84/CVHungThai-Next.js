@@ -21,9 +21,14 @@ import {
   History, 
   Sparkles,
   ChevronRight,
+  ChevronsRight,
   ChevronLeft,
   ArrowLeft,
   ArrowRight,
+  Monitor,
+  Smartphone,
+  Megaphone,
+  ClipboardCheck,
   FileText,
   Shield,
   Layers,
@@ -78,96 +83,29 @@ import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
 import { MEMORIES_DATA } from "./Memories";
 
-// Component video giới thiệu dành cho cột mốc 2026+
-export const MilestoneVideoPlayer = ({ isVi }: { isVi: boolean }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  const togglePlay = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!videoRef.current) return;
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    } else {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
-  };
-
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!videoRef.current) return;
-    const nextMuted = !isMuted;
-    videoRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
-  };
-
-  return (
-    <div className="relative w-full aspect-video rounded-[16px] overflow-hidden bg-black/90 shadow-md border border-slate-200/80 dark:border-slate-800 group my-2">
-      <video
-        ref={videoRef}
-        src="https://cdn.scena.ai/project/8606/e48a67884f3a52e8a68cf06b97979f3b22835ec92bf466a058c0d78da97c83b0.mp4"
-        playsInline
-        autoPlay
-        loop
-        muted={isMuted}
-        className="w-full h-full object-cover"
-      />
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
-      
-      {/* Controls bar */}
-      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs z-10">
-        <span className="font-semibold text-2xs flex items-center gap-1.5 drop-shadow">
-          <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
-          {isVi ? "Video giới thiệu chiến lược 2026+" : "Strategy 2026+ intro video"}
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={togglePlay}
-            className="w-7 h-7 rounded-full bg-black/70 hover:bg-black/95 backdrop-blur-md text-white flex items-center justify-center transition-transform active:scale-90 cursor-pointer shadow"
-            title={isPlaying ? (isVi ? "Tạm dừng" : "Pause") : (isVi ? "Phát" : "Play")}
-          >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
-          </button>
-          <button
-            type="button"
-            onClick={toggleMute}
-            className="w-7 h-7 rounded-full bg-black/70 hover:bg-black/95 backdrop-blur-md text-white flex items-center justify-center transition-transform active:scale-90 cursor-pointer shadow"
-            title={isMuted ? (isVi ? "Bật âm thanh" : "Unmute") : (isVi ? "Tắt âm thanh" : "Mute")}
-          >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Decorative futuristic animated icon for milestone cards
 const renderDecorativeIcon = (key: string) => {
   switch (key) {
     case "2003":
-      return <Radio className="w-4 h-4 text-sky-500 animate-pulse shrink-0" />;
+      return <Radio className="w-4 h-4 text-blue-500 animate-pulse shrink-0" />;
     case "2007":
-      return <Tv className="w-4 h-4 text-indigo-500 animate-pulse shrink-0" />;
+      return <Tv className="w-4 h-4 text-purple-500 animate-pulse shrink-0" />;
     case "2011":
-      return <Activity className="w-4 h-4 text-amber-500 animate-pulse shrink-0" />;
+      return <Activity className="w-4 h-4 text-emerald-500 animate-pulse shrink-0" />;
     case "2013":
-      return <Gamepad2 className="w-4 h-4 text-rose-500 animate-pulse shrink-0" />;
+      return <Gamepad2 className="w-4 h-4 text-slate-500 animate-pulse shrink-0" />;
     case "2015":
       return <ShoppingBag className="w-4 h-4 text-orange-500 animate-pulse shrink-0" />;
     case "2016":
-      return <ShieldCheck className="w-4 h-4 text-pink-500 animate-pulse shrink-0" />;
+      return <ShieldCheck className="w-4 h-4 text-red-500 animate-pulse shrink-0" />;
     case "2018":
-      return <CreditCard className="w-4 h-4 text-purple-500 animate-pulse shrink-0" />;
+      return <CreditCard className="w-4 h-4 text-pink-500 animate-pulse shrink-0" />;
     case "2023":
-      return <Zap className="w-4 h-4 text-emerald-500 animate-pulse shrink-0" />;
+      return <Zap className="w-4 h-4 text-amber-500 animate-pulse shrink-0" />;
     case "2026":
-      return <Bot className="w-4 h-4 text-indigo-500 animate-pulse shrink-0" />;
+      return <Bot className="w-4 h-4 text-blue-500 animate-pulse shrink-0" />;
     default:
       return <Sparkles className="w-4 h-4 text-blue-500 animate-pulse shrink-0" />;
   }
@@ -271,13 +209,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2007",
     year: "2007",
     cardYearLabel: "2007 - 2011",
-    cardYearColor: "text-sky-500 dark:text-sky-400",
+    cardYearColor: "text-purple-600 dark:text-purple-400",
     period: "Từ Năm 2007 đến Năm 2011",
     company: "Công ty Viễn Liên V247",
     subCompanies: "(Điện thoại V247)",
     tag: "Viễn thông",
     tagCategory: "telecom",
-    tagColor: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800",
+    tagColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
     logo: "https://i.ibb.co/QvtbdnfP/V247.png",
     bannerUrl: "https://i.ibb.co/bMZKjMhX/v247.png",
     headerTitle: "Năm 2007 – Phát triển năng lực quản lý tại Viễn Liên V247",
@@ -329,13 +267,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2011",
     year: "2011",
     cardYearLabel: "2011 - 2013",
-    cardYearColor: "text-amber-500 dark:text-amber-400",
+    cardYearColor: "text-emerald-600 dark:text-emerald-400",
     period: "Từ Năm 2011 đến Năm 2013",
     company: "Công ty CPTTBR Cuộc Sống LBC",
     subCompanies: "(Truyền hình cáp HTVC)",
     tag: "Truyền thông",
     tagCategory: "telecom",
-    tagColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
+    tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
     logo: "https://i.ibb.co/R4YXWyzF/LBC.png",
     bannerUrl: "https://i.ibb.co/Mykxzbbz/LBC.png",
     headerTitle: "Năm 2011 – Bước ngoặt tại LBC – Truyền hình Cáp HTV",
@@ -393,13 +331,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2013",
     year: "2013",
     cardYearLabel: "2013 - 2016",
-    cardYearColor: "text-red-500 dark:text-red-400",
+    cardYearColor: "text-slate-600 dark:text-slate-300",
     period: "Từ Năm 2013 đến Năm 2016",
     company: "Công ty Cổ phần Phát triển Thể thao Điện tử Việt Nam",
     subCompanies: "(VED, Shopee, Garena, ShopeePay)",
     tag: "eSport & Game",
     tagCategory: "gaming",
-    tagColor: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800",
+    tagColor: "bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700",
     logo: "https://i.ibb.co/fYPJLfbw/VED.png",
     bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
     headerTitle: "Năm 2013 – Garena và hành trình chuyển đổi số",
@@ -463,13 +401,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2016",
     year: "2016",
     cardYearLabel: "2016 - 2018",
-    cardYearColor: "text-rose-500 dark:text-rose-400",
+    cardYearColor: "text-red-600 dark:text-red-400",
     period: "Từ Năm 2016 đến Năm 2018",
     company: "Công ty Bảo hiểm nhân thọ Prudential",
     subCompanies: "(Khu vực Việt Nam)",
     tag: "Bảo hiểm",
     tagCategory: "insurance",
-    tagColor: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800",
+    tagColor: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800",
     logo: "https://i.ibb.co/XfpQphWF/Prudential.png",
     bannerUrl: "https://i.ibb.co/whFY0YV0/Prudentinal.png",
     headerTitle: "Năm 2016 – Prudential Việt Nam",
@@ -521,13 +459,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2018",
     year: "2018",
     cardYearLabel: "2018 - 2021",
-    cardYearColor: "text-purple-500 dark:text-purple-400",
+    cardYearColor: "text-pink-600 dark:text-pink-400",
     period: "Từ Năm 2018 đến Năm 2021",
     company: "Công ty Cổ Phần Mservice (Ví điện tử MoMo)",
     subCompanies: "(Ví điện tử MoMo)",
     tag: "FinTech",
     tagCategory: "fintech",
-    tagColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
+    tagColor: "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-800",
     logo: "https://i.ibb.co/k2QtrgTw/Momo.png",
     bannerUrl: "https://i.ibb.co/GQLRGwrw/Momo.png",
     headerTitle: "Năm 2018 – MoMo",
@@ -589,13 +527,13 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     key: "2023",
     year: "2023",
     cardYearLabel: "2023 - 2024",
-    cardYearColor: "text-emerald-500 dark:text-emerald-400",
+    cardYearColor: "text-amber-500 dark:text-amber-400",
     period: "Từ Năm 2023 đến Năm 2024",
     company: "Công ty Cổ Phần Công Nghệ Finviet",
     subCompanies: "(Ví điện tử ECO)",
     tag: "FinTech",
     tagCategory: "fintech",
-    tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
+    tagColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
     logo: "https://i.ibb.co/7NtSSz4d/Finviet.png",
     bannerUrl: "https://i.ibb.co/cSXPhWcp/Finviet.png",
     headerTitle: "Năm 2023 – Ví ECO",
@@ -726,7 +664,11 @@ export interface InfographicTimelineItem {
   companyName: string;
   roleTitle: string;
   description: string;
-  iconType: "phone" | "v247" | "lbc" | "target" | "shopee" | "heart" | "momo" | "rocket" | "ved" | "finviet" | "garena" | "prudential" | "strategy";
+  iconType: string;
+  actionTitleVi: string;
+  actionTitleEn: string;
+  bgLight: string;
+  bgDark: string;
 }
 
 const INFOGRAPHIC_TIMELINE_ITEMS: InfographicTimelineItem[] = [
@@ -734,89 +676,121 @@ const INFOGRAPHIC_TIMELINE_ITEMS: InfographicTimelineItem[] = [
     key: "2003",
     milestoneKey: "2003",
     yearLabel: "2003",
-    hexColor: "#0284c7",
-    underlineColor: "#0284c7",
+    hexColor: "#0066FF",
+    underlineColor: "#0066FF",
     companyName: "MobiFone",
     roleTitle: "Tổng đài viên (Trưởng nhóm từ 2007)",
     description: "Khởi đầu tại MobiFone, được đào tạo bài bản về dịch vụ khách hàng.",
-    iconType: "phone"
+    iconType: "phone",
+    actionTitleVi: "Khởi động kế hoạch",
+    actionTitleEn: "Plan Initiation",
+    bgLight: "bg-sky-50/90 border-sky-200/90 text-sky-950",
+    bgDark: "dark:bg-sky-950/40 dark:border-sky-800/70 dark:text-sky-100"
   },
   {
     key: "2007",
     milestoneKey: "2007",
     yearLabel: "2007",
-    hexColor: "#0ea5e9",
-    underlineColor: "#0ea5e9",
+    hexColor: "#7C4DFF",
+    underlineColor: "#7C4DFF",
     companyName: "Viễn Liên V247",
     roleTitle: "Trưởng Nhóm CSKH",
     description: "Phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ.",
-    iconType: "v247"
+    iconType: "v247",
+    actionTitleVi: "Tuyển dụng nhân sự",
+    actionTitleEn: "Talent Recruitment",
+    bgLight: "bg-purple-50/90 border-purple-200/90 text-purple-950",
+    bgDark: "dark:bg-purple-950/40 dark:border-purple-800/70 dark:text-purple-100"
   },
   {
     key: "2011",
     milestoneKey: "2011",
     yearLabel: "2011",
-    hexColor: "#d97706",
-    underlineColor: "#d97706",
+    hexColor: "#00C853",
+    underlineColor: "#00C853",
     companyName: "LBC - HTV Cable",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     description: "Bước ngoặt lớn sang vai trò nhà quản trị toàn diện Phòng CSKH.",
-    iconType: "lbc"
+    iconType: "lbc",
+    actionTitleVi: "Phát triển thương hiệu LB",
+    actionTitleEn: "LB Brand Growth",
+    bgLight: "bg-emerald-50/90 border-emerald-200/90 text-emerald-950",
+    bgDark: "dark:bg-emerald-950/40 dark:border-emerald-800/70 dark:text-emerald-100"
   },
   {
     key: "2013",
     milestoneKey: "2013",
     yearLabel: "2013",
-    hexColor: "#dc2626",
-    underlineColor: "#dc2626",
+    hexColor: "#00E5FF",
+    underlineColor: "#00E5FF",
     companyName: "Garena / VED",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     description: "Quản lý hoạt động CSKH quy mô lớn, chuyển đổi số đa kênh.",
-    iconType: "ved"
+    iconType: "ved",
+    actionTitleVi: "Thiết kế sản phẩm",
+    actionTitleEn: "Product Design",
+    bgLight: "bg-cyan-50/90 border-cyan-200/90 text-cyan-950",
+    bgDark: "dark:bg-cyan-950/40 dark:border-cyan-800/70 dark:text-cyan-100"
   },
   {
     key: "2016",
     milestoneKey: "2016",
     yearLabel: "2016",
-    hexColor: "#be123c",
-    underlineColor: "#be123c",
+    hexColor: "#FF5252",
+    underlineColor: "#FF5252",
     companyName: "Prudential",
     roleTitle: "Trưởng Phòng CallCenter",
     description: "Quản lý hiệu suất CallCenter bảo hiểm, tiên phong triển khai Videocall.",
-    iconType: "heart"
+    iconType: "heart",
+    actionTitleVi: "Sản xuất sản phẩm",
+    actionTitleEn: "Product Production",
+    bgLight: "bg-orange-50/90 border-orange-200/90 text-orange-950",
+    bgDark: "dark:bg-orange-950/40 dark:border-orange-800/70 dark:text-orange-100"
   },
   {
     key: "2018",
     milestoneKey: "2018",
     yearLabel: "2018",
-    hexColor: "#9333ea",
-    underlineColor: "#9333ea",
+    hexColor: "#EC008C",
+    underlineColor: "#EC008C",
     companyName: "MoMo",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     description: "Tối ưu quy trình hỗ trợ khách hàng, nâng cao hiệu quả vận hành ví điện tử.",
-    iconType: "momo"
+    iconType: "momo",
+    actionTitleVi: "Ra mắt trên MoMo",
+    actionTitleEn: "Launch on MoMo",
+    bgLight: "bg-pink-50/90 border-pink-200/90 text-pink-950",
+    bgDark: "dark:bg-pink-950/40 dark:border-pink-800/70 dark:text-pink-100"
   },
   {
     key: "2023",
     milestoneKey: "2023",
     yearLabel: "2023",
-    hexColor: "#059669",
-    underlineColor: "#059669",
+    hexColor: "#FFB300",
+    underlineColor: "#FFB300",
     companyName: "Finviet",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     description: "Tối ưu quy trình chuẩn hóa, ứng dụng công nghệ tự động AI.",
-    iconType: "finviet"
+    iconType: "finviet",
+    actionTitleVi: "Truyền thông & Marketing",
+    actionTitleEn: "Media & Marketing",
+    bgLight: "bg-amber-50/90 border-amber-200/90 text-amber-950",
+    bgDark: "dark:bg-amber-950/40 dark:border-amber-800/70 dark:text-amber-100"
   },
   {
     key: "2026",
     milestoneKey: "2026",
     yearLabel: "2026+",
-    hexColor: "#4f46e5",
-    underlineColor: "#4f46e5",
+    hexColor: "#0066FF",
+    underlineColor: "#0066FF",
     companyName: "CS Strategy 2026+",
     roleTitle: "Head of CS / CS Director",
     description: "Sẵn sàng cho thử thách mới, ứng dụng AI Bot & tự động hóa CRM.",
-    iconType: "strategy"
+    iconType: "strategy",
+    actionTitleVi: "Đánh giá & Mở rộng",
+    actionTitleEn: "Evaluation & Expansion",
+    bgLight: "bg-blue-50/90 border-blue-200/90 text-blue-950",
+    bgDark: "dark:bg-blue-950/40 dark:border-blue-800/70 dark:text-blue-100"
   }
 ];
 
@@ -858,6 +832,29 @@ const renderPinIcon = (type: string, hexColor: string, itemKey?: string) => {
     return <Briefcase className="w-6 h-6" style={{ color: hexColor }} />;
   }
 
+  if (type === "ved" || type === "garena") {
+    return (
+      <div className="relative w-full h-full flex items-center justify-center bg-white dark:bg-slate-950 rounded-full overflow-hidden p-0">
+        {/* VED Logo on the left */}
+        <div className="absolute left-[-2%] w-[68%] h-[68%] rounded-full overflow-hidden border-[1px] border-slate-200/50 bg-white shadow-2xs z-10 flex items-center justify-center">
+          <img 
+            src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif" 
+            alt="VED" 
+            className="w-full h-full object-cover" 
+          />
+        </div>
+        {/* Shopee Logo on the right overlapping */}
+        <div className="absolute right-[-2%] w-[68%] h-[68%] rounded-full overflow-hidden border-[1px] border-slate-200/50 bg-white shadow-2xs z-20 flex items-center justify-center">
+          <img 
+            src="https://i.ibb.co/BSVS4xf/Shopee.png" 
+            alt="Shopee" 
+            className="w-full h-full object-cover p-0.5" 
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <img 
       src={src} 
@@ -874,27 +871,25 @@ const renderPinIcon = (type: string, hexColor: string, itemKey?: string) => {
 const renderBottomIcon = (iconType: string, hexColor: string) => {
   switch (iconType) {
     case "phone":
-      return <Headset className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Radio className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "v247":
-      return <Users className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Users className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "lbc":
-      return <Settings className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "ved":
     case "garena":
-      return <Gamepad2 className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
-    case "shopee":
-      return <TrendingUp className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Monitor className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "heart":
     case "prudential":
-      return <Award className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Building2 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "momo":
-      return <Wallet className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "finviet":
-      return <Lightbulb className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Megaphone className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "strategy":
-      return <Target className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <ClipboardCheck className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     default:
-      return <Briefcase className="w-4 h-4 stroke-[2.5]" style={{ color: hexColor }} />;
+      return <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
   }
 };
 
@@ -1174,27 +1169,6 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
   const BASE_WIDTH = filteredItems.length > 5 ? 980 : Math.max(480, filteredItems.length * 140);
   const BASE_HEIGHT = 175;
 
-  // Tính toán đường thẳng kết nối mốc và line mũi tên
-  const pathD = useMemo(() => {
-    const count = filteredItems.length;
-    if (count <= 1) return "";
-    const pad = 48;
-    const step = (BASE_WIDTH - pad * 2) / (count - 1);
-    const points = filteredItems.map((_, idx) => ({
-      x: pad + idx * step,
-      y: 42,
-    }));
-
-    let d = `M 14,${points[0].y} L ${points[0].x},${points[0].y}`;
-    for (let i = 0; i < points.length - 1; i++) {
-      const p1 = points[i + 1];
-      d += ` L ${p1.x},${p1.y}`;
-    }
-    const last = points[points.length - 1];
-    d += ` L ${BASE_WIDTH - 12},${last.y}`;
-    return d;
-  }, [filteredItems.length, BASE_WIDTH]);
-
   // Tối ưu thuật toán hiển thị 100% vừa vặn không bao giờ trượt ngang hay trượt dọc
   const effectiveScale = isAutoScale ? 1 : timelineScale;
 
@@ -1257,7 +1231,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
         {/* ========================================================================= */}
         <div 
           id="card-career-timeline"
-          className="w-full h-auto rounded-[24px] bg-white/45 dark:bg-white/[0.04] border border-white/50 dark:border-white/12 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-[24px] transition-all duration-300 mb-4"
+          style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+          className="w-full h-auto bg-white/45 dark:bg-white/[0.04] border border-white/50 dark:border-white/12 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-[24px] transition-all duration-300 mb-4"
         >
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
           <div className="w-full flex flex-col gap-1 pb-1">
@@ -1314,200 +1289,78 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
             </div>
           </div>
 
-          {/* Dạng lộ trình Dòng thời gian hiển thị đầy đủ 100% không cuộn ngang/dọc ở mọi kích thước màn hình */}
+          {/* Dạng lộ trình Dòng thời gian hiển thị chuẩn Visual như hình đính kèm (Horizontal Node Flow) */}
           <div 
-            className="w-full relative py-1 sm:py-2 select-none overflow-hidden" 
+            className="w-full relative py-4 select-none overflow-x-auto custom-scrollbar" 
             ref={timelineWrapperRef}
           >
             <div 
-              className="w-full relative flex flex-col justify-center transition-transform duration-200"
+              className="min-w-[820px] md:min-w-0 w-full relative flex flex-col justify-center transition-transform duration-200"
               style={{
                 transform: isAutoScale ? undefined : `scale(${effectiveScale})`,
                 transformOrigin: "center center",
               }}
             >
-              {/* SVG Curved Alternating Arrows connecting each circle (Top arch -> Bottom arch -> Top arch...) */}
-              <svg 
-                className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible"
-                viewBox="0 0 1000 150"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  {/* Primary Cyan/Blue Arrow Marker */}
-                  <marker
-                    id="timeline-curved-arrow"
-                    viewBox="0 0 12 12"
-                    refX="9"
-                    refY="6"
-                    markerWidth="7.5"
-                    markerHeight="7.5"
-                    orient="auto"
-                  >
-                    <path
-                      d="M 2 2 L 10 6 L 2 10 Z"
-                      fill="#00F5FF"
-                      className="dark:fill-cyan-400 fill-blue-600"
-                    />
-                  </marker>
-                  
-                  {/* Subtle Glow Filter */}
-                  <filter id="timeline-glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="1" stdDeviation="2.5" floodColor="#00F5FF" floodOpacity="0.45" />
-                  </filter>
-                </defs>
-
-                {filteredItems.slice(0, -1).map((item, i) => {
-                  const step = 1000 / filteredItems.length;
-                  const cx1 = (i + 0.5) * step;
-                  const cx2 = (i + 1.5) * step;
-                  const cy = 76;
-                  const r = 24;
-
-                  // Alternating pattern: Even index = Curve UP (over top), Odd index = Curve DOWN (under bottom)
-                  const isCurveUp = i % 2 === 0;
-
-                  let x1: number, y1: number, x2: number, y2: number, cp1x: number, cp1y: number, cp2x: number, cp2y: number;
-
-                  if (isCurveUp) {
-                    // Start from upper-right of logo circle 1
-                    const angle1 = -38 * (Math.PI / 180);
-                    x1 = cx1 + Math.cos(angle1) * (r + 4);
-                    y1 = cy + Math.sin(angle1) * (r + 4);
-
-                    // End at upper-left of logo circle 2
-                    const angle2 = -142 * (Math.PI / 180);
-                    x2 = cx2 + Math.cos(angle2) * (r + 6);
-                    y2 = cy + Math.sin(angle2) * (r + 6);
-
-                    // Control points arching upwards over the top of the logos
-                    const archApexY = 16;
-                    cp1x = x1 + (x2 - x1) * 0.28;
-                    cp1y = archApexY;
-                    cp2x = x1 + (x2 - x1) * 0.72;
-                    cp2y = archApexY;
-                  } else {
-                    // Start from lower-right of logo circle 1
-                    const angle1 = 38 * (Math.PI / 180);
-                    x1 = cx1 + Math.cos(angle1) * (r + 4);
-                    y1 = cy + Math.sin(angle1) * (r + 4);
-
-                    // End at lower-left of logo circle 2
-                    const angle2 = 142 * (Math.PI / 180);
-                    x2 = cx2 + Math.cos(angle2) * (r + 6);
-                    y2 = cy + Math.sin(angle2) * (r + 6);
-
-                    // Control points arching downwards under the bottom of the logos
-                    const archValleyY = 136;
-                    cp1x = x1 + (x2 - x1) * 0.28;
-                    cp1y = archValleyY;
-                    cp2x = x1 + (x2 - x1) * 0.72;
-                    cp2y = archValleyY;
-                  }
-
-                  const pathData = `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`;
-
-                  return (
-                    <g key={`timeline-arc-${item.key}`}>
-                      {/* Background Soft Track */}
-                      <path
-                        d={pathData}
-                        fill="none"
-                        stroke="#00F5FF"
-                        strokeWidth="3.5"
-                        className="opacity-20 dark:opacity-30"
-                      />
-                      {/* Main Neon Glow Curve with Arrow Head */}
-                      <path
-                        d={pathData}
-                        fill="none"
-                        stroke="#00F5FF"
-                        strokeWidth="2.2"
-                        strokeDasharray="5 3.5"
-                        filter="url(#timeline-glow)"
-                        markerEnd="url(#timeline-curved-arrow)"
-                        className="transition-all duration-300 opacity-95 dark:stroke-cyan-400 stroke-blue-600"
-                      />
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* The nodes and year headers in a 100% fluid row */}
-              <div className="flex justify-between items-center w-full relative z-10 px-0.5 sm:px-1.5 md:px-3">
-                {filteredItems.map((item) => {
+              {/* The 8 Milestone Columns Layout */}
+              <div className="grid grid-cols-8 gap-1.5 sm:gap-2 md:gap-3 w-full relative z-10 px-0.5">
+                {filteredItems.map((item, idx) => {
                   const isSelected = item.key === activeYear;
+                  const isLast = idx === filteredItems.length - 1;
                   return (
                     <div 
                       key={item.key}
                       onClick={() => setActiveYear(item.key)}
-                      className="flex flex-col items-center relative cursor-pointer group flex-1 min-w-0"
+                      className="flex flex-col items-center relative cursor-pointer group transition-transform duration-300 min-w-0"
                     >
-                      {/* 1. Year label ABOVE the circle - Adaptive text without truncation */}
-                      <div className="h-6 sm:h-7 flex items-center justify-center mb-0.5 sm:mb-1 max-w-full px-0.5">
-                        <span 
+                      {/* 1. Top Year Pill Badge with downward triangle tip */}
+                      <div className="flex flex-col items-center mb-2 sm:mb-2.5 z-10">
+                        <div 
                           className={cn(
-                            "select-none transition-all duration-300 font-sans tracking-tight whitespace-nowrap leading-none text-center",
-                            isSelected 
-                              ? "text-caption sm:text-[13px] font-black text-cyan-500 dark:text-cyan-400 drop-shadow-[0_0_8px_rgba(0,245,255,0.4)]" 
-                              : "text-caption sm:text-[13px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-cyan-400"
+                            "px-2.5 sm:px-3 py-1 rounded-full text-white font-bold text-caption tracking-tight shadow-sm flex items-center justify-center transition-all duration-300 whitespace-nowrap",
+                            isSelected ? "scale-105 shadow-md ring-2 ring-white dark:ring-slate-900" : "group-hover:scale-105 opacity-90 group-hover:opacity-100"
                           )}
+                          style={{ backgroundColor: item.hexColor }}
                         >
-                          <span className="hidden sm:inline">{isVi ? "Năm " : "Year "}</span>
-                          {item.yearLabel}
-                        </span>
+                          <span>{isVi ? `Năm ${item.yearLabel}` : `Year ${item.yearLabel}`}</span>
+                        </div>
+                        {/* Downward pointer tip */}
+                        <div 
+                          className="w-0 h-0 border-x-[5px] border-x-transparent border-t-[6px] -mt-0.5 transition-colors"
+                          style={{ borderTopColor: item.hexColor }}
+                        />
                       </div>
 
-                      {/* 2. Circular Logo Node (Responsive Aspect-Square Circle) */}
-                      <div className="h-14 xs:h-16 sm:h-20 md:h-24 w-full flex items-center justify-center relative">
-                        {isSelected ? (
-                          /* Active Node: Glowing Ring with Top Pip & Bottom Pointer matching logo hexColor */
-                          <div 
-                            className="w-8 h-8 xs:w-10 xs:h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 lg:w-[68px] lg:h-[68px] xl:w-[72px] xl:h-[72px] rounded-full border-2 p-0 relative flex items-center justify-center transition-all duration-300 shrink-0"
-                            style={{ 
-                              padding: 0,
-                              borderColor: item.hexColor || '#00f5ff',
-                              backgroundColor: item.hexColor ? `${item.hexColor}20` : 'rgba(0,245,255,0.15)',
-                              boxShadow: item.hexColor ? `0 0 20px ${item.hexColor}55` : '0 0 20px rgba(0,245,255,0.45)'
-                            }}
-                          >
-                            {/* Top indicator dot */}
+                      {/* 2. Circular Logo Node */}
+                      <div className="h-16 xs:h-18 sm:h-20 w-full flex items-center justify-center relative">
+                        {/* Ring Container */}
+                        <div 
+                          className={cn(
+                            "w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[70px] md:h-[70px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden",
+                            isSelected ? "scale-110" : "group-hover:scale-105"
+                          )}
+                          style={{
+                            borderColor: item.hexColor,
+                            boxShadow: isSelected 
+                              ? `0 0 24px ${item.hexColor}80, inset 0 0 8px ${item.hexColor}40` 
+                              : `0 4px 14px ${item.hexColor}35`
+                          }}
+                        >
+                          <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center p-0">
+                            {renderPinIcon(item.iconType, item.hexColor, item.key)}
+                          </div>
+                        </div>
+
+                        {/* Chevron Arrow Connector (») between adjacent nodes */}
+                        {!isLast && (
+                          <div className="absolute top-1/2 -right-2.5 sm:-right-3.5 md:-right-4 -translate-y-1/2 z-20 pointer-events-none">
                             <div 
-                              className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full border-2 border-white dark:border-slate-900 shadow-xs z-20" 
-                              style={{ backgroundColor: item.hexColor || '#00f5ff' }}
-                            />
-                            
-                            {/* Inner Circle */}
-                            <div 
-                              className="w-full h-full rounded-full border bg-white dark:bg-slate-950 flex items-center justify-center p-0 overflow-hidden shadow-inner"
+                              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white shadow-xs"
                               style={{ 
-                                padding: 0,
-                                borderColor: item.hexColor ? `${item.hexColor}80` : '#00f5ff'
+                                backgroundColor: item.hexColor,
+                                backgroundImage: `linear-gradient(135deg, ${item.hexColor}, ${filteredItems[idx+1]?.hexColor || item.hexColor})` 
                               }}
                             >
-                              {renderPinIcon(item.iconType, item.hexColor, item.key)}
-                            </div>
-
-                            {/* Bottom downward pointer triangle pointing toward detail card */}
-                            <div 
-                              className="absolute -bottom-1.5 sm:-bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-x-[4px] sm:border-x-[6px] border-x-transparent border-t-[6px] sm:border-t-[8px] filter drop-shadow-xs z-20" 
-                              style={{ borderTopColor: item.hexColor || '#00f5ff' }}
-                            />
-                          </div>
-                        ) : (
-                          /* Inactive Node: Circle with border matching logo color */
-                          <div 
-                            className="w-8 h-8 xs:w-10 xs:h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 lg:w-[68px] lg:h-[68px] xl:w-[72px] xl:h-[72px] rounded-full border-2 bg-white dark:bg-slate-950 flex items-center justify-center p-0 shadow-xs transition-all duration-300 group-hover:scale-105 shrink-0"
-                            style={{
-                              borderColor: item.hexColor || 'rgba(0,245,255,0.6)',
-                              boxShadow: item.hexColor ? `0 2px 10px ${item.hexColor}25` : '0 2px 10px rgba(0,245,255,0.15)',
-                              padding: 0
-                            }}
-                          >
-                            <div 
-                              className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center p-0 border border-slate-200 dark:border-slate-800"
-                              style={{ padding: 0 }}
-                            >
-                              {renderPinIcon(item.iconType, item.hexColor, item.key)}
+                              <ChevronsRight className="w-3 sm:w-3.5 h-3 sm:h-3.5 stroke-[3]" />
                             </div>
                           </div>
                         )}
@@ -1532,8 +1385,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-auto rounded-[24px] bg-white dark:bg-slate-950 border p-4 xs:p-5 sm:p-6 md:p-8 flex flex-col gap-5 xs:gap-6 text-left relative -mt-0.5 shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300"
+                className="w-full h-auto bg-white dark:bg-slate-950 border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300"
                 style={{
+                  padding: "15px",
+                  borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))",
                   borderColor: currentHex || '#6366f1',
                   height: "fit-content",
                 }}
@@ -1542,12 +1397,14 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {current.bannerUrl && (
                   <div 
                     id="card-job-banner"
-                    className="w-full h-36 xs:h-44 sm:h-52 md:h-64 rounded-2xl sm:rounded-3xl overflow-hidden relative shadow-md border border-slate-200/80 dark:border-slate-800/80 bg-slate-100 dark:bg-slate-900 group/banner select-none transition-all duration-300"
+                    style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
+                    className="w-full h-36 xs:h-44 sm:h-52 md:h-64 overflow-hidden relative shadow-md border border-slate-200/80 dark:border-slate-800/80 bg-slate-100 dark:bg-slate-900 group/banner select-none transition-all duration-300"
                   >
                     <img
                       src={current.bannerUrl}
                       alt={`${current.company} Banner`}
                       className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/banner:scale-105"
+                      style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
                       referrerPolicy="no-referrer"
                       loading="eager"
                     />
@@ -1570,7 +1427,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD HEADER (Tạo thẻ chuẩn Bento Design System) */}
                 <div 
                   id="card-job-header"
-                  className="w-full rounded-2xl sm:rounded-3xl bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-4 sm:p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
+                  style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
+                  className="w-full bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-4 sm:p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
                 >
                   {/* Left Column: Badge + Company Avatar & Titles */}
                   <div className="flex flex-col gap-3 min-w-0 flex-1">
@@ -1736,7 +1594,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         variants={bentoGridVariants}
                         initial="hidden"
                         animate="visible"
-                        className="w-full columns-1 md:columns-2 gap-4 lg:gap-5"
+                        className="w-full columns-1 sm:columns-2 xl:columns-3 gap-4 lg:gap-5"
                       >
                         
                         {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
@@ -1870,19 +1728,6 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             </div>
 
                             <div className="space-y-2.5">
-                              {/* Thẻ thành phần mới - Tổng quan phạm vi nhiệm vụ */}
-                              <div className="p-3.5 rounded-2xl bg-indigo-100/70 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/60 flex items-center justify-between text-body font-bold text-indigo-950 dark:text-indigo-200 shadow-2xs">
-                                <div className="flex items-center gap-2.5">
-                                  <div className="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                                    <Sparkles className="w-3.5 h-3.5" />
-                                  </div>
-                                  <span>{isVi ? "Phạm vi nhiệm vụ & Trọng tâm chuẩn hóa:" : "Task Scope & Standardized Focus:"}</span>
-                                </div>
-                                <span className="px-2.5 py-1 rounded-full bg-indigo-200/80 dark:bg-indigo-900/80 text-caption font-mono font-black text-indigo-800 dark:text-indigo-200">
-                                  {current.tasks?.length || 0} {isVi ? "Hạng mục" : "Items"}
-                                </span>
-                              </div>
-
                               {current.tasks && current.tasks.map((task, tIdx) => (
                                 <div key={tIdx} className="p-3 px-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100/80 dark:border-indigo-900/40 text-body font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-3 leading-relaxed">
                                   <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-caption flex items-center justify-center shrink-0 mt-0.5">
@@ -1948,19 +1793,6 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             </div>
 
                             <div className="space-y-2.5">
-                              {/* Thẻ thành phần mới - Tiêu chuẩn & Nguyên tắc thực thi */}
-                              <div className="p-3.5 rounded-2xl bg-cyan-100/70 dark:bg-cyan-950/50 border border-cyan-200/80 dark:border-cyan-800/60 flex items-center justify-between text-body font-bold text-cyan-950 dark:text-cyan-200 shadow-2xs">
-                                <div className="flex items-center gap-2.5">
-                                  <div className="w-7 h-7 rounded-xl bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                                    <ShieldCheck className="w-3.5 h-3.5" />
-                                  </div>
-                                  <span>{isVi ? "Tiêu chuẩn & Nguyên tắc thực thi cốt lõi:" : "Standards & Core Execution Principles:"}</span>
-                                </div>
-                                <span className="px-2.5 py-1 rounded-full bg-cyan-200/80 dark:bg-cyan-900/80 text-caption font-mono font-black text-cyan-800 dark:text-cyan-200">
-                                  100% SLA
-                                </span>
-                              </div>
-
                               {current.commitments && current.commitments.map((cmt, cIdx) => (
                                 <div key={cIdx} className="p-3.5 rounded-2xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/80 dark:border-cyan-900/40 text-body font-bold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-relaxed">
                                   <CheckCircle2 className="w-4.5 h-4.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
@@ -1991,11 +1823,6 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 <Camera className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                                 <span className="text-h6 text-rose-900 dark:text-rose-200 uppercase">
                                   {isVi ? "KỶ NIỆM THỰC CHIẾN" : "MEMORIES"}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                                <span className="px-3 py-1 rounded-full bg-rose-100/90 dark:bg-rose-900/60 text-caption font-extrabold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shrink-0">
-                                  {photos?.length || current.photoCount || 4} {isVi ? "hình ảnh" : "photos"}
                                 </span>
                               </div>
                             </div>
@@ -2649,11 +2476,11 @@ export default function Experience() {
       id="experience"
       className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
     >
-      {/* Header Card Kinh nghiệm (Caption / Label: 12px – 13px) */}
+      {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
       <PageCardHeader pageId="experience">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
-          <span className="text-caption font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
+          <span className="text-body-sub text-subcontent font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
             <Target className="w-3.5 h-3.5" />
             <span>{isVi ? "Từ vận hành đến quản trị cấp cao" : "From hands-on operations to senior management"}</span>
           </span>

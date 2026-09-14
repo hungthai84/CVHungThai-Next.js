@@ -323,8 +323,9 @@ function Hero() {
         <div className="w-fit max-w-fit pointer-events-auto">
           <div 
             id="hero-intro-card"
+            style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
             className={cn(
-              "w-fit max-w-fit h-auto group relative p-3 sm:p-3.5 rounded-xl transition-all duration-300 overflow-hidden flex flex-col items-stretch gap-2",
+              "w-fit max-w-fit h-auto group relative p-3 sm:p-3.5 transition-all duration-300 overflow-hidden flex flex-col items-stretch gap-2",
               "glass-surface backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/90 bg-white/95 dark:bg-slate-900/95",
               "shadow-[0_12px_32px_rgba(0,0,0,0.14),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.12)] text-slate-900 dark:text-white",
               "hover:border-blue-500/70 dark:hover:border-cyan-400/70 hover:shadow-[0_16px_36px_rgba(37,99,235,0.22)]"
@@ -350,8 +351,8 @@ function Hero() {
                 <span className="text-h5 text-blue-700 dark:text-blue-300 block tracking-wide">
                   {isVi ? "Xin chào! Tôi là" : "Welcome! I am"}
                 </span>
-                <h1 className="text-h1 tracking-tight text-slate-900 dark:text-white">
-                  <span className="text-h1 text-blue-700 dark:text-cyan-400">Nguyễn Hùng Thái</span>
+                <h1 className="text-h3 tracking-tight text-slate-900 dark:text-white">
+                  <span className="text-h3 text-blue-700 dark:text-cyan-400 font-bold">Nguyễn Hùng Thái</span>
                 </h1>
                 <p className="text-h3 text-slate-800 dark:text-slate-200 leading-tight">
                   {isVi 

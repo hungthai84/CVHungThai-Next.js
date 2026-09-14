@@ -11,6 +11,7 @@ import {
   Camera,
   Cpu,
   Phone,
+  Server,
   Image as ImageIcon,
   LucideIcon
 } from "lucide-react";
@@ -137,16 +138,6 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     accentColorClass: "text-pink-600 dark:text-pink-400",
     lineColorClass: "bg-pink-500/30 dark:bg-pink-500/20",
   },
-  systems: {
-    id: "systems",
-    titleVi: "Hệ thống",
-    titleEn: "Tech Systems",
-    quoteVi: "Kiến trúc hạ tầng công nghệ vững chắc, số hóa quy trình và tích hợp thông minh.",
-    quoteEn: "Solid enterprise architecture, workflow digitalization, and intelligent integration.",
-    icon: Cpu,
-    accentColorClass: "text-blue-600 dark:text-blue-400",
-    lineColorClass: "bg-blue-500/30 dark:bg-blue-500/20",
-  },
   contact: {
     id: "contact",
     titleVi: "Liên hệ",
@@ -166,5 +157,15 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: ImageIcon,
     accentColorClass: "text-sky-600 dark:text-sky-400",
     lineColorClass: "bg-sky-500/30 dark:bg-sky-500/20",
+  },
+  systems: {
+    id: "systems",
+    titleVi: "Hệ thống",
+    titleEn: "Systems Hub",
+    quoteVi: "Hệ sinh thái công cụ số hóa, tự động hóa quy trình vận hành và nâng tầm hiệu quả doanh nghiệp.",
+    quoteEn: "Ecosystem of digital solutions, optimizing operational workflows, and driving enterprise efficiency.",
+    icon: Server,
+    accentColorClass: "text-indigo-600 dark:text-indigo-400",
+    lineColorClass: "bg-indigo-500/30 dark:bg-indigo-500/20",
   },
 };

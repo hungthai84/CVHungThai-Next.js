@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/footer";
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
 
+export type FooterModalTab = "footer" | "cursor" | "sound" | "customization" | "typography" | "radius";
+
 interface FooterContextType {
   footerConfig: FooterConfig;
   setPlacement: (placement: FooterPlacement) => void;
@@ -12,9 +14,9 @@ interface FooterContextType {
   resetFooterConfig: () => void;
   isFooterModalOpen: boolean;
   setIsFooterModalOpen: (open: boolean) => void;
-  footerModalTab: "footer" | "cursor" | "sound" | "customization";
-  setFooterModalTab: (tab: "footer" | "cursor" | "sound" | "customization") => void;
-  openFooterModal: (tab?: "footer" | "cursor" | "sound" | "customization") => void;
+  footerModalTab: FooterModalTab;
+  setFooterModalTab: (tab: FooterModalTab) => void;
+  openFooterModal: (tab?: FooterModalTab) => void;
   isFooterHovered: boolean;
   setIsFooterHovered: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -39,10 +41,10 @@ export function FooterProvider({ children }: { children: ReactNode }) {
   });
 
   const [isFooterModalOpen, setIsFooterModalOpen] = useState(false);
-  const [footerModalTab, setFooterModalTab] = useState<"footer" | "cursor" | "sound" | "customization">("footer");
+  const [footerModalTab, setFooterModalTab] = useState<FooterModalTab>("footer");
   const [isFooterHovered, setIsFooterHovered] = useState(false);
 
-  const openFooterModal = (tab: "footer" | "cursor" | "sound" | "customization" = "footer") => {
+  const openFooterModal = (tab: FooterModalTab = "footer") => {
     setFooterModalTab(tab);
     setIsFooterModalOpen(true);
   };

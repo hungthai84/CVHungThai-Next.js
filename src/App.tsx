@@ -23,9 +23,9 @@ import Projects from "./components/Projects";
 import Interview from "./components/Interview";
 import TuVi from "./components/TuVi";
 import Memories from "./components/Memories";
-import Systems from "./components/Systems";
 import Contact from "./components/Contact";
 import Wallpapers from "./components/Wallpapers";
+import Systems from "./components/Systems";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -39,7 +39,7 @@ import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
   Monitor, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
-  Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones
+  Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server
 } from "lucide-react";
 
 // Helper function to dynamically import modules with automatic retry on chunk load errors
@@ -100,7 +100,7 @@ const SECTIONS: SectionMeta[] = [
   { id: "interview", labelKey: "nav.interview", Icon: Video, Component: Interview, padding: "p-0 overflow-y-auto" },
   { id: "tuvi", labelKey: "nav.tuvi", Icon: Sparkles, Component: TuVi, padding: "p-0 overflow-y-auto" },
   { id: "memories", labelKey: "nav.memories", Icon: Images, Component: Memories, padding: "p-0 overflow-y-auto" },
-  { id: "systems", labelKey: "nav.systems", Icon: LayoutGrid, Component: Systems, padding: "p-0 overflow-y-auto" },
+  { id: "systems", labelKey: "nav.systems", Icon: Server, Component: Systems, padding: "p-0 overflow-y-auto" },
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
 ];
@@ -238,8 +238,8 @@ function MainContent() {
       "6": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
       "7": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
       "8": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
-      "9": { id: "tuvi", nameVi: "Tử Vi & Hệ thống", nameEn: "TuVi & Systems" },
-      "0": { id: "systems", nameVi: "Hệ thống công nghệ", nameEn: "Tech Systems" },
+      "9": { id: "tuvi", nameVi: "Tử Vi & Chiêm Tinh", nameEn: "TuVi & Astrology" },
+      "0": { id: "contact", nameVi: "Liên hệ", nameEn: "Contact" },
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -273,39 +273,90 @@ function MainContent() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeSection]);
 
-  // Touch Swipe Navigation for Responsive Web (Mobile)
+  // Touch Swipe Navigation for Responsive Web (Mobile & Tablet)
+  // Handles high-velocity swipes, varying screen aspect ratios, and dynamic thresholds
   useEffect(() => {
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchStartTime = 0;
+    let isIgnoredTarget = false;
     
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
+      if (e.touches.length !== 1) return; // Only track single-finger gestures
+      
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+
+      // Check if user initiated touch inside an element that handles its own horizontal scroll
+      const target = e.target as HTMLElement | null;
+      if (target) {
+        const scrollableParent = target.closest(
+          '.no-swipe, [data-no-swipe], pre, code, .overflow-x-auto, input, textarea, select, [role="slider"]'
+        );
+        isIgnoredTarget = Boolean(scrollableParent);
+      } else {
+        isIgnoredTarget = false;
+      }
     };
     
     const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndX = e.changedTouches[0].screenX;
-      const touchEndY = e.changedTouches[0].screenY;
-      handleSwipeGesture(touchEndX, touchEndY);
+      if (isIgnoredTarget || e.changedTouches.length === 0) return;
+      
+      const touch = e.changedTouches[0];
+      const touchEndX = touch.clientX;
+      const touchEndY = touch.clientY;
+      const touchEndTime = Date.now();
+      
+      handleSwipeGesture(touchEndX, touchEndY, touchEndTime);
     };
     
-    const handleSwipeGesture = (touchEndX: number, touchEndY: number) => {
-      const swipeThreshold = 110; // Increased threshold to prevent accidental swipes while scrolling
-      const verticalThreshold = 35; // Stricter vertical limit to ensure purely horizontal intent
-      const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-      
+    const handleSwipeGesture = (touchEndX: number, touchEndY: number, touchEndTime: number) => {
       const deltaX = touchEndX - touchStartX;
-      const deltaY = Math.abs(touchEndY - touchStartY);
+      const deltaY = touchEndY - touchStartY;
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
+      const elapsedTime = Math.max(1, touchEndTime - touchStartTime); // in milliseconds
       
-      // Ensure intentional horizontal swipe with high confidence and minimal vertical deviation
-      if (deltaY < verticalThreshold && Math.abs(deltaX) >= swipeThreshold && Math.abs(deltaX) > deltaY * 2.5) {
-        if (deltaX < -swipeThreshold) {
+      // Calculate velocity in pixels per millisecond
+      const velocityX = absDeltaX / elapsedTime;
+
+      // Screen aspect ratio normalization (tall phone ~2.0+, tablet ~1.3, landscape < 1.0)
+      const viewportWidth = window.innerWidth || 390;
+      const viewportHeight = window.innerHeight || 844;
+      const screenAspectRatio = viewportHeight / Math.max(1, viewportWidth);
+
+      // Adaptive distance threshold: proportional to viewport width but capped
+      // Normal swipe: ~14% of width (min 45px, max 85px)
+      // Fast flick (velocity > 0.42 px/ms): lower threshold (35px) for quick responsiveness
+      const isHighVelocity = velocityX >= 0.42 && elapsedTime < 400;
+      const dynamicSwipeThreshold = isHighVelocity 
+        ? 35 
+        : Math.min(85, Math.max(45, viewportWidth * 0.14));
+
+      // Adaptive vertical tolerance based on aspect ratio
+      // Taller screens have a more natural diagonal thumb arc, so relax horizontal dominance ratio slightly
+      const horizontalDominanceRatio = screenAspectRatio > 1.8 ? 1.35 : 1.65;
+      const maxVerticalTolerance = isHighVelocity 
+        ? Math.min(140, viewportHeight * 0.22) 
+        : Math.min(90, viewportHeight * 0.15);
+
+      // Validate gesture intentionality
+      const isHorizontalIntent = absDeltaX >= dynamicSwipeThreshold && 
+                                 absDeltaX > absDeltaY * horizontalDominanceRatio &&
+                                 absDeltaY < maxVerticalTolerance;
+
+      if (isHorizontalIntent) {
+        const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
+        
+        if (deltaX < 0) {
           // Swipe left -> Next section
           if (currentIndex < SECTIONS.length - 1) {
             navigateToSection(SECTIONS[currentIndex + 1].id);
           }
-        } else if (deltaX > swipeThreshold) {
-          // Swipe right -> Prev section
+        } else if (deltaX > 0) {
+          // Swipe right -> Previous section
           if (currentIndex > 0) {
             navigateToSection(SECTIONS[currentIndex - 1].id);
           }

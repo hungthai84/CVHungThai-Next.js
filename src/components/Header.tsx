@@ -29,7 +29,8 @@ import {
   Printer,
   Play,
   Rocket,
-  Type
+  Type,
+  Server
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -192,16 +193,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
     { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "domains", num: "04", labelVi: "Trang dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
+    { id: "domains", num: "04", labelVi: "Dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
     { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
     { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
     { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
     { id: "projects", num: "07", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
     { id: "interview", num: "08", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
-    { id: "tuvi", num: "09", labelVi: "Tử Vi & Hệ thống", labelEn: "TuVi & Systems", Icon: Sparkles, key: "9" },
-    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "0" },
-    { id: "systems", num: "11", labelVi: "Hệ thống", labelEn: "Tech Systems", Icon: LayoutGrid, key: "S" },
-    { id: "contact", num: "12", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
+    { id: "tuvi", num: "09", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
+    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
+    { id: "contact", num: "11", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
+    { id: "systems", num: "12", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
     { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
   ];
 
@@ -217,8 +218,8 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "projects", label: t("nav.projects"), Icon: ClipboardList },
     { id: "interview", label: t("nav.interview"), Icon: Video },
     { id: "tuvi", label: t("nav.tuvi"), Icon: Sparkles },
+    { id: "systems", label: t("nav.systems"), Icon: Server },
     { id: "memories", label: t("nav.memories"), Icon: Images },
-    { id: "systems", label: t("nav.systems"), Icon: LayoutGrid },
     { id: "contact", label: t("nav.contact"), Icon: MessagesSquare },
   ];
 
@@ -244,12 +245,12 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     <>
       <header 
         id="header"
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-500 ease-in-out floating-glass-header ${getHeaderContainerStyle()}`}
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-500 ease-in-out floating-glass-header ${getHeaderContainerStyle()}`}
         style={{
           borderTopLeftRadius: "0px",
           borderTopRightRadius: "0px",
-          borderBottomLeftRadius: "10px",
-          borderBottomRightRadius: "10px"
+          borderBottomLeftRadius: "var(--theme-radius-card, 10px)",
+          borderBottomRightRadius: "var(--theme-radius-card, 10px)"
         }}
       >
         {/* Hidden dummy svg to satisfy selector verification while keeping menu icons active */}
@@ -281,7 +282,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           onMouseEnter={handleNavMouseEnter}
           onMouseMove={handleMouseMove}
           className={cn(
-            "hidden md:flex flex-1 shrink-0 items-center justify-between gap-1 p-1 rounded-full mx-2 lg:mx-6 relative group/nav header-nav-container select-none overflow-visible max-w-[720px] transition-all duration-300 bg-transparent border-transparent shadow-none !backdrop-blur-none",
+            "hidden md:flex flex-1 shrink-0 items-center justify-between gap-1 p-1 rounded-full mx-2 lg:mx-4 min-[1250px]:mx-5 relative group/nav header-nav-container select-none overflow-visible max-w-[720px] min-[1250px]:max-w-[880px] transition-all duration-300 bg-transparent border-transparent shadow-none !backdrop-blur-none",
             theme === "glass-dark-neon"
               ? "text-white"
               : "text-slate-900 dark:text-white"
@@ -315,6 +316,9 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     <span className={`title shrink-0 transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold drop-shadow-sm' : ''}`}>
                       <item.Icon className={`w-4 h-4 shrink-0 transition-all duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400' : ''}`} />
                       <span className="shrink-0">{item.label}</span>
+                    </span>
+                    <span className={`nav-label-bottom transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold' : 'text-slate-600 dark:text-slate-300'}`}>
+                      {item.label}
                     </span>
                   </a>
                 </li>
@@ -684,35 +688,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               );
                             })}
                           </div>
-
-                          {/* Footer Actions */}
-                          <div className="mt-2.5 pt-2 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between gap-2">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsColorDropdownOpen(false);
-                                themeContext.openColorModal();
-                              }}
-                              className="text-2xs font-semibold text-[var(--color-primary)] hover:underline flex items-center gap-1.5 cursor-pointer py-1"
-                            >
-                              <Sliders className="w-3.5 h-3.5" />
-                              <span>{lang === "vi" ? "Token & CSS" : "Token & CSS"}</span>
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsColorDropdownOpen(false);
-                                themeContext.openTypographyModal();
-                              }}
-                              className="text-2xs font-semibold text-indigo-500 hover:underline flex items-center gap-1.5 cursor-pointer py-1"
-                            >
-                              <Type className="w-3.5 h-3.5" />
-                              <span>{lang === "vi" ? "Chỉnh Font" : "Typography"}</span>
-                            </button>
-                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -909,29 +884,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                             </button>
                           );
                         })}
-                      </div>
-
-                      <div className="mt-2 pt-1.5 border-t border-slate-200/50 dark:border-white/10 flex flex-col gap-1">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsColorDropdownOpen(false);
-                            themeContext.openColorModal();
-                          }}
-                          className="w-full text-center text-3xs font-semibold text-[var(--color-primary)] hover:underline py-1 cursor-pointer"
-                        >
-                          {lang === "vi" ? "Xem chi tiết Token & CSS Code →" : "View Token Details →"}
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsColorDropdownOpen(false);
-                            themeContext.openTypographyModal();
-                          }}
-                          className="w-full text-center text-3xs font-semibold text-indigo-500 hover:underline py-1 cursor-pointer"
-                        >
-                          {lang === "vi" ? "Cấu hình Typography & Token Font →" : "Global Typography Settings →"}
-                        </button>
                       </div>
                     </motion.div>
                   )}

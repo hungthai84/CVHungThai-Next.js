@@ -68,6 +68,51 @@ export default function TuVi() {
     return item.tier === zodiacFilterTier;
   });
 
+  const getZodiacTheme = (tier: string) => {
+    if (tier === "best") {
+      return {
+        accent: "emerald",
+        badge: "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs",
+        bgUnselected: "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-100",
+        bgSelected: "bg-gradient-to-br from-emerald-500/25 via-teal-500/20 to-emerald-600/30 border-emerald-400 dark:border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_20px_rgba(16,185,129,0.35)] scale-105",
+        textColor: "text-emerald-700 dark:text-emerald-300",
+        accentBg: "bg-emerald-500/10 border-emerald-500/30",
+        gradientBox: "from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border-emerald-500/40 dark:border-emerald-400/50",
+      };
+    }
+    if (tier === "support") {
+      return {
+        accent: "cyan",
+        badge: "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xs",
+        bgUnselected: "bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 dark:border-cyan-500/40 text-cyan-900 dark:text-cyan-100",
+        bgSelected: "bg-gradient-to-br from-cyan-500/25 via-sky-500/20 to-blue-600/30 border-cyan-400 dark:border-cyan-400 ring-2 ring-cyan-400/80 shadow-[0_0_20px_rgba(6,182,212,0.35)] scale-105",
+        textColor: "text-cyan-700 dark:text-cyan-300",
+        accentBg: "bg-cyan-500/10 border-cyan-500/30",
+        gradientBox: "from-cyan-500/15 via-sky-500/10 to-blue-500/15 border-cyan-500/40 dark:border-cyan-400/50",
+      };
+    }
+    if (tier === "luc_hop") {
+      return {
+        accent: "purple",
+        badge: "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-xs",
+        bgUnselected: "bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/30 dark:border-purple-500/40 text-purple-900 dark:text-purple-100",
+        bgSelected: "bg-gradient-to-br from-purple-500/25 via-fuchsia-500/20 to-pink-600/30 border-purple-400 dark:border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-105",
+        textColor: "text-purple-700 dark:text-purple-300",
+        accentBg: "bg-purple-500/10 border-purple-500/30",
+        gradientBox: "from-purple-500/15 via-fuchsia-500/10 to-pink-500/15 border-purple-500/40 dark:border-purple-400/50",
+      };
+    }
+    return {
+      accent: "amber",
+      badge: "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-xs",
+      bgUnselected: "bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 dark:border-amber-500/40 text-amber-900 dark:text-amber-100",
+      bgSelected: "bg-gradient-to-br from-amber-500/25 via-orange-500/20 to-amber-600/30 border-amber-400 dark:border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.35)] scale-105",
+      textColor: "text-amber-700 dark:text-amber-300",
+      accentBg: "bg-amber-500/10 border-amber-500/30",
+      gradientBox: "from-amber-500/15 via-orange-500/10 to-amber-500/15 border-amber-500/40 dark:border-amber-400/50",
+    };
+  };
+
   return (
     <section 
       id="tuvi" 
@@ -106,9 +151,6 @@ export default function TuVi() {
               <h3 className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400">
                 1. Thông tin chung
               </h3>
-              <span className="ml-auto text-2xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30">
-                Hồ Sơ Mệnh Bản Thể
-              </span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -281,9 +323,6 @@ export default function TuVi() {
                   2. Tính cách trong công việc
                 </h3>
               </div>
-              <span className="text-3xs font-black px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/30">
-                Phong Cách Quản Trị
-              </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -347,9 +386,6 @@ export default function TuVi() {
               <h3 className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">
                 3. Chân dung tử vi trong công việc
               </h3>
-              <span className="ml-auto text-2xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
-                Lục Cung & Ngũ Hành Quản Trị
-              </span>
             </div>
 
             {/* 6 Cung cốt lõi */}
@@ -456,9 +492,6 @@ export default function TuVi() {
               <h3 className="text-base sm:text-lg font-black text-teal-600 dark:text-teal-400">
                 4. Các tuổi hợp tác làm việc
               </h3>
-              <span className="ml-auto text-2xs font-bold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
-                Ma Trận 12 Con Giáp
-              </span>
             </div>
 
             {/* 2-Column Layout: Left Column = Search & Zodiac Ribbon Grid; Right Column = Detailed Result */}
@@ -512,9 +545,10 @@ export default function TuVi() {
                 </div>
 
                 {/* Grid 12 Con Giáp Ribbon */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
                   {filteredZodiacList.map((item) => {
                     const isSelected = selectedZodiacId === item.id;
+                    const theme = getZodiacTheme(item.tier);
                     return (
                       <button
                         key={item.id}
@@ -523,26 +557,22 @@ export default function TuVi() {
                           playUiSound("click");
                           setSelectedZodiacId(item.id);
                         }}
-                        className={`p-2 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border ${
+                        className={`p-2.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer border backdrop-blur-md ${
                           isSelected
-                            ? "ring-2 ring-teal-500 shadow-sm bg-teal-500/10 border-teal-400 dark:border-teal-600 scale-105"
-                            : item.tier === "best"
-                              ? "bg-emerald-500/5 hover:bg-emerald-500/10 border-emerald-500/10"
-                              : item.tier === "support"
-                                ? "bg-sky-500/5 hover:bg-sky-500/10 border-sky-500/10"
-                                : "bg-slate-500/5 hover:bg-slate-500/10 border-slate-500/10"
+                            ? theme.bgSelected
+                            : `${theme.bgUnselected} hover:scale-102 hover:shadow-md`
                         }`}
                       >
-                        <span className="text-2xl">{item.icon}</span>
-                        <span className="text-xs font-black text-slate-800 dark:text-slate-100 mt-1">{item.nameVi}</span>
-                        <span className="text-3xs text-slate-500 dark:text-slate-400 font-semibold">{item.animalVi}</span>
-                        <span className={`mt-1 text-3xs font-black px-1.5 py-0.2 rounded-full leading-tight ${
-                          item.tier === "best"
-                            ? "bg-emerald-600 text-white"
-                            : item.tier === "support"
-                              ? "bg-sky-600 text-white"
-                              : "bg-amber-600 text-white"
-                        }`}>
+                        <span className={`text-2.5xl transition-transform duration-300 ${isSelected ? "scale-110 drop-shadow-md" : ""}`}>
+                          {item.icon}
+                        </span>
+                        <span className="text-xs font-black text-slate-900 dark:text-white mt-1">
+                          Tuổi {item.nameVi}
+                        </span>
+                        <span className="text-3xs text-slate-500 dark:text-slate-400 font-semibold">
+                          ({item.animalVi})
+                        </span>
+                        <span className={`mt-1.5 text-3xs font-black px-2 py-0.5 rounded-full leading-tight ${theme.badge}`}>
                           {item.score}
                         </span>
                       </button>
@@ -553,72 +583,75 @@ export default function TuVi() {
 
               {/* RIGHT COLUMN: Detailed Zodiac Result Info */}
               <div className="lg:col-span-6 h-full">
-                {currentZodiac ? (
-                  <div className="p-4 sm:p-5 rounded-2xl bg-teal-500/5 border border-teal-500/15 space-y-4 h-full flex flex-col justify-between shadow-xs">
-                    <div className="space-y-3">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-teal-500/20">
-                        <div className="flex items-center gap-3">
-                          <span className="text-4xl">{currentZodiac.icon}</span>
-                          <div>
-                            <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                              Tuổi {currentZodiac.nameVi} ({currentZodiac.animalVi}) • {currentZodiac.relationshipVi}
-                            </h4>
-                            <div id="card-zodiac-years-detail" className="mt-1.5 p-2 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs inline-block">
-                              <p className="text-body-sm text-slate-600 dark:text-slate-300 font-semibold flex items-center gap-1.5">
-                                <span>📅 Năm sinh tiêu biểu:</span>
-                                <span className="font-bold text-slate-800 dark:text-slate-100">{currentZodiac.years}</span>
-                              </p>
+                {currentZodiac ? (() => {
+                  const activeTheme = getZodiacTheme(currentZodiac.tier);
+                  return (
+                    <div className={`p-4 sm:p-5 rounded-2xl bg-gradient-to-br ${activeTheme.gradientBox} border space-y-4 h-full flex flex-col justify-between shadow-md backdrop-blur-xl transition-all duration-300`}>
+                      <div className="space-y-3.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-200/40 dark:border-slate-800/60">
+                          <div className="flex items-center gap-3">
+                            <span className="text-4xl drop-shadow-md">{currentZodiac.icon}</span>
+                            <div>
+                              <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                                Tuổi {currentZodiac.nameVi} ({currentZodiac.animalVi}) • {currentZodiac.relationshipVi}
+                              </h4>
+                              <div id="card-zodiac-years-detail" className="mt-1.5 p-2 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs inline-block">
+                                <p className="text-body-sm text-slate-700 dark:text-slate-300 font-semibold flex items-center gap-1.5">
+                                  <span>📅 Năm sinh tiêu biểu:</span>
+                                  <span className="font-bold text-slate-900 dark:text-white">{currentZodiac.years}</span>
+                                </p>
+                              </div>
                             </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-black ${activeTheme.badge}`}>
+                              {currentZodiac.tierLabelVi}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                          <div className="p-3 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800/50 shadow-2xs">
+                            <span className="font-bold text-slate-800 dark:text-slate-200">🏢 Môi trường hợp nhất:</span>
+                            <p className="font-semibold text-slate-900 dark:text-white mt-1 leading-snug">{currentZodiac.workplaceFitVi}</p>
+                          </div>
+                          <div className="p-3 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800/50 shadow-2xs">
+                            <span className="font-bold text-slate-800 dark:text-slate-200">🧭 Hướng bàn tương thích:</span>
+                            <p className="font-semibold text-slate-900 dark:text-white mt-1 leading-snug">{currentZodiac.deskDirectionVi}</p>
+                          </div>
+                        </div>
+
+                        <div className={`p-3.5 rounded-xl ${activeTheme.accentBg} border text-xs leading-relaxed space-y-1.5 shadow-2xs`}>
+                          <span className={`font-black ${activeTheme.textColor} flex items-center gap-1.5`}>
+                            <span>💡 Đánh giá tương hợp & Lời khuyên phối hợp:</span>
+                          </span>
+                          <p className="text-slate-800 dark:text-slate-200 font-medium">{currentZodiac.workplaceAdviceVi}</p>
+                        </div>
+                      </div>
+
+                      {/* Thẻ % tạo thành thẻ nằm cuối cùng */}
+                      <div className={`p-3.5 sm:p-4 rounded-xl bg-gradient-to-r ${activeTheme.gradientBox} border shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 mt-3`}>
+                        <div className="flex items-center gap-2.5">
+                          <div className={`w-9 h-9 rounded-xl ${activeTheme.badge} flex items-center justify-center font-black text-sm shadow-md shrink-0`}>
+                            %
+                          </div>
+                          <div>
+                            <span className={`text-2xs font-extrabold uppercase tracking-wider ${activeTheme.textColor} block`}>
+                              Tỷ Lệ Tương Hợp & Hiệu Quả Hợp Tác
+                            </span>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <span className="px-3 py-1 rounded-full text-xs font-black bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
-                            {currentZodiac.tierLabelVi}
+                          <span className={`text-base sm:text-lg font-black bg-white/95 dark:bg-slate-900/95 px-3.5 py-1 rounded-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs ${activeTheme.textColor}`}>
+                            {currentZodiac.score}
                           </span>
                         </div>
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                        <div className="p-3 rounded-xl bg-slate-500/5 border border-slate-200/20 dark:border-slate-800/40">
-                          <span className="font-bold text-slate-700 dark:text-slate-300">🏢 Môi trường hợp nhất:</span>
-                          <p className="font-semibold text-slate-900 dark:text-white mt-1 leading-snug">{currentZodiac.workplaceFitVi}</p>
-                        </div>
-                        <div className="p-3 rounded-xl bg-slate-500/5 border border-slate-200/20 dark:border-slate-800/40">
-                          <span className="font-bold text-slate-700 dark:text-slate-300">🧭 Hướng bàn tương thích:</span>
-                          <p className="font-semibold text-slate-900 dark:text-white mt-1 leading-snug">{currentZodiac.deskDirectionVi}</p>
-                        </div>
-                      </div>
-
-                      <div className="p-3.5 rounded-xl bg-teal-500/10 border border-teal-500/20 text-xs leading-relaxed space-y-1.5">
-                        <span className="font-black text-teal-900 dark:text-teal-200 flex items-center gap-1.5">
-                          <span>💡 Đánh giá tương hợp & Lời khuyên phối hợp:</span>
-                        </span>
-                        <p className="text-slate-700 dark:text-slate-300">{currentZodiac.workplaceAdviceVi}</p>
-                      </div>
                     </div>
-
-                    {/* Thẻ % tạo thành thẻ nằm cuối cùng */}
-                    <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-teal-500/15 via-emerald-500/15 to-teal-500/10 border border-teal-500/30 dark:border-teal-400/40 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 mt-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-sm shadow-md shrink-0">
-                          %
-                        </div>
-                        <div>
-                          <span className="text-2xs font-extrabold uppercase tracking-wider text-teal-800 dark:text-teal-300 block">
-                            Tỷ Lệ Tương Hợp & Hiệu Quả Hợp Tác
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className="text-base sm:text-lg font-black text-teal-700 dark:text-teal-300 bg-white/90 dark:bg-slate-900/90 px-3.5 py-1 rounded-xl border border-teal-500/30 shadow-xs">
-                          {currentZodiac.score}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
+                  );
+                })() : (
                   <div className="p-6 rounded-2xl bg-slate-500/5 border border-slate-200/20 text-center flex flex-col items-center justify-center h-full text-slate-500 text-xs">
                     Chọn một con giáp hoặc nhập năm sinh ở cột trái để xem chi tiết kết quả.
                   </div>
@@ -627,71 +660,78 @@ export default function TuVi() {
             </div>
           </div>
 
-          {/* BANNER: Châm ngôn bản mệnh Giáp Tý 1984 */}
-          <div className="w-full bg-gradient-to-br from-amber-50/90 via-orange-50/60 to-amber-100/50 dark:from-slate-900/90 dark:via-amber-950/40 dark:to-slate-900 rounded-2xl border border-amber-200/80 dark:border-amber-400/35 p-3 sm:p-4.5 md:p-6 shadow-xs dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-amber-400/60 backdrop-blur-2xl transition-all duration-300 space-y-3 my-2">
-            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-extrabold text-sm">
-              <span className="text-2xl font-serif">“</span>
-              <span>Châm ngôn bản mệnh Giáp Tý 1984 (Hải Trung Kim)</span>
-            </div>
-            <p className="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 italic leading-relaxed text-justify pl-4 border-l-2 border-amber-500">
-              {FINAL_PHILOSOPHY.coreCreed}
-            </p>
-          </div>
-
-          {/* ================= PHẦN 5: CÂU NÓI CUỐI CÙNG VỀ TUỔI NÀY ================= */}
-          <section id="tuvi-section-5" className="space-y-4">
-            <div className="flex items-center gap-2.5 pb-2 border-b border-amber-200/50 dark:border-amber-800/50">
+            {/* ================= PHẦN 5: CÂU NÓI CUỐI CÙNG VỀ TUỔI NÀY ================= */}
+          <div id="tuvi-section-5" className="w-full bg-white/70 dark:bg-slate-900/80 border border-slate-200/80 dark:border-amber-400/35 rounded-2xl p-3 sm:p-4.5 md:p-6 shadow-xs dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-amber-400/60 backdrop-blur-2xl transition-all duration-300 space-y-4 sm:space-y-5">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-amber-200/50 dark:border-amber-800/50">
               <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h3 className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400">
                 5. Câu nói cuối cùng về tuổi này
               </h3>
-              <span className="ml-auto text-2xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                Tâm Niệm Phụng Sự
-              </span>
             </div>
 
-            {/* Thẻ 2: TÁCH RIÊNG & LÀM NỔI BẬT PHƯƠNG CHÂM HÀNH ĐỘNG CỐT LÕI */}
-            <div className="w-full bg-gradient-to-r from-amber-500/15 via-orange-500/20 to-amber-600/15 dark:from-amber-950/70 dark:via-orange-950/60 dark:to-amber-950/70 rounded-2xl border-2 border-amber-400/60 dark:border-amber-400/50 p-4 sm:p-6 shadow-md dark:shadow-[0_15px_40px_rgba(245,158,11,0.25)] text-center relative overflow-hidden backdrop-blur-2xl transition-all duration-300">
-              <div className="absolute -top-6 -left-6 w-24 h-24 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-orange-400/20 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="relative z-10 space-y-2.5">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 text-xs font-black tracking-wider uppercase">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  <span>Phương châm hành động cốt lõi</span>
+            {/* Sub-card 2: Phương châm hành động cốt lõi */}
+            <div 
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 16px))" }}
+              className="w-full glass-surface backdrop-blur-2xl border border-amber-300/80 dark:border-amber-500/40 p-4 sm:p-5 md:p-6 shadow-2xs transition-all duration-300 relative overflow-hidden bg-gradient-to-r from-amber-500/10 via-orange-500/15 to-amber-600/10 dark:from-amber-950/60 dark:via-orange-950/50 dark:to-amber-950/60 space-y-3"
+            >
+              <div className="w-full flex items-center justify-between gap-2 pb-2 border-b border-amber-200/60 dark:border-amber-800/60">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <h4 className="text-card-title font-bold text-amber-700 dark:text-amber-300 tracking-wide">
+                    Phương châm hành động cốt lõi
+                  </h4>
                 </div>
-                <div className="text-base sm:text-lg md:text-xl font-black text-amber-950 dark:text-amber-100 leading-snug max-w-4xl mx-auto drop-shadow-xs">
-                  {FINAL_PHILOSOPHY.actionPrinciple}
-                </div>
+              </div>
+
+              <div className="relative z-10 py-1 text-center">
+                <p className="text-base sm:text-lg md:text-xl font-black text-amber-950 dark:text-amber-100 leading-snug max-w-4xl mx-auto drop-shadow-xs">
+                  “{FINAL_PHILOSOPHY.actionPrinciple.replace(/^“|”$/g, '')}”
+                </p>
               </div>
             </div>
 
-            {/* Thẻ 3: 6 Trụ Cột Tư Duy & Hành Động Cốt Lõi */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {FINAL_PHILOSOPHY.actionGuidelines.map((item, idx) => {
-                const icons = [Target, TrendingUp, Heart, Compass, Zap, Award];
-                const IconComp = icons[idx % icons.length] || CheckCircle2;
-                return (
-                  <div 
-                    key={idx} 
-                    className="p-3.5 rounded-xl bg-white/75 dark:bg-slate-900/75 border border-amber-200/60 dark:border-amber-800/50 shadow-2xs text-xs space-y-1.5 transition-all duration-300 hover:border-amber-400/70 hover:shadow-md hover:-translate-y-0.5"
-                  >
-                    <div className="font-extrabold text-amber-800 dark:text-amber-300 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
-                        <IconComp className="w-3.5 h-3.5" />
+            {/* Sub-card 3: 6 Trụ cột tư duy & hành động cốt lõi */}
+            <div className="space-y-2.5 pt-1">
+              <h4 className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                6 Trụ cột tư duy & hành động cốt lõi
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {FINAL_PHILOSOPHY.actionGuidelines.map((item, idx) => {
+                  const icons = [Target, TrendingUp, Heart, Compass, Zap, Award];
+                  const IconComp = icons[idx % icons.length] || CheckCircle2;
+                  return (
+                    <div 
+                      key={idx} 
+                      className="p-3.5 rounded-xl bg-slate-500/5 border border-slate-200/40 dark:border-slate-800/40 shadow-2xs text-xs space-y-1.5 transition-all duration-300 hover:border-amber-400/70 hover:shadow-md hover:-translate-y-0.5"
+                    >
+                      <div className="font-extrabold text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                          <IconComp className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="text-xs">{item.title}</span>
                       </div>
-                      <span className="text-xs">{item.title}</span>
+                      <p className="text-slate-600 dark:text-slate-300 text-body-sm pl-8">
+                        {item.desc}
+                      </p>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-300 text-body-sm pl-8">
-                      {item.desc}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </section>
+
+            {/* Sub-card 1: Châm ngôn bản mệnh Giáp Tý 1984 */}
+            <div className="p-4 sm:p-5 rounded-xl bg-amber-500/10 border border-amber-300/60 dark:border-amber-800/60 space-y-2">
+              <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-extrabold text-sm">
+                <span className="text-2xl font-serif">“</span>
+                <span>Châm ngôn bản mệnh Giáp Tý 1984 (Hải Trung Kim)</span>
+              </div>
+              <p className="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 italic leading-relaxed text-justify pl-4 border-l-2 border-amber-500">
+                {FINAL_PHILOSOPHY.coreCreed}
+              </p>
+            </div>
+          </div>
 
         </div>
       </div>

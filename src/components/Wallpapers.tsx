@@ -748,12 +748,12 @@ export default function Wallpapers() {
             onDoubleClick={() => {
               resetToDefaultGradient();
             }}
-            className={`group cursor-pointer aspect-video rounded-[10px] p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
+            className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
               config.activeType === 'gradient'
                 ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
                 : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
             }`}
-            style={{ padding: 0, borderRadius: '10px' }}
+            style={{ padding: 0, borderRadius: 'var(--theme-radius-card, 10px)' }}
             title={lang === "vi" ? "Mặc định (Plain Mica Gradient) • Nhấp đúp để áp dụng" : "Default Mica Gradient • Double click to apply"}
           >
             <div className="w-full h-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
@@ -788,12 +788,12 @@ export default function Wallpapers() {
                 onDoubleClick={() => {
                   setActiveBackground(item.id, item.type, item.url, item.cssCode);
                 }}
-                className={`group cursor-pointer aspect-video rounded-[10px] p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
+                className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
                   isActive
                     ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
                     : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
                 }`}
-                style={{ padding: 0, borderRadius: '10px' }}
+                style={{ padding: 0, borderRadius: 'var(--theme-radius-card, 10px)' }}
                 title={`${item.name || `Wallpaper #${idx + 1}`} • ${lang === "vi" ? "Nhấp đúp để áp dụng" : "Double click to apply"}`}
               >
                 {/* Media Preview Container */}

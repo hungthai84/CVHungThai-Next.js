@@ -56,9 +56,9 @@ export function CaseStudy1_5_Mindmap({ jumpToSection, project }: { jumpToSection
   }, []);
 
   return (
-    <article id="mindmap-section" className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 shadow-xl border border-sky-200/80 dark:border-sky-800/60 space-y-5 sm:space-y-6 transition-all duration-300 mb-8 mt-8">
+    <article id="mindmap-section" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 sm:space-y-6 transition duration-300 mb-8 mt-8">
       <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
-        <h2 className="text-base sm:text-xl md:text-2xl font-bold text-sky-600 dark:text-sky-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
+        <h2 className="text-h6 font-bold text-sky-600 dark:text-sky-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
           <span>00</span>
           <span className="text-sky-400 dark:text-sky-500 font-normal">·</span>
           <Network className="w-5 h-5 sm:w-6 sm:h-6 text-sky-600 dark:text-sky-400 shrink-0 inline-block" />

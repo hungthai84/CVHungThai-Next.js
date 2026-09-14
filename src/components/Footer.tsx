@@ -35,7 +35,6 @@ const SECTION_ORDER = [
   "interview",
   "tuvi",
   "memories",
-  "systems",
   "contact"
 ];
 

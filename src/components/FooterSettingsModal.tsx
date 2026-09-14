@@ -4,9 +4,10 @@ import {
   X, Sliders, PanelBottom, Maximize2, Columns, EyeOff, RotateCcw, Check, Pin, 
   CloudSun, Clock, MousePointer, Volume2, VolumeX, Bot, ChevronDown,
   Sparkles, Flame, Crosshair, CircleDot, Dot, Play, CloudRain, Wind, Radio,
-  Palette, Globe, Sun, Moon, Type, Images, Rocket
+  Palette, Globe, Sun, Moon, Type, Images, Rocket, Layers, Minus, Plus, Box,
+  Square, CheckCircle2, AlignLeft, ShieldCheck, Sparkle, SlidersHorizontal
 } from "lucide-react";
-import { useFooter } from "../context/FooterContext";
+import { useFooter, FooterModalTab } from "../context/FooterContext";
 import { useLanguage } from "../i18n";
 import { FOOTER_PLACEMENT_OPTIONS, FOOTER_STYLE_OPTIONS } from "../data/footerData";
 import { FooterPlacement, FooterConfig } from "../types/footer";
@@ -18,6 +19,59 @@ import { SOUND_PACK_OPTIONS, AMBIENT_SOUND_OPTIONS } from "../data/soundData";
 import { AmbientSoundType } from "../types/sound";
 import { useTheme, COLOR_PRESETS, ThemeType } from "../context/ThemeContext";
 import { cn } from "../lib/utils";
+
+const RADIUS_PRESETS = [
+  {
+    id: "sharp",
+    radius: 4,
+    nameVi: "Tối Giản / Vuông (Sharp 4px)",
+    nameEn: "Minimal Sharp (4px)",
+    descVi: "Gọn gàng, chuẩn xác phong cách phẳng",
+    descEn: "Clean, flat modern edge",
+  },
+  {
+    id: "standard",
+    radius: 10,
+    nameVi: "Chuẩn Mực Hệ Thống (Standard 10px)",
+    nameEn: "System Standard (10px)",
+    descVi: "Mặc định Master Agent Design System",
+    descEn: "Standard design system default",
+  },
+  {
+    id: "smooth",
+    radius: 14,
+    nameVi: "Mềm Mại Hiện Đại (Smooth 14px)",
+    nameEn: "Smooth Modern (14px)",
+    descVi: "Bo cong mềm mại, thanh lịch",
+    descEn: "Soft curved, refined modern look",
+  },
+  {
+    id: "rounded",
+    radius: 18,
+    nameVi: "Bo Tròn Nổi Bật (Rounded 18px)",
+    nameEn: "Rounded Soft (18px)",
+    descVi: "Đường cong nổi bật, thân thiện",
+    descEn: "Friendly rounded card edges",
+  },
+  {
+    id: "fluid",
+    radius: 24,
+    nameVi: "Bo Cong Tối Đa (Extra Round 24px)",
+    nameEn: "Extra Round Fluid (24px)",
+    descVi: "Bento bubble cao cấp, mượt mà",
+    descEn: "High curvature bento style",
+  },
+];
+
+const TYPO_TOKENS = [
+  { id: "display", labelVi: "Display (Tiêu đề lớn)", labelEn: "Display", size: "40–52px", weight: "700", leading: "1.15", sampleText: "Nguyễn Hùng Thái" },
+  { id: "h1", labelVi: "H1 (Tiêu đề chính)", labelEn: "H1 Heading", size: "36–42px", weight: "700", leading: "1.20", sampleText: "Giám Đốc Chăm Sóc Khách Hàng" },
+  { id: "h2", labelVi: "H2 (Tiêu đề mục)", labelEn: "H2 Section", size: "28–34px", weight: "700", leading: "1.20", sampleText: "Kinh Nghiệm & Thành Tựu" },
+  { id: "h3", labelVi: "H3 (Tiêu đề phụ)", labelEn: "H3 Subtitle", size: "20–24px", weight: "700", leading: "1.25", sampleText: "Kiến trúc hệ thống CSKH chuẩn quốc tế" },
+  { id: "card", labelVi: "Card Title (Thẻ)", labelEn: "Card Title", size: "18–20px", weight: "700", leading: "1.30", sampleText: "Dự Án Vận Hành Đa Kênh" },
+  { id: "body", labelVi: "Body (Văn bản)", labelEn: "Body Text", size: "15–16px", weight: "400", leading: "1.60", sampleText: "Tối ưu hóa hành trình khách hàng với hiệu suất tăng trưởng vượt bậc." },
+  { id: "caption", labelVi: "Caption / Label", labelEn: "Caption/Label", size: "12–13px", weight: "600", leading: "1.40", sampleText: "22+ NĂM KINH NGHIỆM" },
+];
 
 export default function FooterSettingsModal() {
   const {
@@ -55,12 +109,28 @@ export default function FooterSettingsModal() {
     playSuccess
   } = useSound();
 
-  const { theme, setTheme, colorPreset, setColorPreset, activePalette, openColorModal, openTypographyModal } = useTheme();
+  const { 
+    theme, 
+    setTheme, 
+    colorPreset, 
+    setColorPreset, 
+    activePalette, 
+    openColorModal, 
+    openTypographyModal,
+    fontScale,
+    setFontScale,
+    borderRadius,
+    setBorderRadius,
+    resetBorderRadius
+  } = useTheme();
+
   const { lang, setLang } = useLanguage();
   const isVi = lang === "vi";
 
   // Tab state synced with footerModalTab
-  const [currentTab, setCurrentTab] = useState<"footer" | "cursor" | "sound" | "customization">("footer");
+  const [currentTab, setCurrentTab] = useState<FooterModalTab>("footer");
+  const [customTestText, setCustomTestText] = useState("");
+  const [activeTypoToken, setActiveTypoToken] = useState("body");
 
   useEffect(() => {
     if (footerModalTab) {
@@ -122,9 +192,21 @@ export default function FooterSettingsModal() {
     },
     {
       id: "customization" as const,
-      nameVi: "Tùy chỉnh",
-      nameEn: "Customization",
+      nameVi: "Giao diện",
+      nameEn: "Theme & Colors",
       Icon: Palette,
+    },
+    {
+      id: "typography" as const,
+      nameVi: "Font chữ",
+      nameEn: "Typography",
+      Icon: Type,
+    },
+    {
+      id: "radius" as const,
+      nameVi: "Bo cong góc",
+      nameEn: "Radius",
+      Icon: Layers,
     },
   ];
 
@@ -162,6 +244,22 @@ export default function FooterSettingsModal() {
           bgClass: "bg-emerald-500/10 border-emerald-500/20",
           Icon: Palette,
         };
+      case "typography":
+        return {
+          title: isVi ? "Tùy chỉnh Font chữ & Phân cấp (Play Font)" : "Typography & Scale Settings",
+          desc: isVi ? "Kích thước tỷ lệ toàn cục (80%-130%), Typography Tokens và kiểm tra Tiếng Việt" : "Global font scaling, typography tokens and live text preview",
+          colorClass: "text-amber-600 dark:text-amber-400",
+          bgClass: "bg-amber-500/10 border-amber-500/20",
+          Icon: Type,
+        };
+      case "radius":
+        return {
+          title: isVi ? "Tùy chỉnh độ bo cong góc (Border Radius)" : "Border Radius Customization",
+          desc: isVi ? "Bộ mẫu bo góc, tinh chỉnh pixel và xem trước trực quan quy tắc lồng nhau" : "Radius presets, custom slider and real-time nested component preview",
+          colorClass: "text-rose-600 dark:text-rose-400",
+          bgClass: "bg-rose-500/10 border-rose-500/20",
+          Icon: Layers,
+        };
     }
   };
 
@@ -175,6 +273,14 @@ export default function FooterSettingsModal() {
       resetCursorConfig();
     } else if (currentTab === "sound") {
       resetSoundConfig();
+    } else if (currentTab === "customization") {
+      setTheme("mritech-digital-growth");
+      setColorPreset("neon");
+      setLang("vi");
+    } else if (currentTab === "typography") {
+      setFontScale(100);
+    } else if (currentTab === "radius") {
+      resetBorderRadius();
     }
   };
 
@@ -209,7 +315,7 @@ export default function FooterSettingsModal() {
                   <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2">
                     <span>{currentInfo.title}</span>
                     <span className="text-3xs font-black uppercase px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                      v2.5
+                      v2.6
                     </span>
                   </h3>
                   <p className="text-body-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
@@ -246,8 +352,8 @@ export default function FooterSettingsModal() {
               </div>
             </div>
 
-            {/* TAB SELECTOR BAR (Cohesive Tabbed Navigation) */}
-            <div className="grid grid-cols-3 gap-1 p-1 bg-slate-200/70 dark:bg-slate-800/90 rounded-2xl border border-slate-300/60 dark:border-slate-700/60 mt-4 shadow-inner">
+            {/* TAB SELECTOR BAR (Cohesive 6-Tab Navigation) */}
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 bg-slate-200/70 dark:bg-slate-800/90 rounded-2xl border border-slate-300/60 dark:border-slate-700/60 mt-4 shadow-inner">
               {tabs.map((tab) => {
                 const isTabActive = currentTab === tab.id;
                 const TabIcon = tab.Icon;
@@ -261,19 +367,29 @@ export default function FooterSettingsModal() {
                       playClick();
                     }}
                     className={cn(
-                      "flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2.5 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer relative",
+                      "flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer relative",
                       isTabActive
                         ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/80 dark:border-slate-700/90 scale-[1.02]"
                         : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-slate-800/40"
                     )}
                   >
                     <TabIcon className={cn(
-                      "w-4 h-4 shrink-0 transition-transform",
+                      "w-3.5 h-3.5 shrink-0 transition-transform",
                       isTabActive 
-                        ? (tab.id === "footer" ? "text-purple-600 dark:text-purple-400 scale-110" : tab.id === "cursor" ? "text-indigo-600 dark:text-cyan-400 scale-110" : "text-sky-600 dark:text-sky-400 scale-110")
+                        ? (tab.id === "footer" 
+                            ? "text-purple-600 dark:text-purple-400 scale-110" 
+                            : tab.id === "cursor" 
+                              ? "text-indigo-600 dark:text-cyan-400 scale-110" 
+                              : tab.id === "sound" 
+                                ? "text-sky-600 dark:text-sky-400 scale-110" 
+                                : tab.id === "customization"
+                                  ? "text-emerald-600 dark:text-emerald-400 scale-110"
+                                  : tab.id === "typography"
+                                    ? "text-amber-600 dark:text-amber-400 scale-110"
+                                    : "text-rose-600 dark:text-rose-400 scale-110")
                         : "opacity-70"
                     )} />
-                    <span className="truncate">{isVi ? tab.nameVi : tab.nameEn}</span>
+                    <span className="truncate text-3xs sm:text-2xs">{isVi ? tab.nameVi : tab.nameEn}</span>
                   </button>
                 );
               })}
@@ -940,30 +1056,376 @@ export default function FooterSettingsModal() {
                     <button
                       type="button"
                       onClick={() => {
-                        setIsFooterModalOpen(false);
-                        openTypographyModal();
+                        setCurrentTab("typography");
+                        setFooterModalTab("typography");
                       }}
                       className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                         <Type className="w-3.5 h-3.5" />
                       </div>
-                      <span className="truncate">{isVi ? "Cài đặt Font chữ" : "Typography Settings"}</span>
+                      <span className="truncate">{isVi ? "Tab Font chữ" : "Typography Tab"}</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => {
-                        setIsFooterModalOpen(false);
-                        window.dispatchEvent(new CustomEvent("app-navigate", { detail: "wallpapers" }));
+                        setCurrentTab("radius");
+                        setFooterModalTab("radius");
                       }}
                       className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-                        <Images className="w-3.5 h-3.5" />
+                        <Layers className="w-3.5 h-3.5" />
                       </div>
-                      <span className="truncate">{isVi ? "Hình nền & Video 4K" : "Wallpapers & 4K"}</span>
+                      <span className="truncate">{isVi ? "Tab Bo cong góc" : "Radius Tab"}</span>
                     </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: TYPOGRAPHY (FONT CHỮ) */}
+            {currentTab === "typography" && (
+              <div className="space-y-6">
+                {/* 1. Master Font Banner */}
+                <div className="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0 mt-0.5">
+                    <Type className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black uppercase text-amber-800 dark:text-amber-300">
+                        {isVi ? "Phông Chữ Chuẩn Toàn Cục:" : "Global Typography Standard:"}
+                      </span>
+                      <span className="font-mono text-xs font-black px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-900 dark:text-amber-200">
+                        Play, sans-serif
+                      </span>
+                    </div>
+                    <p className="text-2xs text-amber-700/80 dark:text-amber-300/80 mt-1 leading-relaxed">
+                      {isVi 
+                        ? "Áp dụng đồng bộ font chữ 'Play' chuẩn Master Agent Design System cho tất cả tiêu đề, nội dung và thẻ thành phần."
+                        : "Strictly unified 'Play' Google Font across all titles, body elements, stats and bento cards."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Global Font Scale */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {isVi ? "1. Tỷ lệ kích thước chữ toàn cục" : "1. Global Font Scale"}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                        {fontScale}%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Preset Buttons */}
+                  <div className="grid grid-cols-4 gap-2 mb-3">
+                    {[
+                      { scale: 90, labelVi: "90% Gọn", labelEn: "90% Compact" },
+                      { scale: 100, labelVi: "100% Chuẩn", labelEn: "100% Default" },
+                      { scale: 110, labelVi: "110% Rộng", labelEn: "110% Medium" },
+                      { scale: 120, labelVi: "120% Lớn", labelEn: "120% Large" },
+                    ].map((p) => {
+                      const isSelected = fontScale === p.scale;
+                      return (
+                        <button
+                          key={p.scale}
+                          type="button"
+                          onClick={() => setFontScale(p.scale)}
+                          className={cn(
+                            "py-2 px-1 rounded-xl text-xs font-bold border transition-all text-center cursor-pointer",
+                            isSelected
+                              ? "bg-amber-500/15 border-amber-500 text-amber-900 dark:text-amber-200 ring-1 ring-amber-500/30"
+                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                          )}
+                        >
+                          {isVi ? p.labelVi : p.labelEn}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Range Slider with Controls */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
+                    <button
+                      type="button"
+                      onClick={() => setFontScale(Math.max(80, fontScale - 5))}
+                      disabled={fontScale <= 80}
+                      className="p-1.5 rounded-lg bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+
+                    <input
+                      type="range"
+                      min="80"
+                      max="130"
+                      step="1"
+                      value={fontScale}
+                      onChange={(e) => setFontScale(Number(e.target.value))}
+                      className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setFontScale(Math.min(130, fontScale + 5))}
+                      disabled={fontScale >= 130}
+                      className="p-1.5 rounded-lg bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Typography Hierarchy Inspector */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "2. Phân cấp Typography Tokens & Thử Nghiệm" : "2. Typography Token Hierarchy"}
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {TYPO_TOKENS.map((tk) => {
+                      const isSelected = activeTypoToken === tk.id;
+                      return (
+                        <button
+                          key={tk.id}
+                          type="button"
+                          onClick={() => setActiveTypoToken(tk.id)}
+                          className={cn(
+                            "p-2.5 rounded-xl border text-left transition-all cursor-pointer",
+                            isSelected
+                              ? "bg-amber-500/10 dark:bg-amber-500/15 border-amber-500 text-amber-950 dark:text-amber-200 ring-1 ring-amber-500/30"
+                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                          )}
+                        >
+                          <div className="text-xs font-black text-slate-900 dark:text-white truncate">
+                            {isVi ? tk.labelVi : tk.labelEn}
+                          </div>
+                          <div className="flex items-center gap-2 mt-1 text-3xs font-mono text-slate-500 dark:text-slate-400">
+                            <span>{tk.size}</span>
+                            <span>•</span>
+                            <span>w{tk.weight}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. Live Text Preview Sandbox */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {isVi ? "3. Khung xem trước trực tiếp tiếng Việt" : "3. Live Vietnamese Preview Sandbox"}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={isVi ? "Nhập chữ để test..." : "Type text to test..."}
+                      value={customTestText}
+                      onChange={(e) => setCustomTestText(e.target.value)}
+                      className="px-2.5 py-1 text-2xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-amber-500 w-48"
+                    />
+                  </div>
+
+                  <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 min-h-[90px] flex items-center justify-center text-center">
+                    {(() => {
+                      const currentTk = TYPO_TOKENS.find((t) => t.id === activeTypoToken) || TYPO_TOKENS[5];
+                      const displayText = customTestText || currentTk.sampleText;
+                      return (
+                        <div
+                          className="font-play text-slate-900 dark:text-white transition-all max-w-full"
+                          style={{
+                            fontWeight: currentTk.weight,
+                            fontSize: currentTk.id === "display" ? "28px" : currentTk.id === "h1" ? "24px" : currentTk.id === "h2" ? "20px" : currentTk.id === "h3" ? "17px" : currentTk.id === "card" ? "16px" : currentTk.id === "caption" ? "12px" : "14px",
+                            lineHeight: currentTk.leading,
+                          }}
+                        >
+                          {displayText}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 6: RADIUS (BO CONG GÓC) */}
+            {currentTab === "radius" && (
+              <div className="space-y-6">
+                {/* 1. Master Radius Banner */}
+                <div className="p-4 rounded-2xl border border-rose-500/20 bg-rose-500/10 flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-700 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5">
+                    <Layers className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black uppercase text-rose-800 dark:text-rose-300">
+                        {isVi ? "Quy Chuẩn Bo Góc Master Agent:" : "Master Agent Radius Standard:"}
+                      </span>
+                      <span className="font-mono text-xs font-black px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-900 dark:text-rose-200">
+                        {borderRadius}px
+                      </span>
+                    </div>
+                    <p className="text-2xs text-rose-700/80 dark:text-rose-300/80 mt-1 leading-relaxed">
+                      {isVi 
+                        ? "Điều chỉnh độ bo cong góc toàn bộ 16 trang với quy tắc toán học lồng nhau (Inner Radius = Outer Radius - Padding)."
+                        : "Dynamically tune corner radius across all 16 pages with nested mathematical scaling."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Radius Presets Grid */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "1. Bộ cài đặt mẫu nhanh (Radius Presets)" : "1. Radius Presets"}
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {RADIUS_PRESETS.map((rp) => {
+                      const isSelected = borderRadius === rp.radius;
+                      return (
+                        <button
+                          key={rp.id}
+                          type="button"
+                          onClick={() => setBorderRadius(rp.radius)}
+                          className={cn(
+                            "flex items-start gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer relative",
+                            isSelected
+                              ? "bg-rose-500/10 dark:bg-rose-500/15 border-rose-500 text-rose-950 dark:text-rose-200 ring-1 ring-rose-500/30"
+                              : "bg-slate-50/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 hover:border-slate-300"
+                          )}
+                        >
+                          <div 
+                            className={cn(
+                              "w-8 h-8 flex items-center justify-center shrink-0 border-2 mt-0.5 transition-all",
+                              isSelected 
+                                ? "bg-rose-500 text-white border-rose-600 shadow-xs" 
+                                : "bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300"
+                            )}
+                            style={{ borderRadius: `${rp.radius}px` }}
+                          >
+                            <Box className="w-4 h-4" />
+                          </div>
+
+                          <div className="flex-1 min-w-0 pr-4">
+                            <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                              <span>{isVi ? rp.nameVi : rp.nameEn}</span>
+                            </div>
+                            <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                              {isVi ? rp.descVi : rp.descEn}
+                            </div>
+                          </div>
+
+                          {isSelected && (
+                            <div className="w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Manual Fine-Tuning Range Slider */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {isVi ? "2. Tinh chỉnh bán kính bo góc thủ công" : "2. Manual Corner Radius Slider"}
+                    </label>
+                    <span className="font-mono text-xs font-black text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2.5 py-0.5 rounded-full border border-rose-500/30">
+                      {borderRadius}px
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
+                    <button
+                      type="button"
+                      onClick={() => setBorderRadius(Math.max(0, borderRadius - 2))}
+                      disabled={borderRadius <= 0}
+                      className="p-1.5 rounded-lg bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+
+                    <input
+                      type="range"
+                      min="0"
+                      max="28"
+                      step="1"
+                      value={borderRadius}
+                      onChange={(e) => setBorderRadius(Number(e.target.value))}
+                      className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setBorderRadius(Math.min(28, borderRadius + 2))}
+                      disabled={borderRadius >= 28}
+                      className="p-1.5 rounded-lg bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-600 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* 4. Live Interactive Component Preview */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "3. Khung xem trước tương tác thực tế" : "3. Live Nested Component Preview"}
+                  </label>
+
+                  <div 
+                    className="p-5 border border-slate-200 dark:border-slate-800 bg-slate-100/70 dark:bg-slate-900/80 space-y-3.5 transition-all shadow-sm"
+                    style={{ borderRadius: `${borderRadius}px` }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-7 h-7 bg-rose-500 text-white flex items-center justify-center font-bold text-xs"
+                          style={{ borderRadius: `${Math.max(4, borderRadius - 2)}px` }}
+                        >
+                          HT
+                        </div>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">
+                          {isVi ? "Thẻ Bento Card Mẫu" : "Sample Bento Card"}
+                        </span>
+                      </div>
+
+                      <span 
+                        className="px-2.5 py-0.5 text-3xs font-black uppercase bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30"
+                        style={{ borderRadius: "9999px" }}
+                      >
+                        {isVi ? "Đang áp dụng" : "Live Token"}
+                      </span>
+                    </div>
+
+                    {/* Nested Sub Container */}
+                    <div 
+                      className="p-3 border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800/90 transition-all flex flex-col sm:flex-row items-center justify-between gap-3"
+                      style={{ borderRadius: `${Math.max(2, borderRadius - 4)}px` }}
+                    >
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                        <input
+                          type="text"
+                          readOnly
+                          value={isVi ? "Ô nhập liệu mẫu" : "Sample Input Box"}
+                          className="px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 w-full sm:w-36 focus:outline-none"
+                          style={{ borderRadius: `${Math.max(4, borderRadius - 2)}px` }}
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        className="px-4 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-xs w-full sm:w-auto cursor-pointer"
+                        style={{ borderRadius: `${Math.max(6, borderRadius)}px` }}
+                      >
+                        {isVi ? "Nút Hành Động" : "Action Button"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -974,25 +1436,23 @@ export default function FooterSettingsModal() {
           <div className="flex items-center justify-between px-5 py-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/70">
             <button
               type="button"
-              onClick={() => {
-                if (currentTab === "footer") {
-                  resetFooterConfig();
-                } else if (currentTab === "cursor") {
-                  resetCursorConfig();
-                } else if (currentTab === "sound") {
-                  resetSoundConfig();
-                } else if (currentTab === "customization") {
-                  setTheme("mritech-digital-growth");
-                  setColorPreset("neon");
-                  setLang("vi");
-                }
-              }}
+              onClick={handleResetCurrentTab}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>
                 {isVi 
-                  ? (currentTab === "footer" ? "Đặt lại Footer" : currentTab === "cursor" ? "Đặt lại Con trỏ" : currentTab === "sound" ? "Đặt lại Âm thanh" : "Đặt lại Tùy chỉnh") 
+                  ? (currentTab === "footer" 
+                      ? "Đặt lại Footer" 
+                      : currentTab === "cursor" 
+                        ? "Đặt lại Con trỏ" 
+                        : currentTab === "sound" 
+                          ? "Đặt lại Âm thanh" 
+                          : currentTab === "customization"
+                            ? "Đặt lại Giao diện"
+                            : currentTab === "typography"
+                              ? "Đặt lại Font chữ"
+                              : "Đặt lại Bo góc") 
                   : "Reset Tab Defaults"}
               </span>
             </button>
@@ -1008,7 +1468,11 @@ export default function FooterSettingsModal() {
                     ? "bg-indigo-600 hover:bg-indigo-700" 
                     : currentTab === "sound"
                       ? "bg-sky-600 hover:bg-sky-700"
-                      : "bg-emerald-600 hover:bg-emerald-700"
+                      : currentTab === "customization"
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : currentTab === "typography"
+                          ? "bg-amber-600 hover:bg-amber-700"
+                          : "bg-rose-600 hover:bg-rose-700"
               )}
             >
               {isVi ? "Hoàn tất & Đóng" : "Done & Close"}

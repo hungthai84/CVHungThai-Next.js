@@ -1529,15 +1529,15 @@ export default function Education() {
             {/* Cụm trái: Số lượng học phần */}
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-              <span className="text-body-sub text-subcontent font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+              <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
                 {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
               </span>
             </div>
 
             {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
-            <div className="flex items-center gap-2 ml-auto flex-wrap">
+            <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
               {/* Nút lọc danh mục */}
-              <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+              <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
                 {(["all", "tech", "management"] as const).map((cat) => {
                   const isActive = categoryFilter === cat;
                   const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
@@ -1549,10 +1549,10 @@ export default function Education() {
                         safePlay("toggle");
                         setCategoryFilter(cat);
                       }}
-                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-body-sub text-subcontent font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
+                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
                         isActive
-                          ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                          : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                          ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                          : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
                       }`}
                     >
                       {label}
@@ -1569,10 +1569,10 @@ export default function Education() {
                     safePlay("toggle");
                     setViewMode("grid");
                   }}
-                  className={`px-3 py-1 rounded-lg text-caption font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
                     viewMode === "grid"
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
                   }`}
                 >
                   <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
@@ -1585,10 +1585,10 @@ export default function Education() {
                     setViewMode("book");
                     setIsBookOpen(true);
                   }}
-                  className={`px-3 py-1 rounded-lg text-caption font-bold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
                     (viewMode as any) === "book"
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-black"
-                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
                   }`}
                 >
                   <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
@@ -1627,8 +1627,7 @@ export default function Education() {
                   onMouseLeave={handleMouseLeave}
                   onMouseEnter={() => safePlay("hover")}
                   className={cn(
-                    "group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1",
-                    "bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100"
+                    "group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100"
                   )}
                   style={{
                     transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))',
@@ -1669,7 +1668,7 @@ export default function Education() {
                   </div>
 
                   {/* Metadata List - Flat Direct Rows with Caption / Label: 12px – 13px */}
-                  <div className="space-y-1.5 text-caption text-left mb-3">
+                  <div className="space-y-1.5 text-body-sm text-left mb-3">
                     {/* 1. Học tại / Institution */}
                     <div className="flex items-start gap-1.5 text-left">
                       <span className="w-[76px] shrink-0 font-bold text-caption text-slate-500 dark:text-slate-400 flex items-center gap-1 whitespace-nowrap">

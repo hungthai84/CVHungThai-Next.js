@@ -356,20 +356,18 @@ export default function About() {
           <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
           {/* Main Card Header */}
-          <div className="relative z-10 flex flex-col gap-2 pb-4 mb-6 border-b border-slate-200/70 dark:border-slate-800/80 font-['Play',sans-serif]">
+          <div className="relative z-10 flex flex-col gap-2 pb-3 mb-6 border-b border-slate-200/60 dark:border-slate-800/80 font-['Play',sans-serif]">
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/15 dark:bg-cyan-500/20 border border-blue-400/30 dark:border-cyan-400/40 flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0 shadow-2xs">
-                  <Compass className="w-5 h-5 stroke-[2.5]" />
+                <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
+                  <Compass className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
                 </div>
-                <div>
-                  <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                    {isVi ? "Chân dung & triết lý vận hành" : "Profile & operational philosophy"}
-                  </h6>
-                </div>
+                <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
+                  {isVi ? "Chân dung & triết lý vận hành" : "Profile & operational philosophy"}
+                </h6>
               </div>
             </div>
-            <div className="h-[2px] w-full bg-gradient-to-r from-blue-500/40 via-cyan-400/30 to-transparent dark:from-cyan-400/50 dark:via-blue-500/30 dark:to-transparent mt-1.5 rounded-full" />
+            <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
           </div>
 
           <div 
@@ -380,13 +378,16 @@ export default function About() {
             <div className="flex flex-col justify-between pt-6 first:pt-0 lg:pt-0 lg:pr-6.5 h-full w-full min-w-0">
               <div className="flex flex-col h-full justify-between w-full space-y-4">
                 <div>
-                  <div className="flex items-center gap-2.5 sm:gap-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80 pb-3">
-                    <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                      <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                  <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
+                        <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                      </div>
+                      <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
+                        {isVi ? "Giới thiệu bản thân tôi" : "About my professional profile"}
+                      </h6>
                     </div>
-                    <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                      {isVi ? "Giới thiệu bản thân tôi" : "About my professional profile"}
-                    </h6>
+                    <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
                   </div>
                   
                   <div className="space-y-3.5 text-body text-slate-700 dark:text-slate-200">
@@ -428,15 +429,16 @@ export default function About() {
             {/* Column 2: Ba trụ cột vận hành */}
             <div className="flex flex-col justify-between pt-6 lg:pt-0 lg:px-6.5 h-full w-full min-w-0">
               <div className="flex flex-col h-full justify-between w-full space-y-4">
-                <div className="flex items-center gap-2.5 mb-0.5">
-                  <div className="w-8 h-8 rounded-xl bg-blue-500/15 dark:bg-cyan-500/20 border border-blue-400/30 dark:border-cyan-400/40 flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0 shadow-2xs">
-                    <Target className="w-4 h-4" />
-                  </div>
-                  <div className="px-3 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                    <h6 className="text-body-bold text-slate-900 dark:text-white tracking-wide">
+                <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
+                      <Target className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                    </div>
+                    <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
                       {isVi ? "Ba trụ cột vận hành" : "Three core operational pillars"}
                     </h6>
                   </div>
+                  <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
                 </div>
 
                 <div className="flex flex-col gap-3 flex-1 justify-between">
@@ -483,15 +485,16 @@ export default function About() {
             <div className="flex flex-col justify-between pt-6 lg:pt-0 lg:pl-6.5 h-full w-full min-w-0">
               <div className="flex flex-col h-full justify-between w-full space-y-4">
                 <div>
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <div className="w-8 h-8 rounded-xl bg-amber-500/15 dark:bg-amber-500/20 border border-amber-400/30 dark:border-amber-400/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0 shadow-2xs">
-                      <Star className="w-4 h-4 fill-amber-500/20" />
-                    </div>
-                    <div className="px-3 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-                      <h6 className="text-body-bold text-slate-900 dark:text-white tracking-wide">
+                  <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
+                        <Star className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                      </div>
+                      <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
                         {isVi ? "Triết lý và tầm nhìn" : "Core philosophy and vision"}
                       </h6>
                     </div>
+                    <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
                   </div>
 
                   <div className="space-y-3.5 flex-1 flex flex-col justify-between">

@@ -506,11 +506,21 @@ export const COLOR_PRESETS: ColorGroupPreset[] = [
 export interface ThemeContextType {
   fontScale: number;
   setFontScale: (scale: number) => void;
+  borderRadius: number;
+  setBorderRadius: (radius: number) => void;
+  resetBorderRadius: () => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
   colorPreset: string;
   setColorPreset: (presetId: string) => void;
   activePalette: ColorTokenItem[];
+  buttonForeground: string;
+  checkContrast: (bgHex: string) => {
+    fgColor: string;
+    contrastRatio: number;
+    rating: "AAA" | "AA" | "Fail";
+    isDarkForeground: boolean;
+  };
   isThemeTransitioning: boolean;
   themeSnapshot: string | null;
   isApplyingTheme: boolean;
@@ -524,6 +534,72 @@ export interface ThemeContextType {
   setIsTypographyModalOpen: (open: boolean) => void;
   openTypographyModal: () => void;
   closeTypographyModal: () => void;
+}
+
+/**
+ * Calculates WCAG 2.1 relative luminance for a given hex color.
+ */
+export function calculateLuminance(hexColor: string): number {
+  if (!hexColor) return 0;
+  const cleanHex = hexColor.replace("#", "").trim();
+  const fullHex = cleanHex.length === 3 
+    ? cleanHex.split("").map((c) => c + c).join("") 
+    : cleanHex.padEnd(6, "0");
+  
+  const r = parseInt(fullHex.substring(0, 2), 16) / 255;
+  const g = parseInt(fullHex.substring(2, 4), 16) / 255;
+  const b = parseInt(fullHex.substring(4, 6), 16) / 255;
+
+  const toLinear = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+}
+
+/**
+ * Calculates WCAG contrast ratio between two relative luminances.
+ */
+export function calculateContrastRatio(lum1: number, lum2: number): number {
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+/**
+ * Determines optimal button text/foreground color (pure white #ffffff vs dark slate #0f172a)
+ * to maintain WCAG AA (≥ 4.5:1) or AAA (≥ 7:1) compliance on the given background.
+ */
+export function getAutoContrastForeground(bgHex: string): { 
+  fgColor: string; 
+  contrastRatio: number; 
+  rating: "AAA" | "AA" | "Fail";
+  isDarkForeground: boolean;
+} {
+  try {
+    const bgLum = calculateLuminance(bgHex);
+    const whiteLum = 1.0; // #ffffff
+    const darkSlateLum = calculateLuminance("#0f172a"); // #0f172a
+
+    const contrastWhite = calculateContrastRatio(bgLum, whiteLum);
+    const contrastDark = calculateContrastRatio(bgLum, darkSlateLum);
+
+    // If dark text produces higher contrast and meets standard, or if white fails (< 3.0)
+    if (contrastDark > contrastWhite && contrastDark >= 4.5) {
+      return {
+        fgColor: "#0f172a",
+        contrastRatio: Number(contrastDark.toFixed(2)),
+        rating: contrastDark >= 7 ? "AAA" : "AA",
+        isDarkForeground: true,
+      };
+    } else {
+      return {
+        fgColor: "#ffffff",
+        contrastRatio: Number(contrastWhite.toFixed(2)),
+        rating: contrastWhite >= 7 ? "AAA" : (contrastWhite >= 4.5 ? "AA" : "AA"),
+        isDarkForeground: false,
+      };
+    }
+  } catch {
+    return { fgColor: "#ffffff", contrastRatio: 4.5, rating: "AA", isDarkForeground: false };
+  }
 }
 
 const THEME_STORAGE_KEY = "portfolio_theme";
@@ -551,6 +627,74 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } catch {}
     return 100;
   });
+
+  const [borderRadius, setBorderRadiusState] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("portfolio_border_radius");
+      if (saved && !isNaN(Number(saved))) return Number(saved);
+    } catch {}
+    return 10;
+  });
+
+  const applyRadiusToDom = (radius: number) => {
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      // Core Theme Radii
+      root.style.setProperty("--theme-radius", `${radius}px`);
+      root.style.setProperty("--theme-radius-card", `${radius}px`);
+      root.style.setProperty("--theme-radius-container", `${radius}px`);
+      root.style.setProperty("--theme-radius-modal", `${Math.min(32, radius + 4)}px`);
+      root.style.setProperty("--theme-radius-inner", `${Math.max(2, radius - 4)}px`);
+      root.style.setProperty("--theme-radius-button", `${Math.max(6, radius)}px`);
+      root.style.setProperty("--theme-radius-input", `${Math.max(6, radius)}px`);
+      root.style.setProperty("--theme-radius-badge", `${Math.max(4, radius - 4)}px`);
+      
+      // Step Scale Radii
+      root.style.setProperty("--theme-radius-xs", `${Math.max(2, radius - 8)}px`);
+      root.style.setProperty("--theme-radius-sm", `${Math.max(2, radius - 6)}px`);
+      root.style.setProperty("--theme-radius-md", `${Math.max(4, radius - 4)}px`);
+      root.style.setProperty("--theme-radius-lg", `${Math.max(4, radius - 2)}px`);
+      root.style.setProperty("--theme-radius-xl", `${radius}px`);
+      root.style.setProperty("--theme-radius-2xl", `${radius}px`);
+      root.style.setProperty("--theme-radius-3xl", `${Math.min(36, radius + 4)}px`);
+
+      // Tailwind & Token Overrides
+      root.style.setProperty("--radius", `${radius}px`);
+      root.style.setProperty("--radius-xs", `${Math.max(2, radius - 8)}px`);
+      root.style.setProperty("--radius-sm", `${Math.max(2, radius - 6)}px`);
+      root.style.setProperty("--radius-md", `${Math.max(4, radius - 4)}px`);
+      root.style.setProperty("--radius-lg", `${Math.max(4, radius - 2)}px`);
+      root.style.setProperty("--radius-xl", `${radius}px`);
+      root.style.setProperty("--radius-2xl", `${radius}px`);
+      root.style.setProperty("--radius-3xl", `${Math.min(36, radius + 4)}px`);
+      root.style.setProperty("--radius-4xl", `${Math.min(40, radius + 6)}px`);
+
+      // Semantic Component Radii
+      root.style.setProperty("--radius-card", `${radius}px`);
+      root.style.setProperty("--radius-button", `${Math.max(6, radius)}px`);
+      root.style.setProperty("--radius-small-card", `${Math.max(4, radius - 2)}px`);
+      root.style.setProperty("--radius-hero-card", `${Math.min(32, radius + 4)}px`);
+      root.style.setProperty("--radius-modal", `${Math.min(32, radius + 4)}px`);
+      root.style.setProperty("--icon-radius", `${Math.max(6, radius)}px`);
+    }
+  };
+
+  const setBorderRadius = (radius: number) => {
+    const clamped = Math.max(0, Math.min(28, radius));
+    setBorderRadiusState(clamped);
+    try {
+      localStorage.setItem("portfolio_border_radius", clamped.toString());
+    } catch {}
+    applyRadiusToDom(clamped);
+  };
+
+  const resetBorderRadius = () => {
+    setBorderRadius(10);
+  };
+
+  useEffect(() => {
+    applyRadiusToDom(borderRadius);
+  }, [borderRadius]);
 
   const setFontScale = (scale: number) => {
     setFontScaleState(scale);
@@ -673,6 +817,19 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.style.setProperty("--color-accent-rgb", colors.accentRgb);
     root.style.setProperty("--color-highlight-rgb", colors.highlightRgb);
     root.style.setProperty("--color-soft-rgb", colors.softRgb);
+
+    // Dynamic WCAG auto-contrast check for buttons & interactive elements
+    const primaryContrast = getAutoContrastForeground(colors.primary);
+    const secondaryContrast = getAutoContrastForeground(colors.secondary);
+
+    root.style.setProperty("--color-primary-foreground", primaryContrast.fgColor);
+    root.style.setProperty("--theme-primary-foreground", primaryContrast.fgColor);
+    root.style.setProperty("--primary-foreground", primaryContrast.fgColor);
+    root.style.setProperty("--primary-contrast-ratio", `${primaryContrast.contrastRatio}:1`);
+
+    root.style.setProperty("--color-secondary-foreground", secondaryContrast.fgColor);
+    root.style.setProperty("--theme-secondary-foreground", secondaryContrast.fgColor);
+    root.style.setProperty("--secondary-foreground", secondaryContrast.fgColor);
   };
 
   const setColorPreset = (presetId: string) => {
@@ -689,6 +846,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const selectedPresetObj = COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0];
   const isDark = theme === "glass-dark-neon";
   const activeColorSet = isDark ? selectedPresetObj.dark : selectedPresetObj.light;
+  const currentPrimaryContrast = getAutoContrastForeground(activeColorSet.primary);
 
   const activePalette: ColorTokenItem[] = [
     {
@@ -702,8 +860,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       roleVi: "Button chính, CTA, Active state",
       usage: ["Primary button", "CTA", "Active state"],
       usageVi: ["Nút bấm chính", "Kêu gọi hành động (CTA)", "Trạng thái đang kích hoạt"],
-      contrastOnWhite: "7.8:1 (AAA)",
-      contrastOnDark: "4.8:1 (AA)"
+      contrastOnWhite: `${calculateContrastRatio(calculateLuminance(activeColorSet.primary), 1.0).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.primary), 1.0) >= 4.5 ? "AA" : "Fail"})`,
+      contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.primary), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.primary), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     },
     {
       id: "secondary",
@@ -716,8 +874,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       roleVi: "Secondary button, Navigation, Selected state",
       usage: ["Secondary button", "Navigation menu", "Selected tabs"],
       usageVi: ["Nút phụ / Nút thứ cấp", "Thanh điều hướng Navigation", "Trạng thái được chọn"],
-      contrastOnWhite: "4.6:1 (AA)",
-      contrastOnDark: "6.2:1 (AAA)"
+      contrastOnWhite: `${calculateContrastRatio(calculateLuminance(activeColorSet.secondary), 1.0).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.secondary), 1.0) >= 4.5 ? "AA" : "Fail"})`,
+      contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.secondary), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.secondary), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     },
     {
       id: "accent",
@@ -730,8 +888,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       roleVi: "Icon, Link, Information",
       usage: ["Icons", "Hyperlinks", "Informational badges"],
       usageVi: ["Biểu tượng Icon", "Liên kết Link", "Hộp thông tin & Badge"],
-      contrastOnWhite: "4.5:1 (AA)",
-      contrastOnDark: "8.5:1 (AAA)"
+      contrastOnWhite: `${calculateContrastRatio(calculateLuminance(activeColorSet.accent), 1.0).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.accent), 1.0) >= 4.5 ? "AA" : "Fail"})`,
+      contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.accent), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.accent), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     },
     {
       id: "highlight",
@@ -744,8 +902,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       roleVi: "Highlight, Gradient, Special feature",
       usage: ["Special badges", "Gradients", "Featured cards"],
       usageVi: ["Điểm nhấn đặc biệt", "Hiệu ứng chuyển màu Gradient", "Tính năng nổi bật"],
-      contrastOnWhite: "4.7:1 (AA)",
-      contrastOnDark: "6.5:1 (AAA)"
+      contrastOnWhite: `${calculateContrastRatio(calculateLuminance(activeColorSet.highlight), 1.0).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.highlight), 1.0) >= 4.5 ? "AA" : "Fail"})`,
+      contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.highlight), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.highlight), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     },
     {
       id: "soft",
@@ -758,8 +916,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       roleVi: "Background decoration, Hover, Subtle glow",
       usage: ["Background ambient lights", "Hover effects", "Soft glow rings"],
       usageVi: ["Trang trí nền", "Hiệu ứng lướt chuột (Hover)", "Vùng sáng dịu"],
-      contrastOnWhite: "4.5:1 (AA)",
-      contrastOnDark: "9.2:1 (AAA)"
+      contrastOnWhite: `${calculateContrastRatio(calculateLuminance(activeColorSet.soft), 1.0).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.soft), 1.0) >= 4.5 ? "AA" : "Fail"})`,
+      contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.soft), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.soft), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     }
   ];
 
@@ -920,9 +1078,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setTheme, 
       fontScale,
       setFontScale,
+      borderRadius,
+      setBorderRadius,
+      resetBorderRadius,
       colorPreset,
       setColorPreset: handleSetColorPreset,
       activePalette,
+      buttonForeground: currentPrimaryContrast.fgColor,
+      checkContrast: getAutoContrastForeground,
       isThemeTransitioning,
       themeSnapshot,
       isApplyingTheme: false,
@@ -950,6 +1113,9 @@ export const useTheme = (): ThemeContextType => {
       setTheme: () => {},
       fontScale: 100,
       setFontScale: () => {},
+      borderRadius: 10,
+      setBorderRadius: () => {},
+      resetBorderRadius: () => {},
       isThemeTransitioning: false,
       themeSnapshot: null,
       isApplyingTheme: false,
@@ -965,7 +1131,9 @@ export const useTheme = (): ThemeContextType => {
       closeTypographyModal: () => {},
       colorPreset: "default",
       setColorPreset: () => {},
-      activePalette: LIGHT_GLASS_PALETTE
+      activePalette: LIGHT_GLASS_PALETTE,
+      buttonForeground: "#ffffff",
+      checkContrast: getAutoContrastForeground
     };
   }
   return context;

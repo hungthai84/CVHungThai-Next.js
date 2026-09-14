@@ -203,6 +203,21 @@ export const GLOBAL_TYPOGRAPHY_TOKENS: TypographyTokenDef[] = [
     desc: "Mobile 15px, Desktop 16px. Tiêu đề cấp 6 cho nhãn thông số và tiêu đề nội dòng."
   },
   {
+    id: "h7",
+    level: "H7 / Card Title H7",
+    variable: "--font-size-h7",
+    cssClass: ".text-h6, .text-card-title-h7",
+    labelVi: "Tiêu đề Cấp 7 (Tiêu đề Card H7 / Sub-card Title)",
+    labelEn: "Heading 7 / Card Title H7",
+    targetElements: "<h7>, Tiêu đề card nhỏ H7, Sub-card Header, Tiêu đề thẻ bổ trợ",
+    rangePx: "14–15px",
+    clampValue: "clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem)",
+    defaultWeight: "700",
+    defaultLineHeight: "1.3",
+    defaultLetterSpacing: "0",
+    desc: "Mobile 14px, Desktop 15px. Font-weight 700. Tiêu đề card cấp 7 (H7) dành cho các tiêu đề card nhỏ, khối bento con, nhãn tiêu đề thẻ phụ."
+  },
+  {
     id: "card-title",
     level: "Card Title",
     variable: "--font-size-card-title",
@@ -371,6 +386,7 @@ export const getElementTypography = (el?: HTMLElement | null): ElementComputedTy
         tok.id === "h4" ? 19 :
         tok.id === "h5" ? 17 :
         tok.id === "h6" ? 15.5 :
+        tok.id === "h7" ? 14.5 :
         tok.id === "card-title" ? 19 :
         tok.id === "body-bold" ? 16 :
         tok.id === "body" ? 16 :
@@ -879,19 +895,6 @@ const DEFAULT_PAGE_STRUCTURE: TreeItem[] = [
     ]
   },
   {
-    id: "sec-systems",
-    sectionId: "systems",
-    sectionName: "Hệ thống (Systems)",
-    title: "Hệ thống Vận hành & Kiến trúc CS",
-    tag: "section",
-    type: "Section",
-    selector: "#systems",
-    children: [
-      { id: "sys-arch", sectionId: "systems", sectionName: "Hệ thống", title: "Sơ đồ Kiến trúc Vận hành Đa kênh Omni-channel", tag: "div", type: "Diagram", selector: "#systems .arch-box" },
-      { id: "sys-flow", sectionId: "systems", sectionName: "Hệ thống", title: "Quy trình Xử lý Sự cố & Phản hồi Khách hàng", tag: "div", type: "Flowchart", selector: "#systems .flow-chart" }
-    ]
-  },
-  {
     id: "sec-wallpapers",
     sectionId: "wallpapers",
     sectionName: "Hình nền (Wallpapers)",
@@ -1148,20 +1151,6 @@ export const WEBSITE_PAGES_META: WebsitePageInfo[] = [
     categoryColor: "text-pink-600 dark:text-pink-400 bg-pink-500/10 border-pink-500/30",
     icon: Images,
     descriptionVi: "Bộ sưu tập hơn 32 khoảnh khắc gắn bó cùng đồng đội, sự kiện và cột mốc đáng nhớ.",
-    childCount: 2
-  },
-  {
-    id: "sec-systems",
-    sectionId: "systems",
-    sectionName: "Hệ thống",
-    title: "Hệ thống Vận hành & Kiến trúc CS",
-    tag: "section",
-    selector: "#systems",
-    category: "systems",
-    categoryVi: "Hệ thống",
-    categoryColor: "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/30",
-    icon: LayoutGrid,
-    descriptionVi: "12 Nền tảng quản trị công nghệ, kiến trúc đa kênh và quy trình xử lý sự cố chuẩn hóa.",
     childCount: 2
   },
   {
@@ -1448,11 +1437,12 @@ export default function XRayInspector() {
 
   // Sample Prompts Templates State
   const DEFAULT_SAMPLE_PROMPTS = [
-    { id: "sample-1", title: "Tối ưu UI/UX Responsive", content: "Tối ưu hóa giao diện chuẩn Responsive cho mọi màn hình, cân chỉnh khoảng cách padding/margin và đồng bộ phong cách thiết kế.", isCustom: false },
-    { id: "sample-2", title: "Hiệu ứng Glassmorphism", content: "Làm nổi bật các thẻ thông tin (card) với hiệu ứng kính mờ Glassmorphism, viền neon mỏng và bóng đổ hiện đại.", isCustom: false },
-    { id: "sample-3", title: "Cân bằng Tương phản WCAG AA", content: "Kiểm tra và cân bằng độ tương phản màu sắc đạt chuẩn WCAG AA cho cả 2 chế độ Sáng (Light) và Tối (Dark Neon).", isCustom: false },
-    { id: "sample-4", title: "Hoạt ảnh Chuyển động Mượt", content: "Bổ sung hiệu ứng chuyển động mượt mà (smooth animations/hover states) khi tương tác với các nút và thẻ.", isCustom: false },
-    { id: "sample-5", title: "Đồng bộ Bố cục Thẻ Grid", content: "Sắp xếp lại bố cục dạng lưới thẻ (grid) cân đối, đồng bộ chiều cao và khoảng cách giữa các phần tử.", isCustom: false }
+    { id: "sample-1", title: "Tối ưu UI/UX Responsive", content: "Tối ưu hóa giao diện chuẩn Responsive cho mọi màn hình (Mobile < 768px, Tablet 768-1199px, Desktop >= 1200px), cân chỉnh khoảng cách padding/margin và đảm bảo vùng chạm tối thiểu 44px.", isCustom: false },
+    { id: "sample-2", title: "Hiệu ứng Glassmorphism Hiện Đại", content: "Làm nổi bật các thẻ thông tin (card) với hiệu ứng kính mờ Glassmorphism (backdrop-blur-md kết hợp bg-white/65 hoặc dark:bg-white/[0.06]), viền mỏng 1px và bóng đổ đa tầng mịn màng.", isCustom: false },
+    { id: "sample-3", title: "Cân bằng Tương phản WCAG AA", content: "Kiểm tra và cân bằng độ tương phản màu sắc chữ và nền đạt chuẩn WCAG AA (tối thiểu 4.5:1) cho cả 2 chế độ Sáng (Light) và Tối (Dark).", isCustom: false },
+    { id: "sample-4", title: "Hoạt ảnh Chuyển động Tinh Tế", content: "Bổ sung hiệu ứng chuyển động mượt mà (transition 200ms, hover:-translate-y-1, active:scale-95) khi tương tác với các nút bấm và thẻ card.", isCustom: false },
+    { id: "sample-5", title: "Đồng bộ Bố cục Thẻ Grid & Bento", content: "Sắp xếp lại bố cục dạng lưới thẻ (grid / bento) cân đối, tự động co giãn theo ngưỡng minmax(260px, 1fr) và đồng bộ bo góc theo token hệ thống.", isCustom: false },
+    { id: "sample-6", title: "Làm sạch Imports & Mã nguồn", content: "Rà soát toàn bộ component, loại bỏ các imports không sử dụng, dọn dẹp biến thừa (dead code), bổ sung cleanup function cho useEffect và tối ưu hiệu năng.", isCustom: false }
   ];
 
   const [samplePromptTemplates, setSamplePromptTemplates] = useState<Array<{ id: string; title: string; content: string; isCustom?: boolean }>>(() => {
@@ -2281,10 +2271,7 @@ export default function XRayInspector() {
     const newSavedPrompt: SavedPromptItem = {
       id: `saved-${Date.now()}`,
       title: `${actionTypeName}: ${selectedTreeItem.title}`,
-      prompt: `[THAO TÁC ${actionTypeName.toUpperCase()}]
-• Vị trí: ${selectedTreeItem.sectionName} (#${selectedTreeItem.sectionId})
-• Đối tượng: ${selectedTreeItem.title} (\`${selectedTreeItem.selector}\`)
-• Lệnh thực thi: ${actionDesc}`,
+      prompt: `- Tại trang: ${selectedTreeItem.sectionName} - Phần tử chỉnh sửa: ${selectedTreeItem.title} (${selectedTreeItem.tag ? `<${selectedTreeItem.tag}> - ` : ''}Selector: \`${selectedTreeItem.selector}\`) - Thực hiện: ${actionDesc} - Phạm vi áp dụng: Riêng đối tượng này`,
       time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
       presetName: editPreset ? PRESET_TEMPLATES.find(p => p.id === editPreset)?.label : undefined
     };
@@ -2425,12 +2412,12 @@ Vui lòng thực thi chính xác vào từng component.`;
           ? `Xóa đối tượng đem nội dung bên trong ra ngoài (giữ lại các phần tử con), tìm và xóa file code liên quan${extraNote}`
           : `Xóa toàn bộ đối tượng cùng tất cả phần tử con bên trong, tìm và xóa file code liên quan${extraNote}`;
       } else if (elementActionMode === "clone_format") {
-        actionDetailText = `Định dạng giống mẫu: Áp dụng phong cách thiết kế, màu sắc, typography tương tự mẫu [${styleSource}]`;
+        actionDetailText = `Định dạng giống mẫu: Áp dụng phong cách thiết kế, màu sắc, typography tương tự mẫu [${styleSource || "Thẻ Main card dự án"}] (Hiệu ứng phẳng flat design, bo góc 20px, tiêu đề Sentence case, viền mỏng đồng bộ)${userInstruction.trim() ? ` - ${userInstruction.trim()}` : ''}`;
       } else if (elementActionMode === "add") {
-        actionDetailText = `Thêm đối tượng mới [${newItemTitle}] (<${newItemTag}> - ${newItemType})`;
+        actionDetailText = `Thêm đối tượng mới [${newItemTitle || "Thành phần mới"}] (<${newItemTag || "div"}> - ${newItemType || "Thẻ chứa"})${userInstruction.trim() ? `: ${userInstruction.trim()}` : " với phong cách thiết kế đồng bộ hệ thống"}`;
       } else if (elementActionMode === "clean_code") {
         const activeCleanObj = CLEAN_CODE_TEMPLATES.find(c => c.id === selectedCleanTemplate);
-        actionDetailText = `Làm sạch mã nguồn: ${activeCleanObj?.title || "Tối ưu hóa"}${userInstruction.trim() ? ` - ${userInstruction.trim()}` : ''}`;
+        actionDetailText = `Làm sạch mã nguồn: ${activeCleanObj?.title || "Tối ưu hóa mã nguồn"}. ${activeCleanObj?.promptText || ""}${userInstruction.trim() ? ` - Ghi chú thêm: ${userInstruction.trim()}` : ''}`;
       } else if (elementActionMode === "change_font") {
         const selectedTokenObj = GLOBAL_TYPOGRAPHY_TOKENS.find(t => t.id === typographySelectedToken);
         const fontDesc = selectedTokenObj 
@@ -2439,23 +2426,35 @@ Vui lòng thực thi chính xác vào từng component.`;
         const scopeDesc = applyAllLayout ? "và đồng bộ hóa toàn bộ bố cục liên quan trên trang" : "cho phần tử được chọn";
         actionDetailText = `${fontDesc} ${scopeDesc}${userInstruction.trim() ? ` - Yêu cầu thêm: ${userInstruction.trim()}` : ""}`;
       } else {
-        actionDetailText = userInstruction.trim() || "Chỉnh sửa nội dung và kiểu dáng theo yêu cầu";
+        actionDetailText = userInstruction.trim() || (activePresetObj ? `${activePresetObj.titleVi}: ${activePresetObj.promptSnippet}` : "Chỉnh sửa nội dung và kiểu dáng theo quy chuẩn Design System");
       }
 
       const isEditMode = elementActionMode === "edit";
-      const extraPresetContent = isEditMode && (presetText || codeAnalysisBlock) 
-        ? ` [${(presetText + (codeAnalysisBlock ? ' ' + codeAnalysisBlock : '')).trim().replace(/\n+/g, ' ')}]` 
-        : "";
+      let extraBlock = "";
+      if (isEditMode) {
+        if (presetText.trim()) extraBlock += `${presetText.trim()}\n\n`;
+        if (codeAnalysisBlock.trim()) extraBlock += `${codeAnalysisBlock.trim()}\n\n`;
+      }
 
       const elementTargetDesc = `${selectedElement.componentType} (<${selectedElement.tag}>${selectedElement.fullSelector ? ` - Selector: \`${selectedElement.fullSelector}\`` : ''}${condensedSnippet ? ` - Nội dung: "${condensedSnippet}"` : ''})`;
 
       // Định dạng 1 dòng ngắn gọn theo cấu trúc X-ray:
       // - Tại trang: (tên trang) - Phần tử chỉnh sửa: (tên đối tượng được chọn) - Thực hiện: (yêu cầu chi tiết) - Phạm vi áp dụng: (lựa chọn)
-      finalPrompt = `- Tại trang: ${selectedElement.sectionName || "Hiện tại"} - Phần tử chỉnh sửa: ${elementTargetDesc} - Thực hiện: ${actionDetailText}${extraPresetContent} - Phạm vi áp dụng: ${scopeText}`;
+      if (extraBlock.trim()) {
+        finalPrompt = `- Tại trang: ${selectedElement.sectionName || "Hiện tại"} - Phần tử chỉnh sửa: ${elementTargetDesc} - Thực hiện: ${actionDetailText} - Phạm vi áp dụng: ${scopeText}\n\n${extraBlock.trim()}`;
+      } else {
+        finalPrompt = `- Tại trang: ${selectedElement.sectionName || "Hiện tại"} - Phần tử chỉnh sửa: ${elementTargetDesc} - Thực hiện: ${actionDetailText} - Phạm vi áp dụng: ${scopeText}`;
+      }
       promptTitle = elementActionMode === "clean_code"
         ? `Làm sạch (${selectedElement.componentType} - ${selectedElement.sectionName})`
         : elementActionMode === "change_font"
           ? `Chỉnh Font (${selectedElement.componentType} - ${selectedElement.sectionName})`
+          : elementActionMode === "delete"
+            ? `Xóa ${deleteMode === "wrapper_only" ? "khung bọc" : "đối tượng"} (${selectedElement.componentType} - ${selectedElement.sectionName})`
+          : elementActionMode === "clone_format"
+            ? `Định dạng giống mẫu (${selectedElement.componentType} - ${selectedElement.sectionName})`
+          : elementActionMode === "add"
+            ? `Thêm đối tượng mới (${selectedElement.sectionName})`
           : activePresetObj && isEditMode
             ? `${activePresetObj.titleVi} (${selectedElement.componentType})`
             : `Phần tử ${selectedElement.componentType} (${selectedElement.sectionName})`;

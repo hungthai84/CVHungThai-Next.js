@@ -2,15 +2,10 @@ import React, { useState, useRef, useMemo, Suspense, lazy } from "react";
 import { 
   X, 
   FolderKanban,
-  Search,
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  Check,
-  Menu,
-  Layers,
-  Filter,
-  ChevronDown
+  Check
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -80,24 +75,218 @@ function KeyframersTiltCard({
   );
 }
 
-const BADGE_COLOR_PALETTES = [
-  { bg: "bg-blue-600/90 dark:bg-blue-700/90 border-blue-300/40 text-white shadow-blue-500/30", text: "text-blue-100" },
-  { bg: "bg-emerald-600/90 dark:bg-emerald-700/90 border-emerald-300/40 text-white shadow-emerald-500/30", text: "text-emerald-100" },
-  { bg: "bg-purple-600/90 dark:bg-purple-700/90 border-purple-300/40 text-white shadow-purple-500/30", text: "text-purple-100" },
-  { bg: "bg-amber-600/90 dark:bg-amber-700/90 border-amber-300/40 text-white shadow-amber-500/30", text: "text-amber-100" },
-  { bg: "bg-rose-600/90 dark:bg-rose-700/90 border-rose-300/40 text-white shadow-rose-500/30", text: "text-rose-100" },
-  { bg: "bg-cyan-600/90 dark:bg-cyan-700/90 border-cyan-300/40 text-white shadow-cyan-500/30", text: "text-cyan-100" },
-  { bg: "bg-indigo-600/90 dark:bg-indigo-700/90 border-indigo-300/40 text-white shadow-indigo-500/30", text: "text-indigo-100" },
-  { bg: "bg-orange-600/90 dark:bg-orange-700/90 border-orange-300/40 text-white shadow-orange-500/30", text: "text-orange-100" },
-  { bg: "bg-teal-600/90 dark:bg-teal-700/90 border-teal-300/40 text-white shadow-teal-500/30", text: "text-teal-100" },
-  { bg: "bg-pink-600/90 dark:bg-pink-700/90 border-pink-300/40 text-white shadow-pink-500/30", text: "text-pink-100" },
-  { bg: "bg-violet-600/90 dark:bg-violet-700/90 border-violet-300/40 text-white shadow-violet-500/30", text: "text-violet-100" },
-  { bg: "bg-lime-600/90 dark:bg-lime-700/90 border-lime-300/40 text-white shadow-lime-500/30", text: "text-lime-100" },
-  { bg: "bg-fuchsia-600/90 dark:bg-fuchsia-700/90 border-fuchsia-300/40 text-white shadow-fuchsia-500/30", text: "text-fuchsia-100" },
-  { bg: "bg-sky-600/90 dark:bg-sky-700/90 border-sky-300/40 text-white shadow-sky-500/30", text: "text-sky-100" },
-  { bg: "bg-red-600/90 dark:bg-red-700/90 border-red-300/40 text-white shadow-red-500/30", text: "text-red-100" },
-  { bg: "bg-green-600/90 dark:bg-green-700/90 border-green-300/40 text-white shadow-green-500/30", text: "text-green-100" },
-  { bg: "bg-yellow-600/90 dark:bg-yellow-700/90 border-yellow-300/40 text-white shadow-yellow-100", text: "text-yellow-100" },
+// 15 MÀU SẮC ĐẸP extracted from user image (Modern · Bright · Multi-color)
+const PRESET_15_COLORS = [
+  {
+    hex: "#9B5DE5",
+    name: "Soft Purple",
+    border: "border-[#9B5DE5]/70 dark:border-[#9B5DE5]/60",
+    cardBg: "bg-[#9B5DE5]/10 dark:bg-[#9B5DE5]/20",
+    ring: "ring-[#9B5DE5]/40",
+    title: "text-[#7b35c7] dark:text-[#c492ff] group-hover:text-[#6724b0] dark:group-hover:text-[#d3aaff]",
+    bar: "bg-[#9B5DE5]",
+    phaseBadge: "bg-[#9B5DE5] text-white border-white/30 shadow-[#9B5DE5]/40",
+    tagBg: "bg-[#9B5DE5]/15 dark:bg-[#9B5DE5]/25 text-[#7b35c7] dark:text-[#d3a8ff] border-[#9B5DE5]/40",
+    shadow: "shadow-[#9B5DE5]/15 hover:shadow-[#9B5DE5]/30",
+    badgeBg: "bg-[#9B5DE5] text-white border-white/40 shadow-[#9B5DE5]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#F15BB5",
+    name: "Hot Pink",
+    border: "border-[#F15BB5]/70 dark:border-[#F15BB5]/60",
+    cardBg: "bg-[#F15BB5]/10 dark:bg-[#F15BB5]/20",
+    ring: "ring-[#F15BB5]/40",
+    title: "text-[#c7278d] dark:text-[#ff80cf] group-hover:text-[#a81472] dark:group-hover:text-[#ffa6df]",
+    bar: "bg-[#F15BB5]",
+    phaseBadge: "bg-[#F15BB5] text-white border-white/30 shadow-[#F15BB5]/40",
+    tagBg: "bg-[#F15BB5]/15 dark:bg-[#F15BB5]/25 text-[#b01377] dark:text-[#ffa3dd] border-[#F15BB5]/40",
+    shadow: "shadow-[#F15BB5]/15 hover:shadow-[#F15BB5]/30",
+    badgeBg: "bg-[#F15BB5] text-white border-white/40 shadow-[#F15BB5]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#FEE440",
+    name: "Bright Yellow",
+    border: "border-[#FEE440]/80 dark:border-[#FEE440]/60",
+    cardBg: "bg-[#FEE440]/15 dark:bg-[#FEE440]/20",
+    ring: "ring-[#FEE440]/40",
+    title: "text-[#a38a00] dark:text-[#FEE440] group-hover:text-[#806c00] dark:group-hover:text-[#ffea66]",
+    bar: "bg-[#FEE440]",
+    phaseBadge: "bg-[#FEE440] text-slate-900 border-white/40 shadow-[#FEE440]/40",
+    tagBg: "bg-[#FEE440]/20 dark:bg-[#FEE440]/25 text-[#857000] dark:text-[#ffe859] border-[#FEE440]/50",
+    shadow: "shadow-[#FEE440]/15 hover:shadow-[#FEE440]/30",
+    badgeBg: "bg-[#FEE440] text-slate-900 border-slate-900/20 shadow-[#FEE440]/40",
+    badgeText: "text-slate-900"
+  },
+  {
+    hex: "#00BBF9",
+    name: "Electric Cyan",
+    border: "border-[#00BBF9]/70 dark:border-[#00BBF9]/60",
+    cardBg: "bg-[#00BBF9]/10 dark:bg-[#00BBF9]/20",
+    ring: "ring-[#00BBF9]/40",
+    title: "text-[#008dbd] dark:text-[#4dd5ff] group-hover:text-[#007097] dark:group-hover:text-[#80e0ff]",
+    bar: "bg-[#00BBF9]",
+    phaseBadge: "bg-[#00BBF9] text-white border-white/30 shadow-[#00BBF9]/40",
+    tagBg: "bg-[#00BBF9]/15 dark:bg-[#00BBF9]/25 text-[#006f97] dark:text-[#7ce3ff] border-[#00BBF9]/40",
+    shadow: "shadow-[#00BBF9]/15 hover:shadow-[#00BBF9]/30",
+    badgeBg: "bg-[#00BBF9] text-white border-white/40 shadow-[#00BBF9]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#00F5D4",
+    name: "Turquoise Mint",
+    border: "border-[#00F5D4]/70 dark:border-[#00F5D4]/60",
+    cardBg: "bg-[#00F5D4]/10 dark:bg-[#00F5D4]/20",
+    ring: "ring-[#00F5D4]/40",
+    title: "text-[#009e89] dark:text-[#52ffe8] group-hover:text-[#007a6a] dark:group-hover:text-[#85ffef]",
+    bar: "bg-[#00F5D4]",
+    phaseBadge: "bg-[#00F5D4] text-slate-900 border-white/40 shadow-[#00F5D4]/40",
+    tagBg: "bg-[#00F5D4]/15 dark:bg-[#00F5D4]/25 text-[#007a6a] dark:text-[#76ffec] border-[#00F5D4]/40",
+    shadow: "shadow-[#00F5D4]/15 hover:shadow-[#00F5D4]/30",
+    badgeBg: "bg-[#00F5D4] text-slate-900 border-slate-900/20 shadow-[#00F5D4]/40",
+    badgeText: "text-slate-900"
+  },
+  {
+    hex: "#FF6F61",
+    name: "Bright Coral",
+    border: "border-[#FF6F61]/70 dark:border-[#FF6F61]/60",
+    cardBg: "bg-[#FF6F61]/10 dark:bg-[#FF6F61]/20",
+    ring: "ring-[#FF6F61]/40",
+    title: "text-[#d94436] dark:text-[#ff948a] group-hover:text-[#b32e22] dark:group-hover:text-[#ffb1a8]",
+    bar: "bg-[#FF6F61]",
+    phaseBadge: "bg-[#FF6F61] text-white border-white/30 shadow-[#FF6F61]/40",
+    tagBg: "bg-[#FF6F61]/15 dark:bg-[#FF6F61]/25 text-[#b8271a] dark:text-[#ffab9d] border-[#FF6F61]/40",
+    shadow: "shadow-[#FF6F61]/15 hover:shadow-[#FF6F61]/30",
+    badgeBg: "bg-[#FF6F61] text-white border-white/40 shadow-[#FF6F61]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#7B61FF",
+    name: "Royal Violet",
+    border: "border-[#7B61FF]/70 dark:border-[#7B61FF]/60",
+    cardBg: "bg-[#7B61FF]/10 dark:bg-[#7B61FF]/20",
+    ring: "ring-[#7B61FF]/40",
+    title: "text-[#553ad9] dark:text-[#aa99ff] group-hover:text-[#3f25b5] dark:group-hover:text-[#c4b8ff]",
+    bar: "bg-[#7B61FF]",
+    phaseBadge: "bg-[#7B61FF] text-white border-white/30 shadow-[#7B61FF]/40",
+    tagBg: "bg-[#7B61FF]/15 dark:bg-[#7B61FF]/25 text-[#4226b8] dark:text-[#b8a8ff] border-[#7B61FF]/40",
+    shadow: "shadow-[#7B61FF]/15 hover:shadow-[#7B61FF]/30",
+    badgeBg: "bg-[#7B61FF] text-white border-white/40 shadow-[#7B61FF]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#00C896",
+    name: "Emerald Mint",
+    border: "border-[#00C896]/70 dark:border-[#00C896]/60",
+    cardBg: "bg-[#00C896]/10 dark:bg-[#00C896]/20",
+    ring: "ring-[#00C896]/40",
+    title: "text-[#008f6b] dark:text-[#45e6bd] group-hover:text-[#006e52] dark:group-hover:text-[#75f0cf]",
+    bar: "bg-[#00C896]",
+    phaseBadge: "bg-[#00C896] text-white border-white/30 shadow-[#00C896]/40",
+    tagBg: "bg-[#00C896]/15 dark:bg-[#00C896]/25 text-[#006e52] dark:text-[#68ffd3] border-[#00C896]/40",
+    shadow: "shadow-[#00C896]/15 hover:shadow-[#00C896]/30",
+    badgeBg: "bg-[#00C896] text-white border-white/40 shadow-[#00C896]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#4FC3F7",
+    name: "Cerulean Blue",
+    border: "border-[#4FC3F7]/70 dark:border-[#4FC3F7]/60",
+    cardBg: "bg-[#4FC3F7]/10 dark:bg-[#4FC3F7]/20",
+    ring: "ring-[#4FC3F7]/40",
+    title: "text-[#0277bd] dark:text-[#7bd7ff] group-hover:text-[#01579b] dark:group-hover:text-[#a0e3ff]",
+    bar: "bg-[#4FC3F7]",
+    phaseBadge: "bg-[#4FC3F7] text-slate-900 border-white/40 shadow-[#4FC3F7]/40",
+    tagBg: "bg-[#4FC3F7]/15 dark:bg-[#4FC3F7]/25 text-[#01579b] dark:text-[#9ee5ff] border-[#4FC3F7]/40",
+    shadow: "shadow-[#4FC3F7]/15 hover:shadow-[#4FC3F7]/30",
+    badgeBg: "bg-[#4FC3F7] text-slate-900 border-slate-900/20 shadow-[#4FC3F7]/40",
+    badgeText: "text-slate-900"
+  },
+  {
+    hex: "#EC407A",
+    name: "Crimson Rose",
+    border: "border-[#EC407A]/70 dark:border-[#EC407A]/60",
+    cardBg: "bg-[#EC407A]/10 dark:bg-[#EC407A]/20",
+    ring: "ring-[#EC407A]/40",
+    title: "text-[#c2185b] dark:text-[#ff77a4] group-hover:text-[#880e4f] dark:group-hover:text-[#ffa3c0]",
+    bar: "bg-[#EC407A]",
+    phaseBadge: "bg-[#EC407A] text-white border-white/30 shadow-[#EC407A]/40",
+    tagBg: "bg-[#EC407A]/15 dark:bg-[#EC407A]/25 text-[#880e4f] dark:text-[#ff80ab] border-[#EC407A]/40",
+    shadow: "shadow-[#EC407A]/15 hover:shadow-[#EC407A]/30",
+    badgeBg: "bg-[#EC407A] text-white border-white/40 shadow-[#EC407A]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#FB8C00",
+    name: "Amber Orange",
+    border: "border-[#FB8C00]/70 dark:border-[#FB8C00]/60",
+    cardBg: "bg-[#FB8C00]/10 dark:bg-[#FB8C00]/20",
+    ring: "ring-[#FB8C00]/40",
+    title: "text-[#d86000] dark:text-[#ffaa40] group-hover:text-[#a84700] dark:group-hover:text-[#ffc273]",
+    bar: "bg-[#FB8C00]",
+    phaseBadge: "bg-[#FB8C00] text-white border-white/30 shadow-[#FB8C00]/40",
+    tagBg: "bg-[#FB8C00]/15 dark:bg-[#FB8C00]/25 text-[#e65100] dark:text-[#ffb74d] border-[#FB8C00]/40",
+    shadow: "shadow-[#FB8C00]/15 hover:shadow-[#FB8C00]/30",
+    badgeBg: "bg-[#FB8C00] text-white border-white/40 shadow-[#FB8C00]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#AED581",
+    name: "Lime Leaf",
+    border: "border-[#AED581]/80 dark:border-[#AED581]/60",
+    cardBg: "bg-[#AED581]/15 dark:bg-[#AED581]/20",
+    ring: "ring-[#AED581]/40",
+    title: "text-[#558b2f] dark:text-[#c5e1a5] group-hover:text-[#33691e] dark:group-hover:text-[#dcedc8]",
+    bar: "bg-[#AED581]",
+    phaseBadge: "bg-[#AED581] text-slate-900 border-white/40 shadow-[#AED581]/40",
+    tagBg: "bg-[#AED581]/20 dark:bg-[#AED581]/25 text-[#33691e] dark:text-[#d4e157] border-[#AED581]/50",
+    shadow: "shadow-[#AED581]/15 hover:shadow-[#AED581]/30",
+    badgeBg: "bg-[#AED581] text-slate-900 border-slate-900/20 shadow-[#AED581]/40",
+    badgeText: "text-slate-900"
+  },
+  {
+    hex: "#5C6BC0",
+    name: "Indigo Blue",
+    border: "border-[#5C6BC0]/70 dark:border-[#5C6BC0]/60",
+    cardBg: "bg-[#5C6BC0]/10 dark:bg-[#5C6BC0]/20",
+    ring: "ring-[#5C6BC0]/40",
+    title: "text-[#3949ab] dark:text-[#8e99f3] group-hover:text-[#283593] dark:group-hover:text-[#b0b8f7]",
+    bar: "bg-[#5C6BC0]",
+    phaseBadge: "bg-[#5C6BC0] text-white border-white/30 shadow-[#5C6BC0]/40",
+    tagBg: "bg-[#5C6BC0]/15 dark:bg-[#5C6BC0]/25 text-[#283593] dark:text-[#9fa8da] border-[#5C6BC0]/40",
+    shadow: "shadow-[#5C6BC0]/15 hover:shadow-[#5C6BC0]/30",
+    badgeBg: "bg-[#5C6BC0] text-white border-white/40 shadow-[#5C6BC0]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#BA68C8",
+    name: "Orchid Lavender",
+    border: "border-[#BA68C8]/70 dark:border-[#BA68C8]/60",
+    cardBg: "bg-[#BA68C8]/10 dark:bg-[#BA68C8]/20",
+    ring: "ring-[#BA68C8]/40",
+    title: "text-[#9c27b0] dark:text-[#e1bee7] group-hover:text-[#6a1b9a] dark:group-hover:text-[#f3e5f5]",
+    bar: "bg-[#BA68C8]",
+    phaseBadge: "bg-[#BA68C8] text-white border-white/30 shadow-[#BA68C8]/40",
+    tagBg: "bg-[#BA68C8]/15 dark:bg-[#BA68C8]/25 text-[#6a1b9a] dark:text-[#e1bee7] border-[#BA68C8]/40",
+    shadow: "shadow-[#BA68C8]/15 hover:shadow-[#BA68C8]/30",
+    badgeBg: "bg-[#BA68C8] text-white border-white/40 shadow-[#BA68C8]/40",
+    badgeText: "text-white"
+  },
+  {
+    hex: "#26A69A",
+    name: "Teal Emerald",
+    border: "border-[#26A69A]/70 dark:border-[#26A69A]/60",
+    cardBg: "bg-[#26A69A]/10 dark:bg-[#26A69A]/20",
+    ring: "ring-[#26A69A]/40",
+    title: "text-[#00796b] dark:text-[#80cbc4] group-hover:text-[#004d40] dark:group-hover:text-[#b2dfdb]",
+    bar: "bg-[#26A69A]",
+    phaseBadge: "bg-[#26A69A] text-white border-white/30 shadow-[#26A69A]/40",
+    tagBg: "bg-[#26A69A]/15 dark:bg-[#26A69A]/25 text-[#004d40] dark:text-[#80cbc4] border-[#26A69A]/40",
+    shadow: "shadow-[#26A69A]/15 hover:shadow-[#26A69A]/30",
+    badgeBg: "bg-[#26A69A] text-white border-white/40 shadow-[#26A69A]/40",
+    badgeText: "text-white"
+  }
 ];
 
 export default function Projects() {
@@ -122,280 +311,14 @@ export default function Projects() {
     return map;
   }, []);
 
-  // Card color styles per phase with decreasing intensity (nhạt dần)
-  const getCardColorTheme = (card: ProjectCard) => {
-    const idx = cardPhaseIndexMap.get(card.id) ?? 0;
-    
-    // Giai đoạn 1: Sắc xanh dương (Blue -> Sky -> Cyan) nhạt dần
-    if (card.phase === "Giai đoạn 1") {
-      const shades = [
-        {
-          border: "border-blue-600/90 dark:border-blue-500/90",
-          cardBg: "bg-blue-50/60 dark:bg-blue-950/35",
-          ring: "ring-blue-500/20",
-          title: "text-blue-700 dark:text-blue-300 group-hover:text-blue-800 dark:group-hover:text-blue-200",
-          bar: "bg-blue-600",
-          phaseBadge: "bg-blue-600 text-white border-blue-500 shadow-blue-500/30",
-          tagBg: "bg-blue-100/90 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border-blue-300/80 dark:border-blue-700/60",
-          shadow: "shadow-blue-500/10 hover:shadow-blue-500/25",
-        },
-        {
-          border: "border-blue-500/80 dark:border-blue-400/80",
-          cardBg: "bg-blue-50/45 dark:bg-blue-950/25",
-          ring: "ring-blue-400/20",
-          title: "text-blue-600 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-200",
-          bar: "bg-blue-500",
-          phaseBadge: "bg-blue-500 text-white border-blue-400 shadow-blue-500/20",
-          tagBg: "bg-blue-50/90 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-800/60",
-          shadow: "shadow-blue-400/10 hover:shadow-blue-400/20",
-        },
-        {
-          border: "border-sky-500/75 dark:border-sky-400/75",
-          cardBg: "bg-sky-50/40 dark:bg-sky-950/20",
-          ring: "ring-sky-400/20",
-          title: "text-sky-700 dark:text-sky-300 group-hover:text-sky-800 dark:group-hover:text-sky-200",
-          bar: "bg-sky-500",
-          phaseBadge: "bg-sky-500 text-white border-sky-400 shadow-sky-500/20",
-          tagBg: "bg-sky-50/90 dark:bg-sky-950/70 text-sky-700 dark:text-sky-300 border-sky-200/80 dark:border-sky-800/60",
-          shadow: "shadow-sky-400/10 hover:shadow-sky-400/20",
-        },
-        {
-          border: "border-sky-400/70 dark:border-sky-500/50",
-          cardBg: "bg-sky-50/30 dark:bg-sky-950/15",
-          ring: "ring-sky-300/15",
-          title: "text-sky-600 dark:text-sky-300 group-hover:text-sky-700 dark:group-hover:text-sky-200",
-          bar: "bg-sky-400",
-          phaseBadge: "bg-sky-400 text-white border-sky-300 shadow-sky-400/20",
-          tagBg: "bg-sky-50/70 dark:bg-sky-950/50 text-sky-600 dark:text-sky-300 border-sky-200/60 dark:border-sky-800/40",
-          shadow: "shadow-sky-300/10 hover:shadow-sky-300/20",
-        },
-        {
-          border: "border-cyan-400/60 dark:border-cyan-500/40",
-          cardBg: "bg-cyan-50/25 dark:bg-cyan-950/10",
-          ring: "ring-cyan-300/15",
-          title: "text-cyan-700 dark:text-cyan-300 group-hover:text-cyan-800 dark:group-hover:text-cyan-200",
-          bar: "bg-cyan-400",
-          phaseBadge: "bg-cyan-500/90 text-white border-cyan-400 shadow-cyan-400/20",
-          tagBg: "bg-cyan-50/60 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200/60 dark:border-cyan-800/40",
-          shadow: "shadow-cyan-300/10 hover:shadow-cyan-300/20",
-        },
-        {
-          border: "border-cyan-300/50 dark:border-cyan-600/30",
-          cardBg: "bg-cyan-50/15 dark:bg-cyan-950/5",
-          ring: "ring-cyan-200/10",
-          title: "text-cyan-600 dark:text-cyan-300 group-hover:text-cyan-700 dark:group-hover:text-cyan-200",
-          bar: "bg-cyan-300",
-          phaseBadge: "bg-cyan-400 text-white border-cyan-300 shadow-cyan-300/15",
-          tagBg: "bg-cyan-50/50 dark:bg-cyan-950/30 text-cyan-600 dark:text-cyan-300 border-cyan-100/50 dark:border-cyan-900/30",
-          shadow: "shadow-cyan-200/10 hover:shadow-cyan-200/15",
-        }
-      ];
-      return shades[Math.min(idx, shades.length - 1)];
-    }
-
-    // Giai đoạn 2: Sắc xanh lục / ngọc bích (Emerald -> Teal -> Mint) nhạt dần
-    if (card.phase === "Giai đoạn 2") {
-      const shades = [
-        {
-          border: "border-emerald-600/90 dark:border-emerald-500/90",
-          cardBg: "bg-emerald-50/60 dark:bg-emerald-950/35",
-          ring: "ring-emerald-500/20",
-          title: "text-emerald-700 dark:text-emerald-300 group-hover:text-emerald-800 dark:group-hover:text-emerald-200",
-          bar: "bg-emerald-600",
-          phaseBadge: "bg-emerald-600 text-white border-emerald-500 shadow-emerald-500/30",
-          tagBg: "bg-emerald-100/90 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300/80 dark:border-emerald-700/60",
-          shadow: "shadow-emerald-500/10 hover:shadow-emerald-500/25",
-        },
-        {
-          border: "border-emerald-500/80 dark:border-emerald-400/80",
-          cardBg: "bg-emerald-50/45 dark:bg-emerald-950/25",
-          ring: "ring-emerald-400/20",
-          title: "text-emerald-600 dark:text-emerald-300 group-hover:text-emerald-700 dark:group-hover:text-emerald-200",
-          bar: "bg-emerald-500",
-          phaseBadge: "bg-emerald-500 text-white border-emerald-400 shadow-emerald-500/20",
-          tagBg: "bg-emerald-50/90 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60",
-          shadow: "shadow-emerald-400/10 hover:shadow-emerald-400/20",
-        },
-        {
-          border: "border-teal-500/75 dark:border-teal-400/75",
-          cardBg: "bg-teal-50/40 dark:bg-teal-950/20",
-          ring: "ring-teal-400/20",
-          title: "text-teal-700 dark:text-teal-300 group-hover:text-teal-800 dark:group-hover:text-teal-200",
-          bar: "bg-teal-500",
-          phaseBadge: "bg-teal-500 text-white border-teal-400 shadow-teal-500/20",
-          tagBg: "bg-teal-50/90 dark:bg-teal-950/70 text-teal-700 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60",
-          shadow: "shadow-teal-400/10 hover:shadow-teal-400/20",
-        },
-        {
-          border: "border-teal-400/70 dark:border-teal-500/50",
-          cardBg: "bg-teal-50/30 dark:bg-teal-950/15",
-          ring: "ring-teal-300/15",
-          title: "text-teal-600 dark:text-teal-300 group-hover:text-teal-700 dark:group-hover:text-teal-200",
-          bar: "bg-teal-400",
-          phaseBadge: "bg-teal-400 text-white border-teal-300 shadow-teal-400/20",
-          tagBg: "bg-teal-50/70 dark:bg-teal-950/50 text-teal-600 dark:text-teal-300 border-teal-200/60 dark:border-teal-800/40",
-          shadow: "shadow-teal-300/10 hover:shadow-teal-300/20",
-        },
-        {
-          border: "border-green-400/60 dark:border-green-500/40",
-          cardBg: "bg-green-50/25 dark:bg-green-950/10",
-          ring: "ring-green-300/15",
-          title: "text-green-700 dark:text-green-300 group-hover:text-green-800 dark:group-hover:text-green-200",
-          bar: "bg-green-400",
-          phaseBadge: "bg-green-500/90 text-white border-green-400 shadow-green-400/20",
-          tagBg: "bg-green-50/60 dark:bg-green-950/40 text-green-700 dark:text-green-300 border-green-200/60 dark:border-green-800/40",
-          shadow: "shadow-green-300/10 hover:shadow-green-300/20",
-        },
-        {
-          border: "border-green-300/50 dark:border-green-600/30",
-          cardBg: "bg-green-50/15 dark:bg-green-950/5",
-          ring: "ring-green-200/10",
-          title: "text-green-600 dark:text-green-300 group-hover:text-green-700 dark:group-hover:text-green-200",
-          bar: "bg-green-300",
-          phaseBadge: "bg-green-400 text-white border-green-300 shadow-green-300/15",
-          tagBg: "bg-green-50/50 dark:bg-green-950/30 text-green-600 dark:text-green-300 border-green-100/50 dark:border-green-900/30",
-          shadow: "shadow-green-200/10 hover:shadow-green-200/15",
-        }
-      ];
-      return shades[Math.min(idx, shades.length - 1)];
-    }
-
-    // Giai đoạn 3: Sắc cam / hổ phách / vàng đồng (Amber -> Orange -> Warm Yellow) nhạt dần
-    if (card.phase === "Giai đoạn 3") {
-      const shades = [
-        {
-          border: "border-amber-600/90 dark:border-amber-500/90",
-          cardBg: "bg-amber-50/60 dark:bg-amber-950/35",
-          ring: "ring-amber-500/20",
-          title: "text-amber-700 dark:text-amber-300 group-hover:text-amber-800 dark:group-hover:text-amber-200",
-          bar: "bg-amber-600",
-          phaseBadge: "bg-amber-600 text-white border-amber-500 shadow-amber-500/30",
-          tagBg: "bg-amber-100/90 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300/80 dark:border-amber-700/60",
-          shadow: "shadow-amber-500/10 hover:shadow-amber-500/25",
-        },
-        {
-          border: "border-amber-500/80 dark:border-amber-400/80",
-          cardBg: "bg-amber-50/45 dark:bg-amber-950/25",
-          ring: "ring-amber-400/20",
-          title: "text-amber-600 dark:text-amber-300 group-hover:text-amber-700 dark:group-hover:text-amber-200",
-          bar: "bg-amber-500",
-          phaseBadge: "bg-amber-500 text-white border-amber-400 shadow-amber-500/20",
-          tagBg: "bg-amber-50/90 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60",
-          shadow: "shadow-amber-400/10 hover:shadow-amber-400/20",
-        },
-        {
-          border: "border-orange-500/75 dark:border-orange-400/75",
-          cardBg: "bg-orange-50/40 dark:bg-orange-950/20",
-          ring: "ring-orange-400/20",
-          title: "text-orange-700 dark:text-orange-300 group-hover:text-orange-800 dark:group-hover:text-orange-200",
-          bar: "bg-orange-500",
-          phaseBadge: "bg-orange-500 text-white border-orange-400 shadow-orange-500/20",
-          tagBg: "bg-orange-50/90 dark:bg-orange-950/70 text-orange-700 dark:text-orange-300 border-orange-200/80 dark:border-orange-800/60",
-          shadow: "shadow-orange-400/10 hover:shadow-orange-400/20",
-        },
-        {
-          border: "border-orange-400/70 dark:border-orange-500/50",
-          cardBg: "bg-orange-50/30 dark:bg-orange-950/15",
-          ring: "ring-orange-300/15",
-          title: "text-orange-600 dark:text-orange-300 group-hover:text-orange-700 dark:group-hover:text-orange-200",
-          bar: "bg-orange-400",
-          phaseBadge: "bg-orange-400 text-white border-orange-300 shadow-orange-400/20",
-          tagBg: "bg-orange-50/70 dark:bg-orange-950/50 text-orange-600 dark:text-orange-300 border-orange-200/60 dark:border-orange-800/40",
-          shadow: "shadow-orange-300/10 hover:shadow-orange-300/20",
-        },
-        {
-          border: "border-yellow-400/60 dark:border-yellow-500/40",
-          cardBg: "bg-yellow-50/25 dark:bg-yellow-950/10",
-          ring: "ring-yellow-300/15",
-          title: "text-yellow-700 dark:text-yellow-300 group-hover:text-yellow-800 dark:group-hover:text-yellow-200",
-          bar: "bg-yellow-400",
-          phaseBadge: "bg-yellow-500/90 text-white border-yellow-400 shadow-yellow-400/20",
-          tagBg: "bg-yellow-50/60 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-300 border-yellow-200/60 dark:border-yellow-800/40",
-          shadow: "shadow-yellow-300/10 hover:shadow-yellow-300/20",
-        },
-        {
-          border: "border-yellow-300/50 dark:border-yellow-600/30",
-          cardBg: "bg-yellow-50/15 dark:bg-yellow-950/5",
-          ring: "ring-yellow-200/10",
-          title: "text-yellow-600 dark:text-yellow-300 group-hover:text-yellow-700 dark:group-hover:text-yellow-200",
-          bar: "bg-yellow-300",
-          phaseBadge: "bg-yellow-400 text-white border-yellow-300 shadow-yellow-300/15",
-          tagBg: "bg-yellow-50/50 dark:bg-yellow-950/30 text-yellow-600 dark:text-yellow-300 border-yellow-100/50 dark:border-yellow-900/30",
-          shadow: "shadow-yellow-200/10 hover:shadow-yellow-200/15",
-        }
-      ];
-      return shades[Math.min(idx, shades.length - 1)];
-    }
-
-    // Xuyên suốt: Sắc tím / hoa cà / tím khói (Purple -> Violet -> Fuchsia) nhạt dần
-    const shades = [
-      {
-        border: "border-purple-600/90 dark:border-purple-500/90",
-        cardBg: "bg-purple-50/60 dark:bg-purple-950/35",
-        ring: "ring-purple-500/20",
-        title: "text-purple-700 dark:text-purple-300 group-hover:text-purple-800 dark:group-hover:text-purple-200",
-        bar: "bg-purple-600",
-        phaseBadge: "bg-purple-600 text-white border-purple-500 shadow-purple-500/30",
-        tagBg: "bg-purple-100/90 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border-purple-300/80 dark:border-purple-700/60",
-        shadow: "shadow-purple-500/10 hover:shadow-purple-500/25",
-      },
-      {
-        border: "border-purple-500/80 dark:border-purple-400/80",
-        cardBg: "bg-purple-50/45 dark:bg-purple-950/25",
-        ring: "ring-purple-400/20",
-        title: "text-purple-600 dark:text-purple-300 group-hover:text-purple-700 dark:group-hover:text-purple-200",
-        bar: "bg-purple-500",
-        phaseBadge: "bg-purple-500 text-white border-purple-400 shadow-purple-500/20",
-        tagBg: "bg-purple-50/90 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60",
-        shadow: "shadow-purple-400/10 hover:shadow-purple-400/20",
-      },
-      {
-        border: "border-violet-500/75 dark:border-violet-400/75",
-        cardBg: "bg-violet-50/40 dark:bg-violet-950/20",
-        ring: "ring-violet-400/20",
-        title: "text-violet-700 dark:text-violet-300 group-hover:text-violet-800 dark:group-hover:text-violet-200",
-        bar: "bg-violet-500",
-        phaseBadge: "bg-violet-500 text-white border-violet-400 shadow-violet-500/20",
-        tagBg: "bg-violet-50/90 dark:bg-violet-950/70 text-violet-700 dark:text-violet-300 border-violet-200/80 dark:border-violet-800/60",
-        shadow: "shadow-violet-400/10 hover:shadow-violet-400/20",
-      },
-      {
-        border: "border-violet-400/70 dark:border-violet-500/50",
-        cardBg: "bg-violet-50/30 dark:bg-violet-950/15",
-        ring: "ring-violet-300/15",
-        title: "text-violet-600 dark:text-violet-300 group-hover:text-violet-700 dark:group-hover:text-violet-200",
-        bar: "bg-violet-400",
-        phaseBadge: "bg-violet-400 text-white border-violet-300 shadow-violet-400/20",
-        tagBg: "bg-violet-50/70 dark:bg-violet-950/50 text-violet-600 dark:text-violet-300 border-violet-200/60 dark:border-violet-800/40",
-        shadow: "shadow-violet-300/10 hover:shadow-violet-300/20",
-      },
-      {
-        border: "border-fuchsia-400/60 dark:border-fuchsia-500/40",
-        cardBg: "bg-fuchsia-50/25 dark:bg-fuchsia-950/10",
-        ring: "ring-fuchsia-300/15",
-        title: "text-fuchsia-700 dark:text-fuchsia-300 group-hover:text-fuchsia-800 dark:group-hover:text-fuchsia-200",
-        bar: "bg-fuchsia-400",
-        phaseBadge: "bg-fuchsia-500/90 text-white border-fuchsia-400 shadow-fuchsia-400/20",
-        tagBg: "bg-fuchsia-50/60 dark:bg-fuchsia-950/40 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-200/60 dark:border-fuchsia-800/40",
-        shadow: "shadow-fuchsia-300/10 hover:shadow-fuchsia-300/20",
-      },
-      {
-        border: "border-fuchsia-300/50 dark:border-fuchsia-600/30",
-        cardBg: "bg-fuchsia-50/15 dark:bg-fuchsia-950/5",
-        ring: "ring-fuchsia-200/10",
-        title: "text-fuchsia-600 dark:text-fuchsia-300 group-hover:text-fuchsia-700 dark:group-hover:text-fuchsia-200",
-        bar: "bg-fuchsia-300",
-        phaseBadge: "bg-fuchsia-400 text-white border-fuchsia-300 shadow-fuchsia-300/15",
-        tagBg: "bg-fuchsia-50/50 dark:bg-fuchsia-950/30 text-fuchsia-600 dark:text-fuchsia-300 border-fuchsia-100/50 dark:border-fuchsia-900/30",
-        shadow: "shadow-fuchsia-200/10 hover:shadow-fuchsia-200/15",
-      }
-    ];
-    return shades[Math.min(idx, shades.length - 1)];
+  // Helper to retrieve color theme from 15 preset colors
+  const getCardColorTheme = (card: ProjectCard, index?: number) => {
+    const cardIndex = index ?? PROJECTS_LIST.findIndex((p) => p.id === card.id);
+    const colorIndex = (cardIndex >= 0 ? cardIndex : 0) % PRESET_15_COLORS.length;
+    return PRESET_15_COLORS[colorIndex];
   };
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedPhase, setSelectedPhase] = useState("all");
-  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
 
   const phaseCounts = useMemo(() => {
     const map: Record<string, number> = { all: PROJECTS_LIST.length };
@@ -418,19 +341,9 @@ export default function Projects() {
       if (selectedPhase !== "all" && card.phase !== selectedPhase) {
         return false;
       }
-      // Lọc theo từ khóa tìm kiếm (Search filter)
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase().trim();
-      return (
-        card.branchTitle.toLowerCase().includes(q) ||
-        card.description.toLowerCase().includes(q) ||
-        card.role.toLowerCase().includes(q) ||
-        card.groupTitle.toLowerCase().includes(q) ||
-        card.tags.some((t) => t.toLowerCase().includes(q)) ||
-        (card.caseStudy?.solutionSummary && card.caseStudy.solutionSummary.toLowerCase().includes(q))
-      );
+      return true;
     });
-  }, [selectedPhase, searchQuery]);
+  }, [selectedPhase]);
 
   const handleCardClick = (card: ProjectCard) => {
     setSelectedCardId(card.id);
@@ -445,114 +358,67 @@ export default function Projects() {
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
         __html: `
-        .project-edu-glass-card {
+        .project-edu-glass-card,
+        .project-card {
+          height: auto !important;
           background: rgba(255, 255, 255, 0.78) !important;
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
           backdrop-filter: blur(24px) saturate(140%) !important;
           -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
           border: 1px solid rgba(255, 255, 255, 0.85) !important;
-          border-radius: 10px !important;
+          border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
-        .dark .project-edu-glass-card {
+        .dark .project-edu-glass-card,
+        .dark .project-card {
+          height: auto !important;
           background: rgba(15, 23, 42, 0.82) !important;
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.2) !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
-          border-radius: 10px !important;
+          border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
         }
         `
       }} />
 
       {/* Main Container Dự án */}
       <div className="w-full flex flex-col gap-4">
-        {/* Header Card Dự án (Caption / Label: 12px – 13px) */}
+        {/* Header Card Dự án (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
         <PageCardHeader pageId="projects">
-          <div className="flex items-center gap-2 sm:ml-auto">
-            {/* Filter Dropdown Button: Nhóm bộ lọc thành nút icon trước tìm kiếm */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-bold transition-all border cursor-pointer select-none",
-                  selectedPhase !== "all"
-                    ? "bg-blue-600 text-white border-blue-500 shadow-sm"
-                    : "bg-slate-100/80 dark:bg-white/10 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-white/10 hover:bg-slate-200/80 dark:hover:bg-white/15"
-                )}
-                title={isVi ? "Bộ lọc giai đoạn dự án" : "Filter projects"}
-                aria-label="Filter projects"
-              >
-                <Filter className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">
-                  {selectedPhase === "all" 
-                    ? (isVi ? "Bộ lọc" : "Filter") 
-                    : (isVi ? PHASE_FILTERS.find(f => f.id === selectedPhase)?.shortVi : PHASE_FILTERS.find(f => f.id === selectedPhase)?.labelEn)}
-                </span>
-                {selectedPhase !== "all" ? (
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                ) : null}
-                <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", filterDropdownOpen ? "rotate-180" : "")} />
-              </button>
+          {/* Cụm trái: Số lượng dự án */}
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
+            <span className="text-caption text-label font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
+              {isVi ? `Hiển thị ${filteredProjects.length} dự án` : `Showing ${filteredProjects.length} projects`}
+            </span>
+          </div>
 
-              {/* Filter Dropdown Popover */}
-
-              {/* Filter Dropdown Popover */}
-              {filterDropdownOpen && (
-                <div className="absolute right-0 sm:right-0 mt-2 w-72 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-1">
-                  <div className="px-2.5 py-1 text-3xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800/80 mb-1 flex items-center justify-between">
-                  </div>
-                  {PHASE_FILTERS.map((tab) => {
-                    const isActive = selectedPhase === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedPhase(tab.id);
-                          setFilterDropdownOpen(false);
-                        }}
-                        className={cn(
-                          "w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between text-left transition-all cursor-pointer",
-                          isActive
-                            ? "bg-blue-600 text-white font-black shadow-xs"
-                            : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
-                        )}
-                      >
-                        <div className="flex items-center gap-2 truncate pr-2">
-                          <span className={cn("w-2 h-2 rounded-full shrink-0", isActive ? "bg-white" : "bg-blue-500")} />
-                          <span className="font-bold text-caption">
-                            {isVi ? tab.labelVi : tab.labelEn}
-                          </span>
-                        </div>
-                        <span className={cn("font-mono text-3xs px-2 py-0.5 rounded-full font-bold shrink-0", isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400")} >
-                          {tab.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Search input with glow container effect */}
-            <div className="relative flex items-center w-full sm:w-[220px]">
-              <Search className="absolute left-3 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={isVi ? "Tìm dự án..." : "Search projects..."}
-                className="w-full text-caption pl-8.5 pr-3 py-1 rounded-full bg-slate-100/75 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 text-slate-800 dark:text-slate-100 outline-hidden focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 p-0.5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full text-slate-400 hover:text-slate-600 transition cursor-pointer"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
+          {/* Cụm phải: Bộ lọc giai đoạn + Tìm kiếm */}
+          <div className="flex items-center gap-2 ml-auto flex-wrap">
+            {/* Nút lọc danh mục */}
+            <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+              {PHASE_FILTERS.map((tab) => {
+                const isActive = selectedPhase === tab.id;
+                const label = isVi ? tab.shortVi : tab.labelEn;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setSelectedPhase(tab.id)}
+                    className={cn(
+                      "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1.5 cursor-pointer",
+                      isActive
+                        ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                    )}
+                  >
+                    <span>{label}</span>
+                    <span className={cn("text-3xs font-mono px-1.5 py-0.2 rounded-full", isActive ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300" : "bg-slate-200/60 dark:bg-slate-800 text-slate-500")}>
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </PageCardHeader>
@@ -588,12 +454,11 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={() => {
-                    setSearchQuery("");
                     setSelectedPhase("all");
                   }}
                   className="px-4 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-full border border-blue-200 dark:border-blue-800/60 transition-all cursor-pointer"
                 >
-                  {isVi ? "Đặt lại bộ lọc" : "Reset filters"}
+                  {isVi ? "Xem tất cả giai đoạn" : "Show all phases"}
                 </button>
               </div>
             ) : (
@@ -601,25 +466,26 @@ export default function Projects() {
                 id="card-projects-list-content"
                 className="w-full flex flex-col gap-4"
               >
-                <div id="projects-grid-content" className="p-1 sm:p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-[15px] w-full">
+                <div id="projects-grid-content" className="p-1 sm:p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-[15px] w-full items-start">
                   {filteredProjects.map((card, cardIndex) => {
-                    const theme = getCardColorTheme(card);
+                    const theme = getCardColorTheme(card, cardIndex);
                     const isSelected = selectedCardId === card.id;
                     const formattedIndex = String(cardIndex + 1).padStart(2, "0");
-                    const badgeVariant = BADGE_COLOR_PALETTES[cardIndex % BADGE_COLOR_PALETTES.length];
                     return (
                       <motion.div
                         key={card.id}
                         variants={staggerCardVariants}
-                        className="w-full min-w-0 flex flex-col h-full"
+                        className="w-full min-w-0 flex flex-col h-auto"
                       >
                       <KeyframersTiltCard
                         onClick={() => handleCardClick(card)}
+                        style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                         className={cn(
-                          "card-item project-card project-edu-glass-card rounded-[10px] overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full relative",
-                          isSelected 
-                            ? "ring-4 ring-blue-500/60 dark:ring-blue-400/60 shadow-2xl scale-[1.015] border-blue-500 dark:border-blue-400 bg-white/95 dark:bg-slate-900/95 z-20"
-                            : cn("hover:shadow-2xl hover:border-blue-400/80 dark:hover:border-blue-500/80", theme.border, theme.ring)
+                          "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-auto relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
+                          theme.border,
+                          theme.cardBg,
+                          theme.shadow,
+                          isSelected ? "ring-2 ring-blue-500 dark:ring-blue-400 scale-[1.01] shadow-xl" : ""
                         )}
                       >
 
@@ -629,55 +495,50 @@ export default function Projects() {
                             <div className={cn(
                               "project-card-media relative w-full aspect-[16/9] overflow-hidden rounded-[10px] border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
-                            )} style={{ height: "200px" }}>
+                            )} style={{ height: "200px", borderRadius: "var(--theme-radius-inner, 8px)" }}>
                               <img
                                 src={card.image}
                                 alt={card.branchTitle}
-                                className="w-full h-full object-cover rounded-[10px] group-hover/img:scale-105 transition-transform duration-500"
+                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
+                                style={{ borderRadius: "var(--theme-radius-inner, 8px)" }}
                                 loading="lazy"
                                 decoding="async"
                                 referrerPolicy="no-referrer"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 
-                              {/* Bento Grid Index Badge (Góc trên cùng bên trái) - Dạng hình tròn với màu sắc đa dạng */}
+                              {/* Bento Grid Index Badge (Góc trên cùng bên trái) - Dạng hình tròn với 15 màu sắc ngẫu nhiên/chuẩn hóa */}
                               <div className={cn(
                                 "absolute top-2.5 left-2.5 z-20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border shadow-lg transition-transform duration-300 group-hover/img:scale-110",
-                                isSelected ? "bg-blue-600 text-white border-white/40 shadow-blue-500/40 scale-105" : badgeVariant.bg
+                                theme.badgeBg
                               )}>
-                                <span className={cn("font-mono text-2xs font-black", isSelected ? "text-white" : badgeVariant.text)}>
+                                <span className={cn("font-mono text-2xs font-black", theme.badgeText)}>
                                   {formattedIndex}
                                 </span>
                               </div>
 
-                              {/* Group Title Badge (Góc trên cùng bên right) */}
-                              <div className="absolute top-2.5 right-2.5 z-20 max-w-[68%] px-2.5 py-1 rounded-full bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700/60 shadow-md">
-                                <span className="font-bold text-caption text-slate-800 dark:text-slate-200 truncate block">
-                                  {card.groupTitle}
-                                </span>
-                              </div>
                             </div>
                           </div>
 
                           {/* Standardized Content Area with Color Bar Header & Description */}
-                          <div className="project-card-content p-4 sm:p-5 flex-1 flex flex-col justify-between min-w-0 text-left gap-3" style={{ paddingBottom: "0px" }}>
+                          <div className="project-card-content p-4 sm:p-5 flex flex-col min-w-0 text-left gap-3 pb-4">
                             {/* Standardized Subcard Header with Sleek Color Bar */}
                             <div className="w-full flex items-start gap-3 pb-2.5 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
-                              <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", isSelected ? "bg-blue-600 shadow-md shadow-blue-500/40" : theme.bar)} />
+                              <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
                               <div className="flex-1 min-w-0 text-left">
-                                <h3 className={cn("text-base font-extrabold tracking-tight line-clamp-2 leading-snug min-h-[2.5rem] sm:min-h-[3rem]", isSelected ? "text-blue-700 dark:text-blue-300 font-black" : theme.title)}>
+                                <h3 className={cn("text-h6 tracking-tight line-clamp-2 leading-snug font-bold", theme.title)}>
                                   {card.branchTitle}
                                 </h3>
                               </div>
                             </div>
 
                             {/* Project Description Paragraph */}
-                            <p className="text-body-sm text-slate-600 dark:text-slate-300 line-clamp-2 font-medium">
+                            <p className="text-body-sub text-subcontent text-slate-600 dark:text-slate-300 line-clamp-2 font-normal">
                               {card.description}
                             </p>
 
                             {/* Tags & Action Link Footer */}
-                            <div className="space-y-2.5 mt-auto pt-1">
+                            <div className="space-y-2.5 pt-1">
                               {/* Tags Footer - Always on 1 single row */}
                               <div className="project-tags flex flex-nowrap items-center gap-1.5 overflow-x-auto scrollbar-none whitespace-nowrap">
                                 {card.tags.slice(0, 3).map((tag, idx) => (
@@ -685,16 +546,23 @@ export default function Projects() {
                                     key={idx}
                                     className={cn(
                                       "text-3xs font-mono font-semibold px-2 py-0.5 rounded-md border h-fit flex items-center leading-normal shrink-0 transition-colors",
-                                      isSelected 
-                                        ? "bg-blue-100/90 dark:bg-blue-950/80 text-blue-800 dark:text-blue-200 border-blue-300/80 dark:border-blue-700/60 font-bold"
-                                        : theme.tagBg
+                                      theme.tagBg
                                     )}
                                   >
                                     {tag}
                                   </span>
                                 ))}
                               </div>
-                              {/* Deleted Interactive Action Row */}
+                            </div>
+
+                            {/* Group Title Badge at bottom of card */}
+                            <div className={cn(
+                              "w-full mt-1.5 px-3 py-1.5 rounded-xl backdrop-blur-md border shadow-xs text-center",
+                              theme.phaseBadge
+                            )}>
+                              <span className="font-bold text-caption text-white truncate block">
+                                {card.groupTitle}
+                              </span>
                             </div>
                           </div>
                         </KeyframersTiltCard>
