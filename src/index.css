@@ -4653,6 +4653,86 @@ html.theme-flat-dark body,
   letter-spacing: 0 !important;
 }
 
+/* ==========================================================================
+   MASTER RESPONSIVE OPTIMIZATION — 4 VIEWPORTS & GLOBAL SAFETY
+   ========================================================================== */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  min-width: 0;
+}
+
+/* 1. Desktop Large (>= 1646px) */
+@media (min-width: 1646px) {
+  .master-container {
+    max-width: 1560px;
+    margin-inline: auto;
+  }
+}
+
+/* 2. Desktop Compact (1106px - 1645px) */
+@media (min-width: 1106px) and (max-width: 1645px) {
+  .master-container {
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+}
+
+/* 3. Tablet (768px - 1105px, optimized for 768 x 1024) */
+@media (min-width: 768px) and (max-width: 1105px) {
+  .master-container {
+    max-width: 736px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+  .bento-grid, .projects-grid, .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* 4. Mobile (<= 767px, optimized for 375 x 667) */
+@media (max-width: 767px) {
+  .master-container {
+    width: 100% !important;
+    padding-inline: 12px !important;
+  }
+  .bento-grid, .projects-grid, .skills-grid, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+  /* Modal / Popup responsiveness for mobile 375x667 */
+  [role="dialog"], .modal-container, [class*="bg-white/80"], [class*="bg-slate-900/80"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* General Modal / Popup Safe Sizing */
+.glass-modal, .app-modal {
+  width: min(94vw, 760px);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 767px) {
+  .glass-modal, .app-modal {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+}
+
+
 
 
 

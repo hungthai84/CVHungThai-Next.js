@@ -629,7 +629,7 @@ export default function Projects() {
                             <div className={cn(
                               "project-card-media relative w-full aspect-[16/9] overflow-hidden rounded-[10px] border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
-                            )}>
+                            )} style={{ height: "200px" }}>
                               <img
                                 src={card.image}
                                 alt={card.branchTitle}
@@ -660,7 +660,7 @@ export default function Projects() {
                           </div>
 
                           {/* Standardized Content Area with Color Bar Header & Description */}
-                          <div className="project-card-content p-4 sm:p-5 flex-1 flex flex-col justify-between min-w-0 text-left gap-3">
+                          <div className="project-card-content p-4 sm:p-5 flex-1 flex flex-col justify-between min-w-0 text-left gap-3" style={{ paddingBottom: "0px" }}>
                             {/* Standardized Subcard Header with Sleek Color Bar */}
                             <div className="w-full flex items-start gap-3 pb-2.5 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
                               <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", isSelected ? "bg-blue-600 shadow-md shadow-blue-500/40" : theme.bar)} />

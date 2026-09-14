@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   X, Sliders, PanelBottom, Maximize2, Columns, EyeOff, RotateCcw, Check, Pin, 
   CloudSun, Clock, MousePointer, Volume2, VolumeX, Bot, ChevronDown,
-  Sparkles, Flame, Crosshair, CircleDot, Dot, Play, CloudRain, Wind, Radio
+  Sparkles, Flame, Crosshair, CircleDot, Dot, Play, CloudRain, Wind, Radio,
+  Palette, Globe, Sun, Moon, Type, Images, Rocket
 } from "lucide-react";
 import { useFooter } from "../context/FooterContext";
 import { useLanguage } from "../i18n";
@@ -15,6 +16,7 @@ import { CursorStyleType, CursorSize } from "../types/cursor";
 import { useSound } from "../context/SoundContext";
 import { SOUND_PACK_OPTIONS, AMBIENT_SOUND_OPTIONS } from "../data/soundData";
 import { AmbientSoundType } from "../types/sound";
+import { useTheme, COLOR_PRESETS, ThemeType } from "../context/ThemeContext";
 import { cn } from "../lib/utils";
 
 export default function FooterSettingsModal() {
@@ -53,11 +55,12 @@ export default function FooterSettingsModal() {
     playSuccess
   } = useSound();
 
-  const { lang } = useLanguage();
+  const { theme, setTheme, colorPreset, setColorPreset, activePalette, openColorModal, openTypographyModal } = useTheme();
+  const { lang, setLang } = useLanguage();
   const isVi = lang === "vi";
 
   // Tab state synced with footerModalTab
-  const [currentTab, setCurrentTab] = useState<"footer" | "cursor" | "sound">("footer");
+  const [currentTab, setCurrentTab] = useState<"footer" | "cursor" | "sound" | "customization">("footer");
 
   useEffect(() => {
     if (footerModalTab) {
@@ -101,21 +104,27 @@ export default function FooterSettingsModal() {
   const tabs = [
     {
       id: "footer" as const,
-      nameVi: "Chân trang (Footer)",
-      nameEn: "Footer Settings",
+      nameVi: "Chân trang",
+      nameEn: "Footer",
       Icon: Sliders,
     },
     {
       id: "cursor" as const,
-      nameVi: "Con trỏ chuột (Cursor)",
-      nameEn: "Cursor Settings",
+      nameVi: "Con trỏ",
+      nameEn: "Cursor",
       Icon: MousePointer,
     },
     {
       id: "sound" as const,
-      nameVi: "Âm thanh (Audio)",
-      nameEn: "Audio Settings",
+      nameVi: "Âm thanh",
+      nameEn: "Audio",
       Icon: Volume2,
+    },
+    {
+      id: "customization" as const,
+      nameVi: "Tùy chỉnh",
+      nameEn: "Customization",
+      Icon: Palette,
     },
   ];
 
@@ -144,6 +153,14 @@ export default function FooterSettingsModal() {
           colorClass: "text-sky-600 dark:text-sky-400",
           bgClass: "bg-sky-500/10 border-sky-500/20",
           Icon: Volume2,
+        };
+      case "customization":
+        return {
+          title: isVi ? "Tùy chỉnh Giao diện, Màu sắc & Ngôn ngữ" : "Theme, Color & Customization",
+          desc: isVi ? "Chuyển đổi giao diện, bộ màu sắc tokens, ngôn ngữ và tùy chọn hiển thị" : "Switch themes, design color tokens, language and display options",
+          colorClass: "text-emerald-600 dark:text-emerald-400",
+          bgClass: "bg-emerald-500/10 border-emerald-500/20",
+          Icon: Palette,
         };
     }
   };
@@ -761,19 +778,221 @@ export default function FooterSettingsModal() {
                 </div>
               </div>
             )}
+
+            {/* ========================================================================= */}
+            {/* TAB 4: TÙY CHỈNH & GIAO DIỆN (CUSTOMIZATION & THEME) */}
+            {/* ========================================================================= */}
+            {currentTab === "customization" && (
+              <div className="space-y-6">
+                {/* 1. Language Toggle */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "1. Ngôn ngữ hiển thị (Language)" : "1. Display Language"}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: "vi", label: "Tiếng Việt", flag: "🇻🇳" },
+                      { id: "en", label: "English", flag: "🇬🇧" },
+                    ].map((l) => {
+                      const isSelected = lang === l.id;
+                      return (
+                        <button
+                          key={l.id}
+                          type="button"
+                          onClick={() => setLang(l.id as any)}
+                          className={cn(
+                            "flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer",
+                            isSelected
+                              ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500 dark:border-emerald-400 text-emerald-900 dark:text-emerald-200 ring-1 ring-emerald-500/30"
+                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-base">{l.flag}</span>
+                            <span>{l.label}</span>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Theme Toggle */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "2. Giao diện Next Themes Engine" : "2. Theme Engine"}
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {[
+                      {
+                        id: "mritech-digital-growth",
+                        nameVi: "MRITECH Digital Growth 🚀",
+                        nameEn: "MRITECH Growth Glass 🚀",
+                        descVi: "Nền Pearl Glass, 3-tông gradient & bo góc hiện đại",
+                        descEn: "Pearl glass canvas with 3-tone gradients",
+                        Icon: Rocket,
+                      },
+                      {
+                        id: "glass-dark-neon",
+                        nameVi: "Glass Tối Neon",
+                        nameEn: "Glass Dark Neon",
+                        descVi: "Giao diện tối chuyên nghiệp với viền neon",
+                        descEn: "Dark glassmorphism with prominent neon",
+                        Icon: Moon,
+                      },
+                    ].map((th) => {
+                      const isSelected = theme === th.id;
+                      return (
+                        <button
+                          key={th.id}
+                          type="button"
+                          onClick={() => setTheme(th.id as ThemeType)}
+                          className={cn(
+                            "flex items-start gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer relative",
+                            isSelected
+                              ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500 dark:border-emerald-400 shadow-xs ring-1 ring-emerald-500/30"
+                              : "bg-slate-50/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 hover:border-slate-300"
+                          )}
+                        >
+                          <div className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
+                            isSelected ? "bg-emerald-600 text-white shadow-xs" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                          )}>
+                            <th.Icon className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0 pr-4">
+                            <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              {isVi ? th.nameVi : th.nameEn}
+                            </div>
+                            <div className="text-2xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                              {isVi ? th.descVi : th.descEn}
+                            </div>
+                          </div>
+                          {isSelected && (
+                            <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Color Tokens Grid */}
+                <div>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {isVi ? "3. Bộ màu sắc & Design Tokens" : "3. Color Presets & Tokens"}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsFooterModalOpen(false);
+                        openColorModal();
+                      }}
+                      className="text-3xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>{isVi ? "Tùy chỉnh nâng cao" : "Advanced Tokens"}</span>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {COLOR_PRESETS.map((preset) => {
+                      const isSelected = colorPreset === preset.id;
+                      const isDark = theme === "glass-dark-neon";
+                      const c = isDark ? preset.dark : preset.light;
+                      return (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => setColorPreset(preset.id)}
+                          className={cn(
+                            "flex items-center justify-between p-2.5 rounded-xl border text-left transition-all cursor-pointer",
+                            isSelected
+                              ? "bg-emerald-50 dark:bg-emerald-950/25 border-emerald-500 dark:border-emerald-400 ring-1 ring-emerald-500/30"
+                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 hover:border-slate-300"
+                          )}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="flex items-center -space-x-1 shrink-0">
+                              <span className="w-3 h-3 rounded-full border border-white/40" style={{ backgroundColor: c.primary }} />
+                              <span className="w-3 h-3 rounded-full border border-white/40" style={{ backgroundColor: c.secondary }} />
+                              <span className="w-3 h-3 rounded-full border border-white/40" style={{ backgroundColor: c.accent }} />
+                            </div>
+                            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
+                              {isVi ? preset.nameVi : preset.name}
+                            </span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. Quick Actions / Links */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
+                    {isVi ? "4. Lối tắt cài đặt khác" : "4. Other Settings Shortcuts"}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsFooterModalOpen(false);
+                        openTypographyModal();
+                      }}
+                      className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                        <Type className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="truncate">{isVi ? "Cài đặt Font chữ" : "Typography Settings"}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsFooterModalOpen(false);
+                        window.dispatchEvent(new CustomEvent("app-navigate", { detail: "wallpapers" }));
+                      }}
+                      className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <Images className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="truncate">{isVi ? "Hình nền & Video 4K" : "Wallpapers & 4K"}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Footer Actions */}
           <div className="flex items-center justify-between px-5 py-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/70">
             <button
               type="button"
-              onClick={handleResetCurrentTab}
+              onClick={() => {
+                if (currentTab === "footer") {
+                  resetFooterConfig();
+                } else if (currentTab === "cursor") {
+                  resetCursorConfig();
+                } else if (currentTab === "sound") {
+                  resetSoundConfig();
+                } else if (currentTab === "customization") {
+                  setTheme("mritech-digital-growth");
+                  setColorPreset("neon");
+                  setLang("vi");
+                }
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>
                 {isVi 
-                  ? (currentTab === "footer" ? "Đặt lại Footer" : currentTab === "cursor" ? "Đặt lại Con trỏ" : "Đặt lại Âm thanh") 
+                  ? (currentTab === "footer" ? "Đặt lại Footer" : currentTab === "cursor" ? "Đặt lại Con trỏ" : currentTab === "sound" ? "Đặt lại Âm thanh" : "Đặt lại Tùy chỉnh") 
                   : "Reset Tab Defaults"}
               </span>
             </button>
@@ -787,7 +1006,9 @@ export default function FooterSettingsModal() {
                   ? "bg-purple-600 hover:bg-purple-700" 
                   : currentTab === "cursor" 
                     ? "bg-indigo-600 hover:bg-indigo-700" 
-                    : "bg-sky-600 hover:bg-sky-700"
+                    : currentTab === "sound"
+                      ? "bg-sky-600 hover:bg-sky-700"
+                      : "bg-emerald-600 hover:bg-emerald-700"
               )}
             >
               {isVi ? "Hoàn tất & Đóng" : "Done & Close"}

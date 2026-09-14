@@ -12,9 +12,9 @@ interface FooterContextType {
   resetFooterConfig: () => void;
   isFooterModalOpen: boolean;
   setIsFooterModalOpen: (open: boolean) => void;
-  footerModalTab: "footer" | "cursor" | "sound";
-  setFooterModalTab: (tab: "footer" | "cursor" | "sound") => void;
-  openFooterModal: (tab?: "footer" | "cursor" | "sound") => void;
+  footerModalTab: "footer" | "cursor" | "sound" | "customization";
+  setFooterModalTab: (tab: "footer" | "cursor" | "sound" | "customization") => void;
+  openFooterModal: (tab?: "footer" | "cursor" | "sound" | "customization") => void;
   isFooterHovered: boolean;
   setIsFooterHovered: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -39,10 +39,10 @@ export function FooterProvider({ children }: { children: ReactNode }) {
   });
 
   const [isFooterModalOpen, setIsFooterModalOpen] = useState(false);
-  const [footerModalTab, setFooterModalTab] = useState<"footer" | "cursor" | "sound">("footer");
+  const [footerModalTab, setFooterModalTab] = useState<"footer" | "cursor" | "sound" | "customization">("footer");
   const [isFooterHovered, setIsFooterHovered] = useState(false);
 
-  const openFooterModal = (tab: "footer" | "cursor" | "sound" = "footer") => {
+  const openFooterModal = (tab: "footer" | "cursor" | "sound" | "customization" = "footer") => {
     setFooterModalTab(tab);
     setIsFooterModalOpen(true);
   };
