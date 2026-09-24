@@ -5180,6 +5180,72 @@ html, body {
   }
 }
 
+/* ==========================================================================
+   HIGH-CONTRAST TRUE DARK THEME & WCAG AA CONTRAST ENHANCEMENTS
+   ========================================================================== */
+.theme-true-dark-high-contrast,
+[data-theme="true-dark-high-contrast"] {
+  --color-bg: #000000;
+  --color-surface: #0a0a0a;
+  --color-border: #ffffff;
+  --color-text: #ffffff;
+  --color-text-muted: #e2e8f0;
+
+  --theme-bg: #000000;
+  --theme-text-main: #ffffff;
+  --theme-text-muted: #e2e8f0;
+  --theme-card: #050505;
+  --theme-card-hover: #121212;
+  --theme-border: rgba(255, 255, 255, 0.4);
+  --theme-border-hover: #00f0ff;
+  --theme-primary: #00f0ff;
+  --theme-primary-dark: #00aaff;
+  --theme-primary-glow: rgba(0, 240, 255, 0.85);
+
+  --color-primary: #00f0ff;
+  --color-secondary: #ff007f;
+  --color-accent: #00ff88;
+  --color-highlight: #ffb800;
+  --color-soft: #00f0ff;
+
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.theme-true-dark-high-contrast body,
+[data-theme="true-dark-high-contrast"] body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   GRID PROFILE CARD ANIMATION & WCAG AA CONTRAST STYLES (EDUCATION PAGE)
+   ========================================================================== */
+.grid-profile-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+}
+
+.grid-profile-card:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 20px 45px -10px rgba(0, 102, 255, 0.28), 0 0 25px rgba(0, 229, 255, 0.22) !important;
+}
+
+/* Ensure WCAG AA Contrast Compliance (>= 4.5:1) for Secondary Text inside grid-profile-card */
+.grid-profile-card .secondary-text,
+.grid-profile-card .text-subcontent,
+.grid-profile-card .metadata-label {
+  color: #334155 !important; /* Slate-700 on light bg: WCAG AAA > 7:1 */
+}
+
+.dark .grid-profile-card .secondary-text,
+.dark .grid-profile-card .text-subcontent,
+.dark .grid-profile-card .metadata-label,
+[data-theme="glass-dark-neon"] .grid-profile-card .secondary-text,
+[data-theme="true-dark-high-contrast"] .grid-profile-card .secondary-text {
+  color: #e2e8f0 !important; /* Slate-200 on dark bg: WCAG AAA > 11:1 */
+}
+
+
 
 
 

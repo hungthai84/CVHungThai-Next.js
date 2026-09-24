@@ -5,7 +5,8 @@ export const THEMES = [
   "glass-dark-neon",
   "mritech-digital-growth",
   "fintech-soft-glass",
-  "glass-soft-clay"
+  "glass-soft-clay",
+  "true-dark-high-contrast"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -837,6 +838,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       "theme-mritech-aurora-glass",
       "theme-mritech-digital-growth",
       "theme-fintech-soft-glass",
+      "theme-glass-soft-clay",
+      "theme-true-dark-high-contrast",
       "theme-flat-light",
       "theme-flat-dark"
     );
@@ -844,7 +847,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Set data-theme attribute to the exact theme name for CSS selector matching
     root.setAttribute("data-theme", themeName);
     
-    if (themeName === "glass-dark-neon") {
+    if (themeName === "glass-dark-neon" || themeName === "true-dark-high-contrast") {
       root.classList.add("dark", `theme-${themeName}`);
     } else {
       root.classList.add(`theme-${themeName}`);

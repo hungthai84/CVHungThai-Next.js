@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
-import { Sun, Moon, Sparkles } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { Sun, Sparkles, Clock } from 'lucide-react';
 
 interface ThemeToggleProps {
   className?: string;
@@ -11,13 +11,13 @@ interface ThemeToggleProps {
 
 /**
  * Reusable ThemeToggle Component
- * - Powered by next-themes
+ * - Integrates with ThemeContext & Solar scheduling
  * - Uses mounted guard to prevent Next.js hydration mismatch
- * - Instant toggle between Light ('modern-light-glass') and Dark Neon ('glass-dark-neon')
+ * - Instant toggle between Light ('mritech-digital-growth') and Dark Neon ('glass-dark-neon')
  * - Supports keyboard navigation and accessibility (aria-label)
  */
 export function ThemeToggle({ className = '', showLabel = false }: ThemeToggleProps) {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, autoThemeMode, toggleAutoThemeMode } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration mismatch: render placeholder until mounted on client
@@ -34,23 +34,11 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
     );
   }
 
-  const isDark = theme === 'glass-dark-neon' || resolvedTheme === 'dark' || theme === 'dark';
+  const isDark = theme === 'glass-dark-neon';
 
   const toggleTheme = () => {
-    const nextTheme = isDark ? 'modern-light-glass' : 'glass-dark-neon';
+    const nextTheme = isDark ? 'mritech-digital-growth' : 'glass-dark-neon';
     setTheme(nextTheme);
-
-    // Keep data-theme in sync for custom CSS selectors
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      if (nextTheme === 'glass-dark-neon') {
-        document.documentElement.classList.add('dark', 'theme-glass-dark-neon');
-        document.documentElement.classList.remove('theme-modern-light-glass');
-      } else {
-        document.documentElement.classList.remove('dark', 'theme-glass-dark-neon');
-        document.documentElement.classList.add('theme-modern-light-glass');
-      }
-    }
   };
 
   return (
@@ -58,7 +46,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
       id="theme-toggle-btn"
       type="button"
       onClick={toggleTheme}
-      aria-label={`Chuyển sang giao diện ${isDark ? 'Sáng (Light Glass)' : 'Tối Neon (Dark Neon)'}`}
+      aria-label={`Chuyển sang giao diện ${isDark ? 'Sáng (MRITECH Growth)' : 'Tối Neon (Dark Neon)'}`}
       title={isDark ? 'Chuyển sang Giao diện Sáng' : 'Chuyển sang Giao diện Tối Neon'}
       className={`relative inline-flex items-center justify-center gap-2 p-2 rounded-xl border transition-all duration-300 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
         isDark
@@ -76,7 +64,14 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
 
       {showLabel && (
         <span className="text-xs font-semibold select-none pr-1">
-          {isDark ? 'Neon Dark' : 'Light Glass'}
+          {autoThemeMode ? 'Auto' : isDark ? 'Neon Dark' : 'MRITECH Light'}
+        </span>
+      )}
+
+      {autoThemeMode && (
+        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
         </span>
       )}
     </button>

@@ -1,7 +1,9 @@
 import React, { ReactNode, ElementType } from "react";
+import { motion } from "motion/react";
 import { cn } from "../lib/utils";
 import { PageBanner } from "./PageBanner";
 import { useLanguage } from "../context/LanguageContext";
+import { industrialSubSectionVariants } from "./IndustrialStaggerContainer";
 
 interface PageLayoutProps {
   id?: string;
@@ -77,7 +79,7 @@ export function PageLayout({
     >
       {/* SECTION HEADER BANNER WITH LINE 4 UTILITIES */}
       {!hideBanner && (
-        <div className="mb-4 w-full">
+        <motion.div variants={industrialSubSectionVariants} className="mb-4 w-full">
           <PageBanner 
             title={title}
             subtitle={subtitle || ""}
@@ -144,11 +146,13 @@ export function PageLayout({
               </div>
             )}
           </PageBanner>
-        </div>
+        </motion.div>
       )}
 
       {/* MAIN CONTENT AREA */}
-      {children}
+      <motion.div variants={industrialSubSectionVariants} className="w-full flex-grow flex flex-col">
+        {children}
+      </motion.div>
     </section>
   );
 }

@@ -1616,7 +1616,7 @@ export default function Education() {
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => safePlay("hover")}
                     className={cn(
-                      "group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full"
+                      "grid-profile-card group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full"
                     )}
                     style={{
                       transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))',
@@ -1656,35 +1656,35 @@ export default function Education() {
                       </h3>
                     </div>
 
-                    {/* Metadata List - Flat Direct Rows with Caption / Label: 12px – 13px */}
+                    {/* Metadata List - Flat Direct Rows with Caption / Label: 12px – 13px - WCAG AA Compliant Text */}
                     <div className="space-y-1.5 text-body-sm text-left mb-3">
                       {/* 1. Học tại / Institution */}
                       <div className="flex items-start gap-1.5 text-left">
-                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-500 dark:text-slate-400 flex items-center gap-1 whitespace-nowrap">
-                          <Icons.School className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
+                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-700 dark:text-slate-200 secondary-text flex items-center gap-1 whitespace-nowrap">
+                          <Icons.School className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0" />
                           <span className="whitespace-nowrap">{isVi ? "Học tại:" : "School:"}</span>
                         </span>
-                        <span className="font-semibold text-caption truncate flex-1 text-slate-700 dark:text-slate-200">
+                        <span className="font-semibold text-caption truncate flex-1 text-slate-800 dark:text-slate-100">
                           {card.subtitle}
                         </span>
                       </div>
 
                       {/* 3. Mô tả / Key Summary */}
                       <div className="flex items-start gap-1.5 text-left">
-                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-500 dark:text-slate-400 flex items-center gap-1 whitespace-nowrap">
-                          <Icons.FileText className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
+                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-700 dark:text-slate-200 secondary-text flex items-center gap-1 whitespace-nowrap">
+                          <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0" />
                           <span className="whitespace-nowrap">{isVi ? "Mô tả:" : "Desc:"}</span>
                         </span>
-                        <span className="font-normal text-caption line-clamp-2 leading-snug flex-1 text-slate-600 dark:text-slate-400">
+                        <span className="font-normal text-caption line-clamp-2 leading-snug flex-1 text-slate-700 dark:text-slate-200 secondary-text">
                           {card.desc}
                         </span>
                       </div>
                     </div>
 
                     {/* Bottom Year Badge */}
-                    <div className="flex items-center justify-between pt-2.5 mt-auto border-t border-slate-100 dark:border-slate-800/80 w-full">
-                      <span className="inline-flex items-center gap-1 text-2xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-500/20">
-                        <Icons.Calendar className="w-3 h-3 opacity-80" />
+                    <div className="flex items-center justify-between pt-2.5 mt-auto border-t border-slate-200/80 dark:border-slate-800/80 w-full">
+                      <span className="inline-flex items-center gap-1 text-2xs font-mono font-bold text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-700/80">
+                        <Icons.Calendar className="w-3 h-3 opacity-90" />
                         <span>{card.year}</span>
                       </span>
                     </div>

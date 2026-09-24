@@ -58,6 +58,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
   const [isStackHovered, setIsStackHovered] = useState(false);
   const [isStackPinned, setIsStackPinned] = useState(false);
+  const [hoveredNavId, setHoveredNavId] = useState<string | null>(null);
   const stackTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isHorizontal = orientation === "horizontal";
   
@@ -207,21 +208,21 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
   ];
 
-  // Navigation Items for Top Header Center
+  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips
   const navItems = [
-    { id: "home", label: t("nav.home"), Icon: Monitor },
-    { id: "letter", label: t("nav.letter"), Icon: FileText },
-    { id: "about", label: t("nav.about"), Icon: User },
-    { id: "domains", label: t("nav.domains"), Icon: Compass },
-    { id: "skills", label: t("nav.skills"), Icon: Brain },
-    { id: "education", label: t("nav.education"), Icon: GraduationCap },
-    { id: "experience", label: t("nav.experience"), Icon: Briefcase },
-    { id: "projects", label: t("nav.projects"), Icon: ClipboardList },
-    { id: "interview", label: t("nav.interview"), Icon: Video },
-    { id: "tuvi", label: t("nav.tuvi"), Icon: Sparkles },
-    { id: "systems", label: t("nav.systems"), Icon: Server },
-    { id: "memories", label: t("nav.memories"), Icon: Images },
-    { id: "contact", label: t("nav.contact"), Icon: MessagesSquare },
+    { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Monitor },
+    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: FileText },
+    { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", label: t("nav.about"), Icon: User },
+    { id: "domains", labelVi: "Lĩnh vực", labelEn: "Core Domains", label: t("nav.domains"), Icon: Compass },
+    { id: "skills", labelVi: "Kỹ năng", labelEn: "Core Skills", label: t("nav.skills"), Icon: Brain },
+    { id: "education", labelVi: "Học vấn", labelEn: "Academic Path", label: t("nav.education"), Icon: GraduationCap },
+    { id: "experience", labelVi: "Kinh nghiệm", labelEn: "Career Journey", label: t("nav.experience"), Icon: Briefcase },
+    { id: "projects", labelVi: "Dự án", labelEn: "Key Projects", label: t("nav.projects"), Icon: ClipboardList },
+    { id: "interview", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video },
+    { id: "tuvi", labelVi: "Tử vi", labelEn: "Wisdom Profile", label: t("nav.tuvi"), Icon: Sparkles },
+    { id: "systems", labelVi: "Hệ thống", labelEn: "Systems Hub", label: t("nav.systems"), Icon: Server },
+    { id: "memories", labelVi: "Kỷ niệm", labelEn: "Team Memories", label: t("nav.memories"), Icon: Images },
+    { id: "contact", labelVi: "Liên hệ", labelEn: "Contact Hub", label: t("nav.contact"), Icon: MessagesSquare },
   ];
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -302,20 +303,21 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           </div>
 
           <ul className="header-nav-list flex items-center justify-between gap-0.5 sm:gap-1 w-full relative z-20 shrink-0">
-
-
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
+              const isHovered = hoveredNavId === item.id;
 
               return (
                 <li
                   key={item.id}
-                  className={`header-nav-item shrink-0 ${isActive ? "active" : ""}`}
+                  className={`header-nav-item shrink-0 relative ${isActive ? "active" : ""}`}
+                  onMouseEnter={() => setHoveredNavId(item.id)}
+                  onMouseLeave={() => setHoveredNavId(null)}
                 >
                   <a
                     href={`#${item.id}`}
                     onClick={(e) => handleNavClick(e, item.id)}
-                    aria-label={item.label}
+                    aria-label={`${item.labelVi} / ${item.labelEn}`}
                     className="relative z-10 shrink-0"
                   >
                     <span className="icon shrink-0">
@@ -329,6 +331,24 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                       {item.label}
                     </span>
                   </a>
+
+                  {/* Accessibility Bilingual Hover Tooltip (Vietnamese & English) */}
+                  <AnimatePresence>
+                    {isHovered && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.92 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.92 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-50 pointer-events-none px-3 py-1.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white border border-slate-700/80 dark:border-cyan-400/50 shadow-2xl backdrop-blur-xl flex items-center gap-1.5 whitespace-nowrap text-2xs font-mono font-bold tracking-wide"
+                      >
+                        <span className="text-cyan-400 font-bold">{item.labelVi}</span>
+                        <span className="text-slate-500 font-normal">/</span>
+                        <span className="text-amber-300 font-medium">{item.labelEn}</span>
+                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 dark:bg-slate-950 border-t border-l border-slate-700/80 dark:border-cyan-400/50 rotate-45" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </li>
               );
             })}
@@ -485,6 +505,36 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     </span>
                   </button>
 
+                  {/* 1.5. Nút True Dark Mode (Tối Tương Phản Cao) - Dedicated Explicit Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsStackPinned(true);
+                      if (theme === "true-dark-high-contrast") {
+                        handleThemeToggle("glass-dark-neon");
+                      } else {
+                        handleThemeToggle("true-dark-high-contrast");
+                      }
+                    }}
+                    className={cn(
+                      "w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-bold flex items-center justify-between transition-all duration-200 cursor-pointer border hover:scale-[1.02] active:scale-98 shadow-xs",
+                      theme === "true-dark-high-contrast"
+                        ? "bg-slate-950 text-cyan-400 border-cyan-400/80 ring-1 ring-cyan-400/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
+                        : "bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border-slate-200/60 dark:border-white/10 text-slate-800 dark:text-slate-100"
+                    )}
+                    title={lang === "vi" ? "Chế độ True Dark (Đen tuyệt đối & Tương phản cao)" : "Toggle High Contrast True Dark Mode"}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 shrink-0">
+                        <Moon className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="truncate">{lang === "vi" ? "True Dark" : "True Dark"}</span>
+                    </div>
+                    <span className={cn("text-3xs font-black px-2 py-0.5 rounded-full uppercase shrink-0", theme === "true-dark-high-contrast" ? "bg-cyan-400 text-slate-950" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300")}>
+                      {theme === "true-dark-high-contrast" ? "ON" : "OFF"}
+                    </span>
+                  </button>
+
                   {/* 2. Nút Giao diện (Theme) - Bung xuống */}
                   <div className="relative theme-dropdown-container z-[60]">
                     <button
@@ -561,6 +611,13 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               id: "glass-dark-neon", 
                               label: lang === "vi" ? "Glass Tối Neon (Next Themes)" : "Glass Dark Neon (Next Themes)", 
                               desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
+                              Icon: Moon, 
+                              color: "text-cyan-400" 
+                            },
+                            { 
+                              id: "true-dark-high-contrast", 
+                              label: lang === "vi" ? "True Dark (Tương Phản Cao) 🌘" : "True Dark (High Contrast) 🌘", 
+                              desc: lang === "vi" ? "Chế độ tối siêu tương phản, nền pitch black giúp đọc tốt môi trường thiếu sáng" : "Pitch black high contrast theme ensuring readability in low light environments", 
                               Icon: Moon, 
                               color: "text-cyan-400" 
                             }

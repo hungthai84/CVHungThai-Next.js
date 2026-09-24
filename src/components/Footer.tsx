@@ -26,16 +26,16 @@ interface FooterProps {
 
 const SECTION_ORDER = [
   "home",
-  "letter",
   "about",
+  "skills",
   "education",
   "experience",
-  "skills",
   "projects",
   "interview",
   "tuvi",
-  "memories",
-  "contact"
+  "systems",
+  "contact",
+  "wallpapers"
 ];
 
 function Footer({ theme: propTheme, activeSection = "home", onNavigate }: FooterProps) {

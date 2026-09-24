@@ -12,6 +12,14 @@ export interface SkillItem {
   keyHighlightsEn: string[];
   tools: string[];
   iconName: string;
+  yearsOfExperience?: number;
+  proficiencyTier?: string;
+  breakdown?: {
+    practical: number;
+    architecture: number;
+    optimization: number;
+    automation: number;
+  };
 }
 
 export interface SkillGroup {

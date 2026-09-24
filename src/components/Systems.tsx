@@ -4,6 +4,7 @@ import { playUiSound } from "../lib/sound";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import { IndustrialSubSection, industrialContainerVariants, industrialSubSectionVariants } from "./IndustrialStaggerContainer";
 import {
   Server,
   Monitor,
@@ -258,39 +259,6 @@ export function Systems() {
       id="systems"
       className="relative w-full h-auto flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
     >
-      <style dangerouslySetInnerHTML={{ __html: `
-        .custom-systems-grid {
-          display: grid;
-          gap: 15px;
-          width: 100%;
-          align-items: stretch;
-        }
-        /* Above or equal to 1646px: 4 columns */
-        @media (min-width: 1646px) {
-          .custom-systems-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-          }
-        }
-        /* Between 768px and 1645px (covering below/equal 1106px down to 785px): 3 columns */
-        @media (max-width: 1645px) and (min-width: 768px) {
-          .custom-systems-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          }
-        }
-        /* Small tablet / Mobile: 2 columns */
-        @media (max-width: 767px) and (min-width: 480px) {
-          .custom-systems-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-        }
-        /* Extra small mobile: 1 column */
-        @media (max-width: 479px) {
-          .custom-systems-grid {
-            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-          }
-        }
-      `}} />
-
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 relative z-10">
         
         {/* ========================================================================= */}
@@ -332,43 +300,46 @@ export function Systems() {
         </div>
 
         {/* Header Card Hệ thống giống tiêu đề thẻ chính trang học vấn */}
-        <PageCardHeader pageId="systems">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-5 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
-            <span className="text-caption text-label font-semibold font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
-              {isVi ? `Hiển thị ${SYSTEMS_DATA.length} hệ thống nền tảng` : `Showing ${SYSTEMS_DATA.length} platform systems`}
-            </span>
-          </div>
-        </PageCardHeader>
+        <IndustrialSubSection hasIndustrialAccent>
+          <PageCardHeader pageId="systems">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
+              <span className="text-caption text-label font-semibold font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
+                {isVi ? `Hiển thị ${SYSTEMS_DATA.length} hệ thống nền tảng` : `Showing ${SYSTEMS_DATA.length} platform systems`}
+              </span>
+            </div>
+          </PageCardHeader>
+        </IndustrialSubSection>
 
         {/* ========================================================================= */}
         {/* 12 SYSTEMS BENTO GRID: COMPACT FLUID HEIGHTS & ELEGANT GRADIENTS */}
         {/* ========================================================================= */}
-        <AnimatePresence mode="popLayout">
-          <motion.div 
-            layout
-            className="custom-systems-grid"
-          >
-            {SYSTEMS_DATA.map((item, idx) => {
-              const IconComponent = item.icon;
-              const WatermarkComponent = item.watermarkIcon;
+        <IndustrialSubSection>
+          <AnimatePresence mode="popLayout">
+            <motion.div 
+              layout
+              variants={industrialContainerVariants}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full items-stretch"
+            >
+              {SYSTEMS_DATA.map((item, idx) => {
+                const IconComponent = item.icon;
+                const WatermarkComponent = item.watermarkIcon;
 
-              return (
-                <motion.article
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, delay: idx * 0.02 }}
-                  onClick={() => handleCardClick(item.url, isVi ? item.nameVi : item.nameEn)}
-                  onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
-                  style={{ borderRadius: "var(--radius-card, 16px)" }}
-                  className={cn(
-                    "group cursor-pointer relative overflow-hidden px-3.5 py-2.5 sm:px-4 sm:py-3 text-white flex flex-col justify-between min-h-[95px] h-full shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/20 dark:border-slate-800/60 bg-gradient-to-br",
-                    item.gradientClass
-                  )}
-                >
+                return (
+                  <motion.article
+                    key={item.id}
+                    layout
+                    variants={industrialSubSectionVariants}
+                    onClick={() => handleCardClick(item.url, isVi ? item.nameVi : item.nameEn)}
+                    onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
+                    style={{ borderRadius: "var(--radius-card, 16px)" }}
+                    className={cn(
+                      "group cursor-pointer relative overflow-hidden px-3.5 py-2.5 sm:px-4 sm:py-3 text-white flex flex-col justify-between min-h-[95px] h-full shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/20 dark:border-slate-800/60 bg-gradient-to-br",
+                      item.gradientClass
+                    )}
+                  >
                   {/* Watermark Floating Back Icon */}
                   <div className="absolute -right-2 -bottom-2 text-[3rem] opacity-10 group-hover:opacity-20 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out">
                     <WatermarkComponent className="w-14 h-14 stroke-[1.2]" />
@@ -406,7 +377,8 @@ export function Systems() {
               );
             })}
           </motion.div>
-        </AnimatePresence>
+          </AnimatePresence>
+        </IndustrialSubSection>
 
       </div>
 
