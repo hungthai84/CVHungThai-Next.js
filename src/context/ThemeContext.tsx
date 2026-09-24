@@ -3,10 +3,7 @@ import { useTheme as useNextTheme } from "next-themes";
 
 export const THEMES = [
   "glass-dark-neon",
-  "mritech-digital-growth",
-  "fintech-soft-glass",
-  "glass-soft-clay",
-  "true-dark-high-contrast"
+  "mritech-digital-growth"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -847,7 +844,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Set data-theme attribute to the exact theme name for CSS selector matching
     root.setAttribute("data-theme", themeName);
     
-    if (themeName === "glass-dark-neon" || themeName === "true-dark-high-contrast") {
+    if (themeName === "glass-dark-neon") {
       root.classList.add("dark", `theme-${themeName}`);
     } else {
       root.classList.add(`theme-${themeName}`);

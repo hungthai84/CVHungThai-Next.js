@@ -8,7 +8,7 @@ import {
   Sparkles, Play, Pause, Compass, Shield, Target,
   Search, ArrowRight, Check, Award, Layers, Zap, Eye,
   Navigation, AlertTriangle, ShieldCheck, HelpCircle,
-  Activity, BarChart3, Radio, RefreshCw, Quote
+  Activity, BarChart3, Radio, RefreshCw
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { 
@@ -22,7 +22,6 @@ import {
 } from "../data/tuviData";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
-import { IndustrialSubSection } from "./IndustrialStaggerContainer";
 import { cn } from "../lib/utils";
 
 export default function TuVi() {
@@ -91,44 +90,44 @@ export default function TuVi() {
     if (tier === "best") {
       return {
         accent: "emerald",
-        badge: "bg-emerald-600 text-white shadow-xs",
-        bgUnselected: "bg-emerald-500/5 hover:bg-emerald-500/15 border-emerald-500/25 dark:border-emerald-500/35 text-emerald-950 dark:text-emerald-100",
-        bgSelected: "bg-gradient-to-br from-emerald-500/20 via-teal-500/15 to-emerald-600/25 border-emerald-500 dark:border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-[1.03]",
+        badge: "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs",
+        bgUnselected: "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-100",
+        bgSelected: "bg-gradient-to-br from-emerald-500/25 via-teal-500/20 to-emerald-600/30 border-emerald-400 dark:border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_20px_rgba(16,185,129,0.35)] scale-105",
         textColor: "text-emerald-700 dark:text-emerald-300",
         accentBg: "bg-emerald-500/10 border-emerald-500/30",
-        gradientBox: "from-emerald-500/10 via-teal-500/5 to-emerald-500/10 border-emerald-500/30 dark:border-emerald-400/40",
+        gradientBox: "from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border-emerald-500/40 dark:border-emerald-400/50",
       };
     }
     if (tier === "support") {
       return {
         accent: "cyan",
-        badge: "bg-cyan-600 text-white shadow-xs",
-        bgUnselected: "bg-cyan-500/5 hover:bg-cyan-500/15 border-cyan-500/25 dark:border-cyan-500/35 text-cyan-950 dark:text-cyan-100",
-        bgSelected: "bg-gradient-to-br from-cyan-500/20 via-sky-500/15 to-blue-600/25 border-cyan-500 dark:border-cyan-400 ring-2 ring-cyan-400/80 shadow-[0_0_20px_rgba(6,182,212,0.3)] scale-[1.03]",
+        badge: "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xs",
+        bgUnselected: "bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 dark:border-cyan-500/40 text-cyan-900 dark:text-cyan-100",
+        bgSelected: "bg-gradient-to-br from-cyan-500/25 via-sky-500/20 to-blue-600/30 border-cyan-400 dark:border-cyan-400 ring-2 ring-cyan-400/80 shadow-[0_0_20px_rgba(6,182,212,0.35)] scale-105",
         textColor: "text-cyan-700 dark:text-cyan-300",
         accentBg: "bg-cyan-500/10 border-cyan-500/30",
-        gradientBox: "from-cyan-500/10 via-sky-500/5 to-blue-500/10 border-cyan-500/30 dark:border-cyan-400/40",
+        gradientBox: "from-cyan-500/15 via-sky-500/10 to-blue-500/15 border-cyan-500/40 dark:border-cyan-400/50",
       };
     }
     if (tier === "luc_hop") {
       return {
         accent: "purple",
-        badge: "bg-purple-600 text-white shadow-xs",
-        bgUnselected: "bg-purple-500/5 hover:bg-purple-500/15 border-purple-500/25 dark:border-purple-500/35 text-purple-950 dark:text-purple-100",
-        bgSelected: "bg-gradient-to-br from-purple-500/20 via-fuchsia-500/15 to-pink-600/25 border-purple-500 dark:border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_20px_rgba(168,85,247,0.3)] scale-[1.03]",
+        badge: "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-xs",
+        bgUnselected: "bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/30 dark:border-purple-500/40 text-purple-900 dark:text-purple-100",
+        bgSelected: "bg-gradient-to-br from-purple-500/25 via-fuchsia-500/20 to-pink-600/30 border-purple-400 dark:border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-105",
         textColor: "text-purple-700 dark:text-purple-300",
         accentBg: "bg-purple-500/10 border-purple-500/30",
-        gradientBox: "from-purple-500/10 via-fuchsia-500/5 to-pink-500/10 border-purple-500/30 dark:border-purple-400/40",
+        gradientBox: "from-purple-500/15 via-fuchsia-500/10 to-pink-500/15 border-purple-500/40 dark:border-purple-400/50",
       };
     }
     return {
       accent: "amber",
-      badge: "bg-amber-600 text-white shadow-xs",
-      bgUnselected: "bg-amber-500/5 hover:bg-amber-500/15 border-amber-500/25 dark:border-amber-500/35 text-amber-950 dark:text-amber-100",
-      bgSelected: "bg-gradient-to-br from-amber-500/20 via-orange-500/15 to-amber-600/25 border-amber-500 dark:border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.3)] scale-[1.03]",
+      badge: "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-xs",
+      bgUnselected: "bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 dark:border-amber-500/40 text-amber-900 dark:text-amber-100",
+      bgSelected: "bg-gradient-to-br from-amber-500/25 via-orange-500/20 to-amber-600/30 border-amber-400 dark:border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.35)] scale-105",
       textColor: "text-amber-700 dark:text-amber-300",
       accentBg: "bg-amber-500/10 border-amber-500/30",
-      gradientBox: "from-amber-500/10 via-orange-500/5 to-amber-500/10 border-amber-500/30 dark:border-amber-400/40",
+      gradientBox: "from-amber-500/15 via-orange-500/10 to-amber-500/15 border-amber-500/40 dark:border-amber-400/50",
     };
   };
 
@@ -138,14 +137,18 @@ export default function TuVi() {
       className="relative w-full min-h-full flex flex-col justify-start items-center p-3 sm:p-4.5 md:p-6 lg:p-6 font-sans text-slate-800 dark:text-slate-100"
     >
       {/* Main Container - Thẻ chứa toàn bộ trang Tử vi */}
-      <div className="w-full bg-transparent flex flex-col gap-6 sm:gap-7">
+      <div className="w-full bg-transparent flex flex-col gap-5 sm:gap-6">
 
-        {/* 0. HEADER SECTION */}
-        <IndustrialSubSection hasIndustrialAccent>
+        {/* Container Tử vi */}
+        <div 
+          id="info-card-tuvi" 
+          className="w-full flex flex-col gap-6 relative z-10"
+        >
+          {/* Header Card Tử vi */}
           <PageCardHeader pageId="tuvi">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-5 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
-              <span className="text-caption font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
+              <span className="text-caption font-mono font-black text-purple-700 dark:text-purple-400 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
                 {isVi ? "Giáp Tý 1984 • Hải Trung Kim • 5 Phân khúc chuyên sâu" : "1984 Wood Rat • Sea Metal • 5 In-depth Sections"}
               </span>
             </div>
@@ -156,59 +159,82 @@ export default function TuVi() {
               </span>
             </div>
           </PageCardHeader>
-        </IndustrialSubSection>
 
-        {/* ================= KHỐI 6 THẺ NGUYÊN TẮC & TRIẾT LÝ HÀNH ĐỘNG ================= */}
-        <IndustrialSubSection>
-          <div id="card-tuvi-philosophy-wrapper" className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-amber-500/30 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-amber-200/50 dark:border-amber-800/40">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                  {isVi ? "6 Triết Lý & Nguyên Tắc Hành Động" : "6 Core Action Principles"}
-                </h3>
-              </div>
-              <span className="text-caption font-mono text-slate-500 dark:text-slate-400">
-                {isVi ? "Kim chỉ nam vận hành" : "Operational Compass"}
-              </span>
-            </div>
-
-            <div id="tuvi-philosophy-cards" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 w-full">
+          {/* ================= KHỐI 6 THẺ NGUYÊN TẮC & TRIẾT LÝ HÀNH ĐỘNG ================= */}
+          <div id="card-tuvi-philosophy-wrapper" className="w-full bg-white/75 dark:bg-slate-900/80 border border-slate-200/80 dark:border-amber-500/30 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300">
+            <div id="tuvi-philosophy-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 w-full">
               {ACTION_PHILOSOPHY_CARDS.map((card) => {
                 const renderIcon = () => {
                   switch (card.iconType) {
                     case "target":
-                      return <Target className="w-5 h-5 stroke-[2.2]" />;
+                      return (
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <circle cx="12" cy="12" r="6" />
+                          <circle cx="12" cy="12" r="2" />
+                        </svg>
+                      );
                     case "trending":
                       return <TrendingUp className="w-5 h-5 stroke-[2.2]" />;
                     case "heart":
                       return <Heart className="w-5 h-5 stroke-[2.2]" />;
                     case "compass":
-                      return <Compass className="w-5 h-5 stroke-[2.2]" />;
+                      return (
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                        </svg>
+                      );
                     case "zap":
                       return <Zap className="w-5 h-5 stroke-[2.2]" />;
                     case "award":
-                      return <Award className="w-5 h-5 stroke-[2.2]" />;
+                      return (
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                      );
                     default:
                       return <Sparkles className="w-5 h-5" />;
+                  }
+                };
+
+                 const getGridPlacement = (id: string) => {
+                  switch (id) {
+                    case "strategy": // Card 1
+                      return "lg:col-start-1 lg:row-start-1 md:col-start-1 md:row-start-1";
+                    case "data": // Card 2
+                      return "lg:col-start-2 lg:row-start-1 md:col-start-2 md:row-start-1";
+                    case "heart": // Card 3
+                      return "lg:col-start-3 lg:row-start-1 md:col-start-1 md:row-start-2";
+                    case "truth": // Card 4
+                      return "lg:col-start-1 lg:row-start-2 md:col-start-2 md:row-start-2";
+                    case "action": // Card 5
+                      return "lg:col-start-1 lg:row-start-3 md:col-start-2 md:row-start-3";
+                    case "result": // Card 6
+                      return "lg:col-start-2 lg:row-start-2 md:col-start-1 md:row-start-3";
+                    default:
+                      return "";
                   }
                 };
 
                 return (
                   <div 
                     key={card.id}
-                    className="rounded-2xl p-4 sm:p-4.5 bg-white/95 dark:bg-slate-900/90 border border-amber-200/70 dark:border-amber-500/25 shadow-2xs hover:shadow-md hover:border-amber-400/80 transition-all duration-300 flex flex-col justify-start text-left gap-2.5 backdrop-blur-md group"
+                    className={cn(
+                      "rounded-2xl p-4 sm:p-5 bg-white/95 dark:bg-slate-900/90 border border-amber-200/80 dark:border-amber-500/30 shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-start text-left gap-2.5 backdrop-blur-md",
+                      getGridPlacement(card.id)
+                    )}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/10 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-300/50 dark:border-amber-700/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-100/90 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-700/50 flex items-center justify-center shrink-0">
                         {renderIcon()}
                       </div>
-                      <h4 className="text-sm sm:text-base font-bold text-amber-900 dark:text-amber-300 tracking-tight leading-snug">
+                      <h4 className="text-sm sm:text-base font-bold text-[#8B4513] dark:text-amber-300 tracking-tight leading-snug">
                         {card.title}
                       </h4>
                     </div>
 
-                    <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed font-normal pt-0.5">
+                    <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed font-normal pt-1">
                       {card.description}
                     </p>
                   </div>
@@ -216,37 +242,36 @@ export default function TuVi() {
               })}
             </div>
           </div>
-        </IndustrialSubSection>
 
-        {/* ================= PHẦN 1: THÔNG TIN CHUNG & BÁT TRẠCH PHONG THỦY ================= */}
-        <IndustrialSubSection>
-          <div id="tuvi-section-1" className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-purple-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5">
+          {/* ================= PHẦN 1: THÔNG TIN CHUNG & BÁT TRẠCH PHONG THỦY ================= */}
+          <div id="tuvi-section-1" className="w-full bg-white/75 dark:bg-slate-900/80 border border-slate-200/80 dark:border-purple-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(168,85,247,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-purple-400/60 backdrop-blur-2xl transition-all duration-300 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-purple-200/50 dark:border-purple-800/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
                   <User className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-purple-600 dark:text-purple-400 tracking-wide">
+                <h3 className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-wide">
                   1. Thông tin chung & Bản mệnh phong thủy
                 </h3>
               </div>
-              <span className="text-caption font-mono text-purple-700 dark:text-purple-300">
+              <span className="text-3xs font-black px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">
                 Lá số tử vi 1984
               </span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
               {/* Cột trái: La Bàn Âm Dương & Trình phát âm thanh thiền định */}
-              <div className="lg:col-span-4 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-slate-900/5 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-slate-900/60 border border-purple-200/60 dark:border-purple-800/50 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-between text-center space-y-4 shadow-sm">
-                <div className="flex items-center justify-between pb-2.5 border-b border-purple-200/40 dark:border-purple-800/40 w-full text-left">
+              <div className="lg:col-span-4 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-slate-900/5 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-slate-900/60 border border-purple-200/60 dark:border-purple-800/50 rounded-2xl p-5 flex flex-col items-center justify-between text-center space-y-4 shadow-sm">
+                {/* Header định dạng giống Chi tiết phỏng vấn */}
+                <div className="flex items-center justify-between pb-3 border-b border-purple-200/40 dark:border-purple-800/40 w-full text-left">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-4 bg-purple-600 rounded-full shrink-0" />
                     <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                    <h4 className="text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 tracking-wide">
+                    <h4 className="text-xs sm:text-sm font-black text-purple-600 dark:text-purple-400 tracking-wide">
                       {isVi ? "Âm Dương La Bàn" : "Yin Yang Compass"}
                     </h4>
                   </div>
-                  <span className="text-caption font-mono text-purple-700 dark:text-purple-300">
+                  <span className="text-3xs font-black px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20">
                     1984 - 2026+
                   </span>
                 </div>
@@ -291,10 +316,10 @@ export default function TuVi() {
                         </div>
                       </div>
 
-                      <span className="absolute top-1 text-3xs font-bold text-amber-300 z-10 pointer-events-none drop-shadow">N</span>
-                      <span className="absolute bottom-1 text-3xs font-bold text-amber-300 z-10 pointer-events-none drop-shadow">S</span>
-                      <span className="absolute left-1.5 text-3xs font-bold text-amber-300 z-10 pointer-events-none drop-shadow">W</span>
-                      <span className="absolute right-1.5 text-3xs font-bold text-amber-300 z-10 pointer-events-none drop-shadow">E</span>
+                      <span className="absolute top-1 text-3xs font-black text-amber-300 z-10 pointer-events-none drop-shadow">N</span>
+                      <span className="absolute bottom-1 text-3xs font-black text-amber-300 z-10 pointer-events-none drop-shadow">S</span>
+                      <span className="absolute left-1.5 text-3xs font-black text-amber-300 z-10 pointer-events-none drop-shadow">W</span>
+                      <span className="absolute right-1.5 text-3xs font-black text-amber-300 z-10 pointer-events-none drop-shadow">E</span>
                     </div>
                   </div>
                 </div>
@@ -328,23 +353,23 @@ export default function TuVi() {
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-5 bg-purple-600 rounded-full shrink-0" />
                       <User className="w-4.5 h-4.5 text-purple-600 dark:text-purple-400 shrink-0" />
-                      <h4 className="text-sm sm:text-base font-bold text-purple-700 dark:text-purple-300 tracking-wide">
+                      <h4 className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300 tracking-wide">
                         {TU_VI_PROFILE.fullName}
                       </h4>
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-caption font-mono font-bold text-purple-700 dark:text-purple-300 px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 shrink-0">
+                      <span className="text-3xs font-black px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 shrink-0">
                         {TU_VI_PROFILE.elementNapAm} • {TU_VI_PROFILE.zodiacAnimal}
                       </span>
-                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-full text-caption font-bold shrink-0">
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-full text-3xs font-black shrink-0">
                         <Star className="w-3 h-3 fill-amber-500 text-amber-500 shrink-0" />
                         <span>{TU_VI_PROFILE.cungPhi}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Lưới 6 thẻ thông số nhân thân */}
+                  {/* Lưới 6 thẻ thông số nhân thân với Icon minh họa trực quan */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {/* 1. Dương lịch */}
                     <div className="p-3.5 bg-indigo-50/70 dark:bg-indigo-950/30 rounded-xl border border-indigo-200/50 dark:border-indigo-800/40 flex items-start gap-3 transition-all hover:border-indigo-400 shadow-2xs">
@@ -353,7 +378,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Dương lịch</div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateSolar}</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateSolar}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">Giờ: {TU_VI_PROFILE.birthTimeSolar}</div>
                       </div>
                     </div>
@@ -365,7 +390,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-400">Âm lịch</div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateLunar}</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateLunar}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">Năm: {TU_VI_PROFILE.zodiacSign}</div>
                       </div>
                     </div>
@@ -377,7 +402,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400">Giờ sinh can chi</div>
-                        <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthHourLunar}</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthHourLunar}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">Quý Dậu</div>
                       </div>
                     </div>
@@ -389,7 +414,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Bản mệnh nạp âm</div>
-                        <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">{TU_VI_PROFILE.elementNapAm}</div>
+                        <div className="text-xs font-black text-emerald-700 dark:text-emerald-300">{TU_VI_PROFILE.elementNapAm}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">{TU_VI_PROFILE.elementCore}</div>
                       </div>
                     </div>
@@ -401,7 +426,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">Cung mệnh phi</div>
-                        <div className="text-xs font-bold text-blue-700 dark:text-blue-300">{TU_VI_PROFILE.menhQuai}</div>
+                        <div className="text-xs font-black text-blue-700 dark:text-blue-300">{TU_VI_PROFILE.menhQuai}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">{TU_VI_PROFILE.cungMenh}</div>
                       </div>
                     </div>
@@ -413,7 +438,7 @@ export default function TuVi() {
                       </div>
                       <div>
                         <div className="text-3xs font-extrabold uppercase tracking-wider text-rose-600 dark:text-rose-400">Con số may mắn</div>
-                        <div className="text-xs font-bold text-rose-700 dark:text-rose-300">{TU_VI_PROFILE.luckyNumbers.join(", ")}</div>
+                        <div className="text-xs font-black text-rose-700 dark:text-rose-300">{TU_VI_PROFILE.luckyNumbers.join(", ")}</div>
                         <div className="text-2xs font-semibold text-slate-500 dark:text-slate-400">Kích hoạt vượng khí</div>
                       </div>
                     </div>
@@ -430,11 +455,11 @@ export default function TuVi() {
                   <div className="flex items-center justify-between pb-2 border-b border-emerald-500/20">
                     <div className="flex items-center gap-2">
                       <Navigation className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      <h4 className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                      <h4 className="text-xs sm:text-sm font-black text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
                         4 Hướng Đại Cát (Tây Tứ Trạch)
                       </h4>
                     </div>
-                    <span className="text-caption font-mono text-emerald-700 dark:text-emerald-300">
+                    <span className="text-3xs font-black px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
                       Cát Vượng
                     </span>
                   </div>
@@ -443,10 +468,10 @@ export default function TuVi() {
                     {TU_VI_PROFILE.luckyDirections.map((dir, idx) => (
                       <div key={idx} className="p-2.5 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-emerald-200/60 dark:border-emerald-800/40 flex flex-col justify-between">
                         <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-xs font-bold text-slate-900 dark:text-white">
+                          <span className="text-xs font-black text-slate-900 dark:text-white">
                             🧭 {dir.name}
                           </span>
-                          <span className="text-3xs font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                          <span className="text-3xs font-black px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
                             {dir.meaning}
                           </span>
                         </div>
@@ -463,11 +488,11 @@ export default function TuVi() {
                   <div className="flex items-center justify-between pb-2 border-b border-amber-500/20">
                     <div className="flex items-center gap-2">
                       <Palette className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                      <h4 className="text-xs sm:text-sm font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
+                      <h4 className="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-300 uppercase tracking-wide">
                         Ngũ Hành Sắc Tộc & Hợp Kỵ
                       </h4>
                     </div>
-                    <span className="text-caption font-mono text-amber-700 dark:text-amber-300">
+                    <span className="text-3xs font-black px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300">
                       Phong Thủy Sắc Màu
                     </span>
                   </div>
@@ -502,26 +527,25 @@ export default function TuVi() {
               </div>
             </div>
           </div>
-        </IndustrialSubSection>
 
-        {/* ================= PHẦN 2: TÍNH CÁCH TRONG CÔNG VIỆC ================= */}
-        <IndustrialSubSection>
-          <div id="tuvi-section-2" className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-blue-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5">
+          {/* ================= PHẦN 2: TÍNH CÁCH TRONG CÔNG VIỆC ================= */}
+          <div id="tuvi-section-2" className="w-full bg-white/75 dark:bg-slate-900/80 border border-slate-200/80 dark:border-blue-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(59,130,246,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-blue-400/60 backdrop-blur-2xl transition-all duration-300 space-y-5">
+            {/* Tiêu đề section 2 */}
             <div className="flex items-center justify-between pb-3 border-b border-blue-200/50 dark:border-blue-800/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                   <Briefcase className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-blue-600 dark:text-blue-400 tracking-wide">
+                <h3 className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400 tracking-wide">
                   2. Tính cách & Phong cách quản trị trong công việc
                 </h3>
               </div>
-              <span className="text-caption font-mono text-blue-700 dark:text-blue-300">
+              <span className="text-3xs font-black px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
                 4 Trụ cột cốt lõi
               </span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {WORK_PERSONALITY_TRAITS.map((trait, index) => {
                 const colorPalette = [
                   { 
@@ -561,18 +585,19 @@ export default function TuVi() {
                 return (
                   <div 
                     key={trait.id}
-                    className={`p-4 sm:p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border ${colorPalette.border} ${colorPalette.glow} shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-3.5 backdrop-blur-md`}
+                    className={`p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border ${colorPalette.border} ${colorPalette.glow} shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-3.5 backdrop-blur-md`}
                   >
                     <div className="space-y-2.5">
+                      {/* Tiêu đề sub card */}
                       <div className={`w-full flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b ${colorPalette.border}`}>
                         <div className="flex items-center gap-2">
                           <span className={`w-2 h-5 ${colorPalette.bar} rounded-full shrink-0`} />
                           <Sparkles className={`w-4 h-4 ${colorPalette.text} shrink-0`} />
-                          <h4 className={`text-sm sm:text-base font-bold ${colorPalette.text} tracking-wide`}>
+                          <h4 className={`text-sm sm:text-base font-black ${colorPalette.text} tracking-wide`}>
                             {trait.title}
                           </h4>
                         </div>
-                        <span className={`text-caption font-mono font-bold ${colorPalette.badgeText}`}>
+                        <span className={`text-3xs font-black px-2.5 py-0.5 rounded-full ${colorPalette.bg} ${colorPalette.badgeText} border ${colorPalette.border} shrink-0`}>
                           {trait.tag}
                         </span>
                       </div>
@@ -599,21 +624,19 @@ export default function TuVi() {
               })}
             </div>
           </div>
-        </IndustrialSubSection>
 
-        {/* ================= PHẦN 3: CHÂN DUNG TỬ VI TRONG CÔNG VIỆC ================= */}
-        <IndustrialSubSection>
-          <div id="tuvi-section-3" className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-emerald-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5">
+          {/* ================= PHẦN 3: CHÂN DUNG TỬ VI TRONG CÔNG VIỆC ================= */}
+          <div id="tuvi-section-3" className="w-full bg-white/75 dark:bg-slate-900/80 border border-slate-200/80 dark:border-emerald-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(16,185,129,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-emerald-400/60 backdrop-blur-2xl transition-all duration-300 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-emerald-200/50 dark:border-emerald-800/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <Target className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
+                <h3 className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
                   3. Chân dung tử vi & Ứng dụng ngũ hành trong quản trị
                 </h3>
               </div>
-              <span className="text-caption font-mono text-emerald-700 dark:text-emerald-300">
+              <span className="text-3xs font-black px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
                 Lục Cung & Ngũ Hành
               </span>
             </div>
@@ -622,7 +645,7 @@ export default function TuVi() {
             <div className="space-y-3.5">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-4 bg-emerald-500 rounded-full shrink-0" />
-                <h4 className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                <h4 className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                   Lục cung trọng yếu (Tam hợp Thân – Tý – Thìn)
                 </h4>
               </div>
@@ -649,11 +672,11 @@ export default function TuVi() {
                           <div className="flex items-center gap-2">
                             <span className={`w-2 h-4 ${palette.bar} rounded-full shrink-0`} />
                             <Target className={`w-4 h-4 ${palette.text} shrink-0`} />
-                            <h5 className={`font-bold text-sm ${palette.text}`}>
+                            <h5 className={`font-black text-sm ${palette.text}`}>
                               {palace.name}
                             </h5>
                           </div>
-                          <span className={`text-caption font-mono font-bold ${palette.badgeText}`}>
+                          <span className={`text-3xs font-black px-2 py-0.5 rounded-full ${palette.bg} ${palette.badgeText} border ${palette.border} shrink-0`}>
                             {palace.tag}
                           </span>
                         </div>
@@ -696,7 +719,7 @@ export default function TuVi() {
             <div className="space-y-3.5 pt-3 border-t border-emerald-200/40 dark:border-emerald-800/40">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-4 bg-teal-500 rounded-full shrink-0" />
-                <h4 className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                <h4 className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                   Ứng dụng ngũ hành trong quản trị vận hành (SOP - CRM - CX)
                 </h4>
               </div>
@@ -710,7 +733,7 @@ export default function TuVi() {
                           {el.element}
                         </span>
                       </div>
-                      <h5 className={`text-xs font-bold ${el.titleColor}`}>
+                      <h5 className={`text-xs font-black ${el.titleColor}`}>
                         {el.subtitle}
                       </h5>
                       <p className="text-caption text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -722,21 +745,19 @@ export default function TuVi() {
               </div>
             </div>
           </div>
-        </IndustrialSubSection>
 
-        {/* ================= PHẦN 4: CÁC TUỔI HỢP TÁC LÀM VIỆC ================= */}
-        <IndustrialSubSection>
-          <div id="tuvi-section-4" className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-teal-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5">
+          {/* ================= PHẦN 4: CÁC TUỔI HỢP TÁC LÀM VIỆC ================= */}
+          <div id="tuvi-section-4" className="w-full bg-white/75 dark:bg-slate-900/80 border border-slate-200/80 dark:border-teal-400/35 rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(20,184,166,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.18)] hover:dark:border-teal-400/60 backdrop-blur-2xl transition-all duration-300 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-teal-200/50 dark:border-teal-800/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
                   <Users className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-teal-600 dark:text-teal-400 tracking-wide">
+                <h3 className="text-base sm:text-lg font-black text-teal-600 dark:text-teal-400 tracking-wide">
                   4. Các tuổi hợp tác làm việc (Tam Hợp • Lục Hợp • Tương Trợ)
                 </h3>
               </div>
-              <span className="text-caption font-mono text-teal-700 dark:text-teal-300">
+              <span className="text-3xs font-black px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20">
                 Ma trận 12 Con Giáp
               </span>
             </div>
@@ -762,7 +783,7 @@ export default function TuVi() {
                     <button
                       type="button"
                       onClick={handleYearSearch}
-                      className="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
+                      className="px-4 py-2 rounded-xl text-xs font-black bg-teal-600 hover:bg-teal-700 text-white transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
                     >
                       Tra cứu
                     </button>
@@ -782,7 +803,7 @@ export default function TuVi() {
                           playUiSound("click");
                           setZodiacFilterTier(f.id);
                         }}
-                        className={`px-3 py-1.5 rounded-xl text-2xs font-bold transition-all shrink-0 cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-xl text-2xs font-black transition-all shrink-0 cursor-pointer ${
                           zodiacFilterTier === f.id
                             ? "bg-teal-600 text-white shadow-xs scale-102"
                             : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -816,13 +837,13 @@ export default function TuVi() {
                         <span className={`text-2.5xl transition-transform duration-300 ${isSelected ? "scale-110 drop-shadow-md" : ""}`}>
                           {item.icon}
                         </span>
-                        <span className="text-xs font-bold text-slate-900 dark:text-white mt-1">
+                        <span className="text-xs font-black text-slate-900 dark:text-white mt-1">
                           Tuổi {item.nameVi}
                         </span>
                         <span className="text-3xs text-slate-500 dark:text-slate-400 font-semibold">
                           ({item.animalVi})
                         </span>
-                        <span className={`mt-1.5 text-3xs font-bold px-2 py-0.5 rounded-full leading-tight ${theme.badge}`}>
+                        <span className={`mt-1.5 text-3xs font-black px-2 py-0.5 rounded-full leading-tight ${theme.badge}`}>
                           {item.score}
                         </span>
                       </button>
@@ -842,20 +863,20 @@ export default function TuVi() {
                           <div className="flex items-center gap-3">
                             <span className="text-4xl sm:text-5xl drop-shadow-md">{currentZodiac.icon}</span>
                             <div>
-                              <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                              <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
                                 Tuổi {currentZodiac.nameVi} ({currentZodiac.animalVi}) • {currentZodiac.relationshipVi}
                               </h4>
                               <div id="card-zodiac-years-detail" className="mt-1.5 p-2 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs inline-block">
                                 <p className="text-body-sm text-slate-700 dark:text-slate-300 font-semibold flex items-center gap-1.5">
                                   <span>📅 Năm sinh tiêu biểu:</span>
-                                  <span className="font-bold text-slate-900 dark:text-white">{currentZodiac.years}</span>
+                                  <span className="font-black text-slate-900 dark:text-white">{currentZodiac.years}</span>
                                 </p>
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${activeTheme.badge}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-black ${activeTheme.badge}`}>
                               {currentZodiac.tierLabelVi}
                             </span>
                           </div>
@@ -863,17 +884,17 @@ export default function TuVi() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                           <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/60 dark:border-slate-800/60 shadow-2xs">
-                            <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏢 Môi trường hợp nhất:</span>
+                            <span className="font-extrabold text-slate-800 dark:text-slate-200 block mb-1">🏢 Môi trường hợp nhất:</span>
                             <p className="font-semibold text-slate-900 dark:text-white leading-relaxed">{currentZodiac.workplaceFitVi}</p>
                           </div>
                           <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/60 dark:border-slate-800/60 shadow-2xs">
-                            <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🧭 Hướng bàn tương thích:</span>
+                            <span className="font-extrabold text-slate-800 dark:text-slate-200 block mb-1">🧭 Hướng bàn tương thích:</span>
                             <p className="font-semibold text-slate-900 dark:text-white leading-relaxed">{currentZodiac.deskDirectionVi}</p>
                           </div>
                         </div>
 
                         <div className={`p-4 rounded-2xl ${activeTheme.accentBg} border text-xs leading-relaxed space-y-1.5 shadow-2xs`}>
-                          <span className={`font-bold ${activeTheme.textColor} flex items-center gap-1.5 text-sm`}>
+                          <span className={`font-black ${activeTheme.textColor} flex items-center gap-1.5 text-sm`}>
                             <span>💡 Đánh giá tương hợp & Lời khuyên phối hợp:</span>
                           </span>
                           <p className="text-slate-800 dark:text-slate-200 font-medium leading-relaxed">{currentZodiac.workplaceAdviceVi}</p>
@@ -883,7 +904,7 @@ export default function TuVi() {
                       {/* Thẻ % tạo thành thẻ nằm cuối cùng */}
                       <div className={`p-4 rounded-2xl bg-gradient-to-r ${activeTheme.gradientBox} border shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 mt-3`}>
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-xl ${activeTheme.badge} flex items-center justify-center font-bold text-base shadow-md shrink-0`}>
+                          <div className={`w-10 h-10 rounded-xl ${activeTheme.badge} flex items-center justify-center font-black text-base shadow-md shrink-0`}>
                             %
                           </div>
                           <div>
@@ -897,7 +918,7 @@ export default function TuVi() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <span className={`text-lg sm:text-xl font-bold bg-white/95 dark:bg-slate-900/95 px-4 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs ${activeTheme.textColor}`}>
+                          <span className={`text-lg sm:text-xl font-black bg-white/95 dark:bg-slate-900/95 px-4 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs ${activeTheme.textColor}`}>
                             {currentZodiac.score}
                           </span>
                         </div>
@@ -912,11 +933,9 @@ export default function TuVi() {
               </div>
             </div>
           </div>
-        </IndustrialSubSection>
 
-        {/* ================= 5. HERO QUOTE BANNER (CHUYỂN XUỐNG CUỐI TRANG TỬ VI) ================= */}
-        <IndustrialSubSection>
-          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-purple-950/90 via-indigo-950/85 to-slate-950/90 text-white border border-purple-500/30 shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(168,85,247,0.25)] backdrop-blur-xl">
+          {/* ================= HERO QUOTE BANNER (CHUYỂN XUỐNG CUỐI TRANG TỬ VI) ================= */}
+          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-purple-900/90 via-indigo-900/85 to-slate-900/90 text-white border border-purple-500/30 shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(168,85,247,0.25)] backdrop-blur-xl mt-4">
             <div className="absolute -top-16 -right-16 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
             
@@ -924,11 +943,11 @@ export default function TuVi() {
               <div className="space-y-2 max-w-4xl">
                 <div className="flex items-center gap-2 text-amber-300">
                   <Sparkles className="w-4 h-4 shrink-0" />
-                  <span className="text-xs font-bold uppercase tracking-widest font-mono">
+                  <span className="text-xs font-black uppercase tracking-widest">
                     Châm ngôn bản mệnh • Hải Trung Kim
                   </span>
                 </div>
-                <h2 className="text-base sm:text-lg md:text-xl font-bold text-amber-200/95 leading-snug">
+                <h2 className="text-base sm:text-lg md:text-xl font-black text-amber-200/95 leading-snug">
                   {TU_VI_PROFILE.overviewQuote}
                 </h2>
                 <p className="text-xs sm:text-sm text-purple-200/90 italic font-medium">
@@ -944,9 +963,10 @@ export default function TuVi() {
               </div>
             </div>
           </div>
-        </IndustrialSubSection>
 
+        </div>
       </div>
     </section>
   );
 }
+

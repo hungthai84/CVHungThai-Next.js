@@ -1646,11 +1646,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       {/* 2. Circular Logo Node with Horizontal Overlapping Logo Stack for 2013 */}
                       <div className="h-14 xs:h-16 sm:h-18 md:h-20 w-full flex items-center justify-center relative">
                         {item.yearLabel === "2013" ? (
-                          /* Horizontal Collapsed to 1 Unit & Expand on Hover Logo Stack for 2013: VED + Garena + Gcafe + Shopee + Airpay */
+                          /* 3D Stacked Overlapping Logo Stack for 2013: VED + Garena + Gcafe + Shopee + Airpay */
                           <div 
                             className={cn(
-                              "flex flex-row items-center justify-center -space-x-[40px] sm:-space-x-[52px] group-hover:space-x-1 sm:group-hover:space-x-1.5 z-10 transition-all duration-500 ease-out px-1 py-1",
-                              isSelected ? "scale-105" : ""
+                              "relative w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] z-10 transition-all duration-300",
+                              isSelected ? "scale-105" : "group-hover:scale-105"
                             )}
                           >
                             {[
@@ -1669,15 +1669,19 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     setActiveYear(subLogo.key);
                                   }}
                                   className={cn(
-                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-300 relative shrink-0 cursor-pointer",
+                                    "w-full h-full rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute top-0 left-0 cursor-pointer origin-center",
                                     isCurrentLogo
                                       ? "z-30 scale-110 ring-2 ring-offset-1 shadow-lg"
-                                      : "z-10 opacity-90 group-hover:opacity-100 hover:scale-110 hover:z-40"
+                                      : "opacity-85 hover:opacity-100"
                                   )}
                                   style={{
                                     borderColor: subLogo.color,
                                     zIndex: isCurrentLogo ? 30 : 20 - lIdx,
-                                    boxShadow: isCurrentLogo ? `0 0 12px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.18)`
+                                    // A neat 3D stack effect with translation based on index
+                                    transform: `translate(${lIdx * 3}px, ${lIdx * -3}px) scale(${1 - lIdx * 0.04})`,
+                                    boxShadow: isCurrentLogo 
+                                      ? `0 0 12px ${subLogo.color}90` 
+                                      : `2px 2px 6px rgba(0,0,0,0.15)`
                                   }}
                                   title={subLogo.name}
                                 >

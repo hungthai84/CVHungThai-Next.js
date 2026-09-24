@@ -396,14 +396,12 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={(e) => {
                     e.stopPropagation();
                     const nextTheme = theme === "glass-dark-neon" 
-                      ? "glass-soft-clay"
-                      : (theme === "glass-soft-clay"
-                          ? "fintech-soft-glass" 
-                          : (theme === "fintech-soft-glass" ? "mritech-digital-growth" : "glass-dark-neon"));
+                      ? "mritech-digital-growth"
+                      : "glass-dark-neon";
                     handleThemeToggle(nextTheme);
                   }}
                   className="relative z-20 shrink-0 w-[130px] sm:w-[142px] h-[38px] sm:h-[40px] -ml-[94px] sm:-ml-[104px] flex items-center px-2.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/20 text-slate-800 dark:text-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.12)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-xl hover:scale-105 active:scale-95 transition-transform cursor-pointer text-left"
-                  title={lang === "vi" ? "Giao diện: Glass Soft / Fintech Soft / MRITECH / Dark Neon (Click để đổi)" : "Theme: Glass Soft / Fintech Soft / MRITECH / Dark Neon (Click to change)"}
+                  title={lang === "vi" ? "Giao diện: MRITECH / Dark Neon (Click để đổi)" : "Theme: MRITECH / Dark Neon (Click to change)"}
                 >
                   <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/15 text-blue-500 dark:bg-cyan-500/15 dark:text-cyan-400 shrink-0 mr-2 shadow-xs">
                     <div className="apple-theme-icon-wrapper">
@@ -414,11 +412,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   <span className="truncate">
                     {theme === "glass-dark-neon" 
                       ? (lang === "vi" ? "Glass Tối" : "Dark Neon") 
-                      : (theme === "glass-soft-clay"
-                          ? (lang === "vi" ? "Glass Soft ☁️" : "Glass Soft ☁️")
-                          : (theme === "fintech-soft-glass"
-                              ? (lang === "vi" ? "Fintech Soft 💳" : "Fintech Soft 💳")
-                              : (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")))}
+                      : (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")}
                   </span>
                 </button>
 
@@ -505,36 +499,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     </span>
                   </button>
 
-                  {/* 1.5. Nút True Dark Mode (Tối Tương Phản Cao) - Dedicated Explicit Toggle Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsStackPinned(true);
-                      if (theme === "true-dark-high-contrast") {
-                        handleThemeToggle("glass-dark-neon");
-                      } else {
-                        handleThemeToggle("true-dark-high-contrast");
-                      }
-                    }}
-                    className={cn(
-                      "w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-bold flex items-center justify-between transition-all duration-200 cursor-pointer border hover:scale-[1.02] active:scale-98 shadow-xs",
-                      theme === "true-dark-high-contrast"
-                        ? "bg-slate-950 text-cyan-400 border-cyan-400/80 ring-1 ring-cyan-400/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
-                        : "bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border-slate-200/60 dark:border-white/10 text-slate-800 dark:text-slate-100"
-                    )}
-                    title={lang === "vi" ? "Chế độ True Dark (Đen tuyệt đối & Tương phản cao)" : "Toggle High Contrast True Dark Mode"}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 shrink-0">
-                        <Moon className="w-3.5 h-3.5" />
-                      </div>
-                      <span className="truncate">{lang === "vi" ? "True Dark" : "True Dark"}</span>
-                    </div>
-                    <span className={cn("text-3xs font-black px-2 py-0.5 rounded-full uppercase shrink-0", theme === "true-dark-high-contrast" ? "bg-cyan-400 text-slate-950" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300")}>
-                      {theme === "true-dark-high-contrast" ? "ON" : "OFF"}
-                    </span>
-                  </button>
-
                   {/* 2. Nút Giao diện (Theme) - Bung xuống */}
                   <div className="relative theme-dropdown-container z-[60]">
                     <button
@@ -558,11 +522,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         <span className="truncate">
                           {theme === "glass-dark-neon"
                             ? (lang === "vi" ? "Glass Tối Neon" : "Glass Dark Neon")
-                            : (theme === "glass-soft-clay"
-                                ? (lang === "vi" ? "Glass Soft UI ☁️" : "Glass Soft UI ☁️")
-                                : (theme === "fintech-soft-glass"
-                                    ? (lang === "vi" ? "Fintech Soft 💳" : "Fintech Soft 💳")
-                                    : (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")))}
+                            : (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")}
                         </span>
                       </div>
                       <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform ${isThemeDropdownOpen ? "-rotate-90" : ""}`} />
@@ -587,20 +547,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
 
                           {[
                             { 
-                              id: "glass-soft-clay", 
-                              label: lang === "vi" ? "Glass Soft UI (Soft Claymorphism) ☁️" : "Glass Soft UI (Soft Claymorphism) ☁️", 
-                              desc: lang === "vi" ? "Giao diện Glass Soft Claymorphism: Thẻ kính mờ blur 20px, điểm nhấn tím-cam & nút pill" : "Soft Claymorphism & Glassmorphism: Frosted glass blur 20px, lavender-peach glows & pill action buttons", 
-                              Icon: Sparkles, 
-                              color: "text-indigo-500" 
-                            },
-                            { 
-                              id: "fintech-soft-glass", 
-                              label: lang === "vi" ? "Fintech Soft Glass UI 💳" : "Fintech Soft Glass UI 💳", 
-                              desc: lang === "vi" ? "Giao diện Fintech Soft UI: Thẻ nổi Neumorphic, điểm nhấn cam-cobalt & bo góc 24px" : "Fintech Soft UI: Clean pearl glass, Neumorphic floating cards, cobalt-orange accents & 24px radius", 
-                              Icon: CreditCard, 
-                              color: "text-blue-500" 
-                            },
-                            { 
                               id: "mritech-digital-growth", 
                               label: lang === "vi" ? "Glass MRITECH Digital Growth 🚀" : "MRITECH Digital Growth Glass 🚀", 
                               desc: lang === "vi" ? "Giao diện Thương hiệu Số: Nền Pearl, Nút Gradient 3 tông (Xanh-Tím-Cam) & Bo góc 24px" : "Digital Brand Theme: Pearl Glass canvas, 3-tone CTA gradient (Blue-Purple-Orange) & 24px Glass", 
@@ -611,13 +557,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                               id: "glass-dark-neon", 
                               label: lang === "vi" ? "Glass Tối Neon (Next Themes)" : "Glass Dark Neon (Next Themes)", 
                               desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
-                              Icon: Moon, 
-                              color: "text-cyan-400" 
-                            },
-                            { 
-                              id: "true-dark-high-contrast", 
-                              label: lang === "vi" ? "True Dark (Tương Phản Cao) 🌘" : "True Dark (High Contrast) 🌘", 
-                              desc: lang === "vi" ? "Chế độ tối siêu tương phản, nền pitch black giúp đọc tốt môi trường thiếu sáng" : "Pitch black high contrast theme ensuring readability in low light environments", 
                               Icon: Moon, 
                               color: "text-cyan-400" 
                             }
@@ -804,27 +743,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
                   </button>
 
-                  <div className="h-px bg-slate-200/50 dark:bg-white/10 my-0.5" />
 
-                  {/* 7. Chế độ Trình chiếu Slide */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent("open-presentation-mode"));
-                    }}
-                    className="w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-semibold flex items-center justify-between transition-all duration-200 cursor-pointer bg-blue-50/80 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-blue-900 dark:text-blue-200 hover:scale-[1.02] active:scale-98 shadow-xs"
-                    title={lang === "vi" ? "Chế độ Trình chiếu Tự động" : "Auto Presentation Mode"}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500 text-white shrink-0 shadow-xs">
-                        <Play className="w-3.5 h-3.5 fill-white" />
-                      </div>
-                      <span className="truncate font-bold">{lang === "vi" ? "Trình chiếu Slide" : "Slideshow"}</span>
-                    </div>
-                    <span className="text-3xs font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-300">
-                      AUTO
-                    </span>
-                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1023,20 +942,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
                 {/* Theme options on mobile */}
-                <button
-                  onClick={() => {
-                    setTheme("fintech-soft-glass");
-                  }}
-                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
-                    theme === "fintech-soft-glass"
-                      ? "bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-400/50 font-black shadow-sm"
-                      : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
-                  }`}
-                  title="💳 Fintech Soft Glass"
-                >
-                  <CreditCard className="w-3 h-3 text-blue-500" />
-                  <span>Fintech 💳</span>
-                </button>
                 <button
                   onClick={() => {
                     setTheme("mritech-digital-growth");

@@ -244,51 +244,9 @@ export default function BackgroundRenderer() {
       {activeType === "gradient" && (
         <div className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] pointer-events-none overflow-hidden scale-105">
           {/* Base Mesh Gradient Canvas for Light & Dark */}
-          <div className={`absolute inset-0 transition-colors duration-500 ${
-            theme === "fintech-soft-glass" 
-              ? "bg-gradient-to-br from-[#F4F6FB] via-[#EDF2F8] to-[#F8FAFD]" 
-              : (theme === "glass-soft-clay"
-                  ? "bg-gradient-to-br from-[#F5F7FD] via-[#EEF1FA] to-[#F8F9FE]"
-                  : "bg-gradient-to-br from-[#F5F7FC] via-[#EEF1FA] to-[#F8F9FE] dark:bg-[#090D16]")
-          }`} />
+          <div className="absolute inset-0 transition-colors duration-500 bg-gradient-to-br from-[#F5F7FC] via-[#EEF1FA] to-[#F8F9FE] dark:bg-[#090D16]" />
 
-          {/* GLASS SOFT CLAYMORPHISM AMBIENT BACKDROP */}
-          {theme === "glass-soft-clay" ? (
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Soft Iris & Indigo Glow top left */}
-              <div className="absolute -top-[12%] -left-[5%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-br from-[#5850EC]/20 via-[#7C3AED]/15 to-transparent blur-[110px] animate-[pulse_10s_ease-in-out_infinite]" />
-              {/* Warm Peach & Sunset Glow top right */}
-              <div className="absolute top-[8%] -right-[8%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-bl from-[#FF8A65]/25 via-[#F97316]/15 to-transparent blur-[120px] animate-[pulse_12s_ease-in-out_infinite]" />
-              {/* Mint Green & Sky Blue Glow bottom */}
-              <div className="absolute -bottom-[12%] left-[15%] w-[60vw] h-[55vw] rounded-full bg-gradient-to-tr from-[#10B981]/18 via-[#38BDF8]/20 to-transparent blur-[130px] animate-[pulse_14s_ease-in-out_infinite]" />
-              {/* Soft Frosted Glass Sphere Ring */}
-              <div className="absolute top-[28%] right-[15%] w-64 h-64 rounded-full border border-white/80 bg-white/45 shadow-[inset_0_4px_16px_rgba(255,255,255,0.9),0_20px_40px_rgba(100,110,140,0.06)] backdrop-blur-[20px] animate-[bounce_12s_ease-in-out_infinite] scale-90" />
-            </div>
-          ) : theme === "fintech-soft-glass" ? (
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Organic shape 1: Vibrant orange & sunset glow on the top right */}
-              <div 
-                className="absolute -top-[10%] -right-[8%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-bl from-[#FB923C]/35 via-[#F97316]/25 to-[#FBBF24]/20 blur-[100px] animate-[pulse_10s_ease-in-out_infinite]"
-              />
-              {/* Organic shape 2: Soft lavender & violet orb on the upper mid */}
-              <div 
-                className="absolute top-[5%] right-[25%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#8B5CF6]/20 via-[#A78BFA]/15 to-transparent blur-[120px] animate-[pulse_14s_ease-in-out_infinite]"
-              />
-              {/* Organic shape 3: Deep cobalt & electric blue curve at bottom right */}
-              <div 
-                className="absolute -bottom-[15%] right-[5%] w-[60vw] h-[55vw] rounded-full bg-gradient-to-tl from-[#2563EB]/25 via-[#3B82F6]/20 to-[#60A5FA]/15 blur-[130px] animate-[pulse_12s_ease-in-out_infinite]"
-              />
-              {/* Organic shape 4: Warm amber wave ribbon at bottom center */}
-              <div 
-                className="absolute bottom-[0%] left-[20%] w-[45vw] h-[35vw] rounded-full bg-gradient-to-tr from-[#F59E0B]/20 via-[#FBBF24]/15 to-transparent blur-[110px] animate-[pulse_16s_ease-in-out_infinite]"
-              />
-              {/* Soft aesthetic glass highlight ring */}
-              <div 
-                className="absolute top-[20%] right-[12%] w-72 h-72 rounded-full border border-white/80 bg-white/40 shadow-[inset_0_4px_16px_rgba(255,255,255,0.9),0_20px_50px_rgba(251,146,60,0.08)] backdrop-blur-[20px] animate-[bounce_11s_ease-in-out_infinite] scale-90"
-              />
-            </div>
-          ) : (
-            <>
+          <>
               {/* LIGHT MODE Ambient Multi-Color Radial Light Blobs & Abstract 3D Glass Shapes */}
               <div className="dark:hidden absolute inset-0 overflow-hidden">
                 {/* Lớp gradient mềm nền */}
@@ -364,8 +322,7 @@ export default function BackgroundRenderer() {
                 style={{ animationDuration: '12s' }}
               />
             </>
-          )}
-        </div>
+          </div>
       )}
 
       {/* 2. Video Background (Direct MP4/WebM or YouTube) */}
