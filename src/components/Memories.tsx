@@ -9,11 +9,16 @@ import { useLanguage } from "../i18n";
 import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection } from "./IndustrialStaggerContainer";
 
-interface MemoryItem {
+export interface MemoryItem {
   id: string;
+  companyId?: "mobifone" | "htvc" | "ved" | "prudential" | "momo" | "finviet" | "v247" | string;
   category: "awards" | "team" | "projects" | "milestones";
   titleVi: string;
   titleEn: string;
+  title?: string;
+  src: string;
+  alt?: string;
+  company?: string;
   year: string;
   locationVi: string;
   locationEn: string;
@@ -23,10 +28,202 @@ interface MemoryItem {
   gradient: string;
   descVi: string;
   descEn: string;
+  description?: string;
   quoteVi?: string;
   quoteEn?: string;
   teamSize?: string;
 }
+
+export const MEMORIES_DATA: MemoryItem[] = [
+  {
+    id: "award-best-cs",
+    companyId: "finviet",
+    category: "awards",
+    titleVi: "Giải thưởng Lãnh đạo CSKH Xuất sắc năm 2024",
+    titleEn: "Excellence in CS Leadership Award 2024",
+    title: "Giải thưởng Lãnh đạo CSKH Xuất sắc năm 2024",
+    year: "2024",
+    locationVi: "TP. Hồ Chí Minh",
+    locationEn: "Ho Chi Minh City",
+    tagVi: "Giải thưởng",
+    tagEn: "Honors",
+    imageUrl: "https://images.unsplash.com/photo-1531058240690-006c446962d8?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1531058240690-006c446962d8?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-amber-500 to-orange-600",
+    descVi: "Vinh danh cá nhân xuất sắc có đóng góp vượt bậc trong việc tái cấu trúc quy trình CSKH, nâng chỉ số CSAT đạt 98% và triển khai thành công AI Voicebot 24/7.",
+    descEn: "Honored as Top CS Leader for outstanding contributions in restructuring CSKH operations, raising CSAT to 98%, and successfully deploying 24/7 AI Voicebots.",
+    description: "Vinh danh cá nhân xuất sắc có đóng góp vượt bậc trong việc tái cấu trúc quy trình CSKH, nâng chỉ số CSAT đạt 98% và triển khai thành công AI Voicebot 24/7.",
+    quoteVi: "“Thành công của người lãnh đạo là nhìn thấy đội ngũ ngày càng tự tin và trưởng thành.”",
+    quoteEn: "“A leader's true success is seeing team members grow in confidence and excellence.”",
+    teamSize: "120+ Agents"
+  },
+  {
+    id: "team-building-2023",
+    companyId: "finviet",
+    category: "team",
+    titleVi: "Hành trình Gắn kết Đội ngũ Contact Center 2023",
+    titleEn: "Annual Contact Center Team Retreat 2023",
+    title: "Hành trình Gắn kết Đội ngũ Contact Center 2023",
+    year: "2023",
+    locationVi: "Đà Nẵng & Hội An",
+    locationEn: "Danang & Hoi An",
+    tagVi: "Văn hóa Đội ngũ",
+    tagEn: "Team Culture",
+    imageUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-blue-500 to-indigo-600",
+    descVi: "Chương trình huấn luyện kỹ năng mềm và team building gắn kết hơn 150 điện thoại viên & quản lý cấp trung. Xây dựng tinh thần 'One Team, One Mission'.",
+    descEn: "Soft skills coaching and team building retreat uniting 150+ agents and supervisors under the 'One Team, One Mission' core values.",
+    description: "Chương trình huấn luyện kỹ năng mềm và team building gắn kết hơn 150 điện thoại viên & quản lý cấp trung.",
+    quoteVi: "“Gắn kết con người là chìa khóa vàng cho một hệ thống vận hành bền vững.”",
+    quoteEn: "“Human connection is the ultimate golden key for resilient operational systems.”",
+    teamSize: "150+ Members"
+  },
+  {
+    id: "project-omnichannel",
+    companyId: "momo",
+    category: "projects",
+    titleVi: "Lễ ra mắt Hệ thống Omnichannel Contact Center",
+    titleEn: "Omnichannel Contact Center Go-Live Ceremony",
+    title: "Lễ ra mắt Hệ thống Omnichannel Contact Center",
+    year: "2022",
+    locationVi: "Hà Nội",
+    locationEn: "Hanoi",
+    tagVi: "Dự án Trọng điểm",
+    tagEn: "Key Project",
+    imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-emerald-500 to-teal-600",
+    descVi: "Dấu ấn chuyển đổi số tích hợp Hotline, Zalo, Facebook, Email về một nền tảng tập trung. Cột mốc giúp giảm 40% thời gian phản hồi yêu cầu khách hàng.",
+    descEn: "Digital transformation milestone consolidating Hotline, Zalo, Facebook, and Email into a unified platform—slashing customer wait times by 40%.",
+    description: "Dấu ấn chuyển đổi số tích hợp Hotline, Zalo, Facebook, Email về một nền tảng tập trung.",
+    quoteVi: "“Công nghệ chỉ thực sự có giá trị khi nó làm cho cuộc sống của khách hàng dễ dàng hơn.”",
+    quoteEn: "“Technology truly yields value when it renders customer lives effortlessly simpler.”",
+    teamSize: "Integrated Platform"
+  },
+  {
+    id: "milestone-20years",
+    companyId: "prudential",
+    category: "milestones",
+    titleVi: "Cột mốc 20 năm Cống hiến Ngành Dịch vụ Khách hàng",
+    titleEn: "20 Years Career Milestone in CS Industry",
+    title: "Cột mốc 20 năm Cống hiến Ngành Dịch vụ Khách hàng",
+    year: "2021",
+    locationVi: "Toàn quốc",
+    locationEn: "Nationwide",
+    tagVi: "Cột mốc Sự nghiệp",
+    tagEn: "Career Milestone",
+    imageUrl: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-purple-500 to-pink-600",
+    descVi: "Nhìn lại chặng đường 20 năm liên tục học hỏi, từ vị trí điện thoại viên đầu tiên đến Trưởng phòng điều hành cấp cao. Một hành trình đầy tự hào.",
+    descEn: "Reflecting on two decades of relentless dedication—from frontline agent to senior Head of CS. A journey defined by passion and growth.",
+    description: "Nhìn lại chặng đường 20 năm liên tục học hỏi, từ vị trí điện thoại viên đầu tiên đến Trưởng phòng điều hành cấp cao.",
+    quoteVi: "“Không bao giờ ngừng học hỏi và luôn giữ ngọn lửa nhiệt huyết với nghề.”",
+    quoteEn: "“Never cease learning and always keep the flame of professional dedication burning bright.”",
+    teamSize: "22+ Years Journey"
+  },
+  {
+    id: "qa-workshop-2020",
+    companyId: "prudential",
+    category: "team",
+    titleVi: "Chuỗi Workshop Đào tạo Chuẩn mực QA/QC 2020",
+    titleEn: "QA/QC Operational Excellence Workshop 2020",
+    title: "Chuỗi Workshop Đào tạo Chuẩn mực QA/QC 2020",
+    year: "2020",
+    locationVi: "TP. Hồ Chí Minh",
+    locationEn: "Ho Chi Minh City",
+    tagVi: "Đào tạo & Coaching",
+    tagEn: "Coaching",
+    imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-cyan-500 to-blue-600",
+    descVi: "Trực tiếp đứng lớp đào tạo bộ tiêu chuẩn chấm điểm cuộc gọi, kỹ năng lắng nghe thấu cảm và quy trình giải quyết khủng hoảng cho đội ngũ trưởng nhóm.",
+    descEn: "Personally conducted intensive coaching on call quality evaluation, empathetic listening, and crisis resolution for team leads.",
+    description: "Trực tiếp đứng lớp đào tạo bộ tiêu chuẩn chấm điểm cuộc gọi, kỹ năng lắng nghe thấu cảm và quy trình giải quyết khủng hoảng.",
+    teamSize: "40+ Team Leads"
+  },
+  {
+    id: "csr-charity-2019",
+    companyId: "ved",
+    category: "team",
+    titleVi: "Chương trình Phụng sự Cộng đồng 'Trao Nụ Cười'",
+    titleEn: "CSR Community Initiative 'Sharing Smiles'",
+    title: "Chương trình Phụng sự Cộng đồng 'Trao Nụ Cười'",
+    year: "2019",
+    locationVi: "Lâm Đồng",
+    locationEn: "Lam Dong Province",
+    tagVi: "Hoạt động CSR",
+    tagEn: "CSR Activity",
+    imageUrl: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-rose-500 to-red-600",
+    descVi: "Cùng đội ngũ nhân sự CSKH trao tặng quà Tết, học bổng và trang thiết bị học tập cho các em nhỏ vùng cao, lan tỏa tinh thần phụng sự vì cộng đồng.",
+    descEn: "Led CS staff on a charity expedition providing scholarships, warm clothes, and school supplies to rural children, fostering social responsibility.",
+    description: "Cùng đội ngũ nhân sự CSKH trao tặng quà Tết, học bổng và trang thiết bị học tập cho các em nhỏ vùng cao.",
+    teamSize: "Volunteers Team"
+  },
+  {
+    id: "htvc-milestone-2011",
+    companyId: "htvc",
+    category: "milestones",
+    titleVi: "Vận hành Tổng đài Dịch vụ Truyền hình HTVC",
+    titleEn: "HTVC Pay TV Customer Care Operations",
+    title: "Vận hành Tổng đài Dịch vụ Truyền hình HTVC",
+    year: "2011",
+    locationVi: "TP. Hồ Chí Minh",
+    locationEn: "Ho Chi Minh City",
+    tagVi: "Truyền hình Trả tiền",
+    tagEn: "Pay TV",
+    imageUrl: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-indigo-500 to-purple-600",
+    descVi: "Thiết lập quy trình tiếp nhận sự cố kỹ thuật và chăm sóc thuê bao truyền hình cáp quy mô toàn thành phố.",
+    descEn: "Established technical troubleshooting and customer service workflows for citywide cable TV subscribers.",
+    description: "Thiết lập quy trình tiếp nhận sự cố kỹ thuật và chăm sóc thuê bao truyền hình cáp quy mô toàn thành phố.",
+    teamSize: "60+ Agents"
+  },
+  {
+    id: "v247-telecom-2007",
+    companyId: "v247",
+    category: "projects",
+    titleVi: "Vận hành Call Center Viễn thông Quốc tế V247",
+    titleEn: "V247 International Telecom Call Center",
+    title: "Vận hành Call Center Viễn thông Quốc tế V247",
+    year: "2007",
+    locationVi: "TP. Hồ Chí Minh & Hoa Kỳ",
+    locationEn: "Ho Chi Minh City & USA",
+    tagVi: "Viễn thông",
+    tagEn: "Telecom",
+    imageUrl: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-teal-500 to-emerald-600",
+    descVi: "Quản lý ca trực phục vụ kiều bào 24/7 với tiêu chuẩn chất lượng cuộc gọi quốc tế khắt khe.",
+    descEn: "Supervised 24/7 shift operations serving global overseas Vietnamese under rigorous international SLAs.",
+    description: "Quản lý ca trực phục vụ kiều bào 24/7 với tiêu chuẩn chất lượng cuộc gọi quốc tế khắt khe.",
+    teamSize: "80+ Agents"
+  },
+  {
+    id: "mobifone-early-2003",
+    companyId: "mobifone",
+    category: "milestones",
+    titleVi: "Khởi đầu Sự nghiệp CSKH tại MobiFone 1080",
+    titleEn: "Career Beginning at MobiFone 1080 Call Center",
+    title: "Khởi đầu Sự nghiệp CSKH tại MobiFone 1080",
+    year: "2003",
+    locationVi: "TP. Hồ Chí Minh",
+    locationEn: "Ho Chi Minh City",
+    tagVi: "Khởi đầu",
+    tagEn: "Foundations",
+    imageUrl: "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=800&q=80",
+    src: "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=800&q=80",
+    gradient: "from-blue-600 to-cyan-700",
+    descVi: "Nền tảng vững chắc đầu tiên với kỷ luật trực thoại, giao tiếp chuẩn mực và niềm say mê phục vụ khách hàng.",
+    descEn: "Solid career foundation built on call discipline, empathetic communication, and passion for service excellence.",
+    description: "Nền tảng vững chắc đầu tiên với kỷ luật trực thoại, giao tiếp chuẩn mực và niềm say mê phục vụ khách hàng.",
+    teamSize: "Frontline Agent"
+  }
+];
 
 export default function Memories() {
   const { lang } = useLanguage();
@@ -35,112 +232,7 @@ export default function Memories() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activeMemory, setActiveMemory] = useState<MemoryItem | null>(null);
 
-  const MEMORIES: MemoryItem[] = [
-    {
-      id: "award-best-cs",
-      category: "awards",
-      titleVi: "Giải thưởng Lãnh đạo CSKH Xuất sắc năm 2024",
-      titleEn: "Excellence in CS Leadership Award 2024",
-      year: "2024",
-      locationVi: "TP. Hồ Chí Minh",
-      locationEn: "Ho Chi Minh City",
-      tagVi: "Giải thưởng",
-      tagEn: "Honors",
-      imageUrl: "https://images.unsplash.com/photo-1531058240690-006c446962d8?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-amber-500 to-orange-600",
-      descVi: "Vinh danh cá nhân xuất sắc có đóng góp vượt bậc trong việc tái cấu trúc quy trình CSKH, nâng chỉ số CSAT đạt 98% và triển khai thành công AI Voicebot 24/7.",
-      descEn: "Honored as Top CS Leader for outstanding contributions in restructuring CSKH operations, raising CSAT to 98%, and successfully deploying 24/7 AI Voicebots.",
-      quoteVi: "“Thành công của người lãnh đạo là nhìn thấy đội ngũ ngày càng tự tin và trưởng thành.”",
-      quoteEn: "“A leader's true success is seeing team members grow in confidence and excellence.”",
-      teamSize: "120+ Agents"
-    },
-    {
-      id: "team-building-2023",
-      category: "team",
-      titleVi: "Hành trình Gắn kết Đội ngũ Contact Center 2023",
-      titleEn: "Annual Contact Center Team Retreat 2023",
-      year: "2023",
-      locationVi: "Đà Nẵng & Hội An",
-      locationEn: "Danang & Hoi An",
-      tagVi: "Văn hóa Đội ngũ",
-      tagEn: "Team Culture",
-      imageUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-blue-500 to-indigo-600",
-      descVi: "Chương trình huấn luyện kỹ năng mềm và team building gắn kết hơn 150 điện thoại viên & quản lý cấp trung. Xây dựng tinh thần 'One Team, One Mission'.",
-      descEn: "Soft skills coaching and team building retreat uniting 150+ agents and supervisors under the 'One Team, One Mission' core values.",
-      quoteVi: "“Gắn kết con người là chìa khóa vàng cho một hệ thống vận hành bền vững.”",
-      quoteEn: "“Human connection is the ultimate golden key for resilient operational systems.”",
-      teamSize: "150+ Members"
-    },
-    {
-      id: "project-omnichannel",
-      category: "projects",
-      titleVi: "Lễ ra mắt Hệ thống Omnichannel Contact Center",
-      titleEn: "Omnichannel Contact Center Go-Live Ceremony",
-      year: "2022",
-      locationVi: "Hà Nội",
-      locationEn: "Hanoi",
-      tagVi: "Dự án Trọng điểm",
-      tagEn: "Key Project",
-      imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-emerald-500 to-teal-600",
-      descVi: "Dấu ấn chuyển đổi số tích hợp Hotline, Zalo, Facebook, Email về một nền tảng tập trung. Cột mốc giúp giảm 40% thời gian phản hồi yêu cầu khách hàng.",
-      descEn: "Digital transformation milestone consolidating Hotline, Zalo, Facebook, and Email into a unified platform—slashing customer wait times by 40%.",
-      quoteVi: "“Công nghệ chỉ thực sự có giá trị khi nó làm cho cuộc sống của khách hàng dễ dàng hơn.”",
-      quoteEn: "“Technology truly yields value when it renders customer lives effortlessly simpler.”",
-      teamSize: "Integrated Platform"
-    },
-    {
-      id: "milestone-20years",
-      category: "milestones",
-      titleVi: "Cột mốc 20 năm Cống hiến Ngành Dịch vụ Khách hàng",
-      titleEn: "20 Years Career Milestone in CS Industry",
-      year: "2021",
-      locationVi: "Toàn quốc",
-      locationEn: "Nationwide",
-      tagVi: "Cột mốc Sự nghiệp",
-      tagEn: "Career Milestone",
-      imageUrl: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-purple-500 to-pink-600",
-      descVi: "Nhìn lại chặng đường 20 năm liên tục học hỏi, từ vị trí điện thoại viên đầu tiên đến Trưởng phòng điều hành cấp cao. Một hành trình đầy tự hào.",
-      descEn: "Reflecting on two decades of relentless dedication—from frontline agent to senior Head of CS. A journey defined by passion and growth.",
-      quoteVi: "“Không bao giờ ngừng học hỏi và luôn giữ ngọn lửa nhiệt huyết với nghề.”",
-      quoteEn: "“Never cease learning and always keep the flame of professional dedication burning bright.”",
-      teamSize: "22+ Years Journey"
-    },
-    {
-      id: "qa-workshop-2020",
-      category: "team",
-      titleVi: "Chuỗi Workshop Đào tạo Chuẩn mực QA/QC 2020",
-      titleEn: "QA/QC Operational Excellence Workshop 2020",
-      year: "2020",
-      locationVi: "TP. Hồ Chí Minh",
-      locationEn: "Ho Chi Minh City",
-      tagVi: "Đào tạo & Coaching",
-      tagEn: "Coaching",
-      imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-cyan-500 to-blue-600",
-      descVi: "Trực tiếp đứng lớp đào tạo bộ tiêu chuẩn chấm điểm cuộc gọi, kỹ năng lắng nghe thấu cảm và quy trình giải quyết khủng hoảng cho đội ngũ trưởng nhóm.",
-      descEn: "Personally conducted intensive coaching on call quality evaluation, empathetic listening, and crisis resolution for team leads.",
-      teamSize: "40+ Team Leads"
-    },
-    {
-      id: "csr-charity-2019",
-      category: "team",
-      titleVi: "Chương trình Phụng sự Cộng đồng 'Trao Nụ Cười'",
-      titleEn: "CSR Community Initiative 'Sharing Smiles'",
-      year: "2019",
-      locationVi: "Lâm Đồng",
-      locationEn: "Lam Dong Province",
-      tagVi: "Hoạt động CSR",
-      tagEn: "CSR Activity",
-      imageUrl: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
-      gradient: "from-rose-500 to-red-600",
-      descVi: "Cùng đội ngũ nhân sự CSKH trao tặng quà Tết, học bổng và trang thiết bị học tập cho các em nhỏ vùng cao, lan tỏa tinh thần phụng sự vì cộng đồng.",
-      descEn: "Led CS staff on a charity expedition providing scholarships, warm clothes, and school supplies to rural children, fostering social responsibility.",
-      teamSize: "Volunteers Team"
-    }
-  ];
+  const MEMORIES = MEMORIES_DATA;
 
   const categories = [
     { id: "all", labelVi: "Tất cả kỷ niệm", labelEn: "All Memories" },
@@ -203,6 +295,7 @@ export default function Memories() {
               {filteredMemories.map((memory) => (
                 <motion.div
                   key={memory.id}
+                  id={memory.companyId ? `memory-card-${memory.companyId}` : `memory-card-${memory.id}`}
                   layout
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}

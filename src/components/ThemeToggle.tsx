@@ -17,7 +17,7 @@ interface ThemeToggleProps {
  * - Supports keyboard navigation and accessibility (aria-label)
  */
 export function ThemeToggle({ className = '', showLabel = false }: ThemeToggleProps) {
-  const { theme, setTheme, autoThemeMode, toggleAutoThemeMode } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration mismatch: render placeholder until mounted on client
@@ -64,14 +64,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
 
       {showLabel && (
         <span className="text-xs font-semibold select-none pr-1">
-          {autoThemeMode ? 'Auto' : isDark ? 'Neon Dark' : 'MRITECH Light'}
-        </span>
-      )}
-
-      {autoThemeMode && (
-        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+          {isDark ? 'Neon Dark' : 'MRITECH Light'}
         </span>
       )}
     </button>
