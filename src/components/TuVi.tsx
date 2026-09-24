@@ -133,10 +133,10 @@ export default function TuVi() {
   return (
     <section 
       id="tuvi" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 sm:p-4.5 md:p-6 lg:p-6 font-sans text-slate-800 dark:text-slate-100"
     >
       {/* Main Container - Thẻ chứa toàn bộ trang Tử vi */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-5 sm:gap-6">
+      <div className="w-full bg-transparent flex flex-col gap-5 sm:gap-6">
 
         {/* Container Tử vi */}
         <div 

@@ -192,22 +192,27 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   // Complete Sections for Quick Jump Menu & Direct Navigation
   const ALL_14_SECTIONS = [
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
-    { id: "about", num: "02", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "2" },
-    { id: "skills", num: "03", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "3" },
-    { id: "education", num: "04", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
-    { id: "experience", num: "05", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "5" },
-    { id: "projects", num: "06", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "6" },
-    { id: "interview", num: "07", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "7" },
-    { id: "tuvi", num: "08", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "8" },
-    { id: "systems", num: "09", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "9" },
-    { id: "contact", num: "10", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "0" },
-    { id: "wallpapers", num: "11", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
+    { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
+    { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
+    { id: "domains", num: "04", labelVi: "Dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
+    { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
+    { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+    { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
+    { id: "projects", num: "07", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
+    { id: "interview", num: "08", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
+    { id: "tuvi", num: "09", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
+    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
+    { id: "contact", num: "11", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
+    { id: "systems", num: "12", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
+    { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
   ];
 
   // Navigation Items for Top Header Center
   const navItems = [
     { id: "home", label: t("nav.home"), Icon: Monitor },
+    { id: "letter", label: t("nav.letter"), Icon: FileText },
     { id: "about", label: t("nav.about"), Icon: User },
+    { id: "domains", label: t("nav.domains"), Icon: Compass },
     { id: "skills", label: t("nav.skills"), Icon: Brain },
     { id: "education", label: t("nav.education"), Icon: GraduationCap },
     { id: "experience", label: t("nav.experience"), Icon: Briefcase },
@@ -215,6 +220,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "interview", label: t("nav.interview"), Icon: Video },
     { id: "tuvi", label: t("nav.tuvi"), Icon: Sparkles },
     { id: "systems", label: t("nav.systems"), Icon: Server },
+    { id: "memories", label: t("nav.memories"), Icon: Images },
     { id: "contact", label: t("nav.contact"), Icon: MessagesSquare },
   ];
 
@@ -739,6 +745,28 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                       <span className="truncate">{lang === "vi" ? "Hình nền" : "Wallpaper"}</span>
                     </div>
                     <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                  </button>
+
+                  <div className="h-px bg-slate-200/50 dark:bg-white/10 my-0.5" />
+
+                  {/* 7. Chế độ Trình chiếu Slide */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent("open-presentation-mode"));
+                    }}
+                    className="w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-semibold flex items-center justify-between transition-all duration-200 cursor-pointer bg-blue-50/80 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-blue-900 dark:text-blue-200 hover:scale-[1.02] active:scale-98 shadow-xs"
+                    title={lang === "vi" ? "Chế độ Trình chiếu Tự động" : "Auto Presentation Mode"}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500 text-white shrink-0 shadow-xs">
+                        <Play className="w-3.5 h-3.5 fill-white" />
+                      </div>
+                      <span className="truncate font-bold">{lang === "vi" ? "Trình chiếu Slide" : "Slideshow"}</span>
+                    </div>
+                    <span className="text-3xs font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-300">
+                      AUTO
+                    </span>
                   </button>
                 </motion.div>
               )}

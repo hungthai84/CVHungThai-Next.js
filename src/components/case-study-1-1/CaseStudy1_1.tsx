@@ -365,12 +365,7 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
       <div className="fixed -bottom-40 right-1/4 w-[480px] h-[480px] bg-gradient-to-br from-amber-400/25 via-orange-500/20 to-transparent rounded-full blur-3xl pointer-events-none z-0 animate-float-2"></div>
 
       {/* Main Card Wrapper removed, contents brought directly outside */}
-        <CaseStudy1_1_Header 
-          onShowToast={showToast} 
-          project={project} 
-          onBack={onBack} 
-          onListenPostcard={() => jumpToSection("sec-podcast")} 
-        />
+        <CaseStudy1_1_Header onShowToast={showToast} project={project} onBack={onBack} />
         
         {viewMode === "mindmap" && (
           <>

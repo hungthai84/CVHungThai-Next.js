@@ -360,7 +360,7 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 md:p-5 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
     >
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
@@ -389,7 +389,7 @@ export default function Projects() {
       }} />
 
       {/* Main Container Dự án */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+      <div className="w-full flex flex-col gap-4">
         {/* Header Card Dự án (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
         <PageCardHeader pageId="projects">
           {/* Cụm trái: Số lượng dự án */}

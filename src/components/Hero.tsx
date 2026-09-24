@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, memo } from "react";
 import PageBanner from "./PageBanner";
-import { PageCardHeader } from "./PageCardHeader";
 import { 
   ArrowRight, 
   Github, 
@@ -251,22 +250,6 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-transparent pointer-events-none" />
       </div>
 
-      {/* Synchronized Header Card for Home Page */}
-      <div className="relative z-30 w-full px-3 xs:px-3.5 sm:px-4.5 md:px-6 lg:px-8 pt-3 pointer-events-auto">
-        <div className="w-full max-w-7xl mx-auto">
-          <PageCardHeader pageId="home">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-5 bg-blue-600 dark:bg-cyan-400 rounded-full shrink-0" />
-                <span className="text-caption font-semibold font-mono text-blue-700 dark:text-cyan-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
-                  {isVi ? "22+ Năm kinh nghiệm CX & CS" : "22+ Years CX & Operations"}
-                </span>
-              </div>
-            </div>
-          </PageCardHeader>
-        </div>
-      </div>
-
       {/* 2. Middle-Left Screen Navigation Button (Chuyển qua Màn hình 3) - Glass 50% Opacity Centered Left */}
       <div className="absolute top-1/2 left-3 sm:left-4 -translate-y-1/2 z-30 pointer-events-auto flex flex-col items-center gap-1.5 group/nav-left-btn">
         <MagneticButton
@@ -337,12 +320,12 @@ function Hero() {
 
       {/* 4. Bottom Welcome Note Card (Nằm phía dưới bên phải / responsive, kích thước tự động co giãn theo nội dung bên trong) */}
       <div className="relative z-20 w-full flex justify-end items-end p-2.5 sm:p-4 lg:p-5 pointer-events-none mt-auto">
-        <div className="w-fit max-w-fit">
+        <div className="w-fit max-w-fit pointer-events-auto">
           <div 
             id="hero-intro-card"
             style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
             className={cn(
-              "w-fit max-w-fit h-auto group relative p-3 sm:p-3.5 transition-all duration-300 overflow-hidden pointer-events-auto flex flex-col items-stretch gap-2",
+              "w-fit max-w-fit h-auto group relative p-3 sm:p-3.5 transition-all duration-300 overflow-hidden flex flex-col items-stretch gap-2",
               "glass-surface backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/90 bg-white/95 dark:bg-slate-900/95",
               "shadow-[0_12px_32px_rgba(0,0,0,0.14),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.12)] text-slate-900 dark:text-white",
               "hover:border-blue-500/70 dark:hover:border-cyan-400/70 hover:shadow-[0_16px_36px_rgba(37,99,235,0.22)]"

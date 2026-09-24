@@ -82,6 +82,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import { MEMORIES_DATA } from "./Memories";
 
 
 
@@ -1648,7 +1649,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           /* Horizontal Overlapping Logo Stack for 2013: VED + Garena + Gcafe + Shopee + Airpay */
                           <div 
                             className={cn(
-                              "flex flex-row items-center justify-center -space-x-2.5 xs:-space-x-3 sm:-space-x-3.5 md:-space-x-4 z-10 transition-all duration-300 py-1",
+                              "flex flex-row items-center justify-center -space-x-3.5 sm:-space-x-4.5 z-10 transition-all duration-300",
                               isSelected ? "scale-105" : "group-hover:scale-105"
                             )}
                           >
@@ -1668,15 +1669,15 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     setActiveYear(subLogo.key);
                                   }}
                                   className={cn(
-                                    "w-9 h-9 xs:w-10 xs:h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full border-2 border-white dark:border-slate-900 shadow-sm overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-200 relative shrink-0 cursor-pointer group/subitem",
+                                    "w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-300 relative shrink-0 cursor-pointer",
                                     isCurrentLogo
-                                      ? "z-40 scale-115 ring-2 ring-offset-2 ring-red-500 shadow-md"
-                                      : "opacity-85 hover:opacity-100 hover:scale-115 hover:-translate-y-1 hover:z-50"
+                                      ? "z-30 scale-110 ring-2 ring-offset-1 shadow-lg"
+                                      : "z-10 opacity-85 group-hover:opacity-100 hover:scale-105"
                                   )}
                                   style={{
                                     borderColor: subLogo.color,
-                                    zIndex: isCurrentLogo ? 40 : 10 + lIdx,
-                                    boxShadow: isCurrentLogo ? `0 0 14px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.18)`
+                                    zIndex: isCurrentLogo ? 30 : 20 - lIdx,
+                                    boxShadow: isCurrentLogo ? `0 0 12px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.15)`
                                   }}
                                   title={subLogo.name}
                                 >
@@ -1828,77 +1829,37 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
  
                     {/* Logo + Company Name */}
                     <div className="flex items-center gap-3.5 sm:gap-4 pt-0.5">
-                      {current.year === "2013" || current.key.startsWith("2013") || current.key === "2014-airpay" ? (
-                        /* Horizontal Overlapping Logo Stack for 2013 Ecosystem in Job Header */
-                        <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0 py-1" title="Hệ sinh thái VED / Garena / Gcafe / Shopee / AirPay">
-                          {[
-                            { key: "2013", type: "ved", name: "VED (Vietnam Esports)", color: "#DC2626" },
-                            { key: "2013-garena", type: "garena", name: "Garena", color: "#ED1C24" },
-                            { key: "2013-gcafe", type: "gcafe", name: "Gcafe CYBER", color: "#00A651" },
-                            { key: "2013-shopee", type: "shopee", name: "Shopee", color: "#EE4D2D" },
-                            { key: "2014-airpay", type: "airpay", name: "Airpay / ShopeePay", color: "#00ADEF" }
-                          ].map((subLogo, lIdx) => {
-                            const isCurrentLogo = activeYear === subLogo.key || (activeYear === "2013" && subLogo.key === "2013");
-                            return (
-                              <div
-                                key={subLogo.key}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActiveYear(subLogo.key);
-                                }}
-                                className={cn(
-                                  "w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white dark:border-slate-900 shadow-sm overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-200 relative shrink-0 cursor-pointer",
-                                  isCurrentLogo
-                                    ? "z-30 scale-110 ring-2 ring-offset-2 ring-red-500 shadow-md"
-                                    : "opacity-85 hover:opacity-100 hover:scale-110 hover:-translate-y-1 hover:z-40"
-                                )}
-                                style={{
-                                  borderColor: subLogo.color,
-                                  zIndex: isCurrentLogo ? 30 : 10 + lIdx,
-                                  boxShadow: isCurrentLogo ? `0 0 14px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.18)`
-                                }}
-                                title={subLogo.name}
-                              >
-                                <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
-                                  {renderPinIcon(subLogo.type, subLogo.color, subLogo.key)}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0">
-                          <div 
-                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
-                            style={{
-                              borderColor: currentHex || undefined
+                      <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0">
+                        <div 
+                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
+                          style={{
+                            borderColor: currentHex || undefined
+                          }}
+                        >
+                          <img 
+                            src={current.logo} 
+                            alt={current.company} 
+                            className="w-full h-full object-cover rounded-full" 
+                            onError={(e) => {
+                              if (current.fallbackLogo) {
+                                (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
+                              }
                             }}
+                          />
+                        </div>
+                        {current.subLogo && (
+                          <div 
+                            className="w-13 h-13 sm:w-16 sm:h-16 rounded-full border-2 border-sky-400 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
+                            title="HTVC"
                           >
                             <img 
-                              src={current.logo} 
-                              alt={current.company} 
+                              src={current.subLogo} 
+                              alt="HTVC" 
                               className="w-full h-full object-cover rounded-full" 
-                              onError={(e) => {
-                                if (current.fallbackLogo) {
-                                  (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
-                                }
-                              }}
                             />
                           </div>
-                          {current.subLogo && (
-                            <div 
-                              className="w-13 h-13 sm:w-16 sm:h-16 rounded-full border-2 border-sky-400 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
-                              title="HTVC"
-                            >
-                              <img 
-                                src={current.subLogo} 
-                                alt="HTVC" 
-                                className="w-full h-full object-cover rounded-full" 
-                              />
-                            </div>
-                          )}
-                        </div>
-                      )}
+                        )}
+                      </div>
  
                       <div className="min-w-0 flex-1">
                         {(() => {
@@ -2257,7 +2218,15 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 06 | KỶ NIỆM (Memories Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col justify-between backdrop-blur-xl"
+                          onClick={() => {
+                            if (current.memoryCompanyId) {
+                              const memoryCard = document.getElementById(`memory-card-${current.memoryCompanyId}`);
+                              if (memoryCard) {
+                                memoryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              }
+                            }
+                          }}
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-rose-100/80 dark:border-rose-900/40">
@@ -2812,6 +2781,10 @@ export default function Experience() {
 
   // Get gallery photos for a given milestone
   const getGalleryPhotosForMilestone = (milestone: MilestoneData) => {
+    if (milestone.memoryCompanyId) {
+      const matched = MEMORIES_DATA.filter((m) => m.companyId === milestone.memoryCompanyId);
+      if (matched.length > 0) return matched;
+    }
     return [{
       id: milestone.key,
       src: milestone.photoUrl,
@@ -2913,11 +2886,10 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative min-h-full flex flex-col justify-start items-center font-sans text-slate-800 dark:text-slate-100 w-full p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8"
+      className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
     >
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
-        <PageCardHeader pageId="experience">
+      {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
+      <PageCardHeader pageId="experience">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
           <span className="text-body-sub text-subcontent font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
@@ -3434,7 +3406,6 @@ export default function Experience() {
         );
       })()}
 
-      </div>
     </section>
   );
 }

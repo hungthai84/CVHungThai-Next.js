@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "../i18n";
 import { motion, AnimatePresence } from "motion/react";
 import { 
+  Printer, 
   Brain,
   Target, 
   TrendingUp, 
@@ -21,6 +22,7 @@ import {
   Globe,
   Database,
   Workflow,
+  UserCheck,
   ShieldCheck,
   FolderKanban,
   MessageSquare,
@@ -28,64 +30,15 @@ import {
   Sparkles,
   CheckCircle2,
   Maximize2,
-  Search,
-  X,
-  Layers,
-  Code2,
-  GraduationCap,
-  MessagesSquare,
-  Network,
-  Compass,
-  PieChart,
-  LayoutGrid,
-  ChevronRight,
-  Info
+  Minimize2
 } from "lucide-react";
 
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
-import { SKILL_GROUPS, SkillItem, SkillGroup } from "../data/skillsData";
-import {
-  ExpandedCardStrengths,
-  ExpandedCardOpportunities,
-  ExpandedCardWeaknesses,
-  ExpandedCardThreats,
-  ExpandedCardLanguages
-} from "./SkillCardExpandedViews";
 
 type CardKey = "swot-s" | "swot-o" | "swot-w" | "swot-t";
-type ViewTab = "all" | "swot" | "domains" | "languages";
-
-// Icon mapping helper for domain group skills
-const ICON_MAP: Record<string, React.ElementType> = {
-  Database,
-  BarChart3,
-  Brain,
-  Workflow,
-  Zap,
-  Code2,
-  Users,
-  FolderKanban,
-  GraduationCap,
-  TrendingUp,
-  Target,
-  ShieldAlert,
-  MessagesSquare,
-  Network,
-  Award,
-  Sparkles,
-  Compass,
-  PieChart,
-  ShieldCheck,
-  Layers,
-  Bot,
-  LayoutGrid,
-  Rocket,
-  Languages,
-  Globe
-};
 
 const STRENGTHS_SKILLS = [
   { icon: HeartHandshake, label: "Customer-Centric & CX", percent: 98, descVi: "Xây dựng trải nghiệm khách hàng xuất sắc, thấu cảm hành vi và tối ưu hóa điểm chạm đa kênh.", descEn: "Delivering customer-centric excellence, empathetic journey mapping, and omnichannel CX optimization." },
@@ -124,17 +77,14 @@ const THREATS_SKILLS = [
 ];
 
 export function Skills() {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { language, lang } = useLanguage();
   const isVi = (language || lang) === "vi";
 
-  // Tab filter: Tất cả / Ma trận SWOT / Nhóm Chuyên môn (A-E) / Ngoại ngữ & AI
-  const [selectedCategory, setSelectedCategory] = useState<ViewTab>("all");
-  
-  // Quick search query for filtering skills across all categories
-  const [searchQuery, setSearchQuery] = useState("");
+  // Category filter state for skills page
+  const [selectedCategory, setSelectedCategory] = useState<"all" | "swot" | "languages">("all");
 
-  // Manage individual card collapse states
+  // Manage individual card collapse states (true = collapsed, false = expanded)
   const [collapsedCards, setCollapsedCards] = useState<Record<CardKey, boolean>>({
     "swot-s": false,
     "swot-o": false,
@@ -142,23 +92,7 @@ export function Skills() {
     "swot-t": false,
   });
 
-  // Modal deep-dive state for expanded SWOT / Language views
-  const [activeModal, setActiveModal] = useState<CardKey | "languages" | null>(null);
-
-  // Close modal on ESC key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && activeModal) {
-        playUiSound("close");
-        setActiveModal(null);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeModal]);
-
   const toggleSingleCard = (cardKey: CardKey) => {
-    playUiSound("toggle");
     setCollapsedCards((prev) => ({
       ...prev,
       [cardKey]: !prev[cardKey],
@@ -168,7 +102,6 @@ export function Skills() {
   const areAllCollapsed = Object.values(collapsedCards).every(Boolean);
 
   const toggleAllCards = () => {
-    playUiSound("toggle");
     const nextState = !areAllCollapsed;
     setCollapsedCards({
       "swot-s": nextState,
@@ -178,391 +111,368 @@ export function Skills() {
     });
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const handleNavigateToContact = (topic?: string) => {
     playUiSound("click");
     if (topic) {
       sessionStorage.setItem("contact_selected_skill_topic", topic);
     }
-    setActiveModal(null);
     window.dispatchEvent(new CustomEvent("app-navigate", { detail: "contact" }));
   };
-
-  const openModal = (modalKey: CardKey | "languages") => {
-    playUiSound("open");
-    setActiveModal(modalKey);
-  };
-
-  const closeModal = () => {
-    playUiSound("close");
-    setActiveModal(null);
-  };
-
-  // Filter domain groups based on search query
-  const filteredSkillGroups = useMemo(() => {
-    if (!searchQuery.trim()) return SKILL_GROUPS;
-    const query = searchQuery.toLowerCase().trim();
-
-    return SKILL_GROUPS.map((group) => {
-      const matchingSkills = group.skills.filter((skill) => {
-        const name = (isVi ? skill.nameVi : skill.nameEn).toLowerCase();
-        const desc = (isVi ? skill.descriptionVi : skill.descriptionEn).toLowerCase();
-        const tools = skill.tools.some((t) => t.toLowerCase().includes(query));
-        const highlights = (isVi ? skill.keyHighlightsVi : skill.keyHighlightsEn).some((h) =>
-          h.toLowerCase().includes(query)
-        );
-        return name.includes(query) || desc.includes(query) || tools || highlights;
-      });
-
-      return {
-        ...group,
-        skills: matchingSkills,
-      };
-    }).filter((group) => group.skills.length > 0);
-  }, [searchQuery, isVi]);
 
   return (
     <section
       id="skills"
       className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
     >
-      {/* Main Container */}
+      {/* Main Container Kỹ năng */}
       <div className="w-full flex flex-col gap-4">
-        {/* Component Specific Style Injector for Glassmorphism & High Fidelity Transitions */}
-        <style>{`
-          .skills-glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--theme-border, var(--glass-border, rgba(226, 232, 240, 0.8)));
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
-          }
+        {/* Component Specific Style Injector for Pixel-Exact Glassmorphism & Animations */}
+      <style>{`
+        /* Hiệu ứng Kính Mờ (Glassmorphism) chuẩn đồng bộ với Education & Floating Main Card */
+        .skills-glass-panel {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(226, 232, 240, 0.8)));
+          box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+        }
 
-          .dark .skills-glass-panel {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
-          }
+        .dark .skills-glass-panel {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
+        }
 
-          .skills-glass-swot-blue {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 12px 32px -10px rgba(59, 130, 246, 0.1);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          .skills-glass-swot-blue:hover {
-            border-color: rgba(59, 130, 246, 0.6);
-            box-shadow: 0 20px 40px -12px rgba(59, 130, 246, 0.18);
-          }
-          .dark .skills-glass-swot-blue {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(59, 130, 246, 0.15);
-          }
-          .dark .skills-glass-swot-blue:hover {
-            border-color: rgba(59, 130, 246, 0.7);
-            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(59, 130, 246, 0.25);
-          }
+        /* Thẻ Phủ Màu Chuyên Biệt Cho 4 Nhánh SWOT */
+        .skills-glass-swot-blue {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.6)));
+          border-radius: 24px;
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .skills-glass-swot-blue:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(239, 246, 255, 0.85) 100%);
+          border-color: rgba(59, 130, 246, 0.4);
+          box-shadow: 0 24px 48px -12px rgba(59, 130, 246, 0.12);
+        }
+        .dark .skills-glass-swot-blue {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
+          border-radius: 24px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .skills-glass-swot-blue:hover {
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.4) 100%);
+        }
 
-          .skills-glass-swot-purple {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 12px 32px -10px rgba(139, 92, 246, 0.1);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          .skills-glass-swot-purple:hover {
-            border-color: rgba(139, 92, 246, 0.6);
-            box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.18);
-          }
-          .dark .skills-glass-swot-purple {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(139, 92, 246, 0.35);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(139, 92, 246, 0.15);
-          }
-          .dark .skills-glass-swot-purple:hover {
-            border-color: rgba(139, 92, 246, 0.7);
-            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.25);
-          }
+        .skills-glass-swot-purple {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.6)));
+          border-radius: 24px;
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .skills-glass-swot-purple:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 243, 255, 0.85) 100%);
+          border-color: rgba(139, 92, 246, 0.4);
+          box-shadow: 0 24px 48px -12px rgba(139, 92, 246, 0.12);
+        }
+        .dark .skills-glass-swot-purple {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
+          border-radius: 24px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .skills-glass-swot-purple:hover {
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(88, 28, 135, 0.4) 100%);
+        }
 
-          .skills-glass-swot-amber {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 12px 32px -10px rgba(245, 158, 11, 0.1);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          .skills-glass-swot-amber:hover {
-            border-color: rgba(245, 158, 11, 0.6);
-            box-shadow: 0 20px 40px -12px rgba(245, 158, 11, 0.18);
-          }
-          .dark .skills-glass-swot-amber {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(245, 158, 11, 0.35);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.15);
-          }
-          .dark .skills-glass-swot-amber:hover {
-            border-color: rgba(245, 158, 11, 0.7);
-            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.25);
-          }
+        .skills-glass-swot-amber {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.6)));
+          border-radius: 24px;
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .skills-glass-swot-amber:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 251, 235, 0.85) 100%);
+          border-color: rgba(245, 158, 11, 0.4);
+          box-shadow: 0 24px 48px -12px rgba(245, 158, 11, 0.12);
+        }
+        .dark .skills-glass-swot-amber {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
+          border-radius: 24px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .skills-glass-swot-amber:hover {
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(120, 53, 15, 0.4) 100%);
+        }
 
-          .skills-glass-swot-rose {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(244, 63, 94, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 12px 32px -10px rgba(244, 63, 94, 0.1);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          .skills-glass-swot-rose:hover {
-            border-color: rgba(244, 63, 94, 0.6);
-            box-shadow: 0 20px 40px -12px rgba(244, 63, 94, 0.18);
-          }
-          .dark .skills-glass-swot-rose {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(244, 63, 94, 0.35);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(244, 63, 94, 0.15);
-          }
-          .dark .skills-glass-swot-rose:hover {
-            border-color: rgba(244, 63, 94, 0.7);
-            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(244, 63, 94, 0.25);
-          }
+        .skills-glass-swot-rose {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.6)));
+          border-radius: 24px;
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .skills-glass-swot-rose:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 241, 242, 0.85) 100%);
+          border-color: rgba(244, 63, 94, 0.4);
+          box-shadow: 0 24px 48px -12px rgba(244, 63, 94, 0.12);
+        }
+        .dark .skills-glass-swot-rose {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(0, 240, 255, 0.35)));
+          border-radius: 24px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.18);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .skills-glass-swot-rose:hover {
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(136, 19, 55, 0.4) 100%);
+        }
 
-          .skills-glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 14px;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-          .skills-glass-card:hover {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.06);
-          }
-          .dark .skills-glass-card {
-            background: rgba(30, 41, 59, 0.65);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-          }
-          .dark .skills-glass-card:hover {
-            background: rgba(30, 41, 59, 0.9);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-          }
+        /* Thẻ con bên trong */
+        .skills-glass-card {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.6)));
+          border-radius: 16px;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .skills-glass-card:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 253, 0.9) 100%);
+          box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.06);
+        }
 
-          .skills-hover-lift {
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
-          }
-          .skills-hover-lift:hover {
-            transform: translateY(-2px);
-          }
+        .dark .skills-glass-card {
+          background: rgba(30, 41, 59, 0.7);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--theme-border, var(--glass-border, rgba(255, 255, 255, 0.1)));
+          border-radius: 16px;
+          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .skills-glass-card:hover {
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(51, 65, 85, 0.8) 100%);
+        }
 
-          .skills-swot-collapse-grid {
-            display: grid;
-            grid-template-rows: 1fr;
-            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-            opacity: 1;
-          }
-          .skills-swot-collapse-grid.is-collapsed {
-            grid-template-rows: 0fr;
-            opacity: 0;
-            pointer-events: none;
-          }
-          .skills-swot-collapse-inner {
-            overflow: hidden;
-            min-height: 0;
-          }
-          .skills-swot-collapse-grid:not(.is-collapsed) .skills-swot-collapse-inner {
-            overflow: visible;
-          }
+        /* Nền trong suốt 100% theo yêu cầu */
+        #swot-languages-overview {
+          background: transparent !important;
+          background-color: transparent !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
 
-          @media print {
-            .skills-glass-panel, .skills-glass-card, [class*="skills-glass-swot-"] { 
-              background: #fff !important; 
-              border: 1px solid #ddd !important; 
-              box-shadow: none !important; 
-            }
-            button, input, .no-print { 
-              display: none !important; 
-            }
-            .skills-swot-collapse-grid { 
-              grid-template-rows: 1fr !important; 
-              opacity: 1 !important; 
-            }
+        #swot-s li.p-2,
+        #swot-w li.p-2 {
+          background: transparent !important;
+          background-color: transparent !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+        }
+
+        #swot-s li.p-2 span {
+          font-size: 16px !important;
+        }
+
+        .skills-hover-lift {
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+        }
+        .skills-hover-lift:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+        }
+        .dark .skills-hover-lift:hover {
+          box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hoạt họa Thu Gọn / Mở Rộng Chuyên Nghiệp */
+        .skills-swot-collapse-grid {
+          display: grid;
+          grid-template-rows: 1fr;
+          transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+          opacity: 1;
+        }
+
+        .skills-swot-collapse-grid.is-collapsed {
+          grid-template-rows: 0fr;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .skills-swot-collapse-inner {
+          overflow: hidden;
+          min-height: 0;
+        }
+
+        .skills-swot-collapse-grid:not(.is-collapsed) .skills-swot-collapse-inner {
+          overflow: visible;
+        }
+
+        /* Tối ưu hóa khi In / Xuất PDF */
+        @media print {
+          .skills-glass-panel, .skills-glass-card, [class*="skills-glass-swot-"] { 
+            background: #fff !important; 
+            border: 1px solid #ddd !important; 
+            box-shadow: none !important; 
           }
-        `}</style>
+          #printBtn, #themeToggle, #toggleAllSwot, .swot-toggle-btn { 
+            display: none !important; 
+          }
+          .skills-swot-collapse-grid { 
+            grid-template-rows: 1fr !important; 
+            opacity: 1 !important; 
+          }
+        }
+      `}</style>
 
-        {/* Header with Title, Filter Tabs & Search */}
-        <PageCardHeader pageId="skills">
-          {/* Left: Indicator & Search Bar */}
-          <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap w-full sm:w-auto">
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="w-2.5 h-5 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
-              <span className="text-caption font-semibold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
-                {isVi ? "4 Khối SWOT & 5 Nhóm Chuyên Môn" : "4 SWOT Quadrants & 5 Skill Domains"}
-              </span>
-            </div>
+      {/* Tiêu đề thẻ cho thẻ chính kỹ năng (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
+      <PageCardHeader pageId="skills">
+        {/* Cụm trái: Chỉ báo chuyên đề (Caption / Label: 12px – 13px) */}
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-5 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
+          <span className="text-caption font-semibold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
+            {isVi ? "4 Khối SWOT & 3 Ngôn ngữ" : "4 SWOT Quadrants & 3 Languages"}
+          </span>
+        </div>
 
-            {/* Quick Skill Search Input */}
-            <div className="relative flex items-center min-w-[180px] max-w-xs w-full sm:w-auto">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={isVi ? "Tìm kỹ năng, CRM, AI..." : "Search skills, CRM, AI..."}
-                className="w-full pl-8 pr-7 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all shadow-2xs"
-              />
-              {searchQuery && (
+        {/* Nút lọc danh mục & nút thu gọn tất cả nằm dưới đường line bên phải */}
+        <div className="flex items-center gap-2 ml-auto flex-wrap">
+          {/* Tabs bộ lọc: Tất cả / Ma trận SWOT / Ngoại ngữ */}
+          <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+            {[
+              { id: "all", labelVi: "Tất cả", labelEn: "All" },
+              { id: "swot", labelVi: "Ma trận SWOT", labelEn: "SWOT Matrix" },
+              { id: "languages", labelVi: "Ngoại ngữ", labelEn: "Languages" },
+            ].map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
                 <button
+                  key={cat.id}
                   type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                  title="Clear"
+                  onClick={() => {
+                    playUiSound("click");
+                    setSelectedCategory(cat.id as "all" | "swot" | "languages");
+                  }}
+                  className={cn(
+                    "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1 cursor-pointer",
+                    isActive
+                      ? "bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                  )}
                 >
-                  <X className="w-3.5 h-3.5" />
+                  {isVi ? cat.labelVi : cat.labelEn}
                 </button>
-              )}
-            </div>
+              );
+            })}
           </div>
 
-          {/* Right: Category Tabs & Expand All */}
-          <div className="flex items-center gap-2 ml-auto flex-wrap">
-            {/* View Filter Tabs */}
-            <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-              {[
-                { id: "all", labelVi: "Tất cả", labelEn: "All" },
-                { id: "swot", labelVi: "Ma trận SWOT", labelEn: "SWOT Matrix" },
-                { id: "domains", labelVi: "Chuyên môn A-E", labelEn: "Domains A-E" },
-                { id: "languages", labelVi: "Ngoại ngữ & AI", labelEn: "Languages & AI" },
-              ].map((tab) => {
-                const isActive = selectedCategory === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => {
-                      playUiSound("click");
-                      setSelectedCategory(tab.id as ViewTab);
-                    }}
-                    className={cn(
-                      "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap",
-                      isActive
-                        ? "bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-400 shadow-xs"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-                    )}
-                  >
-                    {isVi ? tab.labelVi : tab.labelEn}
-                  </button>
-                );
-              })}
-            </div>
+          <button
+            type="button"
+            onClick={() => {
+              playUiSound("toggle");
+              toggleAllCards();
+            }}
+            className="px-3 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-caption font-bold text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 shrink-0"
+          >
+            <ChevronsUpDown className="w-3.5 h-3.5 text-purple-500" />
+            <span>
+              {areAllCollapsed
+                ? (isVi ? "Mở rộng tất cả" : "Expand all")
+                : (isVi ? "Thu gọn tất cả" : "Collapse all")}
+            </span>
+          </button>
+        </div>
+      </PageCardHeader>
 
-            {/* Global Collapse / Expand Toggle Button */}
-            {(selectedCategory === "all" || selectedCategory === "swot") && (
-              <button
-                type="button"
-                onClick={toggleAllCards}
-                className="px-3 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-caption font-bold text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 shrink-0"
-              >
-                <ChevronsUpDown className="w-3.5 h-3.5 text-purple-500" />
-                <span>
-                  {areAllCollapsed
-                    ? (isVi ? "Mở rộng" : "Expand all")
-                    : (isVi ? "Thu gọn" : "Collapse all")}
-                </span>
-              </button>
-            )}
-          </div>
-        </PageCardHeader>
+      {/* SWOT Sub-Section */}
+      {(selectedCategory === "all" || selectedCategory === "swot") && (
+        <div className="w-full py-2.5 space-y-4 font-['Play',sans-serif]">
+          {/* 4 Khối SWOT Ghép Thành Vòng Tròn Tâm - Fluid Responsive Grid */}
+          <div className="relative grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4.5 md:gap-5 lg:gap-6 auto-rows-fr items-stretch w-full">
 
-        {/* 1. SWOT QUADRANTS SECTION */}
-        {(selectedCategory === "all" || selectedCategory === "swot") && (
-          <div className="w-full space-y-4 font-['Play',sans-serif]">
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 md:gap-5 auto-rows-fr items-stretch w-full">
-              
-              {/* S: ĐIỂM MẠNH (STRENGTHS) */}
-              <section
-                id="swot-s"
-                className={`skills-glass-swot-blue rounded-[20px] p-4 sm:p-5 flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
-                  collapsedCards["swot-s"] ? "h-auto min-h-[85px]" : "h-full min-h-0"
-                }`}
+            {/* 1. ĐIỂM MẠNH (S - Strengths) */}
+            <section
+              id="swot-s"
+              className={`skills-glass-swot-blue rounded-[24px] p-[25px] flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
+                collapsedCards["swot-s"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
+              }`}
+            >
+              {/* Góc Phần Tư S */}
+              <div
+                className="absolute bottom-0 right-0 w-12 h-12 sm:w-14 sm:h-14 rounded-tl-full rounded-br-2xl bg-gradient-to-br from-blue-500/30 via-blue-500/50 to-blue-600/70 dark:from-blue-500/35 dark:via-blue-500/50 dark:to-blue-600/70 border-t-2 border-l-2 border-blue-400/70 dark:border-blue-400/70 backdrop-blur-md flex items-center justify-center pl-2 pt-2 text-blue-900 dark:text-blue-100 font-extrabold text-sm sm:text-base shadow-sm select-none z-10 transition-transform duration-300 group-hover:scale-105"
+                title="S - Điểm Mạnh"
               >
-                {/* Quadrant Badge S */}
-                <div
-                  className="absolute bottom-0 right-0 w-11 h-11 sm:w-13 sm:h-13 rounded-tl-full rounded-br-[20px] bg-gradient-to-br from-blue-500/30 via-blue-500/50 to-blue-600/70 dark:from-blue-500/35 dark:to-blue-600/70 border-t border-l border-blue-400/70 backdrop-blur-md flex items-center justify-center pl-2 pt-2 text-blue-900 dark:text-blue-100 font-black text-sm select-none z-10"
-                  title="S - Strengths"
-                >
-                  <span>S</span>
+                <span>S</span>
+              </div>
+
+              <div className="h-full flex flex-col justify-between">
+                {/* Header Thẻ S */}
+                <div className="flex items-center justify-between pb-3 border-b border-blue-200/70 dark:border-blue-800/70 mb-3 w-full select-none">
+                  <div className="flex items-center gap-2.5 text-card-title font-bold">
+                    <Gem className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                    <h4 className="text-card-title font-bold text-blue-600 dark:text-blue-400 tracking-wide">
+                      {isVi ? "Điểm Mạnh" : "Strengths"}
+                    </h4>
+                  </div>
                 </div>
 
-                <div className="h-full flex flex-col justify-between">
-                  {/* Header S with Interactive Action Buttons */}
-                  <div className="flex items-center justify-between pb-2.5 border-b border-blue-200/70 dark:border-blue-800/70 mb-3 w-full select-none">
-                    <div className="flex items-center gap-2 text-card-title font-bold">
-                      <Gem className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                      <h3 className="text-card-title font-bold text-blue-600 dark:text-blue-400 tracking-wide">
-                        {isVi ? "Điểm Mạnh" : "Strengths"}
-                      </h3>
-                      <span className="text-caption font-mono text-slate-500 dark:text-slate-400 font-normal">
-                        · 96% TB
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 z-20">
-                      {/* Deep Dive Button */}
-                      <button
-                        type="button"
-                        onClick={() => openModal("swot-s")}
-                        className="p-1 sm:px-2 sm:py-0.5 rounded-lg bg-blue-100/90 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 hover:bg-blue-600 hover:text-white transition-all text-caption font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs"
-                        title={isVi ? "Xem chi tiết & KPI" : "Deep dive & KPIs"}
-                      >
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">{isVi ? "Chi tiết" : "Deep Dive"}</span>
-                      </button>
-                      
-                      {/* Toggle Collapse Button */}
-                      <button
-                        type="button"
-                        onClick={() => toggleSingleCard("swot-s")}
-                        className="p-1 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                        title={collapsedCards["swot-s"] ? (isVi ? "Mở rộng" : "Expand") : (isVi ? "Thu gọn" : "Collapse")}
-                      >
-                        <ChevronsUpDown className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* S Content */}
-                  <div className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${collapsedCards["swot-s"] ? "is-collapsed" : "h-full"}`}>
-                    <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
-                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2.5 leading-relaxed line-clamp-2">
+                {/* Nội Dung Thu Gọn / Mở Rộng Thẻ S */}
+                <div
+                  className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${
+                    collapsedCards["swot-s"] ? "is-collapsed" : "h-full"
+                  }`}
+                >
+                  <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
+                    <div className="flex-1 flex flex-col justify-between">
+                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
                         {isVi
-                          ? "Nền tảng vận hành & lãnh đạo — Năng lực cốt lõi đã chứng minh qua thực tiễn quản lý và phát triển hệ thống Dịch vụ Khách hàng."
-                          : "Operational foundations & leadership — Core competencies proven through hands-on customer experience management."}
+                          ? "Nền tảng vận hành & lãnh đạo — Những năng lực cốt lõi đã được chứng minh qua thực tiễn quản lý, vận hành và phát triển hệ thống Dịch vụ Khách hàng."
+                          : "Operational foundations & leadership — Core competencies proven through hands-on customer experience management and team growth."}
                       </p>
 
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-body font-medium">
+                      <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                         {STRENGTHS_SKILLS.map((skill, idx) => {
                           const IconComp = skill.icon;
                           return (
                             <li 
                               key={idx} 
-                              className="group/subcard relative p-2.5 rounded-xl skills-glass-card border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs cursor-help"
+                              className="group/subcard relative p-2 rounded-[10px] skills-glass-card border-blue-200/60 dark:border-blue-500/30 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body cursor-help"
                             >
-                              {/* Hover Tooltip */}
-                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                              {/* Tooltip giải thích kỹ năng khi rê chuột */}
+                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-56 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
                                 <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-blue-300">
                                   <IconComp className="w-3.5 h-3.5 shrink-0" />
                                   <span className="truncate">{skill.label}</span>
@@ -574,11 +484,11 @@ export function Skills() {
                               </div>
 
                               <div className="flex items-center justify-between text-body">
-                                <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold min-w-0">
-                                  <IconComp className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                                <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                                  <IconComp className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                                   <span className="truncate text-body text-blue-700 dark:text-blue-300 font-bold">{skill.label}</span>
                                 </span>
-                                <span className="px-1.5 py-0.5 rounded bg-blue-500/15 dark:bg-blue-500/25 text-blue-800 dark:text-blue-300 font-mono font-black text-xs shrink-0 ml-2 tabular-nums">
+                                <span className="px-1.5 py-0.5 rounded bg-blue-500/15 dark:bg-blue-500/25 text-blue-800 dark:text-blue-300 font-mono font-black text-xs shrink-0 ml-2">
                                   {skill.percent}%
                                 </span>
                               </div>
@@ -588,8 +498,10 @@ export function Skills() {
                                   whileInView={{ width: `${skill.percent}%` }}
                                   viewport={{ once: true }}
                                   transition={{ duration: 0.8, delay: idx * 0.05, ease: "easeOut" }}
-                                  className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 rounded-full"
-                                />
+                                  className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 rounded-full relative"
+                                >
+                                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                </motion.div>
                               </div>
                             </li>
                           );
@@ -598,75 +510,59 @@ export function Skills() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
+            </section>
 
-              {/* O: CƠ HỘI & PHÁT TRIỂN (OPPORTUNITIES) */}
-              <section
-                id="swot-o"
-                className={`skills-glass-swot-purple rounded-[20px] p-4 sm:p-5 flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
-                  collapsedCards["swot-o"] ? "h-auto min-h-[85px]" : "h-full min-h-0"
-                }`}
+            {/* 2. CƠ HỘI (O - Opportunities) */}
+            <section
+              id="swot-o"
+              className={`skills-glass-swot-purple rounded-[24px] p-[25px] flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
+                collapsedCards["swot-o"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
+              }`}
+            >
+              {/* Góc Phần Tư O (Dưới Trái) */}
+              <div
+                className="absolute bottom-0 left-0 w-12 h-12 sm:w-14 sm:h-14 rounded-tr-full rounded-bl-2xl bg-gradient-to-bl from-purple-500/30 via-purple-500/50 to-purple-600/70 dark:from-purple-500/35 dark:via-purple-500/50 dark:to-purple-600/70 border-t-2 border-r-2 border-purple-400/70 dark:border-purple-400/70 backdrop-blur-md flex items-center justify-center pr-2 pt-2 text-purple-900 dark:text-purple-100 font-extrabold text-sm sm:text-base shadow-sm select-none z-10 transition-transform duration-300 group-hover:scale-105"
+                title="O - Cơ Hội"
               >
-                {/* Quadrant Badge O */}
-                <div
-                  className="absolute bottom-0 left-0 w-11 h-11 sm:w-13 sm:h-13 rounded-tr-full rounded-bl-[20px] bg-gradient-to-bl from-purple-500/30 via-purple-500/50 to-purple-600/70 dark:from-purple-500/35 dark:to-purple-600/70 border-t border-r border-purple-400/70 backdrop-blur-md flex items-center justify-center pr-2 pt-2 text-purple-900 dark:text-purple-100 font-black text-sm select-none z-10"
-                  title="O - Opportunities"
-                >
-                  <span>O</span>
+                <span>O</span>
+              </div>
+
+              <div className="h-full flex flex-col justify-between">
+                {/* Header Thẻ O */}
+                <div className="flex items-center justify-between pb-3 border-b border-purple-200/70 dark:border-purple-800/70 mb-3 w-full select-none flex-row-reverse">
+                  <div className="flex items-center gap-2.5 text-card-title font-bold">
+                    <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                    <h4 className="text-card-title font-bold text-purple-600 dark:text-purple-400 tracking-wide">
+                      {isVi ? "Phát Triển" : "Development & Growth"}
+                    </h4>
+                  </div>
                 </div>
 
-                <div className="h-full flex flex-col justify-between">
-                  {/* Header O */}
-                  <div className="flex items-center justify-between pb-2.5 border-b border-purple-200/70 dark:border-purple-800/70 mb-3 w-full select-none">
-                    <div className="flex items-center gap-2 text-card-title font-bold">
-                      <Rocket className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                      <h3 className="text-card-title font-bold text-purple-600 dark:text-purple-400 tracking-wide">
-                        {isVi ? "Phát Triển" : "Opportunities"}
-                      </h3>
-                      <span className="text-caption font-mono text-slate-500 dark:text-slate-400 font-normal">
-                        · 92% TB
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 z-20">
-                      <button
-                        type="button"
-                        onClick={() => openModal("swot-o")}
-                        className="p-1 sm:px-2 sm:py-0.5 rounded-lg bg-purple-100/90 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 hover:bg-purple-600 hover:text-white transition-all text-caption font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs"
-                        title={isVi ? "Xem chi tiết & Lộ trình" : "Deep dive & Roadmap"}
-                      >
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">{isVi ? "Chi tiết" : "Deep Dive"}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleSingleCard("swot-o")}
-                        className="p-1 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer"
-                        title={collapsedCards["swot-o"] ? (isVi ? "Mở rộng" : "Expand") : (isVi ? "Thu gọn" : "Collapse")}
-                      >
-                        <ChevronsUpDown className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* O Content */}
-                  <div className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${collapsedCards["swot-o"] ? "is-collapsed" : "h-full"}`}>
-                    <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
-                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2.5 leading-relaxed line-clamp-2">
+                {/* Nội Dung Thu Gọn / Mở Rộng Thẻ O */}
+                <div
+                  className={`skills-swot-collapse-grid flex-1 flex flex-col ${
+                    collapsedCards["swot-o"] ? "is-collapsed" : ""
+                  }`}
+                >
+                  <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
+                    <div>
+                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
                         {isVi
-                          ? "Công nghệ & chuyển đổi dịch vụ — Tạo đòn bẩy nâng cao hiệu quả vận hành, tối ưu nguồn lực và chuyển đổi số thông minh."
-                          : "Tech & service transformation — Capabilities leveraging AI, automation and lean models to elevate modern CX operations."}
+                          ? "Công nghệ & chuyển đổi dịch vụ — Những năng lực tạo đòn bẩy để nâng cao hiệu quả vận hành, tối ưu nguồn lực và chuyển đổi mô hình Dịch vụ Khách hàng trong thời đại số."
+                          : "Tech & service transformation — Capabilities leveraging technology to elevate operational efficiency and drive modern digital CX."}
                       </p>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-body font-medium">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                         {OPPORTUNITIES_SKILLS.map((opp, idx) => {
                           const IconComp = opp.icon;
                           return (
                             <div 
                               key={idx} 
-                              className="group/subcard relative p-2.5 rounded-xl skills-glass-card border-purple-200/60 dark:border-purple-500/20 space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs cursor-help"
+                              className="group/subcard relative p-2 rounded-[10px] skills-glass-card border-purple-200/60 dark:border-purple-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body cursor-help"
                             >
-                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                              {/* Tooltip giải thích kỹ năng khi rê chuột */}
+                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-56 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
                                 <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-purple-300">
                                   <IconComp className="w-3.5 h-3.5 shrink-0" />
                                   <span className="truncate">{opp.title}</span>
@@ -678,11 +574,11 @@ export function Skills() {
                               </div>
 
                               <div className="flex items-center justify-between text-body">
-                                <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold min-w-0">
-                                  <IconComp className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400 shrink-0" />
+                                <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                                  <IconComp className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
                                   <span className="truncate text-body text-purple-700 dark:text-purple-300 font-bold">{opp.title}</span>
                                 </span>
-                                <span className="px-1.5 py-0.5 rounded bg-purple-500/15 dark:bg-purple-500/25 text-purple-800 dark:text-purple-300 font-mono font-black text-xs shrink-0 ml-2 tabular-nums">
+                                <span className="px-1.5 py-0.5 rounded bg-purple-500/15 dark:bg-purple-500/25 text-purple-800 dark:text-purple-300 font-mono font-black text-xs shrink-0 ml-2">
                                   {opp.meter}%
                                 </span>
                               </div>
@@ -691,9 +587,11 @@ export function Skills() {
                                   initial={{ width: 0 }}
                                   whileInView={{ width: `${opp.meter}%` }}
                                   viewport={{ once: true }}
-                                  transition={{ duration: 0.8, delay: idx * 0.05, ease: "easeOut" }}
-                                  className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"
-                                />
+                                  transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
+                                  className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full relative"
+                                >
+                                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                </motion.div>
                               </div>
                             </div>
                           );
@@ -702,75 +600,59 @@ export function Skills() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
+            </section>
 
-              {/* W: ĐIỂM CẦN HOÀN THIỆN (WEAKNESSES / GROWTH) */}
-              <section
-                id="swot-w"
-                className={`skills-glass-swot-amber rounded-[20px] p-4 sm:p-5 flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
-                  collapsedCards["swot-w"] ? "h-auto min-h-[85px]" : "h-full min-h-0"
-                }`}
+            {/* 3. ĐIỂM CẦN PHÁT TRIỂN (W - Weaknesses) */}
+            <section
+              id="swot-w"
+              className={`skills-glass-swot-amber rounded-[24px] p-[25px] flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
+                collapsedCards["swot-w"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
+              }`}
+            >
+              {/* Góc Phần Tư W */}
+              <div
+                className="absolute top-0 right-0 w-12 h-12 sm:w-14 sm:h-14 rounded-bl-full rounded-tr-2xl bg-gradient-to-tr from-amber-500/30 via-amber-500/50 to-amber-600/70 dark:from-amber-500/35 dark:via-amber-500/50 dark:to-amber-600/70 border-b-2 border-l-2 border-amber-400/70 dark:border-amber-400/70 backdrop-blur-md flex items-center justify-center pl-2 pb-2 text-amber-900 dark:text-amber-100 font-extrabold text-sm sm:text-base shadow-sm select-none z-10 transition-transform duration-300 group-hover:scale-105"
+                title="W - Hoàn Thiện"
               >
-                {/* Quadrant Badge W */}
-                <div
-                  className="absolute top-0 right-0 w-11 h-11 sm:w-13 sm:h-13 rounded-bl-full rounded-tr-[20px] bg-gradient-to-tr from-amber-500/30 via-amber-500/50 to-amber-600/70 dark:from-amber-500/35 dark:to-amber-600/70 border-b border-l border-amber-400/70 backdrop-blur-md flex items-center justify-center pl-2 pb-2 text-amber-900 dark:text-amber-100 font-black text-sm select-none z-10"
-                  title="W - Growth Areas"
-                >
-                  <span>W</span>
+                <span>W</span>
+              </div>
+
+              <div className="h-full flex flex-col justify-between">
+                {/* Header Thẻ W at top */}
+                <div className="flex items-center justify-between pb-3 border-b border-amber-200/70 dark:border-amber-800/70 mb-3 w-full select-none">
+                  <div className="flex items-center gap-2.5 text-card-title font-bold">
+                    <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                    <h4 className="text-card-title font-bold text-amber-600 dark:text-amber-400 tracking-wide">
+                      {isVi ? "Hoàn Thiện" : "Growth Areas"}
+                    </h4>
+                  </div>
                 </div>
 
-                <div className="h-full flex flex-col justify-between">
-                  {/* Header W */}
-                  <div className="flex items-center justify-between pb-2.5 border-b border-amber-200/70 dark:border-amber-800/70 mb-3 w-full select-none pr-12">
-                    <div className="flex items-center gap-2 text-card-title font-bold">
-                      <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                      <h3 className="text-card-title font-bold text-amber-600 dark:text-amber-400 tracking-wide">
-                        {isVi ? "Hoàn Thiện" : "Growth Areas"}
-                      </h3>
-                      <span className="text-caption font-mono text-slate-500 dark:text-slate-400 font-normal">
-                        · 87% TB
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 z-20">
-                      <button
-                        type="button"
-                        onClick={() => openModal("swot-w")}
-                        className="p-1 sm:px-2 sm:py-0.5 rounded-lg bg-amber-100/90 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 hover:bg-amber-600 hover:text-white transition-all text-caption font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs"
-                        title={isVi ? "Xem kế hoạch nâng cấp" : "View upskilling plan"}
-                      >
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">{isVi ? "Chi tiết" : "Deep Dive"}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleSingleCard("swot-w")}
-                        className="p-1 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors cursor-pointer"
-                        title={collapsedCards["swot-w"] ? (isVi ? "Mở rộng" : "Expand") : (isVi ? "Thu gọn" : "Collapse")}
-                      >
-                        <ChevronsUpDown className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* W Content */}
-                  <div className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${collapsedCards["swot-w"] ? "is-collapsed" : "h-full"}`}>
-                    <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
-                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2.5 leading-relaxed line-clamp-2 font-medium">
+                {/* Nội Dung Thu Gọn / Mở Rộng Thẻ W */}
+                <div
+                  className={`skills-swot-collapse-grid flex-1 flex flex-col ${
+                    collapsedCards["swot-w"] ? "is-collapsed" : ""
+                  }`}
+                >
+                  <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
+                    <div>
+                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2 font-semibold">
                         {isVi
-                          ? "Nâng cao năng lực quản trị — Hoàn thiện để nâng tầm vai trò từ vận hành hiệu quả sang quản trị chiến lược và chuyển đổi số."
-                          : "Strategic upskilling — Target competencies for transitioning from operational execution to strategic enterprise CX leadership."}
+                          ? "Nâng cao năng lực quản trị — Những năng lực cần tiếp tục hoàn thiện để nâng tầm vai trò quản lý từ vận hành hiệu quả sang quản trị chiến lược và phát triển bền vững."
+                          : "Strategic growth areas — Capabilities targeted for ongoing refinement to transition from operational execution to strategic enterprise leadership."}
                       </p>
 
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-body font-medium">
+                      <ul className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                         {WEAKNESSES_SKILLS.map((skill, idx) => {
                           const IconComp = skill.icon;
                           return (
                             <li 
                               key={idx} 
-                              className="group/subcard relative p-2.5 rounded-xl skills-glass-card border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs cursor-help"
+                              className="group/subcard relative p-2 rounded-[10px] skills-glass-card border-amber-200/60 dark:border-amber-500/30 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body cursor-help"
                             >
-                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                              {/* Tooltip giải thích kỹ năng khi rê chuột */}
+                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-56 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
                                 <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-amber-300">
                                   <IconComp className="w-3.5 h-3.5 shrink-0" />
                                   <span className="truncate">{skill.label}</span>
@@ -782,11 +664,11 @@ export function Skills() {
                               </div>
 
                               <div className="flex items-center justify-between text-body">
-                                <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                                <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
                                   <IconComp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
                                   <span className="truncate text-body text-amber-700 dark:text-amber-300 font-bold">{skill.label}</span>
                                 </span>
-                                <span className="px-1.5 py-0.5 rounded bg-amber-500/15 dark:bg-amber-500/25 text-amber-800 dark:text-amber-300 font-mono font-black text-xs shrink-0 ml-2 tabular-nums">
+                                <span className="px-1.5 py-0.5 rounded bg-amber-500/15 dark:bg-amber-500/25 text-amber-800 dark:text-amber-300 font-mono font-black text-xs shrink-0 ml-2">
                                   {skill.percent}%
                                 </span>
                               </div>
@@ -796,8 +678,10 @@ export function Skills() {
                                   whileInView={{ width: `${skill.percent}%` }}
                                   viewport={{ once: true }}
                                   transition={{ duration: 0.8, delay: idx * 0.05, ease: "easeOut" }}
-                                  className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full"
-                                />
+                                  className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full relative"
+                                >
+                                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                </motion.div>
                               </div>
                             </li>
                           );
@@ -806,75 +690,59 @@ export function Skills() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
+            </section>
 
-              {/* T: THÁCH THỨC & RỦI RO (THREATS) */}
-              <section
-                id="swot-t"
-                className={`skills-glass-swot-rose rounded-[20px] p-4 sm:p-5 flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
-                  collapsedCards["swot-t"] ? "h-auto min-h-[85px]" : "h-full min-h-0"
-                }`}
+            {/* 4. THÁCH THỨC & RỦI RO (T - Threats) */}
+            <section
+              id="swot-t"
+              className={`skills-glass-swot-rose rounded-[24px] p-[25px] flex flex-col justify-between skills-hover-lift relative group transition-all duration-300 w-full ${
+                collapsedCards["swot-t"] ? "h-auto min-h-[90px]" : "h-full min-h-0"
+              }`}
+            >
+              {/* Góc Phần Tư T */}
+              <div
+                className="absolute top-0 left-0 w-12 h-12 sm:w-14 sm:h-14 rounded-br-full rounded-tl-2xl bg-gradient-to-tl from-rose-500/30 via-rose-500/50 to-rose-600/70 dark:from-rose-500/35 dark:via-rose-500/50 dark:to-rose-600/70 border-b-2 border-r-2 border-rose-400/70 dark:border-rose-400/70 backdrop-blur-md flex items-center justify-center pr-2 pb-2 text-rose-900 dark:text-rose-100 font-extrabold text-sm sm:text-base shadow-sm select-none z-10 transition-transform duration-300 group-hover:scale-105"
+                title="T - Thách Thức"
               >
-                {/* Quadrant Badge T */}
-                <div
-                  className="absolute top-0 left-0 w-11 h-11 sm:w-13 sm:h-13 rounded-br-full rounded-tl-[20px] bg-gradient-to-tl from-rose-500/30 via-rose-500/50 to-rose-600/70 dark:from-rose-500/35 dark:to-rose-600/70 border-b border-r border-rose-400/70 backdrop-blur-md flex items-center justify-center pr-2 pb-2 text-rose-900 dark:text-rose-100 font-black text-sm select-none z-10"
-                  title="T - Threats & Risks"
-                >
-                  <span>T</span>
+                <span>T</span>
+              </div>
+
+              <div className="h-full flex flex-col justify-between">
+                {/* Header Thẻ T at top */}
+                <div className="flex items-center justify-between pb-3 border-b border-rose-200/70 dark:border-rose-800/70 mb-3 w-full select-none">
+                  <div className="flex items-center gap-2.5 text-card-title font-bold">
+                    <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
+                    <h4 className="text-card-title font-bold text-rose-600 dark:text-rose-400 tracking-wide text-left">
+                      {isVi ? "Thách Thức" : "Challenges"}
+                    </h4>
+                  </div>
                 </div>
 
-                <div className="h-full flex flex-col justify-between">
-                  {/* Header T */}
-                  <div className="flex items-center justify-between pb-2.5 border-b border-rose-200/70 dark:border-rose-800/70 mb-3 w-full select-none pl-12">
-                    <div className="flex items-center gap-2 text-card-title font-bold">
-                      <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 transform transition-transform group-hover:scale-110 duration-300" />
-                      <h3 className="text-card-title font-bold text-rose-600 dark:text-rose-400 tracking-wide">
-                        {isVi ? "Thách Thức" : "Challenges"}
-                      </h3>
-                      <span className="text-caption font-mono text-slate-500 dark:text-slate-400 font-normal">
-                        · 90% Tác động
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 z-20">
-                      <button
-                        type="button"
-                        onClick={() => openModal("swot-t")}
-                        className="p-1 sm:px-2 sm:py-0.5 rounded-lg bg-rose-100/90 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300 hover:bg-rose-600 hover:text-white transition-all text-caption font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs"
-                        title={isVi ? "Xem quản trị rủi ro & giải pháp" : "Risk mitigation & solutions"}
-                      >
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">{isVi ? "Chi tiết" : "Deep Dive"}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleSingleCard("swot-t")}
-                        className="p-1 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
-                        title={collapsedCards["swot-t"] ? (isVi ? "Mở rộng" : "Expand") : (isVi ? "Thu gọn" : "Collapse")}
-                      >
-                        <ChevronsUpDown className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* T Content */}
-                  <div className={`skills-swot-collapse-grid flex-1 flex flex-col justify-between ${collapsedCards["swot-t"] ? "is-collapsed" : "h-full"}`}>
-                    <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-start h-full">
-                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2.5 leading-relaxed line-clamp-2">
+                {/* Nội Dung Thu Gọn / Mở Rộng Thẻ T */}
+                <div
+                  className={`skills-swot-collapse-grid flex-1 flex flex-col ${
+                    collapsedCards["swot-t"] ? "is-collapsed" : ""
+                  }`}
+                >
+                  <div className="skills-swot-collapse-inner flex-1 flex flex-col justify-between pt-1">
+                    <div>
+                      <p className="text-body text-slate-700 dark:text-slate-300 mb-2 sm:mb-3 leading-relaxed line-clamp-2">
                         {isVi
-                          ? "Thích ứng & quản trị rủi ro — Những yếu tố bên ngoài tác động trực tiếp đến chất lượng dịch vụ, nhân sự và hiệu quả vận hành."
-                          : "Adaptability & risk management — External factors impacting service quality, retention, and operations requiring agile responses."}
+                          ? "Thích ứng & quản trị biến động — Những yếu tố bên ngoài tác động trực tiếp đến chất lượng dịch vụ, nhân sự và hiệu quả vận hành, đòi hỏi khả năng thích ứng và quản trị chủ động."
+                          : "Adaptability & risk management — External factors impacting service quality, employee retention, and operations requiring agile responses."}
                       </p>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-body font-medium">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-1.5 xs:gap-2 text-body font-medium">
                         {THREATS_SKILLS.map((threat, idx) => {
                           const IconComp = threat.icon;
                           return (
                             <div 
                               key={idx} 
-                              className="group/subcard relative p-2.5 rounded-xl skills-glass-card border-rose-200/60 dark:border-rose-500/20 space-y-1.5 transition-all hover:bg-white/95 dark:hover:bg-slate-800/95 shadow-2xs cursor-help"
+                              className="group/subcard relative p-2 rounded-[10px] skills-glass-card border-rose-200/60 dark:border-rose-500/20 space-y-1.5 transition-all hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-2xs text-body cursor-help"
                             >
-                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                              {/* Tooltip giải thích kỹ năng khi rê chuột */}
+                              <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-56 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
                                 <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-rose-300">
                                   <IconComp className="w-3.5 h-3.5 shrink-0" />
                                   <span className="truncate">{threat.title}</span>
@@ -886,11 +754,11 @@ export function Skills() {
                               </div>
 
                               <div className="flex items-center justify-between text-body">
-                                <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold min-w-0">
-                                  <IconComp className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400 shrink-0" />
+                                <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold min-w-0">
+                                  <IconComp className="w-4 h-4 text-rose-700 dark:text-rose-400 shrink-0" />
                                   <span className="truncate text-body text-rose-700 dark:text-rose-300 font-bold">{threat.title}</span>
                                 </span>
-                                <span className="px-1.5 py-0.5 rounded bg-rose-500/15 dark:bg-rose-500/25 text-rose-800 dark:text-rose-300 font-mono font-black text-xs shrink-0 ml-2 tabular-nums">
+                                <span className="px-1.5 py-0.5 rounded bg-rose-500/15 dark:bg-rose-500/25 text-rose-800 dark:text-rose-300 font-mono font-black text-xs shrink-0 ml-2">
                                   {threat.meter}%
                                 </span>
                               </div>
@@ -899,9 +767,12 @@ export function Skills() {
                                   initial={{ width: 0 }}
                                   whileInView={{ width: `${threat.meter}%` }}
                                   viewport={{ once: true }}
-                                  transition={{ duration: 0.8, delay: idx * 0.05, ease: "easeOut" }}
-                                  className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"
-                                />
+                                  transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
+                                  className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full relative"
+                                  key={idx}
+                                >
+                                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                </motion.div>
                               </div>
                             </div>
                           );
@@ -910,328 +781,186 @@ export function Skills() {
                     </div>
                   </div>
                 </div>
-              </section>
-
-            </div>
+              </div>
+            </section>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* 2. SPECIALIZED DOMAINS SECTION (A - E) */}
-        {(selectedCategory === "all" || selectedCategory === "domains") && (
-          <div className="w-full pt-4 space-y-4 font-['Play',sans-serif]">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+      {/* Ngôn Ngữ & Năng Lực Giao Tiếp Quốc Tế - Phân mục với tiêu đề chuẩn hóa */}
+      {(selectedCategory === "all" || selectedCategory === "languages") && (
+        <div className="w-full py-2.5 pb-6 space-y-4 pt-4 border-t border-slate-200/50 dark:border-slate-800/50 font-['Play',sans-serif]">
+          <div
+            id="swot-languages-overview"
+            className="!bg-transparent !border-none !shadow-none rounded-2xl p-4 sm:p-5 flex flex-col gap-3 group transition-all duration-300 relative"
+          >
+            {/* Tiêu đề phân mục Ngôn ngữ đồng bộ format Chi tiết phỏng vấn */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
               <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <h3 className="text-card-title font-bold text-slate-900 dark:text-white">
-                  {isVi ? "5 Nhóm Năng Lực Chuyên Sâu" : "5 Specialized Competency Domains"}
-                </h3>
+                <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <h4 className="text-card-title font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
+                  {isVi ? "Năng lực ngôn ngữ" : "International language proficiency"}
+                </h4>
               </div>
-              <span className="text-caption font-mono text-slate-500 dark:text-slate-400">
-                {filteredSkillGroups.length} {isVi ? "nhóm năng lực" : "domains"}
-              </span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {filteredSkillGroups.map((group) => {
-                return (
-                  <div
-                    key={group.id}
-                    className="p-4 sm:p-5 rounded-2xl skills-glass-card border border-slate-200/80 dark:border-slate-800/80 space-y-3.5 shadow-sm hover:shadow-md transition-all"
-                  >
-                    {/* Domain Card Header */}
-                    <div className="flex items-start justify-between gap-3 pb-2.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="px-2 py-0.5 rounded-md font-mono text-xs font-black bg-purple-500/15 text-purple-700 dark:text-purple-300">
-                            {group.code}
-                          </span>
-                          <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight">
-                            {isVi ? group.titleVi : group.titleEn}
-                          </h4>
-                        </div>
-                        <p className="text-caption text-slate-600 dark:text-slate-400 line-clamp-2">
-                          {isVi ? group.subtitleVi : group.subtitleEn}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Skill Items in Group */}
-                    <div className="space-y-2.5">
-                      {group.skills.map((skill) => {
-                        const IconComponent = ICON_MAP[skill.iconName] || Brain;
-                        return (
-                          <div
-                            key={skill.id}
-                            className="p-2.5 rounded-xl bg-slate-50/70 dark:bg-slate-900/50 border border-slate-200/50 dark:border-slate-800/50 space-y-1.5"
-                          >
-                            <div className="flex items-center justify-between text-body">
-                              <span className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-100 min-w-0">
-                                <IconComponent className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                                <span className="truncate text-xs sm:text-sm">
-                                  {isVi ? skill.nameVi : skill.nameEn}
-                                </span>
-                              </span>
-                              <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-caption text-slate-500 dark:text-slate-400 hidden sm:inline">
-                                  {isVi ? skill.levelVi : skill.levelEn}
-                                </span>
-                                <span className="px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-700 dark:text-purple-300 font-mono font-bold text-xs tabular-nums">
-                                  {skill.percentage}%
-                                </span>
-                              </div>
-                            </div>
-
-                            <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-2">
-                              {isVi ? skill.descriptionVi : skill.descriptionEn}
-                            </p>
-
-                            {/* Tech / Tools */}
-                            {skill.tools && skill.tools.length > 0 && (
-                              <div className="flex items-center flex-wrap gap-1 pt-1">
-                                {skill.tools.map((tool, tIdx) => (
-                                  <span
-                                    key={tIdx}
-                                    className="px-1.5 py-0.5 rounded text-3xs font-semibold bg-slate-200/60 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300"
-                                  >
-                                    {tool}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Meter Bar */}
-                            <div className="w-full h-1 bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden mt-1">
-                              <div
-                                style={{ width: `${skill.percentage}%` }}
-                                className="h-full bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Tiếng Việt Subcard */}
+              <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
+                {/* Tooltip */}
+                <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                  <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-rose-300">
+                    <Languages className="w-3.5 h-3.5 shrink-0" />
+                    <span>Tiếng Việt</span>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* 3. LANGUAGES & GLOBAL COMMUNICATION SECTION */}
-        {(selectedCategory === "all" || selectedCategory === "languages") && (
-          <div className="w-full py-2.5 pb-6 space-y-4 pt-4 border-t border-slate-200/50 dark:border-slate-800/50 font-['Play',sans-serif]">
-            <div
-              id="swot-languages-overview"
-              className="!bg-transparent !border-none !shadow-none rounded-2xl p-2 sm:p-3 flex flex-col gap-3 group transition-all duration-300 relative"
-            >
-              <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <h3 className="text-card-title font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
-                    {isVi ? "Năng lực ngôn ngữ & Giao tiếp quốc tế" : "International Language & AI Proficiency"}
-                  </h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => openModal("languages")}
-                  className="px-2.5 py-1 rounded-lg bg-emerald-100/90 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition-all text-caption font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Xem chi tiết" : "Deep Dive"}</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {/* Tiếng Việt */}
-                <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-                      <Languages className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-                      <h4 className="font-bold text-body text-rose-700 dark:text-rose-300">Tiếng Việt</h4>
-                      <span className="text-body-sm text-slate-600 dark:text-slate-400">(Bản xứ / Native)</span>
-                    </div>
-                    <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-rose-600 dark:text-rose-400">
-                      <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-rose-600 dark:text-rose-500 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="95, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-2xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">95%</span>
-                    </div>
-                  </div>
-                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-2">
+                  <p className="text-[11px] text-slate-200 leading-relaxed font-normal">
                     {isVi
-                      ? "Ngôn ngữ bản xứ, khả năng diễn đạt lưu loát, viết báo cáo chuyên sâu và thuyết trình truyền cảm hứng."
-                      : "Native Vietnamese speaker with persuasive communication and executive report drafting."}
+                      ? "Ngôn ngữ bản xứ, khả năng diễn đạt lưu loát, truyền cảm, viết báo cáo chuyên sâu và thuyết trình truyền cảm hứng."
+                      : "Native Vietnamese speaker with persuasive communication, professional report drafting, and inspiring presentation skills."}
                   </p>
-                  <div className="pt-2 border-t border-rose-100/70 dark:border-rose-900/40 flex items-center justify-between">
-                    <span className="text-body-sm text-rose-700 dark:text-rose-400 font-semibold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                      {isVi ? "Thành thạo chuyên sâu" : "Native fluency"}
-                    </span>
-                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-slate-900/95 dark:bg-slate-950/95 rotate-45 border-r border-b border-white/20" />
                 </div>
 
-                {/* Tiếng Anh */}
-                <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-                      <Globe className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
-                      <h4 className="font-bold text-body text-sky-700 dark:text-sky-300">Tiếng Anh</h4>
-                      <span className="text-body-sm text-slate-600 dark:text-slate-400">(Chuyên nghiệp)</span>
-                    </div>
-                    <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-sky-600 dark:text-sky-400">
-                      <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-sky-600 dark:text-sky-500 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="65, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-2xs font-bold text-sky-600 dark:text-sky-400 tabular-nums">65%</span>
-                    </div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                    <Languages className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                    <h4 className="font-bold text-body text-rose-700 dark:text-rose-300">Tiếng Việt</h4>
+                    <span className="text-body-sm text-slate-600 dark:text-slate-400">(Ngôn ngữ bản xứ)</span>
                   </div>
-                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-2">
+                  <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-rose-600 dark:text-rose-400">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-slate-200 dark:text-slate-800 stroke-current"
+                        strokeWidth="3.5"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-rose-600 dark:text-rose-500 stroke-current"
+                        strokeWidth="3.5"
+                        strokeDasharray="90, 100"
+                        strokeLinecap="round"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <span className="absolute text-2xs font-bold text-rose-600 dark:text-rose-400">90%</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-rose-100/70 dark:border-rose-900/40 flex items-center justify-between">
+                  <span className="text-body-sm text-rose-700 dark:text-rose-400 font-semibold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                    {isVi ? "Thành thạo chuyên sâu" : "Native fluency"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tiếng Anh Subcard */}
+              <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
+                {/* Tooltip */}
+                <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                  <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-sky-300">
+                    <Globe className="w-3.5 h-3.5 shrink-0" />
+                    <span>Tiếng Anh</span>
+                  </div>
+                  <p className="text-[11px] text-slate-200 leading-relaxed font-normal">
                     {isVi
                       ? "Giao tiếp làm việc tự tin, đọc hiểu tài liệu kỹ thuật, trao đổi nghiệp vụ với đối tác quốc tế."
                       : "Professional working proficiency in English, technical documentation literacy, and international stakeholder collaboration."}
                   </p>
-                  <div className="pt-2 border-t border-sky-100/70 dark:border-sky-900/40 flex items-center justify-between">
-                    <span className="text-body-sm text-sky-700 dark:text-sky-400 font-semibold flex items-center gap-1.5">
-                      <Award className="w-3.5 h-3.5 shrink-0" />
-                      {isVi ? "Làm việc môi trường quốc tế" : "Professional working level"}
-                    </span>
-                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-slate-900/95 dark:bg-slate-950/95 rotate-45 border-r border-b border-white/20" />
                 </div>
 
-                {/* Ứng dụng AI Đa Ngôn Ngữ */}
-                <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-                      <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                      <h4 className="font-bold text-body text-emerald-600 dark:text-emerald-400 leading-tight">
-                        Ứng dụng AI
-                      </h4>
-                      <span className="text-body-sm text-slate-600 dark:text-slate-400">(Họp &amp; Dịch thuật)</span>
-                    </div>
-                    <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-emerald-700 dark:text-emerald-400">
-                      <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-                        <path
-                          className="text-slate-200 dark:text-slate-800 stroke-current"
-                          strokeWidth="3.5"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path
-                          className="text-emerald-600 stroke-current"
-                          strokeWidth="3.5"
-                          strokeDasharray="88, 100"
-                          strokeLinecap="round"
-                          fill="none"
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                      </svg>
-                      <span className="absolute text-2xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">88%</span>
-                    </div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                    <Globe className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
+                    <h4 className="font-bold text-body text-sky-700 dark:text-sky-300">Tiếng Anh</h4>
+                    <span className="text-body-sm text-slate-600 dark:text-slate-400">(Giao tiếp chuyên nghiệp)</span>
                   </div>
-                  <p className="text-caption text-slate-600 dark:text-slate-300 line-clamp-2">
+                  <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-sky-600 dark:text-sky-400">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-slate-200 dark:text-slate-800 stroke-current"
+                        strokeWidth="3.5"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-sky-600 dark:text-sky-500 stroke-current"
+                        strokeWidth="3.5"
+                        strokeDasharray="60, 100"
+                        strokeLinecap="round"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <span className="absolute text-2xs font-bold text-sky-600 dark:text-sky-400">60%</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-sky-100/70 dark:border-sky-900/40 flex items-center justify-between">
+                  <span className="text-body-sm text-sky-700 dark:text-sky-400 font-semibold flex items-center gap-1.5">
+                    <Award className="w-3.5 h-3.5 shrink-0" />
+                    {isVi ? "Làm việc môi trường quốc tế" : "Professional working level"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Ứng dụng AI Subcard */}
+              <div className="group/subcard relative skills-glass-card rounded-xl p-3.5 flex flex-col justify-between gap-2.5 skills-hover-lift shadow-sm cursor-help">
+                {/* Tooltip */}
+                <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/subcard:opacity-100 group-hover/subcard:translate-y-0 translate-y-1 transition-all duration-200 z-50 w-60 sm:w-64 p-2.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border border-white/20 backdrop-blur-md text-left">
+                  <div className="flex items-center gap-1.5 mb-1 text-[11px] font-bold text-emerald-300">
+                    <Bot className="w-3.5 h-3.5 shrink-0" />
+                    <span>Ứng dụng AI</span>
+                  </div>
+                  <p className="text-[11px] text-slate-200 leading-relaxed font-normal">
                     {isVi
                       ? "Sử dụng công cụ AI phiên dịch, biên soạn tài liệu song ngữ và trợ lý hỗ trợ hội họp đa quốc gia thời gian thực."
                       : "Leveraging generative AI for real-time translation, bilingual document drafting, and cross-border meeting assistance."}
                   </p>
-                  <div className="pt-2 border-t border-emerald-100/70 dark:border-emerald-900/40 flex items-center justify-between">
-                    <span className="text-body-sm text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                      {isVi ? "Dịch thuật & Trợ lý thời gian thực" : "Real-time AI translation & assistant"}
-                    </span>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-slate-900/95 dark:bg-slate-950/95 rotate-45 border-r border-b border-white/20" />
+                </div>
+
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                    <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <h4 className="font-bold text-body text-emerald-600 dark:text-emerald-400 leading-tight">
+                      Ứng dụng AI
+                    </h4>
+                    <span className="text-body-sm text-slate-600 dark:text-slate-400">(Hỗ trợ trao đổi &amp; họp đa quốc gia)</span>
                   </div>
+                  <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center font-bold text-sm text-emerald-700 dark:text-emerald-400">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-slate-200 dark:text-slate-800 stroke-current"
+                        strokeWidth="3.5"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-emerald-600 stroke-current"
+                        strokeWidth="3.5"
+                        strokeDasharray="85, 100"
+                        strokeLinecap="round"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <span className="absolute text-2xs font-bold text-emerald-600 dark:text-emerald-400">85%</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-emerald-100/70 dark:border-emerald-900/40 flex items-center justify-between">
+                  <span className="text-body-sm text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                    {isVi ? "Dịch thuật & Trợ lý thời gian thực" : "Real-time AI translation & assistant"}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </div>
-
-      {/* 4. MODAL DEEP DIVE OVERLAY */}
-      <AnimatePresence>
-        {activeModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeModal}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md"
-            />
-
-            {/* Modal Content Window */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto z-10 my-auto rounded-2xl shadow-2xl"
-            >
-              {activeModal === "swot-s" && (
-                <ExpandedCardStrengths
-                  isVi={isVi}
-                  onClose={closeModal}
-                  onContact={() => handleNavigateToContact("Strengths - Năng lực cốt lõi")}
-                />
-              )}
-              {activeModal === "swot-o" && (
-                <ExpandedCardOpportunities
-                  isVi={isVi}
-                  onClose={closeModal}
-                  onContact={() => handleNavigateToContact("Opportunities - Công nghệ & AI")}
-                />
-              )}
-              {activeModal === "swot-w" && (
-                <ExpandedCardWeaknesses
-                  isVi={isVi}
-                  onClose={closeModal}
-                  onContact={() => handleNavigateToContact("Growth - Kế hoạch nâng cấp")}
-                />
-              )}
-              {activeModal === "swot-t" && (
-                <ExpandedCardThreats
-                  isVi={isVi}
-                  onClose={closeModal}
-                  onContact={() => handleNavigateToContact("Risk Governance - Quản trị rủi ro")}
-                />
-              )}
-              {activeModal === "languages" && (
-                <ExpandedCardLanguages
-                  isVi={isVi}
-                  onClose={closeModal}
-                  onContact={() => handleNavigateToContact("Languages - Giao tiếp quốc tế")}
-                />
-              )}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

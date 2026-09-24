@@ -312,7 +312,7 @@ export default function Wallpapers() {
   return (
     <section 
       id="wallpapers" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6 font-sans text-slate-800 dark:text-slate-100"
     >
       <input
         ref={fileInputRef}
@@ -322,7 +322,7 @@ export default function Wallpapers() {
         className="hidden"
       />
       {/* Main Card Hình nền */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-5 sm:gap-6">
+      <div className="w-full bg-transparent flex flex-col gap-4">
 
         {/* Container Hình nền - đem nội dung ra ngoài thẻ chứa */}
         <div 

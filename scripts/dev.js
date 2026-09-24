@@ -1,23 +1,4 @@
 import { spawn } from "child_process";
-import fs from "fs";
-import path from "path";
-
-// Clean conflicting production build artifacts before starting dev server
-// Next.js 16 Turbopack crashes if production BUILD_ID / cache exists in .next
-try {
-  const nextDir = path.join(process.cwd(), ".next");
-  const buildIdFile = path.join(nextDir, "BUILD_ID");
-  if (fs.existsSync(buildIdFile)) {
-    console.log("[dev.js] Found production build artifacts in .next, cleaning cache to prevent Turbopack collision...");
-    const cacheDir = path.join(nextDir, "cache");
-    const devDir = path.join(nextDir, "dev");
-    if (fs.existsSync(cacheDir)) fs.rmSync(cacheDir, { recursive: true, force: true });
-    if (fs.existsSync(devDir)) fs.rmSync(devDir, { recursive: true, force: true });
-    fs.rmSync(buildIdFile, { force: true });
-  }
-} catch (e) {
-  // Ignore
-}
 
 // Process arguments and translate/remove unsupported flags for Next.js
 const rawArgs = process.argv.slice(2);

@@ -812,6 +812,20 @@ const DEFAULT_PAGE_STRUCTURE: TreeItem[] = [
     ]
   },
   {
+    id: "sec-letter",
+    sectionId: "letter",
+    sectionName: "Thư ngỏ (Open Letter)",
+    title: "Thư ngỏ & Triết lý Quản trị",
+    tag: "section",
+    type: "Section",
+    selector: "#letter",
+    children: [
+      { id: "l-header", sectionId: "letter", sectionName: "Thư ngỏ", title: "Tiêu đề Thư ngỏ & Lời tựa", tag: "h2", type: "Heading", selector: "#letter h2" },
+      { id: "l-body", sectionId: "letter", sectionName: "Thư ngỏ", title: "Nội dung bức thư chia sẻ tâm huyết CX/CS", tag: "div", type: "Article", selector: "#letter .letter-body" },
+      { id: "l-sign", sectionId: "letter", sectionName: "Thư ngỏ", title: "Khối chữ ký số & Cam kết chất lượng", tag: "div", type: "Signature", selector: "#letter .letter-sign" }
+    ]
+  },
+  {
     id: "sec-about",
     sectionId: "about",
     sectionName: "Giới thiệu (About)",
@@ -892,6 +906,19 @@ const DEFAULT_PAGE_STRUCTURE: TreeItem[] = [
       { id: "wp-grid", sectionId: "wallpapers", sectionName: "Hình nền", title: "Lưới 25+ Hình nền & Video 4K phong cách nghệ thuật", tag: "div", type: "Gallery", selector: "#wallpapers .wp-grid" },
       { id: "wp-custom", sectionId: "wallpapers", sectionName: "Hình nền", title: "Form Thêm link hình/video nền cá nhân hóa", tag: "div", type: "Input Box", selector: "#wallpapers .custom-url-box" },
       { id: "wp-controls", sectionId: "wallpapers", sectionName: "Hình nền", title: "Thanh trượt Độ mờ (Opacity) & Độ nhòe (Blur)", tag: "div", type: "Sliders", selector: "#wallpapers .controls-box" }
+    ]
+  },
+  {
+    id: "sec-memories",
+    sectionId: "memories",
+    sectionName: "Kỷ niệm (Memories)",
+    title: "Kỷ niệm, Dấu ấn & Hoạt động Đội ngũ",
+    tag: "section",
+    type: "Section",
+    selector: "#memories",
+    children: [
+      { id: "mem-gallery", sectionId: "memories", sectionName: "Kỷ niệm", title: "Bộ sưu tập Khoảnh khắc Đào tạo & Team Building", tag: "div", type: "Photo Grid", selector: "#memories .photo-gallery" },
+      { id: "mem-filter", sectionId: "memories", sectionName: "Kỷ niệm", title: "Thanh phân loại Album sự kiện", tag: "div", type: "Filter", selector: "#memories .album-filter" }
     ]
   },
   {
@@ -1001,6 +1028,20 @@ export const WEBSITE_PAGES_META: WebsitePageInfo[] = [
     childCount: 5
   },
   {
+    id: "sec-letter",
+    sectionId: "letter",
+    sectionName: "Thư ngỏ",
+    title: "Thư ngỏ & Triết lý Quản trị",
+    tag: "section",
+    selector: "#letter",
+    category: "main",
+    categoryVi: "Trang chính",
+    categoryColor: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+    icon: MailOpen,
+    descriptionVi: "Bức thư tâm huyết, chia sẻ cam kết và tầm nhìn phát triển dịch vụ khách hàng bền vững.",
+    childCount: 3
+  },
+  {
     id: "sec-about",
     sectionId: "about",
     sectionName: "Giới thiệu",
@@ -1096,6 +1137,20 @@ export const WEBSITE_PAGES_META: WebsitePageInfo[] = [
     categoryColor: "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/30",
     icon: Sparkles,
     descriptionVi: "Luận giải Can Chi Giáp Tý 1984, ma trận tương hợp 12 con giáp và hướng làm việc cát lợi.",
+    childCount: 2
+  },
+  {
+    id: "sec-memories",
+    sectionId: "memories",
+    sectionName: "Kỷ niệm",
+    title: "Kỷ niệm, Dấu ấn & Hoạt động Đội ngũ",
+    tag: "section",
+    selector: "#memories",
+    category: "media",
+    categoryVi: "Hình ảnh",
+    categoryColor: "text-pink-600 dark:text-pink-400 bg-pink-500/10 border-pink-500/30",
+    icon: Images,
+    descriptionVi: "Bộ sưu tập hơn 32 khoảnh khắc gắn bó cùng đồng đội, sự kiện và cột mốc đáng nhớ.",
     childCount: 2
   },
   {

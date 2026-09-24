@@ -929,7 +929,7 @@ export default function Education() {
         "relative w-full font-sans text-slate-800 dark:text-slate-100 transition-all duration-300",
         viewMode === "book"
           ? "h-full min-h-0 flex flex-col justify-between overflow-hidden p-2 sm:p-3 lg:p-4"
-          : "min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8"
+          : "min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6"
       )}
     >
       {/* Scoped Custom CSS Animations & Mechanics */}
@@ -1506,84 +1506,83 @@ export default function Education() {
       `
       }} />
 
-      {/* Header Card Học vấn (Hiển thị đồng bộ ở tất cả các chế độ xem Grid và Book) */}
-      <PageCardHeader pageId="education">
-        {/* Cụm trái: Số lượng học phần */}
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-          <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-            {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
-          </span>
-        </div>
-
-        {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
-        <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
-          {/* Nút lọc danh mục */}
-          <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-            {(["all", "tech", "management"] as const).map((cat) => {
-              const isActive = categoryFilter === cat;
-              const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
-              return (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => {
-                    safePlay("toggle");
-                    setCategoryFilter(cat);
-                  }}
-                  className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                      : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Nút chuyển đổi chế độ xem */}
-          <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-            <button
-              type="button"
-              onClick={() => {
-                safePlay("toggle");
-                setViewMode("grid");
-              }}
-              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                viewMode === "grid"
-                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-              }`}
-            >
-              <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                safePlay("bookOpen");
-                setViewMode("book");
-                setIsBookOpen(true);
-              }}
-              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                (viewMode as any) === "book"
-                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-              }`}
-            >
-              <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isVi ? "Sách 3D" : "3D Book"}</span>
-            </button>
-          </div>
-        </div>
-      </PageCardHeader>
-
       {/* Content Area Học Vấn */}
       {/* DẠNG VIEW THẺ NHƯ CARD (DESKTOP: 4 CỘT, DƯỚI DESKTOP: 3 CỘT - FLUID GRID) */}
       {viewMode === "grid" && (
         <div id="card-education-list-content" className="w-full flex flex-col gap-4">
+          {/* Header Card Học vấn (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
+          <PageCardHeader pageId="education">
+            {/* Cụm trái: Số lượng học phần */}
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+              <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+                {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
+              </span>
+            </div>
+
+            {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
+            <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
+              {/* Nút lọc danh mục */}
+              <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+                {(["all", "tech", "management"] as const).map((cat) => {
+                  const isActive = categoryFilter === cat;
+                  const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        safePlay("toggle");
+                        setCategoryFilter(cat);
+                      }}
+                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                          : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Nút chuyển đổi chế độ xem */}
+              <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    safePlay("toggle");
+                    setViewMode("grid");
+                  }}
+                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                    viewMode === "grid"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                  }`}
+                >
+                  <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    safePlay("bookOpen");
+                    setViewMode("book");
+                    setIsBookOpen(true);
+                  }}
+                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                    (viewMode as any) === "book"
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                  }`}
+                >
+                  <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{isVi ? "Sách 3D" : "3D Book"}</span>
+                </button>
+              </div>
+            </div>
+          </PageCardHeader>
 
           <div
             key={`bento-grid-${categoryFilter}`}
