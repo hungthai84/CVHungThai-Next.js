@@ -43,6 +43,7 @@ import {
   Image as ImageIcon,
   ExternalLink,
   Target,
+  Server,
   Award,
   Clock,
   TrendingUp,
@@ -81,7 +82,6 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
-import { MEMORIES_DATA } from "./Memories";
 
 
 
@@ -124,6 +124,8 @@ export interface MilestoneData {
   tagCategory: "telecom" | "gaming" | "ecommerce" | "insurance" | "fintech" | "strategy";
   tagColor: string;
   logo: string;
+  subLogo?: string;
+  fallbackLogo?: string;
   bannerUrl?: string;
   headerTitle: string;
   highlightText: string;
@@ -275,6 +277,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     tagCategory: "telecom",
     tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
     logo: "https://i.ibb.co/R4YXWyzF/LBC.png",
+    subLogo: "https://i.ibb.co/1fNw0hBq/HTVC.png",
     bannerUrl: "https://i.ibb.co/Mykxzbbz/LBC.png",
     headerTitle: "Năm 2011 – Bước ngoặt tại LBC – Truyền hình Cáp HTV",
     highlightText: "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng. Từ một nhà quản lý vận hành, tôi chuyển mình trở thành một nhà quản trị toàn diện. Tôi trực tiếp điều hành hoạt động của phòng ban, xây dựng và chuẩn hóa quy trình, phát triển đội ngũ, thiết lập hệ thống KPI, đồng thời phối hợp với nhiều đơn vị nhằm nâng cao chất lượng dịch vụ và hiệu quả vận hành. Chính giai đoạn này đã giúp tôi hình thành tư duy quản trị hệ thống và phát triển con người song song với mục tiêu kinh doanh.",
@@ -334,23 +337,23 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     cardYearColor: "text-slate-600 dark:text-slate-300",
     period: "Từ Năm 2013 đến Năm 2016",
     company: "Công ty Cổ phần Phát triển Thể thao Điện tử Việt Nam",
-    subCompanies: "(VED, Shopee, Garena, ShopeePay)",
+    subCompanies: "(VED, Garena, AirPay)",
     tag: "eSport & Game",
     tagCategory: "gaming",
     tagColor: "bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700",
-    logo: "https://i.ibb.co/fYPJLfbw/VED.png",
+    logo: "https://i.ibb.co/BKHcWL5R/Logo-VED.gif",
+    fallbackLogo: "https://i.ibb.co/fYPJLfbw/VED.png",
     bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
     headerTitle: "Năm 2013 – Garena và hành trình chuyển đổi số",
-    highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Đặc biệt, việc tham gia vào giai đoạn phát triển ban đầu của Shopee giúp tôi tiếp cận tư duy quản trị thương mại điện tử hiện đại, từ hành trình khách hàng, trải nghiệm đa kênh, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
-    cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Đặc biệt, việc tham gia vào giai đoạn phát triển ban đầu của Shopee giúp tôi tiếp cận tư duy quản trị thương mại điện tử hiện đại, từ hành trình khách hàng, trải nghiệm đa kênh, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
+    highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
+    cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
     cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "eSport & Game", "Quản lý 129 nhân sự"],
-    cardScope: "(VED, Shopee, Garena, ShopeePay)",
+    cardScope: "(VED, Garena, AirPay)",
     cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     paragraphs: [
       "Gia nhập **Garena**, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn.",
-      "Trong thời gian này, Garena phát triển mạnh với **Liên Minh Huyền Thoại**, đồng thời mở rộng thành **Vietnam Esports** và đầu tư vào nhiều lĩnh vực mới như **Shopee, AirPay, Gcafe** và **Liên Quân Mobile**.",
+      "Trong thời gian này, Garena phát triển mạnh với **Liên Minh Huyền Thoại**, đồng thời mở rộng thành **Vietnam Esports** và đầu tư vào nhiều lĩnh vực mới như **AirPay, Gcafe** và **Liên Quân Mobile**.",
       "Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi.",
-      "Đặc biệt, việc tham gia vào giai đoạn phát triển ban đầu của **Shopee** giúp tôi tiếp cận tư duy quản trị thương mại điện tử hiện đại, từ hành trình khách hàng, trải nghiệm đa kênh, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
       "Tại Garena, tôi trực tiếp quản lý **129 nhân sự**, xây dựng cơ cấu tổ chức, phát triển đội ngũ quản lý cấp trung, chuẩn hóa quy trình vận hành, thiết lập hệ thống đánh giá hiệu quả công việc và đào tạo nguồn nhân lực kế thừa.",
       "Làm việc trong môi trường tăng trưởng vượt bậc đã giúp tôi rèn luyện khả năng ra quyết định dưới áp lực, xử lý nhanh các tình huống phát sinh, điều phối nguồn lực hiệu quả và liên tục cải tiến quy trình để đáp ứng sự thay đổi của thị trường.",
       "Đây cũng là giai đoạn đặt nền móng cho triết lý quản trị của tôi: **xây dựng hệ thống trước khi mở rộng quy mô, phát triển con người song hành cùng công nghệ và luôn lấy khách hàng làm trung tâm trong mọi quyết định.**"
@@ -392,6 +395,244 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     commitments: [
       "SOP quy trình dịch vụ khách hàng đa kênh",
       "Đào tạo & Quản trị năng suất đội ngũ theo chỉ số CSAT & NPS"
+    ],
+    photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
+    photoCount: 4,
+    memoryCompanyId: "ved"
+  },
+  "2013-garena": {
+    key: "2013-garena",
+    year: "2013",
+    cardYearLabel: "2013 - 2016",
+    cardYearColor: "text-red-600 dark:text-red-400",
+    period: "Từ Năm 2013 đến Năm 2016",
+    company: "Công ty Cổ phần Phát triển Thể thao Điện tử Việt Nam (Garena)",
+    subCompanies: "(Garena, LMHT, FIFA Online, VED)",
+    tag: "eSport & Game",
+    tagCategory: "gaming",
+    tagColor: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800",
+    logo: "https://i.ibb.co/h1Md65yV/Garena.png",
+    bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
+    headerTitle: "Năm 2013 – Garena & Thể thao Điện tử (eSports)",
+    highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến quy mô hàng triệu game thủ, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lưu lượng truy cập lớn của Liên Minh Huyền Thoại & FIFA Online 3.",
+    cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến quy mô hàng triệu game thủ, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lưu lượng truy cập lớn của Liên Minh Huyền Thoại & FIFA Online 3.",
+    cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "eSport & Game", "Quản lý 129 nhân sự"],
+    cardScope: "(Garena, LMHT, FIFA Online)",
+    cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
+    paragraphs: [
+      "Gia nhập **Garena**, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn.",
+      "Trong thời gian này, Garena phát triển mạnh với **Liên Minh Huyền Thoại**, đồng thời mở rộng thành **Vietnam Esports** và đầu tư vào nhiều lĩnh vực mới như **AirPay, Gcafe** và **Liên Quân Mobile**.",
+      "Tại Garena, tôi trực tiếp quản lý **129 nhân sự**, xây dựng cơ cấu tổ chức, phát triển đội ngũ quản lý cấp trung, chuẩn hóa quy trình vận hành, thiết lập hệ thống đánh giá hiệu quả công việc và đào tạo nguồn nhân lực kế thừa.",
+      "Đây cũng là giai đoạn đặt nền móng cho triết lý quản trị của tôi: **xây dựng hệ thống trước khi mở rộng quy mô, phát triển con người song hành cùng công nghệ và luôn lấy khách hàng làm trung tâm trong mọi quyết định.**"
+    ],
+    headcount: 130,
+    role: "Trưởng Phòng Dịch vụ Khách hàng",
+    roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
+    industry: "eSport & Game",
+    duration: "2013 – 2016 (3 năm)",
+    location: "Hồ Chí Minh, Việt Nam",
+    managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
+    managementHeadcount: "130 nhân sự trực tiếp",
+    kpis: [
+      { label: "Chuẩn hóa quy trình CSKH", percent: 100 },
+      { label: "Phản hồi & Hỗ trợ Game thủ", percent: 92 },
+      { label: "Hỗ trợ sự kiện giải đấu lớn (VCS)", percent: 95 },
+      { label: "Xây dựng hệ thống CRM CSKH", percent: 90 }
+    ],
+    tasks: [
+      "Quản lý Đội ngũ và tổ chức Phòng Dịch Vụ Khách Hàng Garena",
+      "Xây dựng quy trình xử lý khiếu nại tài khoản và nạp thẻ game",
+      "Xây dựng hệ thống CRM đa kênh cho các dòng sản phẩm của Cty",
+      "Đào tạo đội ngũ Dịch Vụ Khách Hàng và Giao tiếp với game thủ",
+      "Điều phối hỗ trợ CSKH tại các sự kiện giải đấu Esports quy mô quốc gia",
+      "Báo cáo chất lượng dịch vụ và phân tích hành vi người dùng hàng tháng"
+    ],
+    projects: [
+      "Thành lập Trung tâm Hỗ trợ Khách hàng Garena",
+      "Xây dựng hệ thống CRM CSKH Đa kênh",
+      "Chuẩn hóa quy trình hỗ trợ Game thủ LMHT & FO3",
+      "Đào tạo đội ngũ CSKH chuyên nghiệp"
+    ],
+    commitments: [
+      "SOP quy trình dịch vụ khách hàng đa kênh tốc độ cao",
+      "Đào tạo & Quản trị năng suất đội ngũ theo chỉ số CSAT & NPS"
+    ],
+    photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
+    photoCount: 4,
+    memoryCompanyId: "ved"
+  },
+  "2013-gcafe": {
+    key: "2013-gcafe",
+    year: "2013",
+    cardYearLabel: "2013 - 2016",
+    cardYearColor: "text-emerald-600 dark:text-emerald-400",
+    period: "Từ Năm 2013 đến Năm 2016",
+    company: "Hệ thống Quản lý Phòng máy Gcafe (Cyber Cafe Network)",
+    subCompanies: "(Phần mềm Quản lý & Bản quyền Game Phòng máy)",
+    tag: "Phần mềm Phòng máy",
+    tagCategory: "gaming",
+    tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
+    logo: "https://i.ibb.co/FkWk3s4W/GCafe.png",
+    bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
+    headerTitle: "Năm 2013 – Gcafe & Mạng lưới Phòng máy Toàn quốc",
+    highlightText: "Đồng hành xây dựng và vận hành dịch vụ khách hàng chuyên nghiệp hỗ trợ hàng chục nghìn chủ phòng máy Internet Cyber Cafe trên toàn quốc sử dụng giải pháp phần mềm quản lý và cập nhật game tự động Gcafe.",
+    cardDescription: "Đồng hành xây dựng và vận hành dịch vụ khách hàng chuyên nghiệp hỗ trợ hàng chục nghìn chủ phòng máy Internet Cyber Cafe trên toàn quốc sử dụng giải pháp phần mềm quản lý và cập nhật game tự động Gcafe.",
+    cardTags: ["Quản trị Dịch vụ Đối tác", "Gcafe Network", "Hỗ trợ Kỹ thuật 24/7"],
+    cardScope: "(Phòng máy Gcafe Cyber toàn quốc)",
+    cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
+    paragraphs: [
+      "Gcafe là nền tảng quản lý phòng máy số 1 tại Việt Nam thời điểm đó, kết nối hàng chục nghìn điểm đại lý Internet Cyber Cafe trên khắp 63 tỉnh thành.",
+      "Tôi chịu trách nhiệm thiết lập đường dây nóng hỗ trợ kỹ thuật và chăm sóc khách hàng doanh nghiệp B2B (Chủ phòng máy), xử lý kịp thời các sự cố phần mềm, cấp quyền bản quyền game và đồng bộ dữ liệu.",
+      "Tối ưu hóa quy trình phối hợp giữa bộ phận CSKH và đội ngũ Kỹ thuật viên hiện trường (Onsite Technicians), giúp rút ngắn thời gian xử lý sự cố từ hàng giờ xuống chỉ còn dưới 15 phút.",
+      "Xây dựng tiêu chuẩn SLA nghiêm ngặt và cơ chế phản hồi định kỳ, tạo sự gắn kết bền vững giữa công ty và các đối tác phòng máy trọng điểm."
+    ],
+    headcount: 85,
+    role: "Trưởng Phòng Dịch vụ Khách hàng",
+    roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
+    industry: "Phần mềm & Hạ tầng Cyber",
+    duration: "2013 – 2016",
+    location: "Hồ Chí Minh, Việt Nam",
+    managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
+    managementHeadcount: "85 nhân sự bộ phận kỹ thuật & CSKH B2B",
+    kpis: [
+      { label: "Tỷ lệ xử lý sự cố phòng máy < 15p", percent: 96 },
+      { label: "Độ hài lòng chủ phòng máy B2B", percent: 94 },
+      { label: "Thời gian uptime tổng đài hỗ trợ 24/7", percent: 99 },
+      { label: "Chuẩn hóa quy trình phân luồng Ticket", percent: 95 }
+    ],
+    tasks: [
+      "Xây dựng tổng đài chuyên biệt hỗ trợ chủ phòng máy Gcafe toàn quốc",
+      "Thiết lập quy trình tiếp nhận và phân phối sự cố kỹ thuật sang đội ngũ Onsite",
+      "Giám sát và duy trì cam kết SLA hỗ trợ đại lý phòng máy 24/7",
+      "Đào tạo kỹ năng tư vấn giải pháp và xử lý khiếu nại B2B cho nhân viên CSKH",
+      "Khảo sát định kỳ mức độ hài lòng của mạng lưới đại lý Gcafe"
+    ],
+    projects: [
+      "Hệ thống Tổng đài Hỗ trợ Kỹ thuật Gcafe 24/7",
+      "Quy trình phối hợp CSKH - Onsite Tech thời gian thực",
+      "Cổng tiếp nhận yêu cầu hỗ trợ phòng máy trực tuyến"
+    ],
+    commitments: [
+      "Duy trì hỗ trợ kỹ thuật liên tục 24/7 không gián đoạn cho chủ phòng máy",
+      "Đảm bảo thời gian phản hồi nhanh nhất và thái độ phục vụ tận tâm"
+    ],
+    photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
+    photoCount: 3,
+    memoryCompanyId: "ved"
+  },
+  "2013-shopee": {
+    key: "2013-shopee",
+    year: "2013",
+    cardYearLabel: "2013 - 2016",
+    cardYearColor: "text-orange-600 dark:text-orange-400",
+    period: "Từ Năm 2013 đến Năm 2016",
+    company: "Sàn Thương mại Điện tử Shopee (SEA Group)",
+    subCompanies: "(Shopee Vietnam / E-Commerce Operations)",
+    tag: "Thương mại điện tử",
+    tagCategory: "ecommerce",
+    tagColor: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-800",
+    logo: "https://i.ibb.co/BSVS4xf/Shopee.png",
+    bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
+    headerTitle: "Năm 2013 – Shopee & Nền tảng Thương mại Điện tử",
+    highlightText: "Tham gia chuẩn bị và đặt nền móng vận hành dịch vụ khách hàng cho giai đoạn sơ khai của sàn thương mại điện tử Shopee tại Việt Nam, thiết lập quy trình giải quyết khiếu nại đơn hàng và tương tác giữa Người mua và Người bán.",
+    cardDescription: "Tham gia chuẩn bị và đặt nền móng vận hành dịch vụ khách hàng cho giai đoạn sơ khai của sàn thương mại điện tử Shopee tại Việt Nam, thiết lập quy trình giải quyết khiếu nại đơn hàng và tương tác giữa Người mua và Người bán.",
+    cardTags: ["E-Commerce CS", "SOP Đơn hàng", "Trải nghiệm Khách hàng"],
+    cardScope: "(Shopee E-Commerce Operations)",
+    cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
+    paragraphs: [
+      "Trong giai đoạn Tập đoàn SEA mở rộng chiến lược sang Thương mại Điện tử với thương hiệu **Shopee**, tôi trực tiếp tham gia đóng góp xây dựng mô hình chăm sóc khách hàng thích ứng với tính chất giao dịch trực tuyến hai chiều (C2C / B2C).",
+      "Xây dựng quy trình tiếp nhận, xử lý khiếu nại đơn hàng, giao vận, hoàn tiền và bảo vệ quyền lợi người tiêu dùng theo tiêu chuẩn an toàn cao nhất.",
+      "Thiết lập bộ tiêu chuẩn giao tiếp đa kênh (In-app Chat, Email, Hotline) để hỗ trợ cả Người mua (Buyer) và Người bán (Seller) xuyên suốt hành trình mua sắm.",
+      "Kinh nghiệm tại giai đoạn này đã bồi đắp tư duy vận hành số hóa tốc độ cao, khả năng giải quyết các tranh chấp phức tạp và thấu hiểu sâu sắc hành vi mua sắm thương mại điện tử."
+    ],
+    headcount: 90,
+    role: "Trưởng Phòng Dịch vụ Khách hàng",
+    roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
+    industry: "Thương mại Điện tử (E-Commerce)",
+    duration: "2013 – 2016",
+    location: "Hồ Chí Minh, Việt Nam",
+    managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
+    managementHeadcount: "90 nhân sự vận hành CSKH sàn TMĐT",
+    kpis: [
+      { label: "Tỷ lệ phản hồi In-app Chat < 60s", percent: 95 },
+      { label: "Giải quyết khiếu nại hoàn tiền đúng SLA", percent: 92 },
+      { label: "Chỉ số hài lòng khách hàng CSAT", percent: 90 },
+      { label: "Chuẩn hóa kịch bản CSKH đa kênh", percent: 98 }
+    ],
+    tasks: [
+      "Thiết lập quy trình CSKH cho Người mua và Người bán trên sàn TMĐT",
+      "Xây dựng kịch bản xử lý khiếu nại vận chuyển, đổi trả hàng và thanh toán",
+      "Phối hợp với các đơn vị vận chuyển đối tác để tối ưu hóa thời gian xử lý khiếu nại",
+      "Đào tạo nghiệp vụ giải quyết tranh chấp thương mại điện tử cho đội ngũ CSKH",
+      "Phân tích dữ liệu khiếu nại để đề xuất cải tiến trải nghiệm ứng dụng"
+    ],
+    projects: [
+      "Quy trình Xử lý Khiếu nại Giao vận & Đổi trả Hàng",
+      "Hệ thống CSKH Chatbot & Live Chat tích hợp App Shopee",
+      "Bộ tiêu chuẩn dịch vụ khách hàng Người mua & Người bán"
+    ],
+    commitments: [
+      "Bảo vệ quyền lợi chính đáng của Người tiêu dùng và Người bán",
+      "Không ngừng nâng cao tốc độ phản hồi và sự tiện lợi trong tương tác"
+    ],
+    photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
+    photoCount: 3,
+    memoryCompanyId: "ved"
+  },
+  "2014-airpay": {
+    key: "2014-airpay",
+    year: "2013",
+    cardYearLabel: "2013 - 2016",
+    cardYearColor: "text-cyan-600 dark:text-cyan-400",
+    period: "Từ Năm 2013 đến Năm 2016",
+    company: "Ví điện tử & Cổng thanh toán AirPay (ShopeePay)",
+    subCompanies: "(AirPay / SEA Group FinTech & Payments)",
+    tag: "FinTech & Thanh toán số",
+    tagCategory: "fintech",
+    tagColor: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-800",
+    logo: "https://i.ibb.co/LdYv3TJy/Shopee-Paye.png",
+    bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
+    headerTitle: "Năm 2013 – AirPay & Kỷ nguyên FinTech Thanh toán số",
+    highlightText: "Xây dựng và điều hành bộ phận Chăm sóc Khách hàng cho Ví điện tử AirPay (tiền thân của ShopeePay), thiết lập các tiêu chuẩn khắt khe về an toàn bảo mật thông tin tài chính và xử lý giao dịch tức thời.",
+    cardDescription: "Xây dựng và điều hành bộ phận Chăm sóc Khách hàng cho Ví điện tử AirPay (tiền thân của ShopeePay), thiết lập các tiêu chuẩn khắt khe về an toàn bảo mật thông tin tài chính và xử lý giao dịch tức thời.",
+    cardTags: ["FinTech CSKH", "Bảo mật Giao dịch", "Ví điện tử AirPay"],
+    cardScope: "(AirPay & Cổng thanh toán đại lý)",
+    cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
+    paragraphs: [
+      "Ra mắt vào năm **2013**, **AirPay** đánh dấu bước tiến chiến lược của Tập đoàn vào lĩnh vực Công nghệ Tài chính (FinTech) và Thanh toán không tiền mặt tại Việt Nam.",
+      "Tôi trực tiếp xây dựng bộ máy Dịch vụ Khách hàng đáp ứng các tiêu chuẩn bảo mật tài chính ngân hàng, bảo vệ tài khoản ví điện tử và kiểm soát giao dịch nghi vấn gian lận.",
+      "Thiết lập đường dây nóng ưu tiên giải quyết sự cố nạp/rút tiền, thanh toán hóa đơn điện/nước, nạp thẻ game và thanh toán dịch vụ ăn uống.",
+      "Đây là cột mốc quan trọng giúp tôi hoàn thiện chuyên môn sâu về vận hành CSKH trong ngành FinTech, tạo nền tảng vững chắc cho các giai đoạn quản trị tại MoMo và Finviet sau này."
+    ],
+    headcount: 75,
+    role: "Trưởng Phòng Dịch vụ Khách hàng",
+    roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
+    industry: "Công nghệ Tài chính (FinTech)",
+    duration: "2013 – 2016",
+    location: "Hồ Chí Minh, Việt Nam",
+    managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
+    managementHeadcount: "75 nhân sự chuyên trách CSKH Tài chính & Bảo mật",
+    kpis: [
+      { label: "Giải quyết sự cố giao dịch ví trong 24h", percent: 98 },
+      { label: "Bảo mật thông tin tài khoản ví 100%", percent: 100 },
+      { label: "Chỉ số hài lòng khách hàng CSAT", percent: 94 },
+      { label: "SLA tiếp nhận cuộc gọi nóng < 20s", percent: 93 }
+    ],
+    tasks: [
+      "Thiết lập quy trình tiếp nhận và xử lý sự cố giao dịch ví điện tử AirPay",
+      "Xây dựng cơ chế phối hợp với bộ phận Đối soát - Kế toán và Ngân hàng liên kết",
+      "Đào tạo nhân viên về quy định bảo mật thông tin tài khoản và phòng chống gian lận",
+      "Giám sát và báo cáo chất lượng dịch vụ khách hàng định kỳ cho Ban Giám Đốc",
+      "Phát triển các kênh hỗ trợ khách hàng tự động qua ứng dụng và website AirPay"
+    ],
+    projects: [
+      "Quy trình Xử lý Khiếu nại Giao dịch FinTech Chuẩn Ngân hàng",
+      "Hệ thống Quản lý Ticket Hỗ trợ Đại lý AirPay Toàn quốc",
+      "Chương trình Đào tạo Bảo mật & Nghiệp vụ Thanh toán Số"
+    ],
+    commitments: [
+      "Bảo mật tuyệt đối thông tin và an toàn tài sản của người dùng ví",
+      "Minh bạch, công bằng và nhanh chóng trong mọi nghiệp vụ đối soát tài chính"
     ],
     photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
     photoCount: 4,
@@ -653,7 +894,19 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
   }
 };
 
-const TIMELINE_ORDER = ["2003", "2007", "2011", "2013", "2016", "2018", "2023", "2026"];
+const TIMELINE_ORDER = [
+  "2003",
+  "2007",
+  "2011",
+  "2013-garena",
+  "2013-gcafe",
+  "2013-shopee",
+  "2014-airpay",
+  "2016",
+  "2018",
+  "2023",
+  "2026"
+];
 
 export interface InfographicTimelineItem {
   key: string;
@@ -721,16 +974,16 @@ const INFOGRAPHIC_TIMELINE_ITEMS: InfographicTimelineItem[] = [
     key: "2013",
     milestoneKey: "2013",
     yearLabel: "2013",
-    hexColor: "#00E5FF",
-    underlineColor: "#00E5FF",
-    companyName: "Garena / VED",
+    hexColor: "#ED1C24",
+    underlineColor: "#ED1C24",
+    companyName: "VED (Garena / AirPay / Gcafe / Shopee)",
     roleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
-    description: "Quản lý hoạt động CSKH quy mô lớn, chuyển đổi số đa kênh.",
-    iconType: "ved",
-    actionTitleVi: "Thiết kế sản phẩm",
-    actionTitleEn: "Product Design",
-    bgLight: "bg-cyan-50/90 border-cyan-200/90 text-cyan-950",
-    bgDark: "dark:bg-cyan-950/40 dark:border-cyan-800/70 dark:text-cyan-100"
+    description: "Quản lý hoạt động CSKH quy mô lớn, chuyển đổi số đa kênh game eSports, Gcafe, AirPay, Shopee.",
+    iconType: "garena",
+    actionTitleVi: "Thể thao Điện tử & Chuyển đổi số",
+    actionTitleEn: "eSports & Digital Transformation",
+    bgLight: "bg-red-50/90 border-red-200/90 text-red-950",
+    bgDark: "dark:bg-red-950/40 dark:border-red-800/70 dark:text-red-100"
   },
   {
     key: "2016",
@@ -796,6 +1049,69 @@ const INFOGRAPHIC_TIMELINE_ITEMS: InfographicTimelineItem[] = [
 
 // Helper to render Pin Marker icon with borderless round logo
 const renderPinIcon = (type: string, hexColor: string, itemKey?: string) => {
+  if (type === "shopee" || itemKey === "2013-shopee") {
+    return (
+      <img 
+        src="https://i.ibb.co/BSVS4xf/Shopee.png" 
+        alt="Shopee" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+      />
+    );
+  }
+
+  if (type === "airpay" || itemKey === "2014-airpay") {
+    return (
+      <img 
+        src="https://i.ibb.co/LdYv3TJy/Shopee-Paye.png" 
+        alt="ShopeePay / AirPay" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+      />
+    );
+  }
+
+  if (type === "gcafe" || itemKey === "2013-gcafe") {
+    return (
+      <img 
+        src="https://i.ibb.co/FkWk3s4W/GCafe.png" 
+        alt="GCafe Cyber" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+      />
+    );
+  }
+
+  if (type === "garena" || itemKey === "2013-garena") {
+    return (
+      <img 
+        src="https://i.ibb.co/h1Md65yV/Garena.png" 
+        alt="Garena" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+      />
+    );
+  }
+
+  if (type === "ved" || itemKey === "2013") {
+    return (
+      <img 
+        src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif" 
+        alt="VED" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = "https://i.ibb.co/fYPJLfbw/VED.png";
+        }}
+      />
+    );
+  }
+
+  if (type === "htvc" || itemKey === "2011-htvc") {
+    return (
+      <img 
+        src="https://i.ibb.co/1fNw0hBq/HTVC.png" 
+        alt="HTVC" 
+        className="w-full h-full object-cover p-0 rounded-full bg-white dark:bg-slate-950" 
+      />
+    );
+  }
+
   const getSrc = () => {
     if (itemKey && MILESTONES_DATA[itemKey]?.logo) {
       return MILESTONES_DATA[itemKey].logo;
@@ -807,11 +1123,18 @@ const renderPinIcon = (type: string, hexColor: string, itemKey?: string) => {
         return "https://i.ibb.co/QvtbdnfP/V247.png";
       case "lbc":
         return "https://i.ibb.co/R4YXWyzF/LBC.png";
+      case "htvc":
+        return "https://i.ibb.co/1fNw0hBq/HTVC.png";
       case "ved":
-      case "garena":
         return "https://i.ibb.co/BKHcWL5R/Logo-VED.gif";
+      case "garena":
+        return "https://i.ibb.co/h1Md65yV/Garena.png";
+      case "gcafe":
+        return "https://i.ibb.co/FkWk3s4W/GCafe.png";
       case "shopee":
         return "https://i.ibb.co/BSVS4xf/Shopee.png";
+      case "airpay":
+        return "https://i.ibb.co/LdYv3TJy/Shopee-Paye.png";
       case "heart":
       case "prudential":
         return "https://i.ibb.co/XfpQphWF/Prudential.png";
@@ -830,29 +1153,6 @@ const renderPinIcon = (type: string, hexColor: string, itemKey?: string) => {
   const src = getSrc();
   if (!src) {
     return <Briefcase className="w-6 h-6" style={{ color: hexColor }} />;
-  }
-
-  if (type === "ved" || type === "garena") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center bg-white dark:bg-slate-950 rounded-full overflow-hidden p-0">
-        {/* VED Logo on the left */}
-        <div className="absolute left-[-2%] w-[68%] h-[68%] rounded-full overflow-hidden border-[1px] border-slate-200/50 bg-white shadow-2xs z-10 flex items-center justify-center">
-          <img 
-            src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif" 
-            alt="VED" 
-            className="w-full h-full object-cover" 
-          />
-        </div>
-        {/* Shopee Logo on the right overlapping */}
-        <div className="absolute right-[-2%] w-[68%] h-[68%] rounded-full overflow-hidden border-[1px] border-slate-200/50 bg-white shadow-2xs z-20 flex items-center justify-center">
-          <img 
-            src="https://i.ibb.co/BSVS4xf/Shopee.png" 
-            alt="Shopee" 
-            className="w-full h-full object-cover p-0.5" 
-          />
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -879,6 +1179,12 @@ const renderBottomIcon = (iconType: string, hexColor: string) => {
     case "ved":
     case "garena":
       return <Monitor className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
+    case "gcafe":
+      return <Server className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
+    case "shopee":
+      return <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
+    case "airpay":
+      return <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "heart":
     case "prudential":
       return <Building2 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
@@ -1232,7 +1538,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
         <div 
           id="card-career-timeline"
           style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-          className="w-full h-auto bg-white/45 dark:bg-white/[0.04] border border-white/50 dark:border-white/12 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-[24px] transition-all duration-300 mb-4"
+          className="w-full h-auto glass-surface backdrop-blur-2xl bg-white/85 dark:bg-slate-950/75 border border-slate-200/80 dark:border-slate-800/80 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-md hover:shadow-xl transition-all duration-300 mb-4"
         >
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
           <div className="w-full flex flex-col gap-1 pb-1">
@@ -1295,14 +1601,20 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
             ref={timelineWrapperRef}
           >
             <div 
-              className="min-w-[820px] md:min-w-0 w-full relative flex flex-col justify-center transition-transform duration-200"
+              className="min-w-[980px] xl:min-w-0 w-full relative flex flex-col justify-center transition-transform duration-200"
               style={{
                 transform: isAutoScale ? undefined : `scale(${effectiveScale})`,
                 transformOrigin: "center center",
               }}
             >
-              {/* The 8 Milestone Columns Layout */}
-              <div className="grid grid-cols-8 gap-1.5 sm:gap-2 md:gap-3 w-full relative z-10 px-0.5">
+              {/* The Milestone Columns Dynamic Layout */}
+              <div 
+                className="w-full relative z-10 px-0.5 gap-1.5 sm:gap-2 md:gap-3"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${filteredItems.length}, minmax(0, 1fr))`
+                }}
+              >
                 {filteredItems.map((item, idx) => {
                   const isSelected = item.key === activeYear;
                   const isLast = idx === filteredItems.length - 1;
@@ -1316,7 +1628,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       <div className="flex flex-col items-center mb-2 sm:mb-2.5 z-10">
                         <div 
                           className={cn(
-                            "px-2.5 sm:px-3 py-1 rounded-full text-white font-bold text-caption tracking-tight shadow-sm flex items-center justify-center transition-all duration-300 whitespace-nowrap",
+                            "px-2 sm:px-2.5 py-1 rounded-full text-white font-bold text-[11px] sm:text-caption tracking-tight shadow-sm flex items-center justify-center transition-all duration-300 whitespace-nowrap",
                             isSelected ? "scale-105 shadow-md ring-2 ring-white dark:ring-slate-900" : "group-hover:scale-105 opacity-90 group-hover:opacity-100"
                           )}
                           style={{ backgroundColor: item.hexColor }}
@@ -1327,40 +1639,116 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         <div 
                           className="w-0 h-0 border-x-[5px] border-x-transparent border-t-[6px] -mt-0.5 transition-colors"
                           style={{ borderTopColor: item.hexColor }}
-                        />
+                        ></div>
                       </div>
 
-                      {/* 2. Circular Logo Node */}
-                      <div className="h-16 xs:h-18 sm:h-20 w-full flex items-center justify-center relative">
-                        {/* Ring Container */}
-                        <div 
-                          className={cn(
-                            "w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[70px] md:h-[70px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden",
-                            isSelected ? "scale-110" : "group-hover:scale-105"
-                          )}
-                          style={{
-                            borderColor: item.hexColor,
-                            boxShadow: isSelected 
-                              ? `0 0 24px ${item.hexColor}80, inset 0 0 8px ${item.hexColor}40` 
-                              : `0 4px 14px ${item.hexColor}35`
-                          }}
-                        >
-                          <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center p-0">
-                            {renderPinIcon(item.iconType, item.hexColor, item.key)}
+                      {/* 2. Circular Logo Node with Horizontal Overlapping Logo Stack for 2013 */}
+                      <div className="h-14 xs:h-16 sm:h-18 md:h-20 w-full flex items-center justify-center relative">
+                        {item.yearLabel === "2013" ? (
+                          /* Horizontal Overlapping Logo Stack for 2013: VED + Garena + Gcafe + Shopee + Airpay */
+                          <div 
+                            className={cn(
+                              "flex flex-row items-center justify-center -space-x-2.5 xs:-space-x-3 sm:-space-x-3.5 md:-space-x-4 z-10 transition-all duration-300 py-1",
+                              isSelected ? "scale-105" : "group-hover:scale-105"
+                            )}
+                          >
+                            {[
+                              { key: "2013", type: "ved", name: "VED (Vietnam Esports)", color: "#DC2626" },
+                              { key: "2013-garena", type: "garena", name: "Garena", color: "#ED1C24" },
+                              { key: "2013-gcafe", type: "gcafe", name: "Gcafe CYBER", color: "#00A651" },
+                              { key: "2013-shopee", type: "shopee", name: "Shopee", color: "#EE4D2D" },
+                              { key: "2014-airpay", type: "airpay", name: "Airpay / ShopeePay", color: "#00ADEF" }
+                            ].map((subLogo, lIdx) => {
+                              const isCurrentLogo = activeYear === subLogo.key || (activeYear === "2013" && subLogo.key === "2013");
+                              return (
+                                <div
+                                  key={subLogo.key}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveYear(subLogo.key);
+                                  }}
+                                  className={cn(
+                                    "w-9 h-9 xs:w-10 xs:h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full border-2 border-white dark:border-slate-900 shadow-sm overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-200 relative shrink-0 cursor-pointer group/subitem",
+                                    isCurrentLogo
+                                      ? "z-40 scale-115 ring-2 ring-offset-2 ring-red-500 shadow-md"
+                                      : "opacity-85 hover:opacity-100 hover:scale-115 hover:-translate-y-1 hover:z-50"
+                                  )}
+                                  style={{
+                                    borderColor: subLogo.color,
+                                    zIndex: isCurrentLogo ? 40 : 10 + lIdx,
+                                    boxShadow: isCurrentLogo ? `0 0 14px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.18)`
+                                  }}
+                                  title={subLogo.name}
+                                >
+                                  <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
+                                    {renderPinIcon(subLogo.type, subLogo.color, subLogo.key)}
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
-                        </div>
+                        ) : item.key === "2011" ? (
+                          /* Horizontal Overlapping Logo Stack for 2011: LBC & HTVC */
+                          <div 
+                            className={cn(
+                              "flex flex-row items-center justify-center -space-x-3.5 sm:-space-x-4.5 z-10 transition-all duration-300",
+                              isSelected ? "scale-105" : "group-hover:scale-105"
+                            )}
+                          >
+                            {[
+                              { key: "2011", type: "lbc", name: "LBC", color: "#00C853" },
+                              { key: "2011-htvc", type: "htvc", name: "HTVC", color: "#0284c7" }
+                            ].map((subLogo, lIdx) => (
+                              <div
+                                key={subLogo.name}
+                                className={cn(
+                                  "w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-300 relative shrink-0",
+                                  isSelected ? "scale-105" : "hover:scale-105"
+                                )}
+                                style={{
+                                  borderColor: subLogo.color,
+                                  zIndex: 20 - lIdx,
+                                  boxShadow: isSelected ? `0 0 10px ${subLogo.color}80` : `0 2px 6px rgba(0,0,0,0.15)`
+                                }}
+                                title={subLogo.name}
+                              >
+                                <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
+                                  {renderPinIcon(subLogo.type, subLogo.color, "2011")}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          /* Standard Ring Container for single-brand years */
+                          <div 
+                            className={cn(
+                              "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden",
+                              isSelected ? "scale-110" : "group-hover:scale-105"
+                            )}
+                            style={{
+                              borderColor: item.hexColor,
+                              boxShadow: isSelected 
+                                ? `0 0 24px ${item.hexColor}80, inset 0 0 8px ${item.hexColor}40` 
+                                : `0 4px 14px ${item.hexColor}35`
+                            }}
+                          >
+                            <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center p-0">
+                              {renderPinIcon(item.iconType, item.hexColor, item.key)}
+                            </div>
+                          </div>
+                        )}
 
                         {/* Chevron Arrow Connector (») between adjacent nodes */}
                         {!isLast && (
-                          <div className="absolute top-1/2 -right-2.5 sm:-right-3.5 md:-right-4 -translate-y-1/2 z-20 pointer-events-none">
+                          <div className="absolute top-1/2 -right-2 sm:-right-2.5 md:-right-3.5 -translate-y-1/2 z-20 pointer-events-none">
                             <div 
-                              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white shadow-xs"
+                              className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-white shadow-xs"
                               style={{ 
                                 backgroundColor: item.hexColor,
                                 backgroundImage: `linear-gradient(135deg, ${item.hexColor}, ${filteredItems[idx+1]?.hexColor || item.hexColor})` 
                               }}
                             >
-                              <ChevronsRight className="w-3 sm:w-3.5 h-3 sm:h-3.5 stroke-[3]" />
+                              <ChevronsRight className="w-2.5 sm:w-3.5 h-2.5 sm:h-3.5 stroke-[3]" />
                             </div>
                           </div>
                         )}
@@ -1385,7 +1773,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-auto bg-white dark:bg-slate-950 border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300"
+                className="w-full h-auto glass-surface backdrop-blur-2xl bg-white/90 dark:bg-slate-950/85 border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-lg dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
                 style={{
                   padding: "15px",
                   borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))",
@@ -1428,7 +1816,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 <div 
                   id="card-job-header"
                   style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
-                  className="w-full bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-4 sm:p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
+                  className="w-full bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-[25px] flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
                 >
                   {/* Left Column: Badge + Company Avatar & Titles */}
                   <div className="flex flex-col gap-3 min-w-0 flex-1">
@@ -1440,14 +1828,77 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
  
                     {/* Logo + Company Name */}
                     <div className="flex items-center gap-3.5 sm:gap-4 pt-0.5">
-                      <div 
-                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform"
-                        style={{
-                          borderColor: currentHex || undefined
-                        }}
-                      >
-                        <img src={current.logo} alt={current.company} className="w-full h-full object-cover rounded-full" />
-                      </div>
+                      {current.year === "2013" || current.key.startsWith("2013") || current.key === "2014-airpay" ? (
+                        /* Horizontal Overlapping Logo Stack for 2013 Ecosystem in Job Header */
+                        <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0 py-1" title="Hệ sinh thái VED / Garena / Gcafe / Shopee / AirPay">
+                          {[
+                            { key: "2013", type: "ved", name: "VED (Vietnam Esports)", color: "#DC2626" },
+                            { key: "2013-garena", type: "garena", name: "Garena", color: "#ED1C24" },
+                            { key: "2013-gcafe", type: "gcafe", name: "Gcafe CYBER", color: "#00A651" },
+                            { key: "2013-shopee", type: "shopee", name: "Shopee", color: "#EE4D2D" },
+                            { key: "2014-airpay", type: "airpay", name: "Airpay / ShopeePay", color: "#00ADEF" }
+                          ].map((subLogo, lIdx) => {
+                            const isCurrentLogo = activeYear === subLogo.key || (activeYear === "2013" && subLogo.key === "2013");
+                            return (
+                              <div
+                                key={subLogo.key}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveYear(subLogo.key);
+                                }}
+                                className={cn(
+                                  "w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white dark:border-slate-900 shadow-sm overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-200 relative shrink-0 cursor-pointer",
+                                  isCurrentLogo
+                                    ? "z-30 scale-110 ring-2 ring-offset-2 ring-red-500 shadow-md"
+                                    : "opacity-85 hover:opacity-100 hover:scale-110 hover:-translate-y-1 hover:z-40"
+                                )}
+                                style={{
+                                  borderColor: subLogo.color,
+                                  zIndex: isCurrentLogo ? 30 : 10 + lIdx,
+                                  boxShadow: isCurrentLogo ? `0 0 14px ${subLogo.color}90` : `0 2px 6px rgba(0,0,0,0.18)`
+                                }}
+                                title={subLogo.name}
+                              >
+                                <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
+                                  {renderPinIcon(subLogo.type, subLogo.color, subLogo.key)}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0">
+                          <div 
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
+                            style={{
+                              borderColor: currentHex || undefined
+                            }}
+                          >
+                            <img 
+                              src={current.logo} 
+                              alt={current.company} 
+                              className="w-full h-full object-cover rounded-full" 
+                              onError={(e) => {
+                                if (current.fallbackLogo) {
+                                  (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
+                                }
+                              }}
+                            />
+                          </div>
+                          {current.subLogo && (
+                            <div 
+                              className="w-13 h-13 sm:w-16 sm:h-16 rounded-full border-2 border-sky-400 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
+                              title="HTVC"
+                            >
+                              <img 
+                                src={current.subLogo} 
+                                alt="HTVC" 
+                                className="w-full h-full object-cover rounded-full" 
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )}
  
                       <div className="min-w-0 flex-1">
                         {(() => {
@@ -1505,7 +1956,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       {/* THẺ HÀNH TRÌNH / TÂM TƯ CÔNG VIỆC - BỐ CỤC ĐIỂM NHẤN BENTO HERO CARD */}
                       <div className="w-full pt-5 sm:pt-7 border-t border-slate-100 dark:border-slate-800/80">
                         {/* Thẻ chứa bo cong bao gồm cả Header lẫn nội dung các đoạn văn bản */}
-                        <div className="space-y-3.5 p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md">
+                        <div className="space-y-3.5 p-[25px] rounded-2xl sm:rounded-3xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md">
                           {/* Header với tag chủ đề & tiêu đề điểm nhấn đưa vào trong thẻ */}
                           <div className="space-y-2 pb-3.5 border-b border-indigo-100/80 dark:border-slate-800/80">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 text-2xs font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
@@ -1588,19 +2039,19 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         </div>
                       </div>
 
-                      {/* BENTO MASONRY GRID 6 THẺ SUB CARD JOB (LAYOUT MASONRY PINTEREST TỰ NHIÊN NGHỆ THUẬT) */}
+                      {/* BENTO 2-COLUMN GRID 6 THẺ SUB CARD JOB - VIEW 2 CỘT CHIỀU CAO THEO NỘI DUNG */}
                       <motion.div 
                         id="card-milestone-detail-grid" 
                         variants={bentoGridVariants}
                         initial="hidden"
                         animate="visible"
-                        className="w-full columns-1 sm:columns-2 xl:columns-3 gap-4 lg:gap-5"
+                        className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 items-start"
                       >
                         
                         {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-blue-400/80 dark:hover:border-blue-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-blue-400/80 dark:hover:border-blue-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-blue-100/80 dark:border-blue-900/40">
@@ -1676,7 +2127,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 02 | KẾT QUẢ & KPI (Metrics Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/80 dark:hover:border-emerald-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/80 dark:hover:border-emerald-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-emerald-100/80 dark:border-emerald-900/40">
@@ -1711,7 +2162,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 03 | CÔNG VIỆC (Tasks Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/80 dark:hover:border-indigo-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/80 dark:hover:border-indigo-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-indigo-100/80 dark:border-indigo-900/40">
@@ -1743,7 +2194,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 04 | DỰ ÁN (Projects Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-amber-100/80 dark:border-amber-900/40">
@@ -1776,7 +2227,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 05 | CAM KẾT (Commitments Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-cyan-400/80 dark:hover:border-cyan-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-cyan-400/80 dark:hover:border-cyan-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-cyan-100/80 dark:border-cyan-900/40">
@@ -1806,15 +2257,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 06 | KỶ NIỆM (Memories Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          onClick={() => {
-                            if (current.memoryCompanyId) {
-                              const memoryCard = document.getElementById(`memory-card-${current.memoryCompanyId}`);
-                              if (memoryCard) {
-                                memoryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }
-                            }
-                          }}
-                          className="break-inside-avoid mb-4 lg:mb-5 w-full rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-4 sm:p-5 md:p-6 border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col justify-between backdrop-blur-xl"
                         >
                           <div className="space-y-3.5">
                             <div className="flex items-center justify-between pb-3 border-b border-rose-100/80 dark:border-rose-900/40">
@@ -2080,7 +2523,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-3">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Phân tích quy mô & cơ cấu quản lý" : "Team Structure & Operational Scope"}</h4>
+                      <h4 className="text-h6 font-bold text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Phân tích quy mô & cơ cấu quản lý" : "Team Structure & Operational Scope"}</h4>
                       <p>
                         {isVi 
                           ? `Với vai trò quản lý cấp cao điều hành đội ngũ ${current.headcount} nhân sự trực thuộc tại ${current.company}, tôi tập trung vào việc thiết lập hệ thống phân quyền phân cấp hiệu quả, phát triển lực lượng quản lý cấp trung (Team Leaders & Supervisors) để tối ưu hóa hiệu quả vận hành và năng suất làm việc nhóm.`
@@ -2095,7 +2538,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
 
                     {customPositions.filter(p => p.milestoneKey === current.key).length > 0 && (
                       <div className="space-y-3">
-                        <h4 className="text-xs font-black text-slate-950 dark:text-white uppercase tracking-wider">{isVi ? "Các Vị Trí Bổ Sung Đã Tạo Thẻ" : "Additional Role Extensions"}</h4>
+                        <h4 className="text-h6 font-bold text-slate-950 dark:text-white uppercase tracking-wider">{isVi ? "Các Vị Trí Bổ Sung Đã Tạo Thẻ" : "Additional Role Extensions"}</h4>
                         <div className="grid grid-cols-1 gap-3">
                           {customPositions.filter(p => p.milestoneKey === current.key).map(cp => (
                             <div key={cp.id} className="p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/60 dark:border-emerald-900/40 space-y-2">
@@ -2116,7 +2559,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {activeSubCard === 2 && (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/60 dark:border-emerald-900/40 space-y-3">
-                      <h4 className="text-xs font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-wider">{isVi ? "Các chỉ số KPIs & Hiệu suất thực chiến" : "Key Metrics & Success Outcomes"}</h4>
+                      <h4 className="text-h6 font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider">{isVi ? "Các chỉ số KPIs & Hiệu suất thực chiến" : "Key Metrics & Success Outcomes"}</h4>
                       <div className="grid grid-cols-1 gap-4">
                         {current.kpis && current.kpis.map((kpi, idx) => (
                           <div key={idx} className="space-y-2 bg-white dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
@@ -2138,7 +2581,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-2.5">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Tác động thực tiễn & Cải tiến" : "Operational Impact & Methodology"}</h4>
+                      <h4 className="text-h6 font-bold text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Tác động thực tiễn & Cải tiến" : "Operational Impact & Methodology"}</h4>
                       <p>
                         {isVi 
                           ? "Hệ thống KPIs được thiết kế khoa học bám sát hành trình khách hàng bao gồm các chỉ số về Tốc độ (SLA/Response Time), Chất lượng (CSAT/QA Score), Hiệu suất (AHT/Năng suất xử lý) và Sự trung thành (NPS). Việc đo lường tự động qua CRM và báo cáo thời gian thực giúp giảm thiểu sai số, phát hiện điểm nghẽn vận hành ngay lập tức."
@@ -2156,7 +2599,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {activeSubCard === 3 && (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/60 dark:border-indigo-900/40 space-y-3">
-                      <h4 className="text-xs font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-wider">{isVi ? "Chi tiết các hạng mục công việc đã thực thi" : "Execution Checklist & Operational Focus"}</h4>
+                      <h4 className="text-h6 font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider">{isVi ? "Chi tiết các hạng mục công việc đã thực thi" : "Execution Checklist & Operational Focus"}</h4>
                       <div className="space-y-2.5">
                         {current.tasks && current.tasks.map((task, tIdx) => (
                           <div key={tIdx} className="p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3 shadow-2xs">
@@ -2179,7 +2622,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {activeSubCard === 4 && (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100/60 dark:border-amber-900/40 space-y-3">
-                      <h4 className="text-xs font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider">{isVi ? "Các dự án chuyển đổi số & Chuyên án cải tiến" : "Digital Transformation & Strategic Projects"}</h4>
+                      <h4 className="text-h6 font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider">{isVi ? "Các dự án chuyển đổi số & Chuyên án cải tiến" : "Digital Transformation & Strategic Projects"}</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {current.projects && current.projects.map((proj, pIdx) => (
                           <div key={pIdx} className="p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
@@ -2198,7 +2641,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-2.5">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Kết quả & Giá trị kinh doanh mang lại" : "Business Outcomes & Return on Investment"}</h4>
+                      <h4 className="text-h6 font-bold text-slate-900 dark:text-white uppercase tracking-wider">{isVi ? "Kết quả & Giá trị kinh doanh mang lại" : "Business Outcomes & Return on Investment"}</h4>
                       <p>
                         {isVi 
                           ? "Các dự án này đã mang lại sự bứt phá vượt bậc về năng suất và trải nghiệm khách hàng: Rút ngắn 40% thời gian chờ đợi phản hồi của khách hàng, giảm thiểu 25% chi phí vận hành thủ công nhờ tự động hóa CRM, đồng thời mở rộng năng lực phục vụ đa kênh không giới hạn vị trí địa lý."
@@ -2211,7 +2654,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {activeSubCard === 5 && (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-cyan-50/40 dark:bg-cyan-950/20 border border-cyan-100/60 dark:border-cyan-900/40 space-y-3.5">
-                      <h4 className="text-xs font-black text-cyan-900 dark:text-cyan-300 uppercase tracking-wider">{isVi ? "Cam kết chất lượng dịch vụ vận hành (SLA/SOP)" : "Service Level Agreements & Quality Compliance"}</h4>
+                      <h4 className="text-h6 font-bold text-cyan-900 dark:text-cyan-300 uppercase tracking-wider">{isVi ? "Cam kết chất lượng dịch vụ vận hành (SLA/SOP)" : "Service Level Agreements & Quality Compliance"}</h4>
                       <div className="space-y-2.5">
                         {current.commitments && current.commitments.map((cmt, cIdx) => (
                           <div key={cIdx} className="p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3 shadow-2xs">
@@ -2234,7 +2677,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 {activeSubCard === 6 && (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-rose-50/40 dark:bg-rose-950/20 border border-rose-100/60 dark:border-rose-900/40 space-y-3">
-                      <h4 className="text-xs font-black text-rose-900 dark:text-rose-300 uppercase tracking-wider">{isVi ? "Khoảnh khắc & Tư liệu hình ảnh thực chiến" : "Workplace Album & Historical Gallery"}</h4>
+                      <h4 className="text-h6 font-bold text-rose-900 dark:text-rose-300 uppercase tracking-wider">{isVi ? "Khoảnh khắc & Tư liệu hình ảnh thực chiến" : "Workplace Album & Historical Gallery"}</h4>
                       
                       {photos.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -2369,10 +2812,6 @@ export default function Experience() {
 
   // Get gallery photos for a given milestone
   const getGalleryPhotosForMilestone = (milestone: MilestoneData) => {
-    if (milestone.memoryCompanyId) {
-      const matched = MEMORIES_DATA.filter((m) => m.companyId === milestone.memoryCompanyId);
-      if (matched.length > 0) return matched;
-    }
     return [{
       id: milestone.key,
       src: milestone.photoUrl,
@@ -2474,10 +2913,11 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
+      className="relative min-h-full flex flex-col justify-start items-center font-sans text-slate-800 dark:text-slate-100 w-full p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8"
     >
-      {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
-      <PageCardHeader pageId="experience">
+      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+        {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
+        <PageCardHeader pageId="experience">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
           <span className="text-body-sub text-subcontent font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
@@ -2994,6 +3434,7 @@ export default function Experience() {
         );
       })()}
 
+      </div>
     </section>
   );
 }

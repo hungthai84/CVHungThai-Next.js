@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useBackground } from "../context/BackgroundContext";
+import { useTheme } from "../context/ThemeContext";
 import MetaballsBg from "./MetaballsBg";
 
 // Interactive cursor ripple and particle overlay for immersive background experience
@@ -186,6 +187,7 @@ function formatScopedCss(cssCode: string, scopeClass: string): string {
 
 export default function BackgroundRenderer() {
   const { config } = useBackground();
+  const { theme } = useTheme();
   const { activeType, activeUrl, activeCssCode, overlayOpacity, blurAmount, items, activeId } = config;
 
   // Resolve CSS code if activeType is css
@@ -242,82 +244,127 @@ export default function BackgroundRenderer() {
       {activeType === "gradient" && (
         <div className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] pointer-events-none overflow-hidden scale-105">
           {/* Base Mesh Gradient Canvas for Light & Dark */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F5F7FC] via-[#EEF1FA] to-[#F8F9FE] dark:bg-[#090D16] transition-colors duration-500" />
+          <div className={`absolute inset-0 transition-colors duration-500 ${
+            theme === "fintech-soft-glass" 
+              ? "bg-gradient-to-br from-[#F4F6FB] via-[#EDF2F8] to-[#F8FAFD]" 
+              : (theme === "glass-soft-clay"
+                  ? "bg-gradient-to-br from-[#F5F7FD] via-[#EEF1FA] to-[#F8F9FE]"
+                  : "bg-gradient-to-br from-[#F5F7FC] via-[#EEF1FA] to-[#F8F9FE] dark:bg-[#090D16]")
+          }`} />
 
-          {/* LIGHT MODE Ambient Multi-Color Radial Light Blobs & Abstract 3D Glass Shapes */}
-          <div className="dark:hidden absolute inset-0 overflow-hidden">
-            {/* Lớp gradient mềm nền */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.06),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(236,72,153,0.05),transparent_50%)]" />
+          {/* GLASS SOFT CLAYMORPHISM AMBIENT BACKDROP */}
+          {theme === "glass-soft-clay" ? (
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Soft Iris & Indigo Glow top left */}
+              <div className="absolute -top-[12%] -left-[5%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-br from-[#5850EC]/20 via-[#7C3AED]/15 to-transparent blur-[110px] animate-[pulse_10s_ease-in-out_infinite]" />
+              {/* Warm Peach & Sunset Glow top right */}
+              <div className="absolute top-[8%] -right-[8%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-bl from-[#FF8A65]/25 via-[#F97316]/15 to-transparent blur-[120px] animate-[pulse_12s_ease-in-out_infinite]" />
+              {/* Mint Green & Sky Blue Glow bottom */}
+              <div className="absolute -bottom-[12%] left-[15%] w-[60vw] h-[55vw] rounded-full bg-gradient-to-tr from-[#10B981]/18 via-[#38BDF8]/20 to-transparent blur-[130px] animate-[pulse_14s_ease-in-out_infinite]" />
+              {/* Soft Frosted Glass Sphere Ring */}
+              <div className="absolute top-[28%] right-[15%] w-64 h-64 rounded-full border border-white/80 bg-white/45 shadow-[inset_0_4px_16px_rgba(255,255,255,0.9),0_20px_40px_rgba(100,110,140,0.06)] backdrop-blur-[20px] animate-[bounce_12s_ease-in-out_infinite] scale-90" />
+            </div>
+          ) : theme === "fintech-soft-glass" ? (
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Organic shape 1: Vibrant orange & sunset glow on the top right */}
+              <div 
+                className="absolute -top-[10%] -right-[8%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-bl from-[#FB923C]/35 via-[#F97316]/25 to-[#FBBF24]/20 blur-[100px] animate-[pulse_10s_ease-in-out_infinite]"
+              />
+              {/* Organic shape 2: Soft lavender & violet orb on the upper mid */}
+              <div 
+                className="absolute top-[5%] right-[25%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#8B5CF6]/20 via-[#A78BFA]/15 to-transparent blur-[120px] animate-[pulse_14s_ease-in-out_infinite]"
+              />
+              {/* Organic shape 3: Deep cobalt & electric blue curve at bottom right */}
+              <div 
+                className="absolute -bottom-[15%] right-[5%] w-[60vw] h-[55vw] rounded-full bg-gradient-to-tl from-[#2563EB]/25 via-[#3B82F6]/20 to-[#60A5FA]/15 blur-[130px] animate-[pulse_12s_ease-in-out_infinite]"
+              />
+              {/* Organic shape 4: Warm amber wave ribbon at bottom center */}
+              <div 
+                className="absolute bottom-[0%] left-[20%] w-[45vw] h-[35vw] rounded-full bg-gradient-to-tr from-[#F59E0B]/20 via-[#FBBF24]/15 to-transparent blur-[110px] animate-[pulse_16s_ease-in-out_infinite]"
+              />
+              {/* Soft aesthetic glass highlight ring */}
+              <div 
+                className="absolute top-[20%] right-[12%] w-72 h-72 rounded-full border border-white/80 bg-white/40 shadow-[inset_0_4px_16px_rgba(255,255,255,0.9),0_20px_50px_rgba(251,146,60,0.08)] backdrop-blur-[20px] animate-[bounce_11s_ease-in-out_infinite] scale-90"
+              />
+            </div>
+          ) : (
+            <>
+              {/* LIGHT MODE Ambient Multi-Color Radial Light Blobs & Abstract 3D Glass Shapes */}
+              <div className="dark:hidden absolute inset-0 overflow-hidden">
+                {/* Lớp gradient mềm nền */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.06),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(236,72,153,0.05),transparent_50%)]" />
 
-            {/* Organic Waves SVG with Soft Blur */}
-            <svg className="absolute top-[5%] -left-[10%] w-[120%] h-[60%] opacity-35 blur-[45px] animate-[pulse_12s_ease-in-out_infinite]" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0,288L120,266.7C240,245,480,203,720,202.7C960,203,1200,245,1320,266.7L1440,288L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z" fill="url(#wave-gradient-1)" />
-              <defs>
-                <linearGradient id="wave-gradient-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#0066FF" stopOpacity="0.25" />
-                  <stop offset="50%" stopColor="#5B21FF" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#D946EF" stopOpacity="0.15" />
-                </linearGradient>
-              </defs>
-            </svg>
+                {/* Organic Waves SVG with Soft Blur */}
+                <svg className="absolute top-[5%] -left-[10%] w-[120%] h-[60%] opacity-35 blur-[45px] animate-[pulse_12s_ease-in-out_infinite]" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0,288L120,266.7C240,245,480,203,720,202.7C960,203,1200,245,1320,266.7L1440,288L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z" fill="url(#wave-gradient-1)" />
+                  <defs>
+                    <linearGradient id="wave-gradient-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#0066FF" stopOpacity="0.25" />
+                      <stop offset="50%" stopColor="#5B21FF" stopOpacity="0.2" />
+                      <stop offset="100%" stopColor="#D946EF" stopOpacity="0.15" />
+                    </linearGradient>
+                  </defs>
+                </svg>
 
-            {/* Blob 1: Blue & Indigo */}
-            <div 
-              className="absolute -top-[15%] -left-[10%] w-[65vw] h-[65vw] rounded-full bg-gradient-to-br from-[#0066FF]/25 via-[#5B21FF]/20 to-[#00C6FF]/15 blur-[120px] animate-[pulse_9s_ease-in-out_infinite]"
-            />
-            {/* Blob 2: Cyan & Sky Blue */}
-            <div 
-              className="absolute top-[15%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-bl from-[#00B4DB]/25 via-[#38BDF8]/20 to-[#00E5FF]/15 blur-[130px] animate-[pulse_11s_ease-in-out_infinite]"
-            />
-            {/* Blob 3: Pink & Purple */}
-            <div 
-              className="absolute -bottom-[20%] left-[10%] w-[70vw] h-[65vw] rounded-full bg-gradient-to-tr from-[#EC008C]/20 via-[#7B2FF7]/20 to-[#E879F9]/15 blur-[140px] animate-[pulse_13s_ease-in-out_infinite]"
-            />
-            {/* Blob 4: Soft Yellow & Orange Sunset */}
-            <div 
-              className="absolute bottom-[10%] right-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tl from-[#FF8A00]/15 via-[#FFD600]/15 to-transparent blur-[110px] animate-[pulse_15s_ease-in-out_infinite]"
-            />
+                {/* Blob 1: Blue & Indigo */}
+                <div 
+                  className="absolute -top-[15%] -left-[10%] w-[65vw] h-[65vw] rounded-full bg-gradient-to-br from-[#0066FF]/25 via-[#5B21FF]/20 to-[#00C6FF]/15 blur-[120px] animate-[pulse_9s_ease-in-out_infinite]"
+                />
+                {/* Blob 2: Cyan & Sky Blue */}
+                <div 
+                  className="absolute top-[15%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-bl from-[#00B4DB]/25 via-[#38BDF8]/20 to-[#00E5FF]/15 blur-[130px] animate-[pulse_11s_ease-in-out_infinite]"
+                />
+                {/* Blob 3: Pink & Purple */}
+                <div 
+                  className="absolute -bottom-[20%] left-[10%] w-[70vw] h-[65vw] rounded-full bg-gradient-to-tr from-[#EC008C]/20 via-[#7B2FF7]/20 to-[#E879F9]/15 blur-[140px] animate-[pulse_13s_ease-in-out_infinite]"
+                />
+                {/* Blob 4: Soft Yellow & Orange Sunset */}
+                <div 
+                  className="absolute bottom-[10%] right-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tl from-[#FF8A00]/15 via-[#FFD600]/15 to-transparent blur-[110px] animate-[pulse_15s_ease-in-out_infinite]"
+                />
 
-            {/* Floating Glass Spheres with 3D shadow and gradient border (Abstract Shapes) */}
-            <div 
-              className="absolute top-[25%] left-[15%] w-48 h-48 rounded-full bg-white/40 border border-white/60 shadow-[inset_0_4px_12px_rgba(255,255,255,0.8),0_12px_32px_rgba(0,102,255,0.08)] backdrop-blur-[15px] animate-[bounce_8s_ease-in-out_infinite] scale-90"
-              style={{ animationDelay: '0s' }}
-            />
-            <div 
-              className="absolute bottom-[25%] right-[18%] w-60 h-60 rounded-full bg-white/35 border border-white/50 shadow-[inset_0_4px_16px_rgba(255,255,255,0.7),0_16px_40px_rgba(91,33,255,0.06)] backdrop-blur-[20px] animate-[bounce_10s_ease-in-out_infinite] scale-95"
-              style={{ animationDelay: '-3s' }}
-            />
-            <div 
-              className="absolute top-[60%] left-[45%] w-32 h-32 rounded-full bg-white/45 border border-white/70 shadow-[inset_0_4px_8px_rgba(255,255,255,0.9),0_10px_24px_rgba(236,0,140,0.06)] backdrop-blur-[10px] animate-[bounce_12s_ease-in-out_infinite] scale-75"
-              style={{ animationDelay: '-6s' }}
-            />
+                {/* Floating Glass Spheres with 3D shadow and gradient border (Abstract Shapes) */}
+                <div 
+                  className="absolute top-[25%] left-[15%] w-48 h-48 rounded-full bg-white/40 border border-white/60 shadow-[inset_0_4px_12px_rgba(255,255,255,0.8),0_12px_32px_rgba(0,102,255,0.08)] backdrop-blur-[15px] animate-[bounce_8s_ease-in-out_infinite] scale-90"
+                  style={{ animationDelay: '0s' }}
+                />
+                <div 
+                  className="absolute bottom-[25%] right-[18%] w-60 h-60 rounded-full bg-white/35 border border-white/50 shadow-[inset_0_4px_16px_rgba(255,255,255,0.7),0_16px_40px_rgba(91,33,255,0.06)] backdrop-blur-[20px] animate-[bounce_10s_ease-in-out_infinite] scale-95"
+                  style={{ animationDelay: '-3s' }}
+                />
+                <div 
+                  className="absolute top-[60%] left-[45%] w-32 h-32 rounded-full bg-white/45 border border-white/70 shadow-[inset_0_4px_8px_rgba(255,255,255,0.9),0_10px_24px_rgba(236,0,140,0.06)] backdrop-blur-[10px] animate-[bounce_12s_ease-in-out_infinite] scale-75"
+                  style={{ animationDelay: '-6s' }}
+                />
 
-            {/* Curved Ribbon / Organic Wave Decorative Overlay */}
-            <div className="absolute top-[40%] -left-[5%] w-[45vw] h-[20vh] rounded-[100px] rotate-[25deg] bg-gradient-to-r from-[#00E5FF]/10 to-[#5B21FF]/5 blur-[60px] animate-pulse" style={{ animationDuration: '8s' }} />
-            <div className="absolute bottom-[15%] -right-[5%] w-[40vw] h-[15vh] rounded-[100px] -rotate-[15deg] bg-gradient-to-r from-[#FF8A00]/8 to-[#EC008C]/5 blur-[70px] animate-pulse" style={{ animationDuration: '12s' }} />
-          </div>
+                {/* Curved Ribbon / Organic Wave Decorative Overlay */}
+                <div className="absolute top-[40%] -left-[5%] w-[45vw] h-[20vh] rounded-[100px] rotate-[25deg] bg-gradient-to-r from-[#00E5FF]/10 to-[#5B21FF]/5 blur-[60px] animate-pulse" style={{ animationDuration: '8s' }} />
+                <div className="absolute bottom-[15%] -right-[5%] w-[40vw] h-[15vh] rounded-[100px] -rotate-[15deg] bg-gradient-to-r from-[#FF8A00]/8 to-[#EC008C]/5 blur-[70px] animate-pulse" style={{ animationDuration: '12s' }} />
+              </div>
 
-          {/* DARK MODE Ambient Multi-Color Radial Light Blobs */}
-          <div 
-            className="hidden dark:block absolute -top-[15%] -left-[10%] w-[65vw] h-[65vw] rounded-full bg-gradient-to-br from-[#8B5CF6]/40 via-[#6366F1]/35 to-[#D946EF]/25 blur-[140px] animate-pulse"
-            style={{ animationDuration: '9s' }}
-          />
-          <div 
-            className="hidden dark:block absolute top-[10%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-bl from-[#00F5FF]/35 via-[#06B6D4]/30 to-[#3B82F6]/25 blur-[150px] animate-pulse"
-            style={{ animationDuration: '11s' }}
-          />
-          <div 
-            className="hidden dark:block absolute -bottom-[20%] left-[10%] w-[70vw] h-[65vw] rounded-full bg-gradient-to-tr from-[#FF007F]/35 via-[#D946EF]/30 to-[#8B5CF6]/25 blur-[160px] animate-pulse"
-            style={{ animationDuration: '13s' }}
-          />
-          <div 
-            className="hidden dark:block absolute bottom-[5%] right-[5%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-tl from-[#00FF88]/25 via-[#10B981]/25 to-transparent blur-[130px] animate-pulse"
-            style={{ animationDuration: '15s' }}
-          />
-          <div 
-            className="hidden dark:block absolute top-[40%] left-[30%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-r from-[#00F5FF]/20 to-[#8B5CF6]/20 blur-[170px] animate-pulse"
-            style={{ animationDuration: '12s' }}
-          />
+              {/* DARK MODE Ambient Multi-Color Radial Light Blobs */}
+              <div 
+                className="hidden dark:block absolute -top-[15%] -left-[10%] w-[65vw] h-[65vw] rounded-full bg-gradient-to-br from-[#8B5CF6]/40 via-[#6366F1]/35 to-[#D946EF]/25 blur-[140px] animate-pulse"
+                style={{ animationDuration: '9s' }}
+              />
+              <div 
+                className="hidden dark:block absolute top-[10%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-bl from-[#00F5FF]/35 via-[#06B6D4]/30 to-[#3B82F6]/25 blur-[150px] animate-pulse"
+                style={{ animationDuration: '11s' }}
+              />
+              <div 
+                className="hidden dark:block absolute -bottom-[20%] left-[10%] w-[70vw] h-[65vw] rounded-full bg-gradient-to-tr from-[#FF007F]/35 via-[#D946EF]/30 to-[#8B5CF6]/25 blur-[160px] animate-pulse"
+                style={{ animationDuration: '13s' }}
+              />
+              <div 
+                className="hidden dark:block absolute bottom-[5%] right-[5%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-tl from-[#00FF88]/25 via-[#10B981]/25 to-transparent blur-[130px] animate-pulse"
+                style={{ animationDuration: '15s' }}
+              />
+              <div 
+                className="hidden dark:block absolute top-[40%] left-[30%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-r from-[#00F5FF]/20 to-[#8B5CF6]/20 blur-[170px] animate-pulse"
+                style={{ animationDuration: '12s' }}
+              />
+            </>
+          )}
         </div>
       )}
 

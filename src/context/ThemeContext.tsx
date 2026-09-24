@@ -3,7 +3,9 @@ import { useTheme as useNextTheme } from "next-themes";
 
 export const THEMES = [
   "glass-dark-neon",
-  "mritech-digital-growth"
+  "mritech-digital-growth",
+  "fintech-soft-glass",
+  "glass-soft-clay"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -501,6 +503,66 @@ export const COLOR_PRESETS: ColorGroupPreset[] = [
       softRgb: "128, 203, 196",
     },
   },
+  {
+    id: "fintech-soft-ui",
+    name: "11 💳 Fintech Soft UI",
+    nameVi: "11 💳 Fintech Soft UI",
+    descriptionVi: "#304FFE → #FB923C | #F59E0B (Fintech Neumorphic)",
+    light: {
+      primary: "#2563EB",
+      secondary: "#FB923C",
+      accent: "#F59E0B",
+      highlight: "#8B5CF6",
+      soft: "#10B981",
+      primaryRgb: "37, 99, 235",
+      secondaryRgb: "251, 146, 60",
+      accentRgb: "245, 158, 11",
+      highlightRgb: "139, 92, 246",
+      softRgb: "16, 185, 129",
+    },
+    dark: {
+      primary: "#3B82F6",
+      secondary: "#FB923C",
+      accent: "#FBBF24",
+      highlight: "#A78BFA",
+      soft: "#34D399",
+      primaryRgb: "59, 130, 246",
+      secondaryRgb: "251, 146, 60",
+      accentRgb: "251, 191, 36",
+      highlightRgb: "167, 139, 250",
+      softRgb: "52, 211, 153",
+    },
+  },
+  {
+    id: "glass-soft-clay",
+    name: "12 ☁️ Glass Soft Clay",
+    nameVi: "12 ☁️ Glass Soft Clay UI",
+    descriptionVi: "#5850EC → #7C3AED | #FF8A65 (Soft Claymorphism & Glassmorphism)",
+    light: {
+      primary: "#5850EC",
+      secondary: "#7C3AED",
+      accent: "#FF8A65",
+      highlight: "#10B981",
+      soft: "#38BDF8",
+      primaryRgb: "88, 80, 236",
+      secondaryRgb: "124, 58, 237",
+      accentRgb: "255, 138, 101",
+      highlightRgb: "16, 185, 129",
+      softRgb: "56, 189, 248",
+    },
+    dark: {
+      primary: "#6366F1",
+      secondary: "#A78BFA",
+      accent: "#FF8A65",
+      highlight: "#34D399",
+      soft: "#38BDF8",
+      primaryRgb: "99, 102, 241",
+      secondaryRgb: "167, 139, 250",
+      accentRgb: "255, 138, 101",
+      highlightRgb: "52, 211, 153",
+      softRgb: "56, 189, 248",
+    },
+  },
 ];
 
 export interface ThemeContextType {
@@ -774,6 +836,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       "theme-modern-light-glass",
       "theme-mritech-aurora-glass",
       "theme-mritech-digital-growth",
+      "theme-fintech-soft-glass",
       "theme-flat-light",
       "theme-flat-dark"
     );

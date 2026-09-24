@@ -14,7 +14,7 @@ export const contentData = {
       icon: "ShoppingCart",
       years: "6+ Năm kinh nghiệm",
       desc: "Tham gia giai đoạn bùng nổ của thương mại điện tử và ví điện tử, xây dựng nền tảng vận hành, xử lý khiếu nại, kiểm soát gian lận và Chăm Sóc Khách Hàng đa kênh.",
-      brands: "Shopee · Finviet"
+      brands: "Finviet · ECO"
     },
     {
       id: "insurance",
@@ -38,7 +38,7 @@ export const contentData = {
       icon: "Wallet",
       years: "5+ Năm kinh nghiệm",
       desc: "Am hiểu vận hành Chăm Sóc Khách Hàng trong lĩnh vực FinTech, từ xác minh người dùng, xử lý giao dịch đến kiểm soát rủi ro và hỗ trợ đối tác tài chính hiệu quả, bền vững.",
-      brands: "Ví MoMo · ShopeePay"
+      brands: "Ví MoMo · AirPay"
     },
     {
       id: "systems",

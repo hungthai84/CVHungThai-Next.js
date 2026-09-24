@@ -1,6 +1,5 @@
 import {
   Home,
-  Mail,
   User,
   Compass,
   Brain,
@@ -25,6 +24,13 @@ export interface PageHeaderItem {
   icon: LucideIcon;
   accentColorClass: string;
   lineColorClass: string;
+  tagVi?: string;
+  tagEn?: string;
+  descriptionVi?: string;
+  descriptionEn?: string;
+  highlightsVi?: string[];
+  highlightsEn?: string[];
+  shortcut?: string;
 }
 
 export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
@@ -37,16 +43,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Home,
     accentColorClass: "text-blue-600 dark:text-cyan-400",
     lineColorClass: "bg-blue-500/30 dark:bg-cyan-500/20",
-  },
-  letter: {
-    id: "letter",
-    titleVi: "Thư ngỏ",
-    titleEn: "Open Letter",
-    quoteVi: "Hành trình 22+ năm phụng sự tận tâm, đồng hành bền vững cùng doanh nghiệp.",
-    quoteEn: "A 22+ year journey of dedicated service and sustainable partnership.",
-    icon: Mail,
-    accentColorClass: "text-emerald-600 dark:text-emerald-400",
-    lineColorClass: "bg-emerald-500/30 dark:bg-emerald-500/20",
+    tagVi: "Tổng quan điều hành",
+    tagEn: "Executive Dashboard",
+    shortcut: "1",
+    descriptionVi: "Không gian làm việc trung tâm, giới thiệu tổng quan bản lĩnh lãnh đạo, phong cách điều hành và các video giới thiệu chân dung chuyên nghiệp.",
+    descriptionEn: "Central executive dashboard showcasing leadership vision, operational style, and interactive professional intro media.",
+    highlightsVi: [
+      "Tổng quan năng lực điều hành và quản trị trải nghiệm khách hàng",
+      "Video tương tác đa màn hình giới thiệu tầm nhìn thực chiến",
+      "Thông điệp chào đón và đường dẫn nhanh đến các chuyên mục cốt lõi",
+    ],
+    highlightsEn: [
+      "Executive Leadership & Customer Experience Operations Overview",
+      "Interactive Multi-screen Media Showcasing Real-world Vision",
+      "Welcome Executive Note & Quick Access to Key Portfolio Pillars",
+    ],
   },
   about: {
     id: "about",
@@ -57,16 +68,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: User,
     accentColorClass: "text-blue-600 dark:text-cyan-400",
     lineColorClass: "bg-blue-500/30 dark:bg-cyan-500/20",
-  },
-  domains: {
-    id: "domains",
-    titleVi: "Lĩnh vực",
-    titleEn: "Core Domains",
-    quoteVi: "Kinh nghiệm thực chiến đa ngành: Viễn thông, Bán lẻ, Thương mại điện tử và Dịch vụ số.",
-    quoteEn: "Cross-industry execution across Telecom, Retail, E-commerce, and Digital Services.",
-    icon: Compass,
-    accentColorClass: "text-emerald-600 dark:text-emerald-400",
-    lineColorClass: "bg-emerald-500/30 dark:bg-emerald-500/20",
+    tagVi: "Hồ sơ cá nhân & Triết lý",
+    tagEn: "Profile & Philosophy",
+    shortcut: "2",
+    descriptionVi: "Hồ sơ chân dung lãnh đạo, nguyên tắc quản trị thấu cảm (Servant Leadership), cam kết chất lượng dịch vụ và các giá trị văn hóa tổ chức cốt lõi.",
+    descriptionEn: "Executive portrait, Servant Leadership principles, commitment to service excellence, and organizational culture values.",
+    highlightsVi: [
+      "Triết lý lãnh đạo phục vụ (Servant Leadership)",
+      "Bộ giá trị văn hóa ứng xử chuyên nghiệp và tận tâm",
+      "Hành trình tôi luyện bản lĩnh quản trị qua các thời kỳ",
+    ],
+    highlightsEn: [
+      "Servant Leadership Philosophy & Empathic Management",
+      "Professional Code of Cultural Values & Dedication",
+      "Executive Resilience & Leadership Evolution Journey",
+    ],
   },
   skills: {
     id: "skills",
@@ -77,6 +93,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Brain,
     accentColorClass: "text-purple-600 dark:text-purple-400",
     lineColorClass: "bg-purple-500/30 dark:bg-purple-500/20",
+    tagVi: "Khung năng lực chuyên môn",
+    tagEn: "Competency Framework",
+    shortcut: "3",
+    descriptionVi: "Bản đồ năng lực quản trị CX toàn diện, ma trận kỹ năng chuyên môn, bảng phân tích SWOT cá nhân và hệ sinh thái công nghệ hỗ trợ.",
+    descriptionEn: "Comprehensive CX management competency map, domain skill matrix, personal SWOT analysis, and modern tech stack tooling.",
+    highlightsVi: [
+      "Khung năng lực CX & Vận hành quy mô lớn",
+      "Bảng phân tích SWOT năng lực thực chiến",
+      "Hệ sinh thái công nghệ & Công cụ quản trị hiện đại",
+    ],
+    highlightsEn: [
+      "Enterprise CX & Operations Framework",
+      "Practical SWOT Competency Analysis",
+      "Operations Tooling & Modern Tech Stack Ecosystem",
+    ],
   },
   education: {
     id: "education",
@@ -87,6 +118,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: GraduationCap,
     accentColorClass: "text-emerald-600 dark:text-emerald-400",
     lineColorClass: "bg-emerald-500/30 dark:bg-emerald-500/20",
+    tagVi: "Văn bằng & Chứng chỉ",
+    tagEn: "Academic & Certifications",
+    shortcut: "4",
+    descriptionVi: "Nền tảng học thuật đại học, hệ thống chứng chỉ quản trị quốc tế và lộ trình nâng cao năng lực liên tục trong kỷ nguyên số hóa.",
+    descriptionEn: "Academic university degrees, international professional certificates, and continuous upskilling path in the digital age.",
+    highlightsVi: [
+      "Văn bằng Cử nhân Quản trị chính quy",
+      "Chứng chỉ quốc tế uy tín về CX, IT & Lãnh đạo",
+      "Hồ sơ xác thực số hóa & Đào tạo nâng cao liên tục",
+    ],
+    highlightsEn: [
+      "Formal Academic Bachelor's Degrees",
+      "Accredited International CX & Leadership Certs",
+      "Digital Credential Verification Portfolio",
+    ],
   },
   experience: {
     id: "experience",
@@ -97,6 +143,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Briefcase,
     accentColorClass: "text-blue-600 dark:text-blue-400",
     lineColorClass: "bg-blue-500/30 dark:bg-blue-500/20",
+    tagVi: "Dấu ấn sự nghiệp 22+ năm",
+    tagEn: "22+ Years Career Journey",
+    shortcut: "5",
+    descriptionVi: "Dòng thời gian sự nghiệp thực chiến tại các tập đoàn lớn, các cột mốc thăng tiến vượt bậc và những dấu ấn dẫn dắt đội ngũ thành công.",
+    descriptionEn: "Hands-on corporate leadership timeline, notable promotions, and key milestones in driving high-performing operational teams.",
+    highlightsVi: [
+      "22+ năm kinh nghiệm quản trị thực chiến",
+      "Lãnh đạo đội ngũ vận hành quy mô lớn",
+      "Chuyển giao và chuẩn hóa quy trình xuất sắc",
+    ],
+    highlightsEn: [
+      "22+ Years Hands-on Leadership Experience",
+      "Large-Scale Team Management & Coaching",
+      "Operational Process Standardization",
+    ],
   },
   projects: {
     id: "projects",
@@ -107,6 +168,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: FolderKanban,
     accentColorClass: "text-blue-600 dark:text-blue-400",
     lineColorClass: "bg-blue-500/30 dark:bg-blue-500/20",
+    tagVi: "Dự án chuyển đổi số",
+    tagEn: "Key Digital Projects",
+    shortcut: "6",
+    descriptionVi: "Bộ sưu tập các dự án tiêu biểu về tối ưu luồng CSKH, tự động hóa tương tác đa kênh và các sáng kiến nâng cao chỉ số NPS/CSAT.",
+    descriptionEn: "Showcase of breakthrough projects in CS workflow optimization, omnichannel automation, and measurable NPS/CSAT enhancements.",
+    highlightsVi: [
+      "Tự động hóa luồng tiếp nhận & Xử lý khiếu nại",
+      "Tối ưu hóa hành trình khách hàng đa kênh (Omnichannel)",
+      "Giải pháp đo lường ROI và chuyển đổi số thực chất",
+    ],
+    highlightsEn: [
+      "Automated Inquiry & Escalation Routing",
+      "Omnichannel Journey Streamlining",
+      "Measurable ROI & Digital Innovation Metrics",
+    ],
   },
   interview: {
     id: "interview",
@@ -117,6 +193,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Video,
     accentColorClass: "text-indigo-600 dark:text-indigo-400",
     lineColorClass: "bg-indigo-500/30 dark:bg-indigo-500/20",
+    tagVi: "Phỏng vấn tình huống AI",
+    tagEn: "AI Interactive Interview",
+    shortcut: "7",
+    descriptionVi: "Môi trường tương tác phỏng vấn đa chiều với trợ lý AI, giải đáp các câu hỏi thực chiến về tình huống quản trị và điều phối dự án khó.",
+    descriptionEn: "Multidimensional interactive interview environment powered by AI, addressing executive operational scenarios and complex challenges.",
+    highlightsVi: [
+      "Tình huống xử lý khủng hoảng truyền thông CX",
+      "Nghệ thuật xây dựng và truyền cảm hứng cho đội ngũ",
+      "Góc nhìn chuyên sâu về quản trị vận hành",
+    ],
+    highlightsEn: [
+      "CX Crisis Resolution Scenarios",
+      "Team Motivation & Alignment Artistry",
+      "In-depth Operational Perspectives",
+    ],
   },
   tuvi: {
     id: "tuvi",
@@ -127,36 +218,21 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Compass,
     accentColorClass: "text-purple-600 dark:text-purple-400",
     lineColorClass: "bg-purple-500/30 dark:bg-purple-500/20",
-  },
-  memories: {
-    id: "memories",
-    titleVi: "Kỷ niệm",
-    titleEn: "Team Memories",
-    quoteVi: "Những khoảnh khắc đáng nhớ cùng đồng đội qua từng chặng đường đồng hành gắn kết.",
-    quoteEn: "Cherished milestones and inspiring memories shared with teammates along the journey.",
-    icon: Camera,
-    accentColorClass: "text-pink-600 dark:text-pink-400",
-    lineColorClass: "bg-pink-500/30 dark:bg-pink-500/20",
-  },
-  contact: {
-    id: "contact",
-    titleVi: "Liên hệ",
-    titleEn: "Contact Hub",
-    quoteVi: "Sẵn sàng kết nối, chia sẻ cơ hội hợp tác và cùng kiến tạo giá trị đột phá mới.",
-    quoteEn: "Always open to connect, share partnership opportunities, and create lasting value.",
-    icon: Phone,
-    accentColorClass: "text-emerald-600 dark:text-emerald-400",
-    lineColorClass: "bg-emerald-500/30 dark:bg-emerald-500/20",
-  },
-  wallpapers: {
-    id: "wallpapers",
-    titleVi: "Hình nền",
-    titleEn: "Visual Space",
-    quoteVi: "Không gian thị giác hiện đại, khơi nguồn cảm hứng làm việc và năng lượng tích cực.",
-    quoteEn: "A modern visual environment sparking creative inspiration and positive energy.",
-    icon: ImageIcon,
-    accentColorClass: "text-sky-600 dark:text-sky-400",
-    lineColorClass: "bg-sky-500/30 dark:bg-sky-500/20",
+    tagVi: "Hồ sơ Tử vi & Chiêm tinh",
+    tagEn: "Wisdom Profile & Astrology",
+    shortcut: "8",
+    descriptionVi: "Khám phá bản mệnh, thiên thời địa lợi và phong cách lãnh đạo tự nhiên thông qua góc nhìn minh triết phương Đông và chiêm tinh học.",
+    descriptionEn: "Exploring personality traits, strategic timing, and authentic leadership style through Eastern astrology and ancient wisdom.",
+    highlightsVi: [
+      "Lá số Tử vi cá nhân & Định vị phong cách",
+      "Nghệ thuật ứng biến nhân tâm trong quản trị",
+      "Thuận theo thiên thời để tạo đột phá bền vững",
+    ],
+    highlightsEn: [
+      "Personal Natal Chart & Leadership Style",
+      "Human Understanding in Management",
+      "Harmonizing Strategic Timing for Growth",
+    ],
   },
   systems: {
     id: "systems",
@@ -167,5 +243,70 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     icon: Server,
     accentColorClass: "text-indigo-600 dark:text-indigo-400",
     lineColorClass: "bg-indigo-500/30 dark:bg-indigo-500/20",
+    tagVi: "Hệ sinh thái công cụ số",
+    tagEn: "Systems Hub & Tooling",
+    shortcut: "9",
+    descriptionVi: "Kho giải pháp phần mềm, công cụ quản lý nội bộ và các nền tảng số hóa do tác giả nghiên cứu, ứng dụng vào doanh nghiệp.",
+    descriptionEn: "Curated ecosystem of software tools, internal systems, and digital platforms researched and deployed to power enterprise operations.",
+    highlightsVi: [
+      "Hệ thống giám sát KPI & Hiệu suất tức thời",
+      "Nền tảng tri thức & Đào tạo nội bộ chuẩn hóa",
+      "Giải pháp số hóa tương tác khách hàng thông minh",
+    ],
+    highlightsEn: [
+      "Real-time KPI & SLA Monitoring Tools",
+      "Standardized Internal Knowledge Base",
+      "Intelligent Customer Interaction Systems",
+    ],
+  },
+  contact: {
+    id: "contact",
+    titleVi: "Liên hệ",
+    titleEn: "Contact Hub",
+    quoteVi: "Sẵn sàng kết nối, chia sẻ cơ hội hợp tác và cùng kiến tạo giá trị đột phá mới.",
+    quoteEn: "Always open to connect, share partnership opportunities, and create lasting value.",
+    icon: Phone,
+    accentColorClass: "text-emerald-600 dark:text-emerald-400",
+    lineColorClass: "bg-emerald-500/30 dark:bg-emerald-500/20",
+    tagVi: "Cổng kết nối hợp tác",
+    tagEn: "Collaboration & Contact",
+    shortcut: "0",
+    descriptionVi: "Kênh liên lạc trực tiếp, gửi lời nhắn, đặt lịch hẹn trao đổi công việc và mở rộng mạng lưới đối tác chiến lược trong ngành.",
+    descriptionEn: "Direct channels to connect, send messages, schedule executive discussions, and expand strategic partnerships in the industry.",
+    highlightsVi: [
+      "Thông tin liên lạc bảo mật & Nhanh chóng",
+      "Biểu mẫu gửi tin nhắn trao đổi cơ hội hợp tác",
+      "Kết nối qua mạng xã hội chuyên nghiệp LinkedIn",
+    ],
+    highlightsEn: [
+      "Fast & Secure Direct Contacts",
+      "Instant Collaboration Inquiry Form",
+      "Professional Social & LinkedIn Networking",
+    ],
+  },
+  wallpapers: {
+    id: "wallpapers",
+    titleVi: "Hình nền",
+    titleEn: "Visual Space",
+    quoteVi: "Không gian thị giác hiện đại, khơi nguồn cảm hứng làm việc và năng lượng tích cực.",
+    quoteEn: "A modern visual environment sparking creative inspiration and positive energy.",
+    icon: ImageIcon,
+    accentColorClass: "text-sky-600 dark:text-sky-400",
+    lineColorClass: "bg-sky-500/30 dark:bg-sky-500/20",
+    tagVi: "Không gian thị giác số",
+    tagEn: "Visual Space & Media",
+    shortcut: "W",
+    descriptionVi: "Thư viện thị giác chọn lọc với hình nền độ phân giải cao và video nghệ thuật, mang đến không gian làm việc số đầy cảm hứng.",
+    descriptionEn: "Curated visual gallery featuring high-resolution wallpapers and cinematic ambient videos, elevating the digital workspace.",
+    highlightsVi: [
+      "Bộ sưu tập hình nền 4K tinh tế",
+      "Video ambient chuyển động mượt mà",
+      "Tùy biến phong cách thị giác theo cảm xúc",
+    ],
+    highlightsEn: [
+      "Curated 4K High-Res Wallpapers",
+      "Smooth Ambient Motion Videos",
+      "Customizable Visual Workspace Experience",
+    ],
   },
 };

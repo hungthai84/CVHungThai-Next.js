@@ -63,6 +63,52 @@ export const TU_VI_PROFILE: TuViProfileInfo = {
   overviewSubQuote: "“Tâm tĩnh như thủy – Trí sáng như kim – Dẫn dắt bằng dữ liệu – Thấu cảm bằng chân tình.”"
 };
 
+export interface ActionPhilosophyCard {
+  id: string;
+  title: string;
+  description: string;
+  iconType: "target" | "trending" | "heart" | "compass" | "zap" | "award";
+}
+
+export const ACTION_PHILOSOPHY_CARDS: ActionPhilosophyCard[] = [
+  {
+    id: "strategy",
+    title: "Tư duy bằng chiến lược",
+    description: "Xây dựng tầm nhìn dài hạn, định hình mô hình vận hành bền vững và dự báo chuẩn xác các xu thế chuyển dịch thị trường.",
+    iconType: "target"
+  },
+  {
+    id: "data",
+    title: "Dẫn dắt bằng dữ liệu",
+    description: "Mọi quyết định, cải tiến và tối ưu hóa quy trình đều dựa trên số liệu thực chứng minh bạch, khách quan và khoa học.",
+    iconType: "trending"
+  },
+  {
+    id: "heart",
+    title: "Thấu cảm bằng trái tim",
+    description: "Đặt trải nghiệm khách hàng và giá trị con người làm trọng tâm, lắng nghe đa chiều và thấu hiểu sâu sắc từng điểm chạm.",
+    iconType: "heart"
+  },
+  {
+    id: "truth",
+    title: "Lấy chân lý làm gốc",
+    description: "Mọi quyết sách đều dựa trên sự thật khách quan, dữ liệu minh bạch và giá trị đạo đức bền vững.",
+    iconType: "compass"
+  },
+  {
+    id: "action",
+    title: "Lấy hành động làm đường",
+    description: "Không dừng lại ở lý thuyết suông; kiên trì thực thi, tối ưu từng quy trình và từng điểm chạm mỗi ngày.",
+    iconType: "zap"
+  },
+  {
+    id: "result",
+    title: "Lấy kết quả làm thước đo",
+    description: "Đo lường thành công bằng sự hài lòng của khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve) và sự trưởng thành của đội ngũ.",
+    iconType: "award"
+  }
+];
+
 export interface WorkPersonalityTrait {
   id: string;
   title: string;

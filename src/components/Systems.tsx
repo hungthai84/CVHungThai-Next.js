@@ -45,8 +45,6 @@ interface SystemItem {
   gradientClass: string;
   icon: React.ComponentType<any>;
   watermarkIcon: React.ComponentType<any>;
-  statusVi: string;
-  statusEn: string;
 }
 
 const SYSTEMS_DATA: SystemItem[] = [
@@ -61,9 +59,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.sdpplatfrom.powerservice.one",
     gradientClass: "from-[#6366f1] via-[#4f46e5] to-[#3730a3]",
     icon: Monitor,
-    watermarkIcon: LogIn,
-    statusVi: "24/7",
-    statusEn: "24/7"
+    watermarkIcon: LogIn
   },
   {
     id: "erp",
@@ -76,9 +72,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.erpplatfrom.powerservice.one",
     gradientClass: "from-[#059669] via-[#0d9488] to-[#115e59]",
     icon: Scale,
-    watermarkIcon: Calculator,
-    statusVi: "Sẵn sàng",
-    statusEn: "Ready"
+    watermarkIcon: Calculator
   },
   {
     id: "crm",
@@ -91,9 +85,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.crmplatfrom.powerservice.one",
     gradientClass: "from-[#e11d48] via-[#be123c] to-[#881337]",
     icon: HeartPulse,
-    watermarkIcon: Eye,
-    statusVi: "360° View",
-    statusEn: "360° View"
+    watermarkIcon: Eye
   },
   {
     id: "hrm",
@@ -106,9 +98,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.hrmplatfrom.powerservice.one",
     gradientClass: "from-[#d97706] via-[#b45309] to-[#78350f]",
     icon: UserCheck,
-    watermarkIcon: Settings,
-    statusVi: "Hoạt động",
-    statusEn: "Active"
+    watermarkIcon: Settings
   },
   {
     id: "bpm",
@@ -121,9 +111,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.bmpplatform.powerservice.one",
     gradientClass: "from-[#0284c7] via-[#0369a1] to-[#075985]",
     icon: Network,
-    watermarkIcon: Layers,
-    statusVi: "Tự động hóa",
-    statusEn: "Automated"
+    watermarkIcon: Layers
   },
   {
     id: "okr",
@@ -136,9 +124,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.okrplatfrom.powerservice.one",
     gradientClass: "from-[#7c3aed] via-[#6d28d9] to-[#4c1d95]",
     icon: Target,
-    watermarkIcon: Target,
-    statusVi: "Hiệu suất",
-    statusEn: "Performance"
+    watermarkIcon: Target
   },
   {
     id: "clp",
@@ -151,9 +137,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.clpplatform.powerservice.one",
     gradientClass: "from-[#ea580c] via-[#c2410c] to-[#9a3412]",
     icon: Crown,
-    watermarkIcon: Gem,
-    statusVi: "Tích điểm",
-    statusEn: "Rewards"
+    watermarkIcon: Gem
   },
   {
     id: "lms",
@@ -166,9 +150,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.lmsplatfrom.powerservice.one",
     gradientClass: "from-[#0d9488] via-[#0f766e] to-[#134e4a]",
     icon: BookOpen,
-    watermarkIcon: GraduationCap,
-    statusVi: "E-Learning",
-    statusEn: "E-Learning"
+    watermarkIcon: GraduationCap
   },
   {
     id: "csc",
@@ -181,9 +163,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.cscplatform.powerservice.one",
     gradientClass: "from-[#2563eb] via-[#1d4ed8] to-[#1e40af]",
     icon: Headphones,
-    watermarkIcon: Headphones,
-    statusVi: "Omnichannel",
-    statusEn: "Omnichannel"
+    watermarkIcon: Headphones
   },
   {
     id: "bi",
@@ -196,9 +176,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: null,
     gradientClass: "from-[#334155] via-[#1e293b] to-[#0f172a]",
     icon: PieChart,
-    watermarkIcon: TrendingUp,
-    statusVi: "Đang tích hợp",
-    statusEn: "Integrating"
+    watermarkIcon: TrendingUp
   },
   {
     id: "ai",
@@ -211,9 +189,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.aiplatfrom.powerservice.one",
     gradientClass: "from-[#9333ea] via-[#7928ca] to-[#4c0519]",
     icon: Bot,
-    watermarkIcon: Sparkles,
-    statusVi: "AI Powered",
-    statusEn: "AI Powered"
+    watermarkIcon: Sparkles
   },
   {
     id: "pos",
@@ -226,9 +202,7 @@ const SYSTEMS_DATA: SystemItem[] = [
     url: "https://www.posplatform.powerservice.one",
     gradientClass: "from-[#f97316] via-[#ea580c] to-[#c2410c]",
     icon: Store,
-    watermarkIcon: CreditCard,
-    statusVi: "Realtime",
-    statusEn: "Realtime"
+    watermarkIcon: CreditCard
   }
 ];
 
@@ -357,12 +331,15 @@ export function Systems() {
           </button>
         </div>
 
-        <div className="w-full text-left mb-2">
-          <h2 className="text-h3 sm:text-h2 font-play font-bold text-slate-900 dark:text-white flex items-center gap-2.5">
-            <Server className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-600 dark:text-indigo-400" />
-            <span>{isVi ? "Hệ thống" : "Systems"}</span>
-          </h2>
-        </div>
+        {/* Header Card Hệ thống giống tiêu đề thẻ chính trang học vấn */}
+        <PageCardHeader pageId="systems">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
+            <span className="text-caption text-label font-semibold font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
+              {isVi ? `Hiển thị ${SYSTEMS_DATA.length} hệ thống nền tảng` : `Showing ${SYSTEMS_DATA.length} platform systems`}
+            </span>
+          </div>
+        </PageCardHeader>
 
         {/* ========================================================================= */}
         {/* 12 SYSTEMS BENTO GRID: COMPACT FLUID HEIGHTS & ELEGANT GRADIENTS */}
@@ -375,7 +352,6 @@ export function Systems() {
             {SYSTEMS_DATA.map((item, idx) => {
               const IconComponent = item.icon;
               const WatermarkComponent = item.watermarkIcon;
-              const isIntegrating = item.url === null;
 
               return (
                 <motion.article
@@ -389,50 +365,41 @@ export function Systems() {
                   onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
                   style={{ borderRadius: "var(--radius-card, 16px)" }}
                   className={cn(
-                    "group cursor-pointer relative overflow-hidden p-5 text-white flex flex-col justify-between min-h-[190px] h-full shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 border border-white/20 dark:border-slate-800/60 bg-gradient-to-br",
+                    "group cursor-pointer relative overflow-hidden px-3.5 py-2.5 sm:px-4 sm:py-3 text-white flex flex-col justify-between min-h-[95px] h-full shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/20 dark:border-slate-800/60 bg-gradient-to-br",
                     item.gradientClass
                   )}
                 >
                   {/* Watermark Floating Back Icon */}
-                  <div className="absolute -right-2 -bottom-3 text-[5.5rem] opacity-10 group-hover:opacity-20 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out">
-                    <WatermarkComponent className="w-24 h-24 stroke-[1.2]" />
+                  <div className="absolute -right-2 -bottom-2 text-[3rem] opacity-10 group-hover:opacity-20 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out">
+                    <WatermarkComponent className="w-14 h-14 stroke-[1.2]" />
                   </div>
 
                   {/* Standard Content Surface wrapping */}
-                  <div className="relative z-10 flex-1 flex flex-col justify-between">
+                  <div className="relative z-10 flex-1 flex flex-col justify-between gap-1.5 w-full">
                     
-                    {/* Card Header row */}
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="text-body-bold font-bold tracking-tight text-white leading-snug text-left truncate">
+                    {/* Dòng 1 : Tên hệ thống (Tiêu đề card cấp 7) */}
+                    <div className="w-full text-left">
+                      <p className="text-xs font-semibold text-white/90 tracking-wide leading-snug truncate drop-shadow-2xs">
                         {isVi ? item.nameVi : item.nameEn}
-                      </h3>
-                      
-                      {/* Status Label Pill */}
-                      <span className={cn(
-                        "inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap border",
-                        isIntegrating 
-                          ? "bg-amber-500/20 border-amber-400/40 text-amber-200 animate-pulse" 
-                          : "bg-black/20 border-white/25 text-indigo-100"
-                      )}>
-                        <span className={cn("w-1.5 h-1.5 rounded-full", isIntegrating ? "bg-amber-400" : "bg-emerald-400 animate-pulse")} />
-                        {isVi ? item.statusVi : item.statusEn}
-                      </span>
+                      </p>
                     </div>
 
-                    {/* Code Tag and Active service indicator */}
-                    <div className="flex items-center justify-between py-2.5 my-auto">
-                      <h4 className="text-body-bold font-extrabold tracking-wider text-white drop-shadow-md font-mono select-none">
+                    {/* Dòng 2 : Bên trái chữ viết tắt , bên phải icon (Kích thước H3) */}
+                    <div className="flex items-center justify-between gap-2 my-0.5">
+                      <h3 className="text-xl sm:text-2xl font-black tracking-wider text-white drop-shadow-sm font-mono select-none leading-none">
                         {item.code}
-                      </h4>
-                      <div className="text-white transform group-hover:scale-115 group-hover:-translate-y-0.5 filter drop-shadow-lg transition-transform duration-300">
-                        <IconComponent className="w-8 h-8 stroke-[2]" />
+                      </h3>
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/20 dark:bg-white/15 backdrop-blur-md border border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.35)] flex items-center justify-center text-white transform group-hover:scale-110 group-hover:shadow-[0_0_22px_rgba(255,255,255,0.6)] group-hover:bg-white/30 transition-all duration-300 shrink-0">
+                        <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] drop-shadow-md" />
                       </div>
                     </div>
 
-                    {/* Footnote Label English name */}
-                    <p className="text-body-sm text-slate-100/90 font-medium italic tracking-tight leading-snug text-left mt-1">
-                      {item.nameEn}
-                    </p>
+                    {/* Dòng 3 : Tên tiếng anh đầy đủ (Tiêu đề card cấp 7) */}
+                    <div className="w-full text-left pt-0.5 border-t border-white/15">
+                      <p className="text-[11px] text-white/80 font-medium italic tracking-tight leading-tight truncate">
+                        {item.nameEn}
+                      </p>
+                    </div>
 
                   </div>
                 </motion.article>

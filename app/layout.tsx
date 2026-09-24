@@ -28,9 +28,11 @@ export default function RootLayout({
         <NextThemeProvider
           attribute="class"
           defaultTheme="glass-dark-neon"
-          themes={['glass-dark-neon', 'modern-light-glass']}
+          themes={['glass-dark-neon', 'mritech-digital-growth', 'fintech-soft-glass', 'modern-light-glass']}
           value={{
             'glass-dark-neon': 'dark',
+            'mritech-digital-growth': 'theme-mritech-digital-growth',
+            'fintech-soft-glass': 'theme-fintech-soft-glass',
             'modern-light-glass': 'light',
           }}
           storageKey="portfolio_theme"

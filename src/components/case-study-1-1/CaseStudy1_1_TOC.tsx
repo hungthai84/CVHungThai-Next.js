@@ -20,7 +20,8 @@ import {
   X, 
   ChevronRight,
   BookOpen,
-  Map
+  Map,
+  Headphones
 } from "lucide-react";
 import { playUiSound } from "../../lib/sound";
 import { ProjectCard } from "../../data/projectsData";
@@ -62,6 +63,7 @@ export function CaseStudy1_1_TOC({
   }, [isOpen]);
 
   const menuItems = [
+    { id: "sec-podcast", num: "00", label: "Bài Viết Podcast & MP3", icon: Headphones, color: "text-amber-500 bg-amber-500/10" },
     { id: "sec-01", num: "01", label: "Tổng Quan Dự Án", icon: FolderKanban, color: "text-sky-500 bg-sky-500/10" },
     { id: "sec-02", num: "02", label: "Bối Cảnh Thực Tế", icon: Activity, color: "text-indigo-500 bg-indigo-500/10" },
     { id: "sec-03", num: "03", label: "Thách Thức Toàn Diện", icon: AlertTriangle, color: "text-rose-500 bg-rose-500/10" },
@@ -121,7 +123,7 @@ export function CaseStudy1_1_TOC({
         {/* Small badge count */}
         {!isOpen && (
           <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-rose-500 text-[8px] sm:text-[9px] font-black text-white border-2 border-white shadow-md pointer-events-none animate-bounce">
-            10
+            11
           </span>
         )}
       </div>

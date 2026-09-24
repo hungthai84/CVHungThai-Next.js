@@ -344,199 +344,308 @@ export default function About() {
 
         </div>
 
-        {/* 4. 3-COLUMN DETAILS: TÔI LÀ AI? | 3 TRỤ CỘT VẬN HÀNH | TRIẾT LÝ & TẦM NHÌN */}
+        {/* 4. CHÂN DUNG & TRIẾT LÝ VẬN HÀNH (KHỐI BENTO 3 CỘT NGUYÊN MẪU CHÍNH XÁC NHƯ HÌNH ĐÍNH KÈM) */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full relative overflow-hidden bg-white/80 dark:bg-slate-900/85 backdrop-blur-2xl rounded-3xl border border-white/90 dark:border-cyan-400/40 p-5 sm:p-7 md:p-8 shadow-[0_16px_40px_rgba(99,102,241,0.1),inset_0_1.5px_2px_rgba(255,255,255,0.9)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.12)] hover:border-blue-400/40 dark:hover:border-cyan-400/60 transition-all duration-300 group/portrait"
+          style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 24px))" }}
+          className="w-full relative overflow-hidden bg-gradient-to-b from-blue-50/50 via-white/95 to-blue-50/30 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-950/95 backdrop-blur-2xl border border-blue-200/80 dark:border-cyan-500/30 p-4 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(37,99,235,0.08),inset_0_1.5px_2px_rgba(255,255,255,0.95)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(0,240,255,0.15)] flex flex-col gap-5 sm:gap-6 text-slate-800 dark:text-slate-100"
         >
-          {/* Subtle Ambient Background Glows */}
-          <div className="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/10 dark:bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Main Card Header */}
-          <div className="relative z-10 flex flex-col gap-2 pb-3 mb-6 border-b border-slate-200/60 dark:border-slate-800/80 font-['Play',sans-serif]">
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                  <Compass className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                </div>
-                <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                  {isVi ? "Chân dung & triết lý vận hành" : "Profile & operational philosophy"}
-                </h6>
-              </div>
-            </div>
-            <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
-          </div>
 
-          <div 
-            className="relative z-10 grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200/80 dark:divide-slate-800/80 items-stretch w-full gap-6 lg:gap-0 font-['Play',sans-serif]"
-          >
+          {/* B. Bố cục Bento 3 Cột (Giới thiệu bản thân | Ba trụ cột vận hành | Triết lý & tầm nhìn) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch w-full">
             
-            {/* Column 1: Giới thiệu bản thân tôi */}
-            <div className="flex flex-col justify-between pt-6 first:pt-0 lg:pt-0 lg:pr-6.5 h-full w-full min-w-0">
-              <div className="flex flex-col h-full justify-between w-full space-y-4">
-                <div>
-                  <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                        <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                      </div>
-                      <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                        {isVi ? "Giới thiệu bản thân tôi" : "About my professional profile"}
-                      </h6>
+            {/* CỘT 1: GIỚI THIỆU BẢN THÂN TÔI (ABOUT ME) */}
+            <div 
+              style={{ borderRadius: "calc(var(--theme-radius-card, var(--theme-radius, 24px)) - 4px)" }}
+              className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 p-4 sm:p-5.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-4 text-left"
+            >
+              {/* Header Cột 1 */}
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
+                  <User className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-base sm:text-lg font-bold text-blue-950 dark:text-white leading-tight">
+                    {isVi ? "Giới thiệu bản thân tôi" : "About Me"}
+                  </h4>
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                    ABOUT ME
+                  </span>
+                </div>
+              </div>
+
+              {/* Đoạn văn giới thiệu với badge "22 năm kinh nghiệm" */}
+              <div className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed text-justify space-y-2">
+                <p>
+                  {isVi ? (
+                    <>
+                      Một chuyên gia dịch vụ khách hàng với hơn{" "}
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-cyan-300 font-bold mx-0.5 shadow-2xs">
+                        22 năm kinh nghiệm
+                      </span>{" "}
+                      thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
+                    </>
+                  ) : (
+                    <>
+                      A customer service expert with over{" "}
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-cyan-300 font-bold mx-0.5 shadow-2xs">
+                        22 years of experience
+                      </span>{" "}
+                      in real-world operations. For me, Customer Service is not just support, but true companionship.
+                    </>
+                  )}
+                </p>
+              </div>
+
+
+
+              {/* Hộp "Giá trị cốt lõi" màu cam viền bo tròn có dấu ngoặc kép */}
+              <div className="relative p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-orange-50/90 via-amber-50/60 to-orange-50/80 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-amber-950/30 border border-amber-300/80 dark:border-amber-500/40 shadow-2xs flex flex-col gap-1.5">
+                {/* Header Giá trị cốt lõi */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-xs">
+                      <Heart className="w-3.5 h-3.5 fill-white" />
                     </div>
-                    <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
+                    <span className="text-xs sm:text-sm font-bold text-orange-600 dark:text-orange-400">
+                      {isVi ? "Giá trị cốt lõi" : "Core Value"}
+                    </span>
                   </div>
-                  
-                  <div className="space-y-3.5 text-body text-slate-700 dark:text-slate-200">
-                    <p className="leading-relaxed text-justify">
-                      {isVi ? (
-                        <>
-                          Một chuyên gia dịch vụ khách hàng với hơn <span className="font-extrabold px-2 py-0.5 rounded bg-blue-500/15 dark:bg-cyan-400/20 text-blue-700 dark:text-cyan-300 border border-blue-400/30 dark:border-cyan-400/30 inline-block my-0.5">22 năm kinh nghiệm</span> thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                        </>
-                      ) : (
-                        <>
-                          A customer service expert with over <span className="font-extrabold px-2 py-0.5 rounded bg-blue-500/15 dark:bg-cyan-400/20 text-blue-700 dark:text-cyan-300 border border-blue-400/30 dark:border-cyan-400/30 inline-block my-0.5">22 years</span> of practical experience. For me, Customer Service is not just serving, but accompanying. Every conversation, every moment, no matter how small, is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations.
-                        </>
-                      )}
-                    </p>
-                  </div>
+                  <span className="text-xl font-serif text-amber-300 dark:text-amber-500/60 font-black leading-none">””</span>
                 </div>
 
-                {/* Callout box cho phương châm đồng cảm */}
-                <div className="p-3.5 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-rose-500/10 dark:from-amber-500/15 dark:via-rose-500/10 dark:to-transparent border-l-4 border-amber-500 dark:border-amber-400 border-y border-r border-amber-300/40 dark:border-amber-500/30 shadow-2xs space-y-1 mt-auto">
-                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-caption">
-                    <Heart className="w-3.5 h-3.5 fill-amber-500/30 shrink-0" />
-                    <span>{isVi ? "Giá trị cốt lõi" : "Core Value"}</span>
-                  </div>
-                  <p className="text-body-sub text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-                    {isVi ? (
-                      <>
-                        Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ <span className="font-bold text-amber-700 dark:text-amber-300 underline decoration-amber-400/40 decoration-2 underline-offset-2">sự tận tâm kịp thời</span> và <span className="font-bold text-rose-700 dark:text-rose-300 underline decoration-rose-400/40 decoration-2 underline-offset-2">đồng cảm chân thành</span>.
-                      </>
-                    ) : (
-                      <>
-                        I believe satisfaction does not come from absolute perfection, but from <span className="font-bold text-amber-700 dark:text-amber-300 underline decoration-amber-400/40 decoration-2 underline-offset-2">timely dedication</span> and <span className="font-bold text-rose-700 dark:text-rose-300 underline decoration-rose-400/40 decoration-2 underline-offset-2">heartfelt empathy</span>.
-                      </>
-                    )}
-                  </p>
-                </div>
+                {/* Nội dung giá trị cốt lõi */}
+                <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                  {isVi ? (
+                    <>
+                      Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
+                      <span className="font-black text-orange-600 dark:text-orange-400 underline decoration-orange-300 decoration-1 underline-offset-2">
+                        sự tận tâm kịp thời
+                      </span>{" "}
+                      và{" "}
+                      <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-300 decoration-1 underline-offset-2">
+                        đồng cảm chân thành
+                      </span>
+                      .
+                    </>
+                  ) : (
+                    <>
+                      I believe satisfaction comes from{" "}
+                      <span className="font-bold text-orange-600">timely dedication</span> and{" "}
+                      <span className="font-bold text-rose-600">heartfelt empathy</span>.
+                    </>
+                  )}
+                </p>
+
+                {/* Dấu trích dẫn trang trí góc dưới */}
+                <span className="absolute bottom-1 left-2 text-xl font-serif text-amber-300/70 dark:text-amber-600/40 font-black leading-none pointer-events-none">““</span>
               </div>
             </div>
 
-            {/* Column 2: Ba trụ cột vận hành */}
-            <div className="flex flex-col justify-between pt-6 lg:pt-0 lg:px-6.5 h-full w-full min-w-0">
-              <div className="flex flex-col h-full justify-between w-full space-y-4">
-                <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                      <Target className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                    </div>
-                    <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                      {isVi ? "Ba trụ cột vận hành" : "Three core operational pillars"}
-                    </h6>
-                  </div>
-                  <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
+            {/* CỘT 2: BA TRỤ CỘT VẬN HÀNH (OPERATIONAL PILLARS) */}
+            <div 
+              style={{ borderRadius: "calc(var(--theme-radius-card, var(--theme-radius, 24px)) - 4px)" }}
+              className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 p-4 sm:p-5.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-4 text-left"
+            >
+              {/* Header Cột 2 */}
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
+                  <Target className="w-5 h-5 stroke-[2.5]" />
                 </div>
+                <div className="flex flex-col">
+                  <h4 className="text-base sm:text-lg font-bold text-blue-950 dark:text-white leading-tight">
+                    {isVi ? "Ba trụ cột vận hành" : "Operational Pillars"}
+                  </h4>
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                    OPERATIONAL PILLARS
+                  </span>
+                </div>
+              </div>
 
-                <div className="flex flex-col gap-3 flex-1 justify-between">
-                  {/* Pillar 1 Card (Màu xanh dương - Formatted like Quy trình card) */}
-                  <div className="rounded-2xl p-4 bg-gradient-to-b from-blue-600 via-indigo-600 to-sky-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-blue-300/40 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+              {/* 3 Thẻ Trụ Cột Gradient Rực Rỡ (01 Hiệu quả, 02 Nhân văn, 03 Bền vững) */}
+              <div className="flex-1 flex flex-col justify-between gap-3.5">
+                
+                {/* 1. HIỆU QUẢ (01 - Gradient Xanh Dương/Tím) */}
+                <div className="relative rounded-2xl p-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
+                  {/* Số 01 góc trái mờ */}
+                  <span className="absolute top-2 left-3 text-2xl sm:text-3xl font-black text-white/35 font-mono pointer-events-none select-none">
+                    01
+                  </span>
+
+                  {/* Nút mũi tên tròn mờ góc phải */}
+                  <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs">
+                    <span>›</span>
+                  </div>
+
+                  {/* Đồ họa biểu đồ cột mờ nền */}
+                  <div className="absolute right-3 bottom-2 opacity-25 pointer-events-none flex items-end gap-1">
+                    <div className="w-2 h-4 bg-white rounded-t-xs" />
+                    <div className="w-2 h-7 bg-white rounded-t-xs" />
+                    <div className="w-2 h-10 bg-white rounded-t-xs" />
+                    <TrendingUp className="w-6 h-6 text-white stroke-[2.5] -ml-2 mb-4" />
+                  </div>
+
+                  {/* Nội dung Trụ cột 01 */}
+                  <div className="flex flex-col items-center text-center mt-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full border border-white/50 bg-white/15 backdrop-blur-xs flex items-center justify-center mb-1 shadow-inner">
                       <Target className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-card-title font-bold tracking-normal">{isVi ? "01. HIỆU QUẢ" : "01. EFFICIENCY"}</span>
-                    <span className="text-body-sm sm:text-body font-semibold text-blue-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Tối ưu & Kết quả" : "Optimization & Results"}</span>
-                    <p className="text-xs text-blue-50/90 mt-1.5 leading-snug max-w-[240px]">
-                      {isVi ? "Tối ưu hiệu suất, tạo kết quả đo lường được." : "Optimize performance, create measurable outcomes."}
+                    <span className="text-base sm:text-lg font-black tracking-wider uppercase text-white drop-shadow-xs">
+                      {isVi ? "HIỆU QUẢ" : "EFFICIENCY"}
+                    </span>
+                    <span className="text-xs font-semibold text-blue-100 mt-0.5">
+                      {isVi ? "Tối ưu & Kết quả" : "Optimization & Results"}
+                    </span>
+                    <p className="text-[11px] text-blue-50/90 mt-1 leading-snug max-w-[240px]">
+                      {isVi ? "Tối ưu hiệu suất, tạo kết quả đo lường được." : "Optimize performance, create measurable results."}
                     </p>
                   </div>
+                </div>
 
-                  {/* Pillar 2 Card (Màu hồng đỏ - Formatted like Quy trình card) */}
-                  <div className="rounded-2xl p-4 bg-gradient-to-b from-rose-500 via-pink-600 to-rose-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-rose-500/25 hover:shadow-xl hover:shadow-rose-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-rose-300/40 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+                {/* 2. NHÂN VĂN (02 - Gradient Hồng/Đỏ/Tím) */}
+                <div className="relative rounded-2xl p-4 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white shadow-md shadow-rose-500/25 overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
+                  {/* Số 02 góc trái mờ */}
+                  <span className="absolute top-2 left-3 text-2xl sm:text-3xl font-black text-white/35 font-mono pointer-events-none select-none">
+                    02
+                  </span>
+
+                  {/* Nút mũi tên tròn mờ góc phải */}
+                  <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs">
+                    <span>›</span>
+                  </div>
+
+                  {/* Đồ họa bóng người 3D mờ nền */}
+                  <div className="absolute right-2 bottom-1 opacity-25 pointer-events-none flex items-center">
+                    <Users className="w-12 h-12 text-white" />
+                  </div>
+
+                  {/* Nội dung Trụ cột 02 */}
+                  <div className="flex flex-col items-center text-center mt-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full border border-white/50 bg-white/15 backdrop-blur-xs flex items-center justify-center mb-1 shadow-inner">
                       <Heart className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-card-title font-bold tracking-normal">{isVi ? "02. NHÂN VĂN" : "02. HUMANITY"}</span>
-                    <span className="text-body-sm sm:text-body font-semibold text-rose-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Đồng cảm & Thấu hiểu" : "Empathy & Understanding"}</span>
-                    <p className="text-xs text-rose-50/90 mt-1.5 leading-snug max-w-[240px]">
-                      {isVi ? "Lắng nghe, thấu hiểu và đặt con người làm trung tâm." : "Listen, empathize, and place people at the center."}
+                    <span className="text-base sm:text-lg font-black tracking-wider uppercase text-white drop-shadow-xs">
+                      {isVi ? "NHÂN VĂN" : "HUMANITY"}
+                    </span>
+                    <span className="text-xs font-semibold text-rose-100 mt-0.5">
+                      {isVi ? "Đồng cảm & Thấu hiểu" : "Empathy & Understanding"}
+                    </span>
+                    <p className="text-[11px] text-rose-50/90 mt-1 leading-snug max-w-[240px]">
+                      {isVi ? "Lắng nghe, thấu hiểu và đặt con người làm trung tâm." : "Listen, empathize, and put people at the center."}
                     </p>
                   </div>
+                </div>
 
-                  {/* Pillar 3 Card (Màu xanh ngọc - Formatted like Quy trình card) */}
-                  <div className="rounded-2xl p-4 bg-gradient-to-b from-teal-500 via-emerald-600 to-teal-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-teal-300/40 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
+                {/* 3. BỀN VỮNG (03 - Gradient Xanh Ngọc/Lá) */}
+                <div className="relative rounded-2xl p-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-teal-700 text-white shadow-md shadow-teal-500/25 overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
+                  {/* Số 03 góc trái mờ */}
+                  <span className="absolute top-2 left-3 text-2xl sm:text-3xl font-black text-white/35 font-mono pointer-events-none select-none">
+                    03
+                  </span>
+
+                  {/* Nút mũi tên tròn mờ góc phải */}
+                  <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs">
+                    <span>›</span>
+                  </div>
+
+                  {/* Đồ họa chiếc lá mờ nền */}
+                  <div className="absolute right-2 bottom-1 opacity-30 pointer-events-none flex items-center">
+                    <Leaf className="w-12 h-12 text-white" />
+                  </div>
+
+                  {/* Nội dung Trụ cột 03 */}
+                  <div className="flex flex-col items-center text-center mt-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full border border-white/50 bg-white/15 backdrop-blur-xs flex items-center justify-center mb-1 shadow-inner">
                       <Leaf className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-card-title font-bold tracking-normal">{isVi ? "03. BỀN VỮNG" : "03. SUSTAINABILITY"}</span>
-                    <span className="text-body-sm sm:text-body font-semibold text-teal-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Giá trị & Tin cậy" : "Value & Reliability"}</span>
-                    <p className="text-xs text-teal-50/90 mt-1.5 leading-snug max-w-[240px]">
+                    <span className="text-base sm:text-lg font-black tracking-wider uppercase text-white drop-shadow-xs">
+                      {isVi ? "BỀN VỮNG" : "SUSTAINABILITY"}
+                    </span>
+                    <span className="text-xs font-semibold text-teal-100 mt-0.5">
+                      {isVi ? "Giá trị & Tin cậy" : "Value & Trust"}
+                    </span>
+                    <p className="text-[11px] text-teal-50/90 mt-1 leading-snug max-w-[240px]">
                       {isVi ? "Xây dựng niềm tin và giá trị bền vững." : "Build enduring trust and sustainable value."}
                     </p>
                   </div>
                 </div>
+
               </div>
             </div>
 
-            {/* Column 3: Triết lý và tầm nhìn */}
-            <div className="flex flex-col justify-between pt-6 lg:pt-0 lg:pl-6.5 h-full w-full min-w-0">
-              <div className="flex flex-col h-full justify-between w-full space-y-4">
-                <div>
-                  <div className="flex flex-col gap-2 pb-3 mb-4 border-b border-slate-200/60 dark:border-slate-800/80">
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                        <Star className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                      </div>
-                      <h6 className="text-h6 tracking-tight text-blue-600 dark:text-cyan-400">
-                        {isVi ? "Triết lý và tầm nhìn" : "Core philosophy and vision"}
-                      </h6>
-                    </div>
-                    <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
-                  </div>
-
-                  <div className="space-y-3.5 flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Banner triết lý nổi bật */}
-                      <div className="mb-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-amber-500/15 via-blue-500/10 to-cyan-500/15 dark:from-amber-500/20 dark:via-cyan-500/15 dark:to-blue-500/20 border border-amber-400/40 dark:border-cyan-400/40 backdrop-blur-xl text-center shadow-2xs">
-                        <p className="text-body-bold italic text-blue-700 dark:text-cyan-300 leading-snug drop-shadow-xs">
-                          {isVi 
-                            ? "“Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”" 
-                            : "“Dedication & Partnership with Customer Experience”"}
-                        </p>
-                      </div>
-
-                      <p className="text-body text-slate-700 dark:text-slate-200 text-justify leading-relaxed">
-                        {isVi ? (
-                          <>
-                            Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi: Họ luôn được lắng nghe.
-                          </>
-                        ) : (
-                          <>
-                            I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels a simple yet core value: They are always listened to.
-                          </>
-                        )}
-                      </p>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 shadow-2xs mt-auto">
-                      <p className="text-body-sub text-slate-700 dark:text-slate-200 text-justify leading-relaxed">
-                        {isVi ? (
-                          <>
-                            <span className="font-bold text-blue-600 dark:text-cyan-400">Tầm nhìn:</span> Kiến tạo giá trị thực sự cho doanh nghiệp thông qua việc tối ưu quy trình và phát triển năng lực của đội ngũ chăm sóc khách hàng trực diện, hướng tới sự phát triển toàn diện.
-                          </>
-                        ) : (
-                          <>
-                            <span className="font-bold text-blue-600 dark:text-cyan-400">Vision:</span> Creating real business value by optimizing processes and developing frontend customer care team competencies, aiming for comprehensive development.
-                          </>
-                        )}
-                      </p>
-                    </div>
-                  </div>
+            {/* CỘT 3: TRIẾT LÝ VÀ TẦM NHÌN (PHILOSOPHY & VISION) */}
+            <div 
+              style={{ borderRadius: "calc(var(--theme-radius-card, var(--theme-radius, 24px)) - 4px)" }}
+              className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 p-4 sm:p-5.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-4 text-left"
+            >
+              {/* Header Cột 3 */}
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
+                  <Star className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-base sm:text-lg font-bold text-blue-950 dark:text-white leading-tight">
+                    {isVi ? "Triết lý và tầm nhìn" : "Philosophy & Vision"}
+                  </h4>
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                    PHILOSOPHY & VISION
+                  </span>
                 </div>
               </div>
+
+              {/* Banner Triết lý nổi bật có viền xanh bên trái & dấu ngoặc kép */}
+              <div className="relative p-3.5 sm:p-4 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border-l-4 border-blue-600 border-y border-r border-blue-200/60 dark:border-blue-800/50 shadow-2xs">
+                <span className="text-base sm:text-lg font-serif text-blue-600 dark:text-cyan-400 font-black leading-none">““</span>
+                <p className="text-sm sm:text-[15px] font-black italic text-blue-700 dark:text-cyan-300 text-center leading-snug px-2">
+                  {isVi 
+                    ? "“Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”" 
+                    : "“Dedication & Companionship in Customer Experience”"}
+                </p>
+                <span className="text-base sm:text-lg font-serif text-blue-600 dark:text-cyan-400 font-black leading-none float-right -mt-2">””</span>
+              </div>
+
+              {/* Đoạn văn giải thích triết lý với "Họ luôn được lắng nghe" */}
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed text-justify">
+                {isVi ? (
+                  <>
+                    Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi:{" "}
+                    <span className="font-bold text-blue-700 dark:text-cyan-300">
+                      Họ luôn được lắng nghe.
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core value:{" "}
+                    <span className="font-bold text-blue-700 dark:text-cyan-300">
+                      They are always listened to.
+                    </span>
+                  </>
+                )}
+              </p>
+
+              {/* Khối Tầm nhìn có icon Mắt */}
+              <div className="p-3 sm:p-3.5 rounded-xl bg-blue-50/50 dark:bg-slate-800/60 border border-blue-100 dark:border-slate-700/60 flex items-start gap-2.5 shadow-2xs">
+                <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
+                  <Compass className="w-3.5 h-3.5" />
+                </div>
+                <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed">
+                  {isVi ? (
+                    <>
+                      <span className="font-black text-blue-800 dark:text-cyan-300">Tầm nhìn:</span> Kiến tạo giá trị thực sự cho doanh nghiệp thông qua việc tối ưu quy trình và phát triển năng lực của đội ngũ chăm sóc khách hàng trực diện, hướng tới sự phát triển toàn diện.
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-black text-blue-800 dark:text-cyan-300">Vision:</span> Creating real business value by optimizing processes and developing customer care team capabilities.
+                    </>
+                  )}
+                </p>
+              </div>
+
+
+
             </div>
 
           </div>

@@ -30,7 +30,8 @@ import {
   Play,
   Rocket,
   Type,
-  Server
+  Server,
+  CreditCard
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -191,27 +192,22 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   // Complete Sections for Quick Jump Menu & Direct Navigation
   const ALL_14_SECTIONS = [
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
-    { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
-    { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "domains", num: "04", labelVi: "Dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
-    { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
-    { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
-    { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
-    { id: "projects", num: "07", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
-    { id: "interview", num: "08", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
-    { id: "tuvi", num: "09", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
-    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
-    { id: "contact", num: "11", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
-    { id: "systems", num: "12", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
-    { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
+    { id: "about", num: "02", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "2" },
+    { id: "skills", num: "03", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "3" },
+    { id: "education", num: "04", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+    { id: "experience", num: "05", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "5" },
+    { id: "projects", num: "06", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "6" },
+    { id: "interview", num: "07", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "7" },
+    { id: "tuvi", num: "08", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "8" },
+    { id: "systems", num: "09", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "9" },
+    { id: "contact", num: "10", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "0" },
+    { id: "wallpapers", num: "11", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
   ];
 
   // Navigation Items for Top Header Center
   const navItems = [
     { id: "home", label: t("nav.home"), Icon: Monitor },
-    { id: "letter", label: t("nav.letter"), Icon: FileText },
     { id: "about", label: t("nav.about"), Icon: User },
-    { id: "domains", label: t("nav.domains"), Icon: Compass },
     { id: "skills", label: t("nav.skills"), Icon: Brain },
     { id: "education", label: t("nav.education"), Icon: GraduationCap },
     { id: "experience", label: t("nav.experience"), Icon: Briefcase },
@@ -219,7 +215,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "interview", label: t("nav.interview"), Icon: Video },
     { id: "tuvi", label: t("nav.tuvi"), Icon: Sparkles },
     { id: "systems", label: t("nav.systems"), Icon: Server },
-    { id: "memories", label: t("nav.memories"), Icon: Images },
     { id: "contact", label: t("nav.contact"), Icon: MessagesSquare },
   ];
 
@@ -236,21 +231,28 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     }
   };
 
-  // Unified minimal luxury frosted glass styling with generous negative space & high micro-contrast
+  // Dedicated clean flat styling for header with no shadows or floating layer effects
   const getHeaderContainerStyle = () => {
-    return getUnifiedSurfaceStyle(theme);
+    switch (theme) {
+      case "glass-dark-neon":
+        return "bg-[#090D16]/90 dark:bg-[#090D16]/90 border-b border-x border-t-0 border-white/10 text-white backdrop-blur-[24px]";
+      case "mritech-digital-growth":
+      default:
+        return "bg-white/85 dark:bg-slate-900/85 border-b border-x border-t-0 border-slate-200/80 dark:border-white/15 text-slate-900 dark:text-slate-100 backdrop-blur-[28px] dark:backdrop-blur-[35px]";
+    }
   };
 
   return (
     <>
       <header 
         id="header"
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-500 ease-in-out floating-glass-header ${getHeaderContainerStyle()}`}
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between transition-all duration-300 ease-in-out shadow-none !shadow-none ${getHeaderContainerStyle()}`}
         style={{
           borderTopLeftRadius: "0px",
           borderTopRightRadius: "0px",
           borderBottomLeftRadius: "var(--theme-radius-card, 10px)",
-          borderBottomRightRadius: "var(--theme-radius-card, 10px)"
+          borderBottomRightRadius: "var(--theme-radius-card, 10px)",
+          boxShadow: "none"
         }}
       >
         {/* Hidden dummy svg to satisfy selector verification while keeping menu icons active */}
@@ -368,14 +370,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   onClick={(e) => {
                     e.stopPropagation();
                     const nextTheme = theme === "glass-dark-neon" 
-                      ? "mritech-digital-growth" 
-                      : "glass-dark-neon";
+                      ? "glass-soft-clay"
+                      : (theme === "glass-soft-clay"
+                          ? "fintech-soft-glass" 
+                          : (theme === "fintech-soft-glass" ? "mritech-digital-growth" : "glass-dark-neon"));
                     handleThemeToggle(nextTheme);
                   }}
                   className="relative z-20 shrink-0 w-[130px] sm:w-[142px] h-[38px] sm:h-[40px] -ml-[94px] sm:-ml-[104px] flex items-center px-2.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/20 text-slate-800 dark:text-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.12)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-xl hover:scale-105 active:scale-95 transition-transform cursor-pointer text-left"
-                  title={lang === "vi" ? "Giao diện: Glass Sáng / Glass Tối Neon (Click để đổi)" : "Theme: Light Glass / Dark Neon (Click to change)"}
+                  title={lang === "vi" ? "Giao diện: Glass Soft / Fintech Soft / MRITECH / Dark Neon (Click để đổi)" : "Theme: Glass Soft / Fintech Soft / MRITECH / Dark Neon (Click to change)"}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500/15 text-amber-500 dark:bg-cyan-500/15 dark:text-cyan-400 shrink-0 mr-2 shadow-xs">
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/15 text-blue-500 dark:bg-cyan-500/15 dark:text-cyan-400 shrink-0 mr-2 shadow-xs">
                     <div className="apple-theme-icon-wrapper">
                       <Sun className="apple-sun-icon w-3.5 h-3.5" />
                       <Moon className="apple-moon-icon w-3.5 h-3.5" />
@@ -384,7 +388,11 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   <span className="truncate">
                     {theme === "glass-dark-neon" 
                       ? (lang === "vi" ? "Glass Tối" : "Dark Neon") 
-                      : (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")}
+                      : (theme === "glass-soft-clay"
+                          ? (lang === "vi" ? "Glass Soft ☁️" : "Glass Soft ☁️")
+                          : (theme === "fintech-soft-glass"
+                              ? (lang === "vi" ? "Fintech Soft 💳" : "Fintech Soft 💳")
+                              : (lang === "vi" ? "MRITECH Growth 🚀" : "MRITECH Growth 🚀")))}
                   </span>
                 </button>
 
@@ -494,7 +502,11 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                         <span className="truncate">
                           {theme === "glass-dark-neon"
                             ? (lang === "vi" ? "Glass Tối Neon" : "Glass Dark Neon")
-                            : (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")}
+                            : (theme === "glass-soft-clay"
+                                ? (lang === "vi" ? "Glass Soft UI ☁️" : "Glass Soft UI ☁️")
+                                : (theme === "fintech-soft-glass"
+                                    ? (lang === "vi" ? "Fintech Soft 💳" : "Fintech Soft 💳")
+                                    : (lang === "vi" ? "Glass MRITECH Growth 🚀" : "MRITECH Growth Glass 🚀")))}
                         </span>
                       </div>
                       <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform ${isThemeDropdownOpen ? "-rotate-90" : ""}`} />
@@ -508,19 +520,30 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                           animate={{ opacity: 1, scale: 1, x: 0 }}
                           exit={{ opacity: 0, scale: 0.95, x: 8 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute right-full top-0 mr-2 w-72 sm:w-80 rounded-2xl bg-white/95 dark:bg-slate-950/95 border border-slate-200/80 dark:border-white/15 p-2.5 shadow-2xl z-[70] backdrop-blur-2xl"
+                          className="absolute right-full top-0 mr-2 w-72 sm:w-84 rounded-2xl bg-white/95 dark:bg-slate-950/95 border border-slate-200/80 dark:border-white/15 p-2.5 shadow-2xl z-[70] backdrop-blur-2xl"
                         >
                           <div className="flex items-center justify-between px-3 py-1 mb-1.5 border-b border-slate-200/60 dark:border-white/10 text-caption font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
                             <span className="flex items-center gap-1.5">
                               <Sparkles className="w-3 h-3 text-cyan-400" />
-                              <span>{lang === "vi" ? "Next Themes Giao Diện" : "Next Themes Engine"}</span>
-                            </span>
-                            <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-mono text-caption font-bold">
-                              v15.0 Next.js
+                              <span>{lang === "vi" ? "Giao diện" : "Themes"}</span>
                             </span>
                           </div>
 
                           {[
+                            { 
+                              id: "glass-soft-clay", 
+                              label: lang === "vi" ? "Glass Soft UI (Soft Claymorphism) ☁️" : "Glass Soft UI (Soft Claymorphism) ☁️", 
+                              desc: lang === "vi" ? "Giao diện Glass Soft Claymorphism: Thẻ kính mờ blur 20px, điểm nhấn tím-cam & nút pill" : "Soft Claymorphism & Glassmorphism: Frosted glass blur 20px, lavender-peach glows & pill action buttons", 
+                              Icon: Sparkles, 
+                              color: "text-indigo-500" 
+                            },
+                            { 
+                              id: "fintech-soft-glass", 
+                              label: lang === "vi" ? "Fintech Soft Glass UI 💳" : "Fintech Soft Glass UI 💳", 
+                              desc: lang === "vi" ? "Giao diện Fintech Soft UI: Thẻ nổi Neumorphic, điểm nhấn cam-cobalt & bo góc 24px" : "Fintech Soft UI: Clean pearl glass, Neumorphic floating cards, cobalt-orange accents & 24px radius", 
+                              Icon: CreditCard, 
+                              color: "text-blue-500" 
+                            },
                             { 
                               id: "mritech-digital-growth", 
                               label: lang === "vi" ? "Glass MRITECH Digital Growth 🚀" : "MRITECH Digital Growth Glass 🚀", 
@@ -716,28 +739,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                       <span className="truncate">{lang === "vi" ? "Hình nền" : "Wallpaper"}</span>
                     </div>
                     <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                  </button>
-
-                  <div className="h-px bg-slate-200/50 dark:bg-white/10 my-0.5" />
-
-                  {/* 7. Chế độ Trình chiếu Slide */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent("open-presentation-mode"));
-                    }}
-                    className="w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-semibold flex items-center justify-between transition-all duration-200 cursor-pointer bg-blue-50/80 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-blue-900 dark:text-blue-200 hover:scale-[1.02] active:scale-98 shadow-xs"
-                    title={lang === "vi" ? "Chế độ Trình chiếu Tự động" : "Auto Presentation Mode"}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500 text-white shrink-0 shadow-xs">
-                        <Play className="w-3.5 h-3.5 fill-white" />
-                      </div>
-                      <span className="truncate font-bold">{lang === "vi" ? "Trình chiếu Slide" : "Slideshow"}</span>
-                    </div>
-                    <span className="text-3xs font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-300">
-                      AUTO
-                    </span>
                   </button>
                 </motion.div>
               )}
@@ -937,6 +938,20 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
                 {/* Theme options on mobile */}
+                <button
+                  onClick={() => {
+                    setTheme("fintech-soft-glass");
+                  }}
+                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
+                    theme === "fintech-soft-glass"
+                      ? "bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-400/50 font-black shadow-sm"
+                      : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
+                  }`}
+                  title="💳 Fintech Soft Glass"
+                >
+                  <CreditCard className="w-3 h-3 text-blue-500" />
+                  <span>Fintech 💳</span>
+                </button>
                 <button
                   onClick={() => {
                     setTheme("mritech-digital-growth");

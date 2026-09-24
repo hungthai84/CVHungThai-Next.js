@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef, memo, lazy, Suspense } from "react";
+import React, { useState, useEffect, useRef, memo, lazy, Suspense, Profiler, type ProfilerOnRenderCallback, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "./lib/utils";
 import Header from "./components/Header";
@@ -11,21 +11,10 @@ import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
 import BentoSkeleton from "./components/BentoSkeleton";
+import { SectionProgressBar, SectionNavigationLoader } from "./components/SectionNavigationLoader";
+import SectionProgressStepper from "./components/SectionProgressStepper";
 import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
-import OpenLetter from "./components/OpenLetter";
-import About from "./components/About";
-import DomainsSection from "./components/DomainsSection";
-import Education from "./components/Education";
-import Skills from "./components/Skills";
-import Experience from "./components/Experience";
-import Projects from "./components/Projects";
-import Interview from "./components/Interview";
-import TuVi from "./components/TuVi";
-import Memories from "./components/Memories";
-import Contact from "./components/Contact";
-import Wallpapers from "./components/Wallpapers";
-import Systems from "./components/Systems";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -37,9 +26,9 @@ import { FooterProvider, useFooter } from "./context/FooterContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
-  Monitor, MailOpen, User, GraduationCap, Compass, 
+  Monitor, User, GraduationCap, 
   Briefcase, Brain, ClipboardList, Video,
-  Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server
+  Sparkles, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server
 } from "lucide-react";
 
 // Helper function to dynamically import modules with automatic retry on chunk load errors
@@ -71,8 +60,17 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
   });
 }
 
-// Lazy load non-hero sections for dynamic code splitting & reduced initial bundle
-// Statically imported section components above
+// Lazy load non-hero sections for dynamic code splitting, reduced initial bundle & granular render profiling
+const About = lazyWithRetry(() => import("./components/About"));
+const Education = lazyWithRetry(() => import("./components/Education"));
+const Skills = lazyWithRetry(() => import("./components/Skills"));
+const Experience = lazyWithRetry(() => import("./components/Experience"));
+const Projects = lazyWithRetry(() => import("./components/Projects"));
+const Interview = lazyWithRetry(() => import("./components/Interview"));
+const TuVi = lazyWithRetry(() => import("./components/TuVi"));
+const Contact = lazyWithRetry(() => import("./components/Contact"));
+const Wallpapers = lazyWithRetry(() => import("./components/Wallpapers"));
+const Systems = lazyWithRetry(() => import("./components/Systems"));
 
 // Lazy load heavy overlays & settings modals
 const XRayInspector = lazyWithRetry(() => import("./components/XRayInspector"));
@@ -83,23 +81,19 @@ const SoundSettingsModal = lazyWithRetry(() => import("./components/SoundSetting
 const FooterSettingsModal = lazyWithRetry(() => import("./components/FooterSettingsModal"));
 const TypographySettings = lazyWithRetry(() => import("./components/TypographySettings"));
 const ExecutiveResumeExportModal = lazyWithRetry(() => import("./components/ExecutiveResumeExportModal"));
-const PresentationModeModal = lazyWithRetry(() => import("./components/PresentationModeModal"));
 
 // Memoize Hero component
 const MemoHero = memo(Hero);
 
 const SECTIONS: SectionMeta[] = [
   { id: "home", labelKey: "nav.home", Icon: Monitor, Component: MemoHero, padding: "p-0 overflow-hidden" },
-  { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: OpenLetter, padding: "p-0 overflow-y-auto" },
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
-  { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: DomainsSection, padding: "p-0 overflow-y-auto" },
   { id: "skills", labelKey: "nav.skills", Icon: Brain, Component: Skills, padding: "p-0 overflow-y-auto" },
   { id: "education", labelKey: "nav.education", Icon: GraduationCap, Component: Education, padding: "p-0 overflow-y-auto" },
   { id: "experience", labelKey: "nav.experience", Icon: Briefcase, Component: Experience, padding: "p-0 overflow-y-auto" },
   { id: "projects", labelKey: "nav.projects", Icon: ClipboardList, Component: Projects, padding: "p-0 overflow-y-auto" },
   { id: "interview", labelKey: "nav.interview", Icon: Video, Component: Interview, padding: "p-0 overflow-y-auto" },
   { id: "tuvi", labelKey: "nav.tuvi", Icon: Sparkles, Component: TuVi, padding: "p-0 overflow-y-auto" },
-  { id: "memories", labelKey: "nav.memories", Icon: Images, Component: Memories, padding: "p-0 overflow-y-auto" },
   { id: "systems", labelKey: "nav.systems", Icon: Server, Component: Systems, padding: "p-0 overflow-y-auto" },
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
@@ -114,16 +108,107 @@ function MainContent() {
   const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
   const [activeSection, setActiveSection] = useState("home");
+  const [pendingSectionId, setPendingSectionId] = useState<string | null>(null);
   const [isSectionLoading, setIsSectionLoading] = useState(false);
-  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [navProgress, setNavProgress] = useState(0);
+  const navAnimTimersRef = useRef<NodeJS.Timeout[]>([]);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
 
+  // Clean up any pending navigation animation timers on unmount
+  useEffect(() => {
+    return () => {
+      navAnimTimersRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
   // States for Proactive Feature Modals
   const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
-  const [isPresentationOpen, setIsPresentationOpen] = useState(false);
 
   const { playTransition } = useSound();
+
+  // Profiler onRender callback to measure render performance of section components and record markers
+  const handleSectionRender: ProfilerOnRenderCallback = useCallback(
+    (id, phase, actualDuration, baseDuration, startTime, commitTime) => {
+      // 1. Browser Performance Timeline Profiling Markers (User Timing API Level 3 with fallback)
+      if (typeof window !== "undefined" && window.performance) {
+        try {
+          const markStart = `react:${id}:${phase}:start`;
+          const markEnd = `react:${id}:${phase}:end`;
+          const measureName = `⚛️ [React Section] ${id} [${phase}] - ${actualDuration.toFixed(1)}ms`;
+
+          window.performance.mark(markStart, { startTime });
+          window.performance.mark(markEnd, { startTime: commitTime });
+
+          window.performance.measure(measureName, {
+            start: markStart,
+            end: markEnd,
+            detail: {
+              sectionId: id,
+              phase,
+              actualDuration: Number(actualDuration.toFixed(2)),
+              baseDuration: Number(baseDuration.toFixed(2)),
+              startTime: Number(startTime.toFixed(2)),
+              commitTime: Number(commitTime.toFixed(2)),
+            },
+          });
+        } catch {
+          try {
+            window.performance.measure?.(`[React Section] ${id} (${phase})`);
+          } catch {}
+        }
+      }
+
+      // 2. In-memory monitoring registry on window object for programmatic diagnostics
+      if (typeof window !== "undefined") {
+        const w = window as any;
+        if (!w.__REACT_SECTION_PROFILING__) {
+          w.__REACT_SECTION_PROFILING__ = {
+            records: [],
+            getSummary: () => {
+              const summary: Record<string, { mounts: number; updates: number; avgActualMs: number; totalActualMs: number; lastCommit: number }> = {};
+              for (const r of w.__REACT_SECTION_PROFILING__.records) {
+                if (!summary[r.id]) {
+                  summary[r.id] = { mounts: 0, updates: 0, avgActualMs: 0, totalActualMs: 0, lastCommit: 0 };
+                }
+                if (r.phase === "mount") summary[r.id].mounts++;
+                else summary[r.id].updates++;
+                summary[r.id].totalActualMs += r.actualDuration;
+                summary[r.id].lastCommit = r.commitTime;
+                const totalRenders = summary[r.id].mounts + summary[r.id].updates;
+                summary[r.id].avgActualMs = Number((summary[r.id].totalActualMs / totalRenders).toFixed(2));
+              }
+              return summary;
+            },
+          };
+        }
+        w.__REACT_SECTION_PROFILING__.records.push({
+          id,
+          phase,
+          actualDuration: Number(actualDuration.toFixed(2)),
+          baseDuration: Number(baseDuration.toFixed(2)),
+          startTime: Number(startTime.toFixed(2)),
+          commitTime: Number(commitTime.toFixed(2)),
+          timestamp: Date.now(),
+        });
+        if (w.__REACT_SECTION_PROFILING__.records.length > 80) {
+          w.__REACT_SECTION_PROFILING__.records.shift();
+        }
+
+        // Decouple dispatch outside React's active commit phase to prevent state update loops
+        setTimeout(() => {
+          try {
+            window.dispatchEvent(
+              new CustomEvent("react-section-profile", {
+                detail: { id, phase, actualDuration, baseDuration, startTime, commitTime },
+              })
+            );
+          } catch {}
+        }, 50);
+      }
+    },
+    []
+  );
 
   // State for Keyboard Shortcut Toast notification
   const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
@@ -177,20 +262,42 @@ function MainContent() {
     }
   }, [theme]);
 
-  // Smoothly switch to specific section with subtle pulse loading state
+  // Smoothly switch to specific section with theme-gradient progress bar loading state
   const navigateToSection = (id: string) => {
     const cleanId = id.replace(/^#/, "");
     const targetSection = SECTIONS.find((s) => s.id === cleanId);
     if (targetSection && cleanId !== activeSection) {
       playTransition();
+
+      // Clear any in-flight navigation timers
+      navAnimTimersRef.current.forEach(clearTimeout);
+      navAnimTimersRef.current = [];
+
       if (cleanId !== "home") {
+        setPendingSectionId(cleanId);
         setIsSectionLoading(true);
-        if (loadingTimerRef.current) clearTimeout(loadingTimerRef.current);
-        loadingTimerRef.current = setTimeout(() => {
-          setIsSectionLoading(false);
-        }, 220);
+        setNavProgress(18);
+
+        // Advance progress bar matching theme gradient: initial burst -> steady sweep -> rapid completion
+        navAnimTimersRef.current.push(
+          setTimeout(() => setNavProgress(52), 60),
+          setTimeout(() => setNavProgress(86), 160),
+          setTimeout(() => {
+            setNavProgress(100);
+            setActiveSection(cleanId);
+          }, 260),
+          setTimeout(() => {
+            setIsSectionLoading(false);
+            setPendingSectionId(null);
+            setNavProgress(0);
+          }, 380)
+        );
+      } else {
+        setActiveSection(cleanId);
+        setIsSectionLoading(false);
+        setPendingSectionId(null);
+        setNavProgress(0);
       }
-      setActiveSection(cleanId);
     }
   };
 
@@ -213,16 +320,13 @@ function MainContent() {
       }
     };
     const handleOpenResumeExport = () => setIsResumeExportOpen(true);
-    const handleOpenPresentationMode = () => setIsPresentationOpen(true);
 
     window.addEventListener("app-navigate", handleAppNavigate);
     window.addEventListener("open-resume-export", handleOpenResumeExport);
-    window.addEventListener("open-presentation-mode", handleOpenPresentationMode);
 
     return () => {
       window.removeEventListener("app-navigate", handleAppNavigate);
       window.removeEventListener("open-resume-export", handleOpenResumeExport);
-      window.removeEventListener("open-presentation-mode", handleOpenPresentationMode);
     };
   }, [activeSection]);
 
@@ -231,14 +335,14 @@ function MainContent() {
   useEffect(() => {
     const shortcutMap: Record<string, { id: string; nameVi: string; nameEn: string }> = {
       "1": { id: "home", nameVi: "Trang chủ", nameEn: "Home" },
-      "2": { id: "letter", nameVi: "Thư ngỏ", nameEn: "Open Letter" },
-      "3": { id: "about", nameVi: "Giới thiệu", nameEn: "About" },
+      "2": { id: "about", nameVi: "Giới thiệu", nameEn: "About" },
+      "3": { id: "skills", nameVi: "Kỹ năng chuyên môn", nameEn: "Skills" },
       "4": { id: "education", nameVi: "Học vấn & Bằng cấp", nameEn: "Education" },
-      "5": { id: "skills", nameVi: "Kỹ năng chuyên môn", nameEn: "Skills" },
-      "6": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
-      "7": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
-      "8": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
-      "9": { id: "tuvi", nameVi: "Tử Vi & Chiêm Tinh", nameEn: "TuVi & Astrology" },
+      "5": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
+      "6": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
+      "7": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
+      "8": { id: "tuvi", nameVi: "Tử Vi & Chiêm Tinh", nameEn: "TuVi & Astrology" },
+      "9": { id: "systems", nameVi: "Hệ thống", nameEn: "Systems" },
       "0": { id: "contact", nameVi: "Liên hệ", nameEn: "Contact" },
     };
 
@@ -379,6 +483,7 @@ function MainContent() {
   const activeIndex = SECTIONS.findIndex((s) => s.id === activeSection);
   const currentSection = SECTIONS[activeIndex] || SECTIONS[0];
   const CurrentComponent = currentSection.Component;
+  const targetSectionMeta = SECTIONS.find((s) => s.id === (pendingSectionId || activeSection)) || currentSection;
 
   const getMainCardStyle = () => {
     return getUnifiedSurfaceStyle(theme);
@@ -417,19 +522,33 @@ function MainContent() {
               isSwitching ? "scale-[0.985] opacity-80" : "scale-100 opacity-100"
             )}
           >
+            {/* Top Rim Section Progress Bar matching theme's gradient color */}
+            <SectionProgressBar 
+              isLoading={isSectionLoading} 
+              progress={navProgress} 
+              theme={theme} 
+            />
+
             <main className="relative w-full h-full overflow-hidden flex-grow">
               <AnimatePresence mode="wait" initial={false}>
                 {isSectionLoading ? (
                   <motion.div
-                    key="section-skeleton-loading"
+                    key={`section-loader-${pendingSectionId || activeSection}`}
                     layoutId="section-card-wrapper"
                     initial={{ opacity: 0, scale: 0.985 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.985 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    className="w-full h-full p-4 sm:p-6 overflow-hidden"
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="w-full h-full p-4 sm:p-6 overflow-hidden flex items-center justify-center"
                   >
-                    <BentoSkeleton />
+                    <SectionNavigationLoader 
+                      theme={theme}
+                      targetSectionTitle={t(targetSectionMeta.labelKey)}
+                      targetSectionSubtitle={lang === "vi" ? targetSectionMeta.subtitleVi : targetSectionMeta.subtitleEn}
+                      TargetIcon={targetSectionMeta.Icon}
+                      lang={lang}
+                      progress={navProgress}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -445,7 +564,7 @@ function MainContent() {
                     animate={{ 
                       y: 0, 
                       opacity: 1, 
-                      scale: 1,
+                      scale: 1, 
                       filter: "blur(0px)" 
                     }}
                     exit={{ 
@@ -460,8 +579,18 @@ function MainContent() {
                     }}
                     className={`w-full h-full ${currentSection.padding} no-scrollbar scroll-smooth`}
                   >
-                    <Suspense fallback={<BentoSkeleton />}>
-                      <CurrentComponent />
+                    <Suspense fallback={
+                      <SectionNavigationLoader 
+                        theme={theme}
+                        targetSectionTitle={t(currentSection.labelKey)}
+                        targetSectionSubtitle={lang === "vi" ? currentSection.subtitleVi : currentSection.subtitleEn}
+                        TargetIcon={currentSection.Icon}
+                        lang={lang}
+                      />
+                    }>
+                      <Profiler id={`section-${currentSection.id}`} onRender={handleSectionRender}>
+                        <CurrentComponent />
+                      </Profiler>
                     </Suspense>
                   </motion.div>
                 )}
@@ -471,62 +600,16 @@ function MainContent() {
 
         </div>
 
-        {/* RIGHT FLOATING PAGE PROGRESS STEPPER - ADAPTS TO WEBSITE THEME */}
-        <div className={cn(
-          "fixed right-3 lg:right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-2 sm:p-2.5 rounded-2xl sm:rounded-full space-y-3 transition-all duration-300 backdrop-blur-xl border shadow-xl",
-          theme === "glass-dark-neon"
-            ? "bg-slate-950/80 border-slate-800/80 text-white shadow-indigo-950/40"
-            : "bg-white/80 dark:bg-slate-900/80 border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-white shadow-lg"
-        )}>
-          {/* Progress Line with Glass effect */}
-          <div className="absolute top-5 bottom-5 w-0.5 bg-slate-300/50 dark:bg-white/10 pointer-events-none backdrop-blur-xs">
-            <div 
-              className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-              style={{ height: `${(activeIndex / (SECTIONS.length - 1)) * 100}%` }}
-            />
-          </div>
-          
-          {SECTIONS.map((sec, idx) => {
-            const isActive = activeSection === sec.id;
-            const Icon = sec.Icon;
-            return (
-              <div key={sec.id} className="relative group/step flex items-center justify-center py-0.5">
-                {/* Tooltip Badge (Slide to the Left with Theme Glassmorphism) */}
-                <div className={cn(
-                  "absolute right-9 px-3 py-1.5 rounded-xl border text-2xs font-black tracking-wide whitespace-nowrap opacity-0 translate-x-3 scale-95 group-hover/step:opacity-100 group-hover/step:translate-x-0 group-hover/step:scale-100 transition-all duration-200 pointer-events-none flex items-center gap-2 backdrop-blur-md shadow-2xl",
-                  theme === "glass-dark-neon"
-                    ? "bg-slate-950/95 border-indigo-500/40 text-white shadow-indigo-950/50"
-                    : "bg-white/95 dark:bg-slate-900/95 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white"
-                )}>
-                  <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-blue-500/20 text-blue-500 dark:text-blue-400">
-                    <Icon className="w-3.5 h-3.5 animate-pulse" />
-                  </div>
-                  <span>{t(sec.labelKey)}</span>
-                  <span className="text-3xs text-blue-600 dark:text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded-md">({idx + 1}/{SECTIONS.length})</span>
-                </div>
-                
-                {/* Target Indicator Button with Vertical Bars (Dấu gạch dọc) */}
-                <button
-                  onClick={() => navigateToSection(sec.id)}
-                  className={`relative z-10 rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center ${
-                    isActive 
-                      ? "w-1.5 h-6.5 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 shadow-md shadow-indigo-500/60 ring-2 ring-indigo-400/80 scale-105" 
-                      : "w-1 h-3.5 bg-slate-400/80 dark:bg-slate-600 hover:w-1.5 hover:h-6 hover:bg-indigo-500 dark:hover:bg-indigo-400"
-                  }`}
-                  title={t(sec.labelKey)}
-                >
-                  {/* Shared ping wave effect for active item */}
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-stepper-glow"
-                      className="absolute -inset-1 rounded-full border border-indigo-500/60 animate-ping opacity-60 pointer-events-none"
-                    />
-                  )}
-                </button>
-              </div>
-            );
-          })}
-        </div>
+        {/* RIGHT FLOATING PAGE PROGRESS STEPPER WITH HEATMAP INDICATOR */}
+        <SectionProgressStepper
+          sections={SECTIONS}
+          activeSection={activeSection}
+          activeIndex={activeIndex}
+          onNavigate={navigateToSection}
+          theme={theme}
+          lang={lang}
+          t={t}
+        />
 
         {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
         <Footer 
@@ -547,11 +630,6 @@ function MainContent() {
           <ExecutiveResumeExportModal
             isOpen={isResumeExportOpen}
             onClose={() => setIsResumeExportOpen(false)}
-          />
-          <PresentationModeModal
-            isOpen={isPresentationOpen}
-            onClose={() => setIsPresentationOpen(false)}
-            onNavigate={navigateToSection}
           />
         </Suspense>
 

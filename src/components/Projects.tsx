@@ -5,43 +5,30 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  Check
+  Check,
+  Search
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
+import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
 import { PROJECTS_LIST, ProjectCard } from "../data/projectsData";
 
-const staggerContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.06,
-      delayChildren: 0.02,
-    },
-  },
-};
-
-const staggerCardVariants: any = {
+const projectCardRevealVariants: any = {
   hidden: { 
     opacity: 0, 
-    y: 20, 
-    scale: 0.96,
-    filter: "blur(4px)"
+    y: 24,
   },
-  visible: { 
+  visible: (index: number) => ({ 
     opacity: 1, 
-    y: 0, 
-    scale: 1,
-    filter: "blur(0px)",
+    y: 0,
     transition: {
-      type: "spring",
-      stiffness: 280,
-      damping: 22,
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+      delay: (index % 4) * 0.06,
     }
-  },
+  }),
 };
 
 import { ProjectArticle } from "./ProjectArticle";
@@ -54,19 +41,31 @@ interface KeyframersTiltCardProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
   style?: React.CSSProperties;
   key?: React.Key;
+  tabIndex?: number;
+  role?: string;
+  "aria-label"?: string;
 }
 
 function KeyframersTiltCard({
   children,
   className,
   onClick,
+  onKeyDown,
   style,
+  tabIndex,
+  role,
+  "aria-label": ariaLabel,
 }: KeyframersTiltCardProps) {
   return (
     <div
+      role={role}
+      tabIndex={tabIndex}
+      aria-label={ariaLabel}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       style={style}
       className={cn("relative keyframers-tilt-card group/kfc", className)}
     >
@@ -319,6 +318,7 @@ export default function Projects() {
   };
 
   const [selectedPhase, setSelectedPhase] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const phaseCounts = useMemo(() => {
     const map: Record<string, number> = { all: PROJECTS_LIST.length };
@@ -337,15 +337,22 @@ export default function Projects() {
   ], [phaseCounts]);
 
   const filteredProjects = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     return PROJECTS_LIST.filter((card) => {
       if (selectedPhase !== "all" && card.phase !== selectedPhase) {
         return false;
       }
-      return true;
+      if (!q) return true;
+      const matchTitle = card.branchTitle.toLowerCase().includes(q);
+      const matchDesc = card.description.toLowerCase().includes(q);
+      const matchGroup = card.groupTitle.toLowerCase().includes(q);
+      const matchTags = card.tags?.some((t) => t.toLowerCase().includes(q));
+      return matchTitle || matchDesc || matchGroup || matchTags;
     });
-  }, [selectedPhase]);
+  }, [selectedPhase, searchQuery]);
 
   const handleCardClick = (card: ProjectCard) => {
+    playUiSound("click");
     setSelectedCardId(card.id);
     setActiveCard(card);
   };
@@ -353,7 +360,7 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-2 sm:p-4 md:p-5 lg:p-6 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
+      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
     >
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
@@ -382,7 +389,7 @@ export default function Projects() {
       }} />
 
       {/* Main Container Dự án */}
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
         {/* Header Card Dự án (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
         <PageCardHeader pageId="projects">
           {/* Cụm trái: Số lượng dự án */}
@@ -393,8 +400,29 @@ export default function Projects() {
             </span>
           </div>
 
-          {/* Cụm phải: Bộ lọc giai đoạn + Tìm kiếm */}
+          {/* Cụm phải: Ô tìm kiếm + Bộ lọc giai đoạn */}
           <div className="flex items-center gap-2 ml-auto flex-wrap">
+            {/* Ô tìm kiếm nhanh */}
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={isVi ? "Tìm kiếm dự án..." : "Search projects..."}
+                className="pl-8 pr-3 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-36 sm:w-48 transition-all shadow-2xs"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+
             {/* Nút lọc danh mục */}
             <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
               {PHASE_FILTERS.map((tab) => {
@@ -404,7 +432,10 @@ export default function Projects() {
                   <button
                     key={tab.id}
                     type="button"
-                    onClick={() => setSelectedPhase(tab.id)}
+                    onClick={() => {
+                      playUiSound("click");
+                      setSelectedPhase(tab.id);
+                    }}
                     className={cn(
                       "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1.5 cursor-pointer",
                       isActive
@@ -474,11 +505,24 @@ export default function Projects() {
                     return (
                       <motion.div
                         key={card.id}
-                        variants={staggerCardVariants}
+                        custom={cardIndex}
+                        variants={projectCardRevealVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
                         className="w-full min-w-0 flex flex-col h-auto"
                       >
                       <KeyframersTiltCard
+                        role="button"
+                        tabIndex={0}
+                        aria-label={card.branchTitle}
                         onClick={() => handleCardClick(card)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleCardClick(card);
+                          }
+                        }}
                         style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                         className={cn(
                           "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-auto relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
@@ -504,6 +548,9 @@ export default function Projects() {
                                 loading="lazy"
                                 decoding="async"
                                 referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop";
+                                }}
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 
@@ -521,7 +568,7 @@ export default function Projects() {
                           </div>
 
                           {/* Standardized Content Area with Color Bar Header & Description */}
-                          <div className="project-card-content p-4 sm:p-5 flex flex-col min-w-0 text-left gap-3 pb-4">
+                          <div className="project-card-content p-[25px] flex flex-col min-w-0 text-left gap-3">
                             {/* Standardized Subcard Header with Sleek Color Bar */}
                             <div className="w-full flex items-start gap-3 pb-2.5 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
                               <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
@@ -537,8 +584,8 @@ export default function Projects() {
                               {card.description}
                             </p>
 
-                            {/* Tags & Action Link Footer */}
-                            <div className="space-y-2.5 pt-1">
+                            {/* Tags & Action Link Footer (Hidden per request) */}
+                            <div className="space-y-2.5 pt-1 hidden">
                               {/* Tags Footer - Always on 1 single row */}
                               <div className="project-tags flex flex-nowrap items-center gap-1.5 overflow-x-auto scrollbar-none whitespace-nowrap">
                                 {card.tags.slice(0, 3).map((tag, idx) => (

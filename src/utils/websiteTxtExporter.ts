@@ -242,7 +242,7 @@ ${sectionDivider}
    • Link ảnh chuyên ngành: https://i.ibb.co/0RtGZR9b/1-4-Qu-n-l-d-n-chăm sóc khách hàng.png
 
 5. CÔNG NGHỆ TÀI CHÍNH & VÍ ĐIỆN TỬ (FinTech & Digital Payment Solutions)
-   • Bối cảnh & Kinh nghiệm: Tích hợp hệ thống hỗ trợ giao dịch tài chính cho Ví MoMo, Finviet, Ví ECO và AirPay/ShopeePay.
+   • Bối cảnh & Kinh nghiệm: Tích hợp hệ thống hỗ trợ giao dịch tài chính cho Ví MoMo, Finviet, Ví ECO và AirPay.
    • Năng lực lõi: Xử lý giao dịch nghẽn tiền, đối soát liên ngân hàng, phòng chống gian lận và tuân thủ bảo mật tài chính PCI-DSS.
    • Link ảnh chuyên ngành: https://i.ibb.co/xt535vdy/3-1-X-y-d-ng-h-th-ng-CRM.png
 

@@ -237,11 +237,11 @@ export const AIAssistant: React.FC = () => {
         window.location.hash = target;
       }
     } else if (actionType === 'contact') {
-      const el = document.querySelector('#letter');
+      const el = document.querySelector('#contact');
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       } else {
-        window.location.hash = '#letter';
+        window.location.hash = '#contact';
       }
     } else if (actionType === 'download_cv') {
       // Look for existing download CV button on page or trigger simulated download
