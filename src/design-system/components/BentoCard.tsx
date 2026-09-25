@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { cn } from "../../lib/utils";
 
 export type BentoCardSize = "small" | "medium" | "large" | "hero";
@@ -132,26 +133,64 @@ export const BentoCard: React.FC<BentoCardProps> = ({
   ...props
 }) => {
   const accentCfg = ACCENT_STYLES[accent];
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springConfig = { damping: 22, stiffness: 240, mass: 0.45 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+
+  const rotateX = useTransform(springY, [-10, 10], [3, -3]);
+  const rotateY = useTransform(springX, [-10, 10], [-3, 3]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hoverEffect || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const offsetX = Math.max(-8, Math.min(8, (e.clientX - centerX) * 0.08));
+    const offsetY = Math.max(-8, Math.min(8, (e.clientY - centerY) * 0.08));
+    x.set(offsetX);
+    y.set(offsetY);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <div
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        x: springX,
+        y: springY,
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      whileHover={hoverEffect ? { scale: 1.012 } : undefined}
+      transition={{ duration: 0.2 }}
       className={cn(
         // Modern Glass & Bento Surface
         "relative rounded-[10px] bg-white/65 dark:bg-white/[0.06] backdrop-blur-[16px] dark:backdrop-blur-[20px]",
         "border border-white/65 dark:border-white/12",
         "shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)]",
-        "text-slate-900 dark:text-white transition-all duration-250 flex flex-col justify-between overflow-hidden",
+        "text-slate-900 dark:text-white flex flex-col justify-between overflow-hidden will-change-transform",
         SIZE_PADDING[size],
         accentCfg.borderLight,
         accentCfg.borderDark,
         hoverEffect && [
-          "hover:-translate-y-1",
           accentCfg.glowHover,
           "hover:border-slate-300/80 dark:hover:border-white/25",
         ],
         className
       )}
-      {...props}
+      {...(props as any)}
     >
       {/* CARD HEADER (ICON + TITLE + NUMBER TAG per Rule 14 & 15) */}
       {(icon || title || subtitle || number !== undefined || badge) && (
@@ -214,7 +253,7 @@ export const BentoCard: React.FC<BentoCardProps> = ({
           {action}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

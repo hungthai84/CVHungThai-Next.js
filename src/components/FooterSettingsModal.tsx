@@ -5,7 +5,7 @@ import {
   CloudSun, Clock, MousePointer, Volume2, VolumeX, Bot, ChevronDown,
   Sparkles, Flame, Crosshair, CircleDot, Dot, Play, CloudRain, Wind, Radio,
   Palette, Globe, Sun, Moon, Type, Images, Rocket, Layers, Minus, Plus, Box,
-  Square, CheckCircle2, AlignLeft, ShieldCheck, Sparkle, SlidersHorizontal
+  Square, CheckCircle2, AlignLeft, ShieldCheck, Sparkle, SlidersHorizontal, Monitor
 } from "lucide-react";
 import { useFooter, FooterModalTab } from "../context/FooterContext";
 import { useLanguage } from "../i18n";
@@ -112,6 +112,8 @@ export default function FooterSettingsModal() {
   const { 
     theme, 
     setTheme, 
+    themeMode,
+    setThemeMode,
     colorPreset, 
     setColorPreset, 
     activePalette, 
@@ -934,60 +936,68 @@ export default function FooterSettingsModal() {
                   </div>
                 </div>
 
-                {/* 2. Theme Toggle */}
+                {/* 2. Theme Toggle (Light / Dark / System) */}
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 block">
-                    {isVi ? "2. Giao diện Next Themes Engine" : "2. Theme Engine"}
+                    {isVi ? "2. Chế độ giao diện (Theme Mode)" : "2. Theme Mode Engine"}
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                     {[
                       {
-                        id: "mritech-digital-growth",
-                        nameVi: "MRITECH Digital Growth 🚀",
-                        nameEn: "MRITECH Growth Glass 🚀",
-                        descVi: "Nền Pearl Glass, 3-tông gradient & bo góc hiện đại",
-                        descEn: "Pearl glass canvas with 3-tone gradients",
-                        Icon: Rocket,
+                        mode: "light" as const,
+                        nameVi: "MRITECH Sáng (Light)",
+                        nameEn: "Light Glass",
+                        descVi: "Nền kính sáng cao cấp, tương phản chuẩn AAA",
+                        descEn: "Clean Pearl Glass canvas",
+                        Icon: Sun,
                       },
                       {
-                        id: "glass-dark-neon",
-                        nameVi: "Glass Tối Neon",
-                        nameEn: "Glass Dark Neon",
+                        mode: "dark" as const,
+                        nameVi: "Glass Tối Neon (Dark)",
+                        nameEn: "Dark Neon",
                         descVi: "Giao diện tối chuyên nghiệp với viền neon",
-                        descEn: "Dark glassmorphism with prominent neon",
+                        descEn: "Dark glassmorphism with neon",
                         Icon: Moon,
                       },
+                      {
+                        mode: "system" as const,
+                        nameVi: "Hệ thống (System Auto)",
+                        nameEn: "System Auto",
+                        descVi: "Tự động đồng bộ theo cấu hình máy (OS)",
+                        descEn: "Sync with OS prefers-color-scheme",
+                        Icon: Monitor,
+                      },
                     ].map((th) => {
-                      const isSelected = theme === th.id;
+                      const isSelected = themeMode === th.mode;
                       return (
                         <button
-                          key={th.id}
+                          key={th.mode}
                           type="button"
-                          onClick={() => setTheme(th.id as ThemeType)}
+                          onClick={() => setThemeMode(th.mode)}
                           className={cn(
-                            "flex items-start gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer relative",
+                            "flex items-start gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer relative",
                             isSelected
                               ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500 dark:border-emerald-400 shadow-xs ring-1 ring-emerald-500/30"
                               : "bg-slate-50/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 hover:border-slate-300"
                           )}
                         >
                           <div className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
+                            "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
                             isSelected ? "bg-emerald-600 text-white shadow-xs" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                           )}>
-                            <th.Icon className="w-4 h-4" />
+                            <th.Icon className="w-3.5 h-3.5" />
                           </div>
-                          <div className="flex-1 min-w-0 pr-4">
+                          <div className="flex-1 min-w-0 pr-3">
                             <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
                               {isVi ? th.nameVi : th.nameEn}
                             </div>
-                            <div className="text-2xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                            <div className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
                               {isVi ? th.descVi : th.descEn}
                             </div>
                           </div>
                           {isSelected && (
-                            <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            <div className="w-3.5 h-3.5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                              <Check className="w-2 h-2 stroke-[3]" />
                             </div>
                           )}
                         </button>

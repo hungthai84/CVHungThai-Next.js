@@ -183,8 +183,7 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
     } else {
       audioRef.current.play().then(() => {
         setIsPlaying(true);
-      }).catch((err) => {
-        console.warn("Audio play error, falling back to AI voice:", err);
+      }).catch(() => {
         setUseAiVoice(true);
         onShowToast?.("Đang phát tổng quan âm thanh với giọng đọc AI...");
         toggleAiSpeech();
@@ -201,7 +200,9 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
 
     if (isAiSpeaking && startFromSec === undefined) {
       // Pause
-      window.speechSynthesis.cancel();
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
       stopSpeechProgressTicker();
       setIsAiSpeaking(false);
       setIsPlaying(false);
@@ -211,8 +212,18 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
         audioRef.current.pause();
       }
 
-      window.speechSynthesis.cancel();
+      try {
+        if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+          window.speechSynthesis.cancel();
+        }
+      } catch (e) {}
       stopSpeechProgressTicker();
+
+      if (window.speechSynthesis.paused) {
+        try {
+          window.speechSynthesis.resume();
+        } catch (e) {}
+      }
 
       const resumeSec = startFromSec !== undefined ? startFromSec : currentTime;
       const totalDur = duration || 75;
@@ -231,13 +242,15 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
       utterance.volume = isMuted ? 0 : volume;
 
       // Select Vietnamese system voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const viVoice = voices.find(v => v.lang.includes("vi") || v.lang.includes("VN")) || 
-                      voices.find(v => v.lang.startsWith("vi")) || 
-                      voices[0];
-      if (viVoice) {
-        utterance.voice = viVoice;
-      }
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        const viVoice = voices.find(v => v.lang.includes("vi") || v.lang.includes("VN")) || 
+                        voices.find(v => v.lang.startsWith("vi")) || 
+                        voices[0];
+        if (viVoice) {
+          utterance.voice = viVoice;
+        }
+      } catch (e) {}
 
       utterance.onstart = () => {
         setIsAiSpeaking(true);
@@ -253,13 +266,25 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
       };
 
       utterance.onerror = (e) => {
-        console.warn("Speech synthesis error:", e);
+        // "canceled" or "interrupted" are normal during pause, seek, or switching voice
+        if (e.error === "canceled" || e.error === "interrupted") {
+          return;
+        }
         setIsAiSpeaking(false);
         setIsPlaying(false);
         stopSpeechProgressTicker();
       };
 
-      window.speechSynthesis.speak(utterance);
+      // Slight timeout to let Chromium cancel queue clear
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {
+          setIsAiSpeaking(false);
+          setIsPlaying(false);
+          stopSpeechProgressTicker();
+        }
+      }, 50);
     }
   };
 
@@ -510,7 +535,7 @@ Cảm ơn quý vị đã lắng nghe! Quý vị có thể nhấn nút Lưu tải
                   setSelectedVoice(voice.id);
                   onShowToast?.(`Đã chọn: ${voice.name} (${voice.role})`);
                   if (isPlaying || isAiSpeaking) {
-                    toggleAiSpeech();
+                    toggleAiSpeech(currentTime);
                   }
                 }}
                 className={cn(

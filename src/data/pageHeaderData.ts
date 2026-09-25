@@ -143,7 +143,7 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     titleVi: "Tử vi",
     titleEn: "Wisdom Profile",
     quoteVi: "Thấu hiểu nhân tâm, thuận hòa thiên thời địa lợi trong nghệ thuật quản trị con người.",
-    quoteEn: "Understanding human nature and harmonizing leadership wisdom with cosmic balance.",
+    quoteEn: "Harmonizing human nature and strategic opportunities in executive management wisdom.",
     readingTimeVi: "~2 phút đọc",
     readingTimeEn: "~2 min read",
     icon: Compass,

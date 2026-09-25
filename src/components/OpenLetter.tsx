@@ -60,7 +60,9 @@ import {
   Atom,
   BarChart2,
   MountainSnow,
-  ShoppingCart
+  ShoppingCart,
+  Database,
+  Cpu
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { playUiSound } from "../lib/sound";
@@ -86,71 +88,6 @@ import {
 // ==========================================
 // 1. SVG GRAPHICS & CUSTOM ILLUSTRATIONS
 // ==========================================
-
-// 3D Minimalist Contact Avatars Icon (Glassmorphism & Electric Blue Clay Style)
-export const Contact3DAvatarIcon: React.FC<{ className?: string }> = ({ className = "w-7 h-7" }) => (
-  <svg 
-    className={cn("shrink-0 select-none drop-shadow-[0_4px_12px_rgba(0,102,255,0.3)] transition-transform duration-300 hover:scale-110", className)} 
-    viewBox="0 0 100 100" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      {/* Clay Gradient for Back Avatar */}
-      <linearGradient id="blueClayGrad" x1="15" y1="15" x2="65" y2="75" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#00C6FF" />
-        <stop offset="50%" stopColor="#0066FF" />
-        <stop offset="100%" stopColor="#0040C0" />
-      </linearGradient>
-
-      {/* Frosted Milky Glass Gradient for Front Avatar */}
-      <linearGradient id="milkyGlassGrad" x1="35" y1="25" x2="85" y2="85" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="rgba(255, 255, 255, 0.95)" />
-        <stop offset="40%" stopColor="rgba(220, 240, 255, 0.65)" />
-        <stop offset="100%" stopColor="rgba(180, 220, 255, 0.45)" />
-      </linearGradient>
-
-      {/* Inner Blue Light Bleed Glow */}
-      <radialGradient id="blueLightBleed" cx="45%" cy="45%" r="50%">
-        <stop offset="0%" stopColor="#00E5FF" stopOpacity="0.85" />
-        <stop offset="60%" stopColor="#0066FF" stopOpacity="0.35" />
-        <stop offset="100%" stopColor="#0040C0" stopOpacity="0" />
-      </radialGradient>
-
-      {/* Soft Drop Shadow for Depth */}
-      <filter id="clayShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="2" dy="5" stdDeviation="3.5" floodColor="#0033aa" floodOpacity="0.3" />
-      </filter>
-      <filter id="glassGlow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="3" dy="6" stdDeviation="5" floodColor="#0066ff" floodOpacity="0.25" />
-      </filter>
-    </defs>
-
-    {/* BACK AVATAR (Vibrant Electric Blue Clay) */}
-    <g filter="url(#clayShadow)">
-      <circle cx="36" cy="32" r="14" fill="url(#blueClayGrad)" />
-      <path d="M 18 64 C 18 48, 26 44, 36 44 C 46 44, 54 48, 54 64 C 54 68, 50 70, 36 70 C 22 70, 18 68, 18 64 Z" fill="url(#blueClayGrad)" />
-      <path d="M 28 24 A 10 10 0 0 1 42 22" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="2.5" strokeLinecap="round" />
-    </g>
-
-    {/* BLUE LIGHT BLEED (Glow from Back to Front Avatar) */}
-    <ellipse cx="50" cy="48" rx="18" ry="22" fill="url(#blueLightBleed)" />
-
-    {/* FRONT PRIMARY AVATAR (Frosted Translucent Milky Glass) */}
-    <g filter="url(#glassGlow)">
-      <circle cx="62" cy="38" r="15" fill="url(#milkyGlassGrad)" stroke="rgba(255, 255, 255, 0.85)" strokeWidth="1.5" />
-      <path d="M 54 30 A 11 11 0 0 1 68 28" stroke="rgba(255, 255, 255, 0.95)" strokeWidth="2" strokeLinecap="round" />
-      
-      <path 
-        d="M 42 74 C 42 56, 51 52, 62 52 C 73 52, 82 56, 82 74 C 82 79, 77 82, 62 82 C 47 82, 42 79, 42 74 Z" 
-        fill="url(#milkyGlassGrad)" 
-        stroke="rgba(255, 255, 255, 0.8)" 
-        strokeWidth="1.5" 
-      />
-      <path d="M 48 64 C 52 56, 58 54, 62 54" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" strokeLinecap="round" />
-    </g>
-  </svg>
-);
 
 
 
@@ -512,7 +449,7 @@ export default function OpenLetter() {
 
         {/* Body: Text with full width readability */}
         <div className="w-full flex-1 my-1.5 text-left relative z-10">
-          <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed text-left">
+          <p className="text-body text-slate-700 dark:text-slate-300 leading-relaxed text-left">
             {renderFormattedText(isVi ? item.descVi : item.descEn)}
           </p>
 
@@ -636,17 +573,7 @@ export default function OpenLetter() {
         {/* ========================================================================= */}
         {/* TIÊU ĐỀ THẺ CHÍNH TRANG THƯ NGỎ (H5 + 2 CHỮ BÊN TRÁI + CÂU NÓI HAY BÊN PHẢI) */}
         {/* ========================================================================= */}
-        <PageCardHeader pageId="letter">
-          {/* Cụm trái: Chỉ báo chuyên môn & số lượng (Caption / Label: 12px – 13px) */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-              <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-                {isVi ? "22+ Năm phụng sự & kiến tạo giá trị" : "22+ Years Service Dedication"}
-              </span>
-            </div>
-          </div>
-        </PageCardHeader>
+        <PageCardHeader pageId="letter" />
 
         {/* ========================================================================= */}
         {/* ROW 1: THẺ THÔNG ĐIỆP HỢP TÁC (FULL-WIDTH BENTO CARD) */}
@@ -662,29 +589,24 @@ export default function OpenLetter() {
           <div
             id="card-main-letter-content"
             style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 24px))" }}
-            className="w-full relative overflow-hidden bg-gradient-to-r from-[#e0f7fa] via-[#e0f2fe] to-[#dbeafe] dark:from-[#081f2c] dark:via-[#0c283c] dark:to-[#0f3048] border border-cyan-200/90 dark:border-cyan-800/70 p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-center justify-between gap-6 group z-10"
+            className="w-full relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-center justify-between gap-6 group z-10"
           >
             {/* Soft Background Wave Gradients matching image */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-              <div className="absolute -right-10 -bottom-20 w-80 h-80 rounded-full bg-cyan-300/30 dark:bg-cyan-600/10 filter blur-3xl" />
-              <div className="absolute left-1/3 -top-20 w-96 h-96 rounded-full bg-blue-200/30 dark:bg-blue-600/10 filter blur-3xl" />
+              <div className="absolute -right-10 -bottom-20 w-80 h-80 rounded-full bg-slate-100/60 dark:bg-slate-800/20 filter blur-3xl" />
+              <div className="absolute left-1/3 -top-20 w-96 h-96 rounded-full bg-slate-50/80 dark:bg-slate-800/20 filter blur-3xl" />
             </div>
 
             {/* Left Column: Text Content */}
             <div className="flex-1 flex flex-col justify-center relative z-10 text-left w-full">
-              {/* Header Title with Green Icon Badge */}
-              <div className="flex items-center gap-3 text-left mb-3.5">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#10b981] text-white shadow-md shadow-emerald-500/20 shrink-0 flex items-center justify-center p-2">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                    <path d="M9 12h6" />
-                    <path d="M9 16h6" />
-                  </svg>
+              {/* Header Title formatted like Trụ cột cống hiến */}
+              <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-3.5">
+                <div className="flex items-center gap-2 sm:gap-2.5">
+                  <BookCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <h6 className="text-h6 font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
+                    {isVi ? "Thông điệp hợp tác" : "Cooperation message"}
+                  </h6>
                 </div>
-                <h3 className="text-xl sm:text-2xl md:text-[26px] font-bold text-[#065f46] dark:text-emerald-400 tracking-tight">
-                  {isVi ? "Thông điệp hợp tác" : "Cooperation message"}
-                </h3>
               </div>
 
               {/* Salutation Line in Vibrant Orange */}
@@ -706,127 +628,111 @@ export default function OpenLetter() {
               </p>
             </div>
 
-            {/* Right Column: 3D Robot, Floating Chat Bubbles & Plant Leaves */}
-            <div className="relative flex items-center justify-center min-h-[190px] md:w-[42%] shrink-0 overflow-visible w-full select-none">
-              {/* Soft Radial Glow */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-48 sm:w-56 h-48 sm:h-56 rounded-full bg-cyan-200/40 dark:bg-cyan-900/20 pointer-events-none filter blur-xl z-0" />
+            {/* Right Column: Hero Robot Companion video & Floating Tags */}
+            <div className="relative md:w-[46%] lg:w-[48%] shrink-0 overflow-visible w-full select-none flex items-center justify-center scale-50 origin-center -my-20 sm:-my-28">
+              {/* Placement Bounds: Padded structure */}
+              <div className="relative w-full flex items-center justify-center lg:justify-end py-10 pointer-events-none">
+                
+                {/* Decorative Orbit Art: Background Aura Circle */}
+                <div 
+                  className="absolute top-[30%] left-[20%] w-[420px] h-[420px] bg-sky-400/15 rounded-full blur-[110px] -z-10 animate-pulse pointer-events-none" 
+                  style={{ animationDuration: "7000ms" }}
+                />
 
-              {/* Custom Vector Artwork matching image.png */}
-              <svg viewBox="0 0 260 180" className="w-full max-w-[290px] h-auto drop-shadow-lg z-10 overflow-visible">
-                <defs>
-                  {/* Robot Body Gradient */}
-                  <linearGradient id="robot3dBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" />
-                    <stop offset="70%" stopColor="#e2e8f0" />
-                    <stop offset="100%" stopColor="#cbd5e1" />
-                  </linearGradient>
+                {/* Centered Robot Companion Video scaled down to 50% (max-w-[300px]) */}
+                <div className="relative w-full max-w-[300px] sm:max-w-[320px] mx-auto pointer-events-auto">
+                  <video
+                    src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    controls={false}
+                    style={{ filter: "brightness(1.02) contrast(1.04)" }}
+                    className="w-full h-auto rounded-[20px] select-none block shadow-xl"
+                  />
 
-                  {/* Visor Screen Gradient */}
-                  <linearGradient id="robot3dScreen" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#0284c7" />
-                    <stop offset="100%" stopColor="#0369a1" />
-                  </linearGradient>
+                  {/* Three Custom-Crafted Dynamic Floating Badges (Liquid-Glass) */}
+                  {/* Card 1: Top-Left */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: [-3, 3, -3] }}
+                    transition={{
+                      y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+                      opacity: { duration: 0.6 }
+                    }}
+                    className="absolute -top-4 -left-3 sm:-top-5 sm:-left-6 z-20 pointer-events-auto"
+                  >
+                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+                        <Bot className="w-4 h-4" />
+                      </div>
+                      <div className="text-left leading-tight">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 dark:text-sky-400 font-mono">
+                            {isVi ? "Trí Nhân AI" : "Tri Nhan AI"}
+                          </span>
+                          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
+                        </div>
+                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
+                          {isVi ? "Trợ lý số đồng hành" : "Digital CX Companion"}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
 
-                  {/* Blue Joint Gradient */}
-                  <linearGradient id="robot3dJoint" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#0284c7" />
-                  </linearGradient>
+                  {/* Card 2: Right-Center */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, y: [4, -4, 4] }}
+                    transition={{
+                      y: { duration: 5.2, repeat: Infinity, ease: "easeInOut" },
+                      opacity: { duration: 0.6, delay: 0.15 }
+                    }}
+                    className="absolute top-1/4 -right-3 sm:top-1/3 sm:-right-6 z-20 pointer-events-auto"
+                  >
+                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
+                        <Award className="w-4 h-4" />
+                      </div>
+                      <div className="text-left leading-tight">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono block">
+                          {isVi ? "22+ Năm Kinh Nghiệm" : "22+ Years CX"}
+                        </span>
+                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
+                          {isVi ? "Xây dựng & Vận hành" : "Care & Operations"}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
 
-                  {/* Chat Bubble Gradients */}
-                  <linearGradient id="pinkBubbleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#f472b6" />
-                    <stop offset="100%" stopColor="#db2777" />
-                  </linearGradient>
-                  <linearGradient id="blueBubbleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#60a5fa" />
-                    <stop offset="100%" stopColor="#2563eb" />
-                  </linearGradient>
+                  {/* Card 3: Bottom-Left */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: [-4, 3, -4] }}
+                    transition={{
+                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+                      opacity: { duration: 0.6, delay: 0.25 }
+                    }}
+                    className="absolute -bottom-4 left-4 sm:-bottom-5 sm:left-8 z-20 pointer-events-auto"
+                  >
+                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
+                        <Heart className="w-4 h-4" />
+                      </div>
+                      <div className="text-left leading-tight">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-mono block">
+                          {isVi ? "Tận Tâm Phụng Sự" : "Dedicated Service"}
+                        </span>
+                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
+                          {isVi ? "Đồng hành cùng khách hàng" : "Partnering for Success"}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
 
-                  {/* Plant Leaf Gradient */}
-                  <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#34d399" />
-                    <stop offset="60%" stopColor="#10b981" />
-                    <stop offset="100%" stopColor="#047857" />
-                  </linearGradient>
-                </defs>
-
-                {/* Background Watermark AI circle */}
-                <g opacity="0.35">
-                  <circle cx="95" cy="135" r="28" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="1.5" />
-                  <text x="95" y="142" fill="#0284c7" fontSize="18" fontWeight="800" textAnchor="middle" fontFamily="sans-serif">AI</text>
-                </g>
-
-                {/* Floating Chat Bubbles */}
-                {/* Pink Chat Bubble */}
-                <g transform="translate(142, 28)">
-                  <circle r="13" fill="url(#pinkBubbleGrad)" filter="drop-shadow(0 2px 4px rgba(219,39,119,0.3))" />
-                  <circle cx="-5" cy="0" r="1.8" fill="white" />
-                  <circle cx="0" cy="0" r="1.8" fill="white" />
-                  <circle cx="5" cy="0" r="1.8" fill="white" />
-                </g>
-
-                {/* Blue Chat Bubble */}
-                <g transform="translate(108, 52)">
-                  <circle r="18" fill="url(#blueBubbleGrad)" filter="drop-shadow(0 3px 6px rgba(37,99,235,0.3))" />
-                  <circle cx="-7" cy="0" r="2.2" fill="white" />
-                  <circle cx="0" cy="0" r="2.2" fill="white" />
-                  <circle cx="7" cy="0" r="2.2" fill="white" />
-                </g>
-
-                {/* Green Tropical Plant Leaves (Behind Robot on Right Side) */}
-                <g transform="translate(205, 10) scale(1.1)">
-                  {/* Leaf 1 (Large main leaf) */}
-                  <path d="M 0 130 C 20 80, 50 30, 25 0 C -10 30, 0 80, 0 130 Z" fill="url(#leafGrad)" />
-                  {/* Leaf vein */}
-                  <path d="M 0 130 Q 15 70 25 0" fill="none" stroke="#6ee7b7" strokeWidth="1.5" opacity="0.7" />
-                  {/* Leaf 2 (Side leaf) */}
-                  <path d="M -10 130 C -25 90, -35 50, -15 20 C 5 50, 0 90, -10 130 Z" fill="url(#leafGrad)" opacity="0.9" />
-                </g>
-
-                {/* 3D Waving AI Robot */}
-                <g transform="translate(130, 30)">
-                  {/* Torso / Body */}
-                  <rect x="22" y="68" width="46" height="42" rx="21" fill="url(#robot3dBody)" />
-                  {/* Chest Ring Indicator */}
-                  <circle cx="45" cy="85" r="8" fill="#f8fafc" stroke="#0284c7" strokeWidth="2" />
-                  <circle cx="45" cy="85" r="4" fill="#0284c7" />
-
-                  {/* Right Arm (Resting on side) */}
-                  <path d="M 64 74 C 74 80, 75 92, 70 100" fill="none" stroke="url(#robot3dBody)" strokeWidth="9" strokeLinecap="round" />
-                  <circle cx="70" cy="100" r="5" fill="url(#robot3dJoint)" />
-
-                  {/* Left Arm (Waving) */}
-                  <path d="M 26 74 C 10 65, 0 45, 8 30" fill="none" stroke="url(#robot3dBody)" strokeWidth="9" strokeLinecap="round" />
-                  {/* Waving Hand & 5 Fingers */}
-                  <g transform="translate(8, 26)">
-                    <circle r="7" fill="url(#robot3dBody)" />
-                    {/* Fingers */}
-                    <line x1="-4" y1="-5" x2="-8" y2="-11" stroke="url(#robot3dBody)" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="-1" y1="-7" x2="-2" y2="-13" stroke="url(#robot3dBody)" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="3" y1="-6" x2="4" y2="-12" stroke="url(#robot3dBody)" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="6" y1="-3" x2="9" y2="-8" stroke="url(#robot3dBody)" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="-6" y1="-1" x2="-11" y2="-3" stroke="url(#robot3dBody)" strokeWidth="2.5" strokeLinecap="round" />
-                  </g>
-
-                  {/* Head Neck */}
-                  <rect x="39" y="60" width="12" height="10" rx="3" fill="#94a3b8" />
-
-                  {/* Head Outer Shell */}
-                  <rect x="10" y="18" width="70" height="46" rx="23" fill="url(#robot3dBody)" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.1))" />
-                  {/* Blue Ear Caps */}
-                  <rect x="4" y="28" width="7" height="20" rx="3.5" fill="url(#robot3dJoint)" />
-                  <rect x="79" y="28" width="7" height="20" rx="3.5" fill="url(#robot3dJoint)" />
-
-                  {/* Blue Screen Visor */}
-                  <rect x="17" y="23" width="56" height="34" rx="17" fill="url(#robot3dScreen)" />
-
-                  {/* Expressive Glowing Eyes (As in image: curved blue visor eyes) */}
-                  <path d="M 28 38 Q 34 32 40 38" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
-                  <path d="M 50 38 Q 56 32 62 38" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
-                  <path d="M 40 47 Q 45 50 50 47" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
-                </g>
-              </svg>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -851,9 +757,9 @@ export default function OpenLetter() {
             <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-indigo-200/60 dark:border-indigo-800/60 mb-3">
               <div className="flex items-center gap-2 sm:gap-2.5">
                 <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                <h5 className="text-h5 text-indigo-600 dark:text-indigo-400 tracking-wide">
+                <h6 className="text-h6 font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">
                   {isVi ? "Trụ cột cống hiến" : "Four dedication pillars"}
-                </h5>
+                </h6>
               </div>
             </div>
 
@@ -922,28 +828,20 @@ export default function OpenLetter() {
           className="w-full glass-surface backdrop-blur-3xl border border-sky-200/80 dark:border-slate-800 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col relative overflow-hidden bg-gradient-to-b from-sky-50/70 via-white/85 to-blue-50/40 dark:from-slate-900/90 dark:via-slate-900/80 dark:to-slate-950/90 z-10 rounded-3xl p-[25px]"
         >
           <div className="relative z-10 w-full">
-            {/* Header: Title on Left with Rocket, Quote Banner on Right */}
-            <div className="w-full flex flex-wrap items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-sky-200/70 dark:border-slate-800 mb-5 sm:mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25 shrink-0">
-                  <Rocket className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                    {isVi ? "Hành trình sự nghiệp" : "Career journey milestones"}
-                  </h3>
-                  <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Những dấu mốc quan trọng kiến tạo nên hành trình phát triển" : "Key milestones shaping the developmental journey"}
-                  </p>
-                </div>
+            {/* Header formatted like Trụ cột cống hiến */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-sky-200/60 dark:border-sky-800/60 mb-5 sm:mb-6">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <Rocket className="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0" />
+                <h6 className="text-h6 font-bold text-sky-600 dark:text-sky-400 tracking-wide">
+                  {isVi ? "Hành trình sự nghiệp" : "Career journey milestones"}
+                </h6>
               </div>
 
-              {/* Quote Banner matching image.png */}
-              <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-sky-100/80 dark:bg-sky-950/50 border border-sky-200/80 dark:border-sky-800/60 shadow-2xs">
-                <Quote className="w-5 h-5 text-blue-600 dark:text-blue-400 rotate-180 shrink-0 -mt-1" />
-                <div className="text-blue-800 dark:text-blue-300 font-semibold italic text-xs sm:text-sm leading-snug text-left">
-                  <div>{isVi ? "Trải nghiệm hôm nay" : "Today's experiences"}</div>
-                  <div>{isVi ? "Tạo giá trị ngày mai" : "Shape tomorrow's value"}</div>
+              {/* Quote Banner */}
+              <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-sky-100/80 dark:bg-sky-950/50 border border-sky-200/80 dark:border-sky-800/60 shadow-2xs">
+                <Quote className="w-4 h-4 text-blue-600 dark:text-blue-400 rotate-180 shrink-0 -mt-0.5" />
+                <div className="text-blue-800 dark:text-blue-300 font-semibold italic text-xs leading-snug text-left">
+                  <span>{isVi ? "Trải nghiệm hôm nay · Tạo giá trị ngày mai" : "Today's experiences · Shape tomorrow's value"}</span>
                 </div>
               </div>
             </div>
@@ -1002,237 +900,296 @@ export default function OpenLetter() {
         </motion.div>
 
         {/* ========================================================================= */}
-        {/* ROW 3: GIẢI PHÁP CÔNG NGHỆ (TITLE & SUBTITLE) */}
+        {/* ROW 3 & 3.2: GIẢI PHÁP CÔNG NGHỆ & TÂM THƯ TRI ÂN (SIDE-BY-SIDE ON SAME ROW) */}
         {/* ========================================================================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full flex flex-col items-start gap-1 relative z-10 mt-2"
-        >
-          <div className="flex items-center gap-2">
-            <Atom className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <h4 className="text-xl sm:text-2xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tight">
-              {isVi ? "Giải pháp công nghệ" : "Technology Solutions"}
-            </h4>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl text-left">
-            {isVi 
-              ? "Tối ưu hóa quy trình toàn diện từ đầu đến cuối, kết hợp Trí tuệ nhân tạo (AI) và hệ sinh thái CRM Omni-Channel 360°" 
-              : "Comprehensive process optimization from start to finish, integrating Artificial Intelligence (AI) and the CRM Omni-Channel 360° ecosystem"}
-          </p>
-        </motion.div>
-
-        {/* ========================================================================= */}
-        {/* ROW 3.1: 3-COLUMN PILLAR GRID (AUTOMATION, DATA ANALYSIS, AI CHATBOTS) */}
-        {/* ========================================================================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20px" }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full relative z-10"
-        >
-          {/* Column 1: CRM Omni 360° (Tự động hóa) */}
-          <div 
-            style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 16px))" }}
-            className="group/pillar relative overflow-hidden flex flex-col justify-between p-6 bg-gradient-to-br from-blue-50/75 to-blue-100/45 dark:from-[#131d35]/40 dark:to-[#0d1527]/30 border border-blue-200/80 dark:border-blue-900/50 hover:border-blue-400 dark:hover:border-blue-600 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[220px] text-left"
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full relative z-10 items-stretch">
+          {/* Card 1: GIẢI PHÁP CÔNG NGHỆ */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-20px" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-full flex flex-col"
           >
-            {/* Ambient lighting & graphic decoration */}
-            <div className="absolute top-0 right-0 -mr-12 -mt-12 w-32 h-32 bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-2xl pointer-events-none z-0" />
-            <Layers className="absolute -right-4 -bottom-4 w-20 h-20 text-blue-500/8 dark:text-blue-400/4 rotate-12 pointer-events-none transition-transform duration-500 group-hover/pillar:rotate-6 group-hover/pillar:scale-110" />
+            <div 
+              id="card-tech-solutions"
+              className="w-full h-full relative overflow-hidden rounded-[28px] sm:rounded-[32px] bg-gradient-to-br from-[#f4f9ff] via-[#eef6ff] to-[#f8fbff] dark:from-[#0b1b2b] dark:via-[#0c2236] dark:to-[#081726] border border-blue-200/90 dark:border-cyan-500/30 p-6 sm:p-8 md:p-10 shadow-lg dark:shadow-[0_0_30px_rgba(6,182,212,0.12)] transition-all duration-300 group/tech text-left flex flex-col justify-between"
+            >
+              {/* Ambient Background Glow */}
+              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-300/20 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-0" />
+              <div className="absolute bottom-0 left-1/3 -mb-20 w-80 h-80 bg-sky-200/25 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
-            {/* Top row */}
-            <div className="flex items-center justify-between relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-500 to-sky-500 text-white flex items-center justify-center shadow-md shadow-blue-500/25 transition-transform duration-300 group-hover/pillar:scale-105">
-                <Layers className="w-6 h-6" />
-              </div>
-              <span className="font-mono font-bold text-xs text-blue-500/70 dark:text-blue-400/70 uppercase tracking-widest">{isVi ? "Tự động hóa" : "Automation"}</span>
-            </div>
-
-            {/* Title & Body */}
-            <div className="mt-5 mb-4 relative z-10 text-left flex-1">
-              <h5 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5 group-hover/pillar:text-blue-600 dark:group-hover/pillar:text-blue-400 transition-colors">
-                CRM Omni 360°
-              </h5>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-                {isVi ? "Hợp nhất kênh tương tác Đa kênh, tối ưu hóa quy trình, mang lại trải nghiệm khách hàng vượt trội." : "Omni-channel contact integration, standardizing processes, and creating exceptional client experiences."}
-              </p>
-            </div>
-
-            {/* Tags footer */}
-            <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
-              <span className="px-2 py-0.5 rounded-md bg-blue-100/70 dark:bg-blue-900/50 text-[9px] font-bold text-blue-600 dark:text-blue-400 tracking-wider">ĐA KÊNH</span>
-              <span className="px-2 py-0.5 rounded-md bg-blue-100/70 dark:bg-blue-900/50 text-[9px] font-bold text-blue-600 dark:text-blue-400 tracking-wider">TỐI ƯU QUY TRÌNH</span>
-            </div>
-          </div>
-
-          {/* Column 2: Dashboard BI (Phân tích dữ liệu) */}
-          <div 
-            style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 16px))" }}
-            className="group/pillar relative overflow-hidden flex flex-col justify-between p-6 bg-gradient-to-br from-purple-50/75 to-purple-100/45 dark:from-[#1b152d]/40 dark:to-[#120e20]/30 border border-purple-200/80 dark:border-purple-900/50 hover:border-purple-400 dark:hover:border-purple-600 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[220px] text-left"
-          >
-            {/* Ambient lighting & graphic decoration */}
-            <div className="absolute top-0 right-0 -mr-12 -mt-12 w-32 h-32 bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-2xl pointer-events-none z-0" />
-            <BarChart2 className="absolute -right-4 -bottom-4 w-20 h-20 text-purple-500/8 dark:text-purple-400/4 rotate-12 pointer-events-none transition-transform duration-500 group-hover/pillar:rotate-6 group-hover/pillar:scale-110" />
-
-            {/* Top row */}
-            <div className="flex items-center justify-between relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-purple-500/25 transition-transform duration-300 group-hover/pillar:scale-105">
-                <BarChart2 className="w-6 h-6" />
-              </div>
-              <span className="font-mono font-bold text-xs text-purple-500/70 dark:text-purple-400/70 uppercase tracking-widest">{isVi ? "Phân tích dữ liệu" : "Data Analysis"}</span>
-            </div>
-
-            {/* Title & Body */}
-            <div className="mt-5 mb-4 relative z-10 text-left flex-1">
-              <h5 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5 group-hover/pillar:text-purple-600 dark:group-hover/pillar:text-purple-400 transition-colors">
-                Dashboard BI
-              </h5>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-                {isVi ? "Báo cáo phân tích dữ liệu theo thời gian thực trực quan, hỗ trợ đắc lực công tác quản trị và ra quyết định." : "Visual real-time analytics reports providing actionable insights for optimal corporate administration."}
-              </p>
-            </div>
-
-            {/* Tags footer */}
-            <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
-              <span className="px-2 py-0.5 rounded-md bg-purple-100/70 dark:bg-purple-900/50 text-[9px] font-bold text-purple-600 dark:text-purple-400 tracking-wider">REAL-TIME BI</span>
-              <span className="px-2 py-0.5 rounded-md bg-purple-100/70 dark:bg-purple-900/50 text-[9px] font-bold text-purple-600 dark:text-purple-400 tracking-wider">TRỰC QUAN</span>
-            </div>
-          </div>
-
-          {/* Column 3: AI Chatbot (AI Chatbot) */}
-          <div 
-            style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 16px))" }}
-            className="group/pillar relative overflow-hidden flex flex-col justify-between p-6 bg-gradient-to-br from-rose-50/75 to-rose-100/45 dark:from-[#2a1b14]/40 dark:to-[#1e120e]/30 border border-rose-200/80 dark:border-rose-900/50 hover:border-rose-400 dark:hover:border-rose-600 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[220px] text-left"
-          >
-            {/* Ambient lighting & graphic decoration */}
-            <div className="absolute top-0 right-0 -mr-12 -mt-12 w-32 h-32 bg-rose-400/10 dark:bg-rose-600/10 rounded-full blur-2xl pointer-events-none z-0" />
-            <Bot className="absolute -right-4 -bottom-4 w-20 h-20 text-rose-500/8 dark:text-rose-400/4 rotate-12 pointer-events-none transition-transform duration-500 group-hover/pillar:rotate-6 group-hover/pillar:scale-110" />
-
-            {/* Top row */}
-            <div className="flex items-center justify-between relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center shadow-md shadow-rose-500/25 transition-transform duration-300 group-hover/pillar:scale-105">
-                <Bot className="w-6 h-6" />
-              </div>
-              <span className="font-mono font-bold text-xs text-rose-500/70 dark:text-rose-400/70 uppercase tracking-widest">AI Chatbot</span>
-            </div>
-
-            {/* Title & Body */}
-            <div className="mt-5 mb-4 relative z-10 text-left flex-1">
-              <h5 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5 group-hover/pillar:text-rose-600 dark:group-hover/pillar:text-rose-400 transition-colors">
-                AI Chatbot
-              </h5>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-                {isVi ? "Tự động hóa phản hồi nhanh chóng, hỗ trợ khách hàng đa kênh tự động và chăm sóc 24/7 chuyên nghiệp." : "Fast automated responses, automated omnichannel client support, and 24/7 smart interactions."}
-              </p>
-            </div>
-
-            {/* Tags footer */}
-            <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
-              <span className="px-2 py-0.5 rounded-md bg-rose-100/70 dark:bg-rose-900/50 text-[9px] font-bold text-rose-600 dark:text-rose-400 tracking-wider">TỰ ĐỘNG 24/7</span>
-              <span className="px-2 py-0.5 rounded-md bg-rose-100/70 dark:bg-rose-900/50 text-[9px] font-bold text-rose-600 dark:text-rose-400 tracking-wider">AI CHĂM SÓC</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ========================================================================= */}
-        {/* ROW 3.2: TÂM THƯ TRI ÂN (FULL-WIDTH ELEGANT 2-COLUMN PANEL) */}
-        {/* ========================================================================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="w-full relative z-10"
-        >
-          <div 
-            id="card-gratitude-statement"
-            style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 24px))" }}
-            className="glass-surface backdrop-blur-2xl border border-emerald-100 dark:border-emerald-900/40 p-6 sm:p-8 md:p-10 shadow-lg shadow-emerald-500/5 hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700/60 transition-all duration-300 flex flex-col md:flex-row items-stretch justify-between gap-8 group/gratitude bg-gradient-to-br from-white/95 to-emerald-50/90 dark:from-slate-900/95 dark:to-emerald-900/90 relative overflow-hidden"
-          >
-            {/* Ambient lighting & decoration */}
-            <div className="absolute top-0 left-0 -ml-16 -mt-16 w-64 h-64 bg-emerald-400/10 dark:bg-emerald-600/10 rounded-full blur-3xl pointer-events-none z-0" />
-            
-            {/* Left Column - Sincere Content & Quote */}
-            <div className="w-full md:w-[55%] flex flex-col justify-between gap-6 relative z-10 text-left">
-              <div className="flex flex-col gap-4">
-                {/* Header title */}
-                <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/25 text-white shrink-0">
-                    <Heart className="w-6 h-6 fill-white/20 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-emerald-800 dark:text-emerald-400">
-                      {isVi ? "Tâm thư tri ân" : "Sincere Appreciation"}
-                    </h3>
-                    <p className="text-[10px] font-bold tracking-[0.15em] text-emerald-500/70 dark:text-emerald-400/70 uppercase mt-0.5">
-                      SINCERE APPRECIATION
-                    </p>
+              {/* Header: Title formatted like Trụ cột cống hiến + Description */}
+              <div className="relative z-10 flex flex-col items-start text-left mb-5 sm:mb-6">
+                <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-blue-200/60 dark:border-blue-800/60 mb-3">
+                  <div className="flex items-center gap-2 sm:gap-2.5">
+                    <Settings className="w-5 h-5 text-[#2563eb] dark:text-cyan-400 shrink-0 animate-[spin_12s_linear_infinite]" />
+                    <h6 className="text-h6 font-bold text-[#2563eb] dark:text-cyan-400 tracking-wide">
+                      {isVi ? "Giải pháp công nghệ" : "Technology Solutions"}
+                    </h6>
                   </div>
                 </div>
 
-                {/* Sincere message */}
-                <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed max-w-[55ch]">
+                {/* Description Paragraph */}
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl text-left">
                   {isVi 
-                    ? "Tôi mong muốn được đồng hành cùng Quý Doanh nghiệp để kiến tạo giá trị, lan tỏa sự hài lòng và cùng nhau phát triển bền vững. Với kinh nghiệm, nhiệt huyết và tinh thần thấu hiểu sâu sắc, tôi tin tưởng vào những thành công tốt đẹp sắp tới."
-                    : "I look forward to partnering with your esteemed enterprise to co-create values, cultivate deep satisfaction, and sustain mutual development. Backed by experience, dedication, and active empathy, I strongly believe in our future triumphs."}
+                    ? "Tập trung áp dụng và triển khai các giải pháp công nghệ để nâng cao hiệu quả vận hành và chất lượng dịch vụ khách hàng."
+                    : "Focusing on deploying technological solutions to enhance operational efficiency and customer service quality."}
                 </p>
               </div>
 
-              {/* Quote box synthesis */}
-              <div className="w-full bg-blue-50/70 dark:bg-blue-950/40 backdrop-blur-sm p-5 sm:p-6 rounded-2xl border border-blue-100 dark:border-blue-900/50 relative flex flex-col justify-center shadow-sm">
-                <Quote className="absolute top-3 left-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15 rotate-180" />
-                <Quote className="absolute bottom-3 right-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15" />
+              {/* Content: 2-Column Layout (List on Left, 3D Dashboard on Right) */}
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center flex-1">
                 
-                <div className="text-center space-y-1.5 relative z-10 py-1.5">
-                  <p className="text-base sm:text-lg font-bold text-indigo-700 dark:text-indigo-400 italic">
-                    {isVi ? "Cùng kết nối · Cùng kiến tạo · Cùng thành công" : "Connect together · Create together · Succeed together"}
+                {/* Left Column: 4 Numbered Feature Rows (lg:col-span-7) */}
+                <div className="lg:col-span-7 flex flex-col gap-3">
+                  
+                  {/* 01: Hệ thống CRM */}
+                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
+                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-blue-500/30 shrink-0">
+                        01
+                      </span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/50 flex items-center justify-center text-[#2563eb] dark:text-blue-400 shrink-0 shadow-2xs">
+                        <Database className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#2563eb] dark:group-hover/item:text-cyan-300 transition-colors">
+                          {isVi ? "Hệ thống CRM" : "CRM Systems"}
+                        </h4>
+                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          {isVi ? "Quản lý khách hàng toàn diện" : "Comprehensive customer management"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                  </div>
+
+                  {/* 02: Tự động hóa */}
+                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
+                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#00b4d8] to-[#0077b6] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-cyan-500/30 shrink-0">
+                        02
+                      </span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/60 dark:border-cyan-800/50 flex items-center justify-center text-[#0077b6] dark:text-cyan-400 shrink-0 shadow-2xs">
+                        <Cpu className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#0077b6] dark:group-hover/item:text-cyan-300 transition-colors">
+                          {isVi ? "Tự động hóa" : "Process Automation"}
+                        </h4>
+                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          {isVi ? "Tối ưu quy trình và nâng cao hiệu suất" : "Workflow optimization and peak performance"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                  </div>
+
+                  {/* 03: Phân tích dữ liệu */}
+                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
+                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#e63946] to-[#d62828] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-rose-500/30 shrink-0">
+                        03
+                      </span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200/60 dark:border-rose-800/50 flex items-center justify-center text-[#e63946] dark:text-rose-400 shrink-0 shadow-2xs">
+                        <BarChart2 className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#e63946] dark:group-hover/item:text-rose-300 transition-colors">
+                          {isVi ? "Phân tích dữ liệu" : "Data Analytics"}
+                        </h4>
+                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          {isVi ? "Hiểu khách hàng sâu sắc hơn" : "Deeper customer insights"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                  </div>
+
+                  {/* 04: AI Chatbot */}
+                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
+                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#f59e0b] to-[#f97316] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-amber-500/30 shrink-0">
+                        04
+                      </span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/50 flex items-center justify-center text-[#f97316] dark:text-amber-400 shrink-0 shadow-2xs">
+                        <Bot className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#f97316] dark:group-hover/item:text-amber-300 transition-colors">
+                          {isVi ? "AI Chatbot" : "AI Chatbot"}
+                        </h4>
+                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          {isVi ? "Hỗ trợ khách hàng 24/7" : "24/7 Intelligent customer support"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                  </div>
+
+                </div>
+
+                {/* Right Column: 3D Monitor & Gadget Illustration (lg:col-span-5) */}
+                <div className="lg:col-span-5 flex items-center justify-center relative select-none">
+                  <div className="relative w-full max-w-[280px] sm:max-w-[320px] flex items-center justify-center py-2">
+                    <svg viewBox="0 0 380 280" className="w-full h-auto drop-shadow-xl overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="screenCasingGrad" x1="0" y1="0" x2="0" y2="210" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#FFFFFF" />
+                          <stop offset="100%" stopColor="#E2E8F0" />
+                        </linearGradient>
+                        <linearGradient id="screenInnerGrad" x1="0" y1="0" x2="300" y2="180" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#F8FAFC" />
+                          <stop offset="100%" stopColor="#EDF2F7" />
+                        </linearGradient>
+                        <linearGradient id="barBlue1" x1="0" y1="80" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#38BDF8" />
+                          <stop offset="100%" stopColor="#60A5FA" />
+                        </linearGradient>
+                        <linearGradient id="barBlue2" x1="0" y1="110" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#2563EB" />
+                          <stop offset="100%" stopColor="#38BDF8" />
+                        </linearGradient>
+                        <linearGradient id="barBlue3" x1="0" y1="140" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#0284C7" />
+                          <stop offset="100%" stopColor="#00E5FF" />
+                        </linearGradient>
+                        <linearGradient id="speakerBlueGrad" x1="0" y1="0" x2="90" y2="50" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#3B82F6" />
+                          <stop offset="50%" stopColor="#2563EB" />
+                          <stop offset="100%" stopColor="#1D4ED8" />
+                        </linearGradient>
+                        <filter id="hubShadow" x="-30%" y="-30%" width="160%" height="160%">
+                          <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#1E40AF" floodOpacity="0.4" />
+                        </filter>
+                        <filter id="monitorShadow" x="-10%" y="-10%" width="120%" height="130%">
+                          <feDropShadow dx="0" dy="10" stdDeviation="12" floodColor="#0F172A" floodOpacity="0.1" />
+                        </filter>
+                      </defs>
+
+                      {/* Monitor Stand */}
+                      <ellipse cx="210" cy="245" rx="50" ry="10" fill="#CBD5E1" opacity="0.8" />
+                      <path d="M198 200 L222 200 L225 242 L195 242 Z" fill="#94A3B8" />
+                      <path d="M200 200 L220 200 L223 240 L197 240 Z" fill="#E2E8F0" />
+                      <ellipse cx="210" cy="242" rx="44" ry="8" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1.5" />
+
+                      {/* Monitor Body */}
+                      <g filter="url(#monitorShadow)">
+                        <rect x="65" y="20" width="260" height="185" rx="18" fill="url(#screenCasingGrad)" stroke="#E2E8F0" strokeWidth="2.5" />
+                        <rect x="76" y="30" width="238" height="164" rx="12" fill="url(#screenInnerGrad)" />
+                      </g>
+
+                      {/* Screen UI Top Bar */}
+                      <circle cx="95" cy="46" r="4" fill="#C084FC" />
+                      <rect x="105" y="43" width="12" height="6" rx="3" fill="#38BDF8" />
+                      <rect x="123" y="45" width="35" height="3" rx="1.5" fill="#CBD5E1" />
+
+                      {/* Screen UI Left Sidebar Lines */}
+                      <rect x="90" y="70" width="40" height="5" rx="2.5" fill="#A78BFA" />
+                      <rect x="90" y="82" width="40" height="5" rx="2.5" fill="#C4B5FD" />
+                      <rect x="90" y="94" width="40" height="5" rx="2.5" fill="#DDD6FE" />
+
+                      {/* Screen UI Dashboard Chart Area */}
+                      <rect x="140" y="62" width="160" height="118" rx="8" fill="#FFFFFF" fillOpacity="0.75" stroke="#E2E8F0" strokeWidth="1.2" />
+
+                      {/* 3 Vertical Bar Charts matching screenshot */}
+                      <rect x="162" y="125" width="16" height="42" rx="4" fill="url(#barBlue1)" />
+                      <rect x="190" y="100" width="16" height="67" rx="4" fill="url(#barBlue2)" />
+                      <rect x="218" y="76" width="16" height="91" rx="4" fill="url(#barBlue3)" />
+
+                      {/* 3D Smart Speaker Gadget in front of monitor */}
+                      <g filter="url(#hubShadow)">
+                        <rect x="68" y="185" width="64" height="38" rx="12" fill="url(#speakerBlueGrad)" />
+                        <rect x="71" y="187" width="58" height="8" rx="4" fill="#FFFFFF" fillOpacity="0.25" />
+                        <circle cx="100" cy="204" r="2" fill="#FFFFFF" />
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 2: TÂM THƯ TRI ÂN */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-20px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-full flex flex-col"
+          >
+            <div 
+              id="card-gratitude-statement"
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 24px))" }}
+              className="glass-surface backdrop-blur-2xl border border-emerald-100 dark:border-emerald-900/40 p-6 sm:p-8 md:p-10 shadow-lg shadow-emerald-500/5 hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700/60 transition-all duration-300 flex flex-col items-stretch justify-between gap-6 group/gratitude bg-gradient-to-br from-white/95 to-emerald-50/90 dark:from-slate-900/95 dark:to-emerald-900/90 relative overflow-hidden h-full"
+            >
+              {/* Ambient lighting & decoration */}
+              <div className="absolute top-0 left-0 -ml-16 -mt-16 w-64 h-64 bg-emerald-400/10 dark:bg-emerald-600/10 rounded-full blur-3xl pointer-events-none z-0" />
+              
+              {/* Top - Sincere Content & Quote */}
+              <div className="w-full flex flex-col justify-between gap-6 relative z-10 text-left">
+                <div className="flex flex-col gap-4">
+                  {/* Header title formatted like Trụ cột cống hiến */}
+                  <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <Heart className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 fill-emerald-500/20" />
+                      <h6 className="text-h6 font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
+                        {isVi ? "Tâm thư tri ân" : "Sincere Appreciation"}
+                      </h6>
+                    </div>
+                  </div>
+
+                  {/* Sincere message */}
+                  <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed">
+                    {isVi 
+                      ? "Tôi mong muốn được đồng hành cùng Quý Doanh nghiệp để kiến tạo giá trị, lan tỏa sự hài lòng và cùng nhau phát triển bền vững. Với kinh nghiệm, nhiệt huyết và tinh thần thấu hiểu sâu sắc, tôi tin tưởng vào những thành công tốt đẹp sắp tới."
+                      : "I look forward to partnering with your esteemed enterprise to co-create values, cultivate deep satisfaction, and sustain mutual development. Backed by experience, dedication, and active empathy, I strongly believe in our future triumphs."}
                   </p>
-                  <p className="text-xs sm:text-sm font-semibold text-[#f95700] dark:text-[#f97316]">
-                    {isVi ? "Cùng nhau, Cùng phát triển, Cùng thành công." : "Together, Grow together, Succeed together."}
-                  </p>
+                </div>
+
+                {/* Quote box synthesis */}
+                <div className="w-full bg-blue-50/70 dark:bg-blue-950/40 backdrop-blur-sm p-5 rounded-2xl border border-blue-100 dark:border-blue-900/50 relative flex flex-col justify-center shadow-sm">
+                  <Quote className="absolute top-3 left-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15 rotate-180" />
+                  <Quote className="absolute bottom-3 right-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15" />
+                  
+                  <div className="text-center space-y-1.5 relative z-10 py-1">
+                    <p className="text-base font-bold text-indigo-700 dark:text-indigo-400 italic">
+                      {isVi ? "Cùng kết nối · Cùng kiến tạo · Cùng thành công" : "Connect together · Create together · Succeed together"}
+                    </p>
+                    <p className="text-xs sm:text-sm font-semibold text-[#f95700] dark:text-[#f97316]">
+                      {isVi ? "Cùng nhau, Cùng phát triển, Cùng thành công." : "Together, Grow together, Succeed together."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom - Signature Block */}
+              <div className="w-full flex flex-col justify-between gap-4 relative z-10 text-left pt-4 border-t border-slate-200/55 dark:border-slate-800/60 mt-auto">
+                <div className="flex flex-col items-start text-left">
+                  <div className="mb-0.5 -ml-1">
+                    <SignatureSvg />
+                  </div>
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                    Nguyễn Hùng Thái
+                  </h4>
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5 uppercase tracking-wide">
+                    {isVi ? "Trưởng phòng Chăm sóc Khách hàng" : "Customer Service Manager"}
+                  </span>
+
+                  <div className="flex flex-wrap items-center justify-start gap-1.5 mt-3 text-[9px] font-black tracking-widest text-emerald-600/80 dark:text-emerald-400/70 uppercase">
+                    <span>TRẢI NGHIỆM</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                    <span>KẾT NỐI</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                    <span>PHÁT TRIỂN</span>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Right Column - Mountain Artwork & Signature Block */}
-            <div className="w-full md:w-[40%] flex flex-col justify-between gap-6 relative z-10 text-left md:border-l md:border-slate-200/55 md:dark:border-slate-800/60 md:pl-8">
-              {/* Decorative Mountain Area */}
-              <div className="w-full rounded-2xl bg-gradient-to-t from-blue-100/60 to-transparent dark:from-blue-950/20 border border-blue-50/50 dark:border-blue-900/30 flex items-end justify-center relative overflow-hidden h-[150px] shadow-sm backdrop-blur-[2px]">
-                <span className="absolute top-4 right-4 text-blue-700 dark:text-blue-400 font-handwriting text-[14px] leading-tight rotate-[-12deg] z-20 text-right opacity-95 drop-shadow-xs">
-                  {isVi ? "Hành trình\nvẫn tiếp tục..." : "The journey\ncontinues..."}
-                </span>
-                
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-blue-200/30 to-transparent dark:from-blue-950/30 z-10 pointer-events-none" />
-                <MountainSnow className="w-24 h-24 text-blue-400/25 dark:text-blue-600/15 absolute -bottom-2 z-0 pointer-events-none" strokeWidth={1.3} />
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-12 h-12 bg-yellow-200/40 dark:bg-yellow-500/10 rounded-full blur-xl z-0 pointer-events-none" />
-              </div>
-
-              {/* Signature block with standard labels */}
-              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div className="mb-0.5 -ml-1">
-                  <SignatureSvg />
-                </div>
-                <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                  Nguyễn Hùng Thái
-                </h4>
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5 uppercase tracking-wide">
-                  {isVi ? "Trưởng phòng Chăm sóc Khách hàng" : "Customer Service Manager"}
-                </span>
-
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mt-4 text-[9px] font-black tracking-widest text-emerald-600/80 dark:text-emerald-400/70 uppercase">
-                  <span>TRẢI NGHIỆM</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                  <span>KẾT NỐI</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                  <span>PHÁT TRIỂN</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* ========================================================================= */}
         {/* ROW 4: GIÁ TRỊ CỐT LÕI CHÚNG TÔI THEO ĐUỔI (FULL WIDTH BENTO CARD) */}
@@ -1250,9 +1207,9 @@ export default function OpenLetter() {
           <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-indigo-200/60 dark:border-indigo-800/60 mb-3">
             <div className="flex items-center gap-2 sm:gap-2.5">
               <Award className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-              <h3 className="text-card-title font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">
+              <h6 className="text-h6 font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">
                 {isVi ? "Giá trị cốt lõi" : "Core values pursued"}
-              </h3>
+              </h6>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, Suspense, lazy } from "react";
+import React, { useState, useRef, useMemo, Suspense, lazy, useEffect } from "react";
 import { 
   X, 
   FolderKanban,
@@ -6,9 +6,11 @@ import {
   CheckCircle2,
   ArrowRight,
   Check,
-  Search
+  Search,
+  Filter,
+  ChevronDown
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
@@ -319,6 +321,22 @@ export default function Projects() {
 
   const [selectedPhase, setSelectedPhase] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: globalThis.MouseEvent | TouchEvent) => {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
 
   const phaseCounts = useMemo(() => {
     const map: Record<string, number> = { all: PROJECTS_LIST.length };
@@ -390,69 +408,36 @@ export default function Projects() {
 
       {/* Main Container Dự án */}
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        {/* Header Card Dự án (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
-        <PageCardHeader pageId="projects">
-          {/* Cụm trái: Số lượng dự án */}
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
-            <span className="text-caption text-label font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
-              {isVi ? `Hiển thị ${filteredProjects.length} dự án` : `Showing ${filteredProjects.length} projects`}
-            </span>
-          </div>
-
-          {/* Cụm phải: Ô tìm kiếm + Bộ lọc giai đoạn */}
-          <div className="flex items-center gap-2 ml-auto flex-wrap">
-            {/* Ô tìm kiếm nhanh */}
-            <div className="relative flex items-center">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={isVi ? "Tìm kiếm dự án..." : "Search projects..."}
-                className="pl-8 pr-3 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-36 sm:w-48 transition-all shadow-2xs"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-
-            {/* Nút lọc danh mục */}
-            <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-              {PHASE_FILTERS.map((tab) => {
-                const isActive = selectedPhase === tab.id;
-                const label = isVi ? tab.shortVi : tab.labelEn;
-                return (
+        {/* Header Card Dự án */}
+        <PageCardHeader 
+          pageId="projects"
+          actionRight={
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Ô tìm kiếm nhanh */}
+              <div className="relative flex items-center">
+                <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={isVi ? "Tìm kiếm..." : "Search..."}
+                  className="pl-8 pr-3 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-32 sm:w-40 transition-all shadow-2xs"
+                />
+                {searchQuery && (
                   <button
-                    key={tab.id}
                     type="button"
-                    onClick={() => {
-                      playUiSound("click");
-                      setSelectedPhase(tab.id);
-                    }}
-                    className={cn(
-                      "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1.5 cursor-pointer",
-                      isActive
-                        ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-                    )}
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                   >
-                    <span>{label}</span>
-                    <span className={cn("text-3xs font-mono px-1.5 py-0.2 rounded-full", isActive ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300" : "bg-slate-200/60 dark:bg-slate-800 text-slate-500")}>
-                      {tab.count}
-                    </span>
+                    <X className="w-3 h-3" />
                   </button>
-                );
-              })}
+                )}
+              </div>
+
+
             </div>
-          </div>
-        </PageCardHeader>
+          }
+        />
 
         {activeCard ? (
           <Suspense fallback={
@@ -564,6 +549,16 @@ export default function Projects() {
                                 </span>
                               </div>
 
+                              {/* Group Title Badge (Góc trên cùng bên phải) */}
+                              <div className={cn(
+                                "absolute top-2.5 right-2.5 z-20 px-2.5 py-1 rounded-full text-3xs font-extrabold backdrop-blur-md border shadow-md max-w-[170px] truncate",
+                                theme.phaseBadge
+                              )}>
+                                <span className="truncate block">
+                                  {card.groupTitle}
+                                </span>
+                              </div>
+
                             </div>
                           </div>
 
@@ -583,34 +578,6 @@ export default function Projects() {
                             <p className="text-body-sub text-subcontent text-slate-600 dark:text-slate-300 line-clamp-2 font-normal">
                               {card.description}
                             </p>
-
-                            {/* Tags & Action Link Footer (Hidden per request) */}
-                            <div className="space-y-2.5 pt-1 hidden">
-                              {/* Tags Footer - Always on 1 single row */}
-                              <div className="project-tags flex flex-nowrap items-center gap-1.5 overflow-x-auto scrollbar-none whitespace-nowrap">
-                                {card.tags.slice(0, 3).map((tag, idx) => (
-                                  <span
-                                    key={idx}
-                                    className={cn(
-                                      "text-3xs font-mono font-semibold px-2 py-0.5 rounded-md border h-fit flex items-center leading-normal shrink-0 transition-colors",
-                                      theme.tagBg
-                                    )}
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Group Title Badge at bottom of card */}
-                            <div className={cn(
-                              "w-full mt-1.5 px-3 py-1.5 rounded-xl backdrop-blur-md border shadow-xs text-center",
-                              theme.phaseBadge
-                            )}>
-                              <span className="font-bold text-caption text-white truncate block">
-                                {card.groupTitle}
-                              </span>
-                            </div>
                           </div>
                         </KeyframersTiltCard>
                         </motion.div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { LucideIcon, Quote, Clock } from "lucide-react";
+import { LucideIcon, Quote } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useLanguage } from "../i18n";
 import { PAGE_HEADER_DATA, PageHeaderItem } from "../data/pageHeaderData";
@@ -24,7 +24,6 @@ export function PageCardHeader({
   icon: customIcon,
   title: customTitle,
   quote: customQuote,
-  readingTime: customReadingTime,
   accentColorClass: customAccent,
   lineColorClass: customLine,
   actionRight,
@@ -39,7 +38,6 @@ export function PageCardHeader({
   const IconComponent = customIcon || defaultData?.icon;
   const displayTitle = customTitle || (defaultData ? (isVi ? defaultData.titleVi : defaultData.titleEn) : "");
   const displayQuote = customQuote || (defaultData ? (isVi ? defaultData.quoteVi : defaultData.quoteEn) : "");
-  const displayReadingTime = customReadingTime || (defaultData ? (isVi ? defaultData.readingTimeVi : defaultData.readingTimeEn) : "");
   const accentClass = customAccent || defaultData?.accentColorClass || "text-blue-600 dark:text-blue-400";
   const lineClass = customLine || defaultData?.lineColorClass || "bg-blue-500/30 dark:bg-blue-500/20";
 
@@ -48,9 +46,9 @@ export function PageCardHeader({
       id={id || (pageId ? `page-card-header-${pageId}` : undefined)}
       className={cn("w-full flex flex-col gap-2 pb-1 shrink-0 font-['Play',sans-serif]", className)}
     >
-      {/* Dòng 1 : Bên trái Tiêu đề 2 chữ (H4) + Thời gian đọc - Bên phải: Câu nói hay về trang đó và/hoặc action */}
+      {/* Dòng 1 : Bên trái Tiêu đề 2 chữ (H4) - Bên phải: Câu nói hay về trang đó và/hoặc action */}
       <div className="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
-        {/* Bên trái: Icon & Tiêu đề H4 (2 chữ) & Badge Thời gian đọc */}
+        {/* Bên trái: Icon & Tiêu đề H4 (2 chữ) */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap">
           {IconComponent && (
             <div className={cn("flex items-center justify-center shrink-0", accentClass)}>
@@ -60,15 +58,6 @@ export function PageCardHeader({
           <h4 className={cn("text-h4 tracking-tight font-bold", accentClass)}>
             {displayTitle}
           </h4>
-          {displayReadingTime && (
-            <div 
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 text-caption font-mono font-medium text-slate-700 dark:text-slate-300 shadow-2xs transition-transform hover:scale-105"
-              title={isVi ? `Thời gian đọc ước tính: ${displayReadingTime}` : `Estimated reading time: ${displayReadingTime}`}
-            >
-              <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-400 shrink-0" />
-              <span className="whitespace-nowrap">{displayReadingTime}</span>
-            </div>
-          )}
         </div>
 
         {/* Bên phải: Câu nói hay & Nút hành động */}

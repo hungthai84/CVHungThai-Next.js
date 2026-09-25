@@ -195,11 +195,18 @@ class VoiceEngine {
     };
 
     utterance.onerror = (e) => {
-      console.error('Speech error:', e);
+      if (e.error === 'canceled' || e.error === 'interrupted') {
+        return;
+      }
       this.setState('stopped');
+      if (onEnd) onEnd();
     };
 
-    this.synth.speak(utterance);
+    try {
+      this.synth.speak(utterance);
+    } catch (err) {
+      this.setState('stopped');
+    }
   }
 
   public pause() {

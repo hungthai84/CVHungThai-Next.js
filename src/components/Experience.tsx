@@ -75,7 +75,11 @@ import {
   MoreVertical,
   MousePointerClick,
   LayoutGrid,
-  List
+  List,
+  Flag,
+  CheckSquare,
+  BarChart2,
+  Handshake
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -159,8 +163,8 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     cardYearLabel: "2003 - 2007",
     cardYearColor: "text-blue-500 dark:text-blue-400",
     period: "Từ Năm 2003 đến Năm 2007",
-    company: "Công ty Viễn Thông Mobifone",
-    subCompanies: "(Cty Ánh Hào Quang)",
+    company: "Công ty Viễn thông Mobifone",
+    subCompanies: "(MobiFone Telecom)",
     tag: "Viễn thông",
     tagCategory: "telecom",
     tagColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800",
@@ -170,39 +174,36 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     highlightText: "Tôi bắt đầu sự nghiệp tại MobiFone, nơi tôi được đào tạo bài bản về dịch vụ khách hàng, quản lý tổng đài, xử lý sự cố và xây dựng quy trình phục vụ theo tiêu chuẩn ngành viễn thông. Đây là nền tảng giúp tôi hình thành tư duy lấy khách hàng làm trung tâm và hiểu rõ tầm quan trọng của quy trình trong vận hành dịch vụ.",
     cardDescription: "Tôi bắt đầu sự nghiệp tại MobiFone, nơi tôi được đào tạo bài bản về dịch vụ khách hàng, quản lý tổng đài, xử lý sự cố và xây dựng quy trình phục vụ theo tiêu chuẩn ngành viễn thông. Đây là nền tảng giúp tôi hình thành tư duy lấy khách hàng làm trung tâm và hiểu rõ tầm quan trọng của quy trình trong vận hành dịch vụ.",
     cardTags: ["Tổng đài viên", "MobiFone", "CSKH viễn thông"],
-    cardScope: "(Cty Ánh Hào Quang)",
-    cardRoleTitle: "Tổng đài viên (Trưởng nhóm từ 2007)",
+    cardScope: "(Viễn thông di động)",
+    cardRoleTitle: "Tổng đài viên (Bổ nhiệm Trưởng nhóm từ năm 2007)",
     paragraphs: [
       "Tôi bắt đầu sự nghiệp tại MobiFone, nơi tôi được đào tạo bài bản về dịch vụ khách hàng, quản lý tổng đài, xử lý sự cố và xây dựng quy trình phục vụ theo tiêu chuẩn ngành viễn thông.",
       "Đây là nền tảng giúp tôi hình thành tư duy lấy khách hàng làm trung tâm và hiểu rõ tầm quan trọng của quy trình trong vận hành dịch vụ."
     ],
     headcount: 12,
-    role: "Tổng đài viên (Trưởng nhóm từ 2007)",
-    roleSub: "Tổng đài viên (Trưởng nhóm từ 2007)",
-    industry: "Viễn thông",
+    role: "Tổng đài viên (Bổ nhiệm Trưởng nhóm từ năm 2007)",
+    roleSub: "Tổng đài viên (Bổ nhiệm Trưởng nhóm từ năm 2007)",
+    industry: "Viễn thông di động",
     duration: "2003 – 2007 (4 năm)",
     location: "Hồ Chí Minh, Việt Nam",
-    managementRole: "Tổng đài viên (Trưởng nhóm từ 2007)",
+    managementRole: "Tổng đài viên (Bổ nhiệm Trưởng nhóm từ năm 2007)",
     managementHeadcount: "12 nhân sự trực tiếp",
     kpis: [
       { label: "Hoàn thành nhiệm vụ", percent: 100 },
       { label: "Phản hồi & Hỗ trợ", percent: 90 }
     ],
     tasks: [
-      "Nghe điện thoại tư vấn trả lời khách hàng",
-      "Giải quyết khiếu nại trường hợp khó",
-      "Gọi điện tư vấn những phiếu đã hoàn thành xong",
-      "Hỗ trợ các nhân viên mới nghiệp vụ",
-      "Xử lý các cuộc gọi quấy rối từ khách hàng",
-      "Quản lý đội ngũ 12 nhân viên CSKH"
+      "Nghe điện thoại tư vấn cước và dịch vụ viễn thông",
+      "Giải quyết khiếu nại khó",
+      "Gọi điện khảo sát phiếu hoàn tất",
+      "Hỗ trợ nghiệp vụ nhân viên mới",
+      "Xử lý cuộc gọi quấy rối"
     ],
     projects: [
-      "Đào tạo nghiệp vụ nhân viên mới",
-      "Bổ nhiệm Trưởng nhóm CSKH"
+      "Tham gia chương trình chuẩn hóa nghiệp vụ tư vấn cước và hỗ trợ giải quyết sự cố mạng di động MobiFone"
     ],
     commitments: [
-      "Đảm bảo 100% cuộc gọi khiếu nại được xử lý dứt điểm",
-      "Giữ vững tỷ lệ CSAT trên 90% trong suốt thời gian đảm nhiệm"
+      "Tuân thủ nghiêm ngặt tiêu chuẩn tư vấn và chăm sóc khách hàng mạng di động MobiFone"
     ],
     photoUrl: "https://i.ibb.co/6Rp6rqXt/Mobifone-1.webp",
     photoCount: 3,
@@ -215,7 +216,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     cardYearColor: "text-purple-600 dark:text-purple-400",
     period: "Từ Năm 2007 đến Năm 2011",
     company: "Công ty Viễn Liên V247",
-    subCompanies: "(Điện thoại V247)",
+    subCompanies: "(Viễn thông quốc tế V247)",
     tag: "Viễn thông",
     tagCategory: "telecom",
     tagColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
@@ -224,20 +225,20 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     headerTitle: "Năm 2007 – Phát triển năng lực quản lý tại Viễn Liên V247",
     highlightText: "Gia nhập Viễn Liên V247, tôi tiếp tục phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ và tối ưu hiệu quả vận hành của trung tâm chăm sóc khách hàng. Giai đoạn này giúp tôi tích lũy kinh nghiệm quản lý hoạt động với quy mô lớn và xây dựng các chỉ số đánh giá chất lượng dịch vụ.",
     cardDescription: "Gia nhập Viễn Liên V247, tôi tiếp tục phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ và tối ưu hiệu quả vận hành của trung tâm chăm sóc khách hàng. Giai đoạn này giúp tôi tích lũy kinh nghiệm quản lý hoạt động với quy mô lớn và xây dựng các chỉ số đánh giá chất lượng dịch vụ.",
-    cardTags: ["Trưởng Nhóm CSKH", "Viễn thông", "Vận hành đa kênh"],
-    cardScope: "(Điện thoại V247)",
-    cardRoleTitle: "Trưởng Nhóm CSKH",
+    cardTags: ["Trưởng nhóm CSKH / Giám sát", "Viễn thông quốc tế", "Vận hành đa kênh"],
+    cardScope: "(Viễn thông quốc tế V247)",
+    cardRoleTitle: "Trưởng nhóm CSKH / Giám sát (Supervisor)",
     paragraphs: [
       "Gia nhập Viễn Liên V247, tôi tiếp tục phát triển năng lực quản lý đội ngũ, giám sát chất lượng dịch vụ và tối ưu hiệu quả vận hành của trung tâm chăm sóc khách hàng.",
       "Giai đoạn này giúp tôi tích lũy kinh nghiệm quản lý hoạt động với quy mô lớn và xây dựng các chỉ số đánh giá chất lượng dịch vụ."
     ],
     headcount: 12,
-    role: "Trưởng Nhóm CSKH",
-    roleSub: "Trưởng Nhóm CSKH",
-    industry: "Viễn thông",
+    role: "Trưởng nhóm CSKH / Giám sát (Supervisor)",
+    roleSub: "Trưởng nhóm CSKH / Giám sát (Supervisor)",
+    industry: "Viễn thông quốc tế",
     duration: "2007 – 2011 (4 năm)",
     location: "Hồ Chí Minh, Việt Nam",
-    managementRole: "Trưởng Nhóm CSKH",
+    managementRole: "Trưởng nhóm CSKH / Giám sát (Supervisor)",
     managementHeadcount: "12 nhân sự trực tiếp",
     kpis: [
       { label: "Hướng dẫn nhân viên mới", percent: 96 },
@@ -245,22 +246,18 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
       { label: "Phản hồi & Hỗ trợ", percent: 80 }
     ],
     tasks: [
-      "Quản lý và giám sát đội ngũ chăm sóc khách hàng",
-      "Theo dõi, phân bổ và phân phối cuộc gọi đến cho các thành viên",
-      "Đánh giá và huấn luyện nhân viên chăm sóc khách hàng",
-      "Lập kế hoạch và lịch trình chăm sóc khách hàng (giờ ăn trưa, cuối tuần)",
-      "Xử lý những trở ngại của nhân viên",
-      "Quản lý và xử lý yêu cầu khách hàng từ đa kênh (Email, Fax, Phone, Chat)",
-      "Khảo sát sự hài lòng của khách hàng",
-      "Nghe ghi âm cuộc gọi và định hướng đào tạo"
+      "Quản lý vận hành đội ngũ CSKH đa kênh (Email, Fax, Phone, Chat)",
+      "Phân bổ cuộc gọi",
+      "Đánh giá và huấn luyện nhân viên",
+      "Lên lịch trực ca trưa và cuối tuần",
+      "Xử lý khiếu nại",
+      "Nghe ghi âm định hướng chiến lược đào tạo"
     ],
     projects: [
-      "Quản lý vận hành dịch vụ đa kênh",
-      "Thiết lập khung đánh giá ghi âm cuộc gọi"
+      "Chuẩn hóa tài liệu đào tạo nội bộ và tối ưu hóa quy trình giám sát chất lượng tổng đài quốc tế V247"
     ],
     commitments: [
-      "Duy trì tổng đài vận hành thông suốt 24/7 không gián đoạn",
-      "Chuẩn hóa 100% tài liệu quy trình hỗ trợ đa kênh"
+      "Đảm bảo chất lượng cuộc gọi dịch vụ viễn thông quốc tế 24/7, liên tục hỗ trợ và giải quyết thắc mắc khách hàng"
     ],
     photoUrl: "https://i.ibb.co/gM7nPptY/V247-3.jpg",
     photoCount: 5,
@@ -272,8 +269,8 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     cardYearLabel: "2011 - 2013",
     cardYearColor: "text-emerald-600 dark:text-emerald-400",
     period: "Từ Năm 2011 đến Năm 2013",
-    company: "Công ty CPTTBR Cuộc Sống LBC",
-    subCompanies: "(Truyền hình cáp HTVC)",
+    company: "Công ty CPTT Băng Rộng Cuộc Sống - LBC HTVC",
+    subCompanies: "(LBC HTVC Cable TV)",
     tag: "Truyền thông",
     tagCategory: "telecom",
     tagColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
@@ -283,8 +280,8 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     headerTitle: "Năm 2011 – Bước ngoặt tại LBC – Truyền hình Cáp HTV",
     highlightText: "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng. Từ một nhà quản lý vận hành, tôi chuyển mình trở thành một nhà quản trị toàn diện. Tôi trực tiếp điều hành hoạt động của phòng ban, xây dựng và chuẩn hóa quy trình, phát triển đội ngũ, thiết lập hệ thống KPI, đồng thời phối hợp với nhiều đơn vị nhằm nâng cao chất lượng dịch vụ và hiệu quả vận hành. Chính giai đoạn này đã giúp tôi hình thành tư duy quản trị hệ thống và phát triển con người song song với mục tiêu kinh doanh.",
     cardDescription: "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng. Từ một nhà quản lý vận hành, tôi chuyển mình trở thành một nhà quản trị toàn diện. Tôi trực tiếp điều hành hoạt động của phòng ban, xây dựng và chuẩn hóa quy trình, phát triển đội ngũ, thiết lập hệ thống KPI, đồng thời phối hợp với nhiều đơn vị nhằm nâng cao chất lượng dịch vụ và hiệu quả vận hành. Chính giai đoạn này đã giúp tôi hình thành tư duy quản trị hệ thống và phát triển con người song song với mục tiêu kinh doanh.",
-    cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "Truyền hình cáp HTVC", "Xây dựng phòng CSKH"],
-    cardScope: "(Truyền hình cáp HTVC)",
+    cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "LBC HTVC", "Truyền thông & Truyền hình cáp"],
+    cardScope: "(LBC HTVC Cable TV)",
     cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     paragraphs: [
       "Đây là dấu mốc quan trọng khi tôi lần đầu đảm nhiệm vị trí Trưởng phòng Chăm sóc Khách hàng.",
@@ -294,7 +291,7 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     headcount: 12,
     role: "Trưởng Phòng Dịch vụ Khách hàng",
     roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
-    industry: "Truyền thông",
+    industry: "Truyền thông & Truyền hình cáp",
     duration: "2011 – 2013 (2 năm)",
     location: "Hồ Chí Minh, Việt Nam",
     managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
@@ -303,29 +300,27 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
       { label: "Chuẩn hóa quy trình", percent: 100 },
       { label: "Phản hồi & Hỗ trợ", percent: 80 },
       { label: "Hỗ trợ sự kiện lớn", percent: 70 },
-      { label: "Tham gia dự án", percent: 80 }
+      { label: "Hoàn thành dự án", percent: 80 }
     ],
     tasks: [
-      "Quản lý và giám sát Phòng Dịch Vụ Khách Hàng",
-      "Xử lý khiếu nại của khách hàng và cải thiện sản phẩm",
-      "Đào tạo và huấn luyện Nhân Viên",
-      "Khảo sát sự hài lòng của khách hàng",
-      "Phối hợp các phòng ban thực hiện chương trình quảng cáo, khuyến mãi",
-      "Theo dõi và phân tích hoạt động Dịch Vụ Khách Hàng của đối thủ cạnh tranh",
-      "Lập kế hoạch thăm hỏi khách hàng VIP, đại lý",
-      "Ghi nhận ý kiến khách hàng để cải tiến công việc"
+      "Quản lý điều hành toàn diện phòng CSKH",
+      "Cải thiện sản phẩm",
+      "Khảo sát sự hài lòng",
+      "Phối hợp Marketing chạy chương trình khuyến mãi",
+      "Phân tích đối thủ cạnh tranh",
+      "Lập kế hoạch thăm hỏi khách hàng VIP",
+      "Xây dựng ngân sách CSKH"
     ],
     projects: [
       "Xây dựng P.CSKH",
       "Thiết lập mục tiêu phòng ban",
-      "Thúc đẩy cải tiến sản phẩm",
+      "Cải tiến sản phẩm",
       "Chuẩn hóa quy trình CSKH",
       "Quản lý chiến dịch Outbound",
       "Phân tích & Báo cáo"
     ],
     commitments: [
-      "Chuẩn hóa 100% quy trình phục vụ khách hàng HTVC",
-      "Nâng cao trải nghiệm dịch vụ truyền hình gia đình"
+      "Đảm bảo xử lý sự cố tín hiệu truyền hình nhanh chóng, nâng cao mức độ hài lòng dịch vụ truyền thông"
     ],
     photoUrl: "https://i.ibb.co/ZzjXpjsX/HTVC-1.webp",
     photoCount: 4,
@@ -337,32 +332,29 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
     cardYearLabel: "2013 - 2016",
     cardYearColor: "text-slate-600 dark:text-slate-300",
     period: "Từ Năm 2013 đến Năm 2016",
-    company: "Công ty Cổ phần Phát triển Thể thao Điện tử Việt Nam",
-    subCompanies: "(VED, Garena, AirPay)",
-    tag: "eSport & Game",
+    company: "Công ty Cổ phần Việt Nam eSport (VED, Shopee, Garena, ShopeePay)",
+    subCompanies: "(VED, Shopee, Garena, AirPay)",
+    tag: "eSport, Game & E-commerce",
     tagCategory: "gaming",
     tagColor: "bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700",
     logo: "https://i.ibb.co/BKHcWL5R/Logo-VED.gif",
-    fallbackLogo: "https://i.ibb.co/fYPJLfbw/VED.png",
+    fallbackLogo: "https://i.ibb.co/jknPRhj3/VED.png",
     bannerUrl: "https://i.ibb.co/jknPRhj3/VED.png",
     headerTitle: "Năm 2013 – Garena và hành trình chuyển đổi số",
-    highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
-    cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Mỗi sản phẩm đều có mô hình vận hành, hành vi người dùng và kỳ vọng khách hàng khác nhau, buộc tôi phải liên tục học hỏi, thích nghi và cập nhật kiến thức để xây dựng các quy trình chăm sóc khách hàng phù hợp với từng lĩnh vực. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi, vận hành dịch vụ quy mô lớn đến ứng dụng dữ liệu trong quản trị chất lượng và tối ưu hiệu quả hoạt động.",
-    cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "eSport & Game", "Quản lý 129 nhân sự"],
-    cardScope: "(VED, Garena, AirPay)",
+    highlightText: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu.",
+    cardDescription: "Gia nhập Garena, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn. Trong thời gian này, Garena phát triển mạnh với Liên Minh Huyền Thoại, đồng thời mở rộng thành Vietnam Esports và đầu tư vào nhiều lĩnh vực mới như Shopee, AirPay, Gcafe và Liên Quân Mobile. Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu.",
+    cardTags: ["Trưởng Phòng Dịch vụ Khách hàng", "eSport, Game & E-commerce", "Quản lý 130 nhân sự"],
+    cardScope: "(VED, Shopee, Garena, AirPay)",
     cardRoleTitle: "Trưởng Phòng Dịch vụ Khách hàng",
     paragraphs: [
       "Gia nhập **Garena**, tôi quản lý hoạt động chăm sóc khách hàng trong lĩnh vực game trực tuyến, nơi yêu cầu tốc độ xử lý nhanh, độ chính xác cao và khả năng đáp ứng lượng khách hàng rất lớn.",
-      "Trong thời gian này, Garena phát triển mạnh với **Liên Minh Huyền Thoại**, đồng thời mở rộng thành **Vietnam Esports** và đầu tư vào nhiều lĩnh vực mới như **AirPay, Gcafe** và **Liên Quân Mobile**.",
-      "Tôi có cơ hội đồng hành cùng các dự án ngay từ giai đoạn đầu. Môi trường đầy năng động giúp tôi rèn luyện tư duy hệ thống, kỹ năng lãnh đạo đội nhóm và khả năng thích nghi nhanh với thay đổi.",
-      "Tại Garena, tôi trực tiếp quản lý **129 nhân sự**, xây dựng cơ cấu tổ chức, phát triển đội ngũ quản lý cấp trung, chuẩn hóa quy trình vận hành, thiết lập hệ thống đánh giá hiệu quả công việc và đào tạo nguồn nhân lực kế thừa.",
-      "Làm việc trong môi trường tăng trưởng vượt bậc đã giúp tôi rèn luyện khả năng ra quyết định dưới áp lực, xử lý nhanh các tình huống phát sinh, điều phối nguồn lực hiệu quả và liên tục cải tiến quy trình để đáp ứng sự thay đổi của thị trường.",
-      "Đây cũng là giai đoạn đặt nền móng cho triết lý quản trị của tôi: **xây dựng hệ thống trước khi mở rộng quy mô, phát triển con người song hành cùng công nghệ và luôn lấy khách hàng làm trung tâm trong mọi quyết định.**"
+      "Trong thời gian này, Garena phát triển mạnh với **Liên Minh Huyền Thoại**, đồng thời mở rộng thành **Vietnam Esports** và đầu tư vào nhiều lĩnh vực mới như **Shopee, AirPay, Gcafe** và **Liên Quân Mobile**.",
+      "Tại VED/Garena, tôi trực tiếp quản lý **130 nhân sự**, xây dựng cơ cấu tổ chức, phát triển đội ngũ quản lý cấp trung, chuẩn hóa quy trình vận hành, thiết lập hệ thống đánh giá hiệu quả công việc và đào tạo nguồn nhân lực kế thừa."
     ],
     headcount: 130,
     role: "Trưởng Phòng Dịch vụ Khách hàng",
     roleSub: "Trưởng Phòng Dịch vụ Khách hàng",
-    industry: "eSport & Game",
+    industry: "eSport, Game & E-commerce",
     duration: "2013 – 2016 (3 năm)",
     location: "Hồ Chí Minh, Việt Nam",
     managementRole: "Trưởng Phòng Dịch vụ Khách hàng",
@@ -371,31 +363,27 @@ export const MILESTONES_DATA: Record<string, MilestoneData> = {
       { label: "Chuẩn hóa quy trình", percent: 100 },
       { label: "Phản hồi & Hỗ trợ", percent: 80 },
       { label: "Hỗ trợ sự kiện lớn", percent: 70 },
-      { label: "Tham gia dự án", percent: 80 }
+      { label: "Hoàn thành dự án", percent: 80 }
     ],
     tasks: [
-      "Tham gia xây dựng các dự án Sản phẩm mới",
-      "Quản lý Đội ngũ và tổ chức Phòng Dịch Vụ Khách Hàng",
-      "Xây dựng Quy trình tại Phòng Dịch Vụ Khách Hàng",
-      "Xây dựng hệ thống CRM cho các dòng sản phẩm của Cty",
-      "Đào tạo đội ngũ Dịch Vụ Khách Hàng và Giao tiếp với khách hàng",
-      "Báo cáo tình hình Phòng Dịch Vụ Khách Hàng hàng tháng",
-      "Giải quyết Khiếu nại đơn hàng",
-      "Đánh giá và tham gia các chương trình MKT",
-      "Kiểm tra và đánh giá sản phẩm trước khi cung cấp"
+      "Tham gia xây dựng dự án sản phẩm mới (Shopee, AirPay, Liên Quân Mobile, LMHT)",
+      "Quản lý và tổ chức phòng CSKH 130 người",
+      "Chuẩn hóa SOP",
+      "Kiến trúc CRM nội bộ",
+      "Đào tạo đội ngũ",
+      "Giải quyết khiếu nại đơn hàng TMĐT"
     ],
     projects: [
       "Xây dựng P.CSKH",
       "Thiết lập mục tiêu phòng ban",
       "Quản lý dự án CSKH",
       "Chuẩn hóa quy trình CSKH",
-      "Xây dựng hệ thống CRM",
+      "Xây dựng CRM",
       "Phát triển đào tạo trực tuyến",
       "Thành lập Trung tâm Hỗ trợ Khách hàng"
     ],
     commitments: [
-      "SOP quy trình dịch vụ khách hàng đa kênh",
-      "Đào tạo & Quản trị năng suất đội ngũ theo chỉ số CSAT & NPS"
+      "Đảm bảo tốc độ phản hồi nhanh, chính xác và khả năng chịu tải cực cao cho hàng triệu người chơi game & người dùng Shopee"
     ],
     photoUrl: "https://i.ibb.co/ds1qm1WD/VED-1.webp",
     photoCount: 4,
@@ -1544,17 +1532,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
           <div className="w-full flex flex-col gap-1 pb-1">
             <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
-                  <History className="w-3.5 h-3.5 stroke-[2.5]" />
-                </div>
-                <h3 className="text-h6 tracking-tight text-slate-900 dark:text-white">
-                  {isVi ? "Dòng thời gian sự nghiệp" : "Career roadmap timeline"}
-                </h3>
-              </div>
-
               {/* Zoom and Scale Controls */}
-              <div className="flex items-center gap-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-2.5 py-1 rounded-xl border border-slate-200/60 dark:border-slate-700/80 shadow-2xs sm:ml-auto">
+              <div className="hidden items-center gap-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-2.5 py-1 rounded-xl border border-slate-200/60 dark:border-slate-700/80 shadow-2xs sm:ml-auto">
                 <button
                   type="button"
                   onClick={handleZoomOut}
@@ -1643,14 +1622,14 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         ></div>
                       </div>
 
-                      {/* 2. Circular Logo Node with Horizontal Overlapping Logo Stack for 2013 */}
+                      {/* 2. Circular Logo Node with Stacked Logo that expands horizontally and scales up on hover */}
                       <div className="h-14 xs:h-16 sm:h-18 md:h-20 w-full flex items-center justify-center relative">
                         {item.yearLabel === "2013" ? (
-                          /* 3D Stacked Overlapping Logo Stack for 2013: VED + Garena + Gcafe + Shopee + Airpay */
+                          /* Stacked Logo Stack for 2013 (5 brands): Initially stacked, expands horizontally and zooms on hover */
                           <div 
                             className={cn(
-                              "relative w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] z-10 transition-all duration-300",
-                              isSelected ? "scale-105" : "group-hover:scale-105"
+                              "relative w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] z-10 transition-all duration-500 ease-out group/stack hover:w-[190px] sm:hover:w-[240px] flex items-center justify-center",
+                              isSelected ? "scale-105" : ""
                             )}
                           >
                             {[
@@ -1661,6 +1640,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               { key: "2014-airpay", type: "airpay", name: "Airpay / ShopeePay", color: "#00ADEF" }
                             ].map((subLogo, lIdx) => {
                               const isCurrentLogo = activeYear === subLogo.key || (activeYear === "2013" && subLogo.key === "2013");
+                              // Offsets when expanded: lIdx - 2 -> [-2, -1, 0, 1, 2]
+                              const offsetFactor = lIdx - 2;
                               return (
                                 <div
                                   key={subLogo.key}
@@ -1669,66 +1650,97 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     setActiveYear(subLogo.key);
                                   }}
                                   className={cn(
-                                    "w-full h-full rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute top-0 left-0 cursor-pointer origin-center",
+                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer origin-center hover:scale-125 hover:z-40",
                                     isCurrentLogo
-                                      ? "z-30 scale-110 ring-2 ring-offset-1 shadow-lg"
-                                      : "opacity-85 hover:opacity-100"
+                                      ? "z-30 ring-2 ring-offset-1 shadow-lg"
+                                      : "opacity-90 hover:opacity-100"
                                   )}
                                   style={{
                                     borderColor: subLogo.color,
                                     zIndex: isCurrentLogo ? 30 : 20 - lIdx,
-                                    // A neat 3D stack effect with translation based on index
-                                    transform: `translate(${lIdx * 3}px, ${lIdx * -3}px) scale(${1 - lIdx * 0.04})`,
                                     boxShadow: isCurrentLogo 
-                                      ? `0 0 12px ${subLogo.color}90` 
-                                      : `2px 2px 6px rgba(0,0,0,0.15)`
+                                      ? `0 0 14px ${subLogo.color}90` 
+                                      : `2px 2px 8px rgba(0,0,0,0.18)`
                                   }}
                                   title={subLogo.name}
                                 >
-                                  <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
-                                    {renderPinIcon(subLogo.type, subLogo.color, subLogo.key)}
+                                  {/* Inner dynamic transform: stacked in default state, fans out horizontally & scales up on hover */}
+                                  <div 
+                                    className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0 transition-transform duration-500 ease-out"
+                                    style={{
+                                      transform: `translate(${lIdx * 3}px, ${lIdx * -3}px) scale(${1 - lIdx * 0.035})`
+                                    }}
+                                  >
+                                    <div className="w-full h-full flex items-center justify-center group-hover/stack:translate-x-[var(--spread-x)] transition-all duration-500"
+                                      style={{
+                                        // Spread horizontally on group-hover: -64px, -32px, 0px, 32px, 64px
+                                        ['--spread-x' as string]: `${offsetFactor * 34}px`,
+                                      }}
+                                    >
+                                      {renderPinIcon(subLogo.type, subLogo.color, subLogo.key)}
+                                    </div>
                                   </div>
                                 </div>
                               );
                             })}
                           </div>
                         ) : item.key === "2011" ? (
-                          /* Horizontal Overlapping Logo Stack for 2011: LBC & HTVC */
+                          /* Stacked Logo Stack for 2011: LBC & HTVC (expands horizontally and zooms on hover) */
                           <div 
                             className={cn(
-                              "flex flex-row items-center justify-center -space-x-3.5 sm:-space-x-4.5 z-10 transition-all duration-300",
-                              isSelected ? "scale-105" : "group-hover:scale-105"
+                              "relative w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] z-10 transition-all duration-500 ease-out group/stack hover:w-[100px] sm:hover:w-[120px] flex items-center justify-center",
+                              isSelected ? "scale-105" : ""
                             )}
                           >
                             {[
                               { key: "2011", type: "lbc", name: "LBC", color: "#00C853" },
                               { key: "2011-htvc", type: "htvc", name: "HTVC", color: "#0284c7" }
-                            ].map((subLogo, lIdx) => (
-                              <div
-                                key={subLogo.name}
-                                className={cn(
-                                  "w-[52px] h-[52px] sm:w-[66px] sm:h-[66px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-300 relative shrink-0",
-                                  isSelected ? "scale-105" : "hover:scale-105"
-                                )}
-                                style={{
-                                  borderColor: subLogo.color,
-                                  zIndex: 20 - lIdx,
-                                  boxShadow: isSelected ? `0 0 10px ${subLogo.color}80` : `0 2px 6px rgba(0,0,0,0.15)`
-                                }}
-                                title={subLogo.name}
-                              >
-                                <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0">
-                                  {renderPinIcon(subLogo.type, subLogo.color, "2011")}
+                            ].map((subLogo, lIdx) => {
+                              const isCurrentLogo = activeYear === subLogo.key || (activeYear === "2011" && subLogo.key === "2011");
+                              const offset = lIdx === 0 ? -24 : 24;
+                              return (
+                                <div
+                                  key={subLogo.name}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveYear(subLogo.key);
+                                  }}
+                                  className={cn(
+                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer hover:scale-120 hover:z-40",
+                                    isCurrentLogo ? "z-30 ring-2 ring-offset-1 shadow-lg" : "opacity-90 hover:opacity-100"
+                                  )}
+                                  style={{
+                                    borderColor: subLogo.color,
+                                    zIndex: isCurrentLogo ? 30 : 20 - lIdx,
+                                    boxShadow: isCurrentLogo ? `0 0 12px ${subLogo.color}80` : `0 2px 6px rgba(0,0,0,0.15)`
+                                  }}
+                                  title={subLogo.name}
+                                >
+                                  <div 
+                                    className="w-full h-full rounded-full overflow-hidden flex items-center justify-center p-0 transition-transform duration-500 ease-out"
+                                    style={{
+                                      transform: `translate(${lIdx * 4}px, ${lIdx * -3}px) scale(${1 - lIdx * 0.04})`
+                                    }}
+                                  >
+                                    <div 
+                                      className="w-full h-full flex items-center justify-center group-hover/stack:translate-x-[var(--spread-x)] transition-all duration-500"
+                                      style={{
+                                        ['--spread-x' as string]: `${offset}px`
+                                      }}
+                                    >
+                                      {renderPinIcon(subLogo.type, subLogo.color, "2011")}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         ) : (
-                          /* Standard Ring Container for single-brand years */
+                          /* Standard Ring Container for single-brand years: scales up on hover */
                           <div 
                             className={cn(
-                              "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden",
-                              isSelected ? "scale-110" : "group-hover:scale-105"
+                              "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden hover:scale-115 cursor-pointer",
+                              isSelected ? "scale-110" : "group-hover:scale-110"
                             )}
                             style={{
                               borderColor: item.hexColor,
@@ -1802,43 +1814,44 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       loading="eager"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent pointer-events-none" />
-                    
-                    {/* Floating Quick Badges on Banner */}
-                    <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-5 flex items-center gap-2 flex-wrap z-10">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white border border-white/20 text-caption font-bold font-mono shadow-sm">
-                        <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                  </div>
+                )}
+
+                {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD (CÔNG TY) */}
+                <div 
+                  id="card-job-header"
+                  style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 16px))" }}
+                  className="w-full bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 backdrop-blur-md shadow-xs p-5 sm:p-6 flex flex-col gap-4 relative select-none group/header transition-all duration-300 hover:shadow-md"
+                >
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-wrap gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
+                        <Award className="w-4.5 h-4.5 stroke-[2.5]" />
+                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                        {isVi ? "Công ty" : "Company"}
+                      </h3>
+                    </div>
+
+                    {/* Quick Badges chuyển xuống thẻ Công ty */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 text-caption font-bold font-mono shadow-xs">
+                        <Calendar className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                         {current.cardYearLabel || current.year}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white backdrop-blur-md border border-slate-200/60 dark:border-slate-700/60 text-caption font-bold shadow-sm">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 text-caption font-bold shadow-xs">
                         <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
                         {current.tag}
                       </span>
                     </div>
                   </div>
-                )}
 
-                {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD HEADER (Tạo thẻ chuẩn Bento Design System) */}
-                <div 
-                  id="card-job-header"
-                  style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
-                  className="w-full bg-slate-50/85 dark:bg-slate-900/65 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md p-[25px] flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5 sm:gap-4 relative select-none group/header transition-all duration-300 hover:shadow-lg"
-                >
-                  {/* Left Column: Badge + Company Avatar & Titles */}
-                  <div className="flex flex-col gap-3 min-w-0 flex-1">
-                    {/* Period Badge */}
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50 text-caption font-bold shadow-2xs self-start">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                      <span>{current.period || `Từ Năm ${current.cardYearLabel}`}</span>
-                    </div>
- 
-                    {/* Logo + Company Name */}
-                    <div className="flex items-center gap-3.5 sm:gap-4 pt-0.5">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5 sm:gap-4.5 min-w-0 flex-1">
+                      {/* Logo Container */}
                       <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0">
                         <div 
-                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
-                          style={{
-                            borderColor: currentHex || undefined
-                          }}
+                          className="w-16 h-16 sm:w-18 sm:h-18 rounded-full border-2 border-amber-400/90 p-0.5 bg-white dark:bg-slate-950 shadow-xs flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
                         >
                           <img 
                             src={current.logo} 
@@ -1853,7 +1866,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         </div>
                         {current.subLogo && (
                           <div 
-                            className="w-13 h-13 sm:w-16 sm:h-16 rounded-full border-2 border-sky-400 p-0 bg-white dark:bg-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
+                            className="w-13 h-13 sm:w-15 sm:h-15 rounded-full border-2 border-sky-400 p-0.5 bg-white dark:bg-slate-950 shadow-xs flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
                             title="HTVC"
                           >
                             <img 
@@ -1864,7 +1877,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           </div>
                         )}
                       </div>
- 
+
                       <div className="min-w-0 flex-1">
                         {(() => {
                           let mainCompany = current.company;
@@ -1878,29 +1891,28 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           }
                           return (
                             <div>
-                              <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900 dark:text-white leading-tight">
+                              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
                                 {mainCompany}
                               </h2>
                               {subComp && (
-                                <p className="text-[16px] sm:text-[18px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
+                                <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mt-0.5">
                                   {subComp}
                                 </p>
                               )}
                             </div>
                           );
                         })()}
- 
-                        <div className="mt-2 flex items-center gap-2 flex-wrap">
-                          <span className="inline-block px-3 py-1 rounded-full bg-indigo-100/90 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-caption">
-                            {current.tag}
+
+                        <div className="mt-2.5 flex items-center gap-2 flex-wrap">
+                          <span className="inline-block px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200/70 dark:border-purple-800/50 font-bold text-xs">
+                            {isVi ? "Quản lý & Điều hành" : "Management & Operations"}
                           </span>
-                          <span className="inline-block px-3 py-1 rounded-full bg-emerald-100/90 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-caption">
+                          <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/50 font-bold text-xs">
                             {current.cardRoleTitle || current.role}
                           </span>
-                          {/* Số lượng nhân sự quản lý */}
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 font-bold text-caption border border-blue-200 dark:border-blue-800/60 shadow-2xs">
-                            <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                            <span>{current.managementHeadcount || `${current.headcount} nhân sự quản lý`}</span>
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/50 font-bold text-xs">
+                            <RotateCcw className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                            <span>{isVi ? "Tối ưu hóa & Phát triển" : "Optimization & Growth"}</span>
                           </span>
                         </div>
                       </div>
@@ -1916,91 +1928,63 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                       animate={{ opacity: 1, height: "auto", y: 0 }}
                       exit={{ opacity: 0, height: 0, y: -8 }}
                       transition={{ duration: 0.35, ease: "easeInOut" }}
-                      className="w-full flex flex-col gap-4 pt-1 transition-all duration-300"
+                      className="w-full flex flex-col gap-5 pt-1 transition-all duration-300"
                     >
                       {/* THẺ HÀNH TRÌNH / TÂM TƯ CÔNG VIỆC - BỐ CỤC ĐIỂM NHẤN BENTO HERO CARD */}
-                      <div className="w-full pt-5 sm:pt-7 border-t border-slate-100 dark:border-slate-800/80">
-                        {/* Thẻ chứa bo cong bao gồm cả Header lẫn nội dung các đoạn văn bản */}
-                        <div className="space-y-3.5 p-[25px] rounded-2xl sm:rounded-3xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md">
-                          {/* Header với tag chủ đề & tiêu đề điểm nhấn đưa vào trong thẻ */}
-                          <div className="space-y-2 pb-3.5 border-b border-indigo-100/80 dark:border-slate-800/80">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 text-2xs font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
-                              <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                              <span>{current.headerTitle}</span>
+                      <div className="w-full rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 backdrop-blur-md shadow-xs p-5 sm:p-6 flex flex-col gap-4">
+                        <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
+                              <BarChart2 className="w-4.5 h-4.5 stroke-[2.5]" />
                             </div>
-                            <h3 className="text-[18px] sm:text-[20px] font-black text-slate-900 dark:text-white leading-tight">
+                            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                               {isVi ? "Hành trình sự nghiệp & Cột mốc" : "Career Journey & Milestones"}
                             </h3>
                           </div>
+                        </div>
 
-                          {current.paragraphs.map((p, pIdx) => {
-                            const renderFormattedText = (text: string) => {
-                              if (text.includes("**")) {
-                                const parts = text.split(/(\*\*.*?\*\*)/g);
-                                return parts.map((part, i) => {
-                                  if (part.startsWith("**") && part.endsWith("**")) {
-                                    return (
-                                      <strong key={i} className="font-black text-indigo-950 dark:text-indigo-200 bg-indigo-50/80 dark:bg-indigo-950/60 px-1.5 py-0.5 rounded-md border border-indigo-100/80 dark:border-indigo-900/40">
-                                        {part.slice(2, -2)}
-                                      </strong>
-                                    );
-                                  }
-                                  return part;
-                                });
-                              }
-                              return text;
-                            };
+                        <div className="space-y-3.5">
+                          <div className="space-y-3">
+                            {current.paragraphs.map((p, pIdx) => {
+                              const renderFormattedText = (text: string) => {
+                                if (text.includes("**")) {
+                                  const parts = text.split(/(\*\*.*?\*\*)/g);
+                                  return parts.map((part, i) => {
+                                    if (part.startsWith("**") && part.endsWith("**")) {
+                                      return (
+                                        <strong key={i} className="font-bold text-slate-900 dark:text-white">
+                                          {part.slice(2, -2)}
+                                        </strong>
+                                      );
+                                    }
+                                    return part;
+                                  });
+                                }
+                                return text;
+                              };
 
-                            const isLast = pIdx === current.paragraphs.length - 1;
-                            const isFirst = pIdx === 0;
-                            const isPhilosophy = p.includes("triết lý") || p.includes("nền móng") || (isLast && current.paragraphs.length > 2);
-
-                            // Đoạn cuối hoặc đoạn mang tính triết lý: Callout Card đặc biệt
-                            if (isPhilosophy) {
                               return (
-                                <div 
-                                  key={pIdx}
-                                  className="mt-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50/80 via-indigo-50/40 to-purple-50/70 dark:from-slate-900/90 dark:via-indigo-950/40 dark:to-purple-950/30 border-l-4 border-amber-500 dark:border-amber-400 border-y border-r border-amber-200/60 dark:border-slate-800 shadow-2xs space-y-2"
-                                >
-                                  <div className="flex items-center gap-2 text-xs font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider">
-                                    <Quote className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                                    <span>{isVi ? "Triết lý Quản trị & Đúc kết Cốt lõi:" : "Core Management Philosophy:"}</span>
-                                  </div>
-                                  <p className="text-body font-semibold text-slate-800 dark:text-slate-200 leading-relaxed italic">
+                                <div key={pIdx} className="flex items-start gap-3">
+                                  <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0 mt-2" />
+                                  <p className="flex-1 text-sm sm:text-[14.5px] font-medium leading-relaxed text-slate-700 dark:text-slate-300">
                                     {renderFormattedText(p)}
                                   </p>
                                 </div>
                               );
-                            }
+                            })}
+                          </div>
 
-                            // Đoạn mở đầu: Lead Card bối cảnh khởi đầu
-                            if (isFirst) {
-                              return (
-                                <div 
-                                  key={pIdx}
-                                  className="p-4 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/70 dark:border-indigo-900/40 text-body text-slate-800 dark:text-slate-200 font-medium leading-relaxed flex items-start gap-3"
-                                >
-                                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mt-1.5 shrink-0 shadow-xs" />
-                                  <div className="flex-1">
-                                    {renderFormattedText(p)}
-                                  </div>
-                                </div>
-                              );
-                            }
-
-                            // Các đoạn triển khai hành động / thành tựu ở giữa: Khối chi tiết có dot bullet
-                            return (
-                              <div 
-                                key={pIdx}
-                                className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/70 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 text-body text-slate-700 dark:text-slate-300 leading-relaxed hover:border-indigo-200 dark:hover:border-indigo-800/60 transition-colors"
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2 shrink-0" />
-                                <div className="flex-1">
-                                  {renderFormattedText(p)}
-                                </div>
-                              </div>
-                            );
-                          })}
+                          {/* Callout box at bottom (amber) */}
+                          <div className="mt-4 p-3.5 sm:p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/25 border border-amber-200/80 dark:border-amber-800/50 border-l-4 border-l-amber-500 dark:border-l-amber-400 flex items-start gap-3">
+                            <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                              <Lightbulb className="w-3 h-3 stroke-[2.5]" />
+                            </div>
+                            <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 leading-relaxed">
+                              {isVi 
+                                ? "Những kinh nghiệm và thành tựu trên giúp tôi tích lũy cho vai trò xây dựng và phát triển hệ thống chăm sóc khách hàng chuyên nghiệp, hiệu quả, đồng thời luôn hướng tới việc mang lại giá trị thiết thực, bền vững cho khách hàng và doanh nghiệp."
+                                : "These experiences and achievements have equipped me to build and scale professional customer care systems, consistently creating sustainable value for clients and businesses."}
+                            </p>
+                          </div>
                         </div>
                       </div>
 
@@ -2010,54 +1994,47 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         variants={bentoGridVariants}
                         initial="hidden"
                         animate="visible"
-                        className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 items-start"
+                        className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 items-stretch"
                       >
                         
                         {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-blue-400/80 dark:hover:border-blue-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-blue-100/80 dark:border-blue-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">01</span>
-                                <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                <span className="text-h6 text-blue-900 dark:text-blue-200 uppercase">{isVi ? "QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT"}</span>
+                                <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                                  {isVi ? "QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT"}
+                                </span>
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <MoreVertical className="w-4 h-4 text-slate-400" />
-                              </div>
+                              <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                             </div>
 
-                            {/* Chuyển thành view 2 cột */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               {/* Hàng 1: Chức danh quản trị */}
-                              <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100/80 dark:border-blue-900/40 flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-                                  <User className="w-4 h-4 stroke-[2.5]" />
+                              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100/80 dark:border-blue-900/40 flex items-center gap-3">
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                  <Headset className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-caption mb-0.5">
-                                    {isVi ? "Chức danh quản trị:" : "Administrative role:"}
-                                  </span>
-                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-body">
-                                    {current.cardRoleTitle || current.role}
+                                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 leading-snug block">
+                                    {isVi ? "Quản lý và vận hành Trung tâm dịch vụ khách hàng" : (current.cardRoleTitle || current.role)}
                                   </span>
                                 </div>
                               </div>
 
                               {/* Hàng 2: Quy mô nhân sự quản lý */}
-                              <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100/80 dark:border-blue-900/40 flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-                                  <Users className="w-4 h-4 stroke-[2.5]" />
+                              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100/80 dark:border-blue-900/40 flex items-center gap-3">
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                  <Users className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <span className="text-slate-500 dark:text-slate-400 font-medium block text-caption mb-0.5">
-                                    {isVi ? "Quy mô nhân sự quản lý:" : "Team size managed:"}
-                                  </span>
-                                  <span className="font-extrabold text-slate-900 dark:text-white leading-snug block text-body">
-                                    {current.managementHeadcount || `${current.headcount} nhân sự trực thuộc`}
+                                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 leading-snug block">
+                                    {isVi ? `Quản trị nhân sự với quy mô từ ${current.headcount || 20} nhân sự trở lên` : (current.managementHeadcount || `${current.headcount} team members`)}
                                   </span>
                                 </div>
                               </div>
@@ -2092,31 +2069,29 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 02 | KẾT QUẢ & KPI (Metrics Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/80 dark:hover:border-emerald-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-emerald-100/80 dark:border-emerald-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-emerald-600 dark:text-emerald-400">02</span>
-                                <Trophy className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-h6 text-emerald-900 dark:text-emerald-200 uppercase">
-                                  {isVi ? "KẾT QUẢ & KPI" : "RESULTS & KPIS"}
+                                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+                                  {isVi ? "KẾT QUẢ KPI" : "KPI RESULTS"}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <MoreVertical className="w-4 h-4 text-slate-400" />
-                              </div>
+                              <ChevronRight className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                               {current.kpis && current.kpis.map((kpi, kIdx) => (
-                                <div key={kIdx} className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-100/80 dark:border-emerald-900/40 space-y-2">
-                                  <div className="flex items-center justify-between text-body font-bold">
+                                <div key={kIdx} className="space-y-1.5">
+                                  <div className="flex items-center justify-between text-xs sm:text-[13px] font-bold">
                                     <span className="text-slate-800 dark:text-slate-200 truncate pr-1">{kpi.label}</span>
-                                    <span className="font-mono text-emerald-700 dark:text-emerald-400 font-black">{kpi.percent}%</span>
+                                    <span className="font-mono text-emerald-600 dark:text-emerald-400 font-black">{kpi.percent}%</span>
                                   </div>
-                                  <div className="w-full h-2.5 bg-slate-200/80 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${kpi.percent}%` }} />
+                                  <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full transition-all duration-500" style={{ width: `${kpi.percent}%` }} />
                                   </div>
                                 </div>
                               ))}
@@ -2127,28 +2102,24 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 03 | CÔNG VIỆC (Tasks Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/80 dark:hover:border-indigo-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-indigo-100/80 dark:border-indigo-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-indigo-600 dark:text-indigo-400">03</span>
-                                <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                <span className="text-h6 text-indigo-900 dark:text-indigo-200 uppercase">
-                                  {isVi ? "CÔNG VIỆC & VẬN HÀNH" : "TASKS & ROLES"}
+                                <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">03</span>
+                                <ClipboardList className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                                  {isVi ? "CÔNG VIỆC ĐÃ VẬN HÀNH" : "OPERATIONAL TASKS"}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <MoreVertical className="w-4 h-4 text-slate-400" />
-                              </div>
+                              <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                             </div>
 
-                            <div className="space-y-2.5">
+                            <div className="space-y-2">
                               {current.tasks && current.tasks.map((task, tIdx) => (
-                                <div key={tIdx} className="p-3 px-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100/80 dark:border-indigo-900/40 text-body font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-3 leading-relaxed">
-                                  <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-caption flex items-center justify-center shrink-0 mt-0.5">
-                                    {tIdx + 1}
-                                  </span>
+                                <div key={tIdx} className="p-2.5 sm:p-3 px-3.5 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100/70 dark:border-blue-900/30 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-snug">
+                                  <CheckSquare className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0 mt-0.5" />
                                   <span className="pt-0.5">{task}</span>
                                 </div>
                               ))}
@@ -2159,30 +2130,28 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 04 | DỰ ÁN (Projects Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-amber-100/80 dark:border-amber-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-amber-600 dark:text-amber-400">04</span>
-                                <FolderKanban className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                                <span className="text-h6 text-amber-900 dark:text-amber-200 uppercase">
-                                  {isVi ? "DỰ ÁN TRỌNG ĐIỂM" : "PROJECTS"}
+                                <span className="text-2xl font-mono font-black text-orange-600 dark:text-orange-400">04</span>
+                                <Flag className="w-5 h-5 text-orange-600 dark:text-orange-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-orange-600 dark:text-orange-400 uppercase tracking-wide">
+                                  {isVi ? "DỰ ÁN TRỌNG ĐIỂM" : "KEY PROJECTS"}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <MoreVertical className="w-4 h-4 text-slate-400" />
-                              </div>
+                              <ChevronRight className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                             </div>
 
                             <div className="space-y-2">
                               {current.projects && current.projects.map((proj, pIdx) => (
-                                <div key={pIdx} className="p-3 px-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100/80 dark:border-amber-900/40 text-body font-bold text-amber-950 dark:text-amber-100 flex items-center justify-between gap-2 hover:bg-amber-100/70 dark:hover:bg-amber-900/50 transition-colors">
-                                  <div className="flex items-center gap-2.5 min-w-0">
-                                    <FolderKanban className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                                <div key={pIdx} className="p-2.5 sm:p-3 px-3.5 rounded-xl bg-orange-50/50 dark:bg-orange-950/25 border border-orange-100/70 dark:border-orange-900/30 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between gap-2 hover:bg-orange-100/70 dark:hover:bg-orange-900/40 transition-colors">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <ArrowUpRight className="w-4 h-4 text-orange-500 dark:text-orange-400 shrink-0" />
                                     <span className="truncate">{proj}</span>
                                   </div>
-                                  <ChevronRight className="w-4 h-4 text-amber-500 shrink-0" />
+                                  <ChevronRight className="w-4 h-4 text-orange-400 shrink-0" />
                                 </div>
                               ))}
                             </div>
@@ -2192,25 +2161,23 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         {/* Sub Card 05 | CAM KẾT (Commitments Card) */}
                         <motion.div 
                           variants={bentoCardVariants}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-cyan-400/80 dark:hover:border-cyan-500/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-cyan-100/80 dark:border-cyan-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-cyan-600 dark:text-cyan-400">05</span>
-                                <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-                                <span className="text-h6 text-cyan-900 dark:text-cyan-200 uppercase">
-                                  {isVi ? "CAM KẾT CHẤT LƯỢNG" : "COMMITMENTS"}
+                                <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">
+                                  {isVi ? "CAM KẾT CHẤT LƯỢNG" : "QUALITY COMMITMENT"}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <MoreVertical className="w-4 h-4 text-slate-400" />
-                              </div>
+                              <ChevronRight className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
                             </div>
 
                             <div className="space-y-2.5">
                               {current.commitments && current.commitments.map((cmt, cIdx) => (
-                                <div key={cIdx} className="p-3.5 rounded-2xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/80 dark:border-cyan-900/40 text-body font-bold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-relaxed">
+                                <div key={cIdx} className="p-3 px-3.5 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/70 dark:border-cyan-900/30 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-snug">
                                   <CheckCircle2 className="w-4.5 h-4.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
                                   <span>{cmt}</span>
                                 </div>
@@ -2230,34 +2197,27 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               }
                             }
                           }}
-                          className="w-full h-auto self-start rounded-2xl md:rounded-3xl bg-slate-50/75 dark:bg-slate-900/60 p-[25px] border border-slate-200/80 dark:border-slate-800/80 hover:border-rose-400/80 dark:hover:border-rose-500/80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between backdrop-blur-xl"
+                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between"
                         >
-                          <div className="space-y-3.5">
-                            <div className="flex items-center justify-between pb-3 border-b border-rose-100/80 dark:border-rose-900/40">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-rose-600 dark:text-rose-400">06</span>
-                                <Camera className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-                                <span className="text-h6 text-rose-900 dark:text-rose-200 uppercase">
-                                  {isVi ? "KỶ NIỆM THỰC CHIẾN" : "MEMORIES"}
+                                <ImageIcon className="w-5 h-5 text-rose-600 dark:text-rose-400 stroke-[2.2]" />
+                                <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 uppercase tracking-wide">
+                                  {isVi ? "KỶ NIỆM TRONG CÔNG VIỆC" : "WORK MEMORIES"}
                                 </span>
                               </div>
+                              <ChevronRight className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                             </div>
 
                             {/* Khung ảnh kỷ niệm */}
-                            <div className="w-full h-40 sm:h-48 rounded-2xl overflow-hidden bg-slate-950 relative border border-rose-200/60 dark:border-rose-900/60 shadow-inner">
+                            <div className="w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-slate-950 relative border border-rose-200/60 dark:border-rose-900/60 shadow-xs">
                               <img 
                                 src={photos && photos[0]?.src ? photos[0].src : current.photoUrl} 
                                 alt="Thẻ 06 Kỷ niệm" 
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-                              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-body text-white font-bold">
-                                <span className="flex items-center gap-2">
-                                  <ImageIcon className="w-4 h-4 text-rose-300" />
-                                  <span>{isVi ? "Khoảnh khắc & tư liệu hình ảnh" : "Moments & Archive"}</span>
-                                </span>
-                                <span className="text-rose-300 font-mono group-hover:translate-x-1 transition-transform">→</span>
-                              </div>
                             </div>
                           </div>
                         </motion.div>

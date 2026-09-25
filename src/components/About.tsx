@@ -1,14 +1,17 @@
 import React, { useState, useRef } from "react";
 import { 
   User, Heart, Leaf, Target, TrendingUp, Building2,
-  Briefcase, Bot, MapPin, ChevronRight, ArrowRight, Clock,
+  Briefcase, Bot, MapPin, ChevronRight, ArrowRight,
   Send, FileText, Settings, Database, Cpu, Star, Compass,
   Share2, Users, Calendar, Home, BarChart3, Eye, Quote,
-  MessagesSquare, Sparkles
+  MessagesSquare, Sparkles, Lightbulb, Handshake, MoreHorizontal
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "../i18n";
 import { HeroIntroButton } from "./HeroIntroButton";
+import { MagneticBentoWrapper } from "./MagneticBentoWrapper";
+import { PageCardHeader } from "./PageCardHeader";
+import { DynamicVideoStoryOverlay } from "./DynamicVideoStoryOverlay";
 
 const ABOUT_IDLE_VIDEO_URL = "https://cdn.scena.ai/project/8606/e48a67884f3a52e8a68cf06b97979f3b22835ec92bf466a058c0d78da97c83b0.mp4";
 const ABOUT_INTRO_VIDEO_URL = "https://cdn.scena.ai/project/8606/5f84521bf5c51ff234fb0f4029fb9fba29e7e386f13912a56bc7ee25aebcbc10.mp4";
@@ -21,10 +24,19 @@ export default function About() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlayingIntro, setIsPlayingIntro] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setVideoCurrentTime(videoRef.current.currentTime);
+    }
+  };
 
   const handlePlayIntro = () => {
     setIsPlayingIntro(true);
     setIsVideoMuted(false);
+    setIsVideoPaused(false);
     if (videoRef.current) {
       videoRef.current.src = ABOUT_INTRO_VIDEO_URL;
       videoRef.current.muted = false;
@@ -36,6 +48,8 @@ export default function About() {
   const handleCancelIntro = () => {
     setIsPlayingIntro(false);
     setIsVideoMuted(true);
+    setIsVideoPaused(false);
+    setVideoCurrentTime(0);
     if (videoRef.current) {
       videoRef.current.src = ABOUT_IDLE_VIDEO_URL;
       videoRef.current.muted = true;
@@ -57,6 +71,24 @@ export default function About() {
     setIsVideoMuted(nextMuted);
   };
 
+  const togglePlayPause = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play().catch(() => {});
+      setIsVideoPaused(false);
+    } else {
+      videoRef.current.pause();
+      setIsVideoPaused(true);
+    }
+  };
+
+  const handleSeek = (time: number) => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = time;
+      setVideoCurrentTime(time);
+    }
+  };
+
   const handleNavigate = (sectionId: string) => {
     window.dispatchEvent(new CustomEvent("app-navigate", { detail: sectionId }));
   };
@@ -68,66 +100,15 @@ export default function About() {
     >
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
 
-        {/* 1. TOP HEADER BANNER CARD - HIGH-FIDELITY RECONSTRUCTION OF HEADER */}
-        <div className="w-full flex flex-col gap-3 pb-2 shrink-0 font-sans">
-          <div className="flex items-center justify-between gap-3 flex-wrap md:flex-nowrap">
-            {/* Left side: Giới thiệu & Clock Pill */}
-            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40">
-                <div className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/60 flex items-center justify-center text-blue-600 dark:text-cyan-400">
-                  <Home className="w-4 h-4" />
-                </div>
-                <h4 className="text-lg font-extrabold text-blue-700 dark:text-cyan-300">
-                  {isVi ? "Giới thiệu" : "About Me"}
-                </h4>
-              </div>
-
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 dark:bg-cyan-500/15 border border-blue-200/50 dark:border-cyan-500/30 text-xs font-mono font-bold text-blue-700 dark:text-cyan-300 shadow-2xs">
-                <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-400 shrink-0" />
-                <span className="whitespace-nowrap">{isVi ? "-3 phút đọc" : "~3 min read"}</span>
-              </div>
-            </div>
-
-            {/* Right side: Quote container */}
-            <div className="flex items-center gap-2 md:ml-auto min-w-0 max-w-full">
-              <div className="px-4 py-2 rounded-full bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 text-xs sm:text-sm font-bold italic text-blue-700 dark:text-cyan-300 flex items-center gap-2.5 max-w-full shadow-2xs">
-                <div className="w-6 h-6 rounded-full bg-blue-600 dark:bg-cyan-500 flex items-center justify-center shrink-0">
-                  <Quote className="w-3 h-3 text-white fill-white stroke-[2]" />
-                </div>
-                <span className="truncate max-w-[260px] xs:max-w-[320px] sm:max-w-[420px] md:max-w-[540px] lg:max-w-[660px]">
-                  {isVi 
-                    ? "Lãnh đạo bằng sự thấu cảm, tối ưu hóa hiệu suất vận hành và gắn kết con người."
-                    : "Leading with empathy, optimizing operations, and fostering human connections."}
-                </span>
-              </div>
-            </div>
+        {/* 1. TOP HEADER BANNER CARD */}
+        <PageCardHeader pageId="about">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-blue-600 dark:bg-cyan-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-blue-700 dark:text-cyan-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
+              {isVi ? "22+ Năm kinh nghiệm CX & CS" : "22+ Years CX & Operations Experience"}
+            </span>
           </div>
-
-          {/* Separating line */}
-          <div className="h-[1.5px] w-full bg-blue-500/20 dark:bg-cyan-500/15" />
-
-          {/* Subtitle / Subheader indicator with bookmark */}
-          <div className="flex items-center gap-2 pt-1 w-full relative">
-            <div className="flex items-center">
-              {/* Bookmark Flag shape */}
-              <div className="w-2.5 h-6 bg-blue-600 dark:bg-cyan-400 rounded-l-md shrink-0 relative">
-                <div className="absolute right-0 top-0 bottom-0 w-1.5 bg-blue-700 dark:bg-cyan-500 rounded-l-sm" />
-              </div>
-              <span className="text-xs font-bold text-blue-700 dark:text-cyan-300 bg-blue-500/10 dark:bg-cyan-500/10 px-3 py-1 rounded-r-full border-y border-r border-blue-500/20 dark:border-cyan-500/20 shadow-3xs">
-                {isVi ? "22+ Năm kinh nghiệm CX & CS" : "22+ Years CX & Operations Experience"}
-              </span>
-            </div>
-
-            {/* Subtle dots layout on right */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex gap-1.5 opacity-25">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-            </div>
-          </div>
-        </div>
+        </PageCardHeader>
 
         {/* 2. HERO PROFILE VIDEO & PERSONAL INFORMATION ROW */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 lg:gap-6 items-stretch w-full">
@@ -148,8 +129,23 @@ export default function About() {
               loop={!isPlayingIntro}
               muted={isVideoMuted}
               playsInline
+              onTimeUpdate={handleTimeUpdate}
               onEnded={handleVideoEnded}
             />
+
+            {/* Dynamic Video Story Overlay when intro video is active */}
+            {isPlayingIntro && (
+              <DynamicVideoStoryOverlay
+                currentTime={videoCurrentTime}
+                duration={videoRef.current?.duration || 210}
+                isPlaying={!isVideoPaused}
+                isMuted={isVideoMuted}
+                onToggleMute={toggleVideoMute}
+                onTogglePlay={togglePlayPause}
+                onClose={handleCancelIntro}
+                onSeek={handleSeek}
+              />
+            )}
 
             {/* Subtle Gradient vignette */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
@@ -275,20 +271,14 @@ export default function About() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="lg:col-span-3 h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl border border-white/80 dark:border-cyan-400/35 p-4 sm:p-5 shadow-[0_16px_40px_rgba(99,102,241,0.06)] hover:dark:border-cyan-400/60 transition-all duration-300 flex flex-col justify-start gap-4 min-w-0"
           >
-            {/* Header */}
-            <div className="flex flex-col gap-2 pb-1 font-sans">
-              <div className="flex items-center justify-between gap-3 flex-wrap">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0">
-                    <User className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-                  </div>
-                  <h6 className="text-base sm:text-lg font-extrabold tracking-tight text-blue-600 dark:text-cyan-400">
-                    {isVi ? "Thông tin cá nhân" : "Personal profile"}
-                  </h6>
-                </div>
-                <ChevronRight className="w-5 h-5 text-blue-500/70" />
+            {/* Header formatted like Trụ cột cống hiến */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-blue-200/60 dark:border-blue-800/60 mb-1">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <User className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0" />
+                <h6 className="text-h6 font-bold text-blue-600 dark:text-cyan-400 tracking-wide">
+                  {isVi ? "Thông tin cá nhân" : "Personal profile"}
+                </h6>
               </div>
-              <div className="h-[2px] w-full bg-blue-500/30 dark:bg-cyan-500/20" />
             </div>
 
             {/* List of Demographic info */}
@@ -408,314 +398,167 @@ export default function About() {
 
         </div>
 
-        {/* 3. BENTO GRID 3 COLUMNS: ABOUT ME | OPERATIONAL PILLARS | PHILOSOPHY & VISION */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch w-full">
-          
-          {/* COLUMN 1: GIỚI THIỆU BẢN THÂN TÔI (ABOUT ME) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-5 text-left"
-          >
-            {/* Header Cột 1 */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
-                    <User className="w-5 h-5 stroke-[2.5]" />
-                  </div>
-                  <div className="flex flex-col">
-                    <h4 className="text-base sm:text-lg font-black text-blue-950 dark:text-white leading-tight">
-                      {isVi ? "Giới thiệu bản thân tôi" : "About Me"}
-                    </h4>
-                    <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-                      ABOUT ME
-                    </span>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-              </div>
-              <div className="h-[1.5px] w-full bg-slate-100 dark:bg-slate-800" />
+        {/* 3. HERO HIGHLIGHT LANDSCAPE BANNER - GIỚI THIỆU CHUYÊN GIA */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="w-full relative overflow-hidden rounded-3xl border border-[var(--grid-banner-border,rgba(191,219,254,0.85))] bg-gradient-to-r from-[#F0F7FF] via-[#E8F3FF] to-[#D9ECFF] dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-950 p-6 sm:p-8 lg:p-9 shadow-sm flex flex-col gap-5 transition-all duration-300"
+        >
+          {/* Header */}
+          <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-blue-200/60 dark:border-blue-800/60 mb-1">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <User className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0" />
+              <h6 className="text-h6 font-bold text-blue-600 dark:text-cyan-400 tracking-wide">
+                {isVi ? "Giới thiệu bản thân & Triết lý vận hành" : "Personal Introduction & Operating Philosophy"}
+              </h6>
             </div>
+            <span className="text-3xs font-mono font-bold text-blue-800 dark:text-cyan-300 bg-blue-50 dark:bg-cyan-950/60 px-2.5 py-1 rounded-full border border-blue-200/80 dark:border-cyan-600/40">
+              {isVi ? "22+ Năm kinh nghiệm thực chiến" : "22+ Years Hands-on Experience"}
+            </span>
+          </div>
 
-            {/* Paragraph with inline badge for 22 năm kinh nghiệm */}
-            <div className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed text-justify flex-1">
-              <p>
-                {isVi ? (
-                  <>
-                    Một chuyên gia dịch vụ khách hàng với hơn{" "}
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-black text-xs mx-1 shadow-sm">
-                      22 năm kinh nghiệm
-                    </span>{" "}
-                    thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                  </>
-                ) : (
-                  <>
-                    A customer service expert with over{" "}
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-black text-xs mx-1 shadow-sm">
-                      22 years of experience
-                    </span>{" "}
-                    in real-world operations. For me, Customer Service is not just support, but true companionship.
-                  </>
-                )}
-              </p>
-            </div>
-
-            {/* Giá trị cốt lõi Card */}
-            <div className="relative p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 shadow-2xs flex flex-col gap-2 mt-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-6.5 h-6.5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-xs">
-                    <Heart className="w-3.5 h-3.5 fill-white" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-black text-orange-600 dark:text-orange-400 uppercase">
-                    {isVi ? "Giá trị cốt lõi" : "Core Value"}
+          <div className="space-y-4 text-left">
+            {/* Paragraph 1 */}
+            <p className="text-sm sm:text-base md:text-[16px] text-[#0B2546] dark:text-slate-100 font-medium leading-relaxed">
+              {isVi ? (
+                <>
+                  Một chuyên gia dịch vụ khách hàng với hơn{" "}
+                  <span className="font-extrabold text-[#0057FF] dark:text-cyan-400 bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">
+                    22 năm kinh nghiệm thực chiến
                   </span>
-                </div>
-                {/* 3 yellow/orange dots in right */}
-                <div className="flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                </div>
-              </div>
+                  . Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là{" "}
+                  <span className="font-bold text-[#0057FF] dark:text-cyan-300">sự đồng hành</span>. 
+                  Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
+                </>
+              ) : (
+                "A customer service expert with over 22 years of hands-on experience. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations."
+              )}
+            </p>
 
-              <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-                {isVi ? (
-                  <>
-                    Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
-                    <span className="font-black text-orange-600 dark:text-orange-400 underline decoration-orange-300 decoration-2 underline-offset-2">
-                      sự tận tâm kịp thời
-                    </span>{" "}
-                    và{" "}
-                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-300 decoration-2 underline-offset-2">
-                      đồng cảm chân thành
-                    </span>
-                    .
-                  </>
-                ) : (
-                  <>
-                    I believe satisfaction comes from{" "}
-                    <span className="font-black text-orange-600">timely dedication</span> and{" "}
-                    <span className="font-black text-rose-600">heartfelt empathy</span>.
-                  </>
-                )}
-              </p>
-            </div>
-          </motion.div>
+            {/* Paragraph 2 */}
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
+              {isVi ? (
+                <>
+                  Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
+                  <span className="font-bold text-slate-900 dark:text-white underline decoration-blue-500/60 decoration-2 underline-offset-4">
+                    sự tận tâm kịp thời
+                  </span>{" "}
+                  và{" "}
+                  <span className="font-bold text-slate-900 dark:text-white underline decoration-cyan-500/60 decoration-2 underline-offset-4">
+                    đồng cảm chân thành
+                  </span>
+                  . Trong suốt sự nghiệp, tôi đã trực tiếp thiết kế và tối ưu hóa hàng chục quy trình, hệ thống Chăm Sóc Khách Hàng, luôn đặt trên nền tảng ba giá trị cốt lõi:
+                </>
+              ) : (
+                "I believe satisfaction comes not from absolute perfection, but from timely dedication and sincere empathy. Throughout my career, I have directly designed and optimized dozens of Customer Care processes and systems, always grounded on three core values:"
+              )}
+            </p>
 
-          {/* COLUMN 2: BA TRỤ CỘT VẬN HÀNH (OPERATIONAL PILLARS) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-5 text-left"
-          >
-            {/* Header Cột 2 */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
-                    <Target className="w-5 h-5 stroke-[2.5]" />
-                  </div>
-                  <div className="flex flex-col">
-                    <h4 className="text-base sm:text-lg font-black text-blue-950 dark:text-white leading-tight">
-                      {isVi ? "Ba trụ cột vận hành" : "Operational Pillars"}
-                    </h4>
-                    <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-                      OPERATIONAL PILLARS
-                    </span>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-              </div>
-              <div className="h-[1.5px] w-full bg-slate-100 dark:bg-slate-800" />
-            </div>
-
-            {/* 3 Pillars Gradient Stack */}
-            <div className="flex-1 flex flex-col gap-3.5 mt-1 justify-center">
-              
-              {/* 1. HIỆU QUẢ */}
-              <div className="relative rounded-2xl p-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-md overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer group/pillar">
-                {/* Big number on left */}
-                <span className="absolute top-1 left-2.5 text-3xl font-black text-white/20 font-mono select-none">
-                  01
+            {/* 3 Core Values Block: Hiệu quả – Nhân văn – Bền vững */}
+            <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-blue-200/90 dark:border-blue-800/80 shadow-xs flex flex-col sm:flex-row items-center justify-around gap-3 my-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+                <span className="text-sm sm:text-base font-black text-blue-700 dark:text-cyan-300 tracking-wide uppercase">
+                  {isVi ? "Hiệu quả" : "Efficiency"}
                 </span>
-
-                {/* Top chevron/arrow in circle */}
-                <div className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs group-hover/pillar:translate-x-1.5 group-hover/pillar:-translate-y-0.5 transition-transform">
-                  <span>→</span>
-                </div>
-
-                {/* Column graph illustration in corner */}
-                <div className="absolute right-3.5 bottom-1.5 opacity-20 pointer-events-none flex items-end gap-1">
-                  <div className="w-1.5 h-3 bg-white rounded-t-xs" />
-                  <div className="w-1.5 h-5.5 bg-white rounded-t-xs" />
-                  <div className="w-1.5 h-8 bg-white rounded-t-xs" />
-                </div>
-
-                {/* Center Content */}
-                <div className="flex flex-col items-center text-center mt-1 relative z-10">
-                  <div className="w-9 h-9 rounded-full border border-white/40 bg-white/10 backdrop-blur-xs flex items-center justify-center mb-1">
-                    <Target className="w-4.5 h-4.5 text-white" />
-                  </div>
-                  <span className="text-sm sm:text-base font-black tracking-wider uppercase text-white drop-shadow-xs">
-                    {isVi ? "HIỆU QUẢ" : "EFFICIENCY"}
-                  </span>
-                  <span className="text-[11px] font-semibold text-blue-100 leading-none mt-0.5">
-                    {isVi ? "Tối ưu & Kết quả" : "Optimization & Results"}
-                  </span>
-                  <p className="text-[10px] text-blue-50/85 mt-1 leading-snug max-w-[210px]">
-                    {isVi ? "Tối ưu hiệu suất, tạo kết quả đo lường được." : "Optimize performance, create measurable results."}
-                  </p>
-                </div>
               </div>
-
-              {/* 2. NHÂN VĂN */}
-              <div className="relative rounded-2xl p-4 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white shadow-md overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer group/pillar">
-                {/* Big number */}
-                <span className="absolute top-1 left-2.5 text-3xl font-black text-white/20 font-mono select-none">
-                  02
+              <span className="hidden sm:inline text-slate-300 dark:text-slate-700 font-black">–</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse" />
+                <span className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300 tracking-wide uppercase">
+                  {isVi ? "Nhân văn" : "Humanity"}
                 </span>
-
-                <div className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs group-hover/pillar:translate-x-1.5 group-hover/pillar:-translate-y-0.5 transition-transform">
-                  <span>→</span>
-                </div>
-
-                {/* Users icon illustration */}
-                <div className="absolute right-3 bottom-1.5 opacity-15 pointer-events-none">
-                  <Users className="w-10 h-10 text-white" />
-                </div>
-
-                <div className="flex flex-col items-center text-center mt-1 relative z-10">
-                  <div className="w-9 h-9 rounded-full border border-white/40 bg-white/10 backdrop-blur-xs flex items-center justify-center mb-1">
-                    <Heart className="w-4.5 h-4.5 text-white" />
-                  </div>
-                  <span className="text-sm sm:text-base font-black tracking-wider uppercase text-white drop-shadow-xs">
-                    {isVi ? "NHÂN VĂN" : "HUMANITY"}
-                  </span>
-                  <span className="text-[11px] font-semibold text-rose-100 leading-none mt-0.5">
-                    {isVi ? "Đồng cảm & Thấu hiểu" : "Empathy & Understanding"}
-                  </span>
-                  <p className="text-[10px] text-rose-50/85 mt-1 leading-snug max-w-[210px]">
-                    {isVi ? "Lắng nghe, thấu hiểu và đặt con người làm trung tâm." : "Listen, empathize, and put people at the center."}
-                  </p>
-                </div>
               </div>
-
-              {/* 3. BỀN VỮNG */}
-              <div className="relative rounded-2xl p-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-teal-700 text-white shadow-md overflow-hidden flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02] cursor-pointer group/pillar">
-                {/* Big number */}
-                <span className="absolute top-1 left-2.5 text-3xl font-black text-white/20 font-mono select-none">
-                  03
+              <span className="hidden sm:inline text-slate-300 dark:text-slate-700 font-black">–</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-sm sm:text-base font-black text-emerald-700 dark:text-emerald-300 tracking-wide uppercase">
+                  {isVi ? "Bền vững" : "Sustainability"}
                 </span>
-
-                <div className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs group-hover/pillar:translate-x-1.5 group-hover/pillar:-translate-y-0.5 transition-transform">
-                  <span>→</span>
-                </div>
-
-                {/* Leaf icon illustration */}
-                <div className="absolute right-3.5 bottom-1.5 opacity-20 pointer-events-none">
-                  <Leaf className="w-9 h-9 text-white" />
-                </div>
-
-                <div className="flex flex-col items-center text-center mt-1 relative z-10">
-                  <div className="w-9 h-9 rounded-full border border-white/40 bg-white/10 backdrop-blur-xs flex items-center justify-center mb-1">
-                    <Leaf className="w-4.5 h-4.5 text-white" />
-                  </div>
-                  <span className="text-sm sm:text-base font-black tracking-wider uppercase text-white drop-shadow-xs">
-                    {isVi ? "BỀN VỮNG" : "SUSTAINABILITY"}
-                  </span>
-                  <span className="text-[11px] font-semibold text-teal-100 leading-none mt-0.5">
-                    {isVi ? "Giá trị & Tin cậy" : "Value & Trust"}
-                  </span>
-                  <p className="text-[10px] text-teal-50/85 mt-1 leading-snug max-w-[210px]">
-                    {isVi ? "Xây dựng niềm tin và giá trị bền vững." : "Build enduring trust and sustainable value."}
-                  </p>
-                </div>
               </div>
-
-            </div>
-          </motion.div>
-
-          {/* COLUMN 3: TRIẾT LÝ VÀ TẦM NHÌN (PHILOSOPHY & VISION) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white/90 dark:bg-slate-900/85 border border-slate-200/90 dark:border-slate-800/90 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-5 text-left"
-          >
-            {/* Header Cột 3 */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
-                    <Star className="w-5 h-5 stroke-[2.5]" />
-                  </div>
-                  <div className="flex flex-col">
-                    <h4 className="text-base sm:text-lg font-black text-blue-950 dark:text-white leading-tight">
-                      {isVi ? "Triết lý và tầm nhìn" : "Philosophy & Vision"}
-                    </h4>
-                    <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-                      PHILOSOPHY & VISION
-                    </span>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-              </div>
-              <div className="h-[1.5px] w-full bg-slate-100 dark:bg-slate-800" />
             </div>
 
-            {/* Blue outlined quote container */}
-            <div className="relative p-4 rounded-2xl bg-blue-50/40 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 shadow-3xs flex flex-col gap-1 text-center">
-              <span className="text-2xl font-serif text-blue-600 dark:text-cyan-400 font-extrabold leading-none text-left h-3 block">“</span>
-              <p className="text-sm sm:text-base font-extrabold text-blue-800 dark:text-cyan-300 italic px-2 leading-tight">
-                {isVi 
-                  ? "“Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”" 
-                  : "“Dedication & Companionship in Customer Experience”"}
-              </p>
-              <span className="text-2xl font-serif text-blue-600 dark:text-cyan-400 font-extrabold leading-none text-right h-3 block -mt-1">”</span>
-            </div>
-
-            {/* Paragraph text with bold blue key message */}
-            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed text-justify flex-1">
+            {/* Paragraph 3 */}
+            <p className="text-sm sm:text-base text-slate-800 dark:text-slate-200 font-medium leading-relaxed pt-1">
               {isVi ? (
                 <>
                   Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi:{" "}
-                  <span className="font-extrabold text-blue-700 dark:text-cyan-300">
+                  <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
                     Họ luôn được lắng nghe.
                   </span>
                 </>
               ) : (
                 <>
-                  I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core value:{" "}
-                  <span className="font-extrabold text-blue-700 dark:text-cyan-300">
+                  I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth:{" "}
+                  <span className="font-black text-[#0057FF] dark:text-cyan-300">
                     They are always listened to.
                   </span>
                 </>
               )}
             </p>
+          </div>
+        </motion.div>
 
-            {/* Vision container with Eye/Compass Icon */}
-            <div className="p-3.5 rounded-2xl bg-blue-50/30 dark:bg-slate-800/40 border border-blue-100/60 dark:border-slate-800 flex items-start gap-3 mt-1 shadow-3xs">
-              <div className="w-8 h-8 rounded-full bg-blue-100/80 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-                <Compass className="w-4 h-4" />
+        {/* 4. TRIẾT LÝ VÀ TẦM NHÌN STRATEGIC VISION */}
+        <div className="w-full">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-white dark:bg-slate-900/90 border border-[var(--grid-card-border,rgba(226,232,240,0.85))] rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col gap-4 text-left h-full"
+          >
+            {/* Header */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-purple-200/60 dark:border-purple-800/60 mb-1">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <Star className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0" />
+                <h6 className="text-h6 font-bold text-purple-600 dark:text-purple-400 tracking-wide">
+                  {isVi ? "Tầm nhìn chiến lược" : "Strategic Vision"}
+                </h6>
               </div>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
+            </div>
+
+            {/* Tầm nhìn chiến lược Card */}
+            <div className="relative p-4 rounded-2xl bg-[#FFF8F0] dark:bg-orange-950/20 border border-[#FFEDD5] dark:border-orange-900/40 shadow-2xs flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-6.5 h-6.5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-xs">
+                    <Target className="w-3.5 h-3.5 text-white stroke-[2.5]" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-black text-orange-600 dark:text-orange-400 uppercase">
+                    {isVi ? "Định hướng phát triển" : "Strategic Direction"}
+                  </span>
+                </div>
+                <div className="flex gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-justify">
                 {isVi ? (
                   <>
-                    <span className="font-black text-blue-700 dark:text-cyan-300">Tầm nhìn:</span> Kiến tạo giá trị thực sự cho doanh nghiệp thông qua việc tối ưu quy trình và phát triển năng lực của đội ngũ chăm sóc khách hàng trực diện, hướng tới sự phát triển toàn diện.
+                    Kiến tạo giá trị thực sự cho doanh nghiệp thông qua việc{" "}
+                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-400 decoration-2 underline-offset-2">
+                      tối ưu quy trình
+                    </span>{" "}
+                    và{" "}
+                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-400 decoration-2 underline-offset-2">
+                      phát triển năng lực đội ngũ
+                    </span>
+                    , chăm sóc khách hàng trực diện, hướng tới sự phát triển toàn diện và bền vững.
                   </>
                 ) : (
                   <>
-                    <span className="font-black text-blue-700 dark:text-cyan-300">Vision:</span> Creating real business value by optimizing processes and developing customer care team capabilities.
+                    Creating real business value by{" "}
+                    <span className="font-black text-rose-600">optimizing processes</span> and{" "}
+                    <span className="font-black text-rose-600">developing customer care team capabilities</span>.
                   </>
                 )}
               </p>
             </div>
           </motion.div>
-
         </div>
 
         {/* 4. BOTTOM CTA COLLABORATION BANNER - HIGH-FIDELITY LUXURY GLASS BANNER */}

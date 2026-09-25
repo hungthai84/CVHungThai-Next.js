@@ -63,7 +63,6 @@ export function CaseStudy1_1_TOC({
   }, [isOpen]);
 
   const menuItems = [
-    { id: "sec-podcast", num: "00", label: "Bài Viết Podcast & MP3", icon: Headphones, color: "text-amber-500 bg-amber-500/10" },
     { id: "sec-01", num: "01", label: "Tổng Quan Dự Án", icon: FolderKanban, color: "text-sky-500 bg-sky-500/10" },
     { id: "sec-02", num: "02", label: "Bối Cảnh Thực Tế", icon: Activity, color: "text-indigo-500 bg-indigo-500/10" },
     { id: "sec-03", num: "03", label: "Thách Thức Toàn Diện", icon: AlertTriangle, color: "text-rose-500 bg-rose-500/10" },

@@ -369,7 +369,6 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
           onShowToast={showToast} 
           project={project} 
           onBack={onBack} 
-          onListenPostcard={() => jumpToSection("sec-podcast")} 
         />
         
         {viewMode === "mindmap" && (

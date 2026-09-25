@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection, industrialContainerVariants, industrialSubSectionVariants } from "./IndustrialStaggerContainer";
+import { MagneticBentoWrapper } from "./MagneticBentoWrapper";
 import {
   Server,
   Monitor,
@@ -257,9 +258,9 @@ export function Systems() {
   return (
     <section
       id="systems"
-      className="relative w-full h-auto flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none overflow-y-auto no-scrollbar"
     >
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 relative z-10">
+      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start relative z-10">
         
         {/* ========================================================================= */}
         {/* FLOATING ACTION VIDEO POPUP COMPONENT (TOP-RIGHT ABOVE ALL LAYERS) */}
@@ -299,85 +300,88 @@ export function Systems() {
           </button>
         </div>
 
-        {/* Header Card Hệ thống giống tiêu đề thẻ chính trang học vấn */}
-        <IndustrialSubSection hasIndustrialAccent>
-          <PageCardHeader pageId="systems">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-5 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
-              <span className="text-caption text-label font-semibold font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
-                {isVi ? `Hiển thị ${SYSTEMS_DATA.length} hệ thống nền tảng` : `Showing ${SYSTEMS_DATA.length} platform systems`}
-              </span>
-            </div>
-          </PageCardHeader>
-        </IndustrialSubSection>
+        {/* Header Card Hệ thống giống tiêu đề thẻ chính */}
+        <PageCardHeader pageId="systems" />
 
         {/* ========================================================================= */}
-        {/* 12 SYSTEMS BENTO GRID: COMPACT FLUID HEIGHTS & ELEGANT GRADIENTS */}
+        {/* 12 SYSTEMS BENTO GRID: COMPACT EQUAL-HEIGHT CARDS & ELEGANT GRADIENTS     */}
+        {/* [MẪU ÁP DỤNG 16: ĐỒNG BỘ CÙNG GIAO DIỆN ĐANG CHỌN & CHIỀU CAO BẰNG NHAU]   */}
+        {/* Outer radius: 24px (rounded-[24px]), padding: 16px (p-4)                 */}
+        {/* Inner element radius = 24px - 16px = 8px (rounded-[8px])                */}
+        {/* Equal height: h-[126px] sm:h-[130px] & grid auto-rows-fr items-stretch    */}
         {/* ========================================================================= */}
         <IndustrialSubSection>
-          <AnimatePresence mode="popLayout">
-            <motion.div 
-              layout
-              variants={industrialContainerVariants}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full items-stretch"
-            >
+          <div className="w-full rounded-[24px] p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-lg">
+            <AnimatePresence mode="popLayout">
+              <motion.div 
+                layout
+                variants={industrialContainerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full auto-rows-fr items-stretch"
+              >
               {SYSTEMS_DATA.map((item, idx) => {
                 const IconComponent = item.icon;
                 const WatermarkComponent = item.watermarkIcon;
 
                 return (
-                  <motion.article
-                    key={item.id}
-                    layout
-                    variants={industrialSubSectionVariants}
-                    onClick={() => handleCardClick(item.url, isVi ? item.nameVi : item.nameEn)}
-                    onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
-                    style={{ borderRadius: "var(--radius-card, 16px)" }}
-                    className={cn(
-                      "group cursor-pointer relative overflow-hidden px-3.5 py-2.5 sm:px-4 sm:py-3 text-white flex flex-col justify-between min-h-[95px] h-full shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/20 dark:border-slate-800/60 bg-gradient-to-br",
-                      item.gradientClass
-                    )}
-                  >
-                  {/* Watermark Floating Back Icon */}
-                  <div className="absolute -right-2 -bottom-2 text-[3rem] opacity-10 group-hover:opacity-20 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out">
-                    <WatermarkComponent className="w-14 h-14 stroke-[1.2]" />
-                  </div>
-
-                  {/* Standard Content Surface wrapping */}
-                  <div className="relative z-10 flex-1 flex flex-col justify-between gap-1.5 w-full">
-                    
-                    {/* Dòng 1 : Tên hệ thống (Tiêu đề card cấp 7) */}
-                    <div className="w-full text-left">
-                      <p className="text-xs font-semibold text-white/90 tracking-wide leading-snug truncate drop-shadow-2xs">
-                        {isVi ? item.nameVi : item.nameEn}
-                      </p>
+                  <MagneticBentoWrapper key={item.id} className="h-full w-full">
+                    <motion.article
+                      layout
+                      variants={industrialSubSectionVariants}
+                      onClick={() => handleCardClick(item.url, isVi ? item.nameVi : item.nameEn)}
+                      onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
+                      style={{ borderRadius: "24px" }}
+                      className={cn(
+                        "group cursor-pointer relative overflow-hidden p-3.5 sm:p-4 flex flex-col justify-between h-[126px] sm:h-[130px] min-h-[126px] sm:min-h-[130px] w-full shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-[24px] text-slate-900 dark:text-white hover:border-indigo-400/60 dark:hover:border-indigo-500/60"
+                      )}
+                    >
+                    {/* Watermark Floating Back Icon */}
+                    <div className="absolute -right-2 -bottom-2 text-[3rem] opacity-10 dark:opacity-15 group-hover:opacity-25 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out text-indigo-600 dark:text-indigo-400">
+                      <WatermarkComponent className="w-14 h-14 stroke-[1.2]" />
                     </div>
 
-                    {/* Dòng 2 : Bên trái chữ viết tắt , bên phải icon (Kích thước H3) */}
-                    <div className="flex items-center justify-between gap-2 my-0.5">
-                      <h3 className="text-xl sm:text-2xl font-black tracking-wider text-white drop-shadow-sm font-mono select-none leading-none">
-                        {item.code}
-                      </h3>
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/20 dark:bg-white/15 backdrop-blur-md border border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.35)] flex items-center justify-center text-white transform group-hover:scale-110 group-hover:shadow-[0_0_22px_rgba(255,255,255,0.6)] group-hover:bg-white/30 transition-all duration-300 shrink-0">
-                        <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] drop-shadow-md" />
+                    {/* Standard Content Surface wrapping */}
+                    <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
+                      
+                      {/* Dòng 1 : Tên hệ thống (Tiêu đề card cấp 7) */}
+                      <div className="w-full text-left">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 tracking-wide leading-snug truncate">
+                          {isVi ? item.nameVi : item.nameEn}
+                        </p>
                       </div>
-                    </div>
 
-                    {/* Dòng 3 : Tên tiếng anh đầy đủ (Tiêu đề card cấp 7) */}
-                    <div className="w-full text-left pt-0.5 border-t border-white/15">
-                      <p className="text-[11px] text-white/80 font-medium italic tracking-tight leading-tight truncate">
-                        {item.nameEn}
-                      </p>
-                    </div>
+                      {/* Dòng 2 : Bên trái chữ viết tắt , bên phải icon (Kích thước H3) */}
+                      <div className="flex items-center justify-between gap-2 my-auto">
+                        <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
+                          {item.code}
+                        </h3>
+                        <div 
+                          style={{ borderRadius: "8px" }}
+                          className={cn(
+                            "w-9 h-9 sm:w-10 sm:h-10 rounded-[8px] bg-gradient-to-br text-white shadow-md flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shrink-0",
+                            item.gradientClass
+                          )}
+                        >
+                          <IconComponent className="w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[2.2] drop-shadow-sm text-white" />
+                        </div>
+                      </div>
 
-                  </div>
-                </motion.article>
+                      {/* Dòng 3 : Tên tiếng anh đầy đủ (Tiêu đề card cấp 7) */}
+                      <div className="w-full text-left pt-1 border-t border-slate-200/60 dark:border-slate-800 mt-auto">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate">
+                          {item.nameEn}
+                        </p>
+                      </div>
+
+                    </div>
+                  </motion.article>
+                </MagneticBentoWrapper>
               );
             })}
           </motion.div>
           </AnimatePresence>
+          </div>
         </IndustrialSubSection>
 
       </div>

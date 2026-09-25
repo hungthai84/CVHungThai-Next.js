@@ -195,7 +195,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
     { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "domains", num: "04", labelVi: "Dịch vụ", labelEn: "Services", Icon: Compass, key: "D" },
+    { id: "domains", num: "04", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass, key: "D" },
     { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
     { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
     { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
@@ -238,14 +238,14 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     }
   };
 
-  // Dedicated clean flat styling for header with no shadows or floating layer effects
+  // Dedicated clean flat styling for header with glassmorphism standard
   const getHeaderContainerStyle = () => {
     switch (theme) {
       case "glass-dark-neon":
-        return "bg-[#090D16]/90 dark:bg-[#090D16]/90 border-b border-x border-t-0 border-white/10 text-white backdrop-blur-[24px]";
+        return "bg-[#121218]/80 dark:bg-[#121218]/80 border-b border-x border-t-0 border-white/12 text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]";
       case "mritech-digital-growth":
       default:
-        return "bg-white/85 dark:bg-slate-900/85 border-b border-x border-t-0 border-slate-200/80 dark:border-white/15 text-slate-900 dark:text-slate-100 backdrop-blur-[28px] dark:backdrop-blur-[35px]";
+        return "bg-white/65 dark:bg-[#121218]/80 border-b border-x border-t-0 border-white/50 dark:border-white/12 text-slate-800 dark:text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]";
     }
   };
 
@@ -317,38 +317,28 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   <a
                     href={`#${item.id}`}
                     onClick={(e) => handleNavClick(e, item.id)}
-                    aria-label={`${item.labelVi} / ${item.labelEn}`}
+                    aria-label={item.label}
                     className="relative z-10 shrink-0"
                   >
                     <span className="icon shrink-0">
-                      <item.Icon className={`w-5 h-5 transition-all duration-300 shrink-0 ${isActive ? 'text-indigo-600 dark:text-cyan-400 scale-110 drop-shadow-md' : 'text-slate-500 dark:text-slate-400 group-hover/nav:text-slate-700 dark:group-hover/nav:text-slate-300'}`} />
+                      <item.Icon 
+                        size={22} 
+                        strokeWidth={2.2} 
+                        className={`w-[22px] h-[22px] transition-all duration-300 shrink-0 group-hover:scale-110 ${isActive ? 'text-indigo-600 dark:text-cyan-400 scale-110 drop-shadow-md' : 'text-slate-500 dark:text-slate-400 group-hover/nav:text-slate-700 dark:group-hover/nav:text-slate-300'}`} 
+                      />
                     </span>
                     <span className={`title shrink-0 transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold drop-shadow-sm' : ''}`}>
-                      <item.Icon className={`w-4 h-4 shrink-0 transition-all duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400' : ''}`} />
+                      <item.Icon 
+                        size={22} 
+                        strokeWidth={2.2} 
+                        className={`w-[22px] h-[22px] shrink-0 transition-all duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400' : ''}`} 
+                      />
                       <span className="shrink-0">{item.label}</span>
                     </span>
                     <span className={`nav-label-bottom transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold' : 'text-slate-600 dark:text-slate-300'}`}>
                       {item.label}
                     </span>
                   </a>
-
-                  {/* Accessibility Bilingual Hover Tooltip (Vietnamese & English) */}
-                  <AnimatePresence>
-                    {isHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.92 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 6, scale: 0.92 }}
-                        transition={{ duration: 0.16, ease: "easeOut" }}
-                        className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-50 pointer-events-none px-3 py-1.5 rounded-xl bg-slate-900/95 dark:bg-slate-950/95 text-white border border-slate-700/80 dark:border-cyan-400/50 shadow-2xl backdrop-blur-xl flex items-center gap-1.5 whitespace-nowrap text-2xs font-mono font-bold tracking-wide"
-                      >
-                        <span className="text-cyan-400 font-bold">{item.labelVi}</span>
-                        <span className="text-slate-500 font-normal">/</span>
-                        <span className="text-amber-300 font-medium">{item.labelEn}</span>
-                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 dark:bg-slate-950 border-t border-l border-slate-700/80 dark:border-cyan-400/50 rotate-45" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </li>
               );
             })}
@@ -547,28 +537,46 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
 
                           {[
                             { 
+                              id: "system", 
+                              label: lang === "vi" ? "Hệ thống (Auto)" : "System (Auto)", 
+                              desc: lang === "vi" ? "Tự động theo cấu hình OS" : "Auto adjust to OS setting", 
+                              Icon: Monitor, 
+                              color: "text-indigo-500 dark:text-cyan-400",
+                              isSystem: true
+                            },
+                            { 
                               id: "mritech-digital-growth", 
-                              label: lang === "vi" ? "Glass MRITECH Digital Growth 🚀" : "MRITECH Digital Growth Glass 🚀", 
-                              desc: lang === "vi" ? "Giao diện Thương hiệu Số: Nền Pearl, Nút Gradient 3 tông (Xanh-Tím-Cam) & Bo góc 24px" : "Digital Brand Theme: Pearl Glass canvas, 3-tone CTA gradient (Blue-Purple-Orange) & 24px Glass", 
-                              Icon: Rocket, 
-                              color: "text-amber-500" 
+                              label: lang === "vi" ? "Sáng (Light)" : "Light Mode", 
+                              desc: lang === "vi" ? "Kính mờ Light Mode sang trọng" : "Modern Light Glass", 
+                              Icon: Sun, 
+                              color: "text-amber-500",
+                              isSystem: false
                             },
                             { 
                               id: "glass-dark-neon", 
-                              label: lang === "vi" ? "Glass Tối Neon (Next Themes)" : "Glass Dark Neon (Next Themes)", 
-                              desc: lang === "vi" ? "Glassmorphism nền tối, neon nổi bật" : "dark Glassmorphism with prominent neon", 
+                              label: lang === "vi" ? "Tối Neon (Dark)" : "Dark Neon", 
+                              desc: lang === "vi" ? "Kính mờ Dark Mode phát sáng Neon" : "Modern Dark Neon", 
                               Icon: Moon, 
-                              color: "text-cyan-400" 
+                              color: "text-cyan-400",
+                              isSystem: false
                             }
                           ].map((tItem) => {
-                            const isSelected = theme === tItem.id;
+                            const isSelected = tItem.isSystem 
+                              ? themeContext.themeMode === "system" 
+                              : (themeContext.themeMode !== "system" && theme === tItem.id);
                             return (
                               <button
                                 key={tItem.id}
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleThemeToggle(tItem.id as ThemeType);
+                                  if (tItem.isSystem) {
+                                    themeContext.setThemeMode("system");
+                                  } else {
+                                    themeContext.setThemeMode(tItem.id === "glass-dark-neon" ? "dark" : "light");
+                                  }
+                                  setIsStackPinned(true);
+                                  setIsThemeDropdownOpen(false);
                                 }}
                                 className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-start gap-2.5 cursor-pointer mb-1 last:mb-0 ${
                                   isSelected

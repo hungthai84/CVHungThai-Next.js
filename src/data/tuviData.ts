@@ -59,52 +59,46 @@ export const TU_VI_PROFILE: TuViProfileInfo = {
   ],
   tabooColors: ["Đỏ", "Hồng", "Cam", "Tím đậm (Hỏa khắc Kim)"],
   luckyNumbers: [6, 7, 2, 8],
-  overviewQuote: "“Giáp Tý 1984 – Hải Trung Kim: Vàng ròng lắng đọng trong lòng biển cả, nội lực thâm sâu, trọng chữ Tín, lấy Tâm làm gốc và kiên định kiến tạo giá trị dài lâu.”",
-  overviewSubQuote: "“Tâm tĩnh như thủy – Trí sáng như kim – Dẫn dắt bằng dữ liệu – Thấu cảm bằng chân tình.”"
+  overviewQuote: "“Giáp Tý 1984 - Hải Trung Kim: Vàng ròng lắng đọng trong lòng biển cả, nội lực thâm sâu, trọng chữ Tín, lấy Tâm làm gốc và kiên định kiến tạo giá trị dài lâu.”",
+  overviewSubQuote: "Trí tuệ - Nhân tâm - Kỷ luật - Phát triển - Thành công bền vững"
 };
 
 export interface ActionPhilosophyCard {
   id: string;
   title: string;
   description: string;
-  iconType: "target" | "trending" | "heart" | "compass" | "zap" | "award";
+  iconType: "target" | "trending" | "heart" | "compass" | "award";
 }
 
 export const ACTION_PHILOSOPHY_CARDS: ActionPhilosophyCard[] = [
   {
     id: "strategy",
     title: "Tư duy bằng chiến lược",
-    description: "Xây dựng tầm nhìn dài hạn, định hình mô hình vận hành bền vững và dự báo chuẩn xác các xu thế chuyển dịch thị trường.",
+    description: "Xây dựng tầm nhìn dài hạn, định hình mô hình vận hành bền vững, nhìn nhận sâu sắc và dự báo chuẩn xác các xu thế chuyển dịch thị trường.",
     iconType: "target"
   },
   {
     id: "data",
     title: "Dẫn dắt bằng dữ liệu",
-    description: "Mọi quyết định, cải tiến và tối ưu hóa quy trình đều dựa trên số liệu thực chứng minh bạch, khách quan và khoa học.",
+    description: "Mọi quyết sách, kế hoạch và điều phối đều dựa trên số liệu thực chứng minh bạch, khoa học, khách quan và chính xác.",
     iconType: "trending"
   },
   {
     id: "heart",
     title: "Thấu cảm bằng trái tim",
-    description: "Đặt trải nghiệm khách hàng và giá trị con người làm trọng tâm, lắng nghe đa chiều và thấu hiểu sâu sắc từng điểm chạm.",
+    description: "Đặt trải nghiệm khách hàng và con người làm trọng tâm, lắng nghe đa chiều và thấu hiểu sâu sắc từng điểm chạm dịch vụ.",
     iconType: "heart"
   },
   {
     id: "truth",
     title: "Lấy chân lý làm gốc",
-    description: "Mọi quyết sách đều dựa trên sự thật khách quan, dữ liệu minh bạch và giá trị đạo đức bền vững.",
+    description: "Mọi quyết định đều dựa trên sự thật khách quan, chính trực, giữ trọn chữ Tín và gìn giữ giá trị đạo đức bền vững.",
     iconType: "compass"
-  },
-  {
-    id: "action",
-    title: "Lấy hành động làm đường",
-    description: "Không dừng lại ở lý thuyết suông; kiên trì thực thi, tối ưu từng quy trình và từng điểm chạm mỗi ngày.",
-    iconType: "zap"
   },
   {
     id: "result",
     title: "Lấy kết quả làm thước đo",
-    description: "Đo lường thành công bằng sự hài lòng của khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve) và sự trưởng thành của đội ngũ.",
+    description: "Đo lường thành công bằng sự hài lòng khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve) và sự trưởng thành của đội ngũ.",
     iconType: "award"
   }
 ];
@@ -123,38 +117,38 @@ export const WORK_PERSONALITY_TRAITS: WorkPersonalityTrait[] = [
   {
     id: "trait-1",
     title: "Điềm đạm, sâu sắc & quan sát toàn cục",
-    subtitle: "Bản chất Hải Trung Kim tĩnh lặng nhưng thâm hậu",
+    subtitle: "Bản chất Hải Trung Kim tĩnh lặng nhưng thâm trầm",
     tag: "Nội Lực Thâm Sâu",
     color: "blue",
-    description: "Không bộc lộ nóng vội ra bên ngoài, người Giáp Tý 1984 luôn lắng nghe, phân tích đa chiều và nhìn nhận toàn cảnh trước khi đưa ra quyết định chiến lược. Phong thái ung dung trước áp lực lớn giúp giữ vững tinh thần cho cả tập thể.",
-    highlights: ["Bình tĩnh trước khủng hoảng", "Tư duy phản biện sắc sảo", "Kiên định với mục tiêu dài hạn"]
+    description: "Không nóng vội bộc lộ ra bên ngoài, người Giáp Tý 1984 luôn lắng nghe, phân tích đa chiều và nhìn nhận toàn cảnh trước khi đưa ra quyết định chiến lược. Phong thái vững vàng, điềm đạm và thấu suốt trong từng tình huống lớn.",
+    highlights: ["Kiên định, phân tích sâu lắng", "Truyền cảm hứng điềm tĩnh", "Khí thần điềm đạm, kiên trì"]
   },
   {
     id: "trait-2",
     title: "Trọng chữ tín, kỷ luật & chuẩn mực cao",
     subtitle: "Chất Kim sắc bén của nhà quản trị chuẩn hóa",
-    tag: "Chính Trực & Tiêu Chuẩn",
+    tag: "Chính Trực & Kỷ Luật",
     color: "purple",
-    description: "Luôn đặt cam kết chất lượng và sự minh bạch lên hàng đầu. Trong công việc, anh đề cao tính kỷ luật, quy chuẩn hóa quy trình (SOP) và chỉ số đo lường hiệu suất (KPI/SLA) rõ ràng, tạo niềm tin tuyệt đối với lãnh đạo và đối tác.",
-    highlights: ["Cam kết trách nhiệm 100%", "Chuẩn hóa quy trình vận hành", "Minh bạch số liệu & báo cáo"]
+    description: "Luôn đề cao chữ Tín, kỷ luật và tuân thủ các chuẩn mực đạo đức trong công việc. Luôn ưu tiên chất lượng, sự ổn định dài hạn và tạo dựng niềm tin bền chặt trong mọi mối quan hệ đối tác.",
+    highlights: ["Cam kết và trách nhiệm 100%", "Chuẩn hóa quy trình vận hành", "Chính trực, công bằng, kỷ luật"]
   },
   {
     id: "trait-3",
     title: "Lãnh đạo thấu cảm & thu phục lòng người",
-    subtitle: "Chi Tý (Thủy) mang lại sự linh hoạt & lắng nghe",
+    subtitle: "Tư duy đồng hành, biết lắng nghe và truyền cảm hứng",
     tag: "Empathetic Leadership",
     color: "emerald",
-    description: "Dù kỷ luật nhưng không cứng nhắc, phong cách điều hành luôn hướng đến con người. Anh coi trọng việc huấn luyện (coaching), truyền cảm hứng, thấu hiểu khó khăn của nhân sự tuyến đầu và xây dựng văn hóa gắn kết bền chặt.",
-    highlights: ["Lắng nghe & đồng cảm", "Đào tạo thế hệ kế thừa", "Tỷ lệ giữ chân nhân sự cao (Low Churn)"]
+    description: "Phong cách điều hành không áp đặt mà lấy sự thấu hiểu làm cầu nối. Dẫn dắt theo hướng đồng hành, nâng đỡ và phát triển năng lực đội ngũ; kiến tạo môi trường tin cậy và gắn kết lâu dài.",
+    highlights: ["Lắng nghe & đồng hành", "Đào tạo phát triển đội ngũ", "Truyền cảm hứng, gắn kết nhân tài"]
   },
   {
     id: "trait-4",
     title: "Tư duy tối ưu & nhạy bén công nghệ",
     subtitle: "Sự kết hợp giữa kinh nghiệm thực chiến và chuyển đổi số",
-    tag: "Tối Ưu Hóa & Đổi Mới",
+    tag: "Tri Thức & Đổi Mới",
     color: "amber",
-    description: "Khả năng nhạy bén phát hiện các điểm nghẽn (bottleneck) trong quy trình, từ đó ứng dụng công nghệ (CRM, AI Bot, Omnichannel) để tự động hóa, tối ưu chi phí vận hành (Cost-to-Serve) và nâng tầm trải nghiệm khách hàng.",
-    highlights: ["Tối ưu Cost-to-Serve", "Ứng dụng AI & Tự động hóa", "Nâng tầm chỉ số CSAT/NPS"]
+    description: "Nhạy bén nhận diện điểm nghẽn quy trình, linh hoạt ứng dụng công nghệ (CRM, AI Automation, Omnichannel) để tối ưu hóa chi phí vận hành (Cost-to-Serve) và nâng tầm trải nghiệm khách hàng.",
+    highlights: ["Tối ưu Cost-to-Serve", "Ứng dụng AI & Tự động hóa", "Mạng lưới & Hệ sinh thái số"]
   }
 ];
 
@@ -174,108 +168,108 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
     id: "menh",
     name: "Cung Mệnh (Tý)",
     branch: "Tý - Thủy",
-    tag: "Bản Mệnh Chi Lực",
-    colorTheme: "purple",
+    tag: "Sao Mệnh: Thất Sát",
+    colorTheme: "rose",
     stars: [
       { name: "Hải Trung Kim", main: true },
-      { name: "Thiên Phủ", main: false },
-      { name: "Hóa Khoa", main: false }
+      { name: "Thất Sát", main: true },
+      { name: "Thiên Phủ", main: false }
     ],
-    description: "Chủ về trí tuệ mưu lược, tư duy nhạy bén và tính cách điềm tĩnh, trọng chữ Tín. Khí chất điềm đạm, có tài quy tụ lòng người và năng lực điều hành tổng thể.",
+    description: "Chủ về trí tuệ, nội lực, tư duy nhạy bén và tính cách điềm tĩnh, trọng chữ Tín. Khí chất điềm đạm, dám nghĩ dám làm, tự cường và luôn hướng đến hành động thực tế.",
     checkpoints: [
-      "Tư duy chiến lược dài hạn",
-      "Chính trực & trọng danh dự",
-      "Điềm đạm trước áp lực lớn"
+      "Thực tế, quyết đoán",
+      "Tư duy chiến lược",
+      "Trí tuệ & chín chắn"
     ]
   },
   {
     id: "quan-loc",
     name: "Cung Quan Lộc (Thìn)",
     branch: "Thìn - Thổ",
-    tag: "Sự Nghiệp Vận Hành",
-    colorTheme: "emerald",
+    tag: "Sự nghiệp: Văn Khúc",
+    colorTheme: "amber",
     stars: [
-      { name: "Thái Âm", main: true },
-      { name: "Văn Xương", main: false },
+      { name: "Văn Khúc", main: true },
+      { name: "Thái Âm", main: false },
       { name: "Thiên Khôi", main: false }
     ],
-    description: "Sự nghiệp gắn liền với quản trị hệ thống, dịch vụ quy mô lớn, công nghệ và chuyển đổi số. Càng dấn thân phụng sự khách hàng càng tỏa sáng rực rỡ.",
+    description: "Sự nghiệp gắn liền với quản trị hệ thống, dịch vụ và kiến tạo giá trị mới. Càng đào sâu chuyên môn càng thăng tiến, phù hợp vai trò lãnh đạo, cố vấn và điều hành.",
     checkpoints: [
-      "Vận hành Contact Center 150+",
-      "Kiến trúc CRM & AI Bot",
-      "22 năm cống hiến thực chiến"
+      "Hiệu quả Cost-to-Serve",
+      "Tài chính & vận hành",
+      "Phát triển con người"
     ]
   },
   {
     id: "tai-bach",
     name: "Cung Tài Bạch (Thân)",
     branch: "Thân - Kim",
-    tag: "Tài Lộc Thực Chiến",
-    colorTheme: "teal",
+    tag: "Tài Lộc Thực Kiến",
+    colorTheme: "emerald",
     stars: [
       { name: "Thiên Đồng", main: true },
-      { name: "Lộc Tồn", main: false },
+      { name: "Lộc Tồn", main: true },
       { name: "Hóa Lộc", main: false }
     ],
-    description: "Tài lộc cộng chắc từ năng lực điều hành thực chiến và tối ưu hóa chi phí vận hành (Cost-to-Serve), tạo ra giá trị thặng dư bền vững cho tổ chức.",
+    description: "Tài lộc tăng trưởng bền vững từ năng lực điều hành thực chiến và tối ưu hóa vận hành (Cost-to-Serve), tạo ra giá trị thặng dư dài hạn cho doanh nghiệp.",
     checkpoints: [
-      "Tối ưu chi phí vận hành",
-      "Quản trị ngân sách minh bạch",
-      "Đầu tư giá trị bền vững"
+      "Tài chính bền vững",
+      "Đầu tư dài hạn",
+      "Tăng trưởng ổn định"
     ]
   },
   {
     id: "thien-di",
     name: "Cung Thiên Di (Ngọ)",
     branch: "Ngọ - Hỏa",
-    tag: "Ngoại Giao & Mở Rộng",
+    tag: "Ngoại giao: Quý Nhân",
     colorTheme: "blue",
     stars: [
-      { name: "Thất Sát", main: true },
-      { name: "Thiên Mã", main: false },
-      { name: "Quý Nhân", main: false }
+      { name: "Thiên Mã", main: true },
+      { name: "Quý Nhân", main: true },
+      { name: "Hóa Quyền", main: false }
     ],
-    description: "Ra ngoài có nhiều quý nhân tương trợ, thích ứng nhanh với môi trường đa văn hóa, tập đoàn đa quốc gia và các thị trường công nghệ chuyển biến liên tục.",
+    description: "Ra ngoài có nhiều quý nhân tương trợ, thích ứng nhanh với môi trường đa văn hóa, tập đoàn đa quốc gia và thị trường công nghệ chuyển biến liên tục.",
     checkpoints: [
-      "Hòa nhập tập đoàn lớn",
+      "Hòa nhập quốc tế",
       "Kết nối đối tác chiến lược",
-      "Linh hoạt ứng biến thời cuộc"
+      "Mở rộng thị trường"
     ]
   },
   {
     id: "no-boc",
     name: "Cung Nô Bộc (Tỵ)",
     branch: "Tỵ - Hỏa",
-    tag: "Đội Ngũ Nhân Sự",
-    colorTheme: "amber",
+    tag: "Đồng Đội: Tả Phù - Hữu Bật",
+    colorTheme: "purple",
     stars: [
+      { name: "Phá Quân", main: true },
       { name: "Tả Phù", main: true },
-      { name: "Hữu Bật", main: false },
-      { name: "Thiên Đức", main: false }
+      { name: "Hữu Bật", main: false }
     ],
-    description: "Đội ngũ cấp dưới đoàn kết, tôn trọng kỷ luật và luôn được truyền cảm hứng qua phong cách lãnh đạo thấu cảm (Empathetic Leadership).",
+    description: "Đội ngũ gắn bó, đoàn kết, tương trợ lẫn nhau hiệu quả. Tinh thần cộng tác cao, cạnh tranh lành mạnh và cùng hướng tới mục tiêu chung.",
     checkpoints: [
-      "Lãnh đạo truyền cảm hứng",
-      "Đào tạo đội ngũ kế thừa",
-      "Giữ chân nhân tài (Low Churn)"
+      "Đồng đội vững mạnh",
+      "Hợp tác chiến lược",
+      "Phát triển bền vững"
     ]
   },
   {
     id: "phuc-duc",
     name: "Cung Phúc Đức (Dần)",
     branch: "Dần - Mộc",
-    tag: "Phúc Khí & Đạo Tâm",
+    tag: "Phúc Khí: Thiên Phúc",
     colorTheme: "rose",
     stars: [
       { name: "Thiên Phúc", main: true },
-      { name: "Thiên Quan", main: false },
+      { name: "Hoa Tinh", main: false },
       { name: "Long Trì", main: false }
     ],
-    description: "Gốc rễ phúc đức vững bền, tâm niệm luôn đặt đạo đức nghề nghiệp và lòng nhân ái lên hàng đầu. Biến nguy thành an qua mọi giai đoạn thử thách.",
+    description: "Gốc rễ phúc đức vững bền, tâm hồn an lạc, luôn hành thiện và giữ tâm sáng. Vận thế hanh thông, biến nguy thành an qua mọi giai đoạn thử thách.",
     checkpoints: [
-      "Tâm sáng – Vận thông",
-      "Bình diện trước biến động",
-      "Lan tỏa năng lượng tích cực"
+      "Tâm an trí sáng",
+      "Hướng thiện & nhân ái",
+      "Phúc đức bền lâu"
     ]
   }
 ];
@@ -293,54 +287,54 @@ export interface FiveElementGovernance {
 
 export const FIVE_ELEMENTS_GOVERNANCE: FiveElementGovernance[] = [
   {
-    element: "Kim (Bản mệnh)",
-    role: "Quy chuẩn & Kỷ luật",
-    subtitle: "Quy trình & Tiêu chuẩn (SOP/KPI)",
-    bgColor: "bg-amber-50 dark:bg-amber-950/30",
-    borderColor: "border-amber-200/80 dark:border-amber-700/50",
+    element: "Kim (Lãnh đạo)",
+    role: "Lãnh đạo",
+    subtitle: "Kim (Lãnh đạo)",
+    bgColor: "bg-amber-50/70 dark:bg-amber-950/30",
+    borderColor: "border-amber-200 dark:border-amber-700/50",
     iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
     titleColor: "text-amber-800 dark:text-amber-300",
-    desc: "Nền tảng cho kỷ luật, tính chuẩn mực, hệ thống quy trình SOP sắc bén và chỉ số đo lường KPI/SLA rõ ràng, minh bạch."
+    desc: "Quy trình, tiêu chuẩn (SOP/KPI)"
   },
   {
-    element: "Thủy (Tương sinh)",
-    role: "Dòng chảy & Kết nối",
-    subtitle: "Dữ liệu & Công nghệ AI Omnichannel",
-    bgColor: "bg-sky-50 dark:bg-sky-950/30",
-    borderColor: "border-sky-200/80 dark:border-sky-700/50",
+    element: "Thủy (Công nghệ)",
+    role: "Công nghệ",
+    subtitle: "Thủy (Công nghệ)",
+    bgColor: "bg-sky-50/70 dark:bg-sky-950/30",
+    borderColor: "border-sky-200 dark:border-sky-700/50",
     iconBg: "bg-sky-500/15 text-sky-600 dark:text-sky-400",
     titleColor: "text-sky-800 dark:text-sky-300",
-    desc: "Thủy biểu trưng cho dòng chảy dữ liệu CRM, hệ thống AI Chatbot tự động và khả năng giao tiếp lắng nghe khách hàng linh hoạt, mềm mại."
+    desc: "Dữ liệu & Công nghệ AI (Omnichannel)"
   },
   {
-    element: "Mộc (Sinh sôi)",
-    role: "Phát triển Con người",
-    subtitle: "Đào tạo & Nuôi dưỡng Nhân tài",
-    bgColor: "bg-emerald-50 dark:bg-emerald-950/30",
-    borderColor: "border-emerald-200/80 dark:border-emerald-700/50",
+    element: "Mộc (Tăng trưởng)",
+    role: "Tăng trưởng",
+    subtitle: "Mộc (Tăng trưởng)",
+    bgColor: "bg-emerald-50/70 dark:bg-emerald-950/30",
+    borderColor: "border-emerald-200 dark:border-emerald-700/50",
     iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
     titleColor: "text-emerald-800 dark:text-emerald-300",
-    desc: "Mộc nuôi dưỡng sự trưởng thành các đội ngũ nhân sự, kiến tạo văn hóa học tập suốt đời và bồi dưỡng các thế hệ quản lý kế thừa."
+    desc: "Phát triển & mở rộng thị trường"
   },
   {
     element: "Hỏa (Nhiệt huyết)",
-    role: "Trải nghiệm & Khát vọng",
-    subtitle: "Trải nghiệm Khách hàng Vượt trội (CX)",
-    bgColor: "bg-rose-50 dark:bg-rose-950/30",
-    borderColor: "border-rose-200/80 dark:border-rose-700/50",
+    role: "Nhiệt huyết",
+    subtitle: "Hỏa (Nhiệt huyết)",
+    bgColor: "bg-rose-50/70 dark:bg-rose-950/30",
+    borderColor: "border-rose-200 dark:border-rose-700/50",
     iconBg: "bg-rose-500/15 text-rose-600 dark:text-rose-400",
     titleColor: "text-rose-800 dark:text-rose-300",
-    desc: "Hỏa truyền lửa tận tâm, sự ấm áp chân thành trong từng điểm chạm dịch vụ và khát vọng phụng sự nâng tầm thương hiệu."
+    desc: "Truyền cảm hứng, Văn hóa (Đào tạo/Coach)"
   },
   {
-    element: "Thổ (Nền móng)",
-    role: "Hạ tầng & An toàn",
-    subtitle: "Hạ tầng & Giá trị Bền vững",
-    bgColor: "bg-amber-50/60 dark:bg-amber-950/20",
-    borderColor: "border-amber-300/60 dark:border-amber-800/40",
-    iconBg: "bg-amber-600/15 text-amber-700 dark:text-amber-300",
-    titleColor: "text-amber-900 dark:text-amber-200",
-    desc: "Thổ là bệ đỡ hạ tầng vững chắc, cơ sở dữ liệu an toàn bảo mật và nền móng vận hành doanh nghiệp không lay chuyển."
+    element: "Thổ (Vận hành)",
+    role: "Vận hành",
+    subtitle: "Thổ (Vận hành)",
+    bgColor: "bg-yellow-50/70 dark:bg-yellow-950/30",
+    borderColor: "border-yellow-200 dark:border-yellow-700/50",
+    iconBg: "bg-yellow-500/15 text-yellow-600 dark:text-yellow-400",
+    titleColor: "text-yellow-800 dark:text-yellow-300",
+    desc: "Hệ thống & Cơ sở tầng (Chuỗi cung ứng)"
   }
 ];
 
@@ -479,12 +473,12 @@ export const ZODIAC_SYNERGY_LIST: ZodiacSynergyItem[] = [
     icon: "🐵",
     score: "92% - 96%",
     tier: "best",
-    tierLabelVi: "Tam Hợp Đỉnh Cao",
+    tierLabelVi: "Tam Hợp Bình Cực",
     relationshipVi: "Tam Hợp (Thân - Tý - Thìn)",
-    years: "1968, 1980, 1992, 2004, 2016",
-    workplaceFitVi: "Trung tâm Omnichannel & Công nghệ AI Automation",
+    years: "1964, 1988, 1992, 2004, 2016",
+    workplaceFitVi: "Định hướng - Hành Trình Automation",
     deskDirectionVi: "Hướng Tây Bắc (Sinh Khí)",
-    workplaceAdviceVi: "Đỉnh cao hợp tác công sở! Thân linh hoạt, nhạy bén công nghệ kết hợp với Tý sâu sắc, mưu lược tạo nên bộ đôi vận hành và bứt phá doanh số lý tưởng nhất."
+    workplaceAdviceVi: "Đây là các năm phù hợp, có lợi về quan hệ và phát triển. Nên hợp tác để tăng cường hiệu quả, xây dựng đội nhóm, tận dụng thế mạnh."
   },
   {
     id: "dau",

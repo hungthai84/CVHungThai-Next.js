@@ -1509,7 +1509,7 @@ export default function Education() {
       {/* Content Area Học Vấn */}
       {/* DẠNG VIEW THẺ NHƯ CARD (DESKTOP: 4 CỘT, DƯỚI DESKTOP: 3 CỘT - FLUID GRID) */}
       {viewMode === "grid" && (
-        <div id="card-education-list-content" className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4">
           {/* Header Card Học vấn (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
           <PageCardHeader pageId="education">
             {/* Cụm trái: Số lượng học phần */}

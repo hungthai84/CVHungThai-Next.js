@@ -25,20 +25,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&subset=latin,vietnamese&display=swap" rel="stylesheet" />
       </head>
       <body suppressHydrationWarning>
-        <NextThemeProvider
-          attribute="class"
-          defaultTheme="glass-dark-neon"
-          themes={['glass-dark-neon', 'mritech-digital-growth', 'fintech-soft-glass', 'modern-light-glass']}
-          value={{
-            'glass-dark-neon': 'dark',
-            'mritech-digital-growth': 'theme-mritech-digital-growth',
-            'fintech-soft-glass': 'theme-fintech-soft-glass',
-            'modern-light-glass': 'light',
-          }}
-          storageKey="portfolio_theme"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
+        <NextThemeProvider>
           {children}
         </NextThemeProvider>
       </body>

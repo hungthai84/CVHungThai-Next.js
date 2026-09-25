@@ -1,6 +1,5 @@
 import React from "react";
 import { CaseStudy1_1_Tools } from "./CaseStudy1_1_Tools";
-import { CaseStudy1_1_Podcast } from "./CaseStudy1_1_Podcast";
 import { 
   FolderKanban, 
   Layers, 
@@ -75,9 +74,6 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
 
     return (
       <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 bg-transparent">
-        {/* 00 · BÀI VIẾT PODCAST & POSTCARD AUDIO */}
-        <CaseStudy1_1_Podcast project={project} />
-
         {/* 01 · Tổng quan dự án & EXECUTIVE OVERVIEW */}
         <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
           <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
@@ -399,9 +395,6 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
   // Static Case Study 1.1 Content
   return (
     <div id="article-section" className="space-y-4 flex flex-col gap-4.5 bg-transparent select-none">
-        {/* 00 · BÀI VIẾT PODCAST & POSTCARD AUDIO */}
-        <CaseStudy1_1_Podcast project={project} />
-
         {/* 01 · TỔNG QUAN DỰ ÁN */}
         <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-gradient-to-br from-sky-500/10 via-blue-500/5 to-transparent dark:from-sky-950/40 dark:via-slate-900/90 dark:to-slate-900 border-2 border-sky-300/80 dark:border-sky-700/80 shadow-lg hover:shadow-sky-500/10 space-y-4 transition duration-300 backdrop-blur-md">
           <div className="flex items-center space-x-3 border-b border-sky-200/90 dark:border-sky-800/80 pb-3.5 sm:pb-4">

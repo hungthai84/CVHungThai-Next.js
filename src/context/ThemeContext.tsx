@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useTheme as useNextTheme } from "next-themes";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 
 export const THEMES = [
   "glass-dark-neon",
@@ -7,6 +6,7 @@ export const THEMES = [
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
+export type ThemeMode = "light" | "dark" | "system";
 
 export interface ColorTokenItem {
   id: string;
@@ -571,6 +571,9 @@ export interface ThemeContextType {
   resetBorderRadius: () => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  resolvedTheme: "light" | "dark";
   colorPreset: string;
   setColorPreset: (presetId: string) => void;
   activePalette: ColorTokenItem[];
@@ -664,12 +667,12 @@ export function getAutoContrastForeground(bgHex: string): {
 
 const THEME_STORAGE_KEY = "portfolio_theme";
 const OLD_THEME_PREF_KEY = "portfolio_theme_pref";
+const THEME_MODE_STORAGE_KEY = "portfolio_theme_mode";
 const COLOR_PRESET_STORAGE_KEY = "portfolio_color_preset";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const nextThemeContext = useNextTheme();
   const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
   const [themeSnapshot, setThemeSnapshot] = useState<string | null>(null);
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
@@ -680,9 +683,57 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const openTypographyModal = () => setIsTypographyModalOpen(true);
   const closeTypographyModal = () => setIsTypographyModalOpen(false);
 
+  // 1. Theme Mode State (light | dark | system)
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
+    try {
+      const savedMode = typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_MODE_STORAGE_KEY) : null;
+      if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
+        return savedMode;
+      }
+    } catch {}
+    return "system";
+  });
+
+  const getResolvedThemeName = (mode: ThemeMode): ThemeType => {
+    if (mode === "dark") return "glass-dark-neon";
+    if (mode === "light") return "mritech-digital-growth";
+    // System Mode: Detect OS preference
+    if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "glass-dark-neon";
+    }
+    return "mritech-digital-growth";
+  };
+
+  // 2. Theme State
+  const [theme, setThemeState] = useState<ThemeType>(() => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const savedMode = localStorage.getItem(THEME_MODE_STORAGE_KEY);
+        if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
+          return getResolvedThemeName(savedMode as ThemeMode);
+        }
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme && THEMES.includes(savedTheme as ThemeType)) {
+          return savedTheme as ThemeType;
+        }
+      }
+    } catch {}
+    return getResolvedThemeName("system");
+  });
+
+  // 3. Color Preset State
+  const [colorPreset, setColorPresetState] = useState<string>(() => {
+    try {
+      return (typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null) || "default";
+    } catch {
+      return "default";
+    }
+  });
+
+  // 4. Font Scale & Border Radius State
   const [fontScale, setFontScaleState] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem("portfolio_font_scale");
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_font_scale") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
     } catch {}
     return 100;
@@ -690,16 +741,16 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const [borderRadius, setBorderRadiusState] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem("portfolio_border_radius");
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
     } catch {}
     return 10;
   });
 
+  // DOM mutation helpers
   const applyRadiusToDom = (radius: number) => {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
-      // Core Theme Radii
       root.style.setProperty("--theme-radius", `${radius}px`);
       root.style.setProperty("--theme-radius-card", `${radius}px`);
       root.style.setProperty("--theme-radius-container", `${radius}px`);
@@ -709,7 +760,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty("--theme-radius-input", `${Math.max(6, radius)}px`);
       root.style.setProperty("--theme-radius-badge", `${Math.max(4, radius - 4)}px`);
       
-      // Step Scale Radii
       root.style.setProperty("--theme-radius-xs", `${Math.max(2, radius - 8)}px`);
       root.style.setProperty("--theme-radius-sm", `${Math.max(2, radius - 6)}px`);
       root.style.setProperty("--theme-radius-md", `${Math.max(4, radius - 4)}px`);
@@ -718,7 +768,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty("--theme-radius-2xl", `${radius}px`);
       root.style.setProperty("--theme-radius-3xl", `${Math.min(36, radius + 4)}px`);
 
-      // Tailwind & Token Overrides
       root.style.setProperty("--radius", `${radius}px`);
       root.style.setProperty("--radius-xs", `${Math.max(2, radius - 8)}px`);
       root.style.setProperty("--radius-sm", `${Math.max(2, radius - 6)}px`);
@@ -729,7 +778,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty("--radius-3xl", `${Math.min(36, radius + 4)}px`);
       root.style.setProperty("--radius-4xl", `${Math.min(40, radius + 6)}px`);
 
-      // Semantic Component Radii
       root.style.setProperty("--radius-card", `${radius}px`);
       root.style.setProperty("--radius-button", `${Math.max(6, radius)}px`);
       root.style.setProperty("--radius-small-card", `${Math.max(4, radius - 2)}px`);
@@ -739,92 +787,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const setBorderRadius = (radius: number) => {
-    const clamped = Math.max(0, Math.min(28, radius));
-    setBorderRadiusState(clamped);
-    try {
-      localStorage.setItem("portfolio_border_radius", clamped.toString());
-    } catch {}
-    applyRadiusToDom(clamped);
-  };
-
-  const resetBorderRadius = () => {
-    setBorderRadius(10);
-  };
-
-  useEffect(() => {
-    applyRadiusToDom(borderRadius);
-  }, [borderRadius]);
-
-  const setFontScale = (scale: number) => {
-    setFontScaleState(scale);
-    try {
-      localStorage.setItem("portfolio_font_scale", scale.toString());
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.fontSize = `${16 * (scale / 100)}px`;
-      }
-    } catch {}
-  };
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.style.fontSize = `${16 * (fontScale / 100)}px`;
-    }
-  }, [fontScale]);
-
-  const [theme, setThemeState] = useState<ThemeType>(() => {
-    try {
-      // 1. Check master prompt storage key 'portfolio_theme'
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-      if (savedTheme) {
-        if (THEMES.includes(savedTheme as ThemeType)) {
-          return savedTheme as ThemeType;
-        }
-        if (savedTheme === "modern-light-glass" || savedTheme === "mritech-aurora-glass") {
-          localStorage.setItem(THEME_STORAGE_KEY, "mritech-digital-growth");
-          return "mritech-digital-growth";
-        }
-      }
-
-      // 2. Otherwise, check for legacy values and perform precise migration
-      const legacyThemeVal = localStorage.getItem("theme");
-      const legacyPrefVal = localStorage.getItem(OLD_THEME_PREF_KEY);
-
-      // light -> mritech-digital-growth
-      if (legacyThemeVal === "light" || legacyThemeVal === "flat-light") {
-        localStorage.setItem(THEME_STORAGE_KEY, "mritech-digital-growth");
-        return "mritech-digital-growth";
-      }
-
-      // dark + portfolio_theme_pref = ...
-      if (legacyThemeVal === "dark" || legacyThemeVal === "flat-dark") {
-        if (legacyPrefVal && THEMES.includes(legacyPrefVal as ThemeType)) {
-          localStorage.setItem(THEME_STORAGE_KEY, legacyPrefVal);
-          return legacyPrefVal as ThemeType;
-        }
-        localStorage.setItem(THEME_STORAGE_KEY, "glass-dark-neon");
-        return "glass-dark-neon";
-      }
-
-      // If legacyPrefVal exists without legacyThemeVal
-      if (legacyPrefVal && THEMES.includes(legacyPrefVal as ThemeType)) {
-        localStorage.setItem(THEME_STORAGE_KEY, legacyPrefVal);
-        return legacyPrefVal as ThemeType;
-      }
-
-      // 3. System preference fallback or default
-      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        localStorage.setItem(THEME_STORAGE_KEY, "glass-dark-neon");
-        return "glass-dark-neon";
-      }
-    } catch (e) {
-      // ignore
-    }
-    return "glass-dark-neon";
-  });
-
-  // Apply theme classes to root
   const applyThemeToDOM = (themeName: ThemeType) => {
+    if (typeof document === 'undefined') return;
     const root = document.documentElement;
     root.classList.remove(
       "dark", 
@@ -841,8 +805,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       "theme-flat-dark"
     );
     
-    // Set data-theme attribute to the exact theme name for CSS selector matching
     root.setAttribute("data-theme", themeName);
+    root.setAttribute("data-theme-mode", themeMode);
     
     if (themeName === "glass-dark-neon") {
       root.classList.add("dark", `theme-${themeName}`);
@@ -851,15 +815,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const [colorPreset, setColorPresetState] = useState<string>(() => {
-    try {
-      return localStorage.getItem("portfolio_color_preset") || "default";
-    } catch {
-      return "default";
-    }
-  });
-
   const applyColorsToDOM = (themeName: ThemeType, presetId: string) => {
+    if (typeof document === 'undefined') return;
     const root = document.documentElement;
 
     const preset = COLOR_PRESETS.find((p) => p.id === presetId) || COLOR_PRESETS[0];
@@ -881,7 +838,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.style.setProperty("--color-highlight-rgb", colors.highlightRgb);
     root.style.setProperty("--color-soft-rgb", colors.softRgb);
 
-    // Dynamic WCAG auto-contrast check for buttons & interactive elements
     const primaryContrast = getAutoContrastForeground(colors.primary);
     const secondaryContrast = getAutoContrastForeground(colors.secondary);
 
@@ -895,17 +851,157 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.style.setProperty("--secondary-foreground", secondaryContrast.fgColor);
   };
 
+  const captureSnapshot = async (): Promise<string | null> => {
+    try {
+      const html2canvasModule = await import("html2canvas");
+      const html2canvas = (html2canvasModule.default || html2canvasModule) as any;
+      const canvas = await html2canvas(document.body, {
+        scale: Math.min(window.devicePixelRatio || 1, 1.25),
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+      });
+      return canvas.toDataURL("image/webp", 0.85);
+    } catch {
+      return null;
+    }
+  };
+
+  const safeStartViewTransition = (callback: () => void) => {
+    if (typeof document !== "undefined" && typeof (document as any).startViewTransition === "function") {
+      try {
+        const transition = (document as any).startViewTransition(() => {
+          try {
+            callback();
+          } catch (e) {
+            console.error("View transition callback error", e);
+          }
+        });
+
+        if (transition) {
+          if (typeof transition.ready?.catch === "function") {
+            transition.ready.catch(() => {});
+          }
+          if (typeof transition.finished?.catch === "function") {
+            transition.finished.catch(() => {});
+          }
+          if (typeof transition.updateCallbackDone?.catch === "function") {
+            transition.updateCallbackDone.catch(() => {});
+          }
+        }
+      } catch {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
+  const setTheme = async (newTheme: ThemeType) => {
+    if (newTheme === theme) return;
+
+    setIsThemeTransitioning(true);
+
+    const snapshotUrl = await captureSnapshot();
+    if (snapshotUrl) {
+      setThemeSnapshot(snapshotUrl);
+    }
+
+    const executeThemeChange = () => {
+      setThemeState(newTheme);
+      applyThemeToDOM(newTheme);
+      applyColorsToDOM(newTheme, colorPreset);
+
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+        localStorage.setItem("theme", newTheme);
+        localStorage.setItem(OLD_THEME_PREF_KEY, newTheme);
+      } catch (e) {
+        console.error("Failed to save theme preference", e);
+      }
+    };
+
+    safeStartViewTransition(executeThemeChange);
+
+    setTimeout(() => {
+      setIsThemeTransitioning(false);
+      setThemeSnapshot(null);
+    }, 450);
+  };
+
   const setColorPreset = (presetId: string) => {
     setColorPresetState(presetId);
     try {
-      localStorage.setItem("portfolio_color_preset", presetId);
+      localStorage.setItem(COLOR_PRESET_STORAGE_KEY, presetId);
     } catch (e) {
       console.error("Failed to save color preset", e);
     }
     applyColorsToDOM(theme, presetId);
   };
 
-  // Get active 5 tokens for components
+  const handleSetColorPreset = async (presetId: string) => {
+    if (presetId === colorPreset) return;
+
+    setIsThemeTransitioning(true);
+    const snapshotUrl = await captureSnapshot();
+    if (snapshotUrl) {
+      setThemeSnapshot(snapshotUrl);
+    }
+
+    const executePresetChange = () => {
+      setColorPreset(presetId);
+    };
+
+    safeStartViewTransition(executePresetChange);
+
+    setTimeout(() => {
+      setIsThemeTransitioning(false);
+      setThemeSnapshot(null);
+    }, 450);
+  };
+
+  const setThemeMode = async (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    try {
+      localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
+    } catch {}
+
+    const resolved = getResolvedThemeName(mode);
+    if (resolved !== theme) {
+      await setTheme(resolved);
+    } else {
+      applyThemeToDOM(resolved);
+      applyColorsToDOM(resolved, colorPreset);
+    }
+  };
+
+  const setBorderRadius = (radius: number) => {
+    const clamped = Math.max(0, Math.min(28, radius));
+    setBorderRadiusState(clamped);
+    try {
+      localStorage.setItem("portfolio_border_radius", clamped.toString());
+    } catch {}
+    applyRadiusToDom(clamped);
+  };
+
+  const resetBorderRadius = () => {
+    setBorderRadius(10);
+  };
+
+  const setFontScale = (scale: number) => {
+    setFontScaleState(scale);
+    try {
+      localStorage.setItem("portfolio_font_scale", scale.toString());
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.fontSize = `${16 * (scale / 100)}px`;
+      }
+    } catch {}
+  };
+
+  const resolvedTheme: "light" | "dark" = theme === "glass-dark-neon" ? "dark" : "light";
+
+  // Active color token list calculation
   const selectedPresetObj = COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0];
   const isDark = theme === "glass-dark-neon";
   const activeColorSet = isDark ? selectedPresetObj.dark : selectedPresetObj.light;
@@ -984,119 +1080,16 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   ];
 
-  const captureSnapshot = async (): Promise<string | null> => {
-    try {
-      const html2canvasModule = await import("html2canvas");
-      const html2canvas = (html2canvasModule.default || html2canvasModule) as any;
-      const canvas = await html2canvas(document.body, {
-        scale: Math.min(window.devicePixelRatio || 1, 1.25),
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-      });
-      return canvas.toDataURL("image/webp", 0.85);
-    } catch {
-      return null;
+  // Effects
+  useEffect(() => {
+    applyRadiusToDom(borderRadius);
+  }, [borderRadius]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = `${16 * (fontScale / 100)}px`;
     }
-  };
-
-  const safeStartViewTransition = (callback: () => void) => {
-    if (typeof document !== "undefined" && typeof (document as any).startViewTransition === "function") {
-      try {
-        const transition = (document as any).startViewTransition(() => {
-          try {
-            callback();
-          } catch (e) {
-            console.error("View transition callback error", e);
-          }
-        });
-
-        if (transition) {
-          if (typeof transition.ready?.catch === "function") {
-            transition.ready.catch(() => {});
-          }
-          if (typeof transition.finished?.catch === "function") {
-            transition.finished.catch(() => {});
-          }
-          if (typeof transition.updateCallbackDone?.catch === "function") {
-            transition.updateCallbackDone.catch(() => {});
-          }
-        }
-      } catch {
-        callback();
-      }
-    } else {
-      callback();
-    }
-  };
-
-  const setTheme = async (newTheme: ThemeType) => {
-    if (newTheme === theme) return;
-
-    setIsThemeTransitioning(true);
-
-    // 1. Capture instant snapshot of current screen state before mutating DOM
-    const snapshotUrl = await captureSnapshot();
-    if (snapshotUrl) {
-      setThemeSnapshot(snapshotUrl);
-    }
-
-    // 2. Trigger safe View Transition API if supported
-    const executeThemeChange = () => {
-      setThemeState(newTheme);
-      try {
-        if (nextThemeContext && nextThemeContext.setTheme) {
-          nextThemeContext.setTheme(newTheme);
-        }
-      } catch {}
-      applyThemeToDOM(newTheme);
-      applyColorsToDOM(newTheme, colorPreset);
-
-      try {
-        localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-        localStorage.setItem("theme", newTheme);
-        localStorage.setItem(OLD_THEME_PREF_KEY, newTheme);
-      } catch (e) {
-        console.error("Failed to save theme preference", e);
-      }
-    };
-
-    safeStartViewTransition(executeThemeChange);
-
-    // 3. Keep snapshot dissolving over 450ms then clear
-    setTimeout(() => {
-      setIsThemeTransitioning(false);
-      setThemeSnapshot(null);
-    }, 450);
-  };
-
-  const handleSetColorPreset = async (presetId: string) => {
-    if (presetId === colorPreset) return;
-
-    setIsThemeTransitioning(true);
-    const snapshotUrl = await captureSnapshot();
-    if (snapshotUrl) {
-      setThemeSnapshot(snapshotUrl);
-    }
-
-    const executePresetChange = () => {
-      setColorPreset(presetId);
-      applyColorsToDOM(theme, presetId);
-      try {
-        localStorage.setItem(COLOR_PRESET_STORAGE_KEY, presetId);
-      } catch (e) {
-        console.error("Failed to save color preset", e);
-      }
-    };
-
-    safeStartViewTransition(executePresetChange);
-
-    setTimeout(() => {
-      setIsThemeTransitioning(false);
-      setThemeSnapshot(null);
-    }, 450);
-  };
+  }, [fontScale]);
 
   useEffect(() => {
     applyThemeToDOM(theme);
@@ -1104,17 +1097,21 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [theme, colorPreset]);
 
   useEffect(() => {
-    if (nextThemeContext?.theme) {
-      const incomingTheme = nextThemeContext.theme;
-      if (incomingTheme === "glass-dark-neon" || incomingTheme === "modern-light-glass") {
-        if (incomingTheme !== theme) {
-          setThemeState(incomingTheme as ThemeType);
-          applyThemeToDOM(incomingTheme as ThemeType);
-          applyColorsToDOM(incomingTheme as ThemeType, colorPreset);
-        }
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = () => {
+      if (themeMode === "system") {
+        const newResolvedTheme = mediaQuery.matches ? "glass-dark-neon" : "mritech-digital-growth";
+        setThemeState(newResolvedTheme);
+        applyThemeToDOM(newResolvedTheme);
+        applyColorsToDOM(newResolvedTheme, colorPreset);
       }
-    }
-  }, [nextThemeContext?.theme, colorPreset]);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [themeMode, colorPreset]);
 
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
@@ -1139,6 +1136,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     <ThemeContext.Provider value={{ 
       theme, 
       setTheme, 
+      themeMode,
+      setThemeMode,
+      resolvedTheme,
       fontScale,
       setFontScale,
       borderRadius,
@@ -1174,6 +1174,9 @@ export const useTheme = (): ThemeContextType => {
     return {
       theme: "mritech-digital-growth",
       setTheme: () => {},
+      themeMode: "system",
+      setThemeMode: () => {},
+      resolvedTheme: "light",
       fontScale: 100,
       setFontScale: () => {},
       borderRadius: 10,

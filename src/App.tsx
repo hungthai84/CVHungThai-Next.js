@@ -404,13 +404,17 @@ function MainContent() {
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full rounded-2xl md:rounded-[24px] lg:rounded-[32px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20",
+              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
               isFooterSlidDown 
                 ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
                 : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
               getMainCardStyle(),
               isSwitching ? "scale-[0.985] opacity-80" : "scale-100 opacity-100"
             )}
+            style={{
+              borderRadius: "var(--theme-radius-card, 10px)",
+              boxShadow: "none"
+            }}
           >
             <main className="relative w-full h-full overflow-hidden flex-grow">
               <AnimatePresence mode="wait" initial={false}>

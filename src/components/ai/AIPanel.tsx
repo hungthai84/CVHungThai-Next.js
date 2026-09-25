@@ -378,35 +378,38 @@ export const AIPanel: React.FC<AIPanelProps> = ({
           </div>
         )}
 
-        {/* CHAT MESSAGES AREA (XÓA GỢI Ý CÂU HỎI TIẾP THEO THEO YÊU CẦU) */}
+        {/* CHAT MESSAGES AREA */}
         <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3.5 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 relative">
-          {/* Rendered Messages */}
-          {messages.map(msg => (
-            <AIMessage
-              key={msg.id}
-              message={msg}
-              onSpeak={text => onSpeakText(text, msg.id)}
-              onStopSpeak={onStopSpeak}
-              isSpeakingThis={isSpeaking && speakingMessageId === msg.id}
-              onActionClick={onActionClick}
-              onSuggestionClick={onQuickQuestionSelect}
-            />
-          ))}
 
-          {/* Loading / Typing Indicator */}
-          {isLoading && (
-            <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-indigo-200/60 dark:border-indigo-800/60 text-slate-600 dark:text-slate-300 text-xs w-max animate-pulse shadow-sm">
-              <img
-                src={AI_AVATAR_URL}
-                alt="AI Avatar"
-                referrerPolicy="no-referrer"
-                className="w-5 h-5 rounded-full object-cover shrink-0"
+          {/* Rendered Messages with relative z-index */}
+          <div className="relative z-10 space-y-3.5">
+            {messages.map(msg => (
+              <AIMessage
+                key={msg.id}
+                message={msg}
+                onSpeak={text => onSpeakText(text, msg.id)}
+                onStopSpeak={onStopSpeak}
+                isSpeakingThis={isSpeaking && speakingMessageId === msg.id}
+                onActionClick={onActionClick}
+                onSuggestionClick={onQuickQuestionSelect}
               />
-              <span>Trí Nhân AI đang suy nghĩ & tra cứu...</span>
-            </div>
-          )}
+            ))}
 
-          <div ref={messagesEndRef} />
+            {/* Loading / Typing Indicator */}
+            {isLoading && (
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-indigo-200/60 dark:border-indigo-800/60 text-slate-600 dark:text-slate-300 text-xs w-max animate-pulse shadow-sm">
+                <img
+                  src={AI_AVATAR_URL}
+                  alt="AI Avatar"
+                  referrerPolicy="no-referrer"
+                  className="w-5 h-5 rounded-full object-cover shrink-0"
+                />
+                <span>Trí Nhân AI đang suy nghĩ & tra cứu...</span>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
         {/* INPUT CONTAINER: NHÓM MIC, CÂU HỎI MẪU VÀ NÚT GỬI VÀO TRONG KHUNG NHẬP TEXT */}
