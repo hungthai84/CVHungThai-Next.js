@@ -186,7 +186,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
         id="footer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`group py-1 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-col justify-center cursor-default ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
+        className={`group py-1 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-col justify-center cursor-default ${getPlacementClass()} ${getFooterSurfaceStyle()} !rounded-bl-none !rounded-br-none`}
       >
         {/* Unpinned / Auto-hide Grab Handle & Peek Indicator */}
         {(!isPinned || footerConfig.placement === "auto-hide") && (

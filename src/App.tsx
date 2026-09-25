@@ -125,6 +125,7 @@ function MainContent() {
 
   // State for Keyboard Shortcut Toast notification
   const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
+  const [clickedRippleSec, setClickedRippleSec] = useState<string | null>(null);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
@@ -504,16 +505,44 @@ function MainContent() {
                   <span className="text-3xs text-blue-600 dark:text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded-md">({idx + 1}/{SECTIONS.length})</span>
                 </div>
                 
-                {/* Target Indicator Button with Vertical Bars (Dấu gạch dọc) */}
-                <button
-                  onClick={() => navigateToSection(sec.id)}
+                 {/* Target Indicator Button with Vertical Bars (Dấu gạch dọc) */}
+                <motion.button
+                  onClick={() => {
+                    setClickedRippleSec(sec.id);
+                    setTimeout(() => setClickedRippleSec(null), 600);
+                    navigateToSection(sec.id);
+                  }}
+                  whileHover={{ 
+                    y: isActive ? [0, -3, 0] : -1,
+                    scale: 1.15
+                  }}
+                  transition={{
+                    y: isActive ? {
+                      duration: 0.6,
+                      ease: "easeInOut",
+                      repeat: Infinity
+                    } : {
+                      duration: 0.2
+                    },
+                    scale: { duration: 0.2 }
+                  }}
                   className={`relative z-10 rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center ${
                     isActive 
-                      ? "w-1.5 h-6.5 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 shadow-md shadow-indigo-500/60 ring-2 ring-indigo-400/80 scale-105" 
+                      ? "w-1.5 h-6.5 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 shadow-md shadow-indigo-500/60 ring-2 ring-indigo-400/80 scale-105 animate-pulse" 
                       : "w-1 h-3.5 bg-slate-400/80 dark:bg-slate-600 hover:w-1.5 hover:h-6 hover:bg-indigo-500 dark:hover:bg-indigo-400"
                   }`}
                   title={t(sec.labelKey)}
                 >
+                  {/* Click Ripple Effect */}
+                  {clickedRippleSec === sec.id && (
+                    <motion.span
+                      initial={{ scale: 0.8, opacity: 0.9 }}
+                      animate={{ scale: 3.5, opacity: 0 }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                      className="absolute -inset-1.5 rounded-full bg-indigo-500 pointer-events-none z-0"
+                    />
+                  )}
+
                   {/* Shared ping wave effect for active item */}
                   {isActive && (
                     <motion.span
@@ -521,7 +550,7 @@ function MainContent() {
                       className="absolute -inset-1 rounded-full border border-indigo-500/60 animate-ping opacity-60 pointer-events-none"
                     />
                   )}
-                </button>
+                </motion.button>
               </div>
             );
           })}

@@ -310,15 +310,15 @@ export function Systems() {
         {/* Inner element radius = 24px - 16px = 8px (rounded-[8px])                */}
         {/* Equal height: h-[126px] sm:h-[130px] & grid auto-rows-fr items-stretch    */}
         {/* ========================================================================= */}
-        <IndustrialSubSection>
-          <div className="w-full rounded-[24px] p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-lg">
+        <IndustrialSubSection className="flex-1 flex flex-col">
+          <div className="w-full flex-grow rounded-[24px] p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-lg flex flex-col justify-center items-center">
             <AnimatePresence mode="popLayout">
               <motion.div 
                 layout
                 variants={industrialContainerVariants}
                 initial="hidden"
                 animate="show"
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full auto-rows-fr items-stretch"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[15px] w-full h-full auto-rows-fr items-stretch"
               >
               {SYSTEMS_DATA.map((item, idx) => {
                 const IconComponent = item.icon;
@@ -331,9 +331,9 @@ export function Systems() {
                       variants={industrialSubSectionVariants}
                       onClick={() => handleCardClick(item.url, isVi ? item.nameVi : item.nameEn)}
                       onMouseEnter={() => { try { playUiSound("hover"); } catch {} }}
-                      style={{ borderRadius: "24px" }}
+                      style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                       className={cn(
-                        "group cursor-pointer relative overflow-hidden p-3.5 sm:p-4 flex flex-col justify-between h-[126px] sm:h-[130px] min-h-[126px] sm:min-h-[130px] w-full shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-[24px] text-slate-900 dark:text-white hover:border-indigo-400/60 dark:hover:border-indigo-500/60"
+                        "group cursor-pointer relative overflow-hidden p-3.5 sm:p-4 flex flex-col justify-between h-full min-h-[126px] sm:min-h-[130px] w-full shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl text-slate-900 dark:text-white hover:border-indigo-400/60 dark:hover:border-indigo-500/60"
                       )}
                     >
                     {/* Watermark Floating Back Icon */}

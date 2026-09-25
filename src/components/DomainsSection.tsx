@@ -812,6 +812,35 @@ export function DomainsSection() {
       id="domains"
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-900 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        #domains button,
+        #domains .service-card,
+        #domains .card-item,
+        #domains [class*="cursor-pointer"] {
+          transition: all 200ms ease-in-out !important;
+        }
+        
+        #domains button:hover,
+        #domains [class*="cursor-pointer"]:hover:not(.service-card):not(.card-item) {
+          transform: translateY(-4px) !important;
+        }
+        
+        #domains .service-card:hover,
+        #domains .card-item:hover {
+          transform: translateY(-4px) perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(1.02) !important;
+        }
+        
+        #domains button:active,
+        #domains [class*="cursor-pointer"]:active:not(.service-card):not(.card-item) {
+          transform: translateY(-4px) scale(0.95) !important;
+        }
+        
+        #domains .service-card:active,
+        #domains .card-item:active {
+          transform: translateY(-4px) perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(0.95) !important;
+        }
+      `}} />
+
       <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
         
         {/* Navigation & Breadcrumbs Header */}
@@ -833,28 +862,11 @@ export function DomainsSection() {
               selectedDomain.cardBgGradient
             )}
           >
-            {/* Top Close Button & Quick Navigation Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/10 dark:border-white/10 pb-4">
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-                {DOMAINS.map(d => (
-                  <button
-                    key={d.id}
-                    onClick={() => setExpandedDomainId(d.id)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap",
-                      d.id === selectedDomain.id
-                        ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md"
-                        : "bg-white/60 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/60"
-                    )}
-                  >
-                    {d.code}. {isVi ? d.titleVi : d.titleEn}
-                  </button>
-                ))}
-              </div>
-
+            {/* Top Close Button */}
+            <div className="flex items-center justify-end border-b border-black/10 dark:border-white/10 pb-4">
               <button
                 onClick={() => setExpandedDomainId(null)}
-                className="px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
+                className="px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span>✕ {isVi ? "Thu gọn về 6 thẻ" : "Collapse view"}</span>
               </button>
@@ -885,8 +897,8 @@ export function DomainsSection() {
 
                 {/* Orientation Block (Định hướng) */}
                 <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-black/10 dark:border-white/10 shadow-2xs space-y-1">
-                  <span className="text-2xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                    {isVi ? "ĐỊNH HƯỚNG TẦM NHÌN & VẬN HÀNH" : "STRATEGIC ORIENTATION"}
+                  <span className="text-2xs font-mono font-bold tracking-wider text-slate-400 block">
+                    {isVi ? "Định hướng tầm nhìn & vận hành" : "Strategic orientation"}
                   </span>
                   <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 leading-snug">
                     {isVi ? selectedDomain.orientationVi : selectedDomain.orientationEn}
@@ -896,8 +908,8 @@ export function DomainsSection() {
                 {/* Grid of Key Metadata */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div className="p-3 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 text-left">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                      {isVi ? "VAI TRÒ CHÍNH" : "PRIMARY ROLE"}
+                    <span className="text-[10px] font-mono font-bold tracking-wider text-slate-400 block">
+                      {isVi ? "Vai trò chính" : "Primary role"}
                     </span>
                     <span className="text-xs font-extrabold text-slate-900 dark:text-white leading-tight block mt-0.5">
                       {isVi ? selectedDomain.roleVi : selectedDomain.roleEn}
@@ -905,8 +917,8 @@ export function DomainsSection() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 text-left">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                      {isVi ? "QUY MÔ ĐỘI NGŨ" : "TEAM SIZE"}
+                    <span className="text-[10px] font-mono font-bold tracking-wider text-slate-400 block">
+                      {isVi ? "Quy mô đội ngũ" : "Team size"}
                     </span>
                     <span className="text-xs font-extrabold text-slate-900 dark:text-white leading-tight block mt-0.5">
                       {isVi ? selectedDomain.teamSizeVi : selectedDomain.teamSizeEn}
@@ -916,8 +928,8 @@ export function DomainsSection() {
 
                 {/* Tools & Tech */}
                 <div className="p-3 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 text-left">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                    {isVi ? "CÔNG NGHỆ & CÔNG CỤ" : "TOOLS & TECH STACK"}
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-slate-400 block">
+                    {isVi ? "Công nghệ & công cụ" : "Tools & tech stack"}
                   </span>
                   <span className="text-xs font-bold text-blue-700 dark:text-cyan-300 leading-tight block mt-0.5">
                     {isVi ? selectedDomain.toolsVi : selectedDomain.toolsEn}
@@ -929,8 +941,8 @@ export function DomainsSection() {
               <div className="lg:col-span-7 flex flex-col gap-4 text-left">
                 {/* Description */}
                 <div className="bg-white/85 dark:bg-slate-900/85 backdrop-blur-md rounded-2xl p-4.5 sm:p-5 border border-black/5 dark:border-white/10 shadow-xs space-y-2">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                    {isVi ? "MÔ TẢ CHUYÊN MÔN NĂNG LỰC" : "PROFESSIONAL DESCRIPTION"}
+                  <span className="text-xs font-mono font-bold tracking-wider text-slate-400 block">
+                    {isVi ? "Mô tả chuyên môn năng lực" : "Professional description"}
                   </span>
                   <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-100 leading-relaxed font-medium">
                     {isVi ? selectedDomain.descVi : selectedDomain.descEn}
@@ -939,8 +951,8 @@ export function DomainsSection() {
 
                 {/* Key Achievements & Highlights */}
                 <div className="bg-white/85 dark:bg-slate-900/85 backdrop-blur-md rounded-2xl p-4.5 sm:p-5 border border-black/5 dark:border-white/10 shadow-xs space-y-2.5">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                    {isVi ? "KẾT QUẢ & THÀNH TỰU NỔI BẬT" : "KEY RESULTS & HIGHLIGHTS"}
+                  <span className="text-xs font-mono font-bold tracking-wider text-slate-400 block">
+                    {isVi ? "Kết quả & thành tựu nổi bật" : "Key results & highlights"}
                   </span>
                   <ul className="space-y-2">
                     {(isVi ? selectedDomain.highlightsVi : selectedDomain.highlightsEn).map((item, idx) => (
@@ -976,7 +988,7 @@ export function DomainsSection() {
           /* 2. SIX COMPACT DOMAIN CARDS (Description hidden, click to expand)         */
           /* ========================================================================= */
           <div className="flex-1 w-full flex items-center justify-center">
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 w-full justify-center items-stretch">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3 w-full justify-center items-stretch">
               {DOMAINS.map((domain, index) => {
                 const Illustration = domain.IllustrationComponent;
                 return (
@@ -987,62 +999,76 @@ export function DomainsSection() {
                     transition={{ duration: 0.35, delay: index * 0.05 }}
                     onClick={() => setExpandedDomainId(domain.id)}
                     className={cn(
-                      "relative rounded-2xl sm:rounded-3xl p-3 sm:p-4 border flex flex-col items-center justify-between gap-2 shadow-sm hover:shadow-xl hover:scale-[1.015] transition-all duration-300 cursor-pointer group overflow-hidden text-center",
+                      "relative rounded-2xl sm:rounded-3xl p-4.5 sm:p-5.5 border flex flex-col justify-between items-start gap-5.5 shadow-sm hover:shadow-md cursor-pointer group overflow-hidden text-left bg-white dark:bg-slate-900",
                       domain.cardBorder,
                       domain.cardBgGradient
                     )}
                     title={isVi ? "Bấm để xem chi tiết đầy đủ" : "Click to view full details"}
                   >
-                    {/* Code Badge */}
-                    <div className="w-full flex items-center justify-between text-3xs sm:text-2xs font-mono font-bold">
-                      <span className="px-1.5 py-0.5 rounded-full bg-black/10 dark:bg-white/10 text-slate-800 dark:text-slate-200">
-                        {domain.code}
-                      </span>
-                      <span className={cn("font-extrabold text-[10px]", domain.expColor)}>
-                        {isVi ? domain.experienceVi : domain.experienceEn}
-                      </span>
-                    </div>
-
-                    {/* 3D Glassmorphism Illustration Icon */}
-                    {Illustration && (
-                      <div className="w-full flex items-center justify-center my-0.5 select-none pointer-events-none scale-90 sm:scale-100">
-                        <Illustration />
-                      </div>
-                    )}
-
-                    <div className="w-full space-y-1">
-                      {/* Title */}
-                      <h2 
-                        className={cn(
-                          "text-sm sm:text-base lg:text-md font-black tracking-tight leading-snug truncate w-full block", 
-                          domain.titleColor
-                        )}
-                        title={isVi ? domain.titleVi : domain.titleEn}
-                      >
-                        {isVi ? domain.titleVi : domain.titleEn}
-                      </h2>
+                    {/* Top Content: Heading & Sub-headers group (Gap-2) */}
+                    <div className="w-full flex flex-col gap-2 relative z-10">
                       
-                      {/* Orientation Quote Tag */}
-                      <p className="text-[10px] sm:text-2xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2 leading-relaxed px-1">
-                        "{isVi ? domain.orientationVi : domain.orientationEn}"
-                      </p>
+                      {/* Sub-row: Icon (left) and Experience Badge (right) */}
+                      <div className="w-full flex items-center justify-between gap-3">
+                        {(() => {
+                          const Icon = domain.IconComponent;
+                          return (
+                            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border bg-white dark:bg-slate-900 shadow-2xs shrink-0", domain.iconBg)}>
+                              <Icon className="w-5 h-5 stroke-[2.2]" />
+                            </div>
+                          );
+                        })()}
+                        
+                        {/* Experience level pill */}
+                        <span className={cn("px-2.5 py-1 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-3xs text-[10px] sm:text-2xs font-mono font-black tracking-wide shrink-0 border border-black/5 dark:border-white/5", domain.expColor)}>
+                          {isVi ? domain.experienceVi : domain.experienceEn}
+                        </span>
+                      </div>
 
-                      {/* Role Tag */}
-                      <span className="inline-block text-[9px] sm:text-[10px] font-mono font-bold text-blue-800 dark:text-cyan-300 bg-white/80 dark:bg-slate-900/80 px-2 py-0.5 rounded-full border border-black/5 dark:border-white/10 truncate max-w-full">
-                        {isVi ? domain.roleVi : domain.roleEn}
-                      </span>
+                      {/* Header Title Block */}
+                      <div className="w-full flex flex-col gap-1 mt-1.5">
+                        <h2 
+                          className={cn(
+                            "text-xs sm:text-base md:text-md lg:text-[17px] font-black tracking-tight leading-snug truncate w-full block font-play", 
+                            domain.titleColor
+                          )}
+                          title={isVi ? domain.titleVi : domain.titleEn}
+                        >
+                          {isVi ? domain.titleVi : domain.titleEn}
+                        </h2>
+                        
+                        {/* Role Capsule Tag */}
+                        <span className="inline-block self-start text-[9px] sm:text-[10px] font-mono font-bold text-blue-800 dark:text-cyan-300 bg-white/60 dark:bg-slate-900/60 px-2 py-0.5 rounded-md border border-black/5 dark:border-white/5 truncate max-w-full">
+                          {isVi ? domain.roleVi : domain.roleEn}
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Bottom Section: Round Brand Logos on 1 Single Row */}
-                    <div className="mt-1 pt-1.5 select-none border-t border-black/5 dark:border-white/10 w-full flex items-center justify-between gap-1">
-                      <div className="flex flex-nowrap items-center justify-center gap-1 py-0.5 min-h-[34px] overflow-hidden flex-1">
+                    {/* Middle Content: Body Description text block (Gap-1.5) */}
+                    <div className="w-full flex flex-col gap-1.5 relative z-10 flex-1">
+                      <p className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-300 line-clamp-3 leading-relaxed">
+                        {isVi ? domain.orientationVi : domain.orientationEn}
+                      </p>
+                    </div>
+
+                    {/* Bottom Content: Action row & Brand logos group */}
+                    <div className="pt-3 select-none border-t border-black/5 dark:border-white/10 w-full flex items-center justify-between gap-2 relative z-10 mt-auto">
+                      {/* Connected Logos list */}
+                      <div className="flex flex-nowrap items-center justify-start gap-1 py-0.5 min-h-[30px] overflow-hidden flex-1">
                         {domain.logos.map((Logo, idx) => (
                           <Logo key={idx} />
                         ))}
                       </div>
-                      <span className="text-[9px] sm:text-[10px] font-mono font-bold text-blue-600 dark:text-cyan-400 group-hover:translate-x-0.5 transition-transform shrink-0">
-                        →
-                      </span>
+
+                      {/* Action trigger chevron/text with bounce hover */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <span className="text-[10px] font-mono font-black text-blue-600 dark:text-cyan-400 group-hover:translate-x-0.5 transition-transform">
+                          {isVi ? "Xem" : "View"}
+                        </span>
+                        <span className="text-[10px] font-mono font-black text-blue-600 dark:text-cyan-400 group-hover:translate-x-1 transition-transform">
+                          →
+                        </span>
+                      </div>
                     </div>
                   </motion.div>
                 );

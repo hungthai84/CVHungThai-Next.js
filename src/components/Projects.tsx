@@ -522,14 +522,14 @@ export default function Projects() {
                           {/* Media Area - Framed Inside Padded Container */}
                           <div className={cn("shrink-0", cardIndex === 10 ? "p-2.5" : "p-3 pb-0")}>
                             <div className={cn(
-                              "project-card-media relative w-full aspect-[16/9] overflow-hidden rounded-[10px] border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
+                              "project-card-media relative w-full aspect-[16/9] overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
-                            )} style={{ height: "200px", borderRadius: "var(--theme-radius-inner, 8px)" }}>
+                            )} style={{ height: "200px", borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
                               <img
                                 src={card.image}
                                 alt={card.branchTitle}
                                 className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                                style={{ borderRadius: "var(--theme-radius-inner, 8px)" }}
+                                style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                                 loading="lazy"
                                 decoding="async"
                                 referrerPolicy="no-referrer"

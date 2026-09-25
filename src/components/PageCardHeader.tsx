@@ -46,18 +46,18 @@ export function PageCardHeader({
       id={id || (pageId ? `page-card-header-${pageId}` : undefined)}
       className={cn("w-full flex flex-col gap-2 pb-1 shrink-0 font-['Play',sans-serif]", className)}
     >
-      {/* Dòng 1 : Bên trái Tiêu đề 2 chữ (H4) - Bên phải: Câu nói hay về trang đó và/hoặc action */}
+      {/* Dòng 1 : Bên trái Tiêu đề 2 chữ (H2) - Bên phải: Câu nói hay về trang đó và/hoặc action */}
       <div className="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
-        {/* Bên trái: Icon & Tiêu đề H4 (2 chữ) */}
+        {/* Bên trái: Icon & Tiêu đề H2 (2 chữ) */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap">
           {IconComponent && (
             <div className={cn("flex items-center justify-center shrink-0", accentClass)}>
               <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
             </div>
           )}
-          <h4 className={cn("text-h4 tracking-tight font-bold", accentClass)}>
+          <h2 className={cn("text-h2 tracking-tight font-black font-play", accentClass)}>
             {displayTitle}
-          </h4>
+          </h2>
         </div>
 
         {/* Bên phải: Câu nói hay & Nút hành động */}

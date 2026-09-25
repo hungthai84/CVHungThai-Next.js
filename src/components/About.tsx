@@ -156,23 +156,23 @@ export default function About() {
 
             {/* 1. Top-Left Floating Badge: 22+ Năm (CX & CS Leadership) */}
             <motion.div
-              animate={{ y: [0, -6, 0] }}
+              animate={{ y: [0, -4, 0] }}
               transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut" }}
-              className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-blue-400/30 dark:border-cyan-400/40 rounded-2xl p-2 sm:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-3 max-w-[170px] sm:max-w-[210px]"
+              className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-blue-400/30 dark:border-cyan-400/40 rounded-xl p-1 sm:p-1.5 shadow-md hover:scale-105 transition-all flex items-center gap-1.5 sm:gap-2 max-w-[105px] sm:max-w-[130px]"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-inner">
-                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-lg bg-blue-500/10 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-inner">
+                <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
-                  {isVi ? "Kinh nghiệm CX & CS" : "CX & CS Exp"}
+                <span className="text-[7px] sm:text-[8px] font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
+                  {isVi ? "Kinh nghiệm" : "CX & CS Exp"}
                 </span>
-                <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                  <span className="text-base sm:text-xl font-black text-blue-600 dark:text-cyan-400 tracking-tight">
+                <div className="flex items-baseline gap-0.5 mt-0.5">
+                  <span className="text-xs sm:text-sm font-black text-blue-600 dark:text-cyan-400 tracking-tight leading-none">
                     22+
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-black text-blue-500 dark:text-cyan-400 tracking-wider">
-                    {isVi ? "NĂM" : "YEARS"}
+                  <span className="text-[7px] sm:text-[8px] font-bold text-blue-500 dark:text-cyan-400 tracking-wider">
+                    {isVi ? "Năm" : "Yrs"}
                   </span>
                 </div>
               </div>
@@ -180,23 +180,23 @@ export default function About() {
 
             {/* 2. Top-Right Floating Badge: 8+ Môi trường (Enterprise Scale) */}
             <motion.div
-              animate={{ y: [0, 6, 0] }}
+              animate={{ y: [0, 4, 0] }}
               transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.5 }}
-              className="absolute top-3 right-3 sm:top-5 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-purple-400/30 dark:border-purple-400/40 rounded-2xl p-2 sm:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-3 max-w-[170px] sm:max-w-[210px]"
+              className="absolute top-3 right-3 sm:top-5 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-purple-400/30 dark:border-purple-400/40 rounded-xl p-1 sm:p-1.5 shadow-md hover:scale-105 transition-all flex items-center gap-1.5 sm:gap-2 max-w-[105px] sm:max-w-[130px]"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-inner">
-                <Building2 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-inner">
+                <Building2 className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
-                  {isVi ? "Quy mô lớn" : "Large Scale"}
+                <span className="text-[7px] sm:text-[8px] font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
+                  {isVi ? "Quy mô" : "Large Scale"}
                 </span>
-                <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                  <span className="text-base sm:text-xl font-black text-purple-600 dark:text-purple-400 tracking-tight">
+                <div className="flex items-baseline gap-0.5 mt-0.5">
+                  <span className="text-xs sm:text-sm font-black text-purple-600 dark:text-purple-400 tracking-tight leading-none">
                     8+
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-black text-purple-500 dark:text-purple-400 tracking-wider">
-                    {isVi ? "MÔI TRƯỜNG" : "ENV."}
+                  <span className="text-[7px] sm:text-[8px] font-bold text-purple-500 dark:text-purple-400 tracking-wider">
+                    {isVi ? "M.Trường" : "Env."}
                   </span>
                 </div>
               </div>
@@ -204,23 +204,23 @@ export default function About() {
 
             {/* 3. Middle-Right Floating Badge: 24/7 AI CRM (Smart Automation) */}
             <motion.div
-              animate={{ y: [0, -5, 0] }}
+              animate={{ y: [0, -3, 0] }}
               transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1.0 }}
-              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-rose-400/30 dark:border-rose-400/40 rounded-2xl p-2 sm:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-3 max-w-[170px] sm:max-w-[210px]"
+              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-rose-400/30 dark:border-rose-400/40 rounded-xl p-1 sm:p-1.5 shadow-md hover:scale-105 transition-all flex items-center gap-1.5 sm:gap-2 max-w-[105px] sm:max-w-[130px]"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 shadow-inner">
-                <Bot className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 shadow-inner">
+                <Bot className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
-                  {isVi ? "Tự động hóa" : "Automation"}
+                <span className="text-[7px] sm:text-[8px] font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
+                  {isVi ? "Tự động" : "Automation"}
                 </span>
-                <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                  <span className="text-base sm:text-xl font-black text-rose-600 dark:text-rose-400 tracking-tight">
+                <div className="flex items-baseline gap-0.5 mt-0.5">
+                  <span className="text-xs sm:text-sm font-black text-rose-600 dark:text-rose-400 tracking-tight leading-none">
                     24/7
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-black text-rose-500 dark:text-rose-400 tracking-wider">
-                    AI CRM
+                  <span className="text-[7px] sm:text-[8px] font-bold text-rose-500 dark:text-rose-400 tracking-wider">
+                    CRM
                   </span>
                 </div>
               </div>
@@ -228,22 +228,22 @@ export default function About() {
 
             {/* 4. Bottom-Right Floating Badge: 99% CSAT (Customer Satisfaction) */}
             <motion.div
-              animate={{ y: [0, 5, 0] }}
+              animate={{ y: [0, 3, 0] }}
               transition={{ repeat: Infinity, duration: 4.0, ease: "easeInOut", delay: 1.5 }}
-              className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-emerald-400/30 dark:border-emerald-400/40 rounded-2xl p-2 sm:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-3 max-w-[170px] sm:max-w-[210px]"
+              className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-emerald-400/30 dark:border-emerald-400/40 rounded-xl p-1 sm:p-1.5 shadow-md hover:scale-105 transition-all flex items-center gap-1.5 sm:gap-2 max-w-[105px] sm:max-w-[130px]"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-inner">
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-inner">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
-                  {isVi ? "Hài lòng KH" : "Satisfaction"}
+                <span className="text-[7px] sm:text-[8px] font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
+                  {isVi ? "Hài lòng KH" : "CSAT"}
                 </span>
-                <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                  <span className="text-base sm:text-xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">
+                <div className="flex items-baseline gap-0.5 mt-0.5">
+                  <span className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tight leading-none">
                     99%
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 dark:text-emerald-400 tracking-wider">
+                  <span className="text-[7px] sm:text-[8px] font-bold text-emerald-500 dark:text-emerald-400 tracking-wider">
                     CSAT
                   </span>
                 </div>
@@ -291,8 +291,8 @@ export default function About() {
                     <User className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-                      {isVi ? "GIỚI TÍNH" : "GENDER"}
+                    <span className="text-[10px] font-bold text-blue-500 tracking-wider">
+                      {isVi ? "Giới tính" : "Gender"}
                     </span>
                     <span className="text-xs font-black text-blue-900 dark:text-cyan-300">
                       {isVi ? "Nam giới" : "Male"}
@@ -309,8 +309,8 @@ export default function About() {
                     <Users className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">
-                      {isVi ? "DÂN TỘC" : "ETHNICITY"}
+                    <span className="text-[10px] font-bold text-indigo-500 tracking-wider">
+                      {isVi ? "Dân tộc" : "Ethnicity"}
                     </span>
                     <span className="text-xs font-black text-indigo-900 dark:text-indigo-300">
                       {isVi ? "Kinh" : "Kinh"}
@@ -327,8 +327,8 @@ export default function About() {
                     <Heart className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-rose-500 uppercase tracking-wider">
-                      {isVi ? "TÌNH TRẠNG" : "STATUS"}
+                    <span className="text-[10px] font-bold text-rose-500 tracking-wider">
+                      {isVi ? "Tình trạng" : "Status"}
                     </span>
                     <span className="text-xs font-black text-rose-900 dark:text-rose-300">
                       {isVi ? "Độc thân" : "Single"}
@@ -345,8 +345,8 @@ export default function About() {
                     <Calendar className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">
-                      {isVi ? "SINH NHẬT" : "DATE OF BIRTH"}
+                    <span className="text-[10px] font-bold text-amber-500 tracking-wider">
+                      {isVi ? "Sinh nhật" : "Date of birth"}
                     </span>
                     <span className="text-xs font-black text-amber-900 dark:text-amber-300">
                       22/06/1984
@@ -363,8 +363,8 @@ export default function About() {
                     <MapPin className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-purple-500 uppercase tracking-wider">
-                      {isVi ? "TẠM TRÚ" : "RESIDENCE"}
+                    <span className="text-[10px] font-bold text-purple-500 tracking-wider">
+                      {isVi ? "Tạm trú" : "Residence"}
                     </span>
                     <span className="text-xs font-black text-purple-900 dark:text-purple-300" title="Q7, Hồ Chí Minh">
                       Q7, Hồ Chí Minh
@@ -381,8 +381,8 @@ export default function About() {
                     <Home className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-                      {isVi ? "CƯ TRÚ" : "HOMETOWN"}
+                    <span className="text-[10px] font-bold text-emerald-500 tracking-wider">
+                      {isVi ? "Cư trú" : "Hometown"}
                     </span>
                     <span className="text-xs font-black text-emerald-900 dark:text-emerald-300" title="Mỹ Tho, Tiền Giang">
                       Mỹ Tho, Tiền Giang
@@ -403,163 +403,159 @@ export default function About() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="w-full relative overflow-hidden rounded-3xl border border-[var(--grid-banner-border,rgba(191,219,254,0.85))] bg-gradient-to-r from-[#F0F7FF] via-[#E8F3FF] to-[#D9ECFF] dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-950 p-6 sm:p-8 lg:p-9 shadow-sm flex flex-col gap-5 transition-all duration-300"
+          className="w-full relative overflow-hidden rounded-3xl border border-[var(--grid-banner-border,rgba(191,219,254,0.85))] bg-gradient-to-br from-[#F0F7FF] via-[#E8F3FF] to-[#D9ECFF] dark:from-slate-900/95 dark:via-slate-900/90 dark:to-[#091526] p-6 sm:p-8 md:p-9 lg:p-10 shadow-lg flex flex-col gap-6 lg:gap-8 transition-all duration-300"
         >
-          {/* Header */}
-          <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-blue-200/60 dark:border-blue-800/60 mb-1">
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <User className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0" />
-              <h6 className="text-h6 font-bold text-blue-600 dark:text-cyan-400 tracking-wide">
-                {isVi ? "Giới thiệu bản thân & Triết lý vận hành" : "Personal Introduction & Operating Philosophy"}
-              </h6>
+          {/* Header Block (Section Title) */}
+          <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-blue-200/60 dark:border-blue-800/60">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-cyan-500/10 flex items-center justify-center border border-blue-500/20 dark:border-cyan-500/20">
+                <User className="w-5.5 h-5.5 text-blue-600 dark:text-cyan-400" />
+              </div>
+              <div className="text-left">
+                <h6 className="text-h6 font-black text-blue-900 dark:text-cyan-400 tracking-tight">
+                  {isVi ? "Giới thiệu bản thân & Triết lý vận hành" : "Personal Introduction & Operating Philosophy"}
+                </h6>
+                <p className="text-2xs font-mono font-bold text-blue-500 uppercase tracking-wider mt-0.5">
+                  {isVi ? "Hồ sơ chuyên môn thực chiến" : "Professional executive profile"}
+                </p>
+              </div>
             </div>
-            <span className="text-3xs font-mono font-bold text-blue-800 dark:text-cyan-300 bg-blue-50 dark:bg-cyan-950/60 px-2.5 py-1 rounded-full border border-blue-200/80 dark:border-cyan-600/40">
+            <span className="self-start sm:self-center text-3xs font-mono font-black text-blue-800 dark:text-cyan-300 bg-blue-100/80 dark:bg-cyan-950/60 px-3.5 py-1.5 rounded-full border border-blue-200/80 dark:border-cyan-600/40 shadow-2xs tracking-wide">
               {isVi ? "22+ Năm kinh nghiệm thực chiến" : "22+ Years Hands-on Experience"}
             </span>
           </div>
 
-          <div className="space-y-4 text-left">
-            {/* Paragraph 1 */}
-            <p className="text-sm sm:text-base md:text-[16px] text-[#0B2546] dark:text-slate-100 font-medium leading-relaxed">
-              {isVi ? (
-                <>
-                  Một chuyên gia dịch vụ khách hàng với hơn{" "}
-                  <span className="font-extrabold text-[#0057FF] dark:text-cyan-400 bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">
-                    22 năm kinh nghiệm thực chiến
-                  </span>
-                  . Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là{" "}
-                  <span className="font-bold text-[#0057FF] dark:text-cyan-300">sự đồng hành</span>. 
-                  Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                </>
-              ) : (
-                "A customer service expert with over 22 years of hands-on experience. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations."
-              )}
-            </p>
+          {/* Grid Layout splits body text on left, core values on right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+            
+            {/* Left Column: Narrative paragraphs (lg:col-span-7) */}
+            <div className="lg:col-span-7 flex flex-col justify-between gap-5 text-left">
+              <div className="space-y-4">
+                {/* Paragraph 1 */}
+                <p className="text-sm sm:text-base md:text-[16px] text-[#0B2546] dark:text-slate-100 font-medium leading-relaxed">
+                  {isVi ? (
+                    <>
+                      Một chuyên gia dịch vụ khách hàng với hơn{" "}
+                      <span className="font-extrabold text-[#0057FF] dark:text-cyan-400 bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">
+                        22 năm kinh nghiệm thực chiến
+                      </span>
+                      . Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là{" "}
+                      <span className="font-bold text-[#0057FF] dark:text-cyan-300">sự đồng hành</span>. 
+                      Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
+                    </>
+                  ) : (
+                    "A customer service expert with over 22 years of hands-on experience. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations."
+                  )}
+                </p>
 
-            {/* Paragraph 2 */}
-            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
-              {isVi ? (
-                <>
-                  Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
-                  <span className="font-bold text-slate-900 dark:text-white underline decoration-blue-500/60 decoration-2 underline-offset-4">
-                    sự tận tâm kịp thời
-                  </span>{" "}
-                  và{" "}
-                  <span className="font-bold text-slate-900 dark:text-white underline decoration-cyan-500/60 decoration-2 underline-offset-4">
-                    đồng cảm chân thành
-                  </span>
-                  . Trong suốt sự nghiệp, tôi đã trực tiếp thiết kế và tối ưu hóa hàng chục quy trình, hệ thống Chăm Sóc Khách Hàng, luôn đặt trên nền tảng ba giá trị cốt lõi:
-                </>
-              ) : (
-                "I believe satisfaction comes not from absolute perfection, but from timely dedication and sincere empathy. Throughout my career, I have directly designed and optimized dozens of Customer Care processes and systems, always grounded on three core values:"
-              )}
-            </p>
+                {/* Paragraph 2 */}
+                <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                  {isVi ? (
+                    <>
+                      Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
+                      <span className="font-bold text-slate-900 dark:text-white underline decoration-blue-500/60 decoration-2 underline-offset-4">
+                        sự tận tâm kịp thời
+                      </span>{" "}
+                      và{" "}
+                      <span className="font-bold text-slate-900 dark:text-white underline decoration-cyan-500/60 decoration-2 underline-offset-4">
+                        đồng cảm chân thành
+                      </span>
+                      . Trong suốt sự nghiệp, tôi đã trực tiếp thiết kế và tối ưu hóa hàng chục quy trình, hệ thống Chăm Sóc Khách Hàng, luôn đặt trên nền tảng ba giá trị cốt lõi:
+                    </>
+                  ) : (
+                    "I believe satisfaction comes not from absolute perfection, but from timely dedication and sincere empathy. Throughout my career, I have directly designed and optimized dozens of Customer Care processes and systems, always grounded on three core values:"
+                  )}
+                </p>
+              </div>
 
-            {/* 3 Core Values Block: Hiệu quả – Nhân văn – Bền vững */}
-            <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-blue-200/90 dark:border-blue-800/80 shadow-xs flex flex-col sm:flex-row items-center justify-around gap-3 my-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-sm sm:text-base font-black text-blue-700 dark:text-cyan-300 tracking-wide uppercase">
-                  {isVi ? "Hiệu quả" : "Efficiency"}
-                </span>
-              </div>
-              <span className="hidden sm:inline text-slate-300 dark:text-slate-700 font-black">–</span>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse" />
-                <span className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300 tracking-wide uppercase">
-                  {isVi ? "Nhân văn" : "Humanity"}
-                </span>
-              </div>
-              <span className="hidden sm:inline text-slate-300 dark:text-slate-700 font-black">–</span>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-sm sm:text-base font-black text-emerald-700 dark:text-emerald-300 tracking-wide uppercase">
-                  {isVi ? "Bền vững" : "Sustainability"}
-                </span>
+              {/* Highlight callout box (Bottom Left) */}
+              <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-cyan-500/5 border border-blue-200/50 dark:border-cyan-500/20 flex items-start gap-3 mt-1 shadow-2xs">
+                <span className="text-2xl text-blue-600 dark:text-cyan-400 select-none">“</span>
+                <p className="text-sm text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
+                  {isVi ? (
+                    <>
+                      Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi:{" "}
+                      <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
+                        Họ luôn được lắng nghe.
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth:{" "}
+                      <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
+                        They are always listened to.
+                      </span>
+                    </>
+                  )}
+                </p>
               </div>
             </div>
 
-            {/* Paragraph 3 */}
-            <p className="text-sm sm:text-base text-slate-800 dark:text-slate-200 font-medium leading-relaxed pt-1">
-              {isVi ? (
-                <>
-                  Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi:{" "}
-                  <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
-                    Họ luôn được lắng nghe.
+            {/* Right Column: Values Widget Block (lg:col-span-5) */}
+            <div className="lg:col-span-5 flex flex-col justify-center">
+              <div className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-slate-800 shadow-md flex flex-col gap-4 h-full justify-between">
+                <div className="flex flex-col gap-1 text-left pb-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-3xs font-mono font-black text-blue-600 dark:text-cyan-400 tracking-widest">
+                    {isVi ? "Ba giá trị cốt lõi" : "Three core values"}
                   </span>
-                </>
-              ) : (
-                <>
-                  I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth:{" "}
-                  <span className="font-black text-[#0057FF] dark:text-cyan-300">
-                    They are always listened to.
-                  </span>
-                </>
-              )}
-            </p>
+                  <h5 className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
+                    {isVi ? "Nền tảng triết lý dịch vụ" : "Foundation of service philosophy"}
+                  </h5>
+                </div>
+
+                <div className="flex flex-col gap-3 my-1">
+                  {/* Value 1: Hiệu quả */}
+                  <div className="flex items-center gap-3.5 p-2.5 rounded-xl bg-blue-50/50 dark:bg-slate-950 border border-blue-100/50 dark:border-blue-900/40 hover:scale-[1.015] transition-all duration-200 text-left">
+                    <span className="w-8.5 h-8.5 rounded-lg bg-blue-500 text-white flex items-center justify-center font-mono font-black text-sm shadow-sm shrink-0">
+                      01
+                    </span>
+                    <div>
+                      <span className="text-sm font-black text-blue-700 dark:text-cyan-300 tracking-wide uppercase block">
+                        {isVi ? "Hiệu quả" : "Efficiency"}
+                      </span>
+                      <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
+                        {isVi ? "Tối ưu hóa quy trình & chi phí vận hành" : "Optimizing process & operational costs"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Value 2: Nhân văn */}
+                  <div className="flex items-center gap-3.5 p-2.5 rounded-xl bg-purple-50/50 dark:bg-slate-950 border border-purple-100/50 dark:border-purple-900/40 hover:scale-[1.015] transition-all duration-200 text-left">
+                    <span className="w-8.5 h-8.5 rounded-lg bg-purple-500 text-white flex items-center justify-center font-mono font-black text-sm shadow-sm shrink-0">
+                      02
+                    </span>
+                    <div>
+                      <span className="text-sm font-black text-purple-700 dark:text-purple-300 tracking-wide uppercase block">
+                        {isVi ? "Nhân văn" : "Humanity"}
+                      </span>
+                      <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
+                        {isVi ? "Thấu cảm sâu sắc, đặt con người làm trọng tâm" : "Deep empathy, keeping people at center"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Value 3: Bền vững */}
+                  <div className="flex items-center gap-3.5 p-2.5 rounded-xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100/50 dark:border-emerald-900/40 hover:scale-[1.015] transition-all duration-200 text-left">
+                    <span className="w-8.5 h-8.5 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-mono font-black text-sm shadow-sm shrink-0">
+                      03
+                    </span>
+                    <div>
+                      <span className="text-sm font-black text-emerald-700 dark:text-emerald-300 tracking-wide uppercase block">
+                        {isVi ? "Bền vững" : "Sustainability"}
+                      </span>
+                      <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
+                        {isVi ? "Đồng hành lâu dài, tạo giá trị thực chất" : "Long-term partnership, creating real value"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </motion.div>
 
-        {/* 4. TRIẾT LÝ VÀ TẦM NHÌN STRATEGIC VISION */}
-        <div className="w-full">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white dark:bg-slate-900/90 border border-[var(--grid-card-border,rgba(226,232,240,0.85))] rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col gap-4 text-left h-full"
-          >
-            {/* Header */}
-            <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-purple-200/60 dark:border-purple-800/60 mb-1">
-              <div className="flex items-center gap-2 sm:gap-2.5">
-                <Star className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0" />
-                <h6 className="text-h6 font-bold text-purple-600 dark:text-purple-400 tracking-wide">
-                  {isVi ? "Tầm nhìn chiến lược" : "Strategic Vision"}
-                </h6>
-              </div>
-            </div>
 
-            {/* Tầm nhìn chiến lược Card */}
-            <div className="relative p-4 rounded-2xl bg-[#FFF8F0] dark:bg-orange-950/20 border border-[#FFEDD5] dark:border-orange-900/40 shadow-2xs flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-6.5 h-6.5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-xs">
-                    <Target className="w-3.5 h-3.5 text-white stroke-[2.5]" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-black text-orange-600 dark:text-orange-400 uppercase">
-                    {isVi ? "Định hướng phát triển" : "Strategic Direction"}
-                  </span>
-                </div>
-                <div className="flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-                </div>
-              </div>
-
-              <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-justify">
-                {isVi ? (
-                  <>
-                    Kiến tạo giá trị thực sự cho doanh nghiệp thông qua việc{" "}
-                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-400 decoration-2 underline-offset-2">
-                      tối ưu quy trình
-                    </span>{" "}
-                    và{" "}
-                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-400 decoration-2 underline-offset-2">
-                      phát triển năng lực đội ngũ
-                    </span>
-                    , chăm sóc khách hàng trực diện, hướng tới sự phát triển toàn diện và bền vững.
-                  </>
-                ) : (
-                  <>
-                    Creating real business value by{" "}
-                    <span className="font-black text-rose-600">optimizing processes</span> and{" "}
-                    <span className="font-black text-rose-600">developing customer care team capabilities</span>.
-                  </>
-                )}
-              </p>
-            </div>
-          </motion.div>
-        </div>
 
         {/* 4. BOTTOM CTA COLLABORATION BANNER - HIGH-FIDELITY LUXURY GLASS BANNER */}
         <motion.div 

@@ -408,8 +408,8 @@ export default function OpenLetter() {
               className={cn(
                 "flex items-center justify-center shrink-0 transition-transform duration-300 group-hover/mcard:scale-105",
                 item.id === "card-2018"
-                  ? "w-12 h-12 rounded-full bg-purple-500/15 dark:bg-purple-500/20 border border-purple-500/35 shadow-[0_0_15px_rgba(168,85,247,0.25)] p-1.5"
-                  : "w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-1 shadow-2xs"
+                  ? "w-20 h-20 rounded-full bg-purple-500/15 dark:bg-purple-500/20 border-2 border-purple-500/35 shadow-[0_0_15px_rgba(168,85,247,0.25)] p-2.5"
+                  : "w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-800 p-2 shadow-xs"
               )}
             >
               <img 
@@ -576,29 +576,39 @@ export default function OpenLetter() {
         <PageCardHeader pageId="letter" />
 
         {/* ========================================================================= */}
-        {/* ROW 1: THẺ THÔNG ĐIỆP HỢP TÁC (FULL-WIDTH BENTO CARD) */}
+        {/* ROW 1: GRID CONTAINER FOR COOPERATION MESSAGE & DEDICATION PILLARS */}
         {/* ========================================================================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20px" }}
           transition={{ duration: 0.5, ease: "easeOut" }} 
-          className="w-full relative z-10"
+          className="w-full relative z-10 flex flex-col"
         >
-          {/* THẺ THÔNG ĐIỆP HỢP TÁC */}
+          {/* THẺ THÔNG ĐIỆP HỢP TÁC VỚI VIDEO NỀN */}
           <div
             id="card-main-letter-content"
             style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 24px))" }}
-            className="w-full relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-center justify-between gap-6 group z-10"
+            className="w-full relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 md:p-9 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row justify-between items-center gap-8 group z-10"
           >
-            {/* Soft Background Wave Gradients matching image */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-              <div className="absolute -right-10 -bottom-20 w-80 h-80 rounded-full bg-slate-100/60 dark:bg-slate-800/20 filter blur-3xl" />
-              <div className="absolute left-1/3 -top-20 w-96 h-96 rounded-full bg-slate-50/80 dark:bg-slate-800/20 filter blur-3xl" />
+            {/* Ambient Background Video */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+              <video
+                src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls={false}
+                style={{ filter: "brightness(0.92) contrast(1.08)" }}
+                className="w-full h-full object-cover opacity-20 dark:opacity-30 scale-105"
+              />
+              {/* Overlay Glass/Gradient for high contrast and readability */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/70 dark:from-slate-950 dark:via-slate-950/90 dark:to-slate-950/70" />
             </div>
 
             {/* Left Column: Text Content */}
-            <div className="flex-1 flex flex-col justify-center relative z-10 text-left w-full">
+            <div className="flex-1 flex flex-col justify-center relative z-10 text-left w-full max-w-2xl">
               {/* Header Title formatted like Trụ cột cống hiến */}
               <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-3.5">
                 <div className="flex items-center gap-2 sm:gap-2.5">
@@ -615,7 +625,7 @@ export default function OpenLetter() {
               </p>
 
               {/* Body Content */}
-              <p className="text-slate-800 dark:text-slate-200 text-sm sm:text-base md:text-[17px] leading-relaxed font-normal text-left max-w-2xl">
+              <p className="text-slate-800 dark:text-slate-200 text-sm sm:text-base md:text-[17px] leading-relaxed font-normal text-left">
                 {isVi ? (
                   <>
                     Tôi là <strong className="font-extrabold text-[#0f172a] dark:text-white">Nguyễn Hùng Thái</strong>, Trưởng phòng Chăm sóc khách hàng với hơn <strong className="font-extrabold text-[#0f172a] dark:text-white">22 năm kinh nghiệm</strong> trong lĩnh vực xây dựng, vận hành và phát triển hệ thống dịch vụ khách hàng chuyên nghiệp.
@@ -628,190 +638,91 @@ export default function OpenLetter() {
               </p>
             </div>
 
-            {/* Right Column: Hero Robot Companion video & Floating Tags */}
-            <div className="relative md:w-[46%] lg:w-[48%] shrink-0 overflow-visible w-full select-none flex items-center justify-center scale-50 origin-center -my-20 sm:-my-28">
-              {/* Placement Bounds: Padded structure */}
-              <div className="relative w-full flex items-center justify-center lg:justify-end py-10 pointer-events-none">
-                
-                {/* Decorative Orbit Art: Background Aura Circle */}
-                <div 
-                  className="absolute top-[30%] left-[20%] w-[420px] h-[420px] bg-sky-400/15 rounded-full blur-[110px] -z-10 animate-pulse pointer-events-none" 
-                  style={{ animationDuration: "7000ms" }}
-                />
-
-                {/* Centered Robot Companion Video scaled down to 50% (max-w-[300px]) */}
-                <div className="relative w-full max-w-[300px] sm:max-w-[320px] mx-auto pointer-events-auto">
-                  <video
-                    src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    controls={false}
-                    style={{ filter: "brightness(1.02) contrast(1.04)" }}
-                    className="w-full h-auto rounded-[20px] select-none block shadow-xl"
-                  />
-
-                  {/* Three Custom-Crafted Dynamic Floating Badges (Liquid-Glass) */}
-                  {/* Card 1: Top-Left */}
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: [-3, 3, -3] }}
-                    transition={{
-                      y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
-                      opacity: { duration: 0.6 }
-                    }}
-                    className="absolute -top-4 -left-3 sm:-top-5 sm:-left-6 z-20 pointer-events-auto"
-                  >
-                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
-                        <Bot className="w-4 h-4" />
-                      </div>
-                      <div className="text-left leading-tight">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 dark:text-sky-400 font-mono">
-                            {isVi ? "Trí Nhân AI" : "Tri Nhan AI"}
-                          </span>
-                          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-                        </div>
-                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
-                          {isVi ? "Trợ lý số đồng hành" : "Digital CX Companion"}
-                        </p>
-                      </div>
+            {/* Right Column: Dynamic Floating Badges on top of background */}
+            <div className="relative z-10 w-full md:w-[320px] shrink-0 flex flex-col gap-4 sm:gap-5 justify-center py-4 md:py-0 select-none">
+              {/* Badge 1 */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                animate={{ y: [-3, 3, -3] }}
+                transition={{
+                  y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                  opacity: { duration: 0.5 }
+                }}
+                className="w-full pointer-events-auto"
+              >
+                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-gradient-to-br from-white/80 to-white/50 dark:from-slate-900/90 dark:to-slate-900/60 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+                    <Bot className="w-5 h-5" />
+                  </div>
+                  <div className="text-left leading-tight">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 dark:text-sky-400 font-mono">
+                        {isVi ? "Trí Nhân AI" : "Tri Nhan AI"}
+                      </span>
+                      <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
                     </div>
-                  </motion.div>
-
-                  {/* Card 2: Right-Center */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, y: [4, -4, 4] }}
-                    transition={{
-                      y: { duration: 5.2, repeat: Infinity, ease: "easeInOut" },
-                      opacity: { duration: 0.6, delay: 0.15 }
-                    }}
-                    className="absolute top-1/4 -right-3 sm:top-1/3 sm:-right-6 z-20 pointer-events-auto"
-                  >
-                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
-                        <Award className="w-4 h-4" />
-                      </div>
-                      <div className="text-left leading-tight">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono block">
-                          {isVi ? "22+ Năm Kinh Nghiệm" : "22+ Years CX"}
-                        </span>
-                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
-                          {isVi ? "Xây dựng & Vận hành" : "Care & Operations"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Card 3: Bottom-Left */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: [-4, 3, -4] }}
-                    transition={{
-                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
-                      opacity: { duration: 0.6, delay: 0.25 }
-                    }}
-                    className="absolute -bottom-4 left-4 sm:-bottom-5 sm:left-8 z-20 pointer-events-auto"
-                  >
-                    <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-br from-white/75 to-white/45 dark:from-slate-900/80 dark:to-slate-900/50 border border-white/70 dark:border-white/20 ring-1 ring-black/5 dark:ring-sky-400/20 backdrop-blur-[20px] shadow-[inset_0_2.5px_4px_rgba(255,255,255,0.8)] transition-all hover:scale-105 select-none">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
-                        <Heart className="w-4 h-4" />
-                      </div>
-                      <div className="text-left leading-tight">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-mono block">
-                          {isVi ? "Tận Tâm Phụng Sự" : "Dedicated Service"}
-                        </span>
-                        <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100">
-                          {isVi ? "Đồng hành cùng khách hàng" : "Partnering for Success"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-
+                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
+                      {isVi ? "Trợ lý số đồng hành" : "Digital CX Companion"}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+              </motion.div>
 
-        {/* ========================================================================= */}
-        {/* ROW 1.5: TRỤ CỘT CỐNG HIẾN (FULL-WIDTH BENTO CARD) */}
-        {/* ========================================================================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }} 
-          className="w-full relative z-10"
-        >
-          {/* Card: TRỤ CỘT CỐNG HIẾN */}
-          <div 
-            id="card-dedication-pillars"
-            style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-            className="w-full glass-surface backdrop-blur-2xl border border-slate-200/80 dark:border-slate-800/80 p-5 sm:p-6 md:p-7 shadow-md hover:shadow-xl hover:border-indigo-400/60 dark:hover:border-indigo-400/60 transition-all duration-300 flex flex-col justify-between group/card"
-          >
-            {/* Header formatted exactly like Thông điệp hợp tác (4-word title in Indigo theme) */}
-            <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-indigo-200/60 dark:border-indigo-800/60 mb-3">
-              <div className="flex items-center gap-2 sm:gap-2.5">
-                <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                <h6 className="text-h6 font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">
-                  {isVi ? "Trụ cột cống hiến" : "Four dedication pillars"}
-                </h6>
-              </div>
-            </div>
-
-            {/* 4 Pillars Cards với màu sắc riêng biệt, nổi bật */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              {/* 1. Quy trình */}
-              <div 
-                style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 8px))" }}
-                className="p-4 bg-gradient-to-b from-blue-600 via-indigo-600 to-sky-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-blue-300/40"
+              {/* Badge 2 */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                animate={{ y: [3, -3, 3] }}
+                transition={{
+                  y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+                  opacity: { duration: 0.5, delay: 0.1 }
+                }}
+                className="w-full pointer-events-auto"
               >
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
-                  <Box className="w-5 h-5 text-white" />
+                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-gradient-to-br from-white/80 to-white/50 dark:from-slate-900/90 dark:to-slate-900/60 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <div className="text-left leading-tight">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono block">
+                      {isVi ? "22+ Năm Kinh Nghiệm" : "22+ Years CX"}
+                    </span>
+                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
+                      {isVi ? "Xây dựng & Vận hành" : "Care & Operations"}
+                    </p>
+                  </div>
                 </div>
-                <span className="text-card-title font-bold tracking-normal">{isVi ? "Quy trình" : "Process"}</span>
-                <span className="text-body-sm sm:text-body font-semibold text-blue-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Đơn giản & Tận tâm" : "Simple & Dedicated"}</span>
-              </div>
+              </motion.div>
 
-              {/* 2. Con người */}
-              <div 
-                style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 8px))" }}
-                className="p-4 bg-gradient-to-b from-amber-500 via-orange-600 to-amber-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-amber-300/40"
+              {/* Badge 3 */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                animate={{ y: [-4, 4, -4] }}
+                transition={{
+                  y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+                  opacity: { duration: 0.5, delay: 0.2 }
+                }}
+                className="w-full pointer-events-auto"
               >
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
-                  <Users className="w-5 h-5 text-white" />
+                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-gradient-to-br from-white/80 to-white/50 dark:from-slate-900/90 dark:to-slate-900/60 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
+                    <Heart className="w-5 h-5" />
+                  </div>
+                  <div className="text-left leading-tight">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-mono block">
+                      {isVi ? "Tận Tâm Phụng Sự" : "Dedicated Service"}
+                    </span>
+                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
+                      {isVi ? "Đồng hành cùng khách hàng" : "Partnering for Success"}
+                    </p>
+                  </div>
                 </div>
-                <span className="text-card-title font-bold tracking-normal">{isVi ? "Con người" : "People"}</span>
-                <span className="text-body-sm sm:text-body font-semibold text-amber-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Trao giá trị & Phát triển" : "Empower & Growth"}</span>
-              </div>
-
-              {/* 3. Nhân văn */}
-              <div 
-                style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 8px))" }}
-                className="p-4 bg-gradient-to-b from-fuchsia-600 via-rose-600 to-pink-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-pink-300/40"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
-                  <Heart className="w-5 h-5 text-white fill-white/30" />
-                </div>
-                <span className="text-card-title font-bold tracking-normal">{isVi ? "Nhân văn" : "Humanity"}</span>
-                <span className="text-body-sm sm:text-body font-semibold text-pink-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Thấu hiểu & Đồng cảm" : "Empathy & Care"}</span>
-              </div>
-
-              {/* 4. Công nghệ */}
-              <div 
-                style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius-md, 8px))" }}
-                className="p-4 bg-gradient-to-b from-emerald-500 via-teal-600 to-cyan-700 text-white flex flex-col items-center justify-center text-center shadow-md shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-500/40 transform hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-teal-300/40"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-1.5 shadow-inner">
-                  <Network className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-card-title font-bold tracking-normal">{isVi ? "Công nghệ" : "Tech"}</span>
-                <span className="text-body-sm sm:text-body font-semibold text-teal-100 mt-1 leading-tight whitespace-nowrap">{isVi ? "Cải tiến & Sáng tạo" : "Innovate & Creative"}</span>
-              </div>
+              </motion.div>
             </div>
           </div>
         </motion.div>
@@ -920,194 +831,76 @@ export default function OpenLetter() {
               <div className="absolute bottom-0 left-1/3 -mb-20 w-80 h-80 bg-sky-200/25 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
               {/* Header: Title formatted like Trụ cột cống hiến + Description */}
-              <div className="relative z-10 flex flex-col items-start text-left mb-5 sm:mb-6">
+              <div className="relative z-10 flex flex-col items-start text-left mb-4 sm:mb-5">
                 <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-blue-200/60 dark:border-blue-800/60 mb-3">
                   <div className="flex items-center gap-2 sm:gap-2.5">
-                    <Settings className="w-5 h-5 text-[#2563eb] dark:text-cyan-400 shrink-0 animate-[spin_12s_linear_infinite]" />
-                    <h6 className="text-h6 font-bold text-[#2563eb] dark:text-cyan-400 tracking-wide">
-                      {isVi ? "Giải pháp công nghệ" : "Technology Solutions"}
+                    <Sparkles className="w-5 h-5 text-[#2563eb] dark:text-cyan-400 shrink-0" />
+                    <h6 className="text-h6 font-black text-[#2563eb] dark:text-cyan-400 tracking-wide uppercase">
+                      {isVi ? "Triết lý quản trị" : "Management Philosophy"}
                     </h6>
                   </div>
                 </div>
 
                 {/* Description Paragraph */}
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl text-left">
+                <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed font-semibold">
                   {isVi 
-                    ? "Tập trung áp dụng và triển khai các giải pháp công nghệ để nâng cao hiệu quả vận hành và chất lượng dịch vụ khách hàng."
-                    : "Focusing on deploying technological solutions to enhance operational efficiency and customer service quality."}
+                    ? "Qua hơn hai thập kỷ làm việc trong nhiều lĩnh vực khác nhau, tôi nhận ra rằng chăm sóc khách hàng không chỉ là giải quyết vấn đề mà là xây dựng một hệ thống giúp doanh nghiệp phát triển bền vững."
+                    : "Through over two decades of working across diverse industries, I realized that customer care is not just about solving issues, but about building a system that fosters sustainable business growth."}
                 </p>
               </div>
 
-              {/* Content: 2-Column Layout (List on Left, 3D Dashboard on Right) */}
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center flex-1">
-                
-                {/* Left Column: 4 Numbered Feature Rows (lg:col-span-7) */}
-                <div className="lg:col-span-7 flex flex-col gap-3">
-                  
-                  {/* 01: Hệ thống CRM */}
-                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
-                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-blue-500/30 shrink-0">
-                        01
-                      </span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/50 flex items-center justify-center text-[#2563eb] dark:text-blue-400 shrink-0 shadow-2xs">
-                        <Database className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#2563eb] dark:group-hover/item:text-cyan-300 transition-colors">
-                          {isVi ? "Hệ thống CRM" : "CRM Systems"}
-                        </h4>
-                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                          {isVi ? "Quản lý khách hàng toàn diện" : "Comprehensive customer management"}
-                        </p>
-                      </div>
+              {/* Content: Three Core Principles */}
+              <div className="relative z-10 flex flex-col gap-4 flex-1 w-full mt-2">
+                <p className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  {isVi ? "Tôi luôn làm việc dựa trên ba nguyên tắc cốt lõi:" : "I always work based on three core principles:"}
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  {/* Principle 1 */}
+                  <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-blue-100 dark:border-blue-900/50 shadow-2xs text-left flex items-center gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-[#2563eb] dark:text-cyan-400 flex items-center justify-center shrink-0">
+                      <Box className="w-5 h-5" />
                     </div>
-                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                    <div>
+                      <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                        {isVi ? "Quy trình tạo nền tảng." : "Process builds the foundation."}
+                      </h4>
+                      <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isVi ? "Định hình chuẩn mực, tối ưu hóa hiệu suất vận hành." : "Defining standards, optimizing operational efficiency."}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* 02: Tự động hóa */}
-                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
-                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#00b4d8] to-[#0077b6] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-cyan-500/30 shrink-0">
-                        02
-                      </span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/60 dark:border-cyan-800/50 flex items-center justify-center text-[#0077b6] dark:text-cyan-400 shrink-0 shadow-2xs">
-                        <Cpu className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#0077b6] dark:group-hover/item:text-cyan-300 transition-colors">
-                          {isVi ? "Tự động hóa" : "Process Automation"}
-                        </h4>
-                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                          {isVi ? "Tối ưu quy trình và nâng cao hiệu suất" : "Workflow optimization and peak performance"}
-                        </p>
-                      </div>
+                  {/* Principle 2 */}
+                  <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-blue-100 dark:border-blue-900/50 shadow-2xs text-left flex items-center gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                      <Users className="w-5 h-5" />
                     </div>
-                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
+                    <div>
+                      <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                        {isVi ? "Con người tạo giá trị." : "People create value."}
+                      </h4>
+                      <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isVi ? "Đào tạo đội ngũ lắng nghe, thấu cảm sâu sắc." : "Training teams to listen and deeply empathize."}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* 03: Phân tích dữ liệu */}
-                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
-                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#e63946] to-[#d62828] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-rose-500/30 shrink-0">
-                        03
-                      </span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200/60 dark:border-rose-800/50 flex items-center justify-center text-[#e63946] dark:text-rose-400 shrink-0 shadow-2xs">
-                        <BarChart2 className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#e63946] dark:group-hover/item:text-rose-300 transition-colors">
-                          {isVi ? "Phân tích dữ liệu" : "Data Analytics"}
-                        </h4>
-                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                          {isVi ? "Hiểu khách hàng sâu sắc hơn" : "Deeper customer insights"}
-                        </p>
-                      </div>
+                  {/* Principle 3 */}
+                  <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-blue-100 dark:border-blue-900/50 shadow-2xs text-left flex items-center gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                      <Network className="w-5 h-5" />
                     </div>
-                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
-                  </div>
-
-                  {/* 04: AI Chatbot */}
-                  <div className="p-3 sm:p-3.5 px-4 sm:px-5 rounded-[20px] bg-white/95 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md hover:translate-x-1.5 transition-all duration-200 flex items-center justify-between gap-3.5 sm:gap-4 group/item cursor-pointer">
-                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                      <span className="w-10 h-7 sm:w-12 sm:h-8 rounded-full bg-gradient-to-r from-[#f59e0b] to-[#f97316] text-white flex items-center justify-center font-extrabold text-xs sm:text-sm shadow-sm shadow-amber-500/30 shrink-0">
-                        04
-                      </span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/50 flex items-center justify-center text-[#f97316] dark:text-amber-400 shrink-0 shadow-2xs">
-                        <Bot className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/item:text-[#f97316] dark:group-hover/item:text-amber-300 transition-colors">
-                          {isVi ? "AI Chatbot" : "AI Chatbot"}
-                        </h4>
-                        <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                          {isVi ? "Hỗ trợ khách hàng 24/7" : "24/7 Intelligent customer support"}
-                        </p>
-                      </div>
+                    <div>
+                      <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                        {isVi ? "Công nghệ tạo đòn bẩy." : "Technology provides leverage."}
+                      </h4>
+                      <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isVi ? "Tích hợp AI và tự động hóa bức phá năng suất." : "Integrating AI and automation for peak productivity."}
+                      </p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-blue-400 group-hover/item:translate-x-1 transition-transform shrink-0" />
-                  </div>
-
-                </div>
-
-                {/* Right Column: 3D Monitor & Gadget Illustration (lg:col-span-5) */}
-                <div className="lg:col-span-5 flex items-center justify-center relative select-none">
-                  <div className="relative w-full max-w-[280px] sm:max-w-[320px] flex items-center justify-center py-2">
-                    <svg viewBox="0 0 380 280" className="w-full h-auto drop-shadow-xl overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <linearGradient id="screenCasingGrad" x1="0" y1="0" x2="0" y2="210" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#FFFFFF" />
-                          <stop offset="100%" stopColor="#E2E8F0" />
-                        </linearGradient>
-                        <linearGradient id="screenInnerGrad" x1="0" y1="0" x2="300" y2="180" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#F8FAFC" />
-                          <stop offset="100%" stopColor="#EDF2F7" />
-                        </linearGradient>
-                        <linearGradient id="barBlue1" x1="0" y1="80" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#38BDF8" />
-                          <stop offset="100%" stopColor="#60A5FA" />
-                        </linearGradient>
-                        <linearGradient id="barBlue2" x1="0" y1="110" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#2563EB" />
-                          <stop offset="100%" stopColor="#38BDF8" />
-                        </linearGradient>
-                        <linearGradient id="barBlue3" x1="0" y1="140" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#0284C7" />
-                          <stop offset="100%" stopColor="#00E5FF" />
-                        </linearGradient>
-                        <linearGradient id="speakerBlueGrad" x1="0" y1="0" x2="90" y2="50" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#3B82F6" />
-                          <stop offset="50%" stopColor="#2563EB" />
-                          <stop offset="100%" stopColor="#1D4ED8" />
-                        </linearGradient>
-                        <filter id="hubShadow" x="-30%" y="-30%" width="160%" height="160%">
-                          <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#1E40AF" floodOpacity="0.4" />
-                        </filter>
-                        <filter id="monitorShadow" x="-10%" y="-10%" width="120%" height="130%">
-                          <feDropShadow dx="0" dy="10" stdDeviation="12" floodColor="#0F172A" floodOpacity="0.1" />
-                        </filter>
-                      </defs>
-
-                      {/* Monitor Stand */}
-                      <ellipse cx="210" cy="245" rx="50" ry="10" fill="#CBD5E1" opacity="0.8" />
-                      <path d="M198 200 L222 200 L225 242 L195 242 Z" fill="#94A3B8" />
-                      <path d="M200 200 L220 200 L223 240 L197 240 Z" fill="#E2E8F0" />
-                      <ellipse cx="210" cy="242" rx="44" ry="8" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1.5" />
-
-                      {/* Monitor Body */}
-                      <g filter="url(#monitorShadow)">
-                        <rect x="65" y="20" width="260" height="185" rx="18" fill="url(#screenCasingGrad)" stroke="#E2E8F0" strokeWidth="2.5" />
-                        <rect x="76" y="30" width="238" height="164" rx="12" fill="url(#screenInnerGrad)" />
-                      </g>
-
-                      {/* Screen UI Top Bar */}
-                      <circle cx="95" cy="46" r="4" fill="#C084FC" />
-                      <rect x="105" y="43" width="12" height="6" rx="3" fill="#38BDF8" />
-                      <rect x="123" y="45" width="35" height="3" rx="1.5" fill="#CBD5E1" />
-
-                      {/* Screen UI Left Sidebar Lines */}
-                      <rect x="90" y="70" width="40" height="5" rx="2.5" fill="#A78BFA" />
-                      <rect x="90" y="82" width="40" height="5" rx="2.5" fill="#C4B5FD" />
-                      <rect x="90" y="94" width="40" height="5" rx="2.5" fill="#DDD6FE" />
-
-                      {/* Screen UI Dashboard Chart Area */}
-                      <rect x="140" y="62" width="160" height="118" rx="8" fill="#FFFFFF" fillOpacity="0.75" stroke="#E2E8F0" strokeWidth="1.2" />
-
-                      {/* 3 Vertical Bar Charts matching screenshot */}
-                      <rect x="162" y="125" width="16" height="42" rx="4" fill="url(#barBlue1)" />
-                      <rect x="190" y="100" width="16" height="67" rx="4" fill="url(#barBlue2)" />
-                      <rect x="218" y="76" width="16" height="91" rx="4" fill="url(#barBlue3)" />
-
-                      {/* 3D Smart Speaker Gadget in front of monitor */}
-                      <g filter="url(#hubShadow)">
-                        <rect x="68" y="185" width="64" height="38" rx="12" fill="url(#speakerBlueGrad)" />
-                        <rect x="71" y="187" width="58" height="8" rx="4" fill="#FFFFFF" fillOpacity="0.25" />
-                        <circle cx="100" cy="204" r="2" fill="#FFFFFF" />
-                      </g>
-                    </svg>
                   </div>
                 </div>
-
               </div>
             </div>
           </motion.div>
@@ -1135,31 +928,51 @@ export default function OpenLetter() {
                   <div className="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60 mb-1">
                     <div className="flex items-center gap-2 sm:gap-2.5">
                       <Heart className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 fill-emerald-500/20" />
-                      <h6 className="text-h6 font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
+                      <h6 className="text-h6 font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">
                         {isVi ? "Tâm thư tri ân" : "Sincere Appreciation"}
                       </h6>
                     </div>
                   </div>
 
                   {/* Sincere message */}
-                  <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed">
-                    {isVi 
-                      ? "Tôi mong muốn được đồng hành cùng Quý Doanh nghiệp để kiến tạo giá trị, lan tỏa sự hài lòng và cùng nhau phát triển bền vững. Với kinh nghiệm, nhiệt huyết và tinh thần thấu hiểu sâu sắc, tôi tin tưởng vào những thành công tốt đẹp sắp tới."
-                      : "I look forward to partnering with your esteemed enterprise to co-create values, cultivate deep satisfaction, and sustain mutual development. Backed by experience, dedication, and active empathy, I strongly believe in our future triumphs."}
-                  </p>
+                  <div className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed space-y-4 font-medium">
+                    <p>
+                      {isVi ? (
+                        <>
+                          Từ đó, tôi tập trung xây dựng các hệ thống <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">CRM</strong>, <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">Dashboard quản trị</strong>, <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">AI Chatbot</strong> và các giải pháp <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">tự động hóa</strong>, nhằm nâng cao hiệu quả vận hành, tối ưu trải nghiệm khách hàng và hỗ trợ nhà quản lý ra quyết định bằng dữ liệu.
+                        </>
+                      ) : (
+                        <>
+                          From there, I focus on building <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">CRM</strong> systems, <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">management Dashboards</strong>, <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">AI Chatbots</strong>, and <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">automation</strong> solutions to enhance operational efficiency, optimize customer experience, and support managers in making data-driven decisions.
+                        </>
+                      )}
+                    </p>
+                    <p>
+                      {isVi ? (
+                        <>
+                          Bên cạnh công nghệ, tôi luôn xem <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">con người</strong> là yếu tố quyết định thành công. Vì vậy, tôi chú trọng đào tạo đội ngũ biết lắng nghe, thấu hiểu và mang đến những trải nghiệm vượt mong đợi cho khách hàng.
+                        </>
+                      ) : (
+                        <>
+                          Beside technology, I always consider <strong className="font-extrabold text-[#0057FF] dark:text-cyan-400">people</strong> as the deciding factor for success. Therefore, I focus on training the team to listen, understand, and bring experiences that exceed customer expectations.
+                        </>
+                      )}
+                    </p>
+                    <p className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      {isVi ? "Tôi luôn tâm niệm:" : "I always believe:"}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Quote box synthesis */}
-                <div className="w-full bg-blue-50/70 dark:bg-blue-950/40 backdrop-blur-sm p-5 rounded-2xl border border-blue-100 dark:border-blue-900/50 relative flex flex-col justify-center shadow-sm">
-                  <Quote className="absolute top-3 left-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15 rotate-180" />
-                  <Quote className="absolute bottom-3 right-3 w-6 h-6 text-indigo-400/30 dark:text-indigo-400/15" />
+                <div className="w-full bg-[#fcfcff] dark:bg-slate-900/50 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-900/40 relative flex flex-col justify-center shadow-xs">
+                  <Quote className="absolute top-3 left-3 w-5 h-5 text-indigo-400/30 dark:text-indigo-400/15 rotate-180" />
                   
-                  <div className="text-center space-y-1.5 relative z-10 py-1">
-                    <p className="text-base font-bold text-indigo-700 dark:text-indigo-400 italic">
-                      {isVi ? "Cùng kết nối · Cùng kiến tạo · Cùng thành công" : "Connect together · Create together · Succeed together"}
-                    </p>
-                    <p className="text-xs sm:text-sm font-semibold text-[#f95700] dark:text-[#f97316]">
-                      {isVi ? "Cùng nhau, Cùng phát triển, Cùng thành công." : "Together, Grow together, Succeed together."}
+                  <div className="relative z-10 text-left pl-5">
+                    <p className="text-sm sm:text-base font-extrabold text-indigo-700 dark:text-cyan-400 italic">
+                      {isVi 
+                        ? "“Sự hài lòng của khách hàng không đến từ sự hoàn hảo, mà đến từ sự đồng cảm kịp thời.”"
+                        : "“Customer satisfaction does not come from perfection, but from timely empathy.”"}
                     </p>
                   </div>
                 </div>

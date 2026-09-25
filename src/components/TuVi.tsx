@@ -149,17 +149,25 @@ export default function TuVi() {
 
           {/* ================= PHẦN 1: THÔNG TIN CHUNG & BÁT TRẠCH PHONG THỦY ================= */}
           <div id="tuvi-section-1" className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-purple-400/30 rounded-2xl md:rounded-3xl p-4.5 sm:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(168,85,247,0.15)] hover:dark:border-purple-400/50 backdrop-blur-2xl transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between pb-3.5 border-b border-purple-200/50 dark:border-purple-800/50">
-              <div className="flex items-center gap-2.5">
-                <span className="text-base sm:text-lg font-black font-mono text-purple-700 dark:text-purple-300">1.</span>
-                <div className="w-6 h-6 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-                  <User className="w-5 h-5" />
+            <div className="w-full relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-500/15 via-indigo-500/10 to-transparent dark:from-purple-950/35 dark:via-indigo-950/25 dark:to-transparent border border-white/60 dark:border-purple-500/20 backdrop-blur-md p-3 sm:p-4 shadow-[inset_0_1px_3px_rgba(255,255,255,0.4),0_8px_32px_rgba(31,38,135,0.07)] flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
+              {/* Glass subtle light reflection streak */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none" />
+              
+              <div className="flex items-center gap-2.5 sm:gap-3 relative z-10">
+                <span className="text-base sm:text-lg font-black font-mono text-purple-700 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-400/20 w-8 h-8 rounded-lg flex items-center justify-center border border-purple-500/20 shadow-2xs">1.</span>
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                  <User className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-black text-purple-700 dark:text-purple-300 tracking-wide">
+                  <h3 className="text-base sm:text-lg font-black text-purple-800 dark:text-purple-200 tracking-wide font-play">
                     {isVi ? "Thông tin chung & Bản mệnh phong thủy" : "General Profile & Feng Shui Destiny"}
                   </h3>
                 </div>
+              </div>
+
+              {/* Glass interactive dynamic badge */}
+              <div className="relative z-10 shrink-0 bg-purple-500/10 dark:bg-purple-400/10 border border-purple-300/30 dark:border-purple-800/30 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold text-purple-700 dark:text-purple-300 tracking-wider uppercase backdrop-blur-xs select-none">
+                {isVi ? "Bản mệnh bát tự" : "Destiny Chart"}
               </div>
             </div>
 

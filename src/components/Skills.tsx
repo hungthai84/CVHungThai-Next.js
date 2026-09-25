@@ -165,6 +165,7 @@ const THREATS_CARDS = [
 export function Skills() {
   const { lang } = useLanguage();
   const isVi = lang === "vi";
+  const [selectedSwot, setSelectedSwot] = React.useState<'S' | 'W' | 'O' | 'T'>('S');
 
   return (
     <section
@@ -177,10 +178,40 @@ export function Skills() {
         <PageCardHeader pageId="skills">
           <div className="flex items-center gap-2">
             <span className="text-xs sm:text-caption font-bold font-mono tracking-wider uppercase text-blue-600 dark:text-cyan-400">
-              {isVi ? "PHÂN TÍCH SWOT CÁ NHÂN" : "PERSONAL SWOT ANALYSIS"}
+              {isVi ? "Phân tích SWOT cá nhân" : "Personal SWOT analysis"}
             </span>
           </div>
         </PageCardHeader>
+
+        {/* SWOT TAB SWITCHER - "update giao diện đang chọn" */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-2 bg-slate-100/50 dark:bg-slate-900/50 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 max-w-lg mx-auto select-none w-full">
+          {[
+            { id: "S", labelVi: "S · Thế mạnh", labelEn: "S · Strengths", color: "bg-blue-600 text-white shadow-blue-500/15" },
+            { id: "W", labelVi: "W · Hoàn thiện", labelEn: "W · Weaknesses", color: "bg-orange-500 text-white shadow-orange-500/15" },
+            { id: "O", labelVi: "O · Cơ hội", labelEn: "O · Opportunities", color: "bg-purple-600 text-white shadow-purple-500/15" },
+            { id: "T", labelVi: "T · Thách thức", labelEn: "T · Threats", color: "bg-red-600 text-white shadow-red-500/15" }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                try {
+                  const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav");
+                  audio.volume = 0.2;
+                  audio.play();
+                } catch {}
+                setSelectedSwot(tab.id as any);
+              }}
+              className={cn(
+                "flex-1 min-w-[90px] py-2 px-3.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer",
+                selectedSwot === tab.id
+                  ? tab.color + " shadow-md scale-102 ring-1 ring-white/10"
+                  : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100/30 dark:hover:bg-slate-800/30"
+              )}
+            >
+              {isVi ? tab.labelVi : tab.labelEn}
+            </button>
+          ))}
+        </div>
 
         {/* ========================================================================= */}
         {/* 4-QUADRANT SWOT GRID: 2 CỘT 2 HÀNG Ở MỌI KÍCH THƯỚC [MẪU ÁP DỤNG 16]     */}
@@ -189,55 +220,96 @@ export function Skills() {
         {/* Inner Icon in Mini Card: r = 8px - 4px = 4px (rounded-[4px])              */}
         {/* ========================================================================= */}
         <div className="flex-1 w-full flex items-center justify-center">
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-stretch relative w-full justify-center">
+          <div className="grid grid-cols-2 gap-[15px] items-stretch relative w-full justify-center">
             
             {/* 1. STRENGTHS (S) */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
-              className="glass-card relative rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 border border-blue-200/80 dark:border-cyan-500/40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl shadow-sm dark:shadow-[0_0_20px_rgba(6,182,212,0.18)] hover:dark:shadow-[0_0_25px_rgba(6,182,212,0.3)] hover:scale-[1.005] transition-all duration-300 flex flex-col justify-between overflow-hidden"
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+              onClick={() => setSelectedSwot('S')}
+              className={cn(
+                "glass-card relative p-4 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer",
+                selectedSwot === 'S'
+                  ? "border-blue-400 dark:border-cyan-400 ring-4 ring-blue-500/15 dark:ring-cyan-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(6,182,212,0.35)]"
+                  : "border-blue-200/40 dark:border-cyan-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
+              )}
             >
-              {/* Corner Letter S (Bottom Right) */}
+              {/* Corner Letter S (Bottom Right) with Pulsing Glow */}
               <div className="absolute bottom-2.5 right-3 sm:bottom-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
-                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-blue-500/20 dark:text-cyan-400/25">
+                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-blue-500/20 dark:text-cyan-400/25 group-hover/main:scale-110 group-hover/main:text-blue-500/30 dark:group-hover/main:text-cyan-400/35 transition-all duration-500">
                   S
                 </span>
               </div>
 
-              <div className="relative z-10">
+              {/* Glass background reflection shine */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-500/5 to-transparent pointer-events-none opacity-0 group-hover/main:opacity-100 transition-opacity duration-700" />
+
+              <div className="relative z-10 w-full">
                 {/* Quadrant Header */}
-                <div className="flex items-center gap-2 sm:gap-3 border-b border-blue-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                  <Gem className="w-5 h-5 sm:w-7 sm:h-7 text-blue-600 dark:text-cyan-400 shrink-0" />
-                  <div className="min-w-0">
-                    <h3 className="text-xs sm:text-base md:text-lg font-black text-blue-700 dark:text-cyan-300 truncate">
-                      {isVi ? "7.1. ĐIỂM MẠNH: NỀN TẢNG VẬN HÀNH & LÃNH ĐẠO" : "7.1. STRENGTHS: OPERATIONAL & LEADERSHIP FOUNDATION"}
-                    </h3>
+                <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3.5 sm:mb-4.5">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 dark:from-cyan-500/20 dark:to-blue-500/20 flex items-center justify-center border border-blue-200/40 dark:border-cyan-500/30 shrink-0">
+                      <Gem className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 text-blue-600 dark:text-cyan-400" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-blue-700 dark:text-cyan-300 truncate font-play">
+                        {isVi ? "7.1. THẾ MẠNH: NỀN TẢNG VẬN HÀNH & LÃNH ĐẠO" : "7.1. STRENGTHS: OPERATIONAL & LEADERSHIP FOUNDATION"}
+                      </h3>
+                    </div>
                   </div>
+                  
+                  {/* Subtle Badge */}
+                  <span className="hidden sm:inline-block px-2.5 py-1 text-[10px] font-bold text-blue-700 dark:text-cyan-300 bg-blue-500/10 dark:bg-cyan-500/10 rounded-full border border-blue-200/30 dark:border-cyan-500/20 uppercase tracking-wider scale-90">
+                    {isVi ? "Ưu thế" : "Core"}
+                  </span>
                 </div>
 
-                <p className="text-[11px] sm:text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
+                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-5 line-clamp-3 sm:line-clamp-none">
                   {isVi 
-                    ? "Những năng lực cốt lõi đã được chứng minh qua thực tiễn quản lý, vận hành và phát triển hệ thống Dịch vụ Khách hàng."
-                    : "Core capabilities proven through management, operations, and CX system development."}
+                    ? "Những thế mạnh cốt lõi nổi bật nhất đã được chứng minh qua thực tiễn quản trị, vận hành và nâng cấp hệ thống CSKH."
+                    : "Core outstanding strengths proven through management, operation, and CX system elevation."}
                 </p>
 
-                {/* Skills Progress List */}
-                <div className="flex flex-col gap-2.5 sm:gap-3.5">
+                {/* Skills Progress List with Custom Premium Layout & Real Animated Bars */}
+                <div className="flex flex-col gap-2.5 sm:gap-3">
                   {STRENGTHS_DATA.map((item, index) => {
                     const ItemIcon = item.icon;
                     return (
-                      <div key={index} className="flex items-center justify-between gap-2 sm:gap-4 group/item">
-                        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                          <ItemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
-                          <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-blue-600 dark:group-hover/item:text-cyan-300 transition-colors">
-                            {isVi ? item.labelVi : item.labelEn}
-                          </span>
+                      <div 
+                        key={index} 
+                        className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-blue-100 dark:hover:border-cyan-500/15 bg-transparent hover:bg-blue-50/20 dark:hover:bg-cyan-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer"
+                      >
+                        {/* Upper row: Label & Percent */}
+                        <div className="flex items-center justify-between gap-2.5 w-full">
+                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <div className="w-5.5 h-5.5 rounded-md bg-blue-500/5 dark:bg-cyan-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-blue-500/10 dark:group-hover/item:bg-cyan-500/20 transition-colors">
+                              <ItemIcon className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                            </div>
+                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-blue-600 dark:group-hover/item:text-cyan-300 transition-colors">
+                              {isVi ? item.labelVi : item.labelEn}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/25 dark:border-cyan-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                              {item.percent}%
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                          <span className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                            {item.percent}%
-                          </span>
+
+                        {/* Lower row: Custom Animated Progress Bar */}
+                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${item.percent}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
+                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-cyan-500 dark:to-blue-600 rounded-full relative"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                          </motion.div>
                         </div>
                       </div>
                     );
@@ -251,7 +323,14 @@ export function Skills() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.05 }}
-              className="glass-card relative rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 border border-orange-200/80 dark:border-amber-500/40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl shadow-sm dark:shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:dark:shadow-[0_0_25px_rgba(245,158,11,0.25)] hover:scale-[1.005] transition-all duration-300 flex flex-col justify-between overflow-hidden"
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+              onClick={() => setSelectedSwot('W')}
+              className={cn(
+                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
+                selectedSwot === 'W'
+                  ? "border-orange-400 dark:border-amber-400 ring-4 ring-orange-500/15 dark:ring-amber-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(245,158,11,0.35)]"
+                  : "border-orange-200/40 dark:border-amber-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
+              )}
             >
               {/* Corner Letter W (Bottom Left) */}
               <div className="absolute bottom-2.5 left-3 sm:bottom-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
@@ -262,37 +341,54 @@ export function Skills() {
 
               <div className="relative z-10">
                 {/* Quadrant Header */}
-                <div className="flex items-center justify-end gap-2 sm:gap-3 border-b border-orange-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4 text-right">
-                  <div className="min-w-0 text-right">
-                    <h3 className="text-xs sm:text-base md:text-lg font-black text-orange-700 dark:text-amber-300 truncate">
+                <div className="flex items-center justify-between gap-2 sm:gap-3 border-b border-orange-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
+                  <div className="min-w-0">
+                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-orange-700 dark:text-amber-300 truncate font-play">
                       {isVi ? "7.2. HOÀN THIỆN: NÂNG CAO NĂNG LỰC QUẢN TRỊ" : "7.2. GROWTH: ELEVATING GOVERNANCE COMPETENCIES"}
                     </h3>
                   </div>
                   <TrendingDown className="w-5 h-5 sm:w-7 sm:h-7 text-orange-600 dark:text-amber-400 shrink-0" />
                 </div>
 
-                <p className="text-[11px] sm:text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
+                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
                   {isVi 
-                    ? "Những năng lực cần tiếp tục hoàn thiện để nâng tầm vai trò quản lý từ vận hành hiệu quả sang quản trị chiến lược và phát triển bền vững."
-                    : "Capabilities to continuously refine to elevate management from operational efficiency to strategic governance."}
+                    ? "Những khía cạnh cần liên tục hoàn thiện nhằm nâng tầm kỹ năng quản lý thực thi sang quản trị định hướng chiến lược."
+                    : "Capabilities to continuously refine to elevate management from execution to strategic governance."}
                 </p>
 
-                {/* Skills Progress List */}
+                {/* Skills Progress List with matching styling and animated bars */}
                 <div className="flex flex-col gap-2.5 sm:gap-3.5">
                   {WEAKNESSES_DATA.map((item, index) => {
                     const ItemIcon = item.icon;
                     return (
-                      <div key={index} className="flex items-center justify-between gap-2 sm:gap-4 group/item">
-                        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                          <ItemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-600 dark:text-amber-400 shrink-0" />
-                          <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-orange-600 dark:group-hover/item:text-amber-400 transition-colors">
-                            {isVi ? item.labelVi : item.labelEn}
-                          </span>
+                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-orange-100 dark:hover:border-amber-500/15 bg-transparent hover:bg-orange-50/20 dark:hover:bg-amber-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
+                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <div className="w-5.5 h-5.5 rounded-md bg-orange-500/5 dark:bg-amber-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-orange-500/10 dark:group-hover/item:bg-amber-500/20 transition-colors">
+                              <ItemIcon className="w-3.5 h-3.5 text-orange-600 dark:text-amber-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                            </div>
+                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-orange-600 dark:group-hover/item:text-amber-400 transition-colors">
+                              {isVi ? item.labelVi : item.labelEn}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-orange-500/10 text-orange-700 dark:text-amber-300 border border-orange-500/25 dark:border-amber-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                              {item.percent}%
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                          <span className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-orange-500/10 text-orange-700 dark:text-amber-300 border border-orange-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                            {item.percent}%
-                          </span>
+
+                        {/* Lower row: Custom Animated Progress Bar */}
+                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${item.percent}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
+                            className="h-full bg-gradient-to-r from-orange-500 to-amber-600 dark:from-amber-500 dark:to-orange-600 rounded-full relative"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                          </motion.div>
                         </div>
                       </div>
                     );
@@ -306,7 +402,14 @@ export function Skills() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.1 }}
-              className="glass-card relative rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 border border-purple-200/80 dark:border-purple-500/40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl shadow-sm dark:shadow-[0_0_20px_rgba(168,85,247,0.18)] hover:dark:shadow-[0_0_25px_rgba(168,85,247,0.3)] hover:scale-[1.005] transition-all duration-300 flex flex-col justify-between overflow-hidden"
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+              onClick={() => setSelectedSwot('O')}
+              className={cn(
+                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
+                selectedSwot === 'O'
+                  ? "border-purple-400 dark:border-purple-500/50 ring-4 ring-purple-500/15 dark:ring-purple-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(168,85,247,0.35)]"
+                  : "border-purple-200/40 dark:border-purple-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
+              )}
             >
               {/* Corner Letter O (Top Right) */}
               <div className="absolute top-2.5 right-3 sm:top-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
@@ -320,34 +423,51 @@ export function Skills() {
                 <div className="flex items-center gap-2 sm:gap-3 border-b border-purple-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
                   <Rocket className="w-5 h-5 sm:w-7 sm:h-7 text-purple-600 dark:text-purple-400 shrink-0" />
                   <div className="min-w-0">
-                    <h3 className="text-xs sm:text-base md:text-lg font-black text-purple-700 dark:text-purple-300 truncate">
+                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-purple-700 dark:text-purple-300 truncate font-play">
                       {isVi ? "7.3. CƠ HỘI PHÁT TRIỂN: CÔNG NGHỆ & CHUYỂN ĐỔI DỊCH VỤ" : "7.3. OPPORTUNITIES: TECH & SERVICE TRANSFORMATION"}
                     </h3>
                   </div>
                 </div>
 
-                <p className="text-[11px] sm:text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
+                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
                   {isVi 
-                    ? "Những năng lực tạo đòn bẩy để nâng cao hiệu quả vận hành, tối ưu nguồn lực và chuyển đổi mô hình Dịch vụ Khách hàng trong thời đại số."
-                    : "Leverage capabilities to boost operational efficiency, optimize resources, and transform CX models."}
+                    ? "Những cơ hội đón đầu làn sóng số, chuyển đổi dịch vụ sang kênh thông minh và ứng dụng AI nâng cao hiệu năng."
+                    : "Excellent avenues to capture digital waves, automating workflows, and leveraging AI models."}
                 </p>
 
-                {/* Skills Progress List */}
+                {/* Skills Progress List with consistent layouts and animated bars */}
                 <div className="flex flex-col gap-2.5 sm:gap-3.5">
-                  {OPPORTUNITIES_CARDS.map((item, index) => {
+                  {OPPORTUNITIES_CARDS.slice(0, 5).map((item, index) => {
                     const ItemIcon = item.icon;
                     return (
-                      <div key={index} className="flex items-center justify-between gap-2 sm:gap-4 group/item">
-                        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                          <ItemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                          <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-purple-600 dark:group-hover/item:text-purple-300 transition-colors">
-                            {isVi ? item.titleVi : item.titleEn}
-                          </span>
+                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-purple-100 dark:hover:border-purple-500/15 bg-transparent hover:bg-purple-50/20 dark:hover:bg-purple-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
+                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <div className="w-5.5 h-5.5 rounded-md bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-purple-500/10 dark:group-hover/item:bg-purple-500/20 transition-colors">
+                              <ItemIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                            </div>
+                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-purple-600 dark:group-hover/item:text-purple-300 transition-colors">
+                              {isVi ? item.titleVi : item.titleEn}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/25 dark:border-purple-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                              {item.percent}%
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                          <span className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                            {item.percent}%
-                          </span>
+
+                        {/* Lower row: Custom Animated Progress Bar */}
+                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${item.percent}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
+                            className="h-full bg-gradient-to-r from-purple-500 to-pink-600 dark:from-purple-500 dark:to-pink-600 rounded-full relative"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                          </motion.div>
                         </div>
                       </div>
                     );
@@ -361,7 +481,14 @@ export function Skills() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.15 }}
-              className="glass-card relative rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 border border-red-200/80 dark:border-red-500/40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl shadow-sm dark:shadow-[0_0_20px_rgba(239,68,68,0.18)] hover:dark:shadow-[0_0_25px_rgba(239,68,68,0.3)] hover:scale-[1.005] transition-all duration-300 flex flex-col justify-between overflow-hidden"
+              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+              onClick={() => setSelectedSwot('T')}
+              className={cn(
+                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
+                selectedSwot === 'T'
+                  ? "border-red-400 dark:border-red-500/50 ring-4 ring-red-500/15 dark:ring-red-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(239,68,68,0.35)]"
+                  : "border-red-200/40 dark:border-red-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
+              )}
             >
               {/* Corner Letter T (Top Left) */}
               <div className="absolute top-2.5 left-3 sm:top-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
@@ -372,37 +499,54 @@ export function Skills() {
 
               <div className="relative z-10">
                 {/* Quadrant Header */}
-                <div className="flex items-center justify-end gap-2 sm:gap-3 border-b border-red-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4 text-right">
-                  <div className="min-w-0 text-right">
-                    <h3 className="text-xs sm:text-base md:text-lg font-black text-red-700 dark:text-red-300 truncate">
+                <div className="flex items-center justify-between gap-2 sm:gap-3 border-b border-red-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
+                  <div className="min-w-0">
+                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-red-700 dark:text-red-300 truncate font-play">
                       {isVi ? "7.4. THÁCH THỨC: THÍCH ỨNG & QUẢN TRỊ BIẾN ĐỘNG" : "7.4. THREATS: ADAPTATION & VOLATILITY MANAGEMENT"}
                     </h3>
                   </div>
                   <Target className="w-5 h-5 sm:w-7 sm:h-7 text-red-600 dark:text-red-400 shrink-0" />
                 </div>
 
-                <p className="text-[11px] sm:text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
+                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
                   {isVi 
-                    ? "Những yếu tố bên ngoài tác động trực tiếp đến chất lượng dịch vụ, nhân sự và hiệu quả vận hành, đòi hỏi khả năng thích ứng và quản trị chủ động."
-                    : "External factors directly impacting service quality, personnel, and operational performance."}
+                    ? "Những thách thức khách quan từ môi trường kinh tế và thay đổi công nghệ đột phá tác động trực tiếp đến dịch vụ."
+                    : "Key external risks from volatile economy and rapid technical changes demanding persistent agility."}
                 </p>
 
-                {/* Skills Progress List */}
+                {/* Skills Progress List with consistent layouts and animated bars */}
                 <div className="flex flex-col gap-2.5 sm:gap-3.5">
-                  {THREATS_CARDS.map((item, index) => {
+                  {THREATS_CARDS.slice(0, 5).map((item, index) => {
                     const ItemIcon = item.icon;
                     return (
-                      <div key={index} className="flex items-center justify-between gap-2 sm:gap-4 group/item">
-                        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                          <ItemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 dark:text-red-400 shrink-0" />
-                          <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-red-600 dark:group-hover/item:text-red-300 transition-colors">
-                            {isVi ? item.titleVi : item.titleEn}
-                          </span>
+                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-red-100 dark:hover:border-red-500/15 bg-transparent hover:bg-red-50/20 dark:hover:bg-red-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
+                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <div className="w-5.5 h-5.5 rounded-md bg-red-500/5 dark:bg-red-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-red-500/10 dark:group-hover/item:bg-red-500/20 transition-colors">
+                              <ItemIcon className="w-3.5 h-3.5 text-red-600 dark:text-red-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                            </div>
+                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-red-600 dark:group-hover/item:text-red-300 transition-colors">
+                              {isVi ? item.titleVi : item.titleEn}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/25 dark:border-red-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                              {item.percent}%
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                          <span className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                            {item.percent}%
-                          </span>
+
+                        {/* Lower row: Custom Animated Progress Bar */}
+                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${item.percent}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
+                            className="h-full bg-gradient-to-r from-red-500 to-rose-600 dark:from-red-500 dark:to-rose-600 rounded-full relative"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                          </motion.div>
                         </div>
                       </div>
                     );
@@ -417,11 +561,14 @@ export function Skills() {
         {/* ========================================================================= */}
         {/* LANGUAGES SECTION: 7.5. NĂNG LỰC NGÔN NGỮ                                  */}
         {/* ========================================================================= */}
-        <div className="glass-card w-full rounded-[28px] p-6 border border-slate-200/90 dark:border-cyan-500/30 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl mt-4 select-none flex flex-col gap-5 shadow-xs dark:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300">
+        <div 
+          style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+          className="glass-card w-full p-6 border border-slate-200/90 dark:border-cyan-500/30 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl mt-4 select-none flex flex-col gap-5 shadow-xs dark:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300"
+        >
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
             <Globe className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
             <h3 className="font-black text-base text-slate-900 dark:text-white tracking-tight uppercase">
-              {isVi ? "7.5. NĂNG LỰC NGÔN NGỮ" : "7.5. LANGUAGE PROFICIENCY"}
+              {isVi ? "7.5. Năng lực ngôn ngữ" : "7.5. Language proficiency"}
             </h3>
           </div>
 
@@ -438,7 +585,7 @@ export function Skills() {
               </div>
               <div className="flex flex-col min-w-0">
                 <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight">
-                  {isVi ? "TIẾNG VIỆT" : "VIETNAMESE"}
+                  {isVi ? "Tiếng Việt" : "Vietnamese"}
                 </h4>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
                   {isVi ? "Ngôn ngữ bản xứ" : "Native language"}
@@ -460,7 +607,7 @@ export function Skills() {
               </div>
               <div className="flex flex-col min-w-0">
                 <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight">
-                  {isVi ? "TIẾNG ANH" : "ENGLISH"}
+                  {isVi ? "Tiếng Anh" : "English"}
                 </h4>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
                   {isVi ? "Giao tiếp chuyên nghiệp" : "Professional communication"}
@@ -482,7 +629,7 @@ export function Skills() {
               </div>
               <div className="flex flex-col min-w-0">
                 <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight uppercase truncate">
-                  {isVi ? "ỨNG DỤNG AI" : "AI APPLICATION"}
+                  {isVi ? "Ứng dụng AI" : "AI application"}
                 </h4>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
                   {isVi ? "Hỗ trợ trao đổi & hợp tác đa quốc gia" : "Assisting multi-national collaboration"}

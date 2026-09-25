@@ -163,13 +163,7 @@ export function Interview() {
         <PageCardHeader pageId="interview" />
 
         {/* Thẻ Phỏng vấn chứa các thẻ con cách tiêu đề main card 15px */}
-        <div className="flex-1 w-full flex items-center justify-center">
-          <div className="w-full rounded-[24px] p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-lg flex flex-col justify-center items-center">
-            
-            {/* ========================================================================= */}
-            {/* BENTO HERO SECTION: VIDEO PLAYER + GIAO DIỆN CÂU ĐANG CHỌN (ACTIVE DETAIL) */}
-            {/* ========================================================================= */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch">
 
             {/* BENTO CARD 1: Video Player Hero Card (7 columns on lg) */}
             <div className="w-full lg:col-span-7 flex flex-col h-[340px] xs:h-[400px] sm:h-[480px] lg:h-[560px]">
@@ -189,22 +183,20 @@ export function Interview() {
                 <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40" />
 
                 {/* Top Left: Active Question Badge & Timecode */}
-                <div className="pointer-events-none absolute left-3 sm:left-4 top-3 sm:top-4 z-20 flex items-center gap-2 max-w-[calc(100%-80px)]">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-white/20 backdrop-blur-md text-xs font-bold text-white shadow-md truncate">
-                    <span className={cn(
-                      "w-2.5 h-2.5 rounded-full shrink-0", 
-                      isInterviewPlaying ? "bg-emerald-400 animate-ping" : "bg-cyan-400"
-                    )} />
-                    <span className="font-mono text-cyan-300">
-                      {isInterviewPlaying 
-                        ? (isVi ? `Đang phát câu 0${currentQ.stt}` : `Playing Q0${currentQ.stt}`)
-                        : (isVi ? "Video phỏng vấn sẵn sàng" : "Ready to play")}
-                    </span>
-                    <span className="text-white/40">·</span>
-                    <span className="text-slate-300 font-mono text-[11px] truncate">
-                      {currentQ.timestamp}
-                    </span>
-                  </div>
+                <div className="pointer-events-none absolute left-3 sm:left-4 top-3 sm:top-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-white/20 backdrop-blur-md text-xs font-bold text-white shadow-md truncate max-w-[calc(100%-80px)]">
+                  <span className={cn(
+                    "w-2.5 h-2.5 rounded-full shrink-0", 
+                    isInterviewPlaying ? "bg-emerald-400 animate-ping" : "bg-cyan-400"
+                  )} />
+                  <span className="font-mono text-cyan-300">
+                    {isInterviewPlaying 
+                      ? (isVi ? `Đang phát câu 0${currentQ.stt}` : `Playing Q0${currentQ.stt}`)
+                      : (isVi ? "Video phỏng vấn sẵn sàng" : "Ready to play")}
+                  </span>
+                  <span className="text-white/40">·</span>
+                  <span className="text-slate-300 font-mono text-[11px] truncate">
+                    {currentQ.timestamp}
+                  </span>
                 </div>
 
                 {/* Bottom Bar: Laser Play/Pause Capsule Button */}
@@ -433,8 +425,6 @@ export function Interview() {
 
           </div>
         </div>
-      </div>
-    </div>
   </section>
   );
 }

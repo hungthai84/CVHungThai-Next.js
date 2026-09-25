@@ -1,732 +1,461 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { 
-  Phone, 
+  User, 
   Mail, 
-  MapPin, 
-  MessageCircle, 
-  Check, 
-  Copy, 
-  ExternalLink, 
-  Clock, 
-  ShieldCheck, 
+  Compass, 
+  Phone, 
+  MessageSquare, 
+  Users, 
+  Lock, 
   Send,
-  UserCheck,
-  QrCode,
-  Sparkles,
-  X,
-  Globe,
-  Linkedin,
-  MessageSquare,
-  FileText,
-  User,
-  AtSign,
-  AlertCircle
+  Heart,
+  Zap,
+  ArrowRight
 } from "lucide-react";
 import { useLanguage } from "../i18n";
-import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
-import { cn } from "../lib/utils";
-import { PageCardHeader } from "./PageCardHeader";
-import { motion, AnimatePresence } from "motion/react";
 
 export function Contact() {
   const { lang } = useLanguage();
-  const { theme } = useTheme();
   const isVi = lang === "vi";
 
-  const [copiedPhone, setCopiedPhone] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedZaloLink, setCopiedZaloLink] = useState(false);
-  const [copiedWebsite, setCopiedWebsite] = useState(false);
-  const [copiedLinkedIn, setCopiedLinkedIn] = useState(false);
-
-  // Email Form State
-  const [senderName, setSenderName] = useState("");
-  const [senderEmail, setSenderEmail] = useState("");
-  const [senderPhone, setSenderPhone] = useState("");
-  const [subject, setSubject] = useState("");
+  // Form State
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [selectedTopic, setSelectedTopic] = useState<string>("");
-  const [formError, setFormError] = useState<string | null>(null);
+  const [activeTopic, setActiveTopic] = useState("💬 General");
   const [formSuccess, setFormSuccess] = useState(false);
-  const [copiedFormContent, setCopiedFormContent] = useState(false);
 
-  const [selectedSkillTopic, setSelectedSkillTopic] = useState<string | null>(() => {
-    try {
-      return typeof window !== "undefined" && window.sessionStorage
-        ? window.sessionStorage.getItem("contact_selected_skill_topic") || null
-        : null;
-    } catch {
-      return null;
-    }
-  });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      try {
-        const storedSkill = typeof window !== "undefined" && window.sessionStorage
-          ? window.sessionStorage.getItem("contact_selected_skill_topic")
-          : null;
-        if (storedSkill) {
-          setSelectedSkillTopic(storedSkill);
-          setSubject(`Trao đổi về kỹ năng: ${storedSkill}`);
-        }
-      } catch {}
-    };
-    handleStorageChange();
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  const phoneNum = "0909097882";
-  const formattedPhone = "0909 097 882";
-  const zaloUrl = "https://zalo.me/0909097882";
-  const emailAddr = "hungthai84@gmail.com";
-  const websiteUrl = "https://nguyenhungthai.powerservice.one/";
-  const linkedinUrl = "https://www.linkedin.com/in/hungthai84/";
-  const qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://zalo.me/0909097882";
-
-  const quickTopics = [
-    { id: "cs_management", labelVi: "Hợp tác & Vận hành CSKH", labelEn: "CS Management & Operations", subVi: "Trao đổi về Quản lý / Vận hành Trung tâm CSKH" },
-    { id: "career", labelVi: "Cơ hội Nghề nghiệp / Tuyển dụng", labelEn: "Career / Recruitment", subVi: "Thư mời phỏng vấn & Cơ hội Hợp tác Nhân sự" },
-    { id: "crm_consulting", labelVi: "Tư vấn CRM & Chuyển đổi số", labelEn: "CRM & Digital Transformation", subVi: "Tư vấn Triển khai Hệ thống CRM Omni & AI Chatbot" },
-    { id: "networking", labelVi: "Kết nối Chuyên môn", labelEn: "Professional Networking", subVi: "Giao lưu & Chia sẻ Kinh nghiệm Ngành CX" }
+  // Topics list matching specification
+  const topics = [
+    { id: "general", label: "💬 General", labelVi: "💬 Chung" },
+    { id: "design", label: "🎨 Design help", labelVi: "🎨 Thiết kế" },
+    { id: "partnership", label: "🤝 Partnership", labelVi: "🤝 Hợp tác" },
+    { id: "bug", label: "🐞 Bug report", labelVi: "🐞 Báo lỗi", isCoral: true }
   ];
 
-  const handleSelectTopic = (topic: typeof quickTopics[0]) => {
+  const handleTopicClick = (topicLabel: string) => {
     try { playUiSound("click"); } catch {}
-    setSelectedTopic(topic.id);
-    setSubject(isVi ? topic.subVi : topic.labelEn);
+    setActiveTopic(topicLabel);
   };
 
-  const handleCopyPhone = () => {
-    navigator.clipboard.writeText(phoneNum);
-    setCopiedPhone(true);
-    setTimeout(() => setCopiedPhone(false), 2500);
-  };
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(emailAddr);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2500);
-  };
-
-  const handleCopyZaloLink = () => {
-    navigator.clipboard.writeText(zaloUrl);
-    setCopiedZaloLink(true);
-    setTimeout(() => setCopiedZaloLink(false), 2500);
-  };
-
-  const handleCopyWebsite = () => {
-    navigator.clipboard.writeText(websiteUrl);
-    setCopiedWebsite(true);
-    setTimeout(() => setCopiedWebsite(false), 2500);
-  };
-
-  const handleCopyLinkedIn = () => {
-    navigator.clipboard.writeText(linkedinUrl);
-    setCopiedLinkedIn(true);
-    setTimeout(() => setCopiedLinkedIn(false), 2500);
-  };
-
-  const handleSendEmail = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
+    try { playUiSound("success"); } catch {}
 
-    if (!senderName.trim()) {
-      setFormError(isVi ? "Vui lòng nhập họ tên hoặc tên tổ chức của bạn." : "Please enter your name or company.");
-      return;
-    }
-    if (!senderEmail.trim() || !senderEmail.includes("@")) {
-      setFormError(isVi ? "Vui lòng nhập địa chỉ email hợp lệ." : "Please enter a valid email address.");
-      return;
-    }
-    if (!message.trim()) {
-      setFormError(isVi ? "Vui lòng nhập nội dung tin nhắn gửi đến tôi." : "Please enter your message content.");
-      return;
-    }
-
-    try { playUiSound("click"); } catch {}
-
-    const emailSubject = encodeURIComponent(subject.trim() || `Tin nhắn từ ${senderName} qua Portfolio`);
+    const targetEmail = "hungthai84@gmail.com";
+    const emailSubject = encodeURIComponent(`[Loop Contact - ${activeTopic}] Message from ${fullName || "User"}`);
     const emailBody = encodeURIComponent(
-      `Kính gửi anh Nguyễn Hùng Thái,\n\n` +
-      `Tôi là: ${senderName}\n` +
-      `Email liên hệ: ${senderEmail}\n` +
-      (senderPhone ? `Số điện thoại / Zalo: ${senderPhone}\n` : "") +
-      `\nNội dung tin nhắn:\n${message}\n\n` +
-      `--\nThư được gửi từ cổng thông tin cá nhân: https://nguyenhungthai.powerservice.one/`
+      `Hi Nguyễn Hùng Thái,\n\n` +
+      `My Name: ${fullName}\n` +
+      `My Email: ${email}\n` +
+      `Topic: ${activeTopic}\n\n` +
+      `Message:\n${message}\n\n` +
+      `--\nSent from Loop Design Platform`
     );
 
-    const mailtoUrl = `mailto:${emailAddr}?subject=${emailSubject}&body=${emailBody}`;
-    window.location.href = mailtoUrl;
-
+    window.location.href = `mailto:${targetEmail}?subject=${emailSubject}&body=${emailBody}`;
     setFormSuccess(true);
   };
 
-  const handleCopyEmailContent = () => {
-    const textContent = 
-      `Kính gửi anh Nguyễn Hùng Thái,\n\n` +
-      `Họ tên người gửi: ${senderName || "Người liên hệ"}\n` +
-      `Email: ${senderEmail || "Chưa cung cấp"}\n` +
-      (senderPhone ? `Số điện thoại: ${senderPhone}\n` : "") +
-      `Tiêu đề: ${subject || "Liên hệ hợp tác"}\n\n` +
-      `Nội dung:\n${message}\n\n` +
-      `Gửi đến: ${emailAddr}`;
-
-    navigator.clipboard.writeText(textContent);
-    setCopiedFormContent(true);
-    setTimeout(() => setCopiedFormContent(false), 3000);
-  };
-
-  const handleResetForm = () => {
-    setSenderName("");
-    setSenderEmail("");
-    setSenderPhone("");
-    setSubject("");
-    setMessage("");
-    setSelectedTopic("");
-    setFormError(null);
-    setFormSuccess(false);
-  };
-
   return (
-    <section 
-      id="contact" 
-      className="relative w-full min-h-full flex flex-col gap-5 p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans select-none"
-    >
-      <div 
-        id="info-card-contact" 
-        className="w-full max-w-7xl mx-auto flex-1 flex flex-col gap-5 relative z-10"
-      >
-        {selectedSkillTopic && (
-          <div className="w-full py-2 px-3.5 rounded-xl bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-blue-500/15 border border-purple-500/30 flex items-center justify-between gap-2 text-xs font-bold text-purple-900 dark:text-purple-200 shadow-2xs shrink-0">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="p-1.5 rounded-lg bg-purple-600 text-white shadow-xs shrink-0">
-                <Sparkles className="w-3.5 h-3.5" />
-              </span>
-              <span className="truncate">
-                {isVi ? "Chuyển tiếp từ Kỹ năng:" : "Forwarded from Skill Matrix:"}{" "}
-                <span className="font-black underline decoration-purple-500 decoration-1">{selectedSkillTopic}</span>
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                sessionStorage.removeItem("contact_selected_skill_topic");
-                setSelectedSkillTopic(null);
-              }}
-              className="px-2.5 py-1 rounded-md bg-purple-200/80 dark:bg-purple-900/60 hover:bg-purple-300 dark:hover:bg-purple-800 text-purple-800 dark:text-purple-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0"
-              title="Đóng"
-            >
-              <X className="w-3.5 h-3.5" />
-              <span>{isVi ? "Đóng" : "Close"}</span>
-            </button>
-          </div>
-        )}
+    <div className="w-full bg-[#f8fafc] text-[#082f49] font-sans antialiased overflow-x-hidden min-h-screen relative pb-12">
+      {/* Scoped CSS animations for the interactive floating illustration */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes floatA {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-14px); }
+        }
+        @keyframes floatB {
+          0%, 100% { transform: translateY(-14px); }
+          50% { transform: translateY(0); }
+        }
+        @keyframes floatC {
+          0%, 100% { transform: translateY(-6px) rotate(0deg); }
+          50% { transform: translateY(-18px) rotate(4deg); }
+        }
+        .float-a { animation: floatA 6s ease-in-out infinite; }
+        .float-b { animation: floatB 7s ease-in-out infinite; }
+        .float-c { animation: floatC 8s ease-in-out infinite; }
+        .grain {
+          background-image: radial-gradient(rgba(14, 165, 233, 0.12) 1.5px, transparent 1.5px);
+          background-size: 24px 24px;
+        }
+      `}} />
 
-        {/* Header Card Liên hệ */}
-        <PageCardHeader pageId="contact">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-            <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-              <span>{isVi ? "Trực tuyến 24/7" : "Active 24/7"}</span>
+      {/* ========================================================================= */}
+      {/* 1. STICKY BLURRED CLOUD NAV                                               */}
+      {/* ========================================================================= */}
+      <header className="sticky top-0 z-50 w-full bg-[#f8fafc]/80 backdrop-blur-md border-b border-sky-100/60 transition-all duration-300">
+        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6 lg:px-8">
+          {/* Logo link */}
+          <a href="#home" className="flex items-center gap-2.5 group shrink-0 select-none">
+            <div className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-[#38bdf8] to-[#0369a1] text-white shadow-md transition-transform duration-300 group-hover:scale-105">
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2.4" 
+                strokeLinecap="round" 
+                className="w-5.5 h-5.5 transition-transform duration-500 ease-out group-hover:rotate-[366deg]"
+              >
+                <path d="M7 9C4.24 9 2 11.24 2 14c0 2.76 2.24 5 5 5c3.21 0 5.25-3.33 7-6c1.75-2.67 3.79-6 7-6c2.76 0 5 2.24 5 5c0 2.76-2.24 5-5 5c-3.21 0-5.25-3.33-7-6c-1.75-2.67-3.79-6-7-6Z" />
+              </svg>
+            </div>
+            <span className="text-[22px] font-black tracking-tight text-[#082f49] font-play transition-colors duration-300 group-hover:text-[#0369a1]">
+              Loop
             </span>
+          </a>
+
+          {/* Navigation links (hidden below md) */}
+          <nav className="hidden md:flex items-center gap-8 text-[15px] font-bold text-slate-500">
+            <a href="#features" className="hover:text-[#0369a1] transition-colors">{isVi ? "Tính năng" : "Features"}</a>
+            <a href="#templates" className="hover:text-[#0369a1] transition-colors">{isVi ? "Giao diện" : "Templates"}</a>
+            <a href="#pricing" className="hover:text-[#0369a1] transition-colors">{isVi ? "Bảng giá" : "Pricing"}</a>
+            <a href="#contact" className="text-[#082f49] font-extrabold">{isVi ? "Liên hệ" : "Contact"}</a>
+          </nav>
+
+          {/* Action buttons on right */}
+          <div className="flex items-center gap-4">
+            <a 
+              href="#login" 
+              className="hidden sm:inline-block text-[15px] font-extrabold text-[#082f49] hover:text-[#0369a1] transition-colors"
+            >
+              {isVi ? "Đăng nhập" : "Log in"}
+            </a>
+            <a 
+              href="#start" 
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#082f49] px-5 py-2.5 text-[15px] font-extrabold text-white shadow-md ring-2 ring-rose-500/10 hover:bg-[#0369a1] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <span>{isVi ? "Thử miễn phí" : "Start free"}</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
-        </PageCardHeader>
+        </div>
+      </header>
 
-        {/* Main Grid: Bento Contact Channels + Interactive Direct Email Compose Form */}
-        {/* [MẪU ÁP DỤNG 16: ĐỒNG BỘ CÙNG GIAO DIỆN ĐANG CHỌN] */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch w-full">
-          
-          {/* Cột 1: Thông tin kênh liên lạc trực tiếp & Zalo QR (5 Cột) */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
-            
-            {/* Card Profile CX: Outer r=28px, p=20px -> Inner r=8px */}
-            <div 
-              id="details-card-contact"
-              style={{ borderRadius: "28px" }}
-              className="glass-card backdrop-blur-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 p-5 shadow-md dark:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-[28px] flex flex-col justify-between gap-3 text-left relative overflow-hidden transition-all duration-300"
-            >
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80">
-                <div className="flex items-center gap-2">
-                  <UserCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                    {isVi ? "Kênh liên hệ chính thức" : "Official Direct Channels"}
-                  </h3>
-                </div>
-                <span className="px-2.5 py-0.5 rounded-[6px] text-[10px] font-black tracking-wider uppercase bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
-                  CX Manager
-                </span>
-              </div>
+      {/* ========================================================================= */}
+      {/* 2. FULL-BLEED HERO BAND + ORBS                                            */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-hidden grain pt-16 pb-20 text-center select-none bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9]">
+        {/* Three blurred background decorative orbs */}
+        <div className="pointer-events-none absolute -top-24 -left-24 h-80 w-80 rounded-full bg-sky-200/60 blur-3xl" />
+        <div className="pointer-events-none absolute -top-10 right-0 h-72 w-72 rounded-full bg-rose-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl" />
 
-              {/* Profile Overview: r_inner = 28 - 20 = 8px */}
-              <div className="py-2.5 px-3.5 rounded-[8px] bg-slate-100/90 dark:bg-slate-800/70 border border-slate-200/90 dark:border-slate-700/80 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-9 h-9 rounded-[4px] bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-xs">
-                    TH
-                  </div>
-                  <div className="min-w-0">
-                    <span className="font-extrabold text-slate-900 dark:text-white text-sm block truncate">
-                      Nguyễn Hùng Thái
-                    </span>
-                    <span className="text-2xs text-emerald-600 dark:text-emerald-400 font-bold block truncate">
-                      Customer Service Manager (22+ Years)
-                    </span>
-                  </div>
-                </div>
-                <div className="hidden sm:flex flex-col items-end text-right shrink-0">
-                  <div className="flex items-center gap-1 text-3xs font-bold text-slate-600 dark:text-slate-300">
-                    <MapPin className="w-3 h-3 text-emerald-500" />
-                    <span>TP.HCM & Tiền Giang</span>
-                  </div>
-                  <span className="text-3xs text-slate-400">Việt Nam</span>
-                </div>
-              </div>
-
-              {/* 4 Contact Channels: r_inner = 8px */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                {/* Phone / Zalo */}
-                <div className="p-2.5 rounded-[8px] bg-emerald-50/90 dark:bg-emerald-950/30 border border-emerald-200/90 dark:border-emerald-800/60 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-[4px] bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                      <Phone className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-3xs font-bold text-emerald-800 dark:text-emerald-300 block leading-tight">
-                        Hotline / Zalo
-                      </span>
-                      <a 
-                        href={zaloUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-black text-slate-900 dark:text-white text-xs hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors block tracking-wide truncate"
-                      >
-                        {formattedPhone}
-                      </a>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyPhone}
-                    className="p-1.5 rounded-[4px] bg-white dark:bg-slate-900 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-slate-700 dark:text-slate-200 border border-emerald-200 dark:border-emerald-800 transition-all cursor-pointer shadow-xs"
-                    title={isVi ? "Sao chép số" : "Copy"}
-                  >
-                    {copiedPhone ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                  </button>
-                </div>
-
-                {/* Email */}
-                <div className="p-2.5 rounded-[8px] bg-blue-50/90 dark:bg-blue-950/30 border border-blue-200/90 dark:border-blue-800/60 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-[4px] bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                      <Mail className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-3xs font-bold text-blue-800 dark:text-blue-300 block leading-tight">
-                        Email
-                      </span>
-                      <span className="font-extrabold text-slate-900 dark:text-white text-2xs block truncate">
-                        {emailAddr}
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="p-1.5 rounded-[4px] bg-white dark:bg-slate-900 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-slate-700 dark:text-slate-200 border border-blue-200 dark:border-blue-800 transition-all cursor-pointer shadow-xs"
-                    title={isVi ? "Sao chép" : "Copy"}
-                  >
-                    {copiedEmail ? <Check className="w-3 h-3 text-blue-600" /> : <Copy className="w-3 h-3" />}
-                  </button>
-                </div>
-
-                {/* Website */}
-                <div className="p-2.5 rounded-[8px] bg-cyan-50/90 dark:bg-cyan-950/30 border border-cyan-200/90 dark:border-cyan-800/60 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-[4px] bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                      <Globe className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-3xs font-bold text-cyan-800 dark:text-cyan-300 block leading-tight">
-                        Website
-                      </span>
-                      <a 
-                        href={websiteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-extrabold text-slate-900 dark:text-white text-2xs hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate"
-                      >
-                        powerservice.one
-                      </a>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyWebsite}
-                    className="p-1.5 rounded-[4px] bg-white dark:bg-slate-900 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 text-slate-700 dark:text-slate-200 border border-cyan-200 dark:border-cyan-800 transition-all cursor-pointer shadow-xs"
-                    title={isVi ? "Sao chép" : "Copy"}
-                  >
-                    {copiedWebsite ? <Check className="w-3 h-3 text-cyan-600" /> : <Copy className="w-3 h-3" />}
-                  </button>
-                </div>
-
-                {/* LinkedIn */}
-                <div className="p-2.5 rounded-[8px] bg-sky-50/90 dark:bg-sky-950/30 border border-sky-200/90 dark:border-sky-800/60 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-[4px] bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-3xs font-bold text-sky-800 dark:text-sky-300 block leading-tight">
-                        LinkedIn
-                      </span>
-                      <a 
-                        href={linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-extrabold text-slate-900 dark:text-white text-2xs hover:text-sky-600 dark:hover:text-sky-400 transition-colors block truncate"
-                      >
-                        in/hungthai84
-                      </a>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyLinkedIn}
-                    className="p-1.5 rounded-[4px] bg-white dark:bg-slate-900 hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-700 dark:text-slate-200 border border-sky-200 dark:border-sky-800 transition-all cursor-pointer shadow-xs"
-                    title={isVi ? "Sao chép" : "Copy"}
-                  >
-                    {copiedLinkedIn ? <Check className="w-3 h-3 text-sky-600" /> : <Copy className="w-3 h-3" />}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Zalo QR Code Card: Outer r=28px, p=20px -> Inner r=8px */}
-            <div 
-              id="zalo-qr-card-contact"
-              style={{ borderRadius: "28px" }}
-              className="glass-card backdrop-blur-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-teal-500/30 p-5 shadow-md dark:shadow-[0_0_15px_rgba(20,184,166,0.15)] rounded-[28px] flex flex-col justify-between gap-3 text-left transition-all duration-300"
-            >
-              <div className="flex items-center justify-between pb-2 border-b border-teal-200/60 dark:border-teal-800/60">
-                <div className="flex items-center gap-2">
-                  <QrCode className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-                  <h3 className="text-xs sm:text-sm font-black text-teal-600 dark:text-teal-400 tracking-wide">
-                    {isVi ? "Quét mã QR Zalo kết nối nhanh" : "Zalo QR Quick Connect"}
-                  </h3>
-                </div>
-                <span className="text-[10px] font-black px-2 py-0.5 rounded-[6px] bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60">
-                  Official Zalo
-                </span>
-              </div>
-
-              <div className="bg-slate-50 dark:bg-slate-950/80 p-2.5 rounded-[8px] border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-center gap-3.5 shadow-inner">
-                <div className="w-20 h-20 rounded-[4px] overflow-hidden border border-slate-200 dark:border-slate-700 bg-white p-1 shadow-xs shrink-0">
-                  <img 
-                    src={qrCodeUrl} 
-                    alt="Zalo QR Code 0909097882" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="space-y-1 min-w-0 text-left">
-                  <span className="text-xs font-black text-blue-600 dark:text-blue-400 block tracking-wide truncate">
-                    Zalo: {formattedPhone}
-                  </span>
-                  <span className="text-3xs font-semibold text-slate-600 dark:text-slate-400 block leading-tight">
-                    {isVi ? "Quét mã để nhắn tin & trao đổi công việc trực tiếp" : "Scan to chat directly on Zalo"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 pt-0.5">
-                <a
-                  href={zaloUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-1.5 px-3 rounded-[8px] bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
-                >
-                  <MessageCircle className="w-3.5 h-3.5" />
-                  <span>Chat Zalo</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-
-                <button
-                  type="button"
-                  onClick={handleCopyZaloLink}
-                  className="py-1.5 px-3 rounded-[8px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer"
-                >
-                  {copiedZaloLink ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-600">{isVi ? "Đã chép!" : "Copied!"}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>{isVi ? "Chép link" : "Copy Link"}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Metric SLA: Outer r=20px, p=14px -> Inner r=6px */}
-            <div className="grid grid-cols-2 gap-2">
-              <div 
-                style={{ borderRadius: "20px" }}
-                className="p-3.5 rounded-[20px] bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-emerald-500/30 shadow-2xs dark:shadow-[0_0_12px_rgba(16,185,129,0.12)] flex flex-col justify-between"
-              >
-                <div className="flex items-center gap-1 text-3xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase">
-                  <Clock className="w-3 h-3" />
-                  <span>{isVi ? "Phản hồi" : "SLA"}</span>
-                </div>
-                <div className="mt-1">
-                  <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">&lt; 15 {isVi ? "Phút" : "Mins"}</span>
-                  <p className="text-3xs text-slate-500 dark:text-slate-400 truncate">Hotline & Zalo 24/7</p>
-                </div>
-              </div>
-
-              <div 
-                style={{ borderRadius: "20px" }}
-                className="p-3.5 rounded-[20px] bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-blue-500/30 shadow-2xs dark:shadow-[0_0_12px_rgba(59,130,246,0.12)] flex flex-col justify-between"
-              >
-                <div className="flex items-center gap-1 text-3xs font-mono font-bold text-blue-600 dark:text-blue-400 uppercase">
-                  <ShieldCheck className="w-3 h-3" />
-                  <span>{isVi ? "Bảo mật" : "Privacy"}</span>
-                </div>
-                <div className="mt-1">
-                  <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">100% {isVi ? "Bảo mật" : "Secure"}</span>
-                  <p className="text-3xs text-slate-500 dark:text-slate-400 truncate">{isVi ? "Trao đổi chuyên môn" : "Confidential Talks"}</p>
-                </div>
-              </div>
-            </div>
-
+        <div className="relative mx-auto max-w-6xl px-6 lg:px-8 flex flex-col items-center">
+          {/* Status response pill */}
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold text-[#082f49] shadow-sm ring-1 ring-sky-100">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+            </span>
+            <span>{isVi ? "Chúng tôi thường trả lời trong vài giờ" : "We usually reply within a few hours"}</span>
           </div>
 
-          {/* Cột 2: Form Nhập & Gửi Email Đến Tôi (7 Cột) */}
-          {/* Outer r=28px, p=20px -> Inner r=8px */}
-          <div className="lg:col-span-7 flex flex-col">
-            <div 
-              id="email-send-form-card"
-              style={{ borderRadius: "28px" }}
-              className="glass-card backdrop-blur-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-blue-500/30 p-5 sm:p-6 shadow-md dark:shadow-[0_0_18px_rgba(59,130,246,0.15)] hover:shadow-xl transition-all duration-300 rounded-[28px] flex flex-col justify-between gap-4 text-left h-full"
-            >
-              {/* Header Form Gửi Email */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-slate-800/80">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-[8px] bg-blue-600 text-white flex items-center justify-center shadow-xs">
-                    <Send className="w-4.5 h-4.5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
-                      {isVi ? "Gửi email trực tiếp đến tôi" : "Send direct email to me"}
-                    </h3>
-                    <p className="text-2xs text-slate-500 dark:text-slate-400">
-                      {isVi 
-                        ? `Gửi đến: ${emailAddr} • Nhận phản hồi nhanh chóng`
-                        : `Sending to: ${emailAddr} • Rapid feedback response`}
-                    </p>
-                  </div>
-                </div>
+          {/* Hero title */}
+          <h1 className="mt-6 text-[40px] font-black leading-[1.08] tracking-tight text-[#082f49] sm:text-[52px] font-play max-w-3xl">
+            {isVi ? (
+              <>Hãy thảo luận về <span className="text-[#0369a1]">bất cứ điều gì</span> bạn đang <span className="text-rose-500">kiến tạo</span></>
+            ) : (
+              <>Let's chat about <span className="text-[#0369a1]">anything</span> you're <span className="text-rose-500">building</span></>
+            )}
+          </h1>
 
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-[8px] text-caption font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80">
-                  <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Direct Mail</span>
-                </span>
-              </div>
+          {/* Subtitle */}
+          <p className="mt-4 mx-auto max-w-xl text-[17px] font-semibold text-slate-500 leading-relaxed">
+            {isVi ? "Câu hỏi, phản hồi, hay ý tưởng dở dang lúc 2 giờ sáng. Chúng tôi luôn lắng nghe." : "Questions, feedback, a half-baked idea at 2am. We're all ears."}
+          </p>
+        </div>
+      </section>
 
-              {/* Quick Topic Selector Chips: r_inner = 8px */}
-              <div className="space-y-1.5">
-                <label className="text-caption font-bold text-slate-700 dark:text-slate-300 block">
-                  {isVi ? "1. Chọn nhanh chủ đề quan tâm:" : "1. Quick topic select:"}
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {quickTopics.map((topic) => {
-                    const isSelected = selectedTopic === topic.id;
-                    return (
-                      <button
-                        key={topic.id}
-                        type="button"
-                        onClick={() => handleSelectTopic(topic)}
-                        className={`p-2 rounded-[8px] text-2xs font-bold text-left transition-all border cursor-pointer flex flex-col justify-between gap-1 ${
-                          isSelected
-                            ? "bg-blue-600 text-white border-blue-600 shadow-xs scale-102"
-                            : "bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600"
-                        }`}
-                      >
-                        <span className="line-clamp-2 leading-tight">
-                          {isVi ? topic.labelVi : topic.labelEn}
-                        </span>
-                        {isSelected && (
-                          <Check className="w-3 h-3 text-white self-end" />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+      {/* ========================================================================= */}
+      {/* 3. THE CONTACT CARD SECTION (Centerpiece)                                 */}
+      {/* ========================================================================= */}
+      <section id="contact" className="relative -mt-4 pb-20 select-none">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <div className="relative rounded-[36px] sm:rounded-[48px] bg-white shadow-xl ring-1 ring-sky-100/70 overflow-hidden">
+            {/* Top gradient seam bar */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-sky-400 via-cyan-300 to-rose-400" />
 
-              {/* Form Fields: r_inner = 8px */}
-              <form onSubmit={handleSendEmail} className="space-y-3 flex-1 flex flex-col justify-between">
+            {/* Card Body */}
+            <div className="grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-16 lg:p-16">
+              
+              {/* LEFT COLUMN: Copy + Illustration panel */}
+              <div className="flex flex-col text-left justify-between h-full gap-8">
                 
-                {/* Row 1: Sender Name & Sender Email */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="space-y-1 text-left">
-                    <label className="text-caption font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{isVi ? "Họ và tên của bạn *" : "Your full name *"}</span>
+                {/* Title & description */}
+                <div className="space-y-4">
+                  <h2 className="text-[34px] font-black leading-[1.08] tracking-tight text-[#082f49] sm:text-[42px] font-play">
+                    {isVi ? (
+                      <>Chào bạn,<br />chúng tôi rất thân thiện</>
+                    ) : (
+                      <>Say hello,<br />we don't bite</>
+                    )}
+                  </h2>
+                  <p className="text-[17px] font-semibold leading-relaxed text-slate-500">
+                    {isVi ? (
+                      <>Gặp rắc rối về thiết kế? Có ý tưởng táo bạo? Hay muốn bàn về giao diện? Hãy gửi thư cho chúng tôi, hoặc <a href="mailto:hello@loop.design" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-700 text-rose-500">gửi email trực tiếp</a>. Người thật việc thật, cam kết!</>
+                    ) : (
+                      <>Stuck on a design? Got a wild idea? Just want to nerd out about UI? Drop us a line, or <a href="mailto:hello@loop.design" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-700 text-rose-500">say hi on email</a> instead. Real humans, promise.</>
+                    )}
+                  </p>
+                </div>
+
+                {/* Hand-built Illustration Panel using HTML + CSS + SVGs */}
+                <div className="relative rounded-[32px] sm:rounded-[36px] bg-gradient-to-br from-slate-50 to-sky-100/40 ring-1 ring-sky-100/70 px-7 pt-12 pb-6 overflow-hidden min-h-[220px] flex flex-col justify-end lg:mt-auto">
+                  {/* (a) Coral Sun */}
+                  <div className="absolute top-5 right-6 h-14 w-14 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 opacity-90 float-a shadow-md" />
+
+                  {/* (b) Clouds */}
+                  <svg className="absolute top-8 left-6 w-12 h-8 text-white opacity-40 float-b" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.36 10.04a6 6 0 0 0-11.11-1.5 4.5 4.5 0 0 0-3.75 4.46c0 .17.02.34.05.51a3.5 3.5 0 0 0 1.95 6.5h13a4 4 0 0 0 .5-7.97Z"/>
+                  </svg>
+                  <svg className="absolute top-16 right-16 w-10 h-6 text-white opacity-30 float-c" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.36 10.04a6 6 0 0 0-11.11-1.5 4.5 4.5 0 0 0-3.75 4.46c0 .17.02.34.05.51a3.5 3.5 0 0 0 1.95 6.5h13a4 4 0 0 0 .5-7.97Z"/>
+                  </svg>
+
+                  {/* (c) Channel Bubbles */}
+                  <div className="flex items-end justify-center gap-4 mb-4 select-none relative z-10">
+                    {/* Compass Bubble */}
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-sky-500 text-white flex items-center justify-center float-c shadow-md shrink-0">
+                      <Compass className="w-6 h-6 sm:w-7 sm:h-7" />
+                    </div>
+                    {/* Direct Mail Bubble */}
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#082f49] text-white flex items-center justify-center ring-4 ring-white float-a shadow-lg shrink-0">
+                      <Mail className="w-9 h-9 sm:w-11 sm:h-11 text-sky-300" />
+                    </div>
+                    {/* Phone Bubble */}
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-500 text-white flex items-center justify-center float-b shadow-md shrink-0">
+                      <Phone className="w-6 h-6 sm:w-7 sm:h-7" />
+                    </div>
+                  </div>
+
+                  {/* (d) Grass blades */}
+                  <div className="flex items-end justify-center gap-1.5 h-10 w-full mb-1 select-none">
+                    <div className="w-1.5 h-6 rounded-full bg-sky-300 opacity-60" />
+                    <div className="w-1.5 h-8 rounded-full bg-rose-300 opacity-70" />
+                    <div className="w-1.5 h-5 rounded-full bg-sky-400 opacity-50" />
+                    <div className="w-1.5 h-10 rounded-full bg-rose-400 opacity-80" />
+                    <div className="w-1.5 h-7 rounded-full bg-sky-300 opacity-65" />
+                    <div className="w-1.5 h-9 rounded-full bg-rose-300 opacity-75" />
+                  </div>
+
+                  {/* (e) Horizon bar */}
+                  <div className="h-2 w-full rounded-full bg-white/70" />
+                </div>
+
+                {/* Trust chips */}
+                <div className="flex flex-wrap gap-x-6 gap-y-3 text-[14px] font-extrabold text-[#082f49] mt-2">
+                  <div className="inline-flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-rose-500 fill-rose-500 shrink-0" />
+                    <span>{isVi ? "Được tin dùng bởi 57k nhà sáng tạo" : "Loved by 57k makers"}</span>
+                  </div>
+                  <div className="inline-flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-[#0369a1] fill-[#0369a1] shrink-0" />
+                    <span>{isVi ? "Phản hồi nhanh chóng, thân thiện" : "Fast, friendly replies"}</span>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* RIGHT COLUMN: Form Field Stack */}
+              <div className="flex flex-col gap-6">
+                <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
+                  
+                  {/* Name field */}
+                  <div className="text-left">
+                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
+                      {isVi ? "Họ và tên của bạn" : "Full name"}
                     </label>
-                    <input
-                      type="text"
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                        <User className="w-5 h-5" />
+                      </div>
+                      <input 
+                        type="text"
+                        required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Sky Walker"
+                        className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 pl-12 pr-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email field */}
+                  <div className="text-left">
+                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
+                      {isVi ? "Địa chỉ Email" : "Email address"}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                        <Mail className="w-5 h-5" />
+                      </div>
+                      <input 
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="hello@you.com"
+                        className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 pl-12 pr-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Message field */}
+                  <div className="text-left">
+                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
+                      {isVi ? "Bạn đang suy nghĩ gì?" : "What's on your mind?"}
+                    </label>
+                    <textarea 
+                      rows={5}
                       required
-                      value={senderName}
-                      onChange={(e) => setSenderName(e.target.value)}
-                      placeholder={isVi ? "Nguyễn Văn A / Công ty ABC..." : "e.g. John Doe / ABC Corp"}
-                      className="w-full px-3.5 py-2 text-xs bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700 rounded-[8px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder={isVi ? "Hãy chia sẻ mọi thứ với chúng tôi..." : "Tell us everything. The weirder the idea, the better."}
+                      className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 px-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200 resize-none"
                     />
                   </div>
 
-                  <div className="space-y-1 text-left">
-                    <label className="text-caption font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                      <AtSign className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{isVi ? "Email liên hệ *" : "Your Email address *"}</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={senderEmail}
-                      onChange={(e) => setSenderEmail(e.target.value)}
-                      placeholder="email@example.com"
-                      className="w-full px-3.5 py-2 text-xs bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700 rounded-[8px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* Row 2: Sender Phone & Subject */}
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                  <div className="sm:col-span-5 space-y-1 text-left">
-                    <label className="text-caption font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{isVi ? "Số điện thoại / Zalo" : "Phone / Zalo (optional)"}</span>
-                    </label>
-                    <input
-                      type="tel"
-                      value={senderPhone}
-                      onChange={(e) => setSenderPhone(e.target.value)}
-                      placeholder={isVi ? "09xx xxx xxx (tùy chọn)" : "Your phone number"}
-                      className="w-full px-3.5 py-2 text-xs bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700 rounded-[8px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all"
-                    />
+                  {/* Topic Select Chips */}
+                  <div className="flex flex-wrap gap-2.5 -mt-1 select-none">
+                    {topics.map((t) => {
+                      const isSelected = activeTopic === t.label;
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => handleTopicClick(t.label)}
+                          className={`rounded-full px-4 py-2 text-[13px] font-extrabold cursor-pointer transition-all duration-200 ${
+                            isSelected
+                              ? t.isCoral 
+                                ? "bg-rose-500 text-white shadow-sm"
+                                : "bg-sky-500 text-white shadow-sm"
+                              : t.isCoral
+                                ? "bg-rose-100/60 text-rose-950 hover:bg-rose-500 hover:text-white"
+                                : "bg-sky-100/60 text-sky-950 hover:bg-sky-500 hover:text-white"
+                          }`}
+                        >
+                          {isVi ? t.labelVi : t.label}
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  <div className="sm:col-span-7 space-y-1 text-left">
-                    <label className="text-caption font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                      <FileText className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{isVi ? "Tiêu đề email" : "Email Subject"}</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder={isVi ? "Tiêu đề thư gửi đến anh Thái..." : "Subject of your message..."}
-                      className="w-full px-3.5 py-2 text-xs bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700 rounded-[8px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all"
-                    />
+                  {/* Submit Button */}
+                  <button 
+                    type="submit"
+                    className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#0369a1] to-[#082f49] px-6 py-4 text-[17px] font-black text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                  >
+                    <span>{isVi ? "Gửi thông điệp" : "Send message"}</span>
+                    <Send className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+
+                  {/* Privacy line */}
+                  <div className="text-center inline-flex items-center justify-center gap-1.5 text-[13px] font-bold text-slate-500 select-none">
+                    <Lock className="w-4 h-4 text-sky-400" />
+                    <span>{isVi ? "Không bao giờ spam. Chúng tôi cũng ghét nó." : "No spam, ever. We hate it too."}</span>
                   </div>
-                </div>
 
-                {/* Row 3: Message Textarea: r_inner = 8px */}
-                <div className="space-y-1 text-left">
-                  <label className="text-caption font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                    <MessageSquare className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{isVi ? "Nội dung tin nhắn *" : "Message content *"}</span>
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder={isVi 
-                      ? "Xin chào anh Thái, tôi muốn trao đổi về..." 
-                      : "Hello Mr. Thai, I would like to discuss..."}
-                    className="w-full px-3.5 py-2.5 text-xs bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700 rounded-[8px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
-                  />
-                </div>
+                </form>
 
-                {/* Form Error Message */}
-                {formError && (
-                  <div className="p-2.5 rounded-[8px] bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{formError}</span>
-                  </div>
-                )}
-
-                {/* Form Success Banner */}
+                {/* Simple form success notification banner */}
                 {formSuccess && (
-                  <div className="p-3 rounded-[8px] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>{isVi ? "Đã mở trình gửi email thành công! Bạn cũng có thể sao chép nội dung bên dưới:" : "Email client opened! You can also copy content below:"}</span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={handleCopyEmailContent}
-                        className="px-2.5 py-1 rounded-[8px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-2xs cursor-pointer shadow-xs"
-                      >
-                        {copiedFormContent ? (isVi ? "Đã chép!" : "Copied!") : (isVi ? "Chép nội dung" : "Copy Content")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleResetForm}
-                        className="px-2.5 py-1 rounded-[8px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-2xs cursor-pointer"
-                      >
-                        {isVi ? "Soạn thư mới" : "New Message"}
-                      </button>
-                    </div>
+                  <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold text-left animate-pulse">
+                    {isVi ? "Ứng dụng Email của bạn đã được mở để gửi thông điệp!" : "Successfully opened your email client to send the message!"}
                   </div>
                 )}
-
-                {/* Action Buttons Row: r_inner = 8px */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 rounded-[8px] bg-blue-600 hover:bg-blue-500 text-white font-black text-xs sm:text-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>{isVi ? "Gửi Email Ngay" : "Send Email Now"}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleCopyEmailContent}
-                      className="px-3.5 py-2.5 rounded-[8px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                      title="Sao chép nội dung thư"
-                    >
-                      {copiedFormContent ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedFormContent ? (isVi ? "Đã sao chép!" : "Copied!") : (isVi ? "Sao chép" : "Copy")}</span>
-                    </button>
-                  </div>
-
-                  <span className="text-3xs text-slate-400 dark:text-slate-500 italic">
-                    {isVi ? "* Mở ứng dụng email mặc định hoặc webmail để gửi" : "* Triggers default email application"}
-                  </span>
-                </div>
-
-              </form>
+              </div>
 
             </div>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* 4. THREE ALT-CONTACT CARDS                                                */}
+          {/* ========================================================================= */}
+          <div className="mt-12 grid sm:grid-cols-3 items-stretch gap-5 select-none">
+            
+            {/* Card 1: Email */}
+            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-50 text-[#0369a1] shadow-inner">
+                <Mail className="w-5.5 h-5.5" />
+              </div>
+              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Email trực tiếp" : "Email us"}</h3>
+              <span className="mt-1 text-[14px] font-semibold text-slate-500">hello@loop.design</span>
+            </div>
+
+            {/* Card 2: Live Chat */}
+            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-rose-50 text-rose-500 shadow-inner">
+                <MessageSquare className="w-5.5 h-5.5" />
+              </div>
+              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Hỗ trợ trực tuyến" : "Live chat"}</h3>
+              <span className="mt-1 text-[14px] font-semibold text-slate-500">Mon to Fri, 9 to 6</span>
+            </div>
+
+            {/* Card 3: Community */}
+            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-50 text-[#0369a1] shadow-inner">
+                <Users className="w-5.5 h-5.5" />
+              </div>
+              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Cộng đồng" : "Community"}</h3>
+              <span className="mt-1 text-[14px] font-semibold text-slate-500">Join 12k makers on Discord</span>
+            </div>
+
           </div>
 
         </div>
+      </section>
 
-      </div>
-    </section>
+      {/* ========================================================================= */}
+      {/* 5. FULL-BLEED SKY-INK FOOTER                                              */}
+      {/* ========================================================================= */}
+      <footer className="bg-[#082f49] text-sky-100/90 w-full mt-12 py-10 relative z-10 select-none">
+        <div className="mx-auto flex max-w-6xl flex-col sm:flex-row items-center justify-between gap-6 px-6 lg:px-8 text-center sm:text-left">
+          {/* Logo brand info */}
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-white">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="w-4.5 h-4.5">
+                <path d="M7 9C4.24 9 2 11.24 2 14c0 2.76 2.24 5 5 5c3.21 0 5.25-3.33 7-6c1.75-2.67 3.79-6 7-6c2.76 0 5 2.24 5 5c0 2.76-2.24 5-5 5c-3.21 0-5.25-3.33-7-6c-1.75-2.67-3.79-6-7-6Z" />
+              </svg>
+            </div>
+            <span className="text-[18px] font-black text-white tracking-tight font-play">
+              Loop
+            </span>
+          </div>
+
+          {/* Copyright content */}
+          <div className="text-[14px] font-semibold inline-flex items-center gap-1.5 text-sky-200">
+            <span>© 2026 Loop Design. Made with</span>
+            <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+            <span>for makers.</span>
+          </div>
+
+          {/* Social connections */}
+          <div className="flex items-center gap-3 text-white/80">
+            {/* Twitter/X */}
+            <a href="#twitter" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
+              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 3.778 8.502 12.54H16.17l-5.214-6.817L4.99 18.5H1.68l7.73-8.235L1.254 2.25H8.08l4.713 6.231zm-1.161 14.275h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            {/* GitHub */}
+            <a href="#github" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
+              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.51 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+              </svg>
+            </a>
+            {/* Discord */}
+            <a href="#discord" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
+              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.03c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.074 0 00-.079-.03A19.736 19.736 0 003.677 4.37a.07.069 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.072 0 00.031.057 19.9 19.9 0 005.993 3.03.078.077 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.873-.894.077.076 0 01-.008-.128c.126-.093.252-.19.372-.287a.075.072 0 01.077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.072 0 01.078.009c.12.099.246.195.373.289a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.894.077.075 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.077 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.058 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
 

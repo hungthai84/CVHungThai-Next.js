@@ -1790,7 +1790,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-auto glass-surface backdrop-blur-2xl bg-white/90 dark:bg-slate-950/85 border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-lg dark:shadow-[0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
+                className="w-full h-auto backdrop-blur-md bg-white/65 dark:bg-white/[0.06] border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-[0_8px_32px_0_rgba(31,38,135,0.06),inset_0_1.5px_2px_rgba(255,255,255,0.9)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.5),inset_0_1px_0.5px_rgba(255,255,255,0.1)] transition-all duration-300 hover:shadow-xl hover:dark:shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
                 style={{
                   padding: "15px",
                   borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))",
@@ -2007,8 +2007,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">01</span>
                                 <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 uppercase tracking-wide">
-                                  {isVi ? "QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT"}
+                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 tracking-wide">
+                                  {isVi ? "Quản lý vận hành" : "Operations management"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -2076,8 +2076,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-emerald-600 dark:text-emerald-400">02</span>
                                 <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
-                                  {isVi ? "KẾT QUẢ KPI" : "KPI RESULTS"}
+                                <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
+                                  {isVi ? "Kết quả KPI" : "KPI results"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -2109,8 +2109,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">03</span>
                                 <ClipboardList className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 uppercase tracking-wide">
-                                  {isVi ? "CÔNG VIỆC ĐÃ VẬN HÀNH" : "OPERATIONAL TASKS"}
+                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 tracking-wide">
+                                  {isVi ? "Công việc đã vận hành" : "Operational tasks"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -2137,8 +2137,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-orange-600 dark:text-orange-400">04</span>
                                 <Flag className="w-5 h-5 text-orange-600 dark:text-orange-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-orange-600 dark:text-orange-400 uppercase tracking-wide">
-                                  {isVi ? "DỰ ÁN TRỌNG ĐIỂM" : "KEY PROJECTS"}
+                                <span className="text-sm sm:text-base font-black text-orange-600 dark:text-orange-400 tracking-wide">
+                                  {isVi ? "Dự án trọng điểm" : "Key projects"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -2168,8 +2168,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-cyan-600 dark:text-cyan-400">05</span>
                                 <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">
-                                  {isVi ? "CAM KẾT CHẤT LƯỢNG" : "QUALITY COMMITMENT"}
+                                <span className="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-400 tracking-wide">
+                                  {isVi ? "Cam kết chất lượng" : "Quality commitment"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
@@ -2179,7 +2179,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               {current.commitments && current.commitments.map((cmt, cIdx) => (
                                 <div key={cIdx} className="p-3 px-3.5 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/70 dark:border-cyan-900/30 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-snug">
                                   <CheckCircle2 className="w-4.5 h-4.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
-                                  <span>{cmt}</span>
+                                  <span className="text-body font-normal">{cmt}</span>
                                 </div>
                               ))}
                             </div>
@@ -2204,8 +2204,8 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                               <div className="flex items-center gap-2.5">
                                 <span className="text-2xl font-mono font-black text-rose-600 dark:text-rose-400">06</span>
                                 <ImageIcon className="w-5 h-5 text-rose-600 dark:text-rose-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 uppercase tracking-wide">
-                                  {isVi ? "KỶ NIỆM TRONG CÔNG VIỆC" : "WORK MEMORIES"}
+                                <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 tracking-wide">
+                                  {isVi ? "Kỷ niệm trong công việc" : "Work memories"}
                                 </span>
                               </div>
                               <ChevronRight className="w-5 h-5 text-rose-600 dark:text-rose-400" />
@@ -2413,12 +2413,12 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   {activeSubCard === 6 && <Camera className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
                   <div>
                     <h3 className="text-h6 text-slate-900 dark:text-white uppercase tracking-tight">
-                      {activeSubCard === 1 && (isVi ? "CHI TIẾT QUẢN LÝ VẬN HÀNH" : "OPERATIONS MANAGEMENT DETAIL")}
-                      {activeSubCard === 2 && (isVi ? "CHỈ SỐ HIỆU QUẢ & KPIs CHI TIẾT" : "DETAILED KPIS & METRICS")}
-                      {activeSubCard === 3 && (isVi ? "CHI TIẾT NHIỆM VỤ & PHẠM VI TRÁCH NHIỆM" : "DETAILED ROLES & RESPONSIBILITIES")}
-                      {activeSubCard === 4 && (isVi ? "DỰ ÁN TRỌNG ĐIỂM & CHUYỂN ĐỔI SỐ" : "STRATEGIC PROJECTS & OUTCOMES")}
-                      {activeSubCard === 5 && (isVi ? "CAM KẾT CHẤT LƯỢNG & TIÊU CHUẨN VẬN HÀNH" : "QUALITY COMMITMENT & SLA STANDARDS")}
-                      {activeSubCard === 6 && (isVi ? "KỶ NIỆM THỰC CHIẾN & TƯ LIỆU HÌNH ẢNH" : "TEAM MOMENTS & ARCHIVE GALLERY")}
+                      {activeSubCard === 1 && (isVi ? "Chi tiết quản lý vận hành" : "Operations management detail")}
+                      {activeSubCard === 2 && (isVi ? "Chỉ số hiệu quả & KPIs chi tiết" : "Detailed KPIs & metrics")}
+                      {activeSubCard === 3 && (isVi ? "Chi tiết nhiệm vụ & phạm vi trách nhiệm" : "Detailed roles & responsibilities")}
+                      {activeSubCard === 4 && (isVi ? "Dự án trọng điểm & chuyển đổi số" : "Strategic projects & outcomes")}
+                      {activeSubCard === 5 && (isVi ? "Cam kết chất lượng & tiêu chuẩn vận hành" : "Quality commitment & SLA standards")}
+                      {activeSubCard === 6 && (isVi ? "Kỷ niệm thực chiến & tư liệu hình ảnh" : "Team moments & archive gallery")}
                     </h3>
                     <p className="text-body-sm text-slate-500 dark:text-slate-400">
                       {current.company} ({current.cardYearLabel || current.period})
@@ -2852,6 +2852,27 @@ export default function Experience() {
       id="experience"
       className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        #experience button,
+        #experience [class*="cursor-pointer"],
+        #experience [id*="card-job-"],
+        #experience #card-milestone-detail {
+          transition: all 200ms ease-in-out !important;
+        }
+        #experience button:hover,
+        #experience [class*="cursor-pointer"]:hover,
+        #experience [id*="card-job-"]:hover,
+        #experience #card-milestone-detail:hover {
+          transform: translateY(-4px) !important;
+        }
+        #experience button:active,
+        #experience [class*="cursor-pointer"]:active,
+        #experience [id*="card-job-"]:active,
+        #experience #card-milestone-detail:active {
+          transform: translateY(-4px) scale(0.95) !important;
+        }
+      ` }} />
+
       {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
       <PageCardHeader pageId="experience">
         <div className="flex items-center gap-2">

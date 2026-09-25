@@ -1506,83 +1506,84 @@ export default function Education() {
       `
       }} />
 
+      {/* Page Header Card Học vấn (Consistent across all view modes) */}
+      <PageCardHeader pageId="education" className="w-full mb-4.5">
+        {/* Cụm trái: Số lượng học phần */}
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+          <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+            {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
+          </span>
+        </div>
+
+        {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
+        <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
+          {/* Nút lọc danh mục */}
+          <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+            {(["all", "tech", "management"] as const).map((cat) => {
+              const isActive = categoryFilter === cat;
+              const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => {
+                    safePlay("toggle");
+                    setCategoryFilter(cat);
+                  }}
+                  className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                      : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Nút chuyển đổi chế độ xem */}
+          <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+            <button
+              type="button"
+              onClick={() => {
+                safePlay("toggle");
+                setViewMode("grid");
+              }}
+              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                viewMode === "grid"
+                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+              }`}
+            >
+              <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                safePlay("bookOpen");
+                setViewMode("book");
+                setIsBookOpen(true);
+              }}
+              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                (viewMode as any) === "book"
+                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+              }`}
+            >
+              <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{isVi ? "Sách 3D" : "3D Book"}</span>
+            </button>
+          </div>
+        </div>
+      </PageCardHeader>
+
       {/* Content Area Học Vấn */}
       {/* DẠNG VIEW THẺ NHƯ CARD (DESKTOP: 4 CỘT, DƯỚI DESKTOP: 3 CỘT - FLUID GRID) */}
       {viewMode === "grid" && (
         <div className="w-full flex flex-col gap-4">
-          {/* Header Card Học vấn (H5 + 2 chữ bên trái + Câu nói hay bên phải) */}
-          <PageCardHeader pageId="education">
-            {/* Cụm trái: Số lượng học phần */}
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-              <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-                {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
-              </span>
-            </div>
-
-            {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
-            <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
-              {/* Nút lọc danh mục */}
-              <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-                {(["all", "tech", "management"] as const).map((cat) => {
-                  const isActive = categoryFilter === cat;
-                  const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
-                  return (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => {
-                        safePlay("toggle");
-                        setCategoryFilter(cat);
-                      }}
-                      className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                          : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Nút chuyển đổi chế độ xem */}
-              <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => {
-                    safePlay("toggle");
-                    setViewMode("grid");
-                  }}
-                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                    viewMode === "grid"
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-                  }`}
-                >
-                  <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    safePlay("bookOpen");
-                    setViewMode("book");
-                    setIsBookOpen(true);
-                  }}
-                  className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                    (viewMode as any) === "book"
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                      : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-                  }`}
-                >
-                  <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>{isVi ? "Sách 3D" : "3D Book"}</span>
-                </button>
-              </div>
-            </div>
-          </PageCardHeader>
 
           <div
             key={`bento-grid-${categoryFilter}`}
@@ -1616,7 +1617,7 @@ export default function Education() {
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => safePlay("hover")}
                     className={cn(
-                      "grid-profile-card group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full"
+                      "grid-profile-card group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full"
                     )}
                     style={{
                       transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))',
@@ -1670,14 +1671,12 @@ export default function Education() {
                       </div>
 
                       {/* 3. Mô tả / Key Summary */}
-                      <div className="flex items-start gap-1.5 text-left">
-                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-700 dark:text-slate-200 secondary-text flex items-center gap-1 whitespace-nowrap">
-                          <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0" />
-                          <span className="whitespace-nowrap">{isVi ? "Mô tả:" : "Desc:"}</span>
+                      <div className="text-left text-caption leading-snug text-slate-700 dark:text-slate-200 secondary-text">
+                        <span className="font-bold text-slate-800 dark:text-slate-100 inline-flex items-center gap-1 mr-1.5">
+                          <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0 inline-block align-middle" />
+                          <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                         </span>
-                        <span className="font-normal text-caption line-clamp-2 leading-snug flex-1 text-slate-700 dark:text-slate-200 secondary-text">
-                          {card.desc}
-                        </span>
+                        <span className="font-normal line-clamp-2 inline">{card.desc}</span>
                       </div>
                     </div>
 
@@ -1840,12 +1839,12 @@ export default function Education() {
                               <span className="font-semibold text-slate-800 dark:text-white line-clamp-1 flex-1">{activeCard.major || "Phát triển kỹ năng & Năng lực chuyên môn"}</span>
                             </div>
 
-                            <div className="flex items-start gap-2">
-                              <span className="text-slate-600 dark:text-slate-300 w-[94px] shrink-0 font-medium flex items-center gap-1">
-                                <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0" />
-                                <span>Mô tả:</span>
+                            <div className="text-left text-xs leading-normal text-slate-700 dark:text-slate-200">
+                              <span className="text-slate-600 dark:text-slate-300 font-medium inline-flex items-center gap-1 mr-1.5">
+                                <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0 inline-block align-middle" />
+                                <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                               </span>
-                              <span className="font-normal text-slate-700 dark:text-slate-200 line-clamp-2 leading-tight flex-1">{activeCard.desc}</span>
+                              <span className="font-normal line-clamp-2 inline">{activeCard.desc}</span>
                             </div>
                           </div>
 
@@ -1917,8 +1916,8 @@ export default function Education() {
                   >
                     {/* TRANG 01 • NỘI DUNG CỐT LÕI */}
                     <div className="front-page">
-                      <div>
-                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                      <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5 w-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-2xs sm:text-xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(1); }}
@@ -1934,9 +1933,9 @@ export default function Education() {
                         </div>
 
                         <div className="mb-3">
-                          <span className="text-h6 text-indigo-600 font-mono leading-none block">01</span>
-                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Nội dung cốt lõi</h3>
-                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <span className="text-xs sm:text-sm font-black text-indigo-600 font-mono leading-none block">01</span>
+                          <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Nội dung cốt lõi</h3>
+                          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 leading-snug mt-1 font-medium">
                             Khám phá 4 mô-đun trọng tâm giúp bạn làm chủ kỹ năng chuyên sâu & truyền cảm hứng.
                           </p>
                         </div>
@@ -1947,10 +1946,10 @@ export default function Education() {
                               <div className="w-7 h-7 rounded-lg bg-indigo-100/70 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-1.5">
                                 <DynamicIcon name={mod.icon || "book-open"} className="w-4 h-4" />
                               </div>
-                              <h4 className="text-3xs font-bold text-slate-800 dark:text-slate-200 leading-snug line-clamp-2 min-h-[26px]">
+                              <h4 className="text-2xs sm:text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug line-clamp-2 min-h-[30px]">
                                 {mod.title}
                               </h4>
-                              <p className="text-3xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight mt-1">
+                              <p className="text-body font-normal text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight mt-1">
                                 {mod.focus}
                               </p>
                             </div>
@@ -1958,7 +1957,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-2xs sm:text-xs font-bold text-slate-400">
                         <span>CHỦ HỒ SƠ: NGUYỄN HÙNG THÁI</span>
                         <span 
                           className="btn-page-nav next cursor-pointer"
@@ -1974,8 +1973,8 @@ export default function Education() {
 
                     {/* TRANG 02 • KẾT QUẢ & ỨNG DỤNG */}
                     <div className="back-page">
-                      <div>
-                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                      <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5 w-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-2xs sm:text-xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(2); }}
@@ -1991,9 +1990,9 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-h6 text-indigo-600 font-mono leading-none block">02</span>
-                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Kết quả & Ứng dụng</h3>
-                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <span className="text-xs sm:text-sm font-black text-indigo-600 font-mono leading-none block">02</span>
+                          <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Kết quả & Ứng dụng</h3>
+                          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 leading-snug mt-1 font-medium">
                             Áp dụng kiến thức vào thực tiễn, tạo ra giá trị cho tổ chức và phát triển sự nghiệp.
                           </p>
                         </div>
@@ -2002,7 +2001,7 @@ export default function Education() {
                           {activeCard.results.map((res, i) => (
                             <div key={i} className="flex items-start gap-1.5 py-1 border-b border-dashed border-slate-100 dark:border-slate-800/60 last:border-0">
                               <span className="text-indigo-500 dark:text-indigo-400 font-extrabold text-xs leading-none select-none">•</span>
-                              <p className="text-3xs font-semibold text-slate-700 dark:text-slate-300 leading-relaxed">
+                              <p className="text-2xs sm:text-xs font-semibold text-slate-700 dark:text-slate-300 leading-relaxed">
                                 {res}
                               </p>
                             </div>
@@ -2012,7 +2011,7 @@ export default function Education() {
 
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-2xs sm:text-xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2046,8 +2045,8 @@ export default function Education() {
                   >
                     {/* TRANG 03 • HÌNH ẢNH KHÓA HỌC */}
                     <div className="front-page">
-                      <div>
-                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                      <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5 w-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-2xs sm:text-xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(2); }}
@@ -2063,9 +2062,9 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-h6 text-indigo-600 font-mono leading-none block">03</span>
-                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Hình ảnh khóa học</h3>
-                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <span className="text-xs sm:text-sm font-black text-indigo-600 font-mono leading-none block">03</span>
+                          <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Hình ảnh khóa học</h3>
+                          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 leading-snug mt-1 font-medium">
                             Hình ảnh chứng nhận hoàn thành khóa học chính thức.
                           </p>
                         </div>
@@ -2088,7 +2087,7 @@ export default function Education() {
                             }}
                           />
                           <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2 py-1 rounded-lg border border-white/20">
-                            <span className="text-3xs text-white font-medium">Hình khóa học</span>
+                            <span className="text-2xs sm:text-xs text-white font-medium">Hình khóa học</span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2103,7 +2102,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-2xs sm:text-xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2127,8 +2126,8 @@ export default function Education() {
 
                     {/* TRANG XÁC THỰC SỐ */}
                     <div className="back-page">
-                      <div>
-                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                      <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5 w-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-2xs sm:text-xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(3); }}
@@ -2148,11 +2147,11 @@ export default function Education() {
                             <Icons.ShieldCheck className="w-5 h-5" />
                           </div>
                           <div>
-                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100">XÁC THỰC BẰNG CẤP CHÍNH THỨC</h4>
-                            <p className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">Chứng nhận đã được thẩm định tính xác thực và công nhận trên toàn hệ thống hồ sơ số hóa.</p>
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">Xác thực bằng cấp chính thức</h4>
+                            <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Chứng nhận đã được thẩm định tính xác thực và công nhận trên toàn hệ thống hồ sơ số hóa.</p>
                           </div>
 
-                          <div className="p-2 rounded-[8px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-3xs text-slate-600 dark:text-slate-300 space-y-1 text-left">
+                          <div className="p-2.5 rounded-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-2xs sm:text-xs text-slate-600 dark:text-slate-300 space-y-1.5 text-left">
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Đơn vị đào tạo:</span><span className="font-bold text-indigo-700 dark:text-indigo-400">{activeCard.subtitle}</span></div>
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Chủ sở hữu:</span><span className="font-bold text-slate-800 dark:text-slate-100">Nguyễn Hùng Thái</span></div>
                             <div className="flex justify-between"><span className="text-slate-400 font-semibold">Mã định danh:</span><span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">STU-VERIFIED-X{activeCard.id}89</span></div>
@@ -2160,7 +2159,7 @@ export default function Education() {
                         </div>
                       </div>
 
-                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs font-bold text-slate-400">
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-2xs sm:text-xs font-bold text-slate-400">
                         <span 
                           className="btn-page-nav prev cursor-pointer"
                           onClick={(e) => {
@@ -2186,8 +2185,8 @@ export default function Education() {
                   >
                     {/* TRANG 04 • BẰNG CẤP */}
                     <div className="front-page">
-                      <div>
-                        <div className="flex items-center justify-between text-3xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
+                      <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5 w-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-2xs sm:text-xs text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-2">
                           <span 
                             className="cursor-pointer hover:text-indigo-600 transition-colors"
                             onClick={(e) => { e.stopPropagation(); jumpToBookPage(3); }}
@@ -2203,9 +2202,9 @@ export default function Education() {
                         </div>
 
                         <div className="mb-2.5">
-                          <span className="text-h6 text-indigo-600 font-mono leading-none block">04</span>
-                          <h3 className="text-h6 text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Bằng cấp & Chứng nhận</h3>
-                          <p className="text-3xs text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                          <span className="text-xs sm:text-sm font-black text-indigo-600 font-mono leading-none block">04</span>
+                          <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-tight mt-0.5">Bằng cấp & Chứng nhận</h3>
+                          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 leading-snug mt-1 font-medium">
                             Chứng nhận hoàn thành khóa học {activeCard.title} tại {activeCard.subtitle}.
                           </p>
                         </div>
@@ -2219,7 +2218,7 @@ export default function Education() {
                                 setCertIndex(0);
                               }}
                               className={cn(
-                                "px-2 py-0.5 rounded text-3xs font-bold cursor-pointer transition-colors",
+                                "px-2 py-0.5 rounded text-2xs sm:text-xs font-bold cursor-pointer transition-colors",
                                 certIndex === 0
                                   ? "bg-indigo-600 text-white shadow-xs"
                                   : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200"
@@ -2336,7 +2335,7 @@ export default function Education() {
                     onClick={() => jumpToBookPage(0)}
                   >
                     <div className="w-full flex justify-end">
-                      <span className="text-3xs font-mono font-bold" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>STU • 2026</span>
+                      <span className="text-2xs font-mono font-bold" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>STU • 2026</span>
                     </div>
                     <div className="space-y-2">
                       <div 
@@ -2349,10 +2348,10 @@ export default function Education() {
                       >
                         <Icons.GraduationCap className="w-6 h-6" />
                       </div>
-                      <h3 className="text-h6 text-slate-900 dark:text-white font-play">HỒ SƠ HỌC VẤN 3D</h3>
-                      <p className="text-3xs font-play" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>Nguyễn Hùng Thái • STU Alumni</p>
+                      <h3 className="text-sm sm:text-base text-slate-900 dark:text-white font-play font-bold">Hồ sơ học vấn 3D</h3>
+                      <p className="text-2xs font-play font-bold" style={{ color: getBookCoverTheme(activeCard.id).textAccent }}>Nguyễn Hùng Thái • STU Alumni</p>
                     </div>
-                    <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 text-3xs text-slate-500 dark:text-slate-300 font-play">
+                    <div className="w-full pt-2 border-t border-slate-300/40 dark:border-white/10 text-2xs text-slate-500 dark:text-slate-300 font-play font-bold">
                       <span>BÌA SAU</span>
                     </div>
                   </div>
@@ -2768,7 +2767,7 @@ export default function Education() {
             {/* Body */}
             <div className="flex flex-col space-y-3">
               <label className="text-3xs font-mono uppercase tracking-wider text-slate-500 block">
-                {isVi ? "CẤU TRÚC JSON HỌC PHẦN" : "JSON COURSE DATA STRUCTURE"}
+                {isVi ? "Cấu trúc JSON học phần" : "JSON course data structure"}
               </label>
               <div className="relative w-full rounded-xl bg-black/50 border border-white/5 p-4 overflow-auto max-h-[300px] text-left">
                 <pre className="text-xs font-mono text-indigo-300 leading-relaxed whitespace-pre-wrap select-all">
