@@ -4,15 +4,21 @@ import { Sparkles, Bot, ShieldCheck, Zap, MessageSquare } from "lucide-react";
 interface HeroRobotCompanionProps {
   className?: string;
   isCompact?: boolean;
+  fillCard?: boolean;
 }
 
 export const HeroRobotCompanion: React.FC<HeroRobotCompanionProps> = ({
   className = "",
   isCompact = false,
+  fillCard = false,
 }) => {
   return (
     <div
-      className={`relative w-full flex items-center justify-center lg:justify-end py-10 pointer-events-none select-none overflow-hidden ${className}`}
+      className={`relative w-full select-none overflow-hidden ${
+        fillCard 
+          ? "h-full flex items-center justify-center pointer-events-auto" 
+          : "flex items-center justify-center lg:justify-end py-10 pointer-events-none"
+      } ${className}`}
     >
       {/* ========================================================================= */}
       {/* 1. DECORATIVE ORBIT ART */}
@@ -82,7 +88,7 @@ export const HeroRobotCompanion: React.FC<HeroRobotCompanionProps> = ({
       {/* ========================================================================= */}
       {/* 2. CENTERED ROBOT COMPANION VIDEO */}
       {/* ========================================================================= */}
-      <div className="relative w-full max-w-[600px] flex items-center justify-center">
+      <div className={`relative flex items-center justify-center ${fillCard ? "w-full h-full absolute inset-0" : "w-full max-w-[600px]"}`}>
         <video
           src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
           autoPlay
@@ -91,7 +97,7 @@ export const HeroRobotCompanion: React.FC<HeroRobotCompanionProps> = ({
           playsInline
           controls={false}
           style={{ filter: "brightness(1.02) contrast(1.04)" }}
-          className="w-full h-auto rounded-[24px] select-none block object-contain"
+          className={`select-none block ${fillCard ? "w-full h-full object-cover rounded-none" : "w-full h-auto rounded-[24px] object-contain"}`}
         />
 
         {/* ========================================================================= */}

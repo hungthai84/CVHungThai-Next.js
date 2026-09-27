@@ -116,9 +116,42 @@ function MainContent() {
   const isFooterPinned = footerConfig.isPinned !== false;
   const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (hash) return hash;
+      const savedSession = sessionStorage.getItem("portfolio_active_section");
+      if (savedSession) return savedSession;
+      const savedLocal = localStorage.getItem("portfolio_active_section");
+      if (savedLocal) return savedLocal;
+    }
+    return "home";
+  });
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
+
+  // Sync active section to sessionStorage, localStorage and URL hash
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("portfolio_active_section", activeSection);
+      localStorage.setItem("portfolio_active_section", activeSection);
+    }
+    if (typeof window !== "undefined" && window.location.hash.replace(/^#/, "") !== activeSection) {
+      window.location.hash = activeSection;
+    }
+  }, [activeSection]);
+
+  // Sync navigation on browser back/forward and hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (hash && hash !== activeSection) {
+        navigateToSection(hash);
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [activeSection]);
 
   // States for Proactive Feature Modals
   const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
@@ -378,7 +411,7 @@ function MainContent() {
   };
 
   return (
-    <SectionProvider activeSection={activeSection} sections={SECTIONS}>
+    <SectionProvider activeSection={activeSection} setActiveSection={setActiveSection} sections={SECTIONS}>
       <div className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent">
         {/* Dynamic Persistent Background Renderer (Video / Image / Gradient) */}
         <BackgroundRenderer />
@@ -407,7 +440,7 @@ function MainContent() {
                 ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
                 : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
               getMainCardStyle(),
-              isSwitching ? "scale-[0.985] opacity-80" : "scale-100 opacity-100"
+              isSwitching ? "opacity-80" : "opacity-100"
             )}
             style={{
               borderRadius: "var(--theme-radius-card, 10px)",
@@ -419,11 +452,10 @@ function MainContent() {
                 <motion.div
                   key={activeSection}
                   id={activeSection}
-                  layoutId="section-card-wrapper"
                   initial={{ 
                     y: 35, 
                     opacity: 0, 
-                    scale: 0.985,
+                    scale: 1,
                     filter: "blur(4px)" 
                   }}
                   animate={{ 
@@ -435,7 +467,7 @@ function MainContent() {
                   exit={{ 
                     y: -25, 
                     opacity: 0, 
-                    scale: 0.985,
+                    scale: 1,
                     filter: "blur(4px)" 
                   }}
                   transition={{ 

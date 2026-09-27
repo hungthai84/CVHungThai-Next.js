@@ -1018,7 +1018,8 @@ export default function Memories() {
                       playUiSound("click");
                       setActiveMemoryIndex(idx);
                     }}
-                    className="group relative rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1"
+                    style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
+                    className="group relative bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1"
                   >
                     {/* Card Image */}
                     <div className="relative w-full h-52 overflow-hidden bg-slate-950">

@@ -34,7 +34,7 @@ import { cn } from "../lib/utils";
 // --- BRAND LOGO BADGE COMPONENT ---
 const BrandLogoBadge = ({ src, alt, title }: { src: string; alt: string; title: string }) => (
   <div 
-    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700/80 flex items-center justify-center shadow-xs hover:scale-110 transition-transform duration-300 select-none shrink-0 overflow-hidden p-0.5"
+    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 dark:bg-slate-800/95 flex items-center justify-center hover:scale-110 transition-transform duration-300 select-none shrink-0 overflow-hidden p-0.5"
     title={title}
   >
     <img 
@@ -69,7 +69,7 @@ const Domain3DIcon = ({ iconName, primaryColor }: { iconName: string; primaryCol
       {/* Ambient Glow */}
       <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-indigo-500/20 to-cyan-400/20 rounded-2xl blur-lg opacity-70 animate-pulse pointer-events-none" />
       
-      {/* Glass Container */}
+      {/* Glass Container - Frame removed as requested (bỏ khung hình icon) */}
       <motion.div 
         animate={{
           y: [0, -4, 0],
@@ -80,7 +80,7 @@ const Domain3DIcon = ({ iconName, primaryColor }: { iconName: string; primaryCol
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="relative z-10 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-white/40 dark:border-white/20 backdrop-blur-[16px] bg-white/40 dark:bg-slate-800/60 shadow-[0_8px_24px_rgba(0,0,0,0.12),inset_0_1.5px_2px_rgba(255,255,255,0.8)] flex items-center justify-center"
+        className="relative z-10 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center"
       >
         <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
       </motion.div>
@@ -126,12 +126,13 @@ export function Domains() {
       id="domains"
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-900 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
+      <div className="w-full h-full flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
         
         {/* Navigation & Breadcrumbs Header */}
         <PageCardHeader pageId="domains">
           {/* Experience Summary Badge */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="w-2 h-4 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
             <span className="text-caption font-semibold font-mono text-blue-700 dark:text-cyan-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
               {isVi ? "Thực chiến: 22+ Năm" : "Track Record: 22+ Years"}
             </span>
@@ -220,9 +221,7 @@ export function Domains() {
                   <div className="flex items-center gap-4">
                     <Domain3DIcon iconName={selectedDomain.iconName} primaryColor={selectedDomain.colorTheme.primary} />
                     <div className="space-y-1 min-w-0 flex-1">
-                      <span className="text-xs font-mono font-bold text-blue-600 dark:text-cyan-400 block uppercase">
-                        LĨNH VỰC {selectedDomain.code}
-                      </span>
+                      {/* Removed per request */}
                       <h3 className={cn("text-h5 sm:text-h4 font-black tracking-tight leading-tight font-play", selectedDomain.colorTheme.text)}>
                         {isVi ? selectedDomain.titleVi : selectedDomain.titleEn}
                       </h3>
@@ -328,7 +327,7 @@ export function Domains() {
             /* ========================================================================= */
             /* 6 COMPACT BENTO DOMAIN CARDS (Grid View)                                  */
             /* ========================================================================= */
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[15px] items-stretch">
+            <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[15px] auto-rows-fr items-stretch pb-1">
               {filteredDomains.map((domain, index) => {
                 const Icon = getIconComponent(domain.iconName);
 
@@ -341,14 +340,20 @@ export function Domains() {
                     onClick={() => setSelectedDomainId(domain.id)}
                     style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
                     className={cn(
-                      "p-[15px] border flex flex-row items-stretch gap-4 shadow-sm hover:shadow-md cursor-pointer group/card overflow-hidden text-left relative transition-all duration-300 hover:-translate-y-1",
+                      "h-full p-[15px] border flex flex-col items-center text-center gap-3 shadow-sm hover:shadow-xl cursor-pointer group/card overflow-hidden relative transition-all duration-500 hover:-translate-y-1.5",
                       getGlassCardClass(),
                       domain.colorTheme.border
                     )}
                     title={isVi ? "Bấm để xem chi tiết đầy đủ" : "Click to view full details"}
                   >
-                    {/* Left Column: Icon height spanning the 4 rows on the right */}
-                    <div className="shrink-0 flex items-center justify-center">
+                    {/* Radiating unique color glow on hover across the card */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none blur-2xl"
+                      style={{ background: `radial-gradient(circle at top center, ${domain.colorTheme.glow}, transparent 75%)` }}
+                    />
+
+                    {/* Top Icon Centered */}
+                    <div className="relative z-10 pt-1">
                       <motion.div
                         animate={{
                           y: [0, -3.5, 0],
@@ -360,56 +365,34 @@ export function Domains() {
                           ease: "easeInOut"
                         }}
                         whileHover={{ scale: 1.15, rotate: 10 }}
-                        className={cn(
-                          "w-12 sm:w-14 h-24 sm:h-28 rounded-2xl flex items-center justify-center border select-none transition-transform duration-300",
-                          domain.colorTheme.iconBg
-                        )}
+                        className="select-none transition-transform duration-300"
                       >
-                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.2] drop-shadow-sm" />
+                        <Icon className={cn("w-12 h-12 stroke-[2] drop-shadow-md", domain.colorTheme.text)} />
                       </motion.div>
                     </div>
 
-                    {/* Right Column: Title, Code, Experience, Description, and Brand Logos */}
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5 h-full">
-                      <div className="flex flex-col gap-1">
-                        {/* Domain Code Tag */}
-                        <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-cyan-400 uppercase tracking-wider">
-                          LĨNH VỰC {domain.code}
+                    {/* Content Section */}
+                    <div className="flex-1 min-w-0 flex flex-col items-center gap-2 relative z-10 w-full">
+                      <h6 className={cn("text-h6 font-bold tracking-tight font-play line-clamp-1", domain.colorTheme.text)}>
+                        {isVi ? domain.titleVi : domain.titleEn}
+                      </h6>
+
+                      <div className="flex items-center justify-center">
+                        <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black tracking-wide border shadow-3xs", domain.colorTheme.badgeBg, domain.colorTheme.badgeText)}>
+                          {isVi ? domain.experienceVi : domain.experienceEn}
                         </span>
-
-                        {/* Title H6 Token */}
-                        <h6 className={cn("text-h6 font-bold tracking-tight font-play truncate", domain.colorTheme.text)}>
-                          {isVi ? domain.titleVi : domain.titleEn}
-                        </h6>
-
-                        {/* Experience Badge */}
-                        <div className="flex items-center">
-                          <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black tracking-wide border shadow-3xs", domain.colorTheme.badgeBg, domain.colorTheme.badgeText)}>
-                            {isVi ? domain.experienceVi : domain.experienceEn}
-                          </span>
-                        </div>
                       </div>
 
-                      {/* Orientation Description */}
-                      <p className="text-xs font-medium text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed flex-1">
+                      <p className="text-xs font-medium text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
                         {isVi ? domain.orientationVi : domain.orientationEn}
                       </p>
 
-                      {/* Bottom Row: Connected Brand Logos & Deep Dive Action */}
-                      <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between gap-2 mt-auto">
-                        {/* Connected Logos list */}
-                        <div className="flex items-center gap-1.5 overflow-hidden flex-1">
+                      {/* Bottom Row: Connected Brand Logos Centered */}
+                      <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-center gap-2 mt-auto">
+                        <div className="flex items-center gap-1.5 justify-center overflow-hidden">
                           {domain.logos.map((logo, idx) => (
                             <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
                           ))}
-                        </div>
-
-                        {/* Action Trigger */}
-                        <div className="flex items-center gap-1 shrink-0 text-blue-600 dark:text-cyan-400 group-hover/card:translate-x-1 transition-transform">
-                          <span className="text-2xs font-mono font-bold">
-                            {isVi ? "Chi tiết" : "Details"}
-                          </span>
-                          <ChevronRight className="w-3.5 h-3.5" />
                         </div>
                       </div>
                     </div>

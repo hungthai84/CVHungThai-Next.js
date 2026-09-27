@@ -39,6 +39,7 @@ import {
   OPERATIONAL_PRINCIPLES_DATA, 
   CareerMilestoneItem 
 } from "../data/letterData";
+import { HeroRobotCompanion } from "./ai/HeroRobotCompanion";
 
 // Authentic Signature vector for Nguyễn Hùng Thái
 const SignatureSvg = () => (
@@ -157,7 +158,7 @@ export default function OpenLetter() {
         />
 
         {/* Header: Company Logo & Name & Role on Left, Year Badge Pill on Right */}
-        <div className="w-full flex items-center justify-between gap-2.5 pb-3 mb-2.5 border-b border-slate-200/60 dark:border-slate-800/80 relative z-10 shrink-0">
+        <div className="w-full flex items-center justify-between gap-2.5 pb-3 mb-2.5 border-b border-slate-200/60 dark:border-slate-800/80 shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 text-left">
             <div 
               className={cn(
@@ -276,13 +277,13 @@ export default function OpenLetter() {
             id="card-main-letter-content"
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={cn(
-              "lg:col-span-8 w-full relative overflow-hidden p-5 sm:p-7 md:p-8 transition-all duration-300 flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 group z-10 border",
+              "lg:col-span-8 w-full relative overflow-hidden p-5 sm:p-7 md:p-8 transition-all duration-300 flex flex-col justify-center gap-4 group z-10 border",
               "rounded-[var(--theme-radius-card,10px)]",
               getGlassCardClass()
             )}
           >
             {/* Left Column: Text Content */}
-            <div className="flex-1 flex flex-col justify-center relative z-10 text-left w-full">
+            <div className="w-full flex flex-col justify-center relative z-10 text-left">
               {/* Header Title with Animated Icon */}
               <AnimatedCardTitle
                 icon={BookCheck}
@@ -309,75 +310,6 @@ export default function OpenLetter() {
                 )}
               </p>
             </div>
-
-            {/* Right Column: Dynamic Floating Badges */}
-            <div className="relative z-10 w-full md:w-[280px] shrink-0 flex flex-col gap-3.5 sm:gap-4 justify-center py-2 md:py-0 select-none">
-              {/* Badge 1 */}
-              <motion.div
-                animate={{ y: [-3, 3, -3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full pointer-events-auto"
-              >
-                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
-                    <Bot className="w-5 h-5" />
-                  </div>
-                  <div className="text-left leading-tight">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 dark:text-sky-400 font-mono">
-                        {isVi ? "Trí Nhân AI" : "Tri Nhan AI"}
-                      </span>
-                      <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    </div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
-                      {isVi ? "Trợ lý số đồng hành" : "Digital CX Companion"}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Badge 2 */}
-              <motion.div
-                animate={{ y: [3, -3, 3] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full pointer-events-auto"
-              >
-                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <div className="text-left leading-tight">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono block">
-                      {isVi ? "22+ Năm Kinh Nghiệm" : "22+ Years CX"}
-                    </span>
-                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
-                      {isVi ? "Xây dựng & Vận hành" : "Care & Operations"}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Badge 3 */}
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full pointer-events-auto"
-              >
-                <div className="flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-md transition-all hover:scale-[1.02] duration-300">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
-                    <Heart className="w-5 h-5" />
-                  </div>
-                  <div className="text-left leading-tight">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-mono block">
-                      {isVi ? "Tận Tâm Phụng Sự" : "Dedicated Service"}
-                    </span>
-                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
-                      {isVi ? "Đồng hành cùng khách hàng" : "Partnering for Success"}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
           </div>
 
           {/* THẺ VIDEO RIÊNG BIỆT (Standalone Video Showcase Card) */}
@@ -385,51 +317,12 @@ export default function OpenLetter() {
             id="card-letter-video-showcase"
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={cn(
-              "lg:col-span-4 w-full relative overflow-hidden p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between items-stretch gap-3 group z-10 border text-left min-h-[260px]",
+              "lg:col-span-4 w-full relative overflow-hidden transition-all duration-300 flex flex-col justify-center items-stretch group z-10 border text-left min-h-[260px]",
               "rounded-[var(--theme-radius-card,10px)]",
               getGlassCardClass()
             )}
           >
-            {/* Video Header Title */}
-            <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 dark:border-slate-800/80 pb-2.5">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                  <Tv className="w-4 h-4 stroke-[2.2]" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white font-play">
-                    {isVi ? "Video Vận Hành AI & Automation" : "AI & Automation Operations"}
-                  </h4>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                    Digital Robot Showcase
-                  </p>
-                </div>
-              </div>
-              <span className="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                LIVE
-              </span>
-            </div>
-
-            {/* Video Player Element */}
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-200/80 dark:border-slate-800 shadow-inner group/vid">
-              <video
-                src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                controls
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Video Footer Caption */}
-            <div className="text-[11px] text-slate-600 dark:text-slate-300 font-semibold font-play flex items-center justify-between gap-2 pt-1 border-t border-slate-200/50 dark:border-slate-800/50">
-              <span>{isVi ? "Trợ lý số Trí Nhân AI đồng hành 24/7" : "Tri Nhan AI Digital Companion 24/7"}</span>
-              <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-            </div>
+            <HeroRobotCompanion fillCard={true} className="absolute inset-0 w-full h-full pointer-events-auto" />
           </div>
         </motion.div>
 
@@ -443,7 +336,7 @@ export default function OpenLetter() {
           id="card-career-milestones"
           style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
           className={cn(
-            "w-full transition-all duration-300 flex flex-col relative overflow-hidden p-5 sm:p-6 z-10 border",
+            "w-full transition-all duration-300 flex flex-col relative overflow-hidden p-[15px] z-10 border",
             "rounded-[var(--theme-radius-card,10px)]",
             getGlassCardClass()
           )}

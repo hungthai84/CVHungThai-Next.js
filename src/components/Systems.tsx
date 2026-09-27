@@ -151,7 +151,15 @@ export function Systems() {
         <div className="relative w-full">
           <PageCardHeader pageId="systems">
             <div className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-0.5 w-full">
-              {/* Left Side: Summary Stats */}
+              {/* Left Side: Editorial subtitle */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="w-2 h-4 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
+                <span className="text-caption font-semibold font-mono text-indigo-700 dark:text-indigo-300 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
+                  {isVi ? "Vận hành & Tự động hoá" : "Governance & Operations Hub"}
+                </span>
+              </div>
+
+              {/* Middle Side: Summary Stats */}
               <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/10 text-[11px] font-medium text-slate-600 dark:text-slate-300">
                 <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
                 <span>{isVi ? `Hiển thị ${filteredSystems.length}/12` : `Showing ${filteredSystems.length}/12`}</span>
@@ -292,7 +300,6 @@ export function Systems() {
                 >
                   {filteredSystems.map((item) => {
                     const IconComponent = item.icon;
-                    const WatermarkComponent = item.watermarkIcon;
 
                     return (
                       <MagneticBentoWrapper key={item.id} className="h-full w-full">
@@ -309,11 +316,6 @@ export function Systems() {
                             getGlassCardClass()
                           )}
                         >
-                          {/* Watermark Floating Back Icon */}
-                          <div className="absolute -right-3 -bottom-3 text-[3.5rem] opacity-10 dark:opacity-15 group-hover:opacity-25 pointer-events-none transform -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-110 transition-all duration-500 ease-in-out text-indigo-600 dark:text-indigo-400">
-                            <WatermarkComponent className="w-20 h-20 sm:w-24 sm:h-24 stroke-[1.2]" />
-                          </div>
-
                           {/* Standard Content Surface */}
                           <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
                             {/* Dòng 1 : Tên hệ thống */}

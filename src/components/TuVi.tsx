@@ -146,7 +146,15 @@ export default function TuVi() {
         >
           {/* Header Card Tử vi */}
           <PageCardHeader pageId="tuvi">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full text-xs font-semibold">
+            {/* Left Side: Editorial subtitle */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-4 bg-purple-600 dark:bg-purple-400 rounded-full shrink-0" />
+              <span className="text-caption font-semibold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-2.5 py-0.5 rounded-full border border-purple-500/30 shadow-2xs">
+                {isVi ? "Tử vi & Phong thủy" : "Astrology & Feng Shui"}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
               {[
                 { id: "tuvi-section-1", label: isVi ? "1. Bản Mệnh Phong Thủy" : "1. Profile & Feng Shui" },
                 { id: "tuvi-section-2", label: isVi ? "2. Phong Cách Quản Trị" : "2. Work Personality" },

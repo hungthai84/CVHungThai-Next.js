@@ -306,14 +306,14 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             <div className="liquid-glare" />
           </div>
 
-          <ul className="header-nav-list flex items-center justify-between gap-1 sm:gap-1.5 w-full relative z-20 shrink-0 px-1">
+          <ul className="header-nav-list flex items-center justify-between gap-0.5 lg:gap-1 xl:gap-1.5 w-full relative z-20 shrink-0 px-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               const isHovered = hoveredNavId === item.id;
 
               const getNavItemTheme = (id: string, active: boolean) => {
                 if (active) {
-                  return "bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105";
+                  return "text-white scale-105";
                 }
                 switch (id) {
                   case "home": return "text-blue-600 dark:text-cyan-400 hover:bg-blue-500/15 hover:scale-110";
@@ -346,12 +346,19 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     aria-label={item.label}
                     title={item.label}
                     className={cn(
-                      "w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer relative shrink-0",
+                      "w-7 h-7 lg:w-8 lg:h-8 xl:w-9 xl:h-9 min-[1250px]:w-10 min-[1250px]:h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer relative shrink-0 overflow-visible",
                       getNavItemTheme(item.id, isActive)
                     )}
                   >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeHeaderTab"
+                        className="absolute inset-0 bg-blue-600 rounded-full shadow-md shadow-blue-500/30 -z-10"
+                        transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                      />
+                    )}
                     <item.Icon 
-                      className={`w-4.5 h-4.5 sm:w-5 sm:h-5 transition-all duration-300 shrink-0 ${
+                      className={`w-3.5 h-3.5 lg:w-4 lg:h-4 xl:w-4.5 xl:h-4.5 min-[1250px]:w-5 min-[1250px]:h-5 transition-all duration-300 shrink-0 ${
                         isActive 
                           ? "text-white stroke-[2.5]" 
                           : "group-hover/navitem:scale-110"
@@ -378,10 +385,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
         </nav>
 
         {/* RIGHT CONTAINER: Horizontal Staggered Overlapping Group (Language, Theme, Color, Wallpaper) */}
-        <div className="hidden md:flex items-center gap-1.5 sm:gap-2 shrink-0 z-50 overflow-visible relative min-w-[250px] sm:min-w-[266px] justify-end">
+        <div className={cn(
+          "hidden md:flex items-center gap-1.5 sm:gap-2 shrink-0 z-50 overflow-visible relative justify-end transition-all duration-300",
+          isStackExpanded ? "min-w-[250px] sm:min-w-[266px]" : "min-w-[140px] lg:min-w-[250px]"
+        )}>
           {/* Framed Staggered Overlapping Horizontal Group (Ngôn ngữ, Giao diện, Màu chính, Hình nền) */}
           <div 
-            className="relative group/stack select-none z-50 overflow-visible w-[250px] sm:w-[266px] min-w-[250px] sm:min-w-[266px] shrink-0"
+            className={cn(
+              "relative group/stack select-none z-50 overflow-visible shrink-0 transition-all duration-300",
+              isStackExpanded ? "w-[250px] sm:w-[266px]" : "w-[140px] lg:w-[250px]"
+            )}
             onMouseEnter={handleStackMouseEnter}
             onMouseLeave={handleStackMouseLeave}
           >

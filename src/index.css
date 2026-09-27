@@ -2,6 +2,59 @@
 
 @import "tailwindcss";
 
+:root {
+  --grid-margin: 16px;
+  --grid-gutter: 16px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --grid-margin: 24px;
+    --grid-gutter: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --grid-margin: 32px;
+    --grid-gutter: 24px;
+  }
+}
+
+.grid-container-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  padding-left: var(--grid-margin);
+  padding-right: var(--grid-margin);
+  gap: var(--grid-gutter);
+}
+
+/* Smooth border-radius transition configs using modern CSS @property */
+@property --theme-radius-card {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 14px;
+}
+
+@property --theme-radius {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 10px;
+}
+
+/* Globally apply smooth morphing of border-radius across cards, panels, and bento cells */
+.floating-glass-main-card,
+.glass-card,
+div[style*="borderRadius"],
+div[class*="rounded-"],
+button,
+input,
+video,
+iframe,
+a {
+  transition: border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -91,14 +144,14 @@
   --text-nav: 0.875rem;
   --text-nav--line-height: 1.25;
 
-  --radius-xs: var(--radius-xs, 4px);
-  --radius-sm: var(--radius-sm, 6px);
-  --radius-md: var(--radius-md, 8px);
-  --radius-lg: var(--radius-lg, 10px);
-  --radius-xl: var(--radius-xl, 10px);
-  --radius-2xl: var(--radius-2xl, 10px);
-  --radius-3xl: var(--radius-3xl, 10px);
-  --radius-4xl: var(--radius-4xl, 14px);
+  --radius-xs: var(--theme-radius-xs, 4px);
+  --radius-sm: var(--theme-radius-sm, 6px);
+  --radius-md: var(--theme-radius-md, 8px);
+  --radius-lg: var(--theme-radius-lg, 10px);
+  --radius-xl: var(--theme-radius-xl, 10px);
+  --radius-2xl: var(--theme-radius-2xl, 10px);
+  --radius-3xl: var(--theme-radius-3xl, 10px);
+  --radius-4xl: var(--theme-radius-4xl, 14px);
   --radius-card: var(--theme-radius-card, 10px);
   --radius-button: var(--theme-radius-button, 10px);
   --radius: var(--theme-radius, 10px);

@@ -3,6 +3,7 @@ import { ArrowLeft, Maximize2, X, Info, Quote } from "lucide-react";
 import { CaseStudy1_1_Header } from "./CaseStudy1_1_Header";
 import { CaseStudy1_1_Mindmap } from "./CaseStudy1_1_Mindmap";
 import { CaseStudy1_1_Sections } from "./CaseStudy1_1_Sections";
+import { CaseStudy1_1_TOC } from "./CaseStudy1_1_TOC";
 import { CaseStudy1_2_Mindmap } from "./CaseStudy1_2_Mindmap";
 import { CaseStudy1_2_Sections } from "./CaseStudy1_2_Sections";
 import { CaseStudy1_3_Mindmap } from "./CaseStudy1_3_Mindmap";
@@ -43,7 +44,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: ProjectCard, onBack: () => void, onZoomImage: (img: string) => void }) {
-  const [viewMode, setViewMode] = useState<"all" | "mindmap">("all");
+  const [viewMode, setViewMode] = useState<"all" | "mindmap">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("project_detail_view_mode") as "all" | "mindmap";
+      if (saved === "all" || saved === "mindmap") return saved;
+    }
+    return "all";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("project_detail_view_mode", viewMode);
+  }, [viewMode]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showStickyBack, setShowStickyBack] = useState(false);
@@ -378,6 +390,15 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
       <div className="fixed -bottom-40 right-1/4 w-[480px] h-[480px] bg-gradient-to-br from-amber-400/25 via-orange-500/20 to-transparent rounded-full blur-3xl pointer-events-none z-0 animate-float-2"></div>
 
       {/* Main Card Wrapper removed, contents brought directly outside */}
+        <CaseStudy1_1_TOC 
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          jumpToSection={jumpToSection}
+          openModal={() => setIsModalOpen(true)}
+          project={project}
+          onBack={onBack}
+        />
+
         <CaseStudy1_1_Header 
           onShowToast={showToast} 
           project={project} 

@@ -294,11 +294,45 @@ export default function Projects() {
   const { lang } = useLanguage();
   const isVi = lang === "vi";
 
-  const [activeCard, setActiveCard] = useState<ProjectCard | null>(null);
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(PROJECTS_LIST[0]?.id || null);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("projects_selected_card_id");
+      if (saved) return saved;
+    }
+    return PROJECTS_LIST[0]?.id || null;
+  });
+
+  const [activeCard, setActiveCard] = useState<ProjectCard | null>(() => {
+    if (typeof window !== "undefined") {
+      const savedId = localStorage.getItem("projects_active_card_id");
+      if (savedId) {
+        const found = PROJECTS_LIST.find((p) => p.id === savedId);
+        if (found) return found;
+      }
+    }
+    return null;
+  });
+
   const [previewImage, setPreviewImage] = useState<{ src: string; title: string } | null>(null);
 
   const gridContainerRef = useRef<HTMLDivElement>(null);
+
+  // Sync selected and active card to localStorage
+  useEffect(() => {
+    if (selectedCardId) {
+      localStorage.setItem("projects_selected_card_id", selectedCardId);
+    } else {
+      localStorage.removeItem("projects_selected_card_id");
+    }
+  }, [selectedCardId]);
+
+  useEffect(() => {
+    if (activeCard) {
+      localStorage.setItem("projects_active_card_id", activeCard.id);
+    } else {
+      localStorage.removeItem("projects_active_card_id");
+    }
+  }, [activeCard]);
 
   // Compute sequential index of each card within its phase for color gradation
   const cardPhaseIndexMap = useMemo(() => {
@@ -319,7 +353,18 @@ export default function Projects() {
     return PRESET_15_COLORS[colorIndex];
   };
 
-  const [selectedPhase, setSelectedPhase] = useState("all");
+  const [selectedPhase, setSelectedPhase] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("projects_selected_phase");
+      if (saved) return saved;
+    }
+    return "all";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("projects_selected_phase", selectedPhase);
+  }, [selectedPhase]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
@@ -378,7 +423,8 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[var(--grid-margin,15px)] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+      style={{ '--grid-margin': '15px', '--grid-gutter': '16px' } as React.CSSProperties}
     >
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
@@ -436,8 +482,16 @@ export default function Projects() {
             </div>
           }
         >
+          {/* Left Side: Editorial subtitle */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="w-2 h-4 bg-teal-600 dark:bg-teal-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-teal-700 dark:text-teal-300 bg-teal-500/15 px-2.5 py-0.5 rounded-full border border-teal-500/30 shadow-2xs">
+              {isVi ? "Dự án & Sáng kiến" : "Featured Projects & Solutions"}
+            </span>
+          </div>
+
           {!activeCard && (
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full text-xs font-semibold">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
               {PHASE_FILTERS.map((f) => {
                 const isActive = selectedPhase === f.id;
                 return (
@@ -512,7 +566,7 @@ export default function Projects() {
                 id="card-projects-list-content"
                 className="w-full flex flex-col gap-4"
               >
-                <div id="projects-grid-content" className="p-1 sm:p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-[15px] w-full items-start">
+                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-start">
                   {filteredProjects.map((card, cardIndex) => {
                     const theme = getCardColorTheme(card, cardIndex);
                     const isSelected = selectedCardId === card.id;
@@ -525,7 +579,7 @@ export default function Projects() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
-                        className="w-full min-w-0 flex flex-col h-auto"
+                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-auto"
                       >
                       <KeyframersTiltCard
                         role="button"

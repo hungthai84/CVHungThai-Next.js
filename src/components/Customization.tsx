@@ -124,7 +124,10 @@ export default function Customization() {
     resetFontScale, 
     borderRadius, 
     setBorderRadius, 
-    resetBorderRadius 
+    resetBorderRadius,
+    borderRadiusCard,
+    setBorderRadiusCard,
+    resetBorderRadiusCard
   } = useTheme();
 
   const {
@@ -167,6 +170,19 @@ export default function Customization() {
   const [customTestText, setCustomTestText] = useState("");
   const [activeTypoToken, setActiveTypoToken] = useState("body");
   const [resetSuccessMessage, setResetSuccessMessage] = useState<string | null>(null);
+
+  // Unsaved border radius local states for the Radius customization card
+  const [tempBorderRadius, setTempBorderRadius] = useState(borderRadius);
+  const [tempBorderRadiusCard, setTempBorderRadiusCard] = useState(borderRadiusCard);
+
+  // Sync temp values when context values change
+  useEffect(() => {
+    setTempBorderRadius(borderRadius);
+  }, [borderRadius]);
+
+  useEffect(() => {
+    setTempBorderRadiusCard(borderRadiusCard);
+  }, [borderRadiusCard]);
 
   // Sync tab with external requested tab (if any)
   useEffect(() => {
@@ -273,9 +289,14 @@ export default function Customization() {
         )}
       </AnimatePresence>
 
-      {/* 2. Top Navigation Tabs Bar (Sticky Glass Container) */}
-      <div className="sticky top-0 z-30 w-full mb-6 py-2 px-1 rounded-2xl bg-slate-100/90 dark:bg-[#121218]/90 border border-slate-200/80 dark:border-white/10 backdrop-blur-2xl shadow-md overflow-x-auto no-scrollbar">
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-200/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 min-w-max">
+      {/* 2. Top Navigation Tabs Bar (Sticky Transparent Container with Apple-style Fluid Sliding Pill & WCAG Contrast) */}
+      <div 
+        className="sticky top-[64px] sm:top-[72px] z-30 w-full mb-6 py-2 overflow-x-auto no-scrollbar transition-all duration-300 bg-transparent"
+      >
+        <div 
+          className="flex items-center gap-1.5 p-1 bg-slate-200/40 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 min-w-max"
+          style={{ borderRadius: "calc(var(--theme-radius-card, 16px) - 2px)" }}
+        >
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.Icon;
@@ -285,13 +306,22 @@ export default function Customization() {
                 type="button"
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
-                  "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 relative",
+                  "flex items-center gap-2 px-4 py-2 text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 relative overflow-visible",
                   isActive
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-cyan-400 shadow-sm border border-slate-200/80 dark:border-white/15 scale-[1.02]"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/5"
+                    ? "text-indigo-600 dark:text-cyan-400 scale-[1.02]"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                 )}
+                style={{ borderRadius: "var(--theme-radius, 8px)" }}
               >
-                <Icon className={cn("w-4 h-4 shrink-0", isActive ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
+                {isActive && (
+                  <motion.div
+                    layoutId="activeCustomizationTab"
+                    className="absolute inset-0 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/15 shadow-xs -z-10"
+                    style={{ borderRadius: "var(--theme-radius, 8px)" }}
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                  />
+                )}
+                <Icon className={cn("w-4 h-4 shrink-0 transition-colors duration-200", isActive ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400 dark:text-slate-500")} />
                 <span>{isVi ? tab.nameVi : tab.nameEn}</span>
                 {isActive && (
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400 shrink-0" />
@@ -313,7 +343,7 @@ export default function Customization() {
             className="space-y-6"
           >
             {/* Theme Presets Selection */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -409,7 +439,7 @@ export default function Customization() {
             </div>
 
             {/* Language Selection Bar */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -459,7 +489,7 @@ export default function Customization() {
             className="space-y-6"
           >
             {/* Color Presets */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -529,7 +559,7 @@ export default function Customization() {
             </div>
 
             {/* Active Palette Details & Token Swatches */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
                 {isVi ? "Chi tiết 5 màu Tokens hiện tại (Click để copy HEX)" : "Active 5 Token Palette (Click to copy HEX)"}
@@ -570,7 +600,7 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -578,53 +608,117 @@ export default function Customization() {
                     {isVi ? "Tùy chỉnh độ bo cong góc (Border Radius)" : "Border Radius Customization"}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Áp dụng đồng bộ cho thẻ chính, nút bấm, header, footer và toàn bộ hệ thống" : "Synchronously applied to cards, buttons, header, footer dock and modals"}
+                    {isVi ? "Điều chỉnh linh hoạt các giá trị bo cong của hệ thống và thẻ bento" : "Adjust corner curvature for system details and card frames independently"}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetBorderRadius();
-                    triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn (10px)" : "Reset to default radius (10px)");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định (10px)" : "Default (10px)"}</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTempBorderRadius(10);
+                      setTempBorderRadiusCard(14);
+                      setBorderRadius(10);
+                      if (setBorderRadiusCard) setBorderRadiusCard(14);
+                      triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn hệ thống 🔄" : "Reset border-radius to defaults 🔄");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBorderRadius(tempBorderRadius);
+                      if (setBorderRadiusCard) setBorderRadiusCard(tempBorderRadiusCard);
+                      triggerResetFeedback(isVi ? "Đã áp dụng độ bo cong góc mới toàn website! 🎉" : "Applied new corner radius configurations site-wide! 🎉");
+                    }}
+                    className={cn(
+                      "flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer w-fit",
+                      tempBorderRadius !== borderRadius || tempBorderRadiusCard !== borderRadiusCard
+                        ? "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 scale-[1.02]"
+                        : "bg-slate-100/80 dark:bg-white/5 text-slate-400 dark:text-slate-600 cursor-not-allowed"
+                    )}
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu & Áp dụng" : "Save & Apply"}</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Slider Control */}
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                    {isVi ? "Điều chỉnh độ bo cong tùy ý:" : "Custom Radius Slider:"}
-                  </span>
-                  <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
-                    {borderRadius}px
-                  </span>
+              {/* Sliders Container (Dual Customization Panel) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {/* Slider 1: System Elements Radius */}
+                <div className="p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {isVi ? "Bo góc hệ thống (Nút, Input, Badges):" : "System Radius (Buttons, Badges):"}
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        {isVi ? "Bo góc nút bấm chính, trường văn bản & các tag trạng thái" : "Applies to UI buttons, fields, & status badges"}
+                      </p>
+                    </div>
+                    <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
+                      {tempBorderRadius}px
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={28}
+                    step={1}
+                    value={tempBorderRadius}
+                    onChange={(e) => {
+                      setTempBorderRadius(Number(e.target.value));
+                      playClick();
+                    }}
+                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
+                  />
                 </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={32}
-                  step={1}
-                  value={borderRadius}
-                  onChange={(e) => setBorderRadius(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
-                />
+
+                {/* Slider 2: Card Radius (--theme-radius-card) */}
+                <div className="p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {isVi ? "Bo góc thẻ chứa (Cards, Bento Blocks):" : "Card Frame Radius (Bento Blocks):"}
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        {isVi ? "Điều chỉnh trực tiếp biến CSS --theme-radius-card toàn website" : "Directly adjust the --theme-radius-card CSS token website-wide"}
+                      </p>
+                    </div>
+                    <span className="text-sm font-mono font-black text-rose-500 dark:text-rose-400 px-2 py-0.5 rounded-md bg-rose-500/10 dark:bg-rose-500/10">
+                      {tempBorderRadiusCard}px
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={32}
+                    step={1}
+                    value={tempBorderRadiusCard}
+                    onChange={(e) => {
+                      setTempBorderRadiusCard(Number(e.target.value));
+                      playClick();
+                    }}
+                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500 dark:accent-rose-400"
+                  />
+                </div>
               </div>
 
               {/* Preset Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {RADIUS_PRESETS.map((preset) => {
-                  const isSelected = borderRadius === preset.radius;
+                  const isSelected = tempBorderRadius === preset.radius;
                   return (
                     <button
                       key={preset.id}
                       type="button"
                       onClick={() => {
-                        setBorderRadius(preset.radius);
+                        setTempBorderRadius(preset.radius);
+                        setTempBorderRadiusCard(Math.min(32, preset.radius + 4));
                         playClick();
                       }}
                       className={cn(
@@ -670,7 +764,7 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -793,7 +887,7 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -939,7 +1033,7 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -1036,7 +1130,7 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="p-5 sm:p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">

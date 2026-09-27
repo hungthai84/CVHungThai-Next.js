@@ -258,7 +258,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
         </section>
 
         {/* 06 · TRIỂN KHAI */}
-        <section id="sec-06" className="p-5 sm:p-7 rounded-3xl bg-blue-50/40 dark:bg-slate-900/80 border border-blue-100 dark:border-blue-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300">
+        <section id="sec-06" className="p-5 sm:p-7 rounded-3xl bg-blue-50/50 dark:bg-slate-900/50 border border-blue-100/80 dark:border-blue-900/50 shadow-md hover:shadow-lg space-y-4 transition duration-300 backdrop-blur-md">
           <div className="flex items-center space-x-3 border-b border-blue-200/80 dark:border-blue-800/80 pb-3.5 sm:pb-4">
             <h2 className="text-base sm:text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
               <span>06</span>
@@ -662,14 +662,12 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
       </section>
 
       {/* 06 · TRIỂN KHAI */}
-      <section id="sec-06" className="p-5 sm:p-7 rounded-3xl bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-950/40 dark:via-slate-900/90 dark:to-slate-900 border-2 border-blue-300/80 dark:border-blue-700/80 shadow-lg space-y-4 transition duration-300 backdrop-blur-md">
+      <section id="sec-06" className="p-5 sm:p-7 rounded-3xl bg-blue-50/50 dark:bg-slate-900/50 border-2 border-blue-300/80 dark:border-blue-700/80 shadow-lg space-y-4 transition duration-300 backdrop-blur-md">
         <div className="flex items-center space-x-3 border-b border-blue-200/90 dark:border-blue-800/80 pb-3.5 sm:pb-4">
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-lg bg-blue-500 text-white font-mono text-xs shadow-xs">06</span>
+            <span>06</span>
             <span className="text-blue-400 dark:text-blue-500 font-normal">·</span>
-            <div className="p-1.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xs">
-              <GitMerge className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-            </div>
+            <GitMerge className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400 shrink-0" />
             <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 dark:from-blue-400 dark:to-violet-300 bg-clip-text text-transparent">Lộ trình triển khai 6 bước bài bản</span>
           </h2>
         </div>

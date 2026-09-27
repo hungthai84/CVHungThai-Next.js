@@ -570,6 +570,9 @@ export interface ThemeContextType {
   borderRadius: number;
   setBorderRadius: (radius: number) => void;
   resetBorderRadius: () => void;
+  borderRadiusCard: number;
+  setBorderRadiusCard: (radius: number) => void;
+  resetBorderRadiusCard: () => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
   themeMode: ThemeMode;
@@ -748,15 +751,23 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return 10;
   });
 
+  const [borderRadiusCard, setBorderRadiusCardState] = useState<number>(() => {
+    try {
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius_card") : null;
+      if (saved && !isNaN(Number(saved))) return Number(saved);
+    } catch {}
+    return 14; // Default card radius is 14px
+  });
+
   // DOM mutation helpers
-  const applyRadiusToDom = (radius: number) => {
+  const applyRadiusToDom = (radius: number, cardRadius: number) => {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
       root.style.setProperty("--theme-radius", `${radius}px`);
-      root.style.setProperty("--theme-radius-card", `${radius}px`);
-      root.style.setProperty("--theme-radius-container", `${radius}px`);
-      root.style.setProperty("--theme-radius-modal", `${Math.min(32, radius + 4)}px`);
-      root.style.setProperty("--theme-radius-inner", `${Math.max(2, radius - 4)}px`);
+      root.style.setProperty("--theme-radius-card", `${cardRadius}px`);
+      root.style.setProperty("--theme-radius-container", `${cardRadius}px`);
+      root.style.setProperty("--theme-radius-modal", `${Math.min(32, cardRadius + 4)}px`);
+      root.style.setProperty("--theme-radius-inner", `${Math.max(2, cardRadius - 4)}px`);
       root.style.setProperty("--theme-radius-button", `${Math.max(6, radius)}px`);
       root.style.setProperty("--theme-radius-input", `${Math.max(6, radius)}px`);
       root.style.setProperty("--theme-radius-badge", `${Math.max(4, radius - 4)}px`);
@@ -779,11 +790,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty("--radius-3xl", `${Math.min(36, radius + 4)}px`);
       root.style.setProperty("--radius-4xl", `${Math.min(40, radius + 6)}px`);
 
-      root.style.setProperty("--radius-card", `${radius}px`);
+      root.style.setProperty("--radius-card", `${cardRadius}px`);
       root.style.setProperty("--radius-button", `${Math.max(6, radius)}px`);
-      root.style.setProperty("--radius-small-card", `${Math.max(4, radius - 2)}px`);
-      root.style.setProperty("--radius-hero-card", `${Math.min(32, radius + 4)}px`);
-      root.style.setProperty("--radius-modal", `${Math.min(32, radius + 4)}px`);
+      root.style.setProperty("--radius-small-card", `${Math.max(4, cardRadius - 2)}px`);
+      root.style.setProperty("--radius-hero-card", `${Math.min(32, cardRadius + 4)}px`);
+      root.style.setProperty("--radius-modal", `${Math.min(32, cardRadius + 4)}px`);
       root.style.setProperty("--icon-radius", `${Math.max(6, radius)}px`);
     }
   };
@@ -983,11 +994,24 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       localStorage.setItem("portfolio_border_radius", clamped.toString());
     } catch {}
-    applyRadiusToDom(clamped);
+    applyRadiusToDom(clamped, borderRadiusCard);
   };
 
   const resetBorderRadius = () => {
     setBorderRadius(10);
+  };
+
+  const setBorderRadiusCard = (radius: number) => {
+    const clamped = Math.max(0, Math.min(32, radius));
+    setBorderRadiusCardState(clamped);
+    try {
+      localStorage.setItem("portfolio_border_radius_card", clamped.toString());
+    } catch {}
+    applyRadiusToDom(borderRadius, clamped);
+  };
+
+  const resetBorderRadiusCard = () => {
+    setBorderRadiusCard(14);
   };
 
   const setFontScale = (scale: number) => {
@@ -1091,8 +1115,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Effects
   useEffect(() => {
-    applyRadiusToDom(borderRadius);
-  }, [borderRadius]);
+    applyRadiusToDom(borderRadius, borderRadiusCard);
+  }, [borderRadius, borderRadiusCard]);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -1154,6 +1178,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       borderRadius,
       setBorderRadius,
       resetBorderRadius,
+      borderRadiusCard,
+      setBorderRadiusCard,
+      resetBorderRadiusCard,
       colorPreset,
       setColorPreset: handleSetColorPreset,
       activePalette,
@@ -1193,6 +1220,9 @@ export const useTheme = (): ThemeContextType => {
       borderRadius: 10,
       setBorderRadius: () => {},
       resetBorderRadius: () => {},
+      borderRadiusCard: 14,
+      setBorderRadiusCard: () => {},
+      resetBorderRadiusCard: () => {},
       isThemeTransitioning: false,
       themeSnapshot: null,
       isApplyingTheme: false,

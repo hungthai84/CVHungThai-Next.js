@@ -272,10 +272,11 @@ export const MasonryGallery: React.FC<MasonryGalleryProps> = ({
           key={item.id}
           data-key={item.id}
           className={cn(
-            'absolute overflow-hidden cursor-pointer rounded-2xl border border-slate-200/80 dark:border-cyan-500/25 transition-shadow hover:shadow-2xl bg-slate-900 group',
+            'absolute overflow-hidden cursor-pointer border border-slate-200/80 dark:border-cyan-500/25 transition-shadow hover:shadow-2xl bg-slate-900 group',
             itemClassName
           )}
           style={{
+            borderRadius: "var(--theme-radius-card, 16px)",
             willChange: 'transform, width, height, opacity, filter',
             boxShadow: '0 10px 30px -10px rgba(0,0,0,0.15)'
           }}

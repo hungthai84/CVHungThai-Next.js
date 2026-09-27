@@ -182,18 +182,22 @@ export function Skills() {
                 <div className="relative z-10 w-full">
                   {/* Quadrant Header */}
                   <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3 mb-3">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 text-left">
                       <motion.div
-                        animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-8 h-8 rounded-xl bg-blue-500/15 dark:bg-cyan-500/20 flex items-center justify-center border border-blue-200/40 dark:border-cyan-500/30 shrink-0"
+                        animate={{ y: [0, -3, 0], scale: [1, 1.08, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        className="shrink-0"
                       >
-                        <Gem className="w-4.5 h-4.5 text-blue-600 dark:text-cyan-400" />
+                        <Gem className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
                       </motion.div>
-                      <div className="min-w-0">
-                        <h6 className="text-h6 font-bold text-blue-700 dark:text-cyan-300 truncate font-play">
-                          {isVi ? "7.1. Thế mạnh: Nền tảng vận hành & lãnh đạo" : "7.1. Strengths: Operations & Leadership"}
-                        </h6>
+                      <div className="min-w-0 text-left">
+                        <motion.h6 
+                          animate={{ opacity: [0.9, 1, 0.9] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                          className="text-h6 font-bold text-blue-600 dark:text-cyan-400 truncate font-play text-left"
+                        >
+                          {isVi ? "7.1. Thế mạnh vận hành" : "7.1. Operational Core Strengths"}
+                        </motion.h6>
                       </div>
                     </div>
                     
@@ -209,7 +213,7 @@ export function Skills() {
                   </p>
 
                   {/* Skills Progress List */}
-                  <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {STRENGTHS_DATA.map((item, index) => {
                       const ItemIcon = getSkillIcon(item.iconName);
                       return (
@@ -271,18 +275,22 @@ export function Skills() {
 
                 <div className="relative z-10 w-full">
                   <div className="flex items-center justify-between border-b border-orange-100 dark:border-slate-800 pb-3 mb-3">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 text-left">
                       <motion.div
-                        animate={{ y: [0, -3, 0], rotate: [0, -3, 3, 0] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-8 h-8 rounded-xl bg-orange-500/15 dark:bg-amber-500/20 flex items-center justify-center border border-orange-200/40 dark:border-amber-500/30 shrink-0"
+                        animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.04, 1] }}
+                        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                        className="shrink-0"
                       >
-                        <TrendingDown className="w-4.5 h-4.5 text-orange-600 dark:text-amber-400" />
+                        <TrendingDown className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                       </motion.div>
-                      <div className="min-w-0">
-                        <h6 className="text-h6 font-bold text-orange-700 dark:text-amber-300 truncate font-play">
-                          {isVi ? "7.2. Hoàn thiện: Nâng cao năng lực quản trị" : "7.2. Growth: Elevating Competencies"}
-                        </h6>
+                      <div className="min-w-0 text-left">
+                        <motion.h6 
+                          animate={{ opacity: [0.9, 1, 0.9] }}
+                          transition={{ duration: 4.2, repeat: Infinity }}
+                          className="text-h6 font-bold text-amber-600 dark:text-amber-400 truncate font-play text-left"
+                        >
+                          {isVi ? "7.2. Hoàn thiện quản trị" : "7.2. Strategic Management Refinements"}
+                        </motion.h6>
                       </div>
                     </div>
                     
@@ -297,7 +305,7 @@ export function Skills() {
                       : "Capabilities to continuously refine to elevate management from execution to strategic governance."}
                   </p>
 
-                  <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {WEAKNESSES_DATA.map((item, index) => {
                       const ItemIcon = getSkillIcon(item.iconName);
                       return (
@@ -355,18 +363,22 @@ export function Skills() {
 
                 <div className="relative z-10 w-full">
                   <div className="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-3 mb-3">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 text-left">
                       <motion.div
-                        animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-8 h-8 rounded-xl bg-purple-500/15 dark:bg-purple-500/20 flex items-center justify-center border border-purple-200/40 dark:border-purple-500/30 shrink-0"
+                        animate={{ y: [0, -4, 0], x: [0, 2, 0] }}
+                        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                        className="shrink-0"
                       >
-                        <Rocket className="w-4.5 h-4.5 text-purple-600 dark:text-purple-400" />
+                        <Rocket className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                       </motion.div>
-                      <div className="min-w-0">
-                        <h6 className="text-h6 font-bold text-purple-700 dark:text-purple-300 truncate font-play">
-                          {isVi ? "7.3. Cơ hội: Chuyển đổi số & bứt phá" : "7.3. Opportunities: Digital Growth"}
-                        </h6>
+                      <div className="min-w-0 text-left">
+                        <motion.h6 
+                          animate={{ opacity: [0.9, 1, 0.9] }}
+                          transition={{ duration: 3.8, repeat: Infinity }}
+                          className="text-h6 font-bold text-emerald-600 dark:text-emerald-400 truncate font-play text-left"
+                        >
+                          {isVi ? "7.3. Cơ hội bứt phá" : "7.3. Innovative Digital Paths"}
+                        </motion.h6>
                       </div>
                     </div>
                     
@@ -381,7 +393,7 @@ export function Skills() {
                       : "Excellent avenues to capture digital waves, automating workflows, and leveraging AI models."}
                   </p>
 
-                  <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {OPPORTUNITIES_DATA.map((item, index) => {
                       const ItemIcon = getSkillIcon(item.iconName);
                       return (
@@ -439,18 +451,22 @@ export function Skills() {
 
                 <div className="relative z-10 w-full">
                   <div className="flex items-center justify-between border-b border-red-100 dark:border-slate-800 pb-3 mb-3">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 text-left">
                       <motion.div
-                        animate={{ y: [0, -3, 0], rotate: [0, -3, 3, 0] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-8 h-8 rounded-xl bg-red-500/15 dark:bg-rose-500/20 flex items-center justify-center border border-red-200/40 dark:border-rose-500/30 shrink-0"
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="shrink-0"
                       >
-                        <Target className="w-4.5 h-4.5 text-red-600 dark:text-rose-400" />
+                        <Target className="w-5 h-5 text-violet-600 dark:text-fuchsia-400" />
                       </motion.div>
-                      <div className="min-w-0">
-                        <h6 className="text-h6 font-bold text-red-700 dark:text-rose-300 truncate font-play">
-                          {isVi ? "7.4. Thách thức: Thích ứng & quản trị biến động" : "7.4. Threats: Agility & Volatility"}
-                        </h6>
+                      <div className="min-w-0 text-left">
+                        <motion.h6 
+                          animate={{ opacity: [0.9, 1, 0.9] }}
+                          transition={{ duration: 3.5, repeat: Infinity }}
+                          className="text-h6 font-bold text-violet-600 dark:text-fuchsia-400 truncate font-play text-left"
+                        >
+                          {isVi ? "7.4. Thách thức thích ứng" : "7.4. Agility Under Pressure"}
+                        </motion.h6>
                       </div>
                     </div>
                     
@@ -465,7 +481,7 @@ export function Skills() {
                       : "Key external risks from volatile economy and rapid technical changes demanding persistent agility."}
                   </p>
 
-                  <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {THREATS_DATA.map((item, index) => {
                       const ItemIcon = getSkillIcon(item.iconName);
                       return (

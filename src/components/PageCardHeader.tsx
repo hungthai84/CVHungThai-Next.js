@@ -248,9 +248,8 @@ export function PageCardHeader({
               onClick={() => {
                 try { playUiSound("click"); } catch {}
               }}
-              className={cn(
-                "w-8 h-8 sm:w-9 sm:h-9 rounded-xl border flex items-center justify-center shrink-0 cursor-pointer shadow-xs transition-all duration-300",
-                currentTheme.iconBg
+               className={cn(
+                "w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center shrink-0 cursor-pointer transition-all duration-300"
               )}
               title={displayTitle}
             >
@@ -276,21 +275,6 @@ export function PageCardHeader({
               {displayTitle}
             </span>
           </motion.h2>
-
-          {/* Reading Time Pill */}
-          {displayReadingTime && (
-            <div
-              className={cn(
-                "hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[11px] font-medium tracking-tight shadow-2xs font-play",
-                currentTheme.badgeBg,
-                currentTheme.badgeText
-              )}
-              title={isVi ? "Thời gian đọc ước tính" : "Estimated reading time"}
-            >
-              <Clock className="w-3 h-3 stroke-[2]" />
-              <span>{displayReadingTime}</span>
-            </div>
-          )}
         </div>
 
         {/* Bên phải: Câu nói hay & Nút hành động */}

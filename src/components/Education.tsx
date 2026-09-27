@@ -1637,25 +1637,30 @@ export default function Education() {
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => safePlay("hover")}
                     className={cn(
-                      "grid-profile-card group relative flex flex-col justify-between p-[15px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full flex-1"
+                      "grid-profile-card group relative flex flex-col justify-between p-[15px] border transition-all duration-300 select-none cursor-pointer h-full flex-1",
+                      themeCard.containerClass
                     )}
                     style={{
                       borderRadius: "var(--theme-radius-card, var(--theme-radius, 14px))",
                       transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))',
-                      transformStyle: 'preserve-3d'
+                      transformStyle: 'preserve-3d',
+                      ...themeCard.containerStyle
                     }}
                   >
                     {/* Banner Image - Clear Clean Banner Image Style without border */}
                     <div 
-                      className="relative w-full aspect-[16/10] overflow-hidden rounded-[10px] border-0 mb-3 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300 shadow-xs"
+                      className={cn(
+                        "relative w-full aspect-[16/10] overflow-hidden rounded-[10px] mb-3 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300 shadow-xs",
+                        themeCard.imageCardBorder
+                      )}
                     >
                       {/* Course Thumbnail Image */}
                       {card.image && (
                         <img 
-                          src={card.image} 
-                          alt={card.title} 
-                          referrerPolicy="no-referrer"
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 rounded-[10px]"
+                           src={card.image} 
+                           alt={card.title} 
+                           referrerPolicy="no-referrer"
+                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 rounded-[10px]"
                         />
                       )}
 
@@ -1667,12 +1672,12 @@ export default function Education() {
                     <div className="flex items-center gap-2.5 mb-2.5">
                       <DynamicIcon 
                         name={card.icon || "graduation-cap"} 
-                        className="w-5 h-5 shrink-0" 
-                        style={{ color: coverTheme.textAccent }}
+                        className={cn("w-5 h-5 shrink-0", themeCard.iconColor)} 
+                        style={{ color: themeCard.actionColor }}
                       />
                       <h3 
-                        className="font-play font-bold leading-tight tracking-tight text-card-title truncate line-clamp-1"
-                        style={{ color: coverTheme.textAccent }}
+                        className={cn("font-play font-bold leading-tight tracking-tight text-card-title truncate line-clamp-1", themeCard.titleColor)}
+                        style={{ color: themeCard.actionColor }}
                       >
                         {card.title}
                       </h3>
@@ -1682,19 +1687,19 @@ export default function Education() {
                     <div className="space-y-1.5 text-body-sm text-left mb-3">
                       {/* 1. Học tại / Institution */}
                       <div className="flex items-start gap-1.5 text-left">
-                        <span className="w-[76px] shrink-0 font-bold text-caption text-slate-700 dark:text-slate-200 secondary-text flex items-center gap-1 whitespace-nowrap">
-                          <Icons.School className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0" />
+                        <span className={cn("w-[76px] shrink-0 font-bold text-caption flex items-center gap-1 whitespace-nowrap", themeCard.metadataLabel)}>
+                          <Icons.School className="w-3.5 h-3.5 shrink-0" />
                           <span className="whitespace-nowrap">{isVi ? "Học tại:" : "School:"}</span>
                         </span>
-                        <span className="font-semibold text-caption truncate flex-1 text-slate-800 dark:text-slate-100">
+                        <span className={cn("font-semibold text-caption truncate flex-1", themeCard.metadataVal)}>
                           {card.subtitle}
                         </span>
                       </div>
 
                       {/* 3. Mô tả / Key Summary */}
-                      <div className="text-left text-caption leading-snug text-slate-700 dark:text-slate-200 secondary-text">
-                        <span className="font-bold text-slate-800 dark:text-slate-100 inline-flex items-center gap-1 mr-1.5">
-                          <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0 inline-block align-middle" />
+                      <div className={cn("text-left text-caption leading-snug secondary-text", themeCard.descColor)}>
+                        <span className={cn("font-bold inline-flex items-center gap-1 mr-1.5", themeCard.metadataLabel)}>
+                          <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" />
                           <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                         </span>
                         <span className="font-normal line-clamp-4 inline">{card.desc}</span>
@@ -1702,8 +1707,8 @@ export default function Education() {
                     </div>
 
                     {/* Bottom Year Badge */}
-                    <div className="flex items-center justify-between pt-2.5 mt-auto border-t border-slate-200/80 dark:border-slate-800/80 w-full">
-                      <span className="inline-flex items-center gap-1 text-2xs font-mono font-bold text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-700/80">
+                    <div className={cn("flex items-center justify-between pt-2.5 mt-auto w-full", themeCard.footerBorder)}>
+                      <span className={cn("inline-flex items-center gap-1 text-2xs font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-2xs", themeCard.badgeYearClass)}>
                         <Icons.Calendar className="w-3 h-3 opacity-90" />
                         <span>{card.year}</span>
                       </span>

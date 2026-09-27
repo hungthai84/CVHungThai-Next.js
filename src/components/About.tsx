@@ -337,10 +337,11 @@ export default function About() {
                         });
                       }}
                       className={cn(
-                        "p-2.5 sm:p-3 rounded-2xl border flex items-center justify-between transition-all min-w-0 group/item cursor-pointer shadow-2xs",
+                        "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item cursor-pointer shadow-2xs",
                         item.colorTheme.bg,
                         item.colorTheme.border
                       )}
+                      style={{ borderRadius: "var(--theme-radius, 12px)" }}
                       title={isVi ? `Click để xem bản đồ Google Maps: ${item.href}` : "Click to view Google Maps"}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -370,10 +371,11 @@ export default function About() {
                       target={item.type === "link" ? "_blank" : undefined}
                       rel={item.type === "link" ? "noopener noreferrer" : undefined}
                       className={cn(
-                        "col-span-1 sm:col-span-2 p-2.5 sm:p-3 rounded-2xl border flex items-center justify-between transition-all min-w-0 group/item hover:shadow-xs",
+                        "col-span-1 sm:col-span-2 p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item hover:shadow-xs",
                         item.colorTheme.bg,
                         item.colorTheme.border
                       )}
+                      style={{ borderRadius: "var(--theme-radius, 12px)" }}
                       title={isVi ? `${item.labelVi}: ${item.valueVi}` : `${item.labelEn}: ${item.valueEn}`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -403,10 +405,11 @@ export default function About() {
                   <div 
                     key={item.id}
                     className={cn(
-                      "p-2.5 sm:p-3 rounded-2xl border flex items-center justify-between transition-all min-w-0 group/item",
+                      "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item",
                       item.colorTheme.bg,
                       item.colorTheme.border
                     )}
+                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
@@ -431,164 +434,345 @@ export default function About() {
 
         </div>
 
-        {/* 3. HERO HIGHLIGHT LANDSCAPE BANNER - GIỚI THIỆU CHUYÊN GIA */}
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-          className={cn(
-            "w-full relative overflow-hidden p-[15px] flex flex-col gap-4 transition-all duration-300 border text-left",
-            "rounded-[var(--theme-radius-card,10px)]",
-            getGlassCardClass()
-          )}
-        >
-          {/* Header Block (Section Title with Animated Floating Icon) */}
-          <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/10">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <motion.div
-                animate={{
-                  y: [0, -3.5, 0],
-                  rotate: [0, 3.5, -3.5, 0],
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  duration: 3.6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                whileHover={{ scale: 1.18, rotate: 10 }}
-                className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-              >
-                <Target className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
-              </motion.div>
-              <div className="text-left">
-                <motion.h6 
-                  animate={{ opacity: [0.96, 1, 0.96] }}
-                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                  className="text-h6 font-bold tracking-tight font-play flex items-center"
-                >
-                  <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-300 dark:to-rose-300">
-                    {isVi ? "Giới thiệu bản thân" : "Personal Executive Profile"}
-                  </span>
-                </motion.h6>
-                <p className="text-2xs font-mono font-bold text-indigo-600 dark:text-cyan-400 uppercase tracking-wider mt-0.5">
-                  {isVi ? "Hồ sơ chuyên môn thực chiến" : "Professional executive profile"}
-                </p>
+        {/* 3. HERO HIGHLIGHT LANDSCAPE BANNER - GIỚI THIỆU CHUYÊN GIA (Tái lập 1:1 từ hình ảnh thực tế) */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch w-full">
+          
+          {/* CỘT TRÁI: Giới thiệu bản thân tôi (xl:col-span-4) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className={cn(
+              "xl:col-span-4 p-6 flex flex-col justify-between relative overflow-hidden border text-left bg-gradient-to-br from-[#F5F8FF] to-[#E9F0FE] dark:from-[#131B2E] dark:to-[#1B2845]",
+              theme === "glass-dark-neon"
+                ? "border-cyan-500/30 shadow-[0_12px_40px_rgba(0,240,255,0.08)]"
+                : "border-blue-100 dark:border-white/10 shadow-[0_12px_40px_rgba(31,38,135,0.06)]"
+            )}
+          >
+            {/* Background Motion Video */}
+            <video
+              src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionitems/source/1782052202366-motion_59.mp4"
+              className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-15 pointer-events-none"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+            {/* Visual glow backdrop */}
+            <div className="absolute top-0 right-0 w-60 h-60 bg-blue-400/10 dark:bg-cyan-500/15 rounded-full filter blur-[80px] pointer-events-none" />
+
+            <div className="space-y-4">
+              {/* Header Title */}
+              <div className="flex items-center gap-3 pb-3 border-b border-blue-200/40 dark:border-white/10">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-600/10 text-blue-600 dark:bg-cyan-500/10 dark:text-cyan-400 shrink-0">
+                  <User className="w-5 h-5 stroke-[2.2]" />
+                </div>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white font-play tracking-tight">
+                  {isVi ? "Giới thiệu bản thân tôi" : "About myself"}
+                </h4>
+              </div>
+
+              {/* Narrative Text */}
+              <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                {isVi ? (
+                  <>
+                    Một chuyên gia dịch vụ khách hàng với hơn{" "}
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
+                      22 năm kinh nghiệm
+                    </span>{" "}
+                    thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
+                  </>
+                ) : (
+                  <>
+                    A customer service expert with over{" "}
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
+                      22 years of experience
+                    </span>{" "}
+                    hands-on. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations.
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* Bottom Graphic & Cursive signature row */}
+            <div className="flex items-end justify-between mt-8 pt-4 border-t border-blue-200/20">
+              {/* Signature: Luôn bên bạn ♡ */}
+              <div className="pb-2">
+                <span className="block font-[Caveat,cursive] text-[#1E56EC] dark:text-cyan-400 text-2xl tracking-wide select-none transform -rotate-3 leading-none">
+                  Luôn bên bạn ♡
+                </span>
+                <div className="w-20 h-0.5 bg-[#1E56EC]/30 dark:bg-cyan-400/30 rounded-full mt-1.5" />
+              </div>
+
+              {/* Inline Cute 3D Gray Mouse Illustration Fallback */}
+              <div className="relative shrink-0 flex items-center justify-center -mr-2">
+                <svg viewBox="0 0 100 100" className="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-md select-none shrink-0 self-end">
+                  {/* Ears */}
+                  <circle cx="28" cy="35" r="18" fill="#B0B3BC" />
+                  <circle cx="28" cy="35" r="12" fill="#FFAEC9" />
+                  <circle cx="72" cy="35" r="18" fill="#B0B3BC" />
+                  <circle cx="72" cy="35" r="12" fill="#FFAEC9" />
+                  {/* Body */}
+                  <ellipse cx="50" cy="72" rx="20" ry="24" fill="#C5C8D0" />
+                  <ellipse cx="50" cy="72" rx="14" ry="16" fill="#F0F1F4" />
+                  {/* Head */}
+                  <ellipse cx="50" cy="52" rx="22" ry="20" fill="#B0B3BC" />
+                  {/* Eyes */}
+                  <circle cx="42" cy="48" r="3.5" fill="#1A1A1A" />
+                  <circle cx="42" cy="46.5" r="1" fill="#FFFFFF" />
+                  <circle cx="58" cy="48" r="3.5" fill="#1A1A1A" />
+                  <circle cx="58" cy="46.5" r="1" fill="#FFFFFF" />
+                  {/* Rosy Cheeks */}
+                  <ellipse cx="34" cy="54" rx="3.5" ry="2" fill="#FF8D9E" opacity="0.6" />
+                  <ellipse cx="66" cy="54" rx="3.5" ry="2" fill="#FF8D9E" opacity="0.6" />
+                  {/* Nose */}
+                  <polygon points="47,53 53,53 50,56" fill="#FF4E6B" />
+                  {/* Mouth */}
+                  <path d="M46,58 Q50,61 54,58" stroke="#FF4E6B" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                  {/* Teeth */}
+                  <rect x="48" y="58" width="4" height="2" fill="#FFFFFF" rx="0.5" />
+                  {/* Hands waving */}
+                  <circle cx="28" cy="70" r="5" fill="#B0B3BC" />
+                  <circle cx="72" cy="62" r="5" fill="#B0B3BC" />
+                </svg>
               </div>
             </div>
-            <span className="self-start sm:self-center text-3xs font-mono font-black text-indigo-600 dark:text-cyan-300 bg-indigo-500/10 px-3.5 py-1.5 rounded-full border border-indigo-500/20 shadow-2xs tracking-wide">
-              {isVi ? "22+ Năm kinh nghiệm thực chiến" : "22+ Years Hands-on Experience"}
-            </span>
-          </div>
+          </motion.div>
 
-          {/* Grid Layout splits body text on left, core values on right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          {/* CỘT PHẢI: Ba trụ cột vận hành + Giá trị/Triết lý (xl:col-span-8) */}
+          <div className="xl:col-span-8 flex flex-col gap-5">
             
-            {/* Left Column: Narrative paragraphs (lg:col-span-7) */}
-            <div className="lg:col-span-7 flex flex-col justify-between gap-5 text-left">
-              <div className="space-y-4">
-                {/* Paragraph 1 */}
-                <p className="text-sm sm:text-base md:text-[16px] text-[#0B2546] dark:text-slate-100 font-medium leading-relaxed">
-                  {isVi ? (
-                    <>
-                      Một chuyên gia dịch vụ khách hàng với hơn{" "}
-                      <span className="font-extrabold text-[#0057FF] dark:text-cyan-400 bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">
-                        22 năm kinh nghiệm thực chiến
-                      </span>
-                      . Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là{" "}
-                      <span className="font-bold text-[#0057FF] dark:text-cyan-300">sự đồng hành</span>. 
-                      Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá: để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                    </>
-                  ) : (
-                    "A customer service expert with over 22 years of hands-on experience. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations."
-                  )}
-                </p>
-
-                {/* Paragraph 2 */}
-                <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-                  {isVi ? (
-                    <>
-                      Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
-                      <span className="font-bold text-slate-900 dark:text-white underline decoration-blue-500/60 decoration-2 underline-offset-4">
-                        sự tận tâm kịp thời
-                      </span>{" "}
-                      và{" "}
-                      <span className="font-bold text-slate-900 dark:text-white underline decoration-cyan-500/60 decoration-2 underline-offset-4">
-                        đồng cảm chân thành
-                      </span>
-                      . Trong suốt sự nghiệp, tôi đã trực tiếp thiết kế và tối ưu hóa hàng chục quy trình, hệ thống Chăm Sóc Khách Hàng, luôn đặt trên nền tảng ba giá trị cốt lõi:
-                    </>
-                  ) : (
-                    "I believe satisfaction comes not from absolute perfection, but from timely dedication and sincere empathy. Throughout my career, I have directly designed and optimized dozens of Customer Care processes and systems, always grounded on three core values:"
-                  )}
-                </p>
-              </div>
-
-              {/* Highlight callout box (Bottom Left) */}
-              <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-cyan-500/5 border border-blue-200/50 dark:border-cyan-500/20 flex items-start gap-3 mt-1 shadow-2xs">
-                <span className="text-2xl text-blue-600 dark:text-cyan-400 select-none">“</span>
-                <p className="text-sm text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
-                  {isVi ? (
-                    <>
-                      Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi:{" "}
-                      <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
-                        Họ luôn được lắng nghe.
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth:{" "}
-                      <span className="font-black text-[#0057FF] dark:text-cyan-300 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/30">
-                        They are always listened to.
-                      </span>
-                    </>
-                  )}
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column: Values Widget Block (lg:col-span-5) from DATA */}
-            <div className="lg:col-span-5 flex flex-col justify-center">
-              <div className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-slate-800 shadow-md flex flex-col gap-4 h-full justify-between">
-                <div className="flex flex-col gap-1 text-left pb-2 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-3xs font-mono font-black text-blue-600 dark:text-cyan-400 tracking-widest uppercase">
-                    {isVi ? "Ba giá trị cốt lõi" : "Three Core Values"}
-                  </span>
-                  <h5 className="text-sm font-extrabold text-slate-800 dark:text-slate-200 font-play">
-                    {isVi ? "Nền tảng triết lý dịch vụ" : "Foundation of service philosophy"}
-                  </h5>
+            {/* Hàng Trên: Ba trụ cột vận hành */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.1 }}
+              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+              className={cn(
+                "p-5 flex flex-col gap-4 border text-left bg-white/70 dark:bg-slate-900/60",
+                theme === "glass-dark-neon" ? "border-cyan-500/20" : "border-slate-200/80 dark:border-white/10"
+              )}
+            >
+              {/* Header Title with Target/Bullseye Icon */}
+              <div className="flex items-center gap-3 pb-2.5 border-b border-slate-250/50 dark:border-white/10">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-600/10 text-blue-600 dark:bg-cyan-500/10 dark:text-cyan-400 shrink-0">
+                  <Target className="w-5 h-5 stroke-[2.2]" />
                 </div>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white font-play tracking-tight">
+                  {isVi ? "Ba trụ cột vận hành" : "Three operational pillars"}
+                </h4>
+              </div>
 
-                <div className="flex flex-col gap-3 my-1">
-                  {SERVICE_PHILOSOPHY_VALUES.map((val) => (
-                    <div 
-                      key={val.id}
-                      className={cn(
-                        "flex items-center gap-3.5 p-2.5 rounded-xl border hover:scale-[1.015] transition-all duration-200 text-left",
-                        val.bgGradient,
-                        val.borderClass
-                      )}
-                    >
-                      <span className={cn("w-8.5 h-8.5 rounded-lg flex items-center justify-center font-mono font-black text-sm shadow-sm shrink-0", val.badgeBg)}>
-                        {val.number}
-                      </span>
-                      <div>
-                        <span className={cn("text-sm font-black tracking-wide uppercase block font-play", val.titleColor)}>
-                          {isVi ? val.titleVi : val.titleEn}
-                        </span>
-                        <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
-                          {isVi ? val.descVi : val.descEn}
-                        </span>
-                      </div>
+              {/* Grid 3 Pillars (Blue, Pink, Green) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                {/* Trụ cột 1: Hiệu quả (Xanh biển) */}
+                <div 
+                  className="bg-gradient-to-b from-[#1E82FF] to-[#125CE6] border border-blue-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                  style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                >
+                  {/* Top Double Ring Icon */}
+                  <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
+                    <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+                      <MessagesSquare className="w-5 h-5 text-white" />
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
+                    <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                      01. HIỆU QUẢ
+                    </h5>
+                    <p className="text-3xs text-blue-100 font-extrabold uppercase tracking-wide">
+                      Tối ưu & Kết quả
+                    </p>
+                    <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                      Tối ưu hiệu suất, tạo kết quả đo lường được.
+                    </p>
+                  </div>
+
+                  {/* Bottom Double Ring Icon */}
+                  <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
+                    <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
+                      <BarChart3 className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
                 </div>
+
+                {/* Trụ cột 2: Nhân văn (Hồng tím) */}
+                <div 
+                  className="bg-gradient-to-b from-[#FF568A] to-[#A838F5] border border-pink-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                  style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                >
+                  {/* Top Double Ring Icon */}
+                  <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
+                    <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+                      <Heart className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
+                    <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                      02. NHÂN VĂN
+                    </h5>
+                    <p className="text-3xs text-pink-100 font-extrabold uppercase tracking-wide">
+                      Đồng cảm & Thấu hiểu
+                    </p>
+                    <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                      Lắng nghe, thấu hiểu và đặt con người làm trung tâm.
+                    </p>
+                  </div>
+
+                  {/* Bottom Double Ring Icon */}
+                  <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
+                    <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
+                      <Users className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Trụ cột 3: Bền vững (Xanh lá) */}
+                <div 
+                  className="bg-gradient-to-b from-[#0FC271] to-[#109B53] border border-emerald-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                  style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                >
+                  {/* Top Double Ring Icon */}
+                  <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
+                    <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
+                    <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                      03. BỀN VỮNG
+                    </h5>
+                    <p className="text-3xs text-emerald-100 font-extrabold uppercase tracking-wide">
+                      Giá trị & Tin cậy
+                    </p>
+                    <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                      Xây dựng niềm tin và giá trị bền vững.
+                    </p>
+                  </div>
+
+                  {/* Bottom Double Ring Icon */}
+                  <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
+                    <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
+                      <Globe className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                </div>
+
               </div>
+            </motion.div>
+
+            {/* Hàng Dưới: Giá trị cốt lõi & Triết lý và tầm nhìn */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
+              {/* Card Trái: Giá trị cốt lõi */}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.45, delay: 0.15 }}
+                style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+                className="p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#FFF9F2] dark:bg-[#201712] border-orange-200/60 dark:border-orange-950/40 min-h-[200px]"
+              >
+                <div className="space-y-3 flex-grow mb-6">
+                  {/* Title Row */}
+                  <div className="flex items-center gap-2.5 pb-2.5 border-b border-orange-200/30 dark:border-orange-950/20">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center bg-orange-500/10 text-orange-500 shrink-0">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <h5 className="text-sm font-extrabold text-orange-950 dark:text-orange-200 font-play">
+                      {isVi ? "Giá trị cốt lõi" : "Core values"}
+                    </h5>
+                  </div>
+                  
+                  {/* Content Paragraph */}
+                  <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-300 font-semibold leading-relaxed">
+                    {isVi ? (
+                      <>
+                        Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
+                        <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                          sự tận tâm kịp thời
+                        </span>{" "}
+                        và{" "}
+                        <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                          đồng cảm chân thành
+                        </span>
+                        .
+                      </>
+                    ) : (
+                      <>
+                        I believe satisfaction comes not from absolute perfection, but from{" "}
+                        <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                          timely dedication
+                        </span>{" "}
+                        and{" "}
+                        <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                          sincere empathy
+                        </span>
+                        .
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {/* Hand-written cursive signature at the bottom right */}
+                <div className="self-end mr-2">
+                  <span className="font-[Caveat,cursive] text-amber-700 dark:text-amber-400 text-lg sm:text-xl select-none transform -rotate-2 block leading-none">
+                    Khách hàng là trọng tâm ♡
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Card Phải: Triết lý và tầm nhìn */}
+              <motion.div
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.45, delay: 0.2 }}
+                style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+                className="p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#F2F7FF] dark:bg-[#121B2D] border-blue-200/60 dark:border-blue-950/40 min-h-[200px]"
+              >
+                <div className="space-y-3">
+                  {/* Title Row */}
+                  <div className="flex items-center gap-2.5 pb-2.5 border-b border-blue-200/30 dark:border-blue-950/20">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center bg-blue-600/10 text-blue-600 dark:bg-cyan-500/10 dark:text-cyan-400 shrink-0">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <h5 className="text-sm font-extrabold text-blue-950 dark:text-cyan-200 font-play">
+                      {isVi ? "Triết lý và tầm nhìn" : "Philosophy & vision"}
+                    </h5>
+                  </div>
+                  
+                  {/* Centered Large Quotation Phrase */}
+                  <div className="relative text-center py-2 px-1 rounded-lg bg-blue-100/20 dark:bg-blue-900/10 border border-blue-200/20">
+                    <span className="absolute -top-3 left-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">“</span>
+                    <h4 className="text-xs sm:text-sm font-black italic text-blue-700 dark:text-cyan-300 leading-snug tracking-wide">
+                      “Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”
+                    </h4>
+                    <span className="absolute -bottom-5 right-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">”</span>
+                  </div>
+
+                  {/* Core Vision Description */}
+                  <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-350 leading-relaxed font-semibold pt-1">
+                    {isVi ? (
+                      "Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi: Họ luôn được lắng nghe."
+                    ) : (
+                      "I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth: They are always listened to."
+                    )}
+                  </p>
+                </div>
+              </motion.div>
+
             </div>
 
           </div>
-        </motion.div>
+
+        </div>
 
         {/* 4. BOTTOM CTA COLLABORATION BANNER */}
         <motion.div 
