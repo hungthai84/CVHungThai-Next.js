@@ -1,82 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  Scan, 
-  X, 
-  Copy, 
-  Check, 
-  Sparkles, 
-  Layers, 
-  Crosshair, 
-  Terminal, 
-  FolderTree,
-  ChevronDown,
-  ChevronRight,
-  Edit3,
-  Trash2,
-  PlusCircle,
-  MoveRight,
-  ArrowRightLeft,
-  ExternalLink,
-  Globe,
-  Tag,
-  Target,
-  Zap,
-  RefreshCw,
-  Sun,
-  Moon,
-  Info,
-  CheckCircle2,
-  ListPlus,
-  AlertCircle,
-  FileCode,
-  RotateCw,
-  Filter,
-  Layout,
-  Code2,
-  Image,
-  Boxes,
-  Wrench,
-  ShieldCheck,
-  Activity,
-  Play,
-  Sliders,
-  Gauge,
-  Palette,
-  CheckCheck,
-  TrendingUp,
-  Maximize2,
-  BookOpen,
-  Save,
-  ListTodo,
-  Bot,
-  Clock,
-  User,
-  Plus,
-  Monitor,
-  MailOpen,
-  UserCheck,
-  Compass,
-  GraduationCap,
-  Briefcase,
-  Brain,
-  ClipboardList,
-  Video,
-  Images,
-  LayoutGrid,
-  MessagesSquare,
-  Film,
-  Navigation,
-  Search,
-  Eye,
-  Grid,
-  List,
-  Type,
-  Baseline,
-  SlidersHorizontal,
-  Columns,
-  AlignLeft,
-  Heading
-} from "lucide-react";
+import { Scan, X, Copy, Check, Sparkles, Layers, Crosshair, Terminal, FolderTree, ChevronDown, ChevronRight, Edit3, Trash2, PlusCircle, ArrowRightLeft, ExternalLink, Globe, Tag, Target, Zap, RefreshCw, Sun, Moon, Info, CheckCircle2, ListPlus, AlertCircle, FileCode, RotateCw, Filter, Layout, Code2, Image, Boxes, Wrench, ShieldCheck, Play, Sliders, Palette, BookOpen, Save, User, Monitor, GraduationCap, Briefcase, Brain, ClipboardList, Video, LayoutGrid, MessagesSquare, Film, Navigation, Search, Eye, Grid, List, Type, Baseline, SlidersHorizontal, Columns, Heading } from "lucide-react";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
 
@@ -1369,6 +1292,10 @@ export default function XRayInspector() {
   const [editPreset, setEditPreset] = useState<string>("");
   const [addPreset, setAddPreset] = useState<string>("");
   const [deleteMode, setDeleteMode] = useState<"wrapper_only" | "full">("wrapper_only");
+  
+  // Deletion selection mode
+  const [isDeletionSelectionMode, setIsDeletionSelectionMode] = useState<boolean>(false);
+  const [selectedItemForDeletion, setSelectedItemForDeletion] = useState<TreeItem | null>(null);
 
 
   const [savedPrompts, setSavedPrompts] = useState<Array<{ id: string; title: string; prompt: string; time: string; presetName?: string }>>(() => {
@@ -1631,6 +1558,14 @@ export default function XRayInspector() {
       if (e.key === "x" || e.key === "X") {
         e.preventDefault();
         handleToggleEvent();
+      } else if (e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        if (isActive) {
+          setIsDeletionSelectionMode((prev) => !prev);
+          playUiSound("click");
+        } else {
+          handleToggleEvent();
+        }
       }
 
       if (e.key === "Escape" && (isActive || inspectorOpen)) {
@@ -2128,6 +2063,17 @@ export default function XRayInspector() {
     }
   };
 
+  const handleDirectDelete = (item: TreeItem) => {
+    playUiSound("alert");
+    const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa trực tiếp [${item.title}] khỏi mã nguồn? Hành động này sẽ yêu cầu lưu code lại ngay sau đó.`);
+    if (confirmDelete) {
+      alert(`Đã gửi yêu cầu xóa [${item.title}] đến Agent. Vui lòng kiểm tra console hoặc thông báo của Agent và lưu code lại sau khi hoàn thành!`);
+      // Here we would ideally send a signal to the agent. 
+      // For now, we simulate the agent interaction.
+      console.log("AGENT_REQUEST:DELETE", item);
+    }
+  };
+
   const handleConfirmAction = () => {
     if (!selectedTreeItem || !modalActionType) return;
     playUiSound("success");
@@ -2601,16 +2547,13 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
           {/* Popup Body */}
           <div className="space-y-3.5 relative z-10 text-xs">
-            {/* Tag/Section Row */}
+            {/* Tag/Type Row */}
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="px-2 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-bold text-3xs">
                 {floatingPopupElement.componentType}
               </span>
               <span className="px-2 py-0.5 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-300 font-mono text-3xs">
                 &lt;{floatingPopupElement.tag}&gt;
-              </span>
-              <span className="px-2 py-0.5 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 text-3xs font-bold">
-                {floatingPopupElement.sectionName}
               </span>
             </div>
 
@@ -2725,8 +2668,6 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 top: hoveredElement.rect.top < 45 ? "100%" : "-36px"
               }}
             >
-              <span className="font-bold text-emerald-400">{hoveredElement.sectionName}</span>
-              <span className="text-slate-500">•</span>
               <span className="text-amber-300 font-semibold">{hoveredElement.componentType}</span>
               <span className="text-slate-500">•</span>
               <span className="text-sky-300">&lt;{hoveredElement.tag}&gt;</span>
@@ -3215,6 +3156,15 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                               >
                                 <Trash2 className="w-3 h-3" />
                                 <span className="hidden sm:inline">Xóa</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleDirectDelete(section)}
+                                title="Xóa trực tiếp từ code"
+                                className="p-1.5 px-2 rounded-lg bg-red-600/10 hover:bg-red-600/20 text-red-600 dark:text-red-400 border border-red-500/30 text-2xs font-bold flex items-center gap-1 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                <span className="hidden sm:inline">Xóa Code</span>
                               </button>
 
                               <button

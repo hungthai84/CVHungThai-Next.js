@@ -10,12 +10,10 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
-import BentoSkeleton from "./components/BentoSkeleton";
 import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
-import OpenLetter from "./components/OpenLetter";
 import About from "./components/About";
-import DomainsSection from "./components/DomainsSection";
+import Domains from "./components/Domains";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
 import Experience from "./components/Experience";
@@ -26,6 +24,9 @@ import Memories from "./components/Memories";
 import Contact from "./components/Contact";
 import Wallpapers from "./components/Wallpapers";
 import Systems from "./components/Systems";
+import Customization from "./components/Customization";
+import TemplatePage from "./components/TemplatePage";
+import Letter from "./components/Letter";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -39,7 +40,8 @@ import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
   Monitor, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
-  Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server
+  Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
+  LayoutTemplate, Sliders
 } from "lucide-react";
 
 // Helper function to dynamically import modules with automatic retry on chunk load errors
@@ -89,9 +91,9 @@ const MemoHero = memo(Hero);
 
 const SECTIONS: SectionMeta[] = [
   { id: "home", labelKey: "nav.home", Icon: Monitor, Component: MemoHero, padding: "p-0 overflow-hidden" },
-  { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: OpenLetter, padding: "p-0 overflow-y-auto" },
+  { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: Letter, padding: "p-0 overflow-y-auto" },
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
-  { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: DomainsSection, padding: "p-0 overflow-y-auto" },
+  { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: Domains, padding: "p-0 overflow-y-auto" },
   { id: "skills", labelKey: "nav.skills", Icon: Brain, Component: Skills, padding: "p-0 overflow-y-auto" },
   { id: "education", labelKey: "nav.education", Icon: GraduationCap, Component: Education, padding: "p-0 overflow-y-auto" },
   { id: "experience", labelKey: "nav.experience", Icon: Briefcase, Component: Experience, padding: "p-0 overflow-y-auto" },
@@ -102,6 +104,8 @@ const SECTIONS: SectionMeta[] = [
   { id: "systems", labelKey: "nav.systems", Icon: Server, Component: Systems, padding: "p-0 overflow-y-auto" },
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
+  { id: "customization", labelKey: "nav.customization", Icon: Sliders, Component: Customization, padding: "p-0 overflow-y-auto" },
+  { id: "template", labelKey: "nav.template", Icon: LayoutTemplate, Component: TemplatePage, padding: "p-0 overflow-y-auto" },
 ];
 
 function MainContent() {
@@ -113,8 +117,6 @@ function MainContent() {
   const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
   const [activeSection, setActiveSection] = useState("home");
-  const [isSectionLoading, setIsSectionLoading] = useState(false);
-  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
 
@@ -176,19 +178,12 @@ function MainContent() {
     }
   }, [theme]);
 
-  // Smoothly switch to specific section with subtle pulse loading state
+  // Smoothly switch to specific section with direct instant transition (không hiển thị màn hình loader)
   const navigateToSection = (id: string) => {
     const cleanId = id.replace(/^#/, "");
     const targetSection = SECTIONS.find((s) => s.id === cleanId);
     if (targetSection && cleanId !== activeSection) {
       playTransition();
-      if (cleanId !== "home") {
-        setIsSectionLoading(true);
-        if (loadingTimerRef.current) clearTimeout(loadingTimerRef.current);
-        loadingTimerRef.current = setTimeout(() => {
-          setIsSectionLoading(false);
-        }, 220);
-      }
       setActiveSection(cleanId);
     }
   };
@@ -236,6 +231,8 @@ function MainContent() {
       "8": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
       "9": { id: "tuvi", nameVi: "Tử Vi & Chiêm Tinh", nameEn: "TuVi & Astrology" },
       "0": { id: "contact", nameVi: "Liên hệ", nameEn: "Contact" },
+      "u": { id: "customization", nameVi: "Tùy chỉnh hệ thống", nameEn: "Customization" },
+      "U": { id: "customization", nameVi: "Tùy chỉnh hệ thống", nameEn: "Customization" },
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -419,52 +416,40 @@ function MainContent() {
           >
             <main className="relative w-full h-full overflow-hidden flex-grow">
               <AnimatePresence mode="wait" initial={false}>
-                {isSectionLoading ? (
-                  <motion.div
-                    key="section-skeleton-loading"
-                    layoutId="section-card-wrapper"
-                    initial={{ opacity: 0, scale: 0.985 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.985 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    className="w-full h-full p-4 sm:p-6 overflow-hidden"
-                  >
-                    <BentoSkeleton />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key={activeSection}
-                    id={activeSection}
-                    layoutId="section-card-wrapper"
-                    initial={{ 
-                      y: 40, 
-                      opacity: 0, 
-                      scale: 0.985,
-                      filter: "blur(4px)" 
-                    }}
-                    animate={{ 
-                      y: 0, 
-                      opacity: 1, 
-                      scale: 1,
-                      filter: "blur(0px)" 
-                    }}
-                    exit={{ 
-                      y: -30, 
-                      opacity: 0, 
-                      scale: 0.985,
-                      filter: "blur(4px)" 
-                    }}
-                    transition={{ 
-                      duration: 0.35, 
-                      ease: [0.16, 1, 0.3, 1] 
-                    }}
-                    className={`w-full h-full ${currentSection.padding} no-scrollbar scroll-smooth`}
-                  >
-                    <Suspense fallback={<BentoSkeleton />}>
-                      <CurrentComponent />
-                    </Suspense>
-                  </motion.div>
-                )}
+                <motion.div
+                  key={activeSection}
+                  id={activeSection}
+                  layoutId="section-card-wrapper"
+                  initial={{ 
+                    y: 35, 
+                    opacity: 0, 
+                    scale: 0.985,
+                    filter: "blur(4px)" 
+                  }}
+                  animate={{ 
+                    y: 0, 
+                    opacity: 1, 
+                    scale: 1,
+                    filter: "blur(0px)" 
+                  }}
+                  exit={{ 
+                    y: -25, 
+                    opacity: 0, 
+                    scale: 0.985,
+                    filter: "blur(4px)" 
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.16, 1, 0.3, 1],
+                    staggerChildren: 0.08,
+                    delayChildren: 0.04
+                  }}
+                  className={`w-full h-full ${currentSection.padding} no-scrollbar scroll-smooth`}
+                >
+                  <Suspense fallback={null}>
+                    <CurrentComponent />
+                  </Suspense>
+                </motion.div>
               </AnimatePresence>
             </main>
           </div>

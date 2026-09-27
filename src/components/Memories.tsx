@@ -1,14 +1,17 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { 
   Camera, Award, Users, Calendar, MapPin, 
-  Sparkles, Heart, Star, Layers, ChevronRight, 
-  X, ZoomIn, MessageSquare, Share2, RefreshCw
+  Sparkles, Heart, Star, Layers, ChevronRight, ChevronLeft,
+  X, ZoomIn, MessageSquare, Share2, RefreshCw, Search,
+  Filter, Grid, LayoutGrid, Check, Quote, ChevronDown
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection } from "./IndustrialStaggerContainer";
 import MasonryGallery, { MasonryItem } from "./MasonryGallery";
+import { playUiSound } from "../lib/sound";
+import { cn } from "../lib/utils";
 
 export interface MemoryItem {
   id: string;
@@ -665,13 +668,93 @@ export default function Memories() {
   const { lang } = useLanguage();
   const isVi = lang === "vi";
 
-  const [activeMemory, setActiveMemory] = useState<MemoryItem | null>(null);
+  // State management
+  const [selectedCompany, setSelectedCompany] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"masonry" | "grid">("masonry");
+  const [activeMemoryIndex, setActiveMemoryIndex] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+
+  // Close filter dropdown on outside interaction
+  useEffect(() => {
+    if (!isFilterDropdownOpen) return;
+    const handleOutsideClick = (e: globalThis.MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".relative")) {
+        setIsFilterDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [isFilterDropdownOpen]);
 
   const MEMORIES = MEMORIES_DATA;
 
+  // Companies metadata
+  const COMPANY_OPTIONS = [
+    { id: "all", labelVi: "Tất cả công ty", labelEn: "All Companies", count: MEMORIES.length },
+    { id: "finviet", labelVi: "Finviet (2023-2024)", labelEn: "Finviet", count: MEMORIES.filter(m => m.companyId === "finviet").length },
+    { id: "momo", labelVi: "MoMo Wallet (2020-2023)", labelEn: "MoMo", count: MEMORIES.filter(m => m.companyId === "momo").length },
+    { id: "prudential", labelVi: "Prudential (2014-2020)", labelEn: "Prudential", count: MEMORIES.filter(m => m.companyId === "prudential").length },
+    { id: "ved", labelVi: "VED / Garena (2012-2014)", labelEn: "VED / Garena", count: MEMORIES.filter(m => m.companyId === "ved").length },
+    { id: "htvc", labelVi: "HTVC (2009-2012)", labelEn: "HTVC", count: MEMORIES.filter(m => m.companyId === "htvc").length },
+    { id: "v247", labelVi: "V247 Telecom (2007-2009)", labelEn: "V247", count: MEMORIES.filter(m => m.companyId === "v247").length },
+    { id: "mobifone", labelVi: "MobiFone (2003-2007)", labelEn: "MobiFone", count: MEMORIES.filter(m => m.companyId === "mobifone").length },
+  ];
+
+  // Category options
+  const CATEGORY_OPTIONS = [
+    { id: "all", labelVi: "Tất cả thể loại", labelEn: "All Categories", icon: Sparkles },
+    { id: "awards", labelVi: "Giải thưởng & Vinh danh", labelEn: "Awards & Honors", icon: Award },
+    { id: "team", labelVi: "Văn hóa & Đội ngũ", labelEn: "Team & Culture", icon: Users },
+    { id: "projects", labelVi: "Dự án Trọng điểm", labelEn: "Key Projects", icon: Layers },
+    { id: "milestones", labelVi: "Cột mốc & Sự kiện", labelEn: "Milestones", icon: Calendar }
+  ];
+
+  // Filtered memory items
+  const filteredMemories = useMemo(() => {
+    return MEMORIES.filter((item) => {
+      // Company match
+      if (selectedCompany !== "all" && item.companyId !== selectedCompany) {
+        return false;
+      }
+      // Category match
+      if (selectedCategory !== "all" && item.category !== selectedCategory) {
+        return false;
+      }
+      // Search query match
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        const titleVi = (item.titleVi || "").toLowerCase();
+        const titleEn = (item.titleEn || "").toLowerCase();
+        const descVi = (item.descVi || "").toLowerCase();
+        const descEn = (item.descEn || "").toLowerCase();
+        const year = (item.year || "").toLowerCase();
+        const locVi = (item.locationVi || "").toLowerCase();
+        const tagVi = (item.tagVi || "").toLowerCase();
+
+        return titleVi.includes(query) || titleEn.includes(query) ||
+               descVi.includes(query) || descEn.includes(query) ||
+               year.includes(query) || locVi.includes(query) || tagVi.includes(query);
+      }
+      return true;
+    });
+  }, [MEMORIES, selectedCompany, selectedCategory, searchQuery]);
+
+  // Active memory object based on activeIndex
+  const activeMemory = useMemo(() => {
+    if (activeMemoryIndex === null || activeMemoryIndex < 0 || activeMemoryIndex >= filteredMemories.length) {
+      return null;
+    }
+    return filteredMemories[activeMemoryIndex];
+  }, [filteredMemories, activeMemoryIndex]);
+
+  // Masonry gallery items map
   const masonryItems: MasonryItem[] = useMemo(() => {
     const heights = [400, 270, 520, 340, 440, 300, 480, 360, 420, 310];
-    return MEMORIES.map((item, idx) => ({
+    return filteredMemories.map((item, idx) => ({
       id: item.id,
       img: item.imageUrl || item.src,
       height: heights[idx % heights.length],
@@ -680,91 +763,414 @@ export default function Memories() {
       tag: isVi ? item.tagVi : item.tagEn,
       year: item.year
     }));
-  }, [MEMORIES, isVi]);
+  }, [filteredMemories, isVi]);
+
+  // Navigation functions for Modal Carousel
+  const handlePrevMemory = () => {
+    if (activeMemoryIndex === null) return;
+    playUiSound("click");
+    setActiveMemoryIndex((prev) => (prev === null || prev === 0 ? filteredMemories.length - 1 : prev - 1));
+  };
+
+  const handleNextMemory = () => {
+    if (activeMemoryIndex === null) return;
+    playUiSound("click");
+    setActiveMemoryIndex((prev) => (prev === null || prev === filteredMemories.length - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard arrow keys for modal navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (activeMemoryIndex === null) return;
+      if (e.key === "ArrowLeft") handlePrevMemory();
+      if (e.key === "ArrowRight") handleNextMemory();
+      if (e.key === "Escape") setActiveMemoryIndex(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeMemoryIndex, filteredMemories]);
+
+  // Handle link sharing
+  const handleShareLink = (item: MemoryItem) => {
+    playUiSound("click");
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(item.imageUrl || window.location.href);
+      setToastMessage(isVi ? "Đã sao chép liên kết hình ảnh kỷ niệm!" : "Copied memory image link!");
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
 
   return (
     <section 
       id="memories" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+      <div className="w-full flex-grow flex flex-col gap-4 max-w-7xl mx-auto justify-start">
 
-        {/* 1. TOP PAGE HEADER */}
+        {/* 1. TOP PAGE HEADER WITH CONSOLIDATED FILTERS */}
         <IndustrialSubSection hasIndustrialAccent>
           <PageCardHeader pageId="memories">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-5 bg-rose-600 dark:bg-rose-400 rounded-full shrink-0" />
-              <span className="text-caption font-semibold font-mono text-rose-700 dark:text-rose-300 bg-rose-500/15 px-2.5 py-0.5 rounded-full border border-rose-500/30 shadow-2xs">
-                {isVi ? "Khoảnh khắc & Cột mốc Sự nghiệp" : "Moments & Career Milestones"}
-              </span>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 w-full">
+              {/* Left Side: Editorial subtitle */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="w-2 h-4 bg-rose-600 dark:bg-rose-400 rounded-full shrink-0" />
+                <span className="text-caption font-semibold font-mono text-rose-700 dark:text-rose-300 bg-rose-500/15 px-2.5 py-0.5 rounded-full border border-rose-500/30 shadow-2xs">
+                  {isVi ? "Khoảnh khắc & Cột mốc Sự nghiệp" : "Moments & Career Milestones"}
+                </span>
+              </div>
+
+              {/* Right Side: Consolidated Controls */}
+              <div className="flex flex-wrap items-center gap-2 md:ml-auto w-full md:w-auto justify-start sm:justify-end">
+                {/* Compact Search Input */}
+                <div className="relative w-full sm:w-[190px] shrink-0">
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={isVi ? "Tìm kiếm..." : "Search..."}
+                    className="w-full pl-8 pr-7 py-1.5 rounded-xl text-[11px] font-sans bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 placeholder-slate-400 border border-slate-200 dark:border-slate-700/60 focus:outline-none focus:ring-1 focus:ring-rose-500/50 transition-all font-semibold"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Collapsed Company Filter */}
+                <div className="relative shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playUiSound("click");
+                      setIsFilterDropdownOpen(!isFilterDropdownOpen);
+                    }}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition-all border cursor-pointer",
+                      selectedCompany !== "all"
+                        ? "bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30"
+                        : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700"
+                    )}
+                    title={isVi ? "Lọc theo công ty" : "Filter by company"}
+                  >
+                    <Filter className="w-3.5 h-3.5" />
+                    <span className="max-w-[120px] truncate">
+                      {selectedCompany === "all"
+                        ? (isVi ? "Tất cả công ty" : "All Companies")
+                        : COMPANY_OPTIONS.find(c => c.id === selectedCompany)?.[isVi ? "labelVi" : "labelEn"]}
+                    </span>
+                    <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", isFilterDropdownOpen ? "rotate-180" : "")} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isFilterDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                        className="absolute right-0 mt-1.5 w-[200px] rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-white/10 shadow-lg backdrop-blur-xl z-50 p-1 py-1.5 max-h-[300px] overflow-y-auto no-scrollbar"
+                      >
+                        {COMPANY_OPTIONS.map((comp) => {
+                          const isActive = selectedCompany === comp.id;
+                          return (
+                            <button
+                              key={comp.id}
+                              type="button"
+                              onClick={() => {
+                                playUiSound("click");
+                                setSelectedCompany(comp.id);
+                                setIsFilterDropdownOpen(false);
+                              }}
+                              className={cn(
+                                "w-full text-left px-3 py-1.5 rounded-lg text-[11px] font-semibold flex items-center justify-between transition-colors",
+                                isActive
+                                  ? "bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold"
+                                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
+                              )}
+                            >
+                              <span className="truncate pr-2">{isVi ? comp.labelVi : comp.labelEn}</span>
+                              <span className="text-[10px] font-mono opacity-60">({comp.count})</span>
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* View Mode Toggle Switcher */}
+                <div className="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800/80 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700/60 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playUiSound("click");
+                      setViewMode("masonry");
+                    }}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all",
+                      viewMode === "masonry"
+                        ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs border border-rose-500/10"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                    )}
+                    title={isVi ? "Dạng lưới nghệ thuật" : "Art Masonry Layout"}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playUiSound("click");
+                      setViewMode("grid");
+                    }}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all",
+                      viewMode === "grid"
+                        ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs border border-rose-500/10"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                    )}
+                    title={isVi ? "Dạng thẻ chi tiết" : "Grid Cards Layout"}
+                  >
+                    <Grid className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
             </div>
           </PageCardHeader>
         </IndustrialSubSection>
 
-        {/* 2. GSAP CINEMATIC MASONRY GALLERY */}
+        {/* Toast Notification */}
+        <AnimatePresence>
+          {toastMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-emerald-600 text-white font-semibold text-xs shadow-xl flex items-center gap-2 border border-emerald-400/30 backdrop-blur-md"
+            >
+              <Check className="w-4 h-4 text-emerald-200" />
+              <span>{toastMessage}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* 4. GALLERY RENDER (MASONRY OR GRID CARDS) */}
         <IndustrialSubSection>
-          <div className="w-full min-h-[450px]">
-            <MasonryGallery
-              items={masonryItems}
-              animateFrom="bottom"
-              blurToFocus={true}
-              stagger={0.06}
-              scaleOnHover={true}
-              hoverScale={0.97}
-              colorShiftOnHover={true}
-              onItemClick={(item) => {
-                const found = MEMORIES.find(m => m.id === item.id);
-                if (found) setActiveMemory(found);
-              }}
-            />
-          </div>
+          {filteredMemories.length === 0 ? (
+            <div className="w-full p-12 rounded-3xl bg-white/50 dark:bg-slate-900/50 border border-dashed border-slate-300 dark:border-slate-800 flex flex-col items-center justify-center text-center gap-3">
+              <Camera className="w-10 h-10 text-slate-400 dark:text-slate-600 animate-pulse" />
+              <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                {isVi ? "Không tìm thấy ảnh kỷ niệm phù hợp với bộ lọc." : "No memory photos found matching your criteria."}
+              </p>
+              <button
+                onClick={() => {
+                  playUiSound("click");
+                  setSelectedCompany("all");
+                  setSelectedCategory("all");
+                  setSearchQuery("");
+                }}
+                className="px-4 py-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold text-xs border border-rose-500/20 hover:bg-rose-500/20 transition-all flex items-center gap-1.5"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>{isVi ? "Đặt lại bộ lọc" : "Reset Filters"}</span>
+              </button>
+            </div>
+          ) : viewMode === "masonry" ? (
+            <div className="w-full min-h-[450px]">
+              <MasonryGallery
+                items={masonryItems}
+                animateFrom="bottom"
+                blurToFocus={true}
+                stagger={0.05}
+                scaleOnHover={true}
+                hoverScale={0.97}
+                colorShiftOnHover={true}
+                onItemClick={(item) => {
+                  const idx = filteredMemories.findIndex(m => m.id === item.id);
+                  if (idx !== -1) {
+                    playUiSound("click");
+                    setActiveMemoryIndex(idx);
+                  }
+                }}
+              />
+            </div>
+          ) : (
+            /* DETAILED GRID CARDS VIEW */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+              {filteredMemories.map((item, idx) => {
+                const title = isVi ? item.titleVi : item.titleEn;
+                const desc = isVi ? item.descVi : item.descEn;
+                const tag = isVi ? item.tagVi : item.tagEn;
+                const location = isVi ? item.locationVi : item.locationEn;
+
+                return (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: idx * 0.03 }}
+                    onClick={() => {
+                      playUiSound("click");
+                      setActiveMemoryIndex(idx);
+                    }}
+                    className="group relative rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1"
+                  >
+                    {/* Card Image */}
+                    <div className="relative w-full h-52 overflow-hidden bg-slate-950">
+                      <img
+                        src={item.imageUrl || item.src}
+                        alt={title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
+
+                      {/* Tag & Year Badges */}
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-rose-600/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 shadow-xs">
+                          {tag}
+                        </span>
+                        <span className="text-[10px] font-mono font-bold text-slate-200 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                          {item.year}
+                        </span>
+                      </div>
+
+                      {/* Hover Zoom Icon */}
+                      <div className="absolute top-3 right-3 p-2 rounded-full bg-slate-900/60 text-white opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-md border border-white/20">
+                        <ZoomIn className="w-4 h-4" />
+                      </div>
+
+                      {/* Bottom title inside image */}
+                      <div className="absolute bottom-3 left-3 right-3">
+                        <p className="text-xs font-mono text-rose-300 font-semibold uppercase tracking-wide">
+                          {item.companyId?.toUpperCase()}
+                        </p>
+                        <h3 className="text-sm font-bold text-white line-clamp-1 mt-0.5">
+                          {title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-4 flex flex-col justify-between flex-1 gap-3">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed font-sans">
+                        {desc}
+                      </p>
+
+                      <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800/80 pt-2.5 mt-auto">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                          <span className="truncate">{location}</span>
+                        </div>
+                        {item.teamSize && (
+                          <div className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-medium">
+                            <Users className="w-3.5 h-3.5 shrink-0" />
+                            <span>{item.teamSize}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
         </IndustrialSubSection>
 
-        {/* LIGHTBOX MODAL */}
+        {/* 5. ENHANCED LIGHTBOX MODAL WITH CAROUSEL NAVIGATION */}
         <AnimatePresence>
           {activeMemory && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/90 backdrop-blur-md">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.93 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-3xl max-h-[90vh] overflow-y-auto no-scrollbar rounded-3xl bg-slate-900 text-white border border-rose-500/30 shadow-2xl overflow-hidden flex flex-col relative"
+                exit={{ opacity: 0, scale: 0.93 }}
+                className="w-full max-w-7xl max-h-[92vh] overflow-y-auto no-scrollbar rounded-3xl bg-slate-900 text-white border border-rose-500/30 shadow-2xl overflow-hidden flex flex-col relative"
               >
-                {/* Image Header */}
-                <div className="relative w-full h-64 sm:h-80 bg-slate-950">
+                {/* Modal Top Control Bar */}
+                <div className="relative w-full h-72 sm:h-[450px] md:h-[500px] lg:h-[550px] bg-slate-950">
                   <img 
-                    src={activeMemory.imageUrl} 
+                    src={activeMemory.imageUrl || activeMemory.src} 
                     alt={isVi ? activeMemory.titleVi : activeMemory.titleEn}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/50" />
 
+                  {/* Left & Right Carousel Arrows */}
                   <button
-                    onClick={() => setActiveMemory(null)}
-                    className="absolute top-4 right-4 p-2.5 rounded-full bg-slate-950/70 hover:bg-slate-900 text-white transition-colors border border-white/20"
+                    type="button"
+                    onClick={handlePrevMemory}
+                    title={isVi ? "Ảnh trước (Mũi tên trái)" : "Previous image (Left arrow)"}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-950/70 hover:bg-rose-600 text-white transition-all border border-white/20 shadow-lg hover:scale-110 active:scale-95"
                   >
-                    <X className="w-5 h-5" />
+                    <ChevronLeft className="w-6 h-6" />
                   </button>
 
-                  <div className="absolute bottom-4 left-6 right-6 flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-300 bg-rose-950/80 px-3 py-1 rounded-full border border-rose-500/40">
+                  <button
+                    type="button"
+                    onClick={handleNextMemory}
+                    title={isVi ? "Ảnh kế tiếp (Mũi tên phải)" : "Next image (Right arrow)"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-950/70 hover:bg-rose-600 text-white transition-all border border-white/20 shadow-lg hover:scale-110 active:scale-95"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+
+                  {/* Action Buttons Top Right */}
+                  <div className="absolute top-4 right-4 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleShareLink(activeMemory)}
+                      title={isVi ? "Chia sẻ liên kết ảnh" : "Share image link"}
+                      className="p-2.5 rounded-full bg-slate-950/70 hover:bg-slate-800 text-white transition-colors border border-white/20"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveMemoryIndex(null)}
+                      title={isVi ? "Đóng (Phím Esc)" : "Close (Esc key)"}
+                      className="p-2.5 rounded-full bg-slate-950/70 hover:bg-rose-600 text-white transition-colors border border-white/20"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Counter Badge Top Left */}
+                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-xs font-mono text-slate-300 font-bold">
+                    {(activeMemoryIndex ?? 0) + 1} / {filteredMemories.length}
+                  </div>
+
+                  {/* Title & Badges Bottom Overlay */}
+                  <div className="absolute bottom-4 left-6 right-6 flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-300 bg-rose-950/90 px-3 py-1 rounded-full border border-rose-500/40">
                         {isVi ? activeMemory.tagVi : activeMemory.tagEn}
                       </span>
-                      <span className="text-xs font-mono font-bold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full">
+                      <span className="text-xs font-mono font-bold text-slate-200 bg-slate-800/90 px-3 py-1 rounded-full border border-white/10">
                         {activeMemory.year}
                       </span>
+                      {activeMemory.companyId && (
+                        <span className="text-xs font-mono font-bold uppercase text-amber-300 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-500/40">
+                          {activeMemory.companyId}
+                        </span>
+                      )}
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+                    <h2 className="text-lg sm:text-2xl font-black text-white leading-snug mt-1">
                       {isVi ? activeMemory.titleVi : activeMemory.titleEn}
                     </h2>
                   </div>
                 </div>
 
-                {/* Body Content */}
-                <div className="p-6 sm:p-8 flex flex-col gap-5">
-                  <div className="flex items-center gap-4 text-xs font-mono text-slate-400 border-b border-white/10 pb-4">
+                {/* Modal Content Body */}
+                <div className="p-6 sm:p-8 flex flex-col gap-5 bg-slate-900">
+                  <div className="flex items-center gap-4 text-xs font-mono text-slate-400 border-b border-white/10 pb-4 flex-wrap">
                     <div className="flex items-center gap-1.5">
                       <MapPin className="w-4 h-4 text-rose-400" />
                       <span>{isVi ? activeMemory.locationVi : activeMemory.locationEn}</span>
@@ -782,20 +1188,43 @@ export default function Memories() {
                   </p>
 
                   {(activeMemory.quoteVi || activeMemory.quoteEn) && (
-                    <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex flex-col gap-2">
-                      <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider">
+                    <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex flex-col gap-2 relative overflow-hidden">
+                      <Quote className="w-12 h-12 text-rose-500/10 absolute right-2 bottom-2" />
+                      <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-rose-400" />
                         {isVi ? "Chia sẻ cảm hứng:" : "Leadership Insight:"}
                       </span>
-                      <p className="text-xs sm:text-sm italic font-medium text-rose-100">
+                      <p className="text-xs sm:text-sm italic font-medium text-rose-100 leading-relaxed">
                         {isVi ? activeMemory.quoteVi : activeMemory.quoteEn}
                       </p>
                     </div>
                   )}
 
-                  <div className="flex justify-end pt-2">
+                  {/* Modal Footer Controls */}
+                  <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrevMemory}
+                        className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs transition-all flex items-center gap-1"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        <span>{isVi ? "Ảnh trước" : "Previous"}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextMemory}
+                        className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs transition-all flex items-center gap-1"
+                      >
+                        <span>{isVi ? "Ảnh tiếp" : "Next"}</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+
                     <button
-                      onClick={() => setActiveMemory(null)}
-                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-all"
+                      type="button"
+                      onClick={() => setActiveMemoryIndex(null)}
+                      className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-all shadow-md"
                     >
                       {isVi ? "Đóng" : "Close"}
                     </button>
@@ -810,3 +1239,4 @@ export default function Memories() {
     </section>
   );
 }
+

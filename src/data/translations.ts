@@ -4,6 +4,8 @@ export const translations: Record<Language, Record<string, string>> = {
   vi: {
     'nav.nec': 'Trang UI NEC',
     'nav.bento': 'Bento Dark Dashboard',
+    'nav.glass_dashboard': 'Trang mẫu',
+    'nav.template': 'Trang mẫu',
     'nav.components': 'UI Components',
     'nav.ui_glass': 'UI Glass',
     'nav.home': 'Trang chủ',
@@ -20,6 +22,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.interview': 'Phỏng vấn',
     'nav.tuvi': 'Tử vi',
     'nav.systems': 'Hệ thống',
+    'nav.customization': 'Tùy chỉnh',
     'nav.downloadCV': 'Tải CV',
 
     'hero.badge': 'Chuyên gia & Quản lý CSKH',
@@ -86,6 +89,8 @@ export const translations: Record<Language, Record<string, string>> = {
   en: {
     'nav.nec': 'UI NEC Page',
     'nav.bento': 'Bento Dark Dashboard',
+    'nav.glass_dashboard': 'Sample Template',
+    'nav.template': 'Sample Template',
     'nav.components': 'UI Template',
     'nav.ui_glass': 'UI Glass',
     'nav.home': 'Home',
@@ -102,6 +107,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.interview': 'Interview',
     'nav.tuvi': 'Astrology',
     'nav.systems': 'Systems',
+    'nav.customization': 'Customization',
     'nav.downloadCV': 'Download CV',
 
     'hero.badge': 'CX & CS Leader',

@@ -10,6 +10,8 @@ const nextConfig: any = {
     '*.run.app',
     'localhost:3000',
     '127.0.0.1:3000',
+    'ais-dev-7ghvj636yajd5nl4bvlahp-414821367668.asia-southeast1.run.app',
+    'ais-pre-7ghvj636yajd5nl4bvlahp-414821367668.asia-southeast1.run.app',
     'ais-dev-6hxzxkkaot2jhscqrhah3o-498435453400.asia-southeast1.run.app',
     'ais-pre-6hxzxkkaot2jhscqrhah3o-498435453400.asia-southeast1.run.app',
     'ais-dev-dbvmw6fehab24wduzejal4-102425859277.asia-southeast1.run.app',

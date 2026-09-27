@@ -378,7 +378,7 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
       {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
@@ -407,7 +407,7 @@ export default function Projects() {
       }} />
 
       {/* Main Container Dự án */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
         {/* Header Card Dự án */}
         <PageCardHeader 
           pageId="projects"
@@ -433,11 +433,41 @@ export default function Projects() {
                   </button>
                 )}
               </div>
-
-
             </div>
           }
-        />
+        >
+          {!activeCard && (
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full text-xs font-semibold">
+              {PHASE_FILTERS.map((f) => {
+                const isActive = selectedPhase === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => {
+                      playUiSound("toggle");
+                      setSelectedPhase(f.id);
+                    }}
+                    className={cn(
+                      "px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs flex items-center gap-1.5",
+                      isActive
+                        ? "bg-blue-600 text-white border-blue-500 shadow-xs font-bold"
+                        : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
+                    )}
+                  >
+                    <span>{isVi ? f.labelVi : f.labelEn}</span>
+                    <span className={cn(
+                      "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
+                      isActive ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    )}>
+                      {f.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </PageCardHeader>
 
         {activeCard ? (
           <Suspense fallback={
@@ -563,9 +593,9 @@ export default function Projects() {
                           </div>
 
                           {/* Standardized Content Area with Color Bar Header & Description */}
-                          <div className="project-card-content p-[25px] flex flex-col min-w-0 text-left gap-3">
+                          <div className="project-card-content p-[15px] flex flex-col min-w-0 text-left gap-2.5">
                             {/* Standardized Subcard Header with Sleek Color Bar */}
-                            <div className="w-full flex items-start gap-3 pb-2.5 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
+                            <div className="w-full flex items-start gap-2.5 pb-2 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
                               <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
                               <div className="flex-1 min-w-0 text-left">
                                 <h3 className={cn("text-h6 tracking-tight line-clamp-2 leading-snug font-bold", theme.title)}>

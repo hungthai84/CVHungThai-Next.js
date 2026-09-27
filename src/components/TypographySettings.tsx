@@ -35,6 +35,7 @@ export const TypographySettings: React.FC = () => {
     theme, 
     fontScale, 
     setFontScale,
+    resetFontScale,
     borderRadius,
     setBorderRadius,
     resetBorderRadius
@@ -201,6 +202,24 @@ export const TypographySettings: React.FC = () => {
   const handleApplyRadiusSync = () => {
     playUiSound("success");
     setSyncFeedback(isVi ? `Đã áp dụng bo góc ${borderRadius}px đồng bộ toàn bộ website!` : `Applied ${borderRadius}px border radius system-wide!`);
+    setTimeout(() => setSyncFeedback(null), 3000);
+  };
+
+  const handleResetFontScale = () => {
+    playUiSound("click");
+    resetFontScale();
+    setSyncFeedback(isVi ? "Đã khôi phục kích thước font về chuẩn mặc định 100%!" : "Reset font scale to 100% default!");
+    setTimeout(() => setSyncFeedback(null), 3000);
+  };
+
+  const handleResetAllTypography = () => {
+    playUiSound("click");
+    resetFontScale();
+    setCustomTargets({});
+    setCustomPreviewText("");
+    setApplySimilarPage(false);
+    setApplySimilarWebsite(false);
+    setSyncFeedback(isVi ? "Đã khôi phục toàn bộ phân cấp Typography & cỡ chữ về mặc định!" : "Restored all typography tokens & font scale to default!");
     setTimeout(() => setSyncFeedback(null), 3000);
   };
 
@@ -529,8 +548,19 @@ export const TypographySettings: React.FC = () => {
                               : "Synchronously scale all elements system-wide (80% - 130%)"}
                           </span>
                         </div>
-                        <div className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">
-                          {fontScale}%
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={handleResetFontScale}
+                            className="flex items-center gap-1 px-2.5 py-1 text-3xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                            title={isVi ? "Khôi phục kích thước font về mặc định chuẩn 100%" : "Reset font size to default (100%)"}
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>{isVi ? "Mặc định (100%)" : "Reset (100%)"}</span>
+                          </button>
+                          <span className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full border border-indigo-200 dark:border-indigo-800/40">
+                            {fontScale}%
+                          </span>
                         </div>
                       </div>
 
@@ -571,6 +601,54 @@ export const TypographySettings: React.FC = () => {
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
+
+                      {/* Quick Font Size Presets */}
+                      <div className="pt-2 border-t border-slate-200/50 dark:border-slate-800/60 space-y-2">
+                        <span className="text-3xs font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
+                          {isVi ? "Các Mức Kích Thước Tiêu Chuẩn Nhanh:" : "Quick Font Scale Presets:"}
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          {[
+                            { scale: 85, labelVi: "85% (Rất gọn)", labelEn: "85% (Compact)", descVi: "Tối ưu màn hình nhỏ" },
+                            { scale: 90, labelVi: "90% (Gọn gàng)", labelEn: "90% (Small)", descVi: "Nhiều nội dung" },
+                            { scale: 100, labelVi: "100% (Chuẩn Master)", labelEn: "100% (Default)", descVi: "Tỉ lệ thiết kế gốc", isDefault: true },
+                            { scale: 110, labelVi: "110% (Lớn rõ)", labelEn: "110% (Large)", descVi: "Dễ đọc & nổi bật" },
+                          ].map((preset) => {
+                            const isSelected = fontScale === preset.scale;
+                            return (
+                              <button
+                                key={preset.scale}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setFontScale(preset.scale);
+                                }}
+                                className={`p-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                                  isSelected
+                                    ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                                    : "bg-white/80 dark:bg-slate-800/60 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200"
+                                }`}
+                              >
+                                <div>
+                                  <div className="font-bold text-xs">
+                                    {isVi ? preset.labelVi : preset.labelEn}
+                                  </div>
+                                  <div className={`text-3xs ${isSelected ? "text-indigo-100" : "text-slate-500 dark:text-slate-400"}`}>
+                                    {preset.descVi}
+                                  </div>
+                                </div>
+                                {isSelected ? (
+                                  <Check className="w-3.5 h-3.5 text-white shrink-0" />
+                                ) : preset.isDefault ? (
+                                  <span className="text-3xs font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                    {isVi ? "Gốc" : "Base"}
+                                  </span>
+                                ) : null}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
 
                     {/* Áp dụng và Đồng bộ Typography */}
@@ -599,14 +677,25 @@ export const TypographySettings: React.FC = () => {
                           </span>
                         </label>
                       </div>
-                      <button
-                        type="button"
-                        onClick={handleApplySync}
-                        className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transform transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
-                      >
-                        <Target className="w-4 h-4" />
-                        {isVi ? "Áp Dụng Đồng Bộ" : "Apply & Sync"}
-                      </button>
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                        <button
+                          type="button"
+                          onClick={handleResetAllTypography}
+                          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                          title={isVi ? "Khôi phục toàn bộ Typography về mặc định ban đầu" : "Reset all typography settings to default"}
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>{isVi ? "Khôi phục mặc định" : "Reset Default"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleApplySync}
+                          className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transform transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <Target className="w-4 h-4" />
+                          {isVi ? "Áp Dụng Đồng Bộ" : "Apply & Sync"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}

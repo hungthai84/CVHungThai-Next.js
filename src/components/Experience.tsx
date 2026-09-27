@@ -1,91 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import AppIcon from "./AppIcon";
 import PageBanner from "./PageBanner";
-import { 
-  Calendar, 
-  Users, 
-  Camera,
-  Star, 
-  Gamepad2, 
-  MapPin, 
-  Trophy, 
-  ClipboardList, 
-  Folder, 
-  CheckCircle2, 
-  Quote, 
-  Building2, 
-  UserCheck, 
-  X, 
-  Maximize2, 
-  Minimize2,
-  History, 
-  Sparkles,
-  ChevronRight,
-  ChevronsRight,
-  ChevronLeft,
-  ArrowLeft,
-  ArrowRight,
-  Monitor,
-  Smartphone,
-  Megaphone,
-  ClipboardCheck,
-  FileText,
-  Shield,
-  Layers,
-  Search,
-  Filter,
-  Briefcase,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-  ArrowUpRight,
-  Image as ImageIcon,
-  ExternalLink,
-  Target,
-  Server,
-  Award,
-  Clock,
-  TrendingUp,
-  Check,
-  Phone,
-  ShoppingBag,
-  Heart,
-  Rocket,
-  Plus,
-  Minus,
-  SlidersHorizontal,
-  ChevronDown,
-  Radio,
-  Tv,
-  Activity,
-  CreditCard,
-  ShieldCheck,
-  Bot,
-  Zap,
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
-  Headset,
-  Settings,
-  Wallet,
-  Lightbulb,
-  User,
-  FolderKanban,
-  MoreVertical,
-  MousePointerClick,
-  LayoutGrid,
-  List,
-  Flag,
-  CheckSquare,
-  BarChart2,
-  Handshake
-} from "lucide-react";
+import { Calendar, Users, Camera, Star, Gamepad2, MapPin, Trophy, ClipboardList, Folder, CheckCircle2, Quote, Building2, X, Maximize2, Minimize2, Sparkles, ChevronRight, ChevronsRight, ChevronLeft, ArrowLeft, ArrowRight, Monitor, Smartphone, Megaphone, ClipboardCheck, FileText, Layers, Filter, Briefcase, Image as ImageIcon, Target, Server, Award, Clock, TrendingUp, Check, Phone, ShoppingBag, Heart, Radio, Tv, Activity, CreditCard, ShieldCheck, Bot, Zap, ZoomIn, ZoomOut, RotateCcw, User, FolderKanban, List } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { MEMORIES_DATA } from "./Memories";
 
 
@@ -115,6 +37,160 @@ const renderDecorativeIcon = (key: string) => {
       return <Sparkles className="w-4 h-4 text-blue-500 animate-pulse shrink-0" />;
   }
 };
+
+// Commemorative Photo Carousel Component (Auto 3s transition)
+function CommemorativeCarousel({ 
+  current, 
+  isVi, 
+  onOpenGallery 
+}: { 
+  current: MilestoneData; 
+  isVi: boolean; 
+  onOpenGallery?: () => void;
+}) {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const slides = useMemo(() => {
+    const compMemories = current.memoryCompanyId 
+      ? MEMORIES_DATA.filter(m => m.companyId === current.memoryCompanyId)
+      : [];
+
+    if (compMemories.length > 0) {
+      return compMemories.slice(0, 4).map((m, idx) => ({
+        url: m.imageUrl || m.src,
+        tag: isVi ? `Kỷ niệm ${idx + 1}/${Math.min(4, compMemories.length)}` : `Memory ${idx + 1}/${Math.min(4, compMemories.length)}`,
+        title: isVi ? m.titleVi : m.titleEn,
+        desc: isVi ? m.descVi : m.descEn
+      }));
+    }
+
+    return [
+      {
+        url: current.photoUrl || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80",
+        tag: isVi ? "Kỷ niệm 1/4" : "Memory 1/4",
+        title: isVi ? `Hoạt động tại ${current.company}` : `Operations at ${current.company}`,
+        desc: isVi ? "Hành trình cống hiến & phát triển cùng tập thể" : "Dedication & team development journey"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1000&q=80",
+        tag: isVi ? "Kỷ niệm 2/4" : "Memory 2/4",
+        title: isVi ? "Hỗ Trợ Vận Hành & Sự Kiện" : "Operations & Event Support",
+        desc: isVi ? "Đồng hành cùng sự kiện lớn của tổ chức" : "Supporting major organizational events"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80",
+        tag: isVi ? "Kỷ niệm 3/4" : "Memory 3/4",
+        title: isVi ? "Đào Tạo & Phát Triển Đội Ngũ" : "Team Coaching & Upskilling",
+        desc: isVi ? `Chương trình huấn luyện nghiệp vụ chuẩn hóa cho ${current.headcount || 20} nhân sự` : `Standardized training program for ${current.headcount || 20} members`
+      },
+      {
+        url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=80",
+        tag: isVi ? "Kỷ niệm 4/4" : "Memory 4/4",
+        title: isVi ? "Chuyển Đổi Số & Tối Ưu Quy Trình" : "Digital Transformation & SOP",
+        desc: isVi ? "Giai đoạn thiết lập quy trình chăm sóc khách hàng đa kênh" : "Establishing omnichannel customer care standards"
+      }
+    ];
+  }, [current, isVi]);
+
+  useEffect(() => {
+    if (isPaused || slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % slides.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isPaused, slides.length]);
+
+  const activeSlide = slides[slideIndex] || slides[0];
+
+  return (
+    <div 
+      className="glass-surface p-3.5 rounded-2xl border border-white/60 dark:border-white/10 shadow-xs flex flex-col justify-between"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div>
+        <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/30 dark:border-white/10">
+          <div className="flex items-center gap-1.5">
+            <Camera className="w-4 h-4 text-pink-600 dark:text-pink-400 shrink-0" />
+            <h3 className="text-sm sm:text-base font-bold text-pink-600 dark:text-pink-400">
+              {isVi ? "Hình Kỷ Niệm" : "Commemorative Photos"}
+            </h3>
+            <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 font-semibold border border-pink-500/20">
+              <span className="w-1 h-1 rounded-full bg-pink-500 animate-pulse"></span>
+              {isVi ? "Tự động 3s" : "Auto 3s"}
+            </span>
+          </div>
+          {onOpenGallery && (
+            <button 
+              type="button"
+              onClick={onOpenGallery}
+              className="text-[10px] px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-300 font-bold border border-pink-500/20 hover:bg-pink-500/20 transition flex items-center gap-1 cursor-pointer"
+            >
+              <span>{isVi ? `Album ${slides.length} ảnh` : `${slides.length} Photos`}</span>
+              <span>→</span>
+            </button>
+          )}
+        </div>
+
+        {/* Photo Container */}
+        <div 
+          onClick={onOpenGallery}
+          className="relative rounded-xl overflow-hidden aspect-[16/10] cursor-pointer group shadow-xs bg-slate-900"
+          title={isVi ? "Nhấp để xem Album ảnh phóng to" : "Click to enlarge gallery"}
+        >
+          <img 
+            src={activeSlide.url} 
+            alt={activeSlide.title} 
+            className="w-full h-full object-cover group-hover:scale-103 transition-all duration-700 opacity-100"
+            referrerPolicy="no-referrer"
+          />
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent flex flex-col justify-end p-2.5 pointer-events-none">
+            <div className="flex items-end justify-between gap-2">
+              <div className="min-w-0">
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-pink-600 text-white font-bold inline-block mb-0.5 shadow-xs">
+                  {activeSlide.tag}
+                </span>
+                <h4 className="text-xs font-bold text-white tracking-wide truncate">
+                  {activeSlide.title}
+                </h4>
+                <p className="text-[10px] text-amber-300 font-medium line-clamp-1">
+                  {activeSlide.desc}
+                </p>
+              </div>
+
+              {/* Indicator Dots */}
+              <div className="flex items-center gap-1 pb-0.5 pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+                {slides.map((_, idx) => (
+                  <button 
+                    key={idx}
+                    type="button"
+                    onClick={() => setSlideIndex(idx)}
+                    className={cn(
+                      "transition-all duration-300 cursor-pointer rounded-full",
+                      idx === slideIndex 
+                        ? "w-4 h-1.5 bg-pink-500 shadow-xs" 
+                        : "w-1.5 h-1.5 bg-white/40 hover:bg-white"
+                    )}
+                    title={`Photo ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Slogan Footer */}
+      <div className="mt-2 py-1.5 px-3 rounded-lg bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-indigo-500/10 border border-pink-400/30 text-center">
+        <span className="text-[11px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 dark:from-pink-400 dark:via-purple-300 dark:to-indigo-300 tracking-wider uppercase">
+          {isVi ? "Khát Vọng • Kỷ Luật • Thành Công" : "Aspiration • Discipline • Success"}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 // Milestone definition interface
 export interface MilestoneData {
@@ -1303,6 +1379,16 @@ const TeamHeadcountCanvas = ({ count, isVi }: { count: number; isVi: boolean }) 
   );
 };
 
+const CATEGORIES = [
+  { id: "all", vi: "Tất cả", en: "All" },
+  { id: "telecom", vi: "Viễn thông & Truyền thông", en: "Telecom & Media" },
+  { id: "gaming", vi: "eSport & Game", en: "eSports & Gaming" },
+  { id: "ecommerce", vi: "Thương mại điện tử", en: "E-commerce" },
+  { id: "insurance", vi: "Bảo hiểm", en: "Insurance" },
+  { id: "fintech", vi: "FinTech", en: "FinTech" },
+  { id: "strategy", vi: "Chiến lược & Lãnh đạo", en: "Strategy & Leadership" },
+];
+
 // Component Dòng Thời Gian (Infographic Roadmap Timeline View) - Phiên bản Lộ trình Infographic kết nối mốc & Thẻ chi tiết Bento Grid
 interface TimelineRoadmapViewProps {
   isVi: boolean;
@@ -1414,6 +1500,12 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
   const hasPrev = currentIdx > 0;
   const hasNext = currentIdx !== -1 && currentIdx < filteredKeys.length - 1;
 
+  useEffect(() => {
+    if (filteredKeys.length > 0 && !filteredKeys.includes(activeYear)) {
+      setActiveYear(filteredKeys[0]);
+    }
+  }, [filterCategory, filteredKeys, activeYear, setActiveYear]);
+
   const handlePrev = () => {
     if (hasPrev) {
       setActiveYear(filteredKeys[currentIdx - 1]);
@@ -1482,34 +1574,24 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
     setTimelineScale(1);
   };
 
-  const CATEGORIES = [
-    { id: "all", vi: "Tất cả", en: "All" },
-    { id: "telecom", vi: "Viễn thông & Truyền thông", en: "Telecom & Media" },
-    { id: "gaming", vi: "eSport & Game", en: "eSports & Gaming" },
-    { id: "ecommerce", vi: "Thương mại điện tử", en: "E-commerce" },
-    { id: "insurance", vi: "Bảo hiểm", en: "Insurance" },
-    { id: "fintech", vi: "FinTech", en: "FinTech" },
-    { id: "strategy", vi: "Chiến lược & Lãnh đạo", en: "Strategy & Leadership" },
-  ];
-
   const bentoGridVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const bentoCardVariants: any = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 25 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
-        ease: "easeOut",
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -1530,10 +1612,13 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
           className="w-full h-auto glass-surface backdrop-blur-2xl bg-white/85 dark:bg-slate-950/75 border border-slate-200/80 dark:border-slate-800/80 p-4 xs:p-5 sm:p-6 flex flex-col gap-4 text-left relative shadow-md hover:shadow-xl transition-all duration-300 mb-4"
         >
           {/* Header Thẻ: Tiêu đề thẻ con + Công cụ thu phóng và điều khiển */}
-          <div className="w-full flex flex-col gap-1 pb-1">
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              {/* Zoom and Scale Controls */}
-              <div className="hidden items-center gap-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-2.5 py-1 rounded-xl border border-slate-200/60 dark:border-slate-700/80 shadow-2xs sm:ml-auto">
+          <AnimatedCardTitle
+            icon={Briefcase}
+            title={isVi ? "Kinh nghiệm thực chiến" : "Practical Work Experience"}
+            subtitle={isVi ? "Dấu ấn 22+ năm dẫn dắt vận hành" : "22+ Years of Operational Leadership"}
+            colorPreset="indigo"
+            actionRight={
+              <div className="flex items-center gap-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-2.5 py-1 rounded-xl border border-slate-200/60 dark:border-slate-700/80 shadow-2xs">
                 <button
                   type="button"
                   onClick={handleZoomOut}
@@ -1572,8 +1657,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   <span>{isVi ? "Tự động" : "Auto"}</span>
                 </button>
               </div>
-            </div>
-          </div>
+            }
+          />
+
+          {/* Category Filter Bar removed - moved to PageCardHeader */}
 
           {/* Dạng lộ trình Dòng thời gian hiển thị chuẩn Visual như hình đính kèm (Horizontal Node Flow) */}
           <div 
@@ -1650,16 +1737,15 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     setActiveYear(subLogo.key);
                                   }}
                                   className={cn(
-                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer origin-center hover:scale-125 hover:z-40",
+                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-0 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer origin-center hover:scale-125 hover:z-40",
                                     isCurrentLogo
-                                      ? "z-30 ring-2 ring-offset-1 shadow-lg"
+                                      ? "z-30 shadow-lg"
                                       : "opacity-90 hover:opacity-100"
                                   )}
                                   style={{
-                                    borderColor: subLogo.color,
                                     zIndex: isCurrentLogo ? 30 : 20 - lIdx,
                                     boxShadow: isCurrentLogo 
-                                      ? `0 0 14px ${subLogo.color}90` 
+                                      ? `0 0 14px ${subLogo.color}45` 
                                       : `2px 2px 8px rgba(0,0,0,0.18)`
                                   }}
                                   title={subLogo.name}
@@ -1706,13 +1792,12 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                     setActiveYear(subLogo.key);
                                   }}
                                   className={cn(
-                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-2 border-white dark:border-slate-900 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer hover:scale-120 hover:z-40",
-                                    isCurrentLogo ? "z-30 ring-2 ring-offset-1 shadow-lg" : "opacity-90 hover:opacity-100"
+                                    "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-0 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer hover:scale-120 hover:z-40",
+                                    isCurrentLogo ? "z-30 shadow-lg" : "opacity-90 hover:opacity-100"
                                   )}
                                   style={{
-                                    borderColor: subLogo.color,
                                     zIndex: isCurrentLogo ? 30 : 20 - lIdx,
-                                    boxShadow: isCurrentLogo ? `0 0 12px ${subLogo.color}80` : `0 2px 6px rgba(0,0,0,0.15)`
+                                    boxShadow: isCurrentLogo ? `0 0 12px ${subLogo.color}45` : `0 2px 6px rgba(0,0,0,0.15)`
                                   }}
                                   title={subLogo.name}
                                 >
@@ -1739,14 +1824,13 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                           /* Standard Ring Container for single-brand years: scales up on hover */
                           <div 
                             className={cn(
-                              "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-[1.5px] p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden hover:scale-115 cursor-pointer",
+                              "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-0 p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden hover:scale-115 cursor-pointer",
                               isSelected ? "scale-110" : "group-hover:scale-110"
                             )}
                             style={{
-                              borderColor: item.hexColor,
                               boxShadow: isSelected 
-                                ? `0 0 24px ${item.hexColor}80, inset 0 0 8px ${item.hexColor}40` 
-                                : `0 4px 14px ${item.hexColor}35`
+                                ? `0 0 24px ${item.hexColor}45, inset 0 0 8px ${item.hexColor}15` 
+                                : `0 4px 14px ${item.hexColor}20`
                             }}
                           >
                             <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center p-0">
@@ -1779,453 +1863,613 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* THẺ CỘT MỐC JOB: THẺ JOB CHÍNH BENTO CO GIẢN CHIỀU CAO KHI CLICK */}
+        {/* THỂ CỘT MỐC JOB: THẺ JOB CHÍNH BENTO CO GIẢN CHIỀU CAO KHI CLICK */}
         {/* ========================================================================= */}
         <AnimatePresence mode="wait">
             {current && (
               <motion.div
-                id="card-milestone-detail"
                 key={current.key}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-auto backdrop-blur-md bg-white/65 dark:bg-white/[0.06] border p-[15px] flex flex-col gap-4 text-left relative -mt-0.5 shadow-[0_8px_32px_0_rgba(31,38,135,0.06),inset_0_1.5px_2px_rgba(255,255,255,0.9)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.5),inset_0_1px_0.5px_rgba(255,255,255,0.1)] transition-all duration-300 hover:shadow-xl hover:dark:shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
-                style={{
-                  padding: "15px",
-                  borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))",
-                  borderColor: currentHex || '#6366f1',
-                  height: "fit-content",
-                }}
+                className="w-full h-full rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-4 sm:p-6 border border-slate-200/80 dark:border-white/10 space-y-4 shadow-xl text-left"
               >
-                {/* 0. THẺ BANNER HÌNH ẢNH DOANH NGHIỆP / CỘT MỐC (BENTO BANNER) */}
-                {current.bannerUrl && (
-                  <div 
-                    id="card-job-banner"
-                    style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
-                    className="w-full h-36 xs:h-44 sm:h-52 md:h-64 overflow-hidden relative shadow-md border border-slate-200/80 dark:border-slate-800/80 bg-slate-100 dark:bg-slate-900 group/banner select-none transition-all duration-300"
-                  >
-                    <img
-                      src={current.bannerUrl}
-                      alt={`${current.company} Banner`}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/banner:scale-105"
-                      style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 8px))" }}
-                      referrerPolicy="no-referrer"
-                      loading="eager"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent pointer-events-none" />
-                  </div>
-                )}
-
-                {/* 1. THẺ THÔNG TIN CHÍNH JOB CARD (CÔNG TY) */}
-                <div 
-                  id="card-job-header"
-                  style={{ borderRadius: "var(--theme-radius-inner, var(--theme-radius, 16px))" }}
-                  className="w-full bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 backdrop-blur-md shadow-xs p-5 sm:p-6 flex flex-col gap-4 relative select-none group/header transition-all duration-300 hover:shadow-md"
-                >
-                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-wrap gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
-                        <Award className="w-4.5 h-4.5 stroke-[2.5]" />
-                      </div>
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                        {isVi ? "Công ty" : "Company"}
-                      </h3>
-                    </div>
-
-                    {/* Quick Badges chuyển xuống thẻ Công ty */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 text-caption font-bold font-mono shadow-xs">
-                        <Calendar className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
-                        {current.cardYearLabel || current.year}
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 text-caption font-bold shadow-xs">
-                        <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
-                        {current.tag}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3.5 sm:gap-4.5 min-w-0 flex-1">
-                      {/* Logo Container */}
-                      <div className="flex items-center -space-x-3 sm:-space-x-4 shrink-0">
-                        <div 
-                          className="w-16 h-16 sm:w-18 sm:h-18 rounded-full border-2 border-amber-400/90 p-0.5 bg-white dark:bg-slate-950 shadow-xs flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-10"
-                        >
-                          <img 
-                            src={current.logo} 
-                            alt={current.company} 
-                            className="w-full h-full object-cover rounded-full" 
-                            onError={(e) => {
-                              if (current.fallbackLogo) {
-                                (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
-                              }
-                            }}
-                          />
-                        </div>
-                        {current.subLogo && (
-                          <div 
-                            className="w-13 h-13 sm:w-15 sm:h-15 rounded-full border-2 border-sky-400 p-0.5 bg-white dark:bg-slate-950 shadow-xs flex items-center justify-center shrink-0 overflow-hidden group-hover/header:scale-105 transition-transform z-0"
-                            title="HTVC"
-                          >
+                  
+                  {/* 1. Header / Icon / Title / Period Badge */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/15">
+                    <div className="flex items-center gap-3 min-w-0">
+                      {/* Logo Frame with Accent Ring */}
+                      <div className="relative shrink-0">
+                        <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 p-0.5 shadow-md">
+                          <div className="w-full h-full rounded-full bg-white dark:bg-slate-950 p-1 flex items-center justify-center overflow-hidden">
                             <img 
-                              src={current.subLogo} 
-                              alt="HTVC" 
-                              className="w-full h-full object-cover rounded-full" 
+                              src={current.logo} 
+                              alt={current.company} 
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                if (current.fallbackLogo) {
+                                  (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
+                                }
+                              }}
                             />
                           </div>
-                        )}
+                        </div>
+                        <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-2xs" />
                       </div>
 
-                      <div className="min-w-0 flex-1">
-                        {(() => {
-                          let mainCompany = current.company;
-                          let subComp = current.subCompanies;
-                          if (!subComp && mainCompany.includes('(')) {
-                            const match = mainCompany.match(/^(.*?)\s*(\(.*\))$/);
-                            if (match) {
-                              mainCompany = match[1].trim();
-                              subComp = match[2].trim();
-                            }
-                          }
-                          return (
-                            <div>
-                              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
-                                {mainCompany}
-                              </h2>
-                              {subComp && (
-                                <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mt-0.5">
-                                  {subComp}
-                                </p>
-                              )}
-                            </div>
-                          );
-                        })()}
-
-                        <div className="mt-2.5 flex items-center gap-2 flex-wrap">
-                          <span className="inline-block px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200/70 dark:border-purple-800/50 font-bold text-xs">
-                            {isVi ? "Quản lý & Điều hành" : "Management & Operations"}
-                          </span>
-                          <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/50 font-bold text-xs">
-                            {current.cardRoleTitle || current.role}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/50 font-bold text-xs">
-                            <RotateCcw className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                            <span>{isVi ? "Tối ưu hóa & Phát triển" : "Optimization & Growth"}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2.5">
+                          <motion.div
+                            animate={{
+                              y: [0, -3.5, 0],
+                              rotate: [0, 3.5, -3.5, 0],
+                              scale: [1, 1.05, 1],
+                            }}
+                            transition={{
+                              duration: 3.8,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                            whileHover={{ scale: 1.15, rotate: 10 }}
+                            className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
+                          >
+                            <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] text-blue-600 dark:text-cyan-400 drop-shadow-sm" />
+                          </motion.div>
+                          <motion.h2 
+                            animate={{ opacity: [0.96, 1, 0.96] }}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                            className="text-h6 tracking-tight font-bold font-play truncate select-none"
+                          >
+                            <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-300">
+                              {current.company}
+                            </span>
+                          </motion.h2>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                          {current.subCompanies && (
+                            <span className="text-[11px] sm:text-xs text-indigo-700 dark:text-indigo-300 font-extrabold bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-0.5 rounded-lg border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
+                              {current.subCompanies}
+                            </span>
+                          )}
+                          <span className="text-[10.5px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black shadow-xs font-mono uppercase tracking-wider">
+                            {current.tag}
                           </span>
                         </div>
                       </div>
                     </div>
+
+                    {/* Huy hiệu thời gian */}
+                    <div className="flex items-center shrink-0 self-start sm:self-auto">
+                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 border border-blue-200/80 dark:border-blue-700/50 shadow-xs text-blue-700 dark:text-cyan-300 backdrop-blur-md">
+                        <Calendar className="w-4 h-4 text-blue-600 dark:text-cyan-400 stroke-[2.5]" />
+                        <span className="font-extrabold text-xs sm:text-sm tracking-wide font-mono">
+                          {current.period || `Từ ${current.cardYearLabel}`}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* 2. BỐ CỤC BENTO BUNG RỘNG CHIỀU CAO THẺ JOB VÀ CO GIẢN THẺ SUB CARD */}
-                <AnimatePresence>
-                  {isJobDetailExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, y: -8 }}
-                      animate={{ opacity: 1, height: "auto", y: 0 }}
-                      exit={{ opacity: 0, height: 0, y: -8 }}
-                      transition={{ duration: 0.35, ease: "easeInOut" }}
-                      className="w-full flex flex-col gap-5 pt-1 transition-all duration-300"
-                    >
-                      {/* THẺ HÀNH TRÌNH / TÂM TƯ CÔNG VIỆC - BỐ CỤC ĐIỂM NHẤN BENTO HERO CARD */}
-                      <div className="w-full rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 backdrop-blur-md shadow-xs p-5 sm:p-6 flex flex-col gap-4">
-                        <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 shadow-2xs">
-                              <BarChart2 className="w-4.5 h-4.5 stroke-[2.5]" />
-                            </div>
-                            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                              {isVi ? "Hành trình sự nghiệp & Cột mốc" : "Career Journey & Milestones"}
-                            </h3>
-                          </div>
+                  {/* 2. Master Card: Thẻ chung Thông tin (Job Information Overview) */}
+                  <div className="glass-surface p-4 sm:p-5 rounded-3xl border border-blue-200/80 dark:border-white/15 bg-gradient-to-br from-white/90 via-blue-50/40 to-indigo-50/50 dark:from-slate-950/90 dark:via-slate-900/90 dark:to-slate-950/90 shadow-lg backdrop-blur-2xl text-left mb-3.5">
+                    
+                    {/* Header Bar */}
+                    <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-blue-100 dark:border-white/10">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8.5 h-8.5 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shrink-0">
+                          <Briefcase className="w-4.5 h-4.5 stroke-[2.2]" />
                         </div>
+                        <div>
+                          <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white font-play tracking-tight">
+                            {isVi ? "Thông Tin Vị Trí" : "Job Information Overview"}
+                          </h3>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                            {isVi ? "Chi tiết thông số & vai trò điều hành" : "Executive position details"}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10.5px] font-black px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-cyan-300 border border-indigo-500/20 uppercase tracking-wider font-mono shadow-2xs">
+                        {current.company}
+                      </span>
+                    </div>
 
-                        <div className="space-y-3.5">
-                          <div className="space-y-3">
-                            {current.paragraphs.map((p, pIdx) => {
-                              const renderFormattedText = (text: string) => {
-                                if (text.includes("**")) {
-                                  const parts = text.split(/(\*\*.*?\*\*)/g);
-                                  return parts.map((part, i) => {
-                                    if (part.startsWith("**") && part.endsWith("**")) {
-                                      return (
-                                        <strong key={i} className="font-bold text-slate-900 dark:text-white">
-                                          {part.slice(2, -2)}
-                                        </strong>
-                                      );
-                                    }
-                                    return part;
-                                  });
-                                }
-                                return text;
-                              };
-
-                              return (
-                                <div key={pIdx} className="flex items-start gap-3">
-                                  <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0 mt-2" />
-                                  <p className="flex-1 text-sm sm:text-[14.5px] font-medium leading-relaxed text-slate-700 dark:text-slate-300">
-                                    {renderFormattedText(p)}
-                                  </p>
-                                </div>
-                              );
-                            })}
+                    {/* 4-Subcard Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 items-stretch">
+                      
+                      {/* Sub-card 1: Quy mô quản lý */}
+                      <div className="glass-card-portal group p-3.5 rounded-2xl flex flex-col justify-between border border-blue-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-blue-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                            <Users className="w-5.5 h-5.5 stroke-[2.2]" />
                           </div>
-
-                          {/* Callout box at bottom (amber) */}
-                          <div className="mt-4 p-3.5 sm:p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/25 border border-amber-200/80 dark:border-amber-800/50 border-l-4 border-l-amber-500 dark:border-l-amber-400 flex items-start gap-3">
-                            <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-                              <Lightbulb className="w-3 h-3 stroke-[2.5]" />
-                            </div>
-                            <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 leading-relaxed">
-                              {isVi 
-                                ? "Những kinh nghiệm và thành tựu trên giúp tôi tích lũy cho vai trò xây dựng và phát triển hệ thống chăm sóc khách hàng chuyên nghiệp, hiệu quả, đồng thời luôn hướng tới việc mang lại giá trị thiết thực, bền vững cho khách hàng và doanh nghiệp."
-                                : "These experiences and achievements have equipped me to build and scale professional customer care systems, consistently creating sustainable value for clients and businesses."}
-                            </p>
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-extrabold text-blue-600 dark:text-cyan-400 block tracking-wider uppercase font-mono">
+                              {isVi ? "Quy mô quản lý" : "Team Scale"}
+                            </span>
+                            <span className="text-sm sm:text-base font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
+                              {current.headcount || 20} {isVi ? "Nhân sự" : "Members"}
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* BENTO 2-COLUMN GRID 6 THẺ SUB CARD JOB - VIEW 2 CỘT CHIỀU CAO THEO NỘI DUNG */}
-                      <motion.div 
-                        id="card-milestone-detail-grid" 
-                        variants={bentoGridVariants}
-                        initial="hidden"
-                        animate="visible"
-                        className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 items-stretch"
-                      >
-                        
-                        {/* Sub Card 01 | QUẢN LÝ VẬN HÀNH (Hero Management Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                        >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">01</span>
-                                <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 tracking-wide">
-                                  {isVi ? "Quản lý vận hành" : "Operations management"}
-                                </span>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              {/* Hàng 1: Chức danh quản trị */}
-                              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100/80 dark:border-blue-900/40 flex items-center gap-3">
-                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                                  <Headset className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 leading-snug block">
-                                    {isVi ? "Quản lý và vận hành Trung tâm dịch vụ khách hàng" : (current.cardRoleTitle || current.role)}
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Hàng 2: Quy mô nhân sự quản lý */}
-                              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100/80 dark:border-blue-900/40 flex items-center gap-3">
-                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100/90 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                                  <Users className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 leading-snug block">
-                                    {isVi ? `Quản trị nhân sự với quy mô từ ${current.headcount || 20} nhân sự trở lên` : (current.managementHeadcount || `${current.headcount} team members`)}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
+                      {/* Sub-card 2: Vai trò chính */}
+                      <div className="glass-card-portal group p-3.5 rounded-2xl flex flex-col justify-between border border-pink-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-pink-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                            <Award className="w-5.5 h-5.5 stroke-[2.2]" />
                           </div>
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-extrabold text-pink-600 dark:text-pink-400 block tracking-wider uppercase truncate font-mono">
+                              {isVi ? "Vai trò chính" : "Primary Role"}
+                            </span>
+                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
+                              {current.cardRoleTitle || current.role}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
 
-                          {/* Danh sách vị trí tùy chỉnh đã thêm nếu có */}
-                          {customPositions.filter(p => p.milestoneKey === current.key).length > 0 && (
-                            <div className="space-y-2 pt-3 mt-3 border-t border-slate-200/80 dark:border-slate-800">
-                              <span className="text-caption font-bold uppercase tracking-wider text-slate-500 block">
-                                {isVi ? "Vị trí & nhiệm vụ bổ sung:" : "Additional added roles:"}
+                      {/* Sub-card 3: Thời gian cống hiến */}
+                      <div className="glass-card-portal group p-3.5 rounded-2xl flex flex-col justify-between border border-indigo-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-indigo-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                            <Clock className="w-5.5 h-5.5 stroke-[2.2]" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-extrabold text-indigo-600 dark:text-indigo-400 block tracking-wider uppercase font-mono">
+                              {isVi ? "Thời gian" : "Tenure"}
+                            </span>
+                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
+                              {current.cardYearLabel || current.year}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Sub-card 4: Địa điểm làm việc */}
+                      <div className="glass-card-portal group p-3.5 rounded-2xl flex flex-col justify-between border border-fuchsia-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-fuchsia-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                            <MapPin className="w-5.5 h-5.5 stroke-[2.2]" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-extrabold text-fuchsia-600 dark:text-fuchsia-400 block tracking-wider uppercase font-mono">
+                              {isVi ? "Địa điểm" : "Location"}
+                            </span>
+                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
+                              {current.location || "Hồ Chí Minh, VN"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                {/* 3. Asymmetric 2-Column Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
+                  
+                  {/* LEFT COLUMN: LĨNH VỰC + HÌNH KỶ NIỆM (col-span-4) */}
+                  <div className="lg:col-span-4 flex flex-col gap-3.5 order-2 lg:order-1">
+
+                    {/* THẺ LĨNH VỰC */}
+                    <div className="glass-surface p-3.5 rounded-2xl border border-white/60 dark:border-white/10 shadow-xs flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/30 dark:border-white/10">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <motion.div
+                              animate={{
+                                y: [0, -3.5, 0],
+                                rotate: [0, 3.5, -3.5, 0],
+                                scale: [1, 1.05, 1],
+                              }}
+                              transition={{
+                                duration: 3.6,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }}
+                              whileHover={{ scale: 1.18, rotate: 10 }}
+                              className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
+                            >
+                              <Layers className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-violet-600 dark:text-violet-400 stroke-[2.2] drop-shadow-sm" />
+                            </motion.div>
+                            <motion.h3 
+                              animate={{ opacity: [0.96, 1, 0.96] }}
+                              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                              className="text-h6 font-bold font-play tracking-tight select-none"
+                            >
+                              <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 dark:from-violet-400 dark:via-purple-300 dark:to-indigo-300">
+                                {isVi ? "Lĩnh Vực Hoạt Động" : "Domains & Scope"}
                               </span>
-                              <div className="space-y-1.5">
-                                {customPositions
-                                  .filter(p => p.milestoneKey === current.key)
-                                  .map(cp => (
-                                    <div key={cp.id} className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 text-body flex items-center justify-between">
-                                      <div>
-                                        <span className="font-extrabold text-emerald-950 dark:text-emerald-200 block text-body">{cp.title}</span>
-                                        <span className="text-caption text-slate-500">{cp.department} • {cp.headcount}</span>
-                                      </div>
-                                      <span className="text-caption font-mono font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
-                                        {cp.level}
+                            </motion.h3>
+                          </div>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-300 font-bold border border-violet-500/20">
+                            {current.cardTags?.length || 3} {isVi ? "Sản phẩm / Mảng" : "Products"}
+                          </span>
+                        </div>
+
+                        {/* List of Domain Products / Card Tags */}
+                        <div className="grid grid-cols-1 gap-2">
+                          {(() => {
+                            const domainItems = (current.key === "2013" || current.key.startsWith("2013") || current.key.startsWith("2014")) ? [
+                              { title: "Garena", desc: "Nền tảng kết nối game trực tuyến", tag: "Platform" },
+                              { title: "LoL", desc: "Liên Minh Huyền Thoại - Game MOBA eSports hàng đầu", tag: "MOBA" },
+                              { title: "Shopee", desc: "Sàn thương mại điện tử đa kênh", tag: "TMĐT" },
+                              { title: "AirPay / ShopeePay", desc: "Ví điện tử FinTech & thanh toán số", tag: "FinTech" },
+                              { title: "AoV", desc: "Liên Quân Mobile - Game MOBA di động triệu người chơi", tag: "Gaming" },
+                              { title: "VED", desc: "Gcafe & Vietnam eSports - Vận hành giải đấu eSports & Cyber", tag: "eSports" }
+                            ] : current.key === "2003" ? [
+                              { title: "MobiFone Telecom", desc: "Dịch vụ khách hàng mạng di động MobiFone", tag: "TeleCom" },
+                              { title: "Tổng đài viên & Hotline", desc: "Tiếp nhận & tư vấn cước viễn thông 24/7", tag: "Inbound" },
+                              { title: "Xử lý sự cố cước", desc: "Quy trình giải quyết khiếu nại cước & FCR", tag: "Escalation" }
+                            ] : current.key === "2007" ? [
+                              { title: "Viễn Liên V247", desc: "Dịch vụ viễn thông quốc tế V247", tag: "TeleCom" },
+                              { title: "Giám sát Call Center", desc: "Quản lý đội ngũ & kiểm soát chất lượng QA", tag: "Supervisor" },
+                              { title: "Đào tạo nhân sự", desc: "Huấn luyện nghiệp vụ & SOP chăm sóc khách hàng", tag: "Coaching" }
+                            ] : current.key === "2011" ? [
+                              { title: "LBC - HTV Cable", desc: "Dịch vụ truyền hình cáp HTVC & Viễn thông", tag: "Media" },
+                              { title: "Trung tâm CSKH", desc: "Quản trị toàn diện phòng CSKH & Tổng đài", tag: "ContactCenter" },
+                              { title: "Phát triển thương hiệu", desc: "Nâng cao chỉ số hài lòng khách hàng CSAT", tag: "Branding" }
+                            ] : current.key === "2016" ? [
+                              { title: "Prudential Vietnam", desc: "Dịch vụ khách hàng bảo hiểm nhân thọ", tag: "Insurance" },
+                              { title: "Videocall CSKH", desc: "Tư vấn hợp đồng bảo hiểm qua Videocall", tag: "Video" },
+                              { title: "E-Commerce CSKH", desc: "Tích hợp kênh bảo hiểm trực tuyến & CallCenter", tag: "E-Com" }
+                            ] : current.key === "2018" ? [
+                              { title: "Ví điện tử MoMo", desc: "Hệ thống Dịch vụ Khách hàng Ví điện tử số 1", tag: "FinTech" },
+                              { title: "CRM & Omnichannel", desc: "Hệ thống CRM hỗ trợ đa kênh toàn diện", tag: "CRM" },
+                              { title: "Quản lý BPO", desc: "Điều hành đối tác BPO Mắt Bảo & SLA", tag: "Outsourcing" }
+                            ] : current.key === "2023" ? [
+                              { title: "Finviet - Ví ECO", desc: "Nền tảng thanh toán & ví điện tử ECO", tag: "FinTech" },
+                              { title: "AI Bot CSKH", desc: "Tích hợp Generative AI & Automation 24/7", tag: "AI Bot" },
+                              { title: "Tối ưu hóa CRM", desc: "Số hóa luồng tra soát & báo cáo phân tích", tag: "CRM" }
+                            ] : [
+                              { title: "AI CS Strategy 2026+", desc: "Ứng dụng Generative AI & Automation CRM", tag: "AI Gen" },
+                              { title: "CX Architecture", desc: "Chuyển đổi trải nghiệm khách hàng xuất sắc", tag: "CX Strategy" },
+                              { title: "Lãnh đạo CSKH", desc: "Quản trị đội ngũ & đào tạo thế hệ kế thừa", tag: "Leadership" }
+                            ];
+
+                            return domainItems.map((item, tIdx) => (
+                              <div 
+                                key={tIdx} 
+                                className="glass-surface-subtle p-2 px-2.5 rounded-xl border border-white/30 dark:border-white/10 flex items-center justify-between gap-2 hover:border-violet-400/50 transition-all group"
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs group-hover:scale-105 transition-transform">
+                                    <Sparkles className="w-3.5 h-3.5" />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                      <span className="text-xs font-bold text-slate-900 dark:text-white block leading-tight truncate font-play">
+                                        {item.title}
+                                      </span>
+                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-violet-500/15 text-violet-600 dark:text-violet-300 font-extrabold border border-violet-500/25 shrink-0 font-mono">
+                                        {item.tag}
                                       </span>
                                     </div>
-                                  ))}
-                              </div>
-                            </div>
-                          )}
-                        </motion.div>
-
-                        {/* Sub Card 02 | KẾT QUẢ & KPI (Metrics Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                        >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-emerald-600 dark:text-emerald-400">02</span>
-                                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
-                                  {isVi ? "Kết quả KPI" : "KPI results"}
-                                </span>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-                              {current.kpis && current.kpis.map((kpi, kIdx) => (
-                                <div key={kIdx} className="space-y-1.5">
-                                  <div className="flex items-center justify-between text-xs sm:text-[13px] font-bold">
-                                    <span className="text-slate-800 dark:text-slate-200 truncate pr-1">{kpi.label}</span>
-                                    <span className="font-mono text-emerald-600 dark:text-emerald-400 font-black">{kpi.percent}%</span>
-                                  </div>
-                                  <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full transition-all duration-500" style={{ width: `${kpi.percent}%` }} />
+                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1 mt-0.5">
+                                      {item.desc}
+                                    </p>
                                   </div>
                                 </div>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-
-                        {/* Sub Card 03 | CÔNG VIỆC (Tasks Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                        >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">03</span>
-                                <ClipboardList className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-blue-600 dark:text-blue-400 tracking-wide">
-                                  {isVi ? "Công việc đã vận hành" : "Operational tasks"}
-                                </span>
                               </div>
-                              <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                            </div>
+                            ));
+                          })()}
+                        </div>
+                      </div>
 
-                            <div className="space-y-2">
-                              {current.tasks && current.tasks.map((task, tIdx) => (
-                                <div key={tIdx} className="p-2.5 sm:p-3 px-3.5 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100/70 dark:border-blue-900/30 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-snug">
-                                  <CheckSquare className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0 mt-0.5" />
-                                  <span className="pt-0.5">{task}</span>
-                                </div>
-                              ))}
-                            </div>
+                      <div className="mt-2.5 pt-2 border-t border-white/20 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                        <span>{isVi ? "Độ bao phủ đa nền tảng" : "Multi-platform coverage"}</span>
+                        <span className="font-bold text-violet-600 dark:text-violet-400">{isVi ? "100% Đồng bộ" : "100% Unified"}</span>
+                      </div>
+                    </div>
+
+                    {/* THẺ HÌNH KỶ NIỆM (CAROUSEL AUTO 3S) */}
+                    <CommemorativeCarousel 
+                      current={current} 
+                      isVi={isVi} 
+                      onOpenGallery={() => {
+                        if (current.memoryCompanyId) {
+                          const memoryCard = document.getElementById(`memory-card-${current.memoryCompanyId}`);
+                          if (memoryCard) {
+                            memoryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }
+                      }}
+                    />
+
+                  </div>
+
+                  {/* RIGHT COLUMN: BANNER + GIỚI THIỆU (col-span-8) */}
+                  <div className="lg:col-span-8 flex flex-col gap-3.5 order-1 lg:order-2">
+                    
+                    {/* BANNER HÌNH ẢNH */}
+                    {current.bannerUrl && (
+                      <div className="glass-surface p-2 sm:p-2.5 rounded-2xl border border-white/60 dark:border-white/10 shadow-xs overflow-hidden group">
+                        <div className="relative w-full overflow-hidden rounded-xl aspect-[21/6] sm:aspect-[24/6] bg-slate-900/10 dark:bg-slate-950/40">
+                          <img 
+                            src={current.bannerUrl} 
+                            alt={`${current.company} Banner`} 
+                            className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500 filter contrast-105"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2.5">
+                            <span className="text-[11px] font-bold text-white bg-slate-900/70 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">
+                              {current.company} • {isVi ? "Giai Đoạn Đột Phá" : "Breakthrough Milestone"}
+                            </span>
                           </div>
-                        </motion.div>
+                        </div>
+                      </div>
+                    )}
 
-                        {/* Sub Card 04 | DỰ ÁN (Projects Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                        >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-orange-600 dark:text-orange-400">04</span>
-                                <Flag className="w-5 h-5 text-orange-600 dark:text-orange-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-orange-600 dark:text-orange-400 tracking-wide">
-                                  {isVi ? "Dự án trọng điểm" : "Key projects"}
-                                </span>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                            </div>
+                    {/* THẺ GIỚI THIỆU */}
+                    <div className="glass-surface p-3.5 sm:p-4 rounded-2xl border border-white/60 dark:border-white/10 shadow-xs text-left">
+                      <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/30 dark:border-white/10">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <motion.div
+                            animate={{
+                              y: [0, -3.5, 0],
+                              rotate: [0, 3.5, -3.5, 0],
+                              scale: [1, 1.05, 1],
+                            }}
+                            transition={{
+                              duration: 3.6,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                            whileHover={{ scale: 1.18, rotate: 10 }}
+                            className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
+                          >
+                            <Target className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-blue-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                          </motion.div>
+                          <motion.h3 
+                            animate={{ opacity: [0.96, 1, 0.96] }}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                            className="text-h6 font-bold font-play tracking-tight select-none"
+                          >
+                            <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-blue-600 via-cyan-600 to-indigo-600 dark:from-blue-400 dark:via-cyan-300 dark:to-indigo-300">
+                              {isVi ? "Tổng Quan Giai Đoạn" : "Executive Career Overview"}
+                            </span>
+                          </motion.h3>
+                        </div>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-300 font-bold border border-blue-500/20">
+                          {isVi ? `Giai Đoạn ${current.cardYearLabel || current.year}` : `Phase ${current.cardYearLabel || current.year}`}
+                        </span>
+                      </div>
 
-                            <div className="space-y-2">
-                              {current.projects && current.projects.map((proj, pIdx) => (
-                                <div key={pIdx} className="p-2.5 sm:p-3 px-3.5 rounded-xl bg-orange-50/50 dark:bg-orange-950/25 border border-orange-100/70 dark:border-orange-900/30 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between gap-2 hover:bg-orange-100/70 dark:hover:bg-orange-900/40 transition-colors">
-                                  <div className="flex items-center gap-2 min-w-0">
-                                    <ArrowUpRight className="w-4 h-4 text-orange-500 dark:text-orange-400 shrink-0" />
-                                    <span className="truncate">{proj}</span>
-                                  </div>
-                                  <ChevronRight className="w-4 h-4 text-orange-400 shrink-0" />
-                                </div>
-                              ))}
-                            </div>
+                      {/* Lead paragraph */}
+                      <p className="text-slate-700 dark:text-slate-200 text-xs sm:text-sm leading-relaxed mb-2.5 text-justify">
+                        {current.highlightText || current.cardDescription}
+                      </p>
+
+                      {/* 2 Strategic Highlight Cards */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2.5">
+                        <div className="glass-surface-subtle p-2.5 rounded-xl border border-white/40 dark:border-white/10">
+                          <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-bold text-[11px] uppercase tracking-wider mb-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                            <span>{isVi ? "Mở Rộng Hệ Sinh Thái & Dịch Vụ" : "Ecosystem & Service Expansion"}</span>
                           </div>
-                        </motion.div>
+                          <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-snug">
+                            {current.paragraphs && current.paragraphs[0] ? current.paragraphs[0].replace(/\*\*/g, '') : (isVi ? "Quản lý và vận hành toàn diện quy trình chăm sóc khách hàng đa kênh." : "Comprehensive management of omnichannel operations.")}
+                          </p>
+                        </div>
 
-                        {/* Sub Card 05 | CAM KẾT (Commitments Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                        >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-cyan-600 dark:text-cyan-400">05</span>
-                                <ShieldCheck className="w-5 h-5 text-cyan-600 dark:text-cyan-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-cyan-600 dark:text-cyan-400 tracking-wide">
-                                  {isVi ? "Cam kết chất lượng" : "Quality commitment"}
-                                </span>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-                            </div>
-
-                            <div className="space-y-2.5">
-                              {current.commitments && current.commitments.map((cmt, cIdx) => (
-                                <div key={cIdx} className="p-3 px-3.5 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100/70 dark:border-cyan-900/30 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-start gap-2.5 leading-snug">
-                                  <CheckCircle2 className="w-4.5 h-4.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
-                                  <span className="text-body font-normal">{cmt}</span>
-                                </div>
-                              ))}
-                            </div>
+                        <div className="glass-surface-subtle p-2.5 rounded-xl border border-white/40 dark:border-white/10">
+                          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold text-[11px] uppercase tracking-wider mb-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            <span>{isVi ? "Chuyển Đổi Số TMĐT & FinTech" : "Digital Transformation & FinTech"}</span>
                           </div>
-                        </motion.div>
+                          <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-snug">
+                            {current.paragraphs && current.paragraphs[1] ? current.paragraphs[1].replace(/\*\*/g, '') : (isVi ? "Tối ưu hóa quy trình, tích hợp dữ liệu số và kiểm soát rủi ro." : "Optimizing workflows, integrating digital data, and managing risk.")}
+                          </p>
+                        </div>
+                      </div>
 
-                        {/* Sub Card 06 | KỶ NIỆM (Memories Card) */}
-                        <motion.div 
-                          variants={bentoCardVariants}
-                          onClick={() => {
-                            if (current.memoryCompanyId) {
-                              const memoryCard = document.getElementById(`memory-card-${current.memoryCompanyId}`);
-                              if (memoryCard) {
-                                memoryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }
-                            }
+                      {/* Resource Management Box */}
+                      <div className="glass-surface-subtle p-2.5 rounded-xl border-l-3 border-blue-600 dark:border-blue-400 mb-2.5 bg-gradient-to-r from-blue-500/10 via-transparent to-transparent">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="px-1.5 py-0.5 rounded bg-blue-600 text-white font-black text-[9px]">
+                            {isVi ? "QUẢN TRỊ NGUỒN LỰC" : "RESOURCE MANAGEMENT"}
+                          </span>
+                          <span className="font-bold text-blue-700 dark:text-blue-300 text-xs">
+                            {isVi ? `Bộ máy ${current.headcount || 20} nhân sự trực thuộc` : `Managing team of ${current.headcount || 20} members`}
+                          </span>
+                        </div>
+                        <p className="text-slate-700 dark:text-slate-200 text-xs leading-relaxed">
+                          {current.paragraphs && current.paragraphs[2] ? current.paragraphs[2].replace(/\*\*/g, '') : (isVi ? "Trực tiếp chịu trách nhiệm tái cấu trúc phòng ban, đào tạo quản lý cấp trung, xây dựng KPI/SLA và kiểm soát quy trình xử lý khủng hoảng." : "Directly responsible for department restructuring, middle management coaching, KPI/SLA frameworks, and crisis escalation protocols.")}
+                        </p>
+                      </div>
+
+                      {/* Management Philosophy Callout */}
+                      <div className="p-2.5 rounded-xl bg-gradient-to-r from-indigo-500/15 via-blue-500/10 to-teal-500/15 border border-indigo-400/30 text-slate-800 dark:text-slate-100">
+                        <div className="flex items-start gap-2">
+                          <span className="text-lg leading-none text-indigo-600 dark:text-indigo-400 font-serif">“</span>
+                          <div className="text-xs leading-snug font-semibold">
+                            <span className="text-indigo-600 dark:text-indigo-400 font-extrabold uppercase tracking-wide inline">
+                              {isVi ? "Triết Lý Quản Trị: " : "Management Philosophy: "}
+                            </span>
+                            {isVi 
+                              ? "Xây dựng hệ thống vững chắc trước khi mở rộng quy mô — Con người song hành công nghệ — Luôn lấy trải nghiệm khách hàng làm kim chỉ nam."
+                              : "Build solid systems before scaling — People alongside technology — Always center decisions around customer experience."}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* 4. 3-Column Execution & KPI Grid (01 - 02 - 03) */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 items-stretch">
+
+                  {/* KHUNG 01: CÔNG VIỆC */}
+                  <div className="glass-surface p-3.5 sm:p-4 rounded-2xl border border-white/40 dark:border-white/10 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
+                        <span className="text-lg sm:text-xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight font-mono">01</span>
+                        <motion.div
+                          animate={{
+                            y: [0, -3.5, 0],
+                            rotate: [0, 3.5, -3.5, 0],
+                            scale: [1, 1.05, 1],
                           }}
-                          className="w-full rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/90 p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between"
+                          transition={{
+                            duration: 3.6,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                          whileHover={{ scale: 1.18, rotate: 10 }}
+                          className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
                         >
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-2xl font-mono font-black text-rose-600 dark:text-rose-400">06</span>
-                                <ImageIcon className="w-5 h-5 text-rose-600 dark:text-rose-400 stroke-[2.2]" />
-                                <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 tracking-wide">
-                                  {isVi ? "Kỷ niệm trong công việc" : "Work memories"}
-                                </span>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-                            </div>
-
-                            {/* Khung ảnh kỷ niệm */}
-                            <div className="w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-slate-950 relative border border-rose-200/60 dark:border-rose-900/60 shadow-xs">
-                              <img 
-                                src={photos && photos[0]?.src ? photos[0].src : current.photoUrl} 
-                                alt="Thẻ 06 Kỷ niệm" 
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                              />
-                            </div>
-                          </div>
+                          <ClipboardList className="w-5 h-5 text-indigo-600 dark:text-indigo-400 stroke-[2.2] drop-shadow-sm shrink-0" />
                         </motion.div>
+                        <motion.h3 
+                          animate={{ opacity: [0.96, 1, 0.96] }}
+                          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="text-h6 font-bold font-play tracking-tight select-none"
+                        >
+                          <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 dark:from-indigo-400 dark:via-blue-300 dark:to-cyan-300">
+                            {isVi ? "Nhiệm Vụ Trọng Tâm" : "Core Tasks & Duties"}
+                          </span>
+                        </motion.h3>
+                      </div>
 
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <div className="space-y-1.5">
+                        {current.tasks && current.tasks.map((task, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-200">
+                            <span className="w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <span className="text-xs font-medium leading-snug">{task}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* KHUNG 02: DỰ ÁN */}
+                  <div className="glass-surface p-3.5 sm:p-4 rounded-2xl border border-white/40 dark:border-white/10 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
+                        <span className="text-lg sm:text-xl font-black text-amber-600 dark:text-amber-400 tracking-tight font-mono">02</span>
+                        <motion.div
+                          animate={{
+                            y: [0, -3.5, 0],
+                            rotate: [0, 3.5, -3.5, 0],
+                            scale: [1, 1.05, 1],
+                          }}
+                          transition={{
+                            duration: 3.6,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                          whileHover={{ scale: 1.18, rotate: 10 }}
+                          className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
+                        >
+                          <FolderKanban className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm shrink-0" />
+                        </motion.div>
+                        <motion.h3 
+                          animate={{ opacity: [0.96, 1, 0.96] }}
+                          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="text-h6 font-bold font-play tracking-tight select-none"
+                        >
+                          <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 dark:from-amber-400 dark:via-orange-300 dark:to-rose-300">
+                            {isVi ? "Dự Án Triển Khai" : "Featured Key Projects"}
+                          </span>
+                        </motion.h3>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-1.5 text-xs">
+                        {current.projects && current.projects.map((proj, idx) => (
+                          <div key={idx} className="flex items-center gap-2 p-1.5 rounded-lg bg-white/40 dark:bg-slate-800/40 border border-white/30 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-amber-400/50 transition-all">
+                            <FolderKanban className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                            <span className="truncate font-semibold text-xs text-slate-700 dark:text-slate-200">{proj}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* KHUNG 03: KẾT QUẢ */}
+                  <div className="glass-surface p-3.5 sm:p-4 rounded-2xl border border-white/40 dark:border-white/10 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
+                        <span className="text-lg sm:text-xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono">03</span>
+                        <motion.div
+                          animate={{
+                            y: [0, -3.5, 0],
+                            rotate: [0, 3.5, -3.5, 0],
+                            scale: [1, 1.05, 1],
+                          }}
+                          transition={{
+                            duration: 3.6,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                          whileHover={{ scale: 1.18, rotate: 10 }}
+                          className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
+                        >
+                          <Trophy className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.2] drop-shadow-sm shrink-0" />
+                        </motion.div>
+                        <motion.h3 
+                          animate={{ opacity: [0.96, 1, 0.96] }}
+                          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="text-h6 font-bold font-play tracking-tight select-none"
+                        >
+                          <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-300">
+                            {isVi ? "Hiệu Quả & KPI" : "Results & Key Metrics"}
+                          </span>
+                        </motion.h3>
+                      </div>
+                      
+                      <div className="space-y-2.5">
+                        {current.kpis && current.kpis.map((kpi, idx) => {
+                          const label = kpi.label.toLowerCase();
+                          let KpiIcon = CheckCircle2;
+                          if (label.includes("quy trình") || label.includes("sop") || label.includes("chuẩn hóa") || label.includes("phản hồi")) {
+                            KpiIcon = CheckCircle2;
+                          } else if (label.includes("hỗ trợ") || label.includes("cộng đồng") || label.includes("dịch vụ") || label.includes("khách hàng")) {
+                            KpiIcon = Heart;
+                          } else if (label.includes("chỉ số") || label.includes("csat") || label.includes("nps") || label.includes("kpi") || label.includes("hài lòng")) {
+                            KpiIcon = Star;
+                          } else if (label.includes("dự án") || label.includes("hoàn thành") || label.includes("nhiệm vụ") || label.includes("sự kiện")) {
+                            KpiIcon = Trophy;
+                          } else if (label.includes("ai") || label.includes("bot") || label.includes("tự động")) {
+                            KpiIcon = Bot;
+                          } else if (label.includes("vận hành") || label.includes("24/7") || label.includes("sẵn sàng") || label.includes("call")) {
+                            KpiIcon = ShieldCheck;
+                          } else if (label.includes("đào tạo") || label.includes("hướng dẫn")) {
+                            KpiIcon = Award;
+                          } else {
+                            KpiIcon = Target;
+                          }
+
+                          return (
+                            <div key={idx} className="group/kpi">
+                              <div className="flex justify-between items-center text-xs font-semibold mb-1 gap-2">
+                                <div className="flex items-center gap-2 min-w-0 pr-1">
+                                  <div className="w-5.5 h-5.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-2xs border border-emerald-500/25 group-hover/kpi:scale-110 transition-transform">
+                                    <KpiIcon className="w-3.5 h-3.5 stroke-[2.5]" />
+                                  </div>
+                                  <span className="text-slate-800 dark:text-slate-200 truncate font-bold text-[11px] sm:text-xs">{kpi.label}</span>
+                                </div>
+                                <span className="text-emerald-600 dark:text-emerald-400 font-black font-mono text-[11px] shrink-0 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">{kpi.percent}%</span>
+                              </div>
+                              <div className="w-full bg-slate-200 dark:bg-slate-700/60 rounded-full h-1.5 overflow-hidden">
+                                <div 
+                                  className="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 h-1.5 rounded-full transition-all duration-500" 
+                                  style={{ width: `${kpi.percent}%` }} 
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </motion.div>
             )}
         </AnimatePresence>
@@ -2400,7 +2644,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-[24px] border border-slate-200/85 dark:border-slate-800/80 shadow-2xl overflow-hidden flex flex-col text-left"
+              className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/85 dark:border-slate-800/80 shadow-2xl overflow-hidden flex flex-col text-left"
             >
               {/* Header */}
               <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/40">
@@ -2850,39 +3094,59 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative min-h-full flex flex-col justify-start font-sans text-slate-800 dark:text-slate-100 w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3 gap-4 sm:gap-5"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
       <style dangerouslySetInnerHTML={{ __html: `
         #experience button,
         #experience [class*="cursor-pointer"],
-        #experience [id*="card-job-"],
-        #experience #card-milestone-detail {
+        #experience [id*="card-job-"] {
           transition: all 200ms ease-in-out !important;
         }
         #experience button:hover,
         #experience [class*="cursor-pointer"]:hover,
-        #experience [id*="card-job-"]:hover,
-        #experience #card-milestone-detail:hover {
+        #experience [id*="card-job-"]:hover {
           transform: translateY(-4px) !important;
         }
         #experience button:active,
         #experience [class*="cursor-pointer"]:active,
-        #experience [id*="card-job-"]:active,
-        #experience #card-milestone-detail:active {
+        #experience [id*="card-job-"]:active {
           transform: translateY(-4px) scale(0.95) !important;
         }
       ` }} />
 
-      {/* Header Card Kinh nghiệm (Sub Content: 14px – 15px) */}
-      <PageCardHeader pageId="experience">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-5 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
-          <span className="text-body-sub text-subcontent font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
-            <Target className="w-3.5 h-3.5" />
-            <span>{isVi ? "Từ vận hành đến quản trị cấp cao" : "From hands-on operations to senior management"}</span>
-          </span>
-        </div>
-      </PageCardHeader>
+      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
+        {/* Header Thẻ chính Kinh nghiệm thực chiến */}
+        <PageCardHeader pageId="experience">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-4 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0" />
+            <span className="text-body-sub text-subcontent font-semibold font-mono text-blue-700 dark:text-blue-400 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs inline-flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5" />
+              <span>{isVi ? "Từ vận hành đến quản trị cấp cao" : "From hands-on operations to senior management"}</span>
+            </span>
+          </div>
+
+          {/* Category Filter Bar */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 text-xs font-semibold md:ml-auto">
+            {CATEGORIES.map((cat) => {
+              const isActive = filterCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setFilterCategory(cat.id)}
+                  className={cn(
+                    "px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs",
+                    isActive
+                      ? "bg-blue-600 text-white border-blue-500 shadow-xs font-bold"
+                      : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  )}
+                >
+                  {isVi ? cat.vi : cat.en}
+                </button>
+              );
+            })}
+          </div>
+        </PageCardHeader>
 
       <TimelineRoadmapView
         isVi={isVi}
@@ -2909,10 +3173,10 @@ export default function Experience() {
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200">
             <div 
               className={cn(
-                "relative w-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-[10px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
+                "relative w-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-card overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
                 isDetailModalFullscreen 
-                  ? "h-full max-h-[96vh] rounded-[10px]" 
-                  : "h-auto max-h-[88vh] rounded-[10px]"
+                  ? "h-full max-h-[96vh] rounded-card" 
+                  : "h-auto max-h-[88vh] rounded-card"
               )}
             >
               
@@ -2995,7 +3259,7 @@ export default function Experience() {
               <div className="p-4 sm:p-6 md:p-8 space-y-6 overflow-y-auto flex-1 custom-scrollbar text-left">
                 
                 {/* Detailed Job Card inside Modal */}
-                <div className="rounded-[10px] bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 shadow-xl relative overflow-hidden text-left">
+                <div className="rounded-card bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 shadow-xl relative overflow-hidden text-left">
                   {/* Job Banner inside Modal */}
                   {selectedMilestoneForDetail.bannerUrl && (
                     <div className="w-full h-36 sm:h-48 md:h-60 rounded-xl overflow-hidden relative shadow-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 group/modal-banner -mt-1 mb-2">
@@ -3390,6 +3654,7 @@ export default function Experience() {
           </div>
         );
       })()}
+      </div>
 
     </section>
   );

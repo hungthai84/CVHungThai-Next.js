@@ -8,8 +8,11 @@ import {
   Pin,
   MousePointer,
   Sliders,
-  Printer
+  Printer,
+  LayoutGrid,
+  LayoutTemplate
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme, ThemeType } from "../context/ThemeContext";
 import { useFooter } from "../context/FooterContext";
@@ -35,12 +38,15 @@ const SECTION_ORDER = [
   "tuvi",
   "systems",
   "contact",
-  "wallpapers"
+  "wallpapers",
+  "customization",
+  "template"
 ];
 
 function Footer({ theme: propTheme, activeSection = "home", onNavigate }: FooterProps) {
   const themeContext = useTheme();
   const theme = propTheme || themeContext.theme;
+  const borderRadius = themeContext.borderRadius ?? 10;
   const { lang } = useLanguage();
   const isVi = lang === "vi";
 
@@ -57,6 +63,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
   const { setIsCursorModalOpen } = useCursor();
 
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [hoveredFooterIcon, setHoveredFooterIcon] = useState<string | null>(null);
 
   // Unpin & slide-down state logic
   const isPinned = footerConfig.isPinned !== false;
@@ -119,30 +126,27 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     if (btn) btn.click();
   };
 
-  // Base container styles based on theme and style variant
+  // Base container styles matched exactly to Header's glass container styling
   const getFooterSurfaceStyle = () => {
-    if (footerConfig.styleVariant === "solid") {
-      if (theme === "glass-dark-neon") {
-        return "bg-slate-900/95 text-white shadow-2xl backdrop-blur-xl";
-      }
-      return "bg-slate-50/95 text-slate-900 shadow-xl backdrop-blur-xl";
+    switch (theme) {
+      case "glass-dark-neon":
+        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-t border-x border-b-0 border-white/20 text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
+      case "mritech-digital-growth":
+      default:
+        return "bg-white/75 dark:bg-[#121218]/85 border-t border-x border-b-0 border-white/60 dark:border-white/20 text-slate-800 dark:text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(31,38,135,0.12)] dark:shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
     }
-    if (footerConfig.styleVariant === "minimal") {
-      return "bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-xl";
-    }
-    return cn(getUnifiedSurfaceStyle(theme), "shadow-xl");
   };
 
-  // Placement class resolver (Xóa khung viền bao quanh thô cứng, bo cong mượt mà 10px)
+  // Placement class resolver (Áp dụng linh hoạt bo cong góc từ Tùy chỉnh độ bo cong)
   const getPlacementClass = () => {
     switch (footerConfig.placement) {
       case "floating-pill":
         return cn(
-          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-20px)] sm:w-[92%] md:w-[86%] lg:w-[82%] xl:w-[78%] max-w-[1180px] h-[58px] sm:h-[62px] floating-glass-footer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-20px)] sm:w-[92%] md:w-[86%] lg:w-[82%] xl:w-[78%] max-w-[1180px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
           isPinned
-            ? "bottom-2.5 sm:bottom-3.5 rounded-[10px] translate-y-0 opacity-100 ring-1 ring-black/5 dark:ring-white/10"
+            ? "bottom-2.5 sm:bottom-3.5 translate-y-0 opacity-100"
             : cn(
-                "bottom-0 rounded-t-[10px] rounded-b-none ring-1 ring-black/5 dark:ring-white/10",
+                "bottom-0",
                 isSlidDown 
                   ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100" 
                   : "translate-y-0 opacity-100"
@@ -150,7 +154,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
         );
       case "full-width":
         return cn(
-          "fixed bottom-0 left-0 right-0 z-40 w-full h-[60px] sm:h-[64px] rounded-none floating-glass-footer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed bottom-0 left-0 right-0 z-40 w-full h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
           isSlidDown
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
@@ -159,12 +163,21 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
       case "fixed-bottom":
       default:
         return cn(
-          "fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] rounded-t-[10px] rounded-b-none floating-glass-footer ring-1 ring-black/5 dark:ring-white/10 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
           isSlidDown
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
         );
     }
+  };
+
+  const isFloatingPillPinned = footerConfig.placement === "floating-pill" && isPinned;
+
+  const footerCustomStyle: React.CSSProperties = {
+    borderTopLeftRadius: "var(--theme-radius-card, 10px)",
+    borderTopRightRadius: "var(--theme-radius-card, 10px)",
+    borderBottomLeftRadius: isFloatingPillPinned ? "var(--theme-radius-card, 10px)" : "0px",
+    borderBottomRightRadius: isFloatingPillPinned ? "var(--theme-radius-card, 10px)" : "0px",
   };
 
   const getActionCircleStyle = (_type?: "ai" | "sound" | "cursor" | "settings") => {
@@ -186,7 +199,8 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
         id="footer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`group py-1 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-col justify-center cursor-default ${getPlacementClass()} ${getFooterSurfaceStyle()} !rounded-bl-none !rounded-br-none`}
+        style={footerCustomStyle}
+        className={`group py-1 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-col justify-center cursor-default ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
       >
         {/* Unpinned / Auto-hide Grab Handle & Peek Indicator */}
         {(!isPinned || footerConfig.placement === "auto-hide") && (
@@ -232,7 +246,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }
               } : handleNextPage}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:via-blue-500 hover:to-indigo-500 text-white border border-sky-300/90 shadow-md hover:shadow-sky-500/50 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer group/nextbtn relative shrink-0"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:via-blue-500 hover:to-indigo-500 text-white border border-sky-300/90 shadow-md hover:shadow-sky-500/50 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer group/nextbtn relative shrink-0"
               title={currentIndex === SECTION_ORDER.length - 1 ? (isVi ? "Lên đầu trang" : "To top") : (isVi ? "Tới trang tiếp theo" : "Next page")}
             >
               <span className="absolute -inset-0.5 rounded-full bg-sky-400/40 blur-xs group-hover/nextbtn:opacity-100 opacity-60 transition-opacity pointer-events-none -z-10" />
@@ -245,47 +259,133 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
           </div>
         )}
 
-        {/* RIGHT CONTAINER: Controls & Actions (AI, Cài đặt footer, Pin) */}
+        {/* RIGHT CONTAINER: Controls & Actions (Header-like Icon Menu with Glass, Chat AI, Print PDF) */}
         <div className="flex items-center justify-end gap-1.5 sm:gap-2 ml-auto shrink-0 z-10">
-          {/* 3. AI Assistant Action Button */}
-          {footerConfig.showAIAssistant && (
+          {/* Header-styled 3-Icon Liquid Glass Menu */}
+          <div className="flex items-center gap-1 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl relative">
+            {/* 1. Chat AI Icon */}
             <button
               type="button"
               onClick={handleOpenAIAssistant}
-              className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all cursor-pointer relative group/aibtn", getActionCircleStyle("ai"))}
-              title={isVi ? "Trợ lý AI Hỗ trợ" : "AI Assistant"}
+              onMouseEnter={() => setHoveredFooterIcon("chat")}
+              onMouseLeave={() => setHoveredFooterIcon(null)}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 hover:bg-purple-500/15 transition-all cursor-pointer relative group/footericon"
+              title={isVi ? "Chat AI Trợ lý Hỗ trợ" : "AI Assistant Chat"}
             >
-              <Bot className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+              <Bot className="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover/footericon:scale-110 transition-transform" />
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              <AnimatePresence>
+                {hoveredFooterIcon === "chat" && (
+                  <motion.span 
+                    initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                    className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                  >
+                    {isVi ? "Trợ lý AI" : "AI Assistant"}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
-          )}
 
-          {/* Export PDF Bento Action Button */}
-          <button
-            type="button"
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent("open-resume-export"));
-            }}
-            className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all cursor-pointer relative group/pdfbtn", getActionCircleStyle("settings"))}
-            title={isVi ? "Xuất Hồ sơ PDF Bento" : "Export Executive Resume PDF"}
-          >
-            <Printer className="w-4 h-4 text-red-500 dark:text-red-400 group-hover/pdfbtn:scale-110 transition-transform duration-200" />
-          </button>
+            {/* 2. Trang Mẫu (Template Page) Icon */}
+            <button
+              type="button"
+              onClick={() => {
+                if (onNavigate) {
+                  onNavigate("template");
+                } else {
+                  window.dispatchEvent(new CustomEvent("app-navigate", { detail: "template" }));
+                }
+              }}
+              onMouseEnter={() => setHoveredFooterIcon("template")}
+              onMouseLeave={() => setHoveredFooterIcon(null)}
+              className={cn(
+                "w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all cursor-pointer relative group/footericon",
+                activeSection === "template" || activeSection === "glass_dashboard"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105"
+                  : "text-blue-600 dark:text-cyan-400 hover:bg-blue-500/15"
+              )}
+              title={isVi ? "Trang mẫu" : "Sample Template"}
+            >
+              <LayoutTemplate className="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover/footericon:scale-110 transition-transform" />
+              <AnimatePresence>
+                {hoveredFooterIcon === "template" && (
+                  <motion.span 
+                    initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                    className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                  >
+                    {isVi ? "Trang mẫu" : "Sample Template"}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* 3. Print PDF Icon */}
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent("open-resume-export"));
+              }}
+              onMouseEnter={() => setHoveredFooterIcon("print")}
+              onMouseLeave={() => setHoveredFooterIcon(null)}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-rose-500 dark:text-rose-400 hover:bg-rose-500/15 transition-all cursor-pointer relative group/footericon"
+              title={isVi ? "In / Xuất Hồ sơ PDF Bento" : "Print / Export Resume PDF"}
+            >
+              <Printer className="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover/footericon:scale-110 transition-transform" />
+              <AnimatePresence>
+                {hoveredFooterIcon === "print" && (
+                  <motion.span 
+                    initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                    className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                  >
+                    {isVi ? "Xuất PDF" : "Export PDF"}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
 
           {/* Vách ngăn / Vertical Separator Divider */}
           <div className="w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mx-0.5 sm:mx-1 rounded-full shrink-0" />
 
-          {/* 4. Tùy chỉnh đặt Footer Button (Footer Settings) */}
+          {/* 4. Tùy chỉnh hệ thống (Customization Page) */}
           <button
             type="button"
-            onClick={() => openFooterModal("footer")}
+            onClick={() => {
+              if (onNavigate) {
+                onNavigate("customization");
+              } else {
+                window.dispatchEvent(new CustomEvent("app-navigate", { detail: "customization" }));
+              }
+            }}
+            onMouseEnter={() => setHoveredFooterIcon("customization")}
+            onMouseLeave={() => setHoveredFooterIcon(null)}
             className={cn(
-              "w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all cursor-pointer relative",
-              getActionCircleStyle("settings")
+              "w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all cursor-pointer relative",
+              activeSection === "customization"
+                ? "bg-purple-600 text-white shadow-md shadow-purple-500/30 scale-105"
+                : getActionCircleStyle("settings")
             )}
-            title={isVi ? "Tùy chỉnh đặt chân trang (Footer)" : "Footer Customization Settings"}
+            title={isVi ? "Tùy chỉnh hệ thống & giao diện" : "System & UI Customization"}
           >
-            <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 dark:text-purple-400" />
+            <Sliders className={cn("w-4.5 h-4.5 sm:w-5 sm:h-5", activeSection === "customization" ? "text-white" : "text-purple-600 dark:text-purple-400")} />
+            <AnimatePresence>
+              {hoveredFooterIcon === "customization" && (
+                <motion.span 
+                  initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                  className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                >
+                  {isVi ? "Tùy chỉnh" : "Customize"}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
 
           {/* 5. Nút Ghim (Pin Button) */}
@@ -293,7 +393,9 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
             <button
               type="button"
               onClick={handleTogglePin}
-              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer border shadow-2xs ${
+              onMouseEnter={() => setHoveredFooterIcon("pin")}
+              onMouseLeave={() => setHoveredFooterIcon(null)}
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer border shadow-2xs relative ${
                 footerConfig.isPinned
                   ? "bg-blue-600/20 dark:bg-cyan-500/20 text-blue-600 dark:text-cyan-400 border-blue-500/50 dark:border-cyan-400/60 shadow-md scale-105"
                   : "bg-slate-100/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border-slate-200 dark:border-slate-700"
@@ -304,7 +406,19 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
                   : (isVi ? "Đang bỏ ghim (Click để ghim giữ cố định)" : "Footer unpinned (Click to pin fixed)")
               }
             >
-              <Pin className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all duration-300 ${footerConfig.isPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
+              <Pin className={`w-4.5 h-4.5 sm:w-5 sm:h-5 transition-all duration-300 ${footerConfig.isPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
+              <AnimatePresence>
+                {hoveredFooterIcon === "pin" && (
+                  <motion.span 
+                    initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                    className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                  >
+                    {footerConfig.isPinned ? (isVi ? "Bỏ ghim" : "Unpin") : (isVi ? "Ghim" : "Pin")}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
           )}
         </div>

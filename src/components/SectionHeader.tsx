@@ -74,16 +74,14 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
 
   const getGlassStyle = () => {
     if (flat) {
-      return "bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-slate-100 shadow-sm backdrop-blur-md";
+      return "bg-white/70 dark:bg-slate-900/80 border border-white/60 dark:border-white/10 text-slate-800 dark:text-slate-100 shadow-md backdrop-blur-xl";
     }
     switch (theme as any) {
-      case "light":
-        return "glass-surface backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800/80 text-slate-900 dark:text-white shadow-[0_10px_30px_rgba(59,130,246,0.08)]";
-      case "modern-light-glass":
-        return "glass-surface backdrop-blur-2xl border border-indigo-200/80 dark:border-white/20 text-slate-900 dark:text-white shadow-[0_16px_40px_rgba(99,102,241,0.14)]";
       case "glass-dark-neon":
+        return "bg-[#121218]/80 dark:bg-[#121218]/80 border border-white/12 text-slate-100 shadow-[0_8px_32px_0_rgba(0,0,0,0.45)] backdrop-blur-[16px] backdrop-saturate-[180%]";
+      case "mritech-digital-growth":
       default:
-        return "glass-surface backdrop-blur-2xl border border-indigo-400/40 dark:border-cyan-400/40 text-slate-100 dark:text-cyan-50 shadow-[0_16px_40px_rgba(0,0,0,0.7),0_0_20px_rgba(0,240,255,0.15)]";
+        return "bg-white/70 dark:bg-slate-900/70 border border-white/60 dark:border-white/10 text-slate-800 dark:text-slate-100 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] backdrop-blur-[16px] backdrop-saturate-[180%]";
     }
   };
 
@@ -92,7 +90,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
       layoutId={`section-header-card-${activeSectionId || "default"}`}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "relative rounded-[10px] py-3.5 px-4 sm:py-4 sm:px-6 overflow-hidden transition-all duration-300 group flex flex-col justify-between w-full mb-4 sm:mb-6 select-none",
+        "relative rounded-2xl md:rounded-[var(--theme-radius-card,14px)] p-[20px] overflow-hidden transition-all duration-300 group flex flex-col justify-between w-full mb-4 sm:mb-6 select-none",
         getGlassStyle(),
         className
       )}
@@ -114,25 +112,34 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
               className="relative shrink-0 flex items-center justify-center p-0.5"
             >
               {iconType ? (
-                <Suspense fallback={<div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] bg-slate-200/50 dark:bg-slate-800/50 animate-pulse" />}>
-                  <BannerIcon3D iconType={iconType} className="w-10 h-10 sm:w-12 sm:h-12" />
+                <Suspense fallback={<div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] rounded-[14px] bg-slate-200/50 dark:bg-slate-800/50 animate-pulse" />}>
+                  <BannerIcon3D iconType={iconType} className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px]" />
                 </Suspense>
               ) : IconComponent ? (
-                <div
-                  className={cn(
-                    "w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] border flex items-center justify-center transition-all duration-300",
-                    flat
-                      ? "bg-slate-200/80 dark:bg-slate-800/80 border-slate-300/80 dark:border-slate-700/80 shadow-xs"
-                      : "backdrop-blur-md border-indigo-400/40 dark:border-cyan-400/40 shadow-lg bg-gradient-to-tr from-indigo-500/20 to-cyan-400/20",
-                    colorStyle
-                  )}
+                <motion.div
+                  animate={{
+                    y: [0, -3, 0],
+                    rotate: [0, 3, -3, 0],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 3.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ scale: 1.15, rotate: 10 }}
+                  className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
                 >
-                  <IconComponent className={cn("w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]", colorStyle)} />
-                </div>
+                  <IconComponent className={cn("w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] stroke-[1.9] drop-shadow-md transition-colors duration-300", colorStyle)} />
+                </motion.div>
               ) : (
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] bg-indigo-500/10 dark:bg-cyan-400/10 border border-indigo-500/20 dark:border-cyan-400/20 flex items-center justify-center text-indigo-600 dark:text-cyan-400">
-                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
+                <motion.div
+                  animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.08, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative flex items-center justify-center shrink-0 text-indigo-600 dark:text-cyan-400"
+                >
+                  <Sparkles className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] stroke-[1.9]" />
+                </motion.div>
               )}
             </motion.div>
 

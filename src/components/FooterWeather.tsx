@@ -246,14 +246,14 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           onClick={() => {
             setIsOpen(!isOpen);
           }}
-          className="group flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 pr-3 sm:pr-4 rounded-full h-[50px] sm:h-[56px] bg-transparent dark:bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-transparent transition-all duration-200 active:scale-95 cursor-pointer text-left font-['Play',sans-serif]"
+          className="group flex items-center gap-1 xs:gap-1.5 sm:gap-2.5 p-1 xs:p-1.5 sm:p-2 pr-2 xs:pr-2.5 sm:pr-4 rounded-full h-[38px] xs:h-[44px] sm:h-[50px] bg-transparent dark:bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-transparent transition-all duration-200 active:scale-95 cursor-pointer text-left font-['Play',sans-serif] shrink-0 max-w-full"
           title={lang === "vi" ? `Thời tiết: ${weather.temp}°C tại ${weather.city}` : `Weather: ${weather.temp}°C in ${weather.city}`}
         >
           {/* Time & Date Block */}
           {timeString && dateString && (
-            <div className="flex flex-col items-start px-2 py-0.5 border-r border-slate-300/50 dark:border-slate-600/50 pr-3 font-['Play',sans-serif]">
-              <span className="text-xs sm:text-sm font-bold tracking-wider text-blue-600 dark:text-blue-400 font-['Play',sans-serif]">{timeString}</span>
-              <span className="text-3xs sm:text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase font-['Play',sans-serif]">{dateString}</span>
+            <div className="flex flex-col items-start px-1 xs:px-1.5 sm:px-2 py-0.5 border-r border-slate-300/50 dark:border-slate-600/50 pr-1.5 xs:pr-2 sm:pr-3 font-['Play',sans-serif] shrink-0">
+              <span className="text-[11px] xs:text-xs sm:text-sm font-bold tracking-wider text-blue-600 dark:text-blue-400 font-['Play',sans-serif] leading-tight">{timeString}</span>
+              <span className="text-[8px] xs:text-[9px] sm:text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase font-['Play',sans-serif] leading-tight">{dateString}</span>
             </div>
           )}
 
@@ -262,7 +262,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             <GlassWeatherIcon 
               weatherCode={weather.weatherCode} 
               isDay={weather.isDay} 
-              className="w-8 h-8 sm:w-9 sm:h-9 group-hover:scale-110 transition-transform duration-300 drop-shadow-md" 
+              className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8.5 sm:h-8.5 group-hover:scale-110 transition-transform duration-300 drop-shadow-md" 
             />
             {isLoading && (
               <span className="absolute inset-0 rounded-full bg-sky-400/20 animate-ping" />
@@ -270,16 +270,16 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           </div>
 
           {/* Temperature & City pill */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+          <div className="flex items-center gap-1 xs:gap-1.5 shrink-0">
+            <span className="text-xs xs:text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
               {weather.temp}°C
             </span>
-            <span className="text-2xs sm:text-xs font-bold text-slate-500 dark:text-slate-400 hidden xs:inline truncate max-w-[80px]">
+            <span className="text-[10px] xs:text-2xs sm:text-xs font-bold text-slate-500 dark:text-slate-400 hidden xs:inline truncate max-w-[60px] sm:max-w-[90px]">
               • {displayCityShort}
             </span>
           </div>
 
-          <ChevronDown className={`w-3.5 h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 ml-1 ${isOpen ? "rotate-180 text-blue-500" : ""}`} />
+          <ChevronDown className={`w-3 h-3 xs:w-3.5 xs:h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 ml-0.5 xs:ml-1 ${isOpen ? "rotate-180 text-blue-500" : ""}`} />
         </button>
       ) : (
         /* HORIZONTAL SIDEBAR RIGHT TRIGGER */

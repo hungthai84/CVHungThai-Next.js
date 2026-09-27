@@ -1,37 +1,33 @@
-import { PageBanner } from "./PageBanner";
 import React, { useState, useRef, useMemo } from "react";
 import { 
   Plus, 
   Image as ImageIcon, 
-  Images,
   Video as VideoIcon, 
   Trash2, 
   Check, 
   Download, 
   Upload, 
-  RotateCcw, 
   Sliders, 
   Sparkles, 
   Copy, 
   CheckCheck,
   FileJson,
-  Layers,
-  ExternalLink,
   Maximize2,
   RefreshCw,
-  Palette,
-  Eye,
-  Film,
   X,
   Code,
-  Terminal,
-  Play
+  Search,
+  Eye,
+  ArrowUpRight,
+  Info
 } from "lucide-react";
-import { useBackground, PRESET_BACKGROUNDS, INITIAL_WALLPAPERS_FROM_JSON } from "../context/BackgroundContext";
+import { useBackground } from "../context/BackgroundContext";
 import { BackgroundItem } from "../types/background";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { PageCardHeader } from "./PageCardHeader";
+import { WALLPAPER_CATEGORIES, CSS_PRESET_TEMPLATES } from "../data/wallpapers";
+import { playUiSound } from "../lib/sound";
 
 // Helper to format scoped CSS for preview containers
 function formatScopedCss(cssCode: string, scopeClass: string): string {
@@ -45,115 +41,6 @@ function formatScopedCss(cssCode: string, scopeClass: string): string {
   formatted = formatted.replace(/&/g, `.${scopeClass}`);
   return formatted;
 }
-
-const CSS_PRESET_TEMPLATES = [
-  {
-    name: "Cực quang Bryce 4 Màu (CodePen)",
-    category: "css",
-    code: `background-color: #0b0f19;
-position: absolute;
-inset: 0;
-width: 100%;
-height: 100%;
-overflow: hidden;
-
-&::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000");
-  background-size: cover;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(100%);
-  z-index: 1;
-}
-
-&::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 400%;
-  height: 400%;
-  opacity: 0.82;
-  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-  -webkit-animation: gradient_transition_bryce 15s ease infinite;
-  animation: gradient_transition_bryce 15s ease infinite;
-  mix-blend-mode: hard-light;
-  z-index: 2;
-}
-
-@keyframes gradient_transition_bryce {
-  0% { top: 0; left: 0; }
-  50% { top: -200%; left: -200%; }
-  100% { top: 0; left: 0; }
-}
-@-webkit-keyframes gradient_transition_bryce {
-  0% { top: 0; left: 0; }
-  50% { top: -200%; left: -200%; }
-  100% { top: 0; left: 0; }
-}`
-  },
-  {
-    name: "Cực quang Aurora Mesh",
-    category: "css",
-    code: `background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
-position: relative;
-box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);`
-  },
-  {
-    name: "Lưới Neon Cyberpunk 3D",
-    category: "css",
-    code: `background-color: #05050d;
-background-image: 
-  linear-gradient(rgba(0, 242, 254, 0.25) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(0, 242, 254, 0.25) 1px, transparent 1px),
-  radial-gradient(circle at 50% 50%, rgba(255, 0, 128, 0.25) 0%, transparent 70%);
-background-size: 40px 40px, 40px 40px, 100% 100%;`
-  },
-  {
-    name: "Hoàng hôn Sunset Mesh Flow",
-    category: "css",
-    code: `background: radial-gradient(at 0% 0%, #ff5e62 0px, transparent 50%),
-radial-gradient(at 100% 0%, #ff9966 0px, transparent 50%),
-radial-gradient(at 100% 100%, #6b11ff 0px, transparent 50%),
-radial-gradient(at 0% 100%, #3a1c71 0px, transparent 50%),
-#0b0c10;`
-  },
-  {
-    name: "Vũ trụ Sao Cosmic Starfield",
-    category: "css",
-    code: `background-color: #030014;
-background-image: 
-  radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-  radial-gradient(1.5px 1.5px at 40px 70px, #ffffff, rgba(0,0,0,0)),
-  radial-gradient(2px 2px at 90px 40px, #f472b6, rgba(0,0,0,0)),
-  radial-gradient(ellipse at 70% 30%, rgba(99, 102, 241, 0.3) 0%, transparent 60%),
-  radial-gradient(ellipse at 20% 80%, rgba(236, 72, 153, 0.25) 0%, transparent 60%);
-background-size: 150px 150px, 150px 150px, 150px 150px, 100% 100%, 100% 100%;`
-  },
-  {
-    name: "Ma trận Lục bảo Emerald Matrix",
-    category: "css",
-    code: `background: #022c22;
-background-image: 
-  radial-gradient(circle at 100% 150%, #022c22 24%, #059669 25%, #059669 28%, #022c22 29%, #022c22 36%, #059669 36%, #059669 40%, transparent 40%),
-  radial-gradient(circle at 0% 150%, #022c22 24%, #059669 25%, #059669 28%, #022c22 29%, #022c22 36%, #059669 36%, #059669 40%, transparent 40%),
-  radial-gradient(circle at 50% 100%, #10b981 10%, #047857 11%, #047857 23%, #064e3b 24%, #059669 31%, #022c22 44%, transparent 53%);
-background-size: 80px 40px;`
-  },
-  {
-    name: "Lăng kính Tối giản Dark Prism",
-    category: "css",
-    code: `background: radial-gradient(circle at 30% 30%, #312e81 0%, transparent 45%),
-radial-gradient(circle at 70% 70%, #4c1d95 0%, transparent 50%),
-radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);`
-  }
-];
 
 export default function Wallpapers() {
   const { 
@@ -173,29 +60,28 @@ export default function Wallpapers() {
 
   const { lang } = useLanguage();
   const { theme } = useTheme();
-  const isLightMode = theme === 'mritech-digital-growth';
+  const isVi = lang === "vi";
 
+  // Search & Category Filters
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Input states
   const [urlInput, setUrlInput] = useState("");
   const [selectedType, setSelectedType] = useState<'auto' | 'image' | 'video' | 'css' | 'codepen'>('auto');
   const [inputError, setInputError] = useState("");
   const [successToast, setSuccessToast] = useState("");
 
-  // CODEPEN PRESETS
-  const CODEPEN_PRESETS = [
-    { name: "WebGL Metaballs", url: "https://codepen.io/TC5550/pen/WNNWoaO" },
-    { name: "Aurora Shader", url: "https://codepen.io/yuhomyan/pen/OJMejWJ" },
-    { name: "Plasma Fluid", url: "https://codepen.io/RAFA-R3/pen/JjXbWwo" },
-    { name: "Synthwave Grid", url: "https://codepen.io/P1N34PPL3/pen/eYpYmOp" },
-    { name: "Particle Network", url: "https://codepen.io/juliangarnier/pen/LpWpbe" },
-  ];
-
-  // CSS Code Wallpaper state
+  // CSS Code Input state
   const [cssNameInput, setCssNameInput] = useState("");
   const [cssCodeInput, setCssCodeInput] = useState(CSS_PRESET_TEMPLATES[0].code);
   const [inspectingCssItem, setInspectingCssItem] = useState<BackgroundItem | null>(null);
   const [copiedInspectCode, setCopiedInspectCode] = useState(false);
-  
-  // Filtering and Searching (PROMPT #9)
+
+  // Preview Lightbox
+  const [previewItem, setPreviewItem] = useState<BackgroundItem | null>(null);
+
+  // Expandable Control Drawers
   const [showAddControls, setShowAddControls] = useState(false);
   const [showJsonStudio, setShowJsonStudio] = useState(false);
   const [jsonPasteInput, setJsonPasteInput] = useState("");
@@ -206,7 +92,7 @@ export default function Wallpapers() {
 
   const showToast = (msg: string) => {
     setSuccessToast(msg);
-    setTimeout(() => setSuccessToast(""), 3500);
+    setTimeout(() => setSuccessToast(""), 3200);
   };
 
   const handleAddLink = (e: React.FormEvent) => {
@@ -215,27 +101,28 @@ export default function Wallpapers() {
 
     if (selectedType === 'css') {
       if (!cssCodeInput.trim()) {
-        setInputError(lang === "vi" ? "Vui lòng nhập đoạn mã CSS cho hình nền." : "Please enter CSS code for wallpaper.");
+        setInputError(isVi ? "Vui lòng nhập đoạn mã CSS cho hình nền." : "Please enter CSS code for wallpaper.");
         return;
       }
       const ok = addCssBackground(cssNameInput.trim() || "Hình nền CSS Custom", cssCodeInput.trim(), "css");
       if (ok) {
         setCssNameInput("");
-        showToast(lang === "vi" ? "Đã thêm và kích hoạt hình nền CSS thành công!" : "CSS Wallpaper created and applied successfully!");
+        try { playUiSound("click"); } catch {}
+        showToast(isVi ? "Đã thêm và kích hoạt hình nền CSS thành công!" : "CSS Wallpaper created and applied successfully!");
       }
       return;
     }
 
     const trimmed = urlInput.trim();
     if (!trimmed) {
-      setInputError(lang === "vi" ? "Vui lòng dán liên kết ảnh, video hoặc CodePen." : "Please enter a valid image, video or CodePen URL.");
+      setInputError(isVi ? "Vui lòng dán liên kết ảnh, video hoặc CodePen." : "Please enter a valid image, video or CodePen URL.");
       return;
     }
 
     try {
       new URL(trimmed);
     } catch {
-      setInputError(lang === "vi" ? "Định dạng URL không hợp lệ (cần bắt đầu bằng http:// hoặc https://)" : "Invalid URL format.");
+      setInputError(isVi ? "Định dạng URL không hợp lệ (cần bắt đầu bằng http:// hoặc https://)" : "Invalid URL format.");
       return;
     }
 
@@ -244,10 +131,11 @@ export default function Wallpapers() {
     const ok = addBackgroundLink(trimmed, explicitType);
     if (ok) {
       setUrlInput("");
+      try { playUiSound("click"); } catch {}
       showToast(
         isCp || explicitType === 'codepen'
-          ? (lang === "vi" ? "Đã thêm và kích hoạt hình nền CodePen thành công!" : "CodePen Live Wallpaper applied successfully!")
-          : (lang === "vi" ? "Đã thêm và kích hoạt hình nền thành công!" : "Background added and applied successfully!")
+          ? (isVi ? "Đã thêm và kích hoạt hình nền CodePen thành công!" : "CodePen Live Wallpaper applied successfully!")
+          : (isVi ? "Đã thêm và kích hoạt hình nền thành công!" : "Background added and applied successfully!")
       );
     }
   };
@@ -256,7 +144,8 @@ export default function Wallpapers() {
     const json = exportConfigToJson();
     navigator.clipboard.writeText(json);
     setCopiedJson(true);
-    showToast(lang === "vi" ? "Đã sao chép cấu hình JSON vào bộ nhớ tạm!" : "Copied JSON configuration to clipboard!");
+    try { playUiSound("click"); } catch {}
+    showToast(isVi ? "Đã sao chép cấu hình JSON vào bộ nhớ tạm!" : "Copied JSON configuration to clipboard!");
     setTimeout(() => setCopiedJson(false), 2000);
   };
 
@@ -270,6 +159,7 @@ export default function Wallpapers() {
       if (content) {
         const result = importConfigFromJson(content);
         if (result.success) {
+          try { playUiSound("click"); } catch {}
           showToast(result.message);
           setJsonError("");
         } else {
@@ -286,11 +176,12 @@ export default function Wallpapers() {
   const handleImportPastedJson = () => {
     setJsonError("");
     if (!jsonPasteInput.trim()) {
-      setJsonError(lang === "vi" ? "Vui lòng dán chuỗi JSON vào ô bên dưới." : "Please paste a JSON string.");
+      setJsonError(isVi ? "Vui lòng dán chuỗi JSON vào ô bên dưới." : "Please paste a JSON string.");
       return;
     }
     const result = importConfigFromJson(jsonPasteInput);
     if (result.success) {
+      try { playUiSound("click"); } catch {}
       showToast(result.message);
       setJsonPasteInput("");
       setShowJsonStudio(false);
@@ -299,11 +190,29 @@ export default function Wallpapers() {
     }
   };
 
-  // Filtered List (PROMPT #9)
+  // Filtered List
   const filteredWallpapers = useMemo(() => {
-    return config.items;
-  }, [config.items]);
+    return config.items.filter((item) => {
+      const matchCat =
+        activeCategory === "all" ||
+        (activeCategory === "css" && item.type === "css") ||
+        (activeCategory === "codepen" && item.type === "codepen") ||
+        (activeCategory === "video" && item.type === "video") ||
+        (activeCategory === "image" && (item.type === "image" || !item.type));
 
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return matchCat;
+
+      const matchSearch =
+        (item.name || "").toLowerCase().includes(query) ||
+        (item.category || "").toLowerCase().includes(query) ||
+        (item.tags || []).some((t) => t.toLowerCase().includes(query));
+
+      return matchCat && matchSearch;
+    });
+  }, [config.items, activeCategory, searchQuery]);
+
+  // Statistics
   const totalImages = useMemo(() => config.items.filter(item => item.type === 'image' || !item.type).length, [config.items]);
   const totalVideos = useMemo(() => config.items.filter(item => item.type === 'video').length, [config.items]);
   const totalCss = useMemo(() => config.items.filter(item => item.type === 'css').length, [config.items]);
@@ -312,7 +221,7 @@ export default function Wallpapers() {
   return (
     <section 
       id="wallpapers" 
-      className="relative w-full min-h-full flex flex-col justify-start items-center p-3 xs:p-3.5 sm:p-4.5 md:p-6 lg:p-8 font-sans text-slate-800 dark:text-slate-100"
+      className="relative w-full h-auto overflow-hidden flex flex-col justify-start items-stretch p-3.5 sm:p-5 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
     >
       <input
         ref={fileInputRef}
@@ -321,112 +230,165 @@ export default function Wallpapers() {
         onChange={handleFileUpload}
         className="hidden"
       />
-      {/* Main Card Hình nền */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-5 sm:gap-6">
 
-        {/* Container Hình nền - đem nội dung ra ngoài thẻ chứa */}
-        <div 
-          id="info-card-wallpapers" 
-          className="w-full flex flex-col gap-6 relative z-10"
-        >
-          {/* Header Card Hình nền */}
-          <PageCardHeader pageId="wallpapers">
-            {/* Dòng 4: Header Action Bar & Thống kê */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1 w-full">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-5 bg-sky-600 dark:bg-sky-400 rounded-full shrink-0" />
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-xs">
-                  <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
-                    <ImageIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalImages}</span>
-                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">{lang === "vi" ? "ảnh" : "img"}</span>
-                  </div>
-                  <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
-                    <VideoIcon className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalVideos}</span>
-                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">vid</span>
-                  </div>
-                  <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
-                    <Code className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalCss}</span>
-                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CSS</span>
-                  </div>
-                  <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
-                    <span className="text-caption font-black text-slate-800 dark:text-white">{totalCodePen}</span>
-                    <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CodePen</span>
-                  </div>
+      <div className="w-full flex-grow flex flex-col gap-4 sm:gap-5 max-w-7xl mx-auto justify-start relative z-10">
+
+        {/* Header Card */}
+        <PageCardHeader pageId="wallpapers">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1 w-full">
+            {/* Stat Counters */}
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-5 bg-sky-600 dark:bg-sky-400 rounded-full shrink-0" />
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-xs">
+                <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
+                  <ImageIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <span className="text-caption font-black text-slate-800 dark:text-white">{totalImages}</span>
+                  <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">{isVi ? "ảnh" : "img"}</span>
+                </div>
+                <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
+                  <VideoIcon className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+                  <span className="text-caption font-black text-slate-800 dark:text-white">{totalVideos}</span>
+                  <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">video</span>
+                </div>
+                <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
+                  <Code className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-caption font-black text-slate-800 dark:text-white">{totalCss}</span>
+                  <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CSS</span>
+                </div>
+                <div className="px-2.5 py-1 rounded-lg bg-white dark:bg-white/5 border border-slate-200/60 dark:border-transparent flex items-center gap-1.5 text-center shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+                  <span className="text-caption font-black text-slate-800 dark:text-white">{totalCodePen}</span>
+                  <span className="text-3xs text-slate-600 dark:text-slate-400 font-medium">CodePen</span>
                 </div>
               </div>
-
-              <div className="flex flex-wrap items-center gap-2 md:justify-end ml-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAddControls(!showAddControls);
-                  }}
-                  className={`py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border ${
-                    showAddControls 
-                      ? "bg-blue-600 text-white border-blue-500 shadow-blue-500/30" 
-                      : "bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-                  }`}
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>{lang === "vi" ? "Thêm nền" : "Add"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    fileInputRef.current?.click();
-                  }}
-                  className="py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-                >
-                  <Upload className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-                  <span>{lang === "vi" ? "Nhập JSON" : "Import"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    downloadJsonFile();
-                  }}
-                  className="py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
-                >
-                  <Download className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-                  <span>{lang === "vi" ? "Xuất JSON" : "Export"}</span>
-                </button>
-              </div>
             </div>
-          </PageCardHeader>
-          {/* Toast Alert */}
+
+            {/* Quick Actions */}
+            <div className="flex flex-wrap items-center gap-2 md:justify-end ml-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  try { playUiSound("click"); } catch {}
+                  setShowAddControls(!showAddControls);
+                }}
+                className={`py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border ${
+                  showAddControls 
+                    ? "bg-blue-600 text-white border-blue-500 shadow-blue-500/30" 
+                    : "bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+                }`}
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{isVi ? "Thêm nền mới" : "Add Wallpaper"}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  try { playUiSound("click"); } catch {}
+                  setShowJsonStudio(!showJsonStudio);
+                }}
+                className={`py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border ${
+                  showJsonStudio 
+                    ? "bg-purple-600 text-white border-purple-500 shadow-purple-500/30" 
+                    : "bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+                }`}
+              >
+                <FileJson className="w-3.5 h-3.5 text-purple-500" />
+                <span>JSON Studio</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => downloadJsonFile()}
+                className="py-1.5 px-3 rounded-xl font-bold text-caption flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer border bg-white hover:bg-slate-50 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-slate-200 dark:border-slate-800"
+              >
+                <Download className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+                <span>{isVi ? "Xuất JSON" : "Export"}</span>
+              </button>
+            </div>
+          </div>
+        </PageCardHeader>
+
+        {/* Toast Notification */}
         {successToast && (
           <div className="bg-emerald-500/15 border border-emerald-500/30 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-2.5 shadow-sm animate-fadeIn">
-            <CheckCheck className="w-5 h-5 text-emerald-500" />
+            <CheckCheck className="w-5 h-5 text-emerald-500 shrink-0" />
             <span>{successToast}</span>
           </div>
         )}
 
-        {/* ================= 2. QUICK ADD BY URL & DISPLAY TUNING CONTROLS ================= */}
+        {/* Filter Toolbar */}
+        <div className="w-full p-3.5 sm:p-4 rounded-2xl bg-white/75 dark:bg-slate-900/80 border border-white/70 dark:border-white/10 backdrop-blur-md shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          {/* Category Tabs */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {WALLPAPER_CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    try { playUiSound("click"); } catch {}
+                    setActiveCategory(cat.id);
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all duration-200 flex items-center gap-1.5 cursor-pointer border ${
+                    isActive
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md shadow-blue-500/20 scale-[1.02]"
+                      : "bg-white/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-white/10 hover:bg-white/80 dark:hover:bg-slate-800/80"
+                  }`}
+                >
+                  <span>{isVi ? cat.labelVi : cat.labelEn}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative flex-1 sm:w-60 md:max-w-xs">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={isVi ? "Tìm tên, mã, thẻ hình nền..." : "Search name, tag..."}
+              className="w-full pl-8 pr-3 py-1.5 rounded-full text-xs bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all font-play"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* QUICK ADD BY URL & DISPLAY TUNING CONTROLS */}
         {showAddControls && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 animate-fadeIn">
             
-            {/* LEFT: Quick Add URL Box (7 Cols) */}
-            <div className="lg:col-span-7 glass-card p-5 sm:p-6 rounded-3xl border border-brand-border/60 shadow-md space-y-4">
-              <div className="flex items-center justify-end">
+            {/* Quick Add Form */}
+            <div className="lg:col-span-7 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-200 font-play">
+                  {isVi ? "Thêm liên kết hình nền mới:" : "Add New Background:"}
+                </span>
+
                 {/* Type Switcher */}
-                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-brand-border/40 text-2xs font-semibold">
+                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 text-2xs font-semibold">
                   <button
                     type="button"
                     onClick={() => setSelectedType('auto')}
-                    className={`px-2.5 py-1 rounded-lg transition-colors ${selectedType === 'auto' ? 'bg-blue-600 text-white shadow-xs' : 'text-brand-text-muted hover:text-brand-text-light'}`}
+                    className={`px-2.5 py-1 rounded-lg transition-colors ${selectedType === 'auto' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 dark:text-slate-300'}`}
                   >
                     Auto
                   </button>
                   <button
                     type="button"
                     onClick={() => setSelectedType('image')}
-                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'image' ? 'bg-blue-600 text-white shadow-xs' : 'text-brand-text-muted hover:text-brand-text-light'}`}
+                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'image' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 dark:text-slate-300'}`}
                   >
                     <ImageIcon className="w-3 h-3" />
                     <span>Ảnh</span>
@@ -434,7 +396,7 @@ export default function Wallpapers() {
                   <button
                     type="button"
                     onClick={() => setSelectedType('video')}
-                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'video' ? 'bg-blue-600 text-white shadow-xs' : 'text-brand-text-muted hover:text-brand-text-light'}`}
+                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'video' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 dark:text-slate-300'}`}
                   >
                     <VideoIcon className="w-3 h-3" />
                     <span>Video</span>
@@ -442,53 +404,21 @@ export default function Wallpapers() {
                   <button
                     type="button"
                     onClick={() => setSelectedType('css')}
-                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'css' ? 'bg-emerald-600 text-white shadow-xs' : 'text-emerald-500 hover:text-emerald-400 font-bold'}`}
+                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'css' ? 'bg-emerald-600 text-white shadow-xs' : 'text-emerald-500'}`}
                   >
                     <Code className="w-3 h-3" />
                     <span>Code CSS</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedType('codepen')}
-                    className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${selectedType === 'codepen' ? 'bg-amber-600 text-white shadow-xs' : 'text-amber-500 hover:text-amber-400 font-bold'}`}
-                  >
-                    <Sparkles className="w-3 h-3" />
-                    <span>CodePen</span>
-                  </button>
                 </div>
               </div>
 
-              {/* Form depending on selectedType */}
-              {selectedType === 'codepen' ? (
-                <form onSubmit={handleAddLink} className="space-y-3">
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <input
-                      type="text"
-                      placeholder={lang === "vi" ? "Dán link CodePen (VD: https://codepen.io/user/pen/abc123)..." : "Paste CodePen URL (e.g., https://codepen.io/user/pen/abc123)..."}
-                      value={urlInput}
-                      onChange={(e) => setUrlInput(e.target.value)}
-                      className="flex-1 px-4 py-2.5 text-xs sm:text-sm rounded-2xl glass-surface border border-amber-500/40 text-brand-text-light placeholder-brand-text-muted focus:outline-hidden focus:ring-2 focus:ring-amber-500 shadow-inner"
-                    />
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer"
-                    >
-                      <Sparkles className="w-4 h-4" />
-                      <span>{lang === "vi" ? "Thêm nền CodePen" : "Add CodePen Wallpaper"}</span>
-                    </button>
-                  </div>
-
-                  {inputError && (
-                    <p className="text-xs text-red-500 font-medium pl-1">{inputError}</p>
-                  )}
-                </form>
-              ) : selectedType === 'css' ? (
+              {selectedType === 'css' ? (
                 <form onSubmit={handleAddLink} className="space-y-3">
                   {/* Preset chips */}
                   <div className="space-y-1.5">
-                    <span className="text-2xs font-bold text-brand-text-muted flex items-center gap-1">
+                    <span className="text-2xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-amber-400" />
-                      <span>{lang === "vi" ? "Mẫu CSS nền có sẵn (nhấp để nạp code):" : "CSS Wallpaper Presets (click to load):"}</span>
+                      <span>{isVi ? "Mẫu CSS nền có sẵn:" : "CSS Presets:"}</span>
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {CSS_PRESET_TEMPLATES.map((tpl, i) => (
@@ -507,30 +437,27 @@ export default function Wallpapers() {
                     </div>
                   </div>
 
-                  {/* Name Input */}
                   <input
                     type="text"
-                    placeholder={lang === "vi" ? "Tên hình nền CSS (VD: Cực quang Neon...)" : "CSS Wallpaper Name..."}
+                    placeholder={isVi ? "Tên hình nền CSS (VD: Cực quang Neon...)" : "CSS Wallpaper Name..."}
                     value={cssNameInput}
                     onChange={(e) => setCssNameInput(e.target.value)}
-                    className="w-full px-4 py-2 text-xs sm:text-sm rounded-xl glass-surface border border-brand-border text-brand-text-light placeholder-brand-text-muted focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                    className="w-full px-4 py-2 text-xs sm:text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
 
-                  {/* Code Editor with Live Thumbnail Preview */}
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                     <div className="sm:col-span-8">
                       <textarea
-                        rows={5}
-                        placeholder={lang === "vi" ? "Nhập mã CSS (VD: background: linear-gradient(...); hoặc @keyframes...)" : "Enter CSS rules..."}
+                        rows={4}
+                        placeholder={isVi ? "Nhập mã CSS..." : "Enter CSS rules..."}
                         value={cssCodeInput}
                         onChange={(e) => setCssCodeInput(e.target.value)}
-                        className="w-full p-3 text-xs font-mono rounded-xl glass-surface border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 placeholder-brand-text-muted focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                        className="w-full p-3 text-xs font-mono rounded-xl bg-slate-100 dark:bg-slate-800 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
-                    {/* Live mini preview */}
                     <div className="sm:col-span-4 flex flex-col gap-1">
-                      <span className="text-3xs font-bold text-brand-text-muted">Live Preview:</span>
-                      <div className="w-full h-24 rounded-xl border border-brand-border/60 overflow-hidden relative shadow-inner bg-slate-950">
+                      <span className="text-3xs font-bold text-slate-400">Preview:</span>
+                      <div className="w-full h-20 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden relative shadow-inner bg-slate-950">
                         <style dangerouslySetInnerHTML={{ __html: `
                           .quick-preview-css-box {
                             width: 100%;
@@ -545,15 +472,13 @@ export default function Wallpapers() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 pt-1">
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2"
-                    >
-                      <Code className="w-4 h-4" />
-                      <span>{lang === "vi" ? "Thêm & Áp dụng nền CSS" : "Add & Apply CSS Wallpaper"}</span>
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Code className="w-4 h-4" />
+                    <span>{isVi ? "Thêm & Áp dụng nền CSS" : "Add & Apply CSS Wallpaper"}</span>
+                  </button>
 
                   {inputError && (
                     <p className="text-xs text-red-500 font-medium pl-1">{inputError}</p>
@@ -564,17 +489,17 @@ export default function Wallpapers() {
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="text"
-                      placeholder={lang === "vi" ? "Dán link ảnh (.jpg, .png, Unsplash, Pinterest...) hoặc video (.mp4)..." : "Paste image (.jpg, .png...) or video (.mp4, stream) URL..."}
+                      placeholder={isVi ? "Dán link ảnh (.jpg, .png, Unsplash...) hoặc video (.mp4)..." : "Paste image or video URL..."}
                       value={urlInput}
                       onChange={(e) => setUrlInput(e.target.value)}
-                      className="flex-1 px-4 py-2.5 text-xs sm:text-sm rounded-2xl glass-surface border border-brand-border text-brand-text-light placeholder-brand-text-muted focus:outline-hidden focus:ring-2 focus:ring-blue-500 shadow-inner"
+                      className="flex-1 px-4 py-2.5 text-xs sm:text-sm rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <button
                       type="submit"
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0"
+                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>{lang === "vi" ? "Thêm & Áp dụng" : "Add & Apply"}</span>
+                      <span>{isVi ? "Thêm & Áp dụng" : "Add & Apply"}</span>
                     </button>
                   </div>
 
@@ -584,32 +509,30 @@ export default function Wallpapers() {
                 </form>
               )}
 
-              <div className="flex items-center justify-between text-2xs text-brand-text-muted pt-1">
-                <span>💡 {lang === "vi" ? "Hệ thống tự động lưu vĩnh viễn vào bộ nhớ trình duyệt." : "Auto-saved permanently in browser storage."}</span>
+              <div className="flex items-center justify-between text-2xs text-slate-500 dark:text-slate-400 pt-1">
+                <span>💡 {isVi ? "Hệ thống tự động lưu vĩnh viễn vào bộ nhớ trình duyệt." : "Auto-saved permanently in browser storage."}</span>
                 <button 
                   type="button" 
-                  onClick={resetToDefaultJsonLibrary} 
-                  className="text-blue-500 hover:underline flex items-center gap-1 font-semibold"
-                  title="Khôi phục toàn bộ danh sách 25+ hình nền gốc từ file JSON"
+                  onClick={() => resetToDefaultJsonLibrary()} 
+                  className="text-blue-500 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
                 >
                   <RefreshCw className="w-3 h-3" />
-                  <span>{lang === "vi" ? "Khôi phục kho JSON gốc" : "Restore original JSON library"}</span>
+                  <span>{isVi ? "Khôi phục kho vĩnh viễn" : "Restore permanent library"}</span>
                 </button>
               </div>
             </div>
 
-            {/* RIGHT: Live Visual Display Tuning (5 Cols) */}
-            <div className="lg:col-span-5 glass-card p-5 sm:p-6 rounded-3xl border border-brand-border/60 shadow-md flex flex-col justify-between space-y-4">
-              <span className="text-xs font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-wider flex items-center gap-1.5">
+            {/* Display Tuning */}
+            <div className="lg:col-span-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md flex flex-col justify-between space-y-4">
+              <span className="text-xs font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-wider flex items-center gap-1.5 font-play">
                 <Sliders className="w-4 h-4" />
-                <span>{lang === "vi" ? "Tùy chỉnh hiệu ứng hiển thị:" : "Display Tuning:"}</span>
+                <span>{isVi ? "Tùy chỉnh hiệu ứng hiển thị:" : "Display Tuning:"}</span>
               </span>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Overlay Dim Slider */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-play">
                 <div className="space-y-1.5">
-                  <div className="flex justify-between items-center text-xs font-bold text-brand-text-light">
-                    <span>{lang === "vi" ? "Độ tối lớp phủ" : "Overlay Dim"}</span>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <span>{isVi ? "Độ tối lớp phủ" : "Overlay Dim"}</span>
                     <span className="font-mono text-blue-600 dark:text-blue-400">{config.overlayOpacity}%</span>
                   </div>
                   <input
@@ -622,10 +545,9 @@ export default function Wallpapers() {
                   />
                 </div>
 
-                {/* Blur Slider */}
                 <div className="space-y-1.5">
-                  <div className="flex justify-between items-center text-xs font-bold text-brand-text-light">
-                    <span>{lang === "vi" ? "Độ mờ hậu cảnh" : "Background Blur"}</span>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <span>{isVi ? "Độ mờ hậu cảnh" : "Background Blur"}</span>
                     <span className="font-mono text-purple-600 dark:text-purple-400">{config.blurAmount}px</span>
                   </div>
                   <input
@@ -639,84 +561,75 @@ export default function Wallpapers() {
                 </div>
               </div>
 
-              {/* Quick Action Buttons */}
-              <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-border/50">
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                 <button
                   onClick={resetToDefaultGradient}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
                     config.activeType === 'gradient'
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                      : 'glass-surface border-brand-border text-brand-text-light hover:border-blue-400'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-blue-400'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>{lang === "vi" ? "Nền Gradient Mặc Định" : "Default Gradient"}</span>
+                  <span>{isVi ? "Nền Gradient Mặc Định" : "Default Gradient"}</span>
                 </button>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={downloadJsonFile}
-                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-brand-text-light border border-brand-border text-xs transition-colors"
-                    title="Tải file JSON cấu hình"
+                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs transition-colors cursor-pointer"
+                    title={isVi ? "Tải file JSON cấu hình" : "Download JSON config"}
                   >
                     <Download className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={handleCopyJson}
-                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-brand-text-light border border-brand-border text-xs transition-colors"
-                    title="Sao chép JSON"
+                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs transition-colors cursor-pointer"
+                    title={isVi ? "Sao chép JSON" : "Copy JSON"}
                   >
                     {copiedJson ? <CheckCheck className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
-
             </div>
 
           </div>
         )}
 
-        {/* ================= 3. JSON STUDIO EXPANDABLE DRAWER ================= */}
+        {/* JSON STUDIO PANEL */}
         {showJsonStudio && (
-          <div className="glass-card p-6 rounded-3xl border border-purple-500/30 shadow-xl bg-purple-50/20 dark:bg-purple-950/20 space-y-4 animate-fadeIn">
-            <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-purple-200/50 dark:border-purple-800/50">
+          <div className="bg-purple-900/10 dark:bg-purple-950/30 p-5 sm:p-6 rounded-3xl border border-purple-500/30 shadow-xl space-y-4 animate-fadeIn">
+            <div className="flex items-center justify-between pb-3 border-b border-purple-500/20">
               <div className="flex items-center gap-2.5">
                 <FileJson className="w-5 h-5 text-purple-600 dark:text-purple-400 shrink-0" />
-                <h3 className="text-sm sm:text-base font-black text-brand-text-light uppercase tracking-wide">
-                  {lang === "vi" ? "JSON Studio • Nhập / Xuất & Chỉnh sửa trực tiếp" : "JSON Studio • Raw Config & Live Import"}
+                <h3 className="text-sm sm:text-base font-bold text-slate-800 dark:text-white uppercase tracking-wide font-play">
+                  {isVi ? "JSON Studio • Quản lý & Đồng bộ dữ liệu" : "JSON Studio • Raw Config"}
                 </h3>
               </div>
               <div className="flex items-center gap-2">
-
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                  className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
                 >
                   <Upload className="w-3.5 h-3.5" />
-                  <span>{lang === "vi" ? "Tải lên file .json" : "Upload .json"}</span>
+                  <span>{isVi ? "Tải file .json" : "Upload .json"}</span>
                 </button>
                 <button
                   onClick={downloadJsonFile}
-                  className="px-3 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-brand-text-light rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"
+                  className="px-3 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>{lang === "vi" ? "Tải về .json" : "Download .json"}</span>
+                  <span>{isVi ? "Tải về .json" : "Download .json"}</span>
                 </button>
               </div>
             </div>
 
-            <p className="text-xs text-brand-text-muted">
-              {lang === "vi" 
-                ? "Dán chuỗi JSON chứa danh sách hình nền (định dạng `customWallpapers` hoặc `allLinks`) để nhập tự động vào hệ thống:" 
-                : "Paste raw JSON data containing wallpaper links to import directly:"}
-            </p>
-
             <textarea
               rows={5}
-              placeholder={lang === "vi" ? "Dán nội dung file JSON vào đây..." : "Paste JSON string here..."}
+              placeholder={isVi ? "Dán nội dung file JSON vào đây..." : "Paste JSON string here..."}
               value={jsonPasteInput}
               onChange={(e) => setJsonPasteInput(e.target.value)}
-              className="w-full p-3 rounded-2xl glass-surface border border-brand-border text-xs font-mono text-brand-text-light placeholder-brand-text-muted focus:outline-hidden focus:ring-2 focus:ring-purple-500 shadow-inner"
+              className="w-full p-3 rounded-2xl bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-inner"
             />
 
             {jsonError && (
@@ -726,269 +639,299 @@ export default function Wallpapers() {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setJsonPasteInput(exportConfigToJson())}
-                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-brand-text-light text-xs font-bold rounded-xl transition-all"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
               >
-                {lang === "vi" ? "Nạp JSON hiện tại vào ô" : "Fill current JSON"}
+                {isVi ? "Nạp JSON hiện tại" : "Fill current JSON"}
               </button>
               <button
                 onClick={handleImportPastedJson}
-                className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs rounded-xl shadow-md transition-all hover:opacity-90"
+                className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs rounded-xl shadow-md transition-all hover:opacity-90 cursor-pointer"
               >
-                {lang === "vi" ? "Áp dụng JSON vừa dán" : "Import & Sync Now"}
+                {isVi ? "Áp dụng JSON vừa dán" : "Import & Sync Now"}
               </button>
             </div>
           </div>
         )}
 
-        {/* ================= 4. WALLPAPERS INTERACTIVE GALLERY BENTO GRID ================= */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 sm:gap-4">
-          
-          {/* Default Gradient Card */}
-          <div 
-            onDoubleClick={() => {
-              resetToDefaultGradient();
-            }}
-            className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
-              config.activeType === 'gradient'
-                ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
-                : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
-            }`}
-            style={{ padding: 0, borderRadius: 'var(--theme-radius-card, 10px)' }}
-            title={lang === "vi" ? "Mặc định (Plain Mica Gradient) • Nhấp đúp để áp dụng" : "Default Mica Gradient • Double click to apply"}
-          >
-            <div className="w-full h-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white/80 animate-pulse" />
-              
-              {config.activeType === 'gradient' && (
-                <div className="absolute inset-0 bg-blue-600/25 flex items-center justify-center">
-                  <div className="p-1.5 rounded-full bg-blue-600 text-white shadow-md">
-                    <Check className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Hover Tooltip Overlay */}
-            <div className="absolute inset-0 bg-white/95 dark:bg-slate-950/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 pointer-events-none z-10 backdrop-blur-xs">
-              <span className="text-3xs font-black text-slate-900 dark:text-white truncate">
-                {lang === "vi" ? "Mặc định (Gradient)" : "Default Gradient"}
-              </span>
-              <span className="text-3xs text-blue-600 dark:text-blue-300 font-extrabold">
-                {lang === "vi" ? "Nháy đúp để áp dụng" : "Double click to set"}
-              </span>
-            </div>
+        {/* WALLPAPERS BENTO GRID */}
+        {filteredWallpapers.length === 0 ? (
+          <div className="w-full py-12 px-6 rounded-3xl bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center gap-3 font-play">
+            <ImageIcon className="w-10 h-10 text-slate-400" />
+            <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">
+              {isVi ? "Không tìm thấy hình nền phù hợp" : "No matching wallpaper found"}
+            </h4>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setActiveCategory("all");
+              }}
+              className="mt-1 px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer"
+            >
+              {isVi ? "Hiển thị tất cả hình nền" : "Show all wallpapers"}
+            </button>
           </div>
-
-          {/* Wallpapers List from JSON */}
-          {filteredWallpapers.map((item, idx) => {
-            const isActive = config.activeId === item.id;
-            return (
-              <div
-                key={item.id}
-                onDoubleClick={() => {
-                  setActiveBackground(item.id, item.type, item.url, item.cssCode);
-                }}
-                className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
-                  isActive
-                    ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
-                    : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
-                }`}
-                style={{ padding: 0, borderRadius: 'var(--theme-radius-card, 10px)' }}
-                title={`${item.name || `Wallpaper #${idx + 1}`} • ${lang === "vi" ? "Nhấp đúp để áp dụng" : "Double click to apply"}`}
-              >
-                {/* Media Preview Container */}
-                <div className="w-full h-full bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
-                  {item.type === 'css' ? (
-                    <div className="w-full h-full relative overflow-hidden bg-slate-950">
-                      <style dangerouslySetInnerHTML={{ __html: `
-                        .preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')} {
-                          width: 100%;
-                          height: 100%;
-                          position: absolute;
-                          inset: 0;
-                        }
-                        ${formatScopedCss(item.cssCode || '', `preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')}`)}
-                      `}} />
-                      <div className={`preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')} w-full h-full`} />
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 sm:gap-4">
+            
+            {/* Default Gradient Card */}
+            <div 
+              onClick={() => {
+                try { playUiSound("click"); } catch {}
+                resetToDefaultGradient();
+              }}
+              className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
+                config.activeType === 'gradient'
+                  ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
+                  : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
+              }`}
+              style={{ borderRadius: 'var(--theme-radius-card, 12px)' }}
+              title={isVi ? "Nền Gradient mặc định" : "Default Gradient"}
+            >
+              <div className="w-full h-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white/80 animate-pulse" />
+                
+                {config.activeType === 'gradient' && (
+                  <div className="absolute inset-0 bg-blue-600/25 flex items-center justify-center">
+                    <div className="p-1.5 rounded-full bg-blue-600 text-white shadow-md">
+                      <Check className="w-3.5 h-3.5" />
                     </div>
-                  ) : item.type === 'codepen' ? (
-                    <div className="w-full h-full relative overflow-hidden bg-slate-950">
-                      {item.previewUrl && item.previewUrl.startsWith('http') ? (
+                  </div>
+                )}
+              </div>
+
+              {/* Hover Tooltip Overlay */}
+              <div className="absolute inset-0 bg-white/95 dark:bg-slate-950/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 pointer-events-none z-10 backdrop-blur-xs font-play">
+                <span className="text-3xs font-black text-slate-900 dark:text-white truncate">
+                  {isVi ? "Mặc định (Gradient)" : "Default Gradient"}
+                </span>
+                <span className="text-3xs text-blue-600 dark:text-blue-300 font-extrabold">
+                  {isVi ? "Nhấp để kích hoạt" : "Click to apply"}
+                </span>
+              </div>
+            </div>
+
+            {/* Wallpaper Cards */}
+            {filteredWallpapers.map((item, idx) => {
+              const isActive = config.activeId === item.id;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    try { playUiSound("click"); } catch {}
+                    setActiveBackground(item.id, item.type, item.url, item.cssCode);
+                  }}
+                  className={`group cursor-pointer aspect-video p-0 border overflow-hidden transition-all duration-300 relative shadow-md hover:shadow-xl hover:scale-103 ${
+                    isActive
+                      ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50/20 dark:bg-blue-950/20'
+                      : 'border-slate-200/90 dark:border-white/10 bg-white/90 dark:bg-slate-900/90 hover:border-blue-400'
+                  }`}
+                  style={{ borderRadius: 'var(--theme-radius-card, 12px)' }}
+                  title={`${item.name || `Wallpaper #${idx + 1}`}`}
+                >
+                  {/* Media Preview */}
+                  <div className="w-full h-full bg-slate-950 relative overflow-hidden">
+                    {item.type === 'css' ? (
+                      <div className="w-full h-full relative overflow-hidden bg-slate-950">
+                        <style dangerouslySetInnerHTML={{ __html: `
+                          .preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')} {
+                            width: 100%;
+                            height: 100%;
+                            position: absolute;
+                            inset: 0;
+                          }
+                          ${formatScopedCss(item.cssCode || '', `preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')}`)}
+                        `}} />
+                        <div className={`preview-tile-css-${item.id.replace(/[^a-zA-Z0-9_-]/g, '')} w-full h-full`} />
+                      </div>
+                    ) : item.type === 'codepen' ? (
+                      <div className="w-full h-full relative overflow-hidden bg-slate-950">
                         <img
-                          src={item.previewUrl}
+                          src={item.previewUrl || item.url}
                           alt={item.name || "CodePen Wallpaper"}
                           loading="lazy"
                           decoding="async"
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400";
+                          }}
                         />
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-950 via-slate-900 to-black p-3 text-center">
-                          <Sparkles className="w-6 h-6 text-amber-400 mb-1 animate-pulse" />
-                          <span className="text-3xs font-bold text-amber-300">CodePen Live</span>
-                        </div>
-                      )}
-                    </div>
-                  ) : item.type === 'video' ? (
-                    <video
-                      src={item.url}
-                      className="w-full h-full object-cover"
-                      muted
-                      autoPlay
-                      loop
-                      playsInline
-                    />
-                  ) : (
-                    <img
-                      src={item.previewUrl || item.url}
-                      alt={item.name || "Wallpaper"}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-
-                  {/* Active Indicator Overlay */}
-                  {isActive && (
-                    <div className="absolute inset-0 bg-blue-600/25 flex items-center justify-center">
-                      <div className="p-1.5 rounded-full bg-blue-600 text-white shadow-md">
-                        <Check className="w-3.5 h-3.5" />
                       </div>
-                    </div>
-                  )}
-
-                  {/* Type Badge top left (very tiny) */}
-                  <div className={`absolute top-1 left-1 px-1 py-0.2 rounded backdrop-blur-xs text-3xs font-black scale-90 origin-top-left z-10 ${
-                    item.type === 'css'
-                      ? 'bg-emerald-600/90 text-white shadow-xs'
-                      : item.type === 'codepen'
-                      ? 'bg-amber-600/90 text-white shadow-xs'
-                      : 'bg-white/60 dark:bg-black/60 text-slate-900 dark:text-white'
-                  }`}>
-                    {item.type === 'css' ? 'CSS' : item.type === 'codepen' ? 'CODEPEN' : item.type === 'video' ? 'LIVE' : (item.type === 'animated-gradient' || item.type === 'beach') ? 'DYNAMIC' : '4K'}
-                  </div>
-
-                  {/* Floating Action Buttons */}
-                  <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                    {item.type === 'css' && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setInspectingCssItem(item);
+                    ) : item.type === 'video' ? (
+                      <video
+                        src={item.url}
+                        className="w-full h-full object-cover"
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        poster={item.previewUrl || "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=400"}
+                        onError={(e) => {
+                          const target = e.target as HTMLVideoElement;
+                          target.style.display = 'none';
                         }}
-                        className="p-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white transition-colors"
-                        title="Xem / Sao chép mã CSS"
-                      >
-                        <Code className="w-2.5 h-2.5" />
-                      </button>
+                      />
+                    ) : (
+                      <img
+                        src={item.previewUrl || item.url}
+                        alt={item.name || "Wallpaper"}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400";
+                        }}
+                      />
                     )}
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeBackground(item.id);
-                      }}
-                      className="p-1 rounded bg-rose-600/90 hover:bg-rose-700 text-white transition-colors"
-                      title="Xóa"
-                    >
-                      <Trash2 className="w-2.5 h-2.5" />
-                    </button>
-                  </div>
+                    {/* Active Overlay */}
+                    {isActive && (
+                      <div className="absolute inset-0 bg-blue-600/25 flex items-center justify-center">
+                        <div className="p-1.5 rounded-full bg-blue-600 text-white shadow-md">
+                          <Check className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    )}
 
-                  {/* Hover Tooltip Overlay with Title */}
-                  <div className="absolute inset-0 bg-white/95 dark:bg-slate-950/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 pointer-events-none z-10 backdrop-blur-xs">
-                    <span className="text-3xs font-black text-slate-900 dark:text-white truncate">
-                      {item.name || `Wallpaper #${idx + 1}`}
-                    </span>
-                    <span className="text-3xs text-slate-600 dark:text-slate-300 font-semibold capitalize truncate">
-                      {item.category || "custom"} • {item.type}
-                    </span>
-                    <span className="text-3xs text-blue-600 dark:text-blue-300 font-extrabold">
-                      {lang === "vi" ? "Nháy đúp để áp dụng" : "Double click to set"}
-                    </span>
+                    {/* Type Badge */}
+                    <div className={`absolute top-1 left-1 px-1.5 py-0.5 rounded backdrop-blur-xs text-[9px] font-bold z-10 ${
+                      item.type === 'css'
+                        ? 'bg-emerald-600/90 text-white'
+                        : item.type === 'codepen'
+                        ? 'bg-amber-600/90 text-white'
+                        : item.type === 'video'
+                        ? 'bg-cyan-600/90 text-white'
+                        : 'bg-slate-900/70 text-white'
+                    }`}>
+                      {item.type === 'css' ? 'CSS' : item.type === 'codepen' ? 'CODEPEN' : item.type === 'video' ? 'VIDEO' : '4K'}
+                    </div>
+
+                    {/* Hover Action Overlay */}
+                    <div className="absolute inset-0 bg-slate-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2 z-20 font-play">
+                      <div className="flex items-center justify-between">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPreviewItem(item);
+                          }}
+                          className="p-1 rounded-md bg-white/20 hover:bg-white/40 text-white transition cursor-pointer"
+                          title={isVi ? "Xem trước toàn màn hình" : "Full Screen Preview"}
+                        >
+                          <Maximize2 className="w-3 h-3" />
+                        </button>
+
+                        {item.isCustom && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeBackground(item.id);
+                            }}
+                            className="p-1 rounded-md bg-rose-600/80 hover:bg-rose-600 text-white transition cursor-pointer"
+                            title={isVi ? "Xóa hình nền này" : "Delete Wallpaper"}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-white truncate leading-tight">
+                          {item.name}
+                        </p>
+                        <p className="text-[9px] text-blue-300 font-medium">
+                          {isVi ? "Nhấp để kích hoạt" : "Click to apply"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-              </div>
-            );
-          })}
-
-        </div>
+              );
+            })}
+          </div>
+        )}
 
       </div>
 
-      {/* ================= 5. CSS CODE INSPECTOR & COPY MODAL ================= */}
-      {inspectingCssItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/70 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 text-slate-800 dark:text-white">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+      {/* FULL SCREEN PREVIEW LIGHTBOX */}
+      {previewItem && (
+        <div 
+          onClick={() => setPreviewItem(null)}
+          className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-8"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-4xl w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-slate-950 flex flex-col"
+          >
+            {/* Header */}
+            <div className="p-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-white font-play z-10">
+              <span className="text-xs font-bold flex items-center gap-2">
+                <Eye className="w-4 h-4 text-blue-400" />
+                <span>{previewItem.name}</span>
+              </span>
+
               <div className="flex items-center gap-2">
-                <Code className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">{inspectingCssItem.name}</h4>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveBackground(previewItem.id, previewItem.type, previewItem.url, previewItem.cssCode);
+                    setPreviewItem(null);
+                    showToast(isVi ? "Đã áp dụng hình nền thành công!" : "Applied wallpaper successfully!");
+                  }}
+                  className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>{isVi ? "Áp dụng làm nền" : "Apply as Background"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setPreviewItem(null)}
+                  className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => setInspectingCssItem(null)}
-                className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
 
-            {/* Live Preview Box */}
-            <div className="w-full h-32 rounded-2xl overflow-hidden relative border border-slate-700 shadow-inner bg-slate-950">
-              <style dangerouslySetInnerHTML={{ __html: `
-                .modal-inspect-css-box {
-                  width: 100%;
-                  height: 100%;
-                  position: absolute;
-                  inset: 0;
-                }
-                ${formatScopedCss(inspectingCssItem.cssCode || '', 'modal-inspect-css-box')}
-              `}} />
-              <div className="modal-inspect-css-box w-full h-full" />
-            </div>
-
-            {/* Code Block */}
-            <div className="space-y-1">
-              <span className="text-2xs font-bold text-slate-400">CSS Code:</span>
-              <pre className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto max-h-48 whitespace-pre-wrap">
-                {inspectingCssItem.cssCode}
-              </pre>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center justify-between gap-3 pt-2">
-              <button
-                onClick={() => {
-                  if (inspectingCssItem.cssCode) {
-                    navigator.clipboard.writeText(inspectingCssItem.cssCode);
-                    setCopiedInspectCode(true);
-                    setTimeout(() => setCopiedInspectCode(false), 2000);
-                  }
-                }}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors"
-              >
-                {copiedInspectCode ? <CheckCheck className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedInspectCode ? "Đã chép CSS!" : "Sao chép mã CSS"}</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveBackground(inspectingCssItem.id, inspectingCssItem.type, inspectingCssItem.url, inspectingCssItem.cssCode);
-                  setInspectingCssItem(null);
-                  showToast(lang === "vi" ? "Đã áp dụng hình nền CSS!" : "Applied CSS Wallpaper!");
-                }}
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-colors"
-              >
-                <Check className="w-3.5 h-3.5" />
-                <span>{lang === "vi" ? "Áp dụng làm hình nền" : "Apply as Wallpaper"}</span>
-              </button>
+            {/* Preview Frame */}
+            <div className="relative flex-1 w-full h-full overflow-hidden bg-slate-950 flex items-center justify-center">
+              {previewItem.type === 'css' ? (
+                <div className="w-full h-full relative overflow-hidden bg-slate-950">
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    .preview-modal-css-${previewItem.id.replace(/[^a-zA-Z0-9_-]/g, '')} {
+                      width: 100%;
+                      height: 100%;
+                      position: absolute;
+                      inset: 0;
+                    }
+                    ${formatScopedCss(previewItem.cssCode || '', `preview-modal-css-${previewItem.id.replace(/[^a-zA-Z0-9_-]/g, '')}`)}
+                  `}} />
+                  <div className={`preview-modal-css-${previewItem.id.replace(/[^a-zA-Z0-9_-]/g, '')} w-full h-full`} />
+                </div>
+              ) : previewItem.type === 'video' ? (
+                <video
+                  src={previewItem.url}
+                  className="w-full h-full object-cover"
+                  controls
+                  autoPlay
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={previewItem.previewUrl || previewItem.url}
+                  alt={previewItem.name}
+                  className="w-full h-full object-contain"
+                />
+              )}
             </div>
           </div>
         </div>
       )}
-
-      </div>
-
     </section>
   );
 }

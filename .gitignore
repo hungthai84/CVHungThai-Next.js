@@ -1,6 +1,10 @@
 node_modules/
+.next/
+dist/
 build/
 coverage/
+*.tsbuildinfo
+bun.lock
 .DS_Store
 *.log
 .env*

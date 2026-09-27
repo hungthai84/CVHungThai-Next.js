@@ -121,6 +121,7 @@ export default function FooterSettingsModal() {
     openTypographyModal,
     fontScale,
     setFontScale,
+    resetFontScale,
     borderRadius,
     setBorderRadius,
     resetBorderRadius
@@ -175,10 +176,22 @@ export default function FooterSettingsModal() {
 
   const tabs = [
     {
-      id: "footer" as const,
-      nameVi: "Chân trang",
-      nameEn: "Footer",
-      Icon: Sliders,
+      id: "customization" as const,
+      nameVi: "Giao diện",
+      nameEn: "Theme",
+      Icon: Sun,
+    },
+    {
+      id: "colors" as const,
+      nameVi: "Bảng màu",
+      nameEn: "Colors",
+      Icon: Palette,
+    },
+    {
+      id: "radius" as const,
+      nameVi: "Bo cong",
+      nameEn: "Radius",
+      Icon: Layers,
     },
     {
       id: "cursor" as const,
@@ -193,22 +206,16 @@ export default function FooterSettingsModal() {
       Icon: Volume2,
     },
     {
-      id: "customization" as const,
-      nameVi: "Giao diện",
-      nameEn: "Theme & Colors",
-      Icon: Palette,
+      id: "footer" as const,
+      nameVi: "Footer",
+      nameEn: "Footer",
+      Icon: Sliders,
     },
     {
       id: "typography" as const,
       nameVi: "Font chữ",
       nameEn: "Typography",
       Icon: Type,
-    },
-    {
-      id: "radius" as const,
-      nameVi: "Bo cong góc",
-      nameEn: "Radius",
-      Icon: Layers,
     },
   ];
 
@@ -240,10 +247,18 @@ export default function FooterSettingsModal() {
         };
       case "customization":
         return {
-          title: isVi ? "Tùy chỉnh Giao diện, Màu sắc & Ngôn ngữ" : "Theme, Color & Customization",
-          desc: isVi ? "Chuyển đổi giao diện, bộ màu sắc tokens, ngôn ngữ và tùy chọn hiển thị" : "Switch themes, design color tokens, language and display options",
+          title: isVi ? "Tùy chỉnh Giao diện & Ngôn ngữ" : "Theme & Customization",
+          desc: isVi ? "Chuyển đổi giao diện chính, ngôn ngữ và tùy chọn hiển thị" : "Switch main themes, language and display options",
           colorClass: "text-emerald-600 dark:text-emerald-400",
           bgClass: "bg-emerald-500/10 border-emerald-500/20",
+          Icon: Sun,
+        };
+      case "colors":
+        return {
+          title: isVi ? "Bảng Màu Sắc & Design Tokens" : "Color System & Tokens",
+          desc: isVi ? "Các bộ màu sắc Design Tokens chuẩn WCAG AAA và sao chép CSS" : "Design color tokens with WCAG AAA contrast ratios and CSS copy",
+          colorClass: "text-indigo-600 dark:text-cyan-400",
+          bgClass: "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/20 dark:border-cyan-500/20",
           Icon: Palette,
         };
       case "typography":
@@ -354,8 +369,8 @@ export default function FooterSettingsModal() {
               </div>
             </div>
 
-            {/* TAB SELECTOR BAR (Cohesive 6-Tab Navigation) */}
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 bg-slate-200/70 dark:bg-slate-800/90 rounded-2xl border border-slate-300/60 dark:border-slate-700/60 mt-4 shadow-inner">
+            {/* TAB SELECTOR BAR (Cohesive 7-Tab Navigation) */}
+            <div className="grid grid-cols-3 sm:grid-cols-7 gap-1 p-1 bg-slate-200/70 dark:bg-slate-800/90 rounded-2xl border border-slate-300/60 dark:border-slate-700/60 mt-4 shadow-inner">
               {tabs.map((tab) => {
                 const isTabActive = currentTab === tab.id;
                 const TabIcon = tab.Icon;
@@ -1127,6 +1142,18 @@ export default function FooterSettingsModal() {
                       {isVi ? "1. Tỷ lệ kích thước chữ toàn cục" : "1. Global Font Scale"}
                     </label>
                     <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playClick();
+                          resetFontScale();
+                        }}
+                        className="flex items-center gap-1 px-2.5 py-1 text-3xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                        title={isVi ? "Khôi phục kích thước chữ về chuẩn 100%" : "Reset font scale to 100% default"}
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>{isVi ? "Mặc định (100%)" : "Reset (100%)"}</span>
+                      </button>
                       <span className="font-mono text-xs font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-0.5 rounded-full border border-amber-500/30">
                         {fontScale}%
                       </span>

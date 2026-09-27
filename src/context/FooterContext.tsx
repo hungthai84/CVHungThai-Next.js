@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/footer";
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
 
-export type FooterModalTab = "footer" | "cursor" | "sound" | "customization" | "typography" | "radius";
+export type FooterModalTab = "customization" | "colors" | "radius" | "cursor" | "sound" | "footer" | "typography";
 
 interface FooterContextType {
   footerConfig: FooterConfig;
@@ -41,12 +41,14 @@ export function FooterProvider({ children }: { children: ReactNode }) {
   });
 
   const [isFooterModalOpen, setIsFooterModalOpen] = useState(false);
-  const [footerModalTab, setFooterModalTab] = useState<FooterModalTab>("footer");
+  const [footerModalTab, setFooterModalTab] = useState<FooterModalTab>("customization");
   const [isFooterHovered, setIsFooterHovered] = useState(false);
 
   const openFooterModal = (tab: FooterModalTab = "footer") => {
     setFooterModalTab(tab);
-    setIsFooterModalOpen(true);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("app-navigate", { detail: "customization" }));
+    }
   };
 
   // Sync to localStorage

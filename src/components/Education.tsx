@@ -619,7 +619,7 @@ export default function Education() {
     switch (themeName) {
       case "flat-light":
         return {
-          containerClass: "font-play text-slate-900 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-lg bg-white border border-slate-200 shadow-none hover:border-blue-600",
+          containerClass: "font-play text-slate-900 relative flex flex-col justify-between p-[15px] overflow-hidden transition-all duration-300 rounded-lg bg-white border border-slate-200 shadow-none hover:border-blue-600",
           containerStyle: { background: "#ffffff", borderColor: "#e2e8f0" },
           badgeYearClass: "text-2xs font-mono font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded border border-amber-300",
           badgeProfileStyle: { background: "#f1f5f9", borderColor: "#cbd5e1", color: "#2563eb" },
@@ -638,7 +638,7 @@ export default function Education() {
         };
       case "flat-dark":
         return {
-          containerClass: "font-play text-slate-100 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-lg bg-[#1e293b] border border-slate-700 shadow-none hover:border-sky-400",
+          containerClass: "font-play text-slate-100 relative flex flex-col justify-between p-[15px] overflow-hidden transition-all duration-300 rounded-lg bg-[#1e293b] border border-slate-700 shadow-none hover:border-sky-400",
           containerStyle: { background: "#1e293b", borderColor: "#334155" },
           badgeYearClass: "text-2xs font-mono font-bold text-amber-200 bg-amber-950 px-2.5 py-0.5 rounded border border-amber-700",
           badgeProfileStyle: { background: "#334155", borderColor: "#475569", color: "#38bdf8" },
@@ -657,7 +657,7 @@ export default function Education() {
         };
       case "glass-dark-neon":
         return {
-          containerClass: "font-play text-white relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-[10px] border backdrop-blur-xl shadow-lg hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] bg-slate-950/70 border-indigo-500/20 hover:border-indigo-400/40",
+          containerClass: "font-play text-white relative flex flex-col justify-between p-[15px] overflow-hidden transition-all duration-300 rounded-2xl md:rounded-[var(--theme-radius-card,14px)] border backdrop-blur-xl shadow-lg hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] bg-slate-950/70 border-indigo-500/20 hover:border-indigo-400/40",
           containerStyle: {
             background: `linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 27, 75, 0.6) 100%)`,
             borderColor: coverTheme.borderColor
@@ -686,7 +686,7 @@ export default function Education() {
       default:
         // Modern colorful light glassmorphism
         return {
-          containerClass: "font-play text-slate-800 relative flex flex-col justify-between p-6 overflow-hidden transition-all duration-300 rounded-[10px] border backdrop-blur-md shadow-md hover:shadow-xl bg-white/75 dark:bg-slate-900/75 border-white/40 dark:border-white/10 hover:border-indigo-200/50 dark:hover:border-indigo-800/50",
+          containerClass: "font-play text-slate-800 relative flex flex-col justify-between p-[15px] overflow-hidden transition-all duration-300 rounded-2xl md:rounded-[var(--theme-radius-card,14px)] border backdrop-blur-md shadow-md hover:shadow-xl bg-white/75 dark:bg-slate-900/75 border-white/40 dark:border-white/10 hover:border-indigo-200/50 dark:hover:border-indigo-800/50",
           containerStyle: {
             boxShadow: `0 8px 32px 0 rgba(31, 38, 135, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.4)`
           },
@@ -788,11 +788,28 @@ export default function Education() {
       }, 500);
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) return;
+      const step = currentBookStepRef.current;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown") {
+        e.preventDefault();
+        if (step < 4) jumpToBookPage(step + 1);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        if (step > 0) jumpToBookPage(step - 1);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setViewMode(lastViewMode || "grid");
+      }
+    };
+
     el.addEventListener("wheel", handleWheelNative, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       el.removeEventListener("wheel", handleWheelNative);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [viewMode]);
+  }, [viewMode, lastViewMode]);
 
   const openBookMode = (id: number) => {
     safePlay("bookOpen");
@@ -928,8 +945,8 @@ export default function Education() {
       className={cn(
         "relative w-full font-sans text-slate-800 dark:text-slate-100 transition-all duration-300",
         viewMode === "book"
-          ? "h-full min-h-0 flex flex-col justify-between overflow-hidden p-2 sm:p-3 lg:p-4"
-          : "min-h-full flex flex-col justify-start items-center p-2 sm:p-4 lg:p-6"
+          ? "h-full min-h-0 flex flex-col justify-between overflow-hidden p-[15px]"
+          : "h-full flex flex-col justify-start items-stretch p-[15px] bg-transparent overflow-y-auto no-scrollbar"
       )}
     >
       {/* Scoped Custom CSS Animations & Mechanics */}
@@ -1244,10 +1261,11 @@ export default function Education() {
           position: relative;
           transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
           transform-style: preserve-3d;
+          transform: translateX(0px);
         }
 
         .book.is-open {
-          transform: translateX(180px);
+          transform: translateX(0px);
         }
 
         .cover {
@@ -1506,79 +1524,81 @@ export default function Education() {
       `
       }} />
 
-      {/* Page Header Card Học vấn (Consistent across all view modes) */}
-      <PageCardHeader pageId="education" className="w-full mb-4.5">
-        {/* Cụm trái: Số lượng học phần */}
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
-          <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
-            {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
-          </span>
-        </div>
-
-        {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
-        <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
-          {/* Nút lọc danh mục */}
-          <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-            {(["all", "tech", "management"] as const).map((cat) => {
-              const isActive = categoryFilter === cat;
-              const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
-              return (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => {
-                    safePlay("toggle");
-                    setCategoryFilter(cat);
-                  }}
-                  className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                      : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+      {/* Page Header Card Học vấn (Only shown in Grid / Stack view mode, hidden in 3D Book Mode) */}
+      {viewMode !== "book" && (
+        <PageCardHeader pageId="education" className="w-full mb-4.5">
+          {/* Cụm trái: Số lượng học phần */}
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-5 bg-emerald-600 dark:bg-emerald-400 rounded-full shrink-0" />
+            <span className="text-caption text-label font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+              {isVi ? `Hiển thị ${filteredCards.length} học phần` : `Showing ${filteredCards.length} courses`}
+            </span>
           </div>
 
-          {/* Nút chuyển đổi chế độ xem */}
-          <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
-            <button
-              type="button"
-              onClick={() => {
-                safePlay("toggle");
-                setViewMode("grid");
-              }}
-              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                viewMode === "grid"
-                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-              }`}
-            >
-              <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                safePlay("bookOpen");
-                setViewMode("book");
-                setIsBookOpen(true);
-              }}
-              className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-                (viewMode as any) === "book"
-                  ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
-                  : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
-              }`}
-            >
-              <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isVi ? "Sách 3D" : "3D Book"}</span>
-            </button>
+          {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
+          <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
+            {/* Nút lọc danh mục */}
+            <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+              {(["all", "tech", "management"] as const).map((cat) => {
+                const isActive = categoryFilter === cat;
+                const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      safePlay("toggle");
+                      setCategoryFilter(cat);
+                    }}
+                    className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                        : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Nút chuyển đổi chế độ xem */}
+            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => {
+                  safePlay("toggle");
+                  setViewMode("grid");
+                }}
+                className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                  viewMode === "grid"
+                    ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                    : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                }`}
+              >
+                <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
+                <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  safePlay("bookOpen");
+                  setViewMode("book");
+                  setIsBookOpen(true);
+                }}
+                className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                  (viewMode as any) === "book"
+                    ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
+                    : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
+                }`}
+              >
+                <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                <span>{isVi ? "Sách 3D" : "3D Book"}</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </PageCardHeader>
+        </PageCardHeader>
+      )}
 
       {/* Content Area Học Vấn */}
       {/* DẠNG VIEW THẺ NHƯ CARD (DESKTOP: 4 CỘT, DƯỚI DESKTOP: 3 CỘT - FLUID GRID) */}
@@ -1587,7 +1607,7 @@ export default function Education() {
 
           <div
             key={`bento-grid-${categoryFilter}`}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 py-2"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 py-2 items-stretch"
           >
             {filteredCards.map((card, cardIndex) => {
               const themeCard = getThemeCardStyles(theme || "light", card.id);
@@ -1600,7 +1620,7 @@ export default function Education() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
-                  className="w-full min-w-0 flex flex-col h-auto"
+                  className="w-full min-w-0 flex flex-col h-full"
                 >
                   <div
                     tabIndex={0}
@@ -1617,9 +1637,10 @@ export default function Education() {
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => safePlay("hover")}
                     className={cn(
-                      "grid-profile-card group relative flex flex-col justify-between p-3.5 rounded-[10px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full"
+                      "grid-profile-card group relative flex flex-col justify-between p-[15px] border transition-all duration-300 select-none cursor-pointer shadow-sm hover:shadow-xl bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border-slate-200/80 dark:border-cyan-400/35 hover:border-indigo-300 dark:hover:border-cyan-400/60 dark:shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.18),inset_0_1.5px_2px_rgba(255,255,255,0.18)] text-slate-800 dark:text-slate-100 h-full flex-1"
                     )}
                     style={{
+                      borderRadius: "var(--theme-radius-card, var(--theme-radius, 14px))",
                       transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1))',
                       transformStyle: 'preserve-3d'
                     }}
@@ -1676,7 +1697,7 @@ export default function Education() {
                           <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 shrink-0 inline-block align-middle" />
                           <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                         </span>
-                        <span className="font-normal line-clamp-2 inline">{card.desc}</span>
+                        <span className="font-normal line-clamp-4 inline">{card.desc}</span>
                       </div>
                     </div>
 
@@ -1844,7 +1865,7 @@ export default function Education() {
                                 <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0 inline-block align-middle" />
                                 <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                               </span>
-                              <span className="font-normal line-clamp-2 inline">{activeCard.desc}</span>
+                              <span className="font-normal line-clamp-4 inline">{activeCard.desc}</span>
                             </div>
                           </div>
 

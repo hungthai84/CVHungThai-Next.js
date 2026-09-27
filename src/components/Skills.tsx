@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { useLanguage } from "../i18n";
-import { motion } from "motion/react";
+import { useTheme } from "../context/ThemeContext";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Target, 
   Rocket, 
@@ -14,158 +15,94 @@ import {
   Users, 
   Coins, 
   Globe, 
-  Quote,
-  BarChart3,
-  Brain,
-  Workflow,
-  HeartHandshake,
-  TrendingUp,
-  Lightbulb,
-  ShieldAlert
+  BarChart3, 
+  Brain, 
+  Workflow, 
+  HeartHandshake, 
+  TrendingUp, 
+  Lightbulb, 
+  ShieldAlert,
+  Headphones,
+  Zap,
+  Languages,
+  Layers,
+  PieChart,
+  ShieldCheck,
+  LayoutGrid,
+  CheckCircle2,
+  ChevronRight,
+  SlidersHorizontal,
+  Compass
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import { 
+  STRENGTHS_DATA, 
+  WEAKNESSES_DATA, 
+  OPPORTUNITIES_DATA, 
+  THREATS_DATA, 
+  LANGUAGES_DATA,
+  SKILL_GROUPS,
+  SwotSkillItem,
+  SkillGroup
+} from "../data/skillsData";
 
-// Strengths (S) - 7.1. Điểm mạnh: Nền tảng vận hành & lãnh đạo
-const STRENGTHS_DATA = [
-  { labelVi: "Trải nghiệm khách hàng", labelEn: "Customer Experience (CX)", percent: 98, icon: Sparkles },
-  { labelVi: "CRM Contact Center", labelEn: "CRM & Contact Center", percent: 96, icon: Database },
-  { labelVi: "Quản trị Hiệu suất", labelEn: "Performance Management", percent: 96, icon: BarChart3 },
-  { labelVi: "Lãnh đạo & Đội ngũ", labelEn: "Leadership & Team Management", percent: 95, icon: Users },
-  { labelVi: "SOP & Chuẩn hóa", labelEn: "SOP & Standardization", percent: 95, icon: Workflow },
-  { labelVi: "Xử lý Khủng hoảng", labelEn: "Crisis Management", percent: 94, icon: ShieldAlert }
-];
-
-// Weaknesses / Growth (W) - 7.2. Hoàn thiện: Nâng cao năng lực quản trị
-const WEAKNESSES_DATA = [
-  { labelVi: "Tư duy dịch vụ", labelEn: "Service Mindset", percent: 92, icon: HeartHandshake },
-  { labelVi: "Giao tiếp & Đàm phán", labelEn: "Communication & Negotiation", percent: 90, icon: Lightbulb },
-  { labelVi: "Tư duy Chiến lược", labelEn: "Strategic Thinking", percent: 88, icon: Target },
-  { labelVi: "Quản trị Dự án", labelEn: "Project Management", percent: 88, icon: Rocket },
-  { labelVi: "Công nghệ Đổi mới", labelEn: "Innovative Technology", percent: 86, icon: Cpu },
-  { labelVi: "Thiết kế & Lập trình", labelEn: "Design & Programming", percent: 78, icon: Monitor }
-];
-
-// Opportunities (O) Cards - 7.3. Cơ hội phát triển: Công nghệ & chuyển đổi dịch vụ
-const OPPORTUNITIES_CARDS = [
-  {
-    titleVi: "AI & Tự động hóa",
-    titleEn: "AI & Automation",
-    percent: 94,
-    descVi: "Ứng dụng AI, Chatbot, RPA và Tự động hóa để tối ưu vận hành & nâng tầm trải nghiệm.",
-    descEn: "Implementing AI, Chatbots, RPA and automation tools to streamline workflows & CX.",
-    icon: Bot,
-    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
-  },
-  {
-    titleVi: "Kaizen & Cải tiến",
-    titleEn: "Kaizen & Continuous Improvement",
-    percent: 94,
-    descVi: "Cải tiến liên tục quy trình, loại bỏ lãng phí và tối ưu điểm nghẽn vận hành.",
-    descEn: "Continuous process optimization and bottleneck elimination.",
-    icon: TrendingUp,
-    color: "bg-pink-50/80 dark:bg-pink-950/30 text-pink-700 dark:text-pink-300 border-pink-200/80 dark:border-pink-800/60"
-  },
-  {
-    titleVi: "Tối ưu Chi phí",
-    titleEn: "Cost Optimization",
-    percent: 93,
-    descVi: "Tối ưu hóa Cost-to-Serve, nâng cao hiệu quả hoạt động với nguồn lực hợp lý.",
-    descEn: "Optimizing Cost-to-Serve while elevating service quality.",
-    icon: Coins,
-    color: "bg-amber-50/80 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60"
-  },
-  {
-    titleVi: "Chuyển đổi Số",
-    titleEn: "Digital Transformation",
-    percent: 92,
-    descVi: "Thúc đẩy chuyển đổi số, Omnichannel CRM và hệ sinh thái dịch vụ số.",
-    descEn: "Driving digital transformation, Omnichannel CRM, and digital service ecosystems.",
-    icon: Monitor,
-    color: "bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800/60"
-  },
-  {
-    titleVi: "Quản trị Dữ liệu",
-    titleEn: "Data Governance & BI",
-    percent: 91,
-    descVi: "Khai thác dữ liệu, đo lường Realtime Dashboard & cá nhân hóa trải nghiệm.",
-    descEn: "Leveraging operational data and real-time dashboards for touchpoint personalization.",
-    icon: Database,
-    color: "bg-cyan-50/80 dark:bg-cyan-950/30 text-cyan-700 dark:text-cyan-300 border-cyan-200/80 dark:border-cyan-800/60"
-  },
-  {
-    titleVi: "Thiết kế Hệ thống",
-    titleEn: "System Architecture Design",
-    percent: 87,
-    descVi: "Tư vấn và kiến tạo hệ thống Contact Center & CSKH toàn diện.",
-    descEn: "Consulting and building holistic Contact Center & CX architectures.",
-    icon: Workflow,
-    color: "bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60"
+// Helper map to resolve icon components from strings
+const getSkillIcon = (name: string) => {
+  switch (name) {
+    case "Sparkles": return Sparkles;
+    case "Database": return Database;
+    case "BarChart3": return BarChart3;
+    case "Users": return Users;
+    case "Workflow": return Workflow;
+    case "ShieldAlert": return ShieldAlert;
+    case "HeartHandshake": return HeartHandshake;
+    case "Lightbulb": return Lightbulb;
+    case "Target": return Target;
+    case "Rocket": return Rocket;
+    case "Cpu": return Cpu;
+    case "Monitor": return Monitor;
+    case "Bot": return Bot;
+    case "TrendingUp": return TrendingUp;
+    case "Coins": return Coins;
+    case "Headphones": return Headphones;
+    case "Brain": return Brain;
+    case "Zap": return Zap;
+    case "Globe": return Globe;
+    case "Languages": return Languages;
+    case "Layers": return Layers;
+    case "PieChart": return PieChart;
+    case "ShieldCheck": return ShieldCheck;
+    case "LayoutGrid": return LayoutGrid;
+    case "Compass": return Compass;
+    default: return Gem;
   }
-];
-
-// Threats (T) Cards - 7.4. Thách thức: Thích ứng & quản trị biến động
-const THREATS_CARDS = [
-  {
-    titleVi: "Tối ưu Chi phí",
-    titleEn: "Cost Optimization Pressures",
-    percent: 94,
-    descVi: "Yêu cầu hiệu quả vận hành cao hơn với chi phí tối ưu trong nền kinh tế biến động.",
-    descEn: "Higher efficiency requirements under tight operating budgets.",
-    icon: Coins,
-    color: "bg-amber-50/80 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60"
-  },
-  {
-    titleVi: "AI & Thay đổi CSKH",
-    titleEn: "AI & CSKH Transformation",
-    percent: 92,
-    descVi: "AI & Automation thay thế tác vụ lặp lại, đòi hỏi liên tục nâng cấp năng lực.",
-    descEn: "AI automation shifting customer care roles towards higher level empathy.",
-    icon: Bot,
-    color: "bg-red-50/80 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-200/80 dark:border-red-800/60"
-  },
-  {
-    titleVi: "Công nghệ Đổi mới",
-    titleEn: "Rapid Tech Disruption",
-    percent: 90,
-    descVi: "Công nghệ thay đổi nhanh chóng, đòi hỏi khả năng học hỏi và thích ứng liên tục.",
-    descEn: "Fast evolving tech landscape requiring rapid continuous adaptation.",
-    icon: Cpu,
-    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
-  },
-  {
-    titleVi: "Quản trị Rủi ro",
-    titleEn: "Risk Management & Compliance",
-    percent: 90,
-    descVi: "Nhận diện, phòng ngừa và kiểm soát rủi ro vận hành & bảo mật dữ liệu.",
-    descEn: "Proactive risk identification, operational controls, and data security.",
-    icon: ShieldAlert,
-    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
-  },
-  {
-    titleVi: "Cạnh tranh Nhân sự",
-    titleEn: "Talent Competition & Retention",
-    percent: 88,
-    descVi: "Áp lực giữ chân và phát triển nhân tài có tư duy dịch vụ & công nghệ.",
-    descEn: "Competitive market demand for skilled service & tech talent.",
-    icon: Users,
-    color: "bg-orange-50/80 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300 border-orange-200/80 dark:border-orange-800/60"
-  },
-  {
-    titleVi: "Phối hợp Liên phòng",
-    titleEn: "Cross-Functional Collaboration",
-    percent: 86,
-    descVi: "Xóa bỏ rào cản phòng ban, xây dựng Vòng lặp phản hồi (Closed-Loop VoC).",
-    descEn: "Breaking department silos and embedding Closed-Loop VoC feedback loops.",
-    icon: HeartHandshake,
-    color: "bg-blue-50/80 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-800/60"
-  }
-];
+};
 
 export function Skills() {
   const { lang } = useLanguage();
+  const { theme } = useTheme();
   const isVi = lang === "vi";
-  const [selectedSwot, setSelectedSwot] = React.useState<'S' | 'W' | 'O' | 'T'>('S');
+  
+  // Tab view mode: 'swot' (SWOT 4-Quadrant View) or 'detailed' (Detailed 5 Professional Domains)
+  const [viewMode, setViewMode] = useState<"swot" | "detailed">("swot");
+  const [selectedSwot, setSelectedSwot] = useState<"S" | "W" | "O" | "T">("S");
+  const [activeSkillGroupId, setActiveSkillGroupId] = useState<string>("crm-contact-center");
+
+  // Dynamic theme-aware Glass Card classes
+  const getGlassCardClass = useCallback(() => {
+    switch (theme as string) {
+      case "glass-dark-neon":
+        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-cyan-400/25 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_0_20px_rgba(0,240,255,0.15)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.25)]";
+      case "modern-light-glass":
+        return "bg-white/70 dark:bg-slate-900/75 border-white/80 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_10px_30px_0_rgba(100,110,140,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_14px_40px_0_rgba(100,110,140,0.15)]";
+      case "mritech-digital-growth":
+      default:
+        return "bg-white/75 dark:bg-[#121218]/80 border-white/70 dark:border-white/12 backdrop-blur-[18px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_12px_40px_0_rgba(31,38,135,0.12)]";
+    }
+  }, [theme]);
+
+  const activeSkillGroup = SKILL_GROUPS.find(g => g.id === activeSkillGroupId) || SKILL_GROUPS[0];
 
   return (
     <section
@@ -174,474 +111,587 @@ export function Skills() {
     >
       <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
         
-        {/* Page Header */}
+        {/* Page Header with Floating Animated Icon & Metrics */}
         <PageCardHeader pageId="skills">
-          <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-caption font-bold font-mono tracking-wider uppercase text-blue-600 dark:text-cyan-400">
-              {isVi ? "Phân tích SWOT cá nhân" : "Personal SWOT analysis"}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="w-2 h-4 bg-blue-600 dark:bg-cyan-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-blue-700 dark:text-cyan-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
+              {isVi ? "Khung Năng Lực Toàn Diện" : "Comprehensive Skills & SWOT Analysis"}
             </span>
+            <span className="text-[10px] font-mono font-black text-blue-600 dark:text-cyan-400 bg-blue-500/10 dark:bg-cyan-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+              SOP · CRM · AI · CX
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/70 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/10 backdrop-blur-md shadow-xs md:ml-auto">
+            <button
+              onClick={() => setViewMode("swot")}
+              className={cn(
+                "px-3.5 py-1 rounded-full text-xs font-bold font-play tracking-wide transition-all cursor-pointer flex items-center gap-1.5",
+                viewMode === "swot"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              )}
+            >
+              <Gem className="w-3.5 h-3.5" />
+              <span>{isVi ? "Phân tích SWOT (4 Trụ cột)" : "SWOT Matrix View"}</span>
+            </button>
+            <button
+              onClick={() => setViewMode("detailed")}
+              className={cn(
+                "px-3.5 py-1 rounded-full text-xs font-bold font-play tracking-wide transition-all cursor-pointer flex items-center gap-1.5",
+                viewMode === "detailed"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              )}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>{isVi ? "Chuyên môn chi tiết (5 Nhóm)" : "Detailed Competency Groups"}</span>
+            </button>
           </div>
         </PageCardHeader>
 
-        {/* SWOT TAB SWITCHER - "update giao diện đang chọn" */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-2 bg-slate-100/50 dark:bg-slate-900/50 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 max-w-lg mx-auto select-none w-full">
-          {[
-            { id: "S", labelVi: "S · Thế mạnh", labelEn: "S · Strengths", color: "bg-blue-600 text-white shadow-blue-500/15" },
-            { id: "W", labelVi: "W · Hoàn thiện", labelEn: "W · Weaknesses", color: "bg-orange-500 text-white shadow-orange-500/15" },
-            { id: "O", labelVi: "O · Cơ hội", labelEn: "O · Opportunities", color: "bg-purple-600 text-white shadow-purple-500/15" },
-            { id: "T", labelVi: "T · Thách thức", labelEn: "T · Threats", color: "bg-red-600 text-white shadow-red-500/15" }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                try {
-                  const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav");
-                  audio.volume = 0.2;
-                  audio.play();
-                } catch {}
-                setSelectedSwot(tab.id as any);
-              }}
-              className={cn(
-                "flex-1 min-w-[90px] py-2 px-3.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer",
-                selectedSwot === tab.id
-                  ? tab.color + " shadow-md scale-102 ring-1 ring-white/10"
-                  : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100/30 dark:hover:bg-slate-800/30"
-              )}
-            >
-              {isVi ? tab.labelVi : tab.labelEn}
-            </button>
-          ))}
-        </div>
-
         {/* ========================================================================= */}
-        {/* 4-QUADRANT SWOT GRID: 2 CỘT 2 HÀNG Ở MỌI KÍCH THƯỚC [MẪU ÁP DỤNG 16]     */}
-        {/* Outer Card: rounded-[24px] sm:rounded-[28px], padding: p-3.5 sm:p-5 md:p-6*/}
-        {/* Inner Card / Mini Cards: r_inner = 28px - 20px = 8px (rounded-[8px])      */}
-        {/* Inner Icon in Mini Card: r = 8px - 4px = 4px (rounded-[4px])              */}
+        {/* VIEW 1: SWOT 4-QUADRANT BENTO GRID                                        */}
         {/* ========================================================================= */}
-        <div className="flex-1 w-full flex items-center justify-center">
-          <div className="grid grid-cols-2 gap-[15px] items-stretch relative w-full justify-center">
-            
-            {/* 1. STRENGTHS (S) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-              onClick={() => setSelectedSwot('S')}
-              className={cn(
-                "glass-card relative p-4 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer",
-                selectedSwot === 'S'
-                  ? "border-blue-400 dark:border-cyan-400 ring-4 ring-blue-500/15 dark:ring-cyan-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(6,182,212,0.35)]"
-                  : "border-blue-200/40 dark:border-cyan-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
-              )}
-            >
-              {/* Corner Letter S (Bottom Right) with Pulsing Glow */}
-              <div className="absolute bottom-2.5 right-3 sm:bottom-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
-                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-blue-500/20 dark:text-cyan-400/25 group-hover/main:scale-110 group-hover/main:text-blue-500/30 dark:group-hover/main:text-cyan-400/35 transition-all duration-500">
-                  S
-                </span>
-              </div>
-
-              {/* Glass background reflection shine */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-500/5 to-transparent pointer-events-none opacity-0 group-hover/main:opacity-100 transition-opacity duration-700" />
-
-              <div className="relative z-10 w-full">
-                {/* Quadrant Header */}
-                <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3.5 sm:mb-4.5">
-                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 dark:from-cyan-500/20 dark:to-blue-500/20 flex items-center justify-center border border-blue-200/40 dark:border-cyan-500/30 shrink-0">
-                      <Gem className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 text-blue-600 dark:text-cyan-400" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-blue-700 dark:text-cyan-300 truncate font-play">
-                        {isVi ? "7.1. THẾ MẠNH: NỀN TẢNG VẬN HÀNH & LÃNH ĐẠO" : "7.1. STRENGTHS: OPERATIONAL & LEADERSHIP FOUNDATION"}
-                      </h3>
-                    </div>
-                  </div>
-                  
-                  {/* Subtle Badge */}
-                  <span className="hidden sm:inline-block px-2.5 py-1 text-[10px] font-bold text-blue-700 dark:text-cyan-300 bg-blue-500/10 dark:bg-cyan-500/10 rounded-full border border-blue-200/30 dark:border-cyan-500/20 uppercase tracking-wider scale-90">
-                    {isVi ? "Ưu thế" : "Core"}
+        {viewMode === "swot" && (
+          <div className="w-full flex flex-col gap-[15px]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px] items-stretch relative w-full justify-center">
+              
+              {/* 1. STRENGTHS (S) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                onClick={() => setSelectedSwot('S')}
+                className={cn(
+                  "p-[15px] border transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer relative text-left",
+                  "rounded-[var(--theme-radius-card,10px)]",
+                  getGlassCardClass(),
+                  selectedSwot === 'S' && "ring-2 ring-blue-500/30 border-blue-400 dark:border-cyan-400"
+                )}
+              >
+                {/* Corner Letter S (Bottom Right) with Subtle Glow */}
+                <div className="absolute bottom-2.5 right-3 sm:bottom-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
+                  <span className="font-mono font-black text-4xl sm:text-5xl md:text-6xl text-blue-500/15 dark:text-cyan-400/20 group-hover/main:scale-110 transition-transform duration-500">
+                    S
                   </span>
                 </div>
 
-                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-5 line-clamp-3 sm:line-clamp-none">
-                  {isVi 
-                    ? "Những thế mạnh cốt lõi nổi bật nhất đã được chứng minh qua thực tiễn quản trị, vận hành và nâng cấp hệ thống CSKH."
-                    : "Core outstanding strengths proven through management, operation, and CX system elevation."}
-                </p>
-
-                {/* Skills Progress List with Custom Premium Layout & Real Animated Bars */}
-                <div className="flex flex-col gap-2.5 sm:gap-3">
-                  {STRENGTHS_DATA.map((item, index) => {
-                    const ItemIcon = item.icon;
-                    return (
-                      <div 
-                        key={index} 
-                        className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-blue-100 dark:hover:border-cyan-500/15 bg-transparent hover:bg-blue-50/20 dark:hover:bg-cyan-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer"
+                <div className="relative z-10 w-full">
+                  {/* Quadrant Header */}
+                  <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3 mb-3">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                      <motion.div
+                        animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-8 h-8 rounded-xl bg-blue-500/15 dark:bg-cyan-500/20 flex items-center justify-center border border-blue-200/40 dark:border-cyan-500/30 shrink-0"
                       >
-                        {/* Upper row: Label & Percent */}
-                        <div className="flex items-center justify-between gap-2.5 w-full">
-                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <div className="w-5.5 h-5.5 rounded-md bg-blue-500/5 dark:bg-cyan-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-blue-500/10 dark:group-hover/item:bg-cyan-500/20 transition-colors">
-                              <ItemIcon className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0 group-hover/item:scale-110 transition-transform" />
-                            </div>
-                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-blue-600 dark:group-hover/item:text-cyan-300 transition-colors">
-                              {isVi ? item.labelVi : item.labelEn}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/25 dark:border-cyan-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                              {item.percent}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Lower row: Custom Animated Progress Bar */}
-                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${item.percent}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-cyan-500 dark:to-blue-600 rounded-full relative"
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-                          </motion.div>
-                        </div>
+                        <Gem className="w-4.5 h-4.5 text-blue-600 dark:text-cyan-400" />
+                      </motion.div>
+                      <div className="min-w-0">
+                        <h6 className="text-h6 font-bold text-blue-700 dark:text-cyan-300 truncate font-play">
+                          {isVi ? "7.1. Thế mạnh: Nền tảng vận hành & lãnh đạo" : "7.1. Strengths: Operations & Leadership"}
+                        </h6>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* 2. WEAKNESSES (W) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.05 }}
-              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-              onClick={() => setSelectedSwot('W')}
-              className={cn(
-                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
-                selectedSwot === 'W'
-                  ? "border-orange-400 dark:border-amber-400 ring-4 ring-orange-500/15 dark:ring-amber-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(245,158,11,0.35)]"
-                  : "border-orange-200/40 dark:border-amber-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
-              )}
-            >
-              {/* Corner Letter W (Bottom Left) */}
-              <div className="absolute bottom-2.5 left-3 sm:bottom-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
-                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-orange-500/20 dark:text-amber-400/25">
-                  W
-                </span>
-              </div>
-
-              <div className="relative z-10">
-                {/* Quadrant Header */}
-                <div className="flex items-center justify-between gap-2 sm:gap-3 border-b border-orange-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                  <div className="min-w-0">
-                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-orange-700 dark:text-amber-300 truncate font-play">
-                      {isVi ? "7.2. HOÀN THIỆN: NÂNG CAO NĂNG LỰC QUẢN TRỊ" : "7.2. GROWTH: ELEVATING GOVERNANCE COMPETENCIES"}
-                    </h3>
+                    </div>
+                    
+                    <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold text-blue-700 dark:text-cyan-300 bg-blue-500/10 dark:bg-cyan-500/10 rounded-full border border-blue-200/30 dark:border-cyan-500/20 uppercase tracking-wider">
+                      {isVi ? "Ưu thế" : "Core"}
+                    </span>
                   </div>
-                  <TrendingDown className="w-5 h-5 sm:w-7 sm:h-7 text-orange-600 dark:text-amber-400 shrink-0" />
-                </div>
 
-                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
-                  {isVi 
-                    ? "Những khía cạnh cần liên tục hoàn thiện nhằm nâng tầm kỹ năng quản lý thực thi sang quản trị định hướng chiến lược."
-                    : "Capabilities to continuously refine to elevate management from execution to strategic governance."}
-                </p>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-3.5">
+                    {isVi 
+                      ? "Những thế mạnh cốt lõi nổi bật nhất đã được chứng minh qua thực tiễn quản trị, vận hành và nâng cấp hệ thống CSKH."
+                      : "Core outstanding strengths proven through hands-on management, operation, and CX system elevation."}
+                  </p>
 
-                {/* Skills Progress List with matching styling and animated bars */}
-                <div className="flex flex-col gap-2.5 sm:gap-3.5">
-                  {WEAKNESSES_DATA.map((item, index) => {
-                    const ItemIcon = item.icon;
-                    return (
-                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-orange-100 dark:hover:border-amber-500/15 bg-transparent hover:bg-orange-50/20 dark:hover:bg-amber-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
-                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
-                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <div className="w-5.5 h-5.5 rounded-md bg-orange-500/5 dark:bg-amber-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-orange-500/10 dark:group-hover/item:bg-amber-500/20 transition-colors">
-                              <ItemIcon className="w-3.5 h-3.5 text-orange-600 dark:text-amber-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                  {/* Skills Progress List */}
+                  <div className="flex flex-col gap-2.5">
+                    {STRENGTHS_DATA.map((item, index) => {
+                      const ItemIcon = getSkillIcon(item.iconName);
+                      return (
+                        <div 
+                          key={item.id} 
+                          className="flex flex-col gap-1.5 p-2 rounded-xl border border-transparent hover:border-blue-100 dark:hover:border-cyan-500/15 bg-transparent hover:bg-blue-50/30 dark:hover:bg-cyan-500/5 transition-all duration-300 group/item"
+                        >
+                          <div className="flex items-center justify-between gap-2.5 w-full">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-5.5 h-5.5 rounded-md bg-blue-500/10 dark:bg-cyan-500/15 flex items-center justify-center shrink-0">
+                                <ItemIcon className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
+                              </div>
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate font-play">
+                                {isVi ? item.labelVi : item.labelEn}
+                              </span>
                             </div>
-                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-orange-600 dark:group-hover/item:text-amber-400 transition-colors">
-                              {isVi ? item.labelVi : item.labelEn}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-orange-500/10 text-orange-700 dark:text-amber-300 border border-orange-500/25 dark:border-amber-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                            
+                            <span className="px-2 py-0.5 rounded-[6px] bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/25 dark:border-cyan-500/20 text-xs font-mono font-black tracking-wide">
                               {item.percent}%
                             </span>
                           </div>
+
+                          <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${item.percent}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.06 }}
+                              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+                            />
+                          </div>
                         </div>
-
-                        {/* Lower row: Custom Animated Progress Bar */}
-                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${item.percent}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
-                            className="h-full bg-gradient-to-r from-orange-500 to-amber-600 dark:from-amber-500 dark:to-orange-600 rounded-full relative"
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-                          </motion.div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* 3. OPPORTUNITIES (O) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.1 }}
-              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-              onClick={() => setSelectedSwot('O')}
-              className={cn(
-                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
-                selectedSwot === 'O'
-                  ? "border-purple-400 dark:border-purple-500/50 ring-4 ring-purple-500/15 dark:ring-purple-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(168,85,247,0.35)]"
-                  : "border-purple-200/40 dark:border-purple-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
-              )}
-            >
-              {/* Corner Letter O (Top Right) */}
-              <div className="absolute top-2.5 right-3 sm:top-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
-                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-purple-500/20 dark:text-purple-400/25">
-                  O
-                </span>
-              </div>
-
-              <div className="relative z-10">
-                {/* Quadrant Header */}
-                <div className="flex items-center gap-2 sm:gap-3 border-b border-purple-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                  <Rocket className="w-5 h-5 sm:w-7 sm:h-7 text-purple-600 dark:text-purple-400 shrink-0" />
-                  <div className="min-w-0">
-                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-purple-700 dark:text-purple-300 truncate font-play">
-                      {isVi ? "7.3. CƠ HỘI PHÁT TRIỂN: CÔNG NGHỆ & CHUYỂN ĐỔI DỊCH VỤ" : "7.3. OPPORTUNITIES: TECH & SERVICE TRANSFORMATION"}
-                    </h3>
+                      );
+                    })}
                   </div>
                 </div>
+              </motion.div>
 
-                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
-                  {isVi 
-                    ? "Những cơ hội đón đầu làn sóng số, chuyển đổi dịch vụ sang kênh thông minh và ứng dụng AI nâng cao hiệu năng."
-                    : "Excellent avenues to capture digital waves, automating workflows, and leveraging AI models."}
-                </p>
-
-                {/* Skills Progress List with consistent layouts and animated bars */}
-                <div className="flex flex-col gap-2.5 sm:gap-3.5">
-                  {OPPORTUNITIES_CARDS.slice(0, 5).map((item, index) => {
-                    const ItemIcon = item.icon;
-                    return (
-                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-purple-100 dark:hover:border-purple-500/15 bg-transparent hover:bg-purple-50/20 dark:hover:bg-purple-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
-                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
-                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <div className="w-5.5 h-5.5 rounded-md bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-purple-500/10 dark:group-hover/item:bg-purple-500/20 transition-colors">
-                              <ItemIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0 group-hover/item:scale-110 transition-transform" />
-                            </div>
-                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-purple-600 dark:group-hover/item:text-purple-300 transition-colors">
-                              {isVi ? item.titleVi : item.titleEn}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/25 dark:border-purple-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
-                              {item.percent}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Lower row: Custom Animated Progress Bar */}
-                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${item.percent}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
-                            className="h-full bg-gradient-to-r from-purple-500 to-pink-600 dark:from-purple-500 dark:to-pink-600 rounded-full relative"
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-                          </motion.div>
-                        </div>
-                      </div>
-                    );
-                  })}
+              {/* 2. WEAKNESSES / GROWTH (W) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.05 }}
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                onClick={() => setSelectedSwot('W')}
+                className={cn(
+                  "p-[15px] border transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer relative text-left",
+                  "rounded-[var(--theme-radius-card,10px)]",
+                  getGlassCardClass(),
+                  selectedSwot === 'W' && "ring-2 ring-orange-500/30 border-orange-400 dark:border-amber-400"
+                )}
+              >
+                {/* Corner Letter W (Bottom Left) */}
+                <div className="absolute bottom-2.5 left-3 sm:bottom-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
+                  <span className="font-mono font-black text-4xl sm:text-5xl md:text-6xl text-orange-500/15 dark:text-amber-400/20 group-hover/main:scale-110 transition-transform duration-500">
+                    W
+                  </span>
                 </div>
-              </div>
-            </motion.div>
 
-            {/* 4. THREATS (T) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.15 }}
-              style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-              onClick={() => setSelectedSwot('T')}
-              className={cn(
-                "glass-card relative p-3.5 sm:p-5 md:p-6 border bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer",
-                selectedSwot === 'T'
-                  ? "border-red-400 dark:border-red-500/50 ring-4 ring-red-500/15 dark:ring-red-500/25 scale-[1.015] z-10 dark:shadow-[0_0_25px_rgba(239,68,68,0.35)]"
-                  : "border-red-200/40 dark:border-red-500/10 opacity-60 saturate-[0.7] hover:opacity-95"
-              )}
-            >
-              {/* Corner Letter T (Top Left) */}
-              <div className="absolute top-2.5 left-3 sm:top-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
-                <span className="font-mono font-black text-3xl sm:text-4xl md:text-5xl text-red-500/20 dark:text-red-400/25">
-                  T
-                </span>
-              </div>
-
-              <div className="relative z-10">
-                {/* Quadrant Header */}
-                <div className="flex items-center justify-between gap-2 sm:gap-3 border-b border-red-100 dark:border-slate-800 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                  <div className="min-w-0">
-                    <h3 className="text-xs sm:text-sm md:text-md lg:text-[15px] font-black text-red-700 dark:text-red-300 truncate font-play">
-                      {isVi ? "7.4. THÁCH THỨC: THÍCH ỨNG & QUẢN TRỊ BIẾN ĐỘNG" : "7.4. THREATS: ADAPTATION & VOLATILITY MANAGEMENT"}
-                    </h3>
+                <div className="relative z-10 w-full">
+                  <div className="flex items-center justify-between border-b border-orange-100 dark:border-slate-800 pb-3 mb-3">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                      <motion.div
+                        animate={{ y: [0, -3, 0], rotate: [0, -3, 3, 0] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-8 h-8 rounded-xl bg-orange-500/15 dark:bg-amber-500/20 flex items-center justify-center border border-orange-200/40 dark:border-amber-500/30 shrink-0"
+                      >
+                        <TrendingDown className="w-4.5 h-4.5 text-orange-600 dark:text-amber-400" />
+                      </motion.div>
+                      <div className="min-w-0">
+                        <h6 className="text-h6 font-bold text-orange-700 dark:text-amber-300 truncate font-play">
+                          {isVi ? "7.2. Hoàn thiện: Nâng cao năng lực quản trị" : "7.2. Growth: Elevating Competencies"}
+                        </h6>
+                      </div>
+                    </div>
+                    
+                    <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold text-orange-700 dark:text-amber-300 bg-orange-500/10 dark:bg-amber-500/10 rounded-full border border-orange-200/30 dark:border-amber-500/20 uppercase tracking-wider">
+                      {isVi ? "Phát triển" : "Growth"}
+                    </span>
                   </div>
-                  <Target className="w-5 h-5 sm:w-7 sm:h-7 text-red-600 dark:text-red-400 shrink-0" />
-                </div>
 
-                <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-none">
-                  {isVi 
-                    ? "Những thách thức khách quan từ môi trường kinh tế và thay đổi công nghệ đột phá tác động trực tiếp đến dịch vụ."
-                    : "Key external risks from volatile economy and rapid technical changes demanding persistent agility."}
-                </p>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-3.5">
+                    {isVi 
+                      ? "Những khía cạnh cần liên tục hoàn thiện nhằm nâng tầm kỹ năng quản lý thực thi sang quản trị định hướng chiến lược."
+                      : "Capabilities to continuously refine to elevate management from execution to strategic governance."}
+                  </p>
 
-                {/* Skills Progress List with consistent layouts and animated bars */}
-                <div className="flex flex-col gap-2.5 sm:gap-3.5">
-                  {THREATS_CARDS.slice(0, 5).map((item, index) => {
-                    const ItemIcon = item.icon;
-                    return (
-                      <div key={index} className="flex flex-col gap-1.5 p-2 sm:p-2.5 rounded-xl border border-transparent hover:border-red-100 dark:hover:border-red-500/15 bg-transparent hover:bg-red-50/20 dark:hover:bg-red-500/5 shadow-none hover:shadow-2xs transition-all duration-300 group/item cursor-pointer">
-                        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
-                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <div className="w-5.5 h-5.5 rounded-md bg-red-500/5 dark:bg-red-500/10 flex items-center justify-center shrink-0 group-hover/item:bg-red-500/10 dark:group-hover/item:bg-red-500/20 transition-colors">
-                              <ItemIcon className="w-3.5 h-3.5 text-red-600 dark:text-red-400 shrink-0 group-hover/item:scale-110 transition-transform" />
+                  <div className="flex flex-col gap-2.5">
+                    {WEAKNESSES_DATA.map((item, index) => {
+                      const ItemIcon = getSkillIcon(item.iconName);
+                      return (
+                        <div key={item.id} className="flex flex-col gap-1.5 p-2 rounded-xl border border-transparent hover:border-orange-100 dark:hover:border-amber-500/15 bg-transparent hover:bg-orange-50/30 dark:hover:bg-amber-500/5 transition-all duration-300 group/item">
+                          <div className="flex items-center justify-between gap-2.5 w-full">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-5.5 h-5.5 rounded-md bg-orange-500/10 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
+                                <ItemIcon className="w-3.5 h-3.5 text-orange-600 dark:text-amber-400 shrink-0" />
+                              </div>
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate font-play">
+                                {isVi ? item.labelVi : item.labelEn}
+                              </span>
                             </div>
-                            <span className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-red-600 dark:group-hover/item:text-red-300 transition-colors">
-                              {isVi ? item.titleVi : item.titleEn}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                            <span className="px-1.5 sm:px-2 py-0.5 rounded-[6px] bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/25 dark:border-red-500/20 text-[10px] sm:text-xs font-mono font-black tracking-wide">
+                            <span className="px-2 py-0.5 rounded-[6px] bg-orange-500/10 text-orange-700 dark:text-amber-300 border border-orange-500/25 dark:border-amber-500/20 text-xs font-mono font-black tracking-wide">
                               {item.percent}%
                             </span>
                           </div>
-                        </div>
 
-                        {/* Lower row: Custom Animated Progress Bar */}
-                        <div className="w-full h-1 bg-slate-100 dark:bg-slate-800/80 rounded-full overflow-hidden relative">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${item.percent}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.08 }}
-                            className="h-full bg-gradient-to-r from-red-500 to-rose-600 dark:from-red-500 dark:to-rose-600 rounded-full relative"
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-                          </motion.div>
+                          <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${item.percent}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.06 }}
+                              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
 
+              {/* 3. OPPORTUNITIES (O) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.1 }}
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                onClick={() => setSelectedSwot('O')}
+                className={cn(
+                  "p-[15px] border transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer relative text-left",
+                  "rounded-[var(--theme-radius-card,10px)]",
+                  getGlassCardClass(),
+                  selectedSwot === 'O' && "ring-2 ring-purple-500/30 border-purple-400 dark:border-purple-400"
+                )}
+              >
+                {/* Corner Letter O (Top Right) */}
+                <div className="absolute top-2.5 right-3 sm:top-3.5 sm:right-4 z-0 select-none pointer-events-none flex items-center justify-center">
+                  <span className="font-mono font-black text-4xl sm:text-5xl md:text-6xl text-purple-500/15 dark:text-purple-400/20 group-hover/main:scale-110 transition-transform duration-500">
+                    O
+                  </span>
+                </div>
+
+                <div className="relative z-10 w-full">
+                  <div className="flex items-center justify-between border-b border-purple-100 dark:border-slate-800 pb-3 mb-3">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                      <motion.div
+                        animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-8 h-8 rounded-xl bg-purple-500/15 dark:bg-purple-500/20 flex items-center justify-center border border-purple-200/40 dark:border-purple-500/30 shrink-0"
+                      >
+                        <Rocket className="w-4.5 h-4.5 text-purple-600 dark:text-purple-400" />
+                      </motion.div>
+                      <div className="min-w-0">
+                        <h6 className="text-h6 font-bold text-purple-700 dark:text-purple-300 truncate font-play">
+                          {isVi ? "7.3. Cơ hội: Chuyển đổi số & bứt phá" : "7.3. Opportunities: Digital Growth"}
+                        </h6>
+                      </div>
+                    </div>
+                    
+                    <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/10 rounded-full border border-purple-200/30 dark:border-purple-500/20 uppercase tracking-wider">
+                      {isVi ? "Cơ hội" : "Opp"}
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-3.5">
+                    {isVi 
+                      ? "Những cơ hội đón đầu làn sóng số, chuyển đổi dịch vụ sang kênh thông minh và ứng dụng AI nâng cao hiệu năng."
+                      : "Excellent avenues to capture digital waves, automating workflows, and leveraging AI models."}
+                  </p>
+
+                  <div className="flex flex-col gap-2.5">
+                    {OPPORTUNITIES_DATA.map((item, index) => {
+                      const ItemIcon = getSkillIcon(item.iconName);
+                      return (
+                        <div key={item.id} className="flex flex-col gap-1.5 p-2 rounded-xl border border-transparent hover:border-purple-100 dark:hover:border-purple-500/15 bg-transparent hover:bg-purple-50/30 dark:hover:bg-purple-500/5 transition-all duration-300 group/item">
+                          <div className="flex items-center justify-between gap-2.5 w-full">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-5.5 h-5.5 rounded-md bg-purple-500/10 dark:bg-purple-500/15 flex items-center justify-center shrink-0">
+                                <ItemIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
+                              </div>
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate font-play">
+                                {isVi ? item.labelVi : item.labelEn}
+                              </span>
+                            </div>
+                            <span className="px-2 py-0.5 rounded-[6px] bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/25 dark:border-purple-500/20 text-xs font-mono font-black tracking-wide">
+                              {item.percent}%
+                            </span>
+                          </div>
+
+                          <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${item.percent}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.06 }}
+                              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* 4. THREATS (T) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.15 }}
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                onClick={() => setSelectedSwot('T')}
+                className={cn(
+                  "p-[15px] border transition-all duration-300 flex flex-col justify-between overflow-hidden group/main cursor-pointer relative text-left",
+                  "rounded-[var(--theme-radius-card,10px)]",
+                  getGlassCardClass(),
+                  selectedSwot === 'T' && "ring-2 ring-red-500/30 border-red-400 dark:border-rose-400"
+                )}
+              >
+                {/* Corner Letter T (Top Left) */}
+                <div className="absolute top-2.5 left-3 sm:top-3.5 sm:left-4 z-0 select-none pointer-events-none flex items-center justify-center">
+                  <span className="font-mono font-black text-4xl sm:text-5xl md:text-6xl text-red-500/15 dark:text-rose-400/20 group-hover/main:scale-110 transition-transform duration-500">
+                    T
+                  </span>
+                </div>
+
+                <div className="relative z-10 w-full">
+                  <div className="flex items-center justify-between border-b border-red-100 dark:border-slate-800 pb-3 mb-3">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                      <motion.div
+                        animate={{ y: [0, -3, 0], rotate: [0, -3, 3, 0] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-8 h-8 rounded-xl bg-red-500/15 dark:bg-rose-500/20 flex items-center justify-center border border-red-200/40 dark:border-rose-500/30 shrink-0"
+                      >
+                        <Target className="w-4.5 h-4.5 text-red-600 dark:text-rose-400" />
+                      </motion.div>
+                      <div className="min-w-0">
+                        <h6 className="text-h6 font-bold text-red-700 dark:text-rose-300 truncate font-play">
+                          {isVi ? "7.4. Thách thức: Thích ứng & quản trị biến động" : "7.4. Threats: Agility & Volatility"}
+                        </h6>
+                      </div>
+                    </div>
+                    
+                    <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold text-red-700 dark:text-rose-300 bg-red-500/10 dark:bg-rose-500/10 rounded-full border border-red-200/30 dark:border-rose-500/20 uppercase tracking-wider">
+                      {isVi ? "Thách thức" : "Threats"}
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-300 leading-relaxed mb-3.5">
+                    {isVi 
+                      ? "Những thách thức khách quan từ môi trường kinh tế và thay đổi công nghệ đột phá tác động trực tiếp đến dịch vụ."
+                      : "Key external risks from volatile economy and rapid technical changes demanding persistent agility."}
+                  </p>
+
+                  <div className="flex flex-col gap-2.5">
+                    {THREATS_DATA.map((item, index) => {
+                      const ItemIcon = getSkillIcon(item.iconName);
+                      return (
+                        <div key={item.id} className="flex flex-col gap-1.5 p-2 rounded-xl border border-transparent hover:border-red-100 dark:hover:border-rose-500/15 bg-transparent hover:bg-red-50/30 dark:hover:bg-rose-500/5 transition-all duration-300 group/item">
+                          <div className="flex items-center justify-between gap-2.5 w-full">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-5.5 h-5.5 rounded-md bg-red-500/10 dark:bg-rose-500/15 flex items-center justify-center shrink-0">
+                                <ItemIcon className="w-3.5 h-3.5 text-red-600 dark:text-rose-400 shrink-0" />
+                              </div>
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate font-play">
+                                {isVi ? item.labelVi : item.labelEn}
+                              </span>
+                            </div>
+                            
+                            {/* CRITICAL: Must use label 'Mức độ tác động' instead of 'Mức độ kỹ năng' */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className="hidden xs:inline-block text-[10px] text-red-600/80 dark:text-rose-400/80 font-mono font-medium">
+                                {isVi ? "Mức độ tác động" : "Impact level"}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-[6px] bg-red-500/10 text-red-700 dark:text-rose-300 border border-red-500/25 dark:border-rose-500/20 text-xs font-mono font-black tracking-wide">
+                                {item.percent}%
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${item.percent}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.85, ease: "easeOut", delay: index * 0.06 }}
+                              className="h-full bg-gradient-to-r from-red-500 to-rose-600 rounded-full"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ========================================================================= */}
-        {/* LANGUAGES SECTION: 7.5. NĂNG LỰC NGÔN NGỮ                                  */}
+        {/* VIEW 2: 5 DETAILED SPECIALIZED COMPETENCY DOMAINS                         */}
         {/* ========================================================================= */}
-        <div 
-          style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-          className="glass-card w-full p-6 border border-slate-200/90 dark:border-cyan-500/30 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl mt-4 select-none flex flex-col gap-5 shadow-xs dark:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300"
+        {viewMode === "detailed" && (
+          <div className="w-full flex flex-col gap-[15px]">
+            {/* Category Sub-Tabs */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+              {SKILL_GROUPS.map((group) => {
+                const isActive = activeSkillGroupId === group.id;
+                const GroupIcon = getSkillIcon(group.iconName);
+                return (
+                  <button
+                    key={group.id}
+                    onClick={() => setActiveSkillGroupId(group.id)}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-full text-xs font-bold font-play tracking-wide transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 border",
+                      isActive
+                        ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                        : "bg-white/70 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800"
+                    )}
+                  >
+                    <GroupIcon className="w-3.5 h-3.5" />
+                    <span>{isVi ? `Khối ${group.code}: ${group.titleVi.replace(/KỸ NĂNG CHUYÊN MÔN|NĂNG LỰC|ĐỔI MỚI SÁNG TẠO &/i, "").trim()}` : `Group ${group.code}`}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Group Showcase Card */}
+            <motion.div
+              key={activeSkillGroup.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className={cn(
+                "p-5 sm:p-7 border flex flex-col gap-5 text-left relative overflow-hidden",
+                "rounded-[var(--theme-radius-card,10px)]",
+                getGlassCardClass()
+              )}
+            >
+              {/* Group Header */}
+              <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/10">
+                <div>
+                  <span className="text-2xs font-mono font-bold text-blue-600 dark:text-cyan-400 uppercase tracking-wider block">
+                    {isVi ? `NHÓM CHUYÊN MÔN ${activeSkillGroup.code}` : `COMPETENCY GROUP ${activeSkillGroup.code}`}
+                  </span>
+                  <h5 className="text-h6 font-bold text-slate-900 dark:text-white font-play mt-0.5">
+                    {isVi ? activeSkillGroup.titleVi : activeSkillGroup.titleEn}
+                  </h5>
+                  <p className="text-xs text-slate-500 dark:text-slate-300 font-medium mt-1 max-w-3xl">
+                    {isVi ? activeSkillGroup.subtitleVi : activeSkillGroup.subtitleEn}
+                  </p>
+                </div>
+              </div>
+
+              {/* Skills Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {activeSkillGroup.skills.map((skill) => {
+                  const SkillIcon = getSkillIcon(skill.iconName);
+                  return (
+                    <div
+                      key={skill.id}
+                      className="p-4 rounded-2xl bg-white/60 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between gap-3 shadow-2xs hover:border-blue-300 dark:hover:border-cyan-500/40 transition-all"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-8 h-8 rounded-xl bg-blue-500/10 dark:bg-cyan-500/20 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                            <SkillIcon className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <h6 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white font-play truncate">
+                              {isVi ? skill.nameVi : skill.nameEn}
+                            </h6>
+                            <span className="text-[10px] font-mono text-blue-600 dark:text-cyan-400 font-bold block truncate">
+                              {isVi ? skill.levelVi : skill.levelEn}
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className="px-2 py-0.5 rounded-[6px] bg-blue-500/10 text-blue-700 dark:text-cyan-300 text-xs font-mono font-black shrink-0 border border-blue-500/20">
+                          {skill.percentage}%
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                        {isVi ? skill.descriptionVi : skill.descriptionEn}
+                      </p>
+
+                      {/* Tool Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200/50 dark:border-white/5 mt-auto">
+                        {skill.tools.map((tool, tIdx) => (
+                          <span key={tIdx} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-600 dark:text-slate-300 font-semibold">
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SECTION 7.5: NĂNG LỰC NGÔN NGỮ (LANGUAGES PROFICIENCY)                   */}
+        {/* ========================================================================= */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+          className={cn(
+            "w-full p-5 sm:p-6 border select-none flex flex-col gap-4 text-left transition-all duration-300",
+            "rounded-[var(--theme-radius-card,10px)]",
+            getGlassCardClass()
+          )}
         >
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <Globe className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
-            <h3 className="font-black text-base text-slate-900 dark:text-white tracking-tight uppercase">
-              {isVi ? "7.5. Năng lực ngôn ngữ" : "7.5. Language proficiency"}
-            </h3>
+          {/* Section Header */}
+          <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-white/10 pb-3">
+            <div className="flex items-center gap-2.5">
+              <motion.div
+                animate={{ y: [0, -3, 0], rotate: [0, 4, -4, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                className="w-8 h-8 rounded-xl bg-blue-500/10 dark:bg-cyan-500/20 flex items-center justify-center text-blue-600 dark:text-cyan-400 shrink-0"
+              >
+                <Globe className="w-4.5 h-4.5" />
+              </motion.div>
+              <h6 className="text-h6 font-bold text-slate-900 dark:text-white font-play">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 dark:from-blue-400 dark:via-indigo-300 dark:to-cyan-300">
+                  {isVi ? "7.5. Năng lực ngôn ngữ & Giao tiếp quốc tế" : "7.5. Language Proficiency & Global Communication"}
+                </span>
+              </h6>
+            </div>
+
+            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+              Native · Professional · AI
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            
-            {/* Vietnamese Indicator: 90% */}
-            <div className="flex items-center gap-4 p-4 rounded-[8px] bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-              <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-slate-200 dark:text-slate-700 stroke-current" strokeWidth="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-blue-500 dark:text-cyan-400 stroke-current animate-pulse" strokeWidth="3" strokeDasharray="90, 100" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <span className="absolute text-xs font-mono font-black text-slate-900 dark:text-white">90%</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight">
-                  {isVi ? "Tiếng Việt" : "Vietnamese"}
-                </h4>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
-                  {isVi ? "Ngôn ngữ bản xứ" : "Native language"}
-                </span>
-                <span className="text-xs font-extrabold text-blue-700 dark:text-cyan-400 mt-1 leading-tight">
-                  {isVi ? "Thành thạo chuyên sâu" : "Native / Expert fluency"}
-                </span>
-              </div>
-            </div>
+          {/* 3 Circular Language Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {LANGUAGES_DATA.map((langItem) => (
+              <div 
+                key={langItem.id}
+                className="flex items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:scale-[1.01] transition-transform"
+              >
+                {/* SVG Progress Circle */}
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shrink-0">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                    <path className="text-slate-200 dark:text-slate-800 stroke-current" strokeWidth="3.2" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path 
+                      className={cn("stroke-current", langItem.color)} 
+                      strokeWidth="3.2" 
+                      strokeDasharray={`${langItem.percent}, 100`} 
+                      strokeLinecap="round" 
+                      fill="none" 
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
+                    />
+                  </svg>
+                  <span className="absolute text-xs font-mono font-black text-slate-900 dark:text-white">
+                    {langItem.percent}%
+                  </span>
+                </div>
 
-            {/* English Indicator: 60% */}
-            <div className="flex items-center gap-4 p-4 rounded-[8px] bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-              <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-slate-200 dark:text-slate-700 stroke-current" strokeWidth="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-purple-500 stroke-current animate-pulse" strokeWidth="3" strokeDasharray="60, 100" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <span className="absolute text-xs font-mono font-black text-slate-900 dark:text-white">60%</span>
+                <div className="flex flex-col min-w-0 text-left">
+                  <h6 className="font-bold text-sm text-slate-900 dark:text-white leading-tight font-play">
+                    {isVi ? langItem.nameVi : langItem.nameEn}
+                  </h6>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
+                    {isVi ? langItem.roleVi : langItem.roleEn}
+                  </span>
+                  <span className={cn("text-xs font-extrabold mt-1 leading-tight font-play", langItem.color)}>
+                    {isVi ? langItem.levelVi : langItem.levelEn}
+                  </span>
+                </div>
               </div>
-              <div className="flex flex-col min-w-0">
-                <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight">
-                  {isVi ? "Tiếng Anh" : "English"}
-                </h4>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
-                  {isVi ? "Giao tiếp chuyên nghiệp" : "Professional communication"}
-                </span>
-                <span className="text-xs font-extrabold text-purple-700 dark:text-purple-400 mt-1 leading-tight">
-                  {isVi ? "Làm việc môi trường quốc tế" : "Working in global environments"}
-                </span>
-              </div>
-            </div>
-
-            {/* AI-powered Multi-Language: 85% */}
-            <div className="flex items-center gap-4 p-4 rounded-[8px] bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-              <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                  <path className="text-slate-200 dark:text-slate-700 stroke-current" strokeWidth="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-emerald-500 stroke-current animate-pulse" strokeWidth="3" strokeDasharray="85, 100" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <span className="absolute text-xs font-mono font-black text-slate-900 dark:text-white">85%</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <h4 className="font-black text-sm text-slate-900 dark:text-white leading-tight uppercase truncate">
-                  {isVi ? "Ứng dụng AI" : "AI application"}
-                </h4>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-0.5">
-                  {isVi ? "Hỗ trợ trao đổi & hợp tác đa quốc gia" : "Assisting multi-national collaboration"}
-                </span>
-                <span className="text-xs font-extrabold text-emerald-700 dark:text-emerald-400 mt-1 leading-tight">
-                  {isVi ? "Dịch thuật & Trợ lý thời gian thực" : "Real-time translation & AI assistant"}
-                </span>
-              </div>
-            </div>
-
+            ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

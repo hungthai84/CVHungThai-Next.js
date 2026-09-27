@@ -566,6 +566,7 @@ export const COLOR_PRESETS: ColorGroupPreset[] = [
 export interface ThemeContextType {
   fontScale: number;
   setFontScale: (scale: number) => void;
+  resetFontScale: () => void;
   borderRadius: number;
   setBorderRadius: (radius: number) => void;
   resetBorderRadius: () => void;
@@ -990,13 +991,21 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setFontScale = (scale: number) => {
-    setFontScaleState(scale);
+    const clamped = Math.max(80, Math.min(130, scale));
+    setFontScaleState(clamped);
     try {
-      localStorage.setItem("portfolio_font_scale", scale.toString());
+      localStorage.setItem("portfolio_font_scale", clamped.toString());
       if (typeof document !== 'undefined') {
-        document.documentElement.style.fontSize = `${16 * (scale / 100)}px`;
+        document.documentElement.style.fontSize = `${16 * (clamped / 100)}px`;
       }
     } catch {}
+  };
+
+  const resetFontScale = () => {
+    setFontScale(100);
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = "16px";
+    }
   };
 
   const resolvedTheme: "light" | "dark" = theme === "glass-dark-neon" ? "dark" : "light";
@@ -1141,6 +1150,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       resolvedTheme,
       fontScale,
       setFontScale,
+      resetFontScale,
       borderRadius,
       setBorderRadius,
       resetBorderRadius,
@@ -1179,6 +1189,7 @@ export const useTheme = (): ThemeContextType => {
       resolvedTheme: "light",
       fontScale: 100,
       setFontScale: () => {},
+      resetFontScale: () => {},
       borderRadius: 10,
       setBorderRadius: () => {},
       resetBorderRadius: () => {},

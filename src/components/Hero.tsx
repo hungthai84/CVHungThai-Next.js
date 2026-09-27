@@ -149,7 +149,7 @@ function Hero() {
   return (
     <section 
       id="home" 
-      className="relative w-full h-full flex flex-col justify-between overflow-hidden p-0 m-0 font-sans text-slate-800 dark:text-slate-100 select-none"
+      className="relative w-full h-full flex flex-col justify-between overflow-hidden p-[15px] font-sans text-slate-800 dark:text-slate-100 select-none"
     >
       {/* 1. Main Fullscreen / Full-Card Background Video Player - 100% Fills Home (Screen 3) */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
@@ -166,6 +166,11 @@ function Hero() {
         />
         {/* Subtle Atmospheric Gradient Overlays for crisp video visibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-transparent pointer-events-none" />
+      </div>
+
+      {/* Header Card Trang chủ tổng quan */}
+      <div className="relative z-20 w-full pointer-events-auto hidden">
+        <PageCardHeader pageId="home" />
       </div>
 
       {/* 2. Bottom Welcome Note Card */}
@@ -239,10 +244,10 @@ function Hero() {
                   </div>
                 </div>
 
-                {/* Actions Area - Bottom Row with Action Buttons */}
-                <div className="relative z-20 flex flex-row flex-wrap items-center justify-end gap-1.5 sm:gap-2 w-full shrink-0 pt-2 border-t border-slate-200/90 dark:border-slate-800/90">
+                {/* Actions Area - Bottom Row with Action Buttons strictly side-by-side on the same row */}
+                <div className="relative z-20 flex flex-row flex-nowrap items-center justify-between gap-2 w-full shrink-0 pt-2 border-t border-slate-200/90 dark:border-slate-800/90">
                   <HeroIntroButton
-                    className="w-auto max-w-fit shrink-0 min-h-[38px] text-xs"
+                    className="flex-1 min-w-0 min-h-[38px] text-xs justify-center"
                     isPlayingIntro={isIntro}
                     isAudioOn={isVideoAudioOn}
                     onToggleAudio={() => {
@@ -254,7 +259,7 @@ function Hero() {
                   />
                   
                   <HeroContactButton 
-                    className="w-auto max-w-fit shrink-0 min-h-[38px] text-xs"
+                    className="flex-1 min-w-0 min-h-[38px] text-xs justify-center"
                     onContact={() => {
                       scrollTo('contact');
                     }}

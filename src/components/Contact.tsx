@@ -1,42 +1,149 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { 
   User, 
   Mail, 
   Compass, 
   Phone, 
   MessageSquare, 
-  Users, 
-  Lock, 
   Send,
   Heart,
   Zap,
-  ArrowRight
+  Check,
+  Copy,
+  MapPin,
+  Clock,
+  ShieldCheck,
+  Sparkles,
+  HelpCircle,
+  ChevronDown,
+  Briefcase,
+  Building2,
+  ExternalLink,
+  CheckCircle2,
+  Share2
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
+import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
+import { PageCardHeader } from "./PageCardHeader";
+import { cn } from "../lib/utils";
 
 export function Contact() {
   const { lang } = useLanguage();
+  const { theme } = useTheme();
   const isVi = lang === "vi";
+
+  // Dynamic theme-aware Glass Card classes
+  const getGlassCardClass = useCallback(() => {
+    switch (theme as string) {
+      case "glass-dark-neon":
+        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-cyan-400/25 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_0_20px_rgba(0,240,255,0.15)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.25)]";
+      case "modern-light-glass":
+        return "bg-white/70 dark:bg-slate-900/75 border-white/80 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_10px_30px_0_rgba(100,110,140,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_14px_40px_0_rgba(100,110,140,0.15)]";
+      case "mritech-digital-growth":
+      default:
+        return "bg-white/75 dark:bg-[#121218]/80 border-white/70 dark:border-white/12 backdrop-blur-[18px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_12px_40px_0_rgba(31,38,135,0.12)]";
+    }
+  }, [theme]);
 
   // Form State
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState("");
   const [message, setMessage] = useState("");
   const [activeTopic, setActiveTopic] = useState("💬 General");
   const [formSuccess, setFormSuccess] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Topics list matching specification
   const topics = [
     { id: "general", label: "💬 General", labelVi: "💬 Chung" },
-    { id: "design", label: "🎨 Design help", labelVi: "🎨 Thiết kế" },
-    { id: "partnership", label: "🤝 Partnership", labelVi: "🤝 Hợp tác" },
-    { id: "bug", label: "🐞 Bug report", labelVi: "🐞 Báo lỗi", isCoral: true }
+    { id: "design", label: "🎨 CX & CS Advisory", labelVi: "🎨 Tư vấn CX & CS" },
+    { id: "partnership", label: "🤝 Partnership", labelVi: "🤝 Hợp tác chiến lược" },
+    { id: "bug", label: "🐞 Feedback & Bug", labelVi: "🐞 Góp ý & Báo lỗi" }
   ];
+
+  // Quick message presets
+  const presets = [
+    {
+      labelVi: "Cần tư vấn chiến lược Contact Center",
+      labelEn: "Need Contact Center strategy consultation",
+      textVi: "Tôi cần tư vấn tái cấu trúc và tối ưu hóa hệ thống Contact Center quy mô 100+ nhân sự.",
+      textEn: "I need consultation on restructuring and optimizing a 100+ seat Contact Center."
+    },
+    {
+      labelVi: "Hợp tác đào tạo đội ngũ CSKH",
+      labelEn: "CS Team Training Partnership",
+      textVi: "Tôi muốn tìm hiểu chương trình đào tạo kỹ năng thấu cảm và quy trình QA cho đội ngũ CSKH.",
+      textEn: "I would like to explore empathy skills training and QA framework for our CS team."
+    },
+    {
+      labelVi: "Tích hợp AI & Omni-channel CRM",
+      labelEn: "AI & Omni-channel Integration",
+      textVi: "Tôi cần tư vấn tích hợp AI Chatbot và Omni-channel Contact Center (Zendesk / Salesforce).",
+      textEn: "I need advice on integrating AI Chatbot and Omni-channel Contact Center (Zendesk / Salesforce)."
+    }
+  ];
+
+  // FAQ Data
+  const faqs = [
+    {
+      qVi: "Thời gian phản hồi sau khi gửi yêu cầu liên hệ là bao lâu?",
+      qEn: "How quickly do you respond to inquiry submissions?",
+      aVi: "Tôi luôn ưu tiên phản hồi trong vòng 24 giờ làm việc. Với các đề xuất khẩn cấp hoặc dự án chiến lược, thời gian phản hồi thường trong vòng 2–4 giờ làm việc.",
+      aEn: "I prioritize responding within 24 business hours. For urgent proposals or strategic advisory, response time is usually within 2–4 hours during office hours."
+    },
+    {
+      qVi: "Anh Thái có nhận tư vấn dự án ngắn hạn hoặc đào tạo doanh nghiệp không?",
+      qEn: "Do you offer short-term advisory or customized corporate training?",
+      aVi: "Có. Tôi nhận tư vấn chiến lược CX/CSKH, thẩm định hệ thống Contact Center, xây dựng bộ tiêu chuẩn QA Scorecard và đào tạo nâng cao kỹ năng cho đội ngũ lãnh đạo & nhân sự CSKH.",
+      aEn: "Yes. I offer CX/CS strategic advisory, Contact Center audits, QA Scorecard framework development, and specialized training for CS leaders and operational teams."
+    },
+    {
+      qVi: "Thông tin dự án và ý tưởng trao đổi có được cam kết bảo mật không?",
+      qEn: "Are project details and discussion ideas guaranteed to be confidential?",
+      aVi: "Cam kết bảo mật 100%. Mọi dữ liệu trao đổi, số liệu vận hành và ý tưởng chiến lược của doanh nghiệp đều được bảo mật tuyệt đối. Sẵn sàng ký kết thỏa thuận NDA (Non-Disclosure Agreement) trước khi đi vào chi tiết.",
+      aEn: "100% Confidentiality guaranteed. All business operational metrics, strategies, and project details remain strictly confidential with NDA agreements signed upon request."
+    }
+  ];
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
 
   const handleTopicClick = (topicLabel: string) => {
     try { playUiSound("click"); } catch {}
     setActiveTopic(topicLabel);
+  };
+
+  const handleCopyEmail = () => {
+    try { playUiSound("click"); } catch {}
+    navigator.clipboard.writeText("hungthai84@gmail.com");
+    setCopiedEmail(true);
+    showToast(isVi ? "Đã sao chép địa chỉ Email: hungthai84@gmail.com" : "Copied email: hungthai84@gmail.com");
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
+  const handleCopyPhone = () => {
+    try { playUiSound("click"); } catch {}
+    navigator.clipboard.writeText("0908848xxx");
+    setCopiedPhone(true);
+    showToast(isVi ? "Đã sao chép số điện thoại liên hệ" : "Copied phone number");
+    setTimeout(() => setCopiedPhone(false), 2500);
+  };
+
+  const handleApplyPreset = (presetText: string) => {
+    try { playUiSound("click"); } catch {}
+    setMessage(presetText);
+    showToast(isVi ? "Đã chèn mẫu tin nhắn nhanh!" : "Quick message template applied!");
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -47,415 +154,474 @@ export function Contact() {
     const emailSubject = encodeURIComponent(`[Loop Contact - ${activeTopic}] Message from ${fullName || "User"}`);
     const emailBody = encodeURIComponent(
       `Hi Nguyễn Hùng Thái,\n\n` +
-      `My Name: ${fullName}\n` +
-      `My Email: ${email}\n` +
+      `Full Name: ${fullName}\n` +
+      `Email: ${email}\n` +
+      `Phone: ${phone || "N/A"}\n` +
+      `Company: ${company || "N/A"}\n` +
       `Topic: ${activeTopic}\n\n` +
       `Message:\n${message}\n\n` +
-      `--\nSent from Loop Design Platform`
+      `--\nSent from Executive Portfolio & Contact Hub`
     );
 
     window.location.href = `mailto:${targetEmail}?subject=${emailSubject}&body=${emailBody}`;
     setFormSuccess(true);
+    showToast(isVi ? "Đã mở trình ứng dụng gửi Mail của bạn!" : "Opened your email client!");
   };
 
   return (
-    <div className="w-full bg-[#f8fafc] text-[#082f49] font-sans antialiased overflow-x-hidden min-h-screen relative pb-12">
-      {/* Scoped CSS animations for the interactive floating illustration */}
+    <section 
+      id="contact" 
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+    >
+      {/* Toast Floating Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className="fixed bottom-20 right-6 z-50 bg-slate-900/95 dark:bg-sky-950/95 text-white px-4 py-2.5 rounded-2xl shadow-2xl border border-sky-400/40 backdrop-blur-md flex items-center gap-2.5 text-xs font-bold"
+          >
+            <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
+            <span>{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Scoped CSS animations for floating illustration */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes floatA {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-14px); }
+          50% { transform: translateY(-12px); }
         }
         @keyframes floatB {
-          0%, 100% { transform: translateY(-14px); }
+          0%, 100% { transform: translateY(-12px); }
           50% { transform: translateY(0); }
         }
         @keyframes floatC {
           0%, 100% { transform: translateY(-6px) rotate(0deg); }
-          50% { transform: translateY(-18px) rotate(4deg); }
+          50% { transform: translateY(-16px) rotate(4deg); }
         }
         .float-a { animation: floatA 6s ease-in-out infinite; }
         .float-b { animation: floatB 7s ease-in-out infinite; }
         .float-c { animation: floatC 8s ease-in-out infinite; }
-        .grain {
-          background-image: radial-gradient(rgba(14, 165, 233, 0.12) 1.5px, transparent 1.5px);
-          background-size: 24px 24px;
-        }
       `}} />
 
-      {/* ========================================================================= */}
-      {/* 1. STICKY BLURRED CLOUD NAV                                               */}
-      {/* ========================================================================= */}
-      <header className="sticky top-0 z-50 w-full bg-[#f8fafc]/80 backdrop-blur-md border-b border-sky-100/60 transition-all duration-300">
-        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6 lg:px-8">
-          {/* Logo link */}
-          <a href="#home" className="flex items-center gap-2.5 group shrink-0 select-none">
-            <div className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-[#38bdf8] to-[#0369a1] text-white shadow-md transition-transform duration-300 group-hover:scale-105">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2.4" 
-                strokeLinecap="round" 
-                className="w-5.5 h-5.5 transition-transform duration-500 ease-out group-hover:rotate-[366deg]"
-              >
-                <path d="M7 9C4.24 9 2 11.24 2 14c0 2.76 2.24 5 5 5c3.21 0 5.25-3.33 7-6c1.75-2.67 3.79-6 7-6c2.76 0 5 2.24 5 5c0 2.76-2.24 5-5 5c-3.21 0-5.25-3.33-7-6c-1.75-2.67-3.79-6-7-6Z" />
-              </svg>
-            </div>
-            <span className="text-[22px] font-black tracking-tight text-[#082f49] font-play transition-colors duration-300 group-hover:text-[#0369a1]">
-              Loop
+      <div className="w-full flex-grow flex flex-col gap-5 max-w-7xl mx-auto justify-start pb-12">
+        
+        {/* Header Bar */}
+        <PageCardHeader pageId="contact">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-4 bg-emerald-500 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shadow-2xs">
+              {isVi ? "Sẵn sàng kết nối & hợp tác chiến lược" : "Ready to connect and collaborate"}
             </span>
-          </a>
-
-          {/* Navigation links (hidden below md) */}
-          <nav className="hidden md:flex items-center gap-8 text-[15px] font-bold text-slate-500">
-            <a href="#features" className="hover:text-[#0369a1] transition-colors">{isVi ? "Tính năng" : "Features"}</a>
-            <a href="#templates" className="hover:text-[#0369a1] transition-colors">{isVi ? "Giao diện" : "Templates"}</a>
-            <a href="#pricing" className="hover:text-[#0369a1] transition-colors">{isVi ? "Bảng giá" : "Pricing"}</a>
-            <a href="#contact" className="text-[#082f49] font-extrabold">{isVi ? "Liên hệ" : "Contact"}</a>
-          </nav>
-
-          {/* Action buttons on right */}
-          <div className="flex items-center gap-4">
-            <a 
-              href="#login" 
-              className="hidden sm:inline-block text-[15px] font-extrabold text-[#082f49] hover:text-[#0369a1] transition-colors"
-            >
-              {isVi ? "Đăng nhập" : "Log in"}
-            </a>
-            <a 
-              href="#start" 
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#082f49] px-5 py-2.5 text-[15px] font-extrabold text-white shadow-md ring-2 ring-rose-500/10 hover:bg-[#0369a1] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-            >
-              <span>{isVi ? "Thử miễn phí" : "Start free"}</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
           </div>
-        </div>
-      </header>
+        </PageCardHeader>
 
-      {/* ========================================================================= */}
-      {/* 2. FULL-BLEED HERO BAND + ORBS                                            */}
-      {/* ========================================================================= */}
-      <section className="relative overflow-hidden grain pt-16 pb-20 text-center select-none bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9]">
-        {/* Three blurred background decorative orbs */}
-        <div className="pointer-events-none absolute -top-24 -left-24 h-80 w-80 rounded-full bg-sky-200/60 blur-3xl" />
-        <div className="pointer-events-none absolute -top-10 right-0 h-72 w-72 rounded-full bg-rose-200/50 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 left-1/3 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl" />
-
-        <div className="relative mx-auto max-w-6xl px-6 lg:px-8 flex flex-col items-center">
-          {/* Status response pill */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[13px] font-extrabold text-[#082f49] shadow-sm ring-1 ring-sky-100">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
-            </span>
-            <span>{isVi ? "Chúng tôi thường trả lời trong vài giờ" : "We usually reply within a few hours"}</span>
-          </div>
-
-          {/* Hero title */}
-          <h1 className="mt-6 text-[40px] font-black leading-[1.08] tracking-tight text-[#082f49] sm:text-[52px] font-play max-w-3xl">
-            {isVi ? (
-              <>Hãy thảo luận về <span className="text-[#0369a1]">bất cứ điều gì</span> bạn đang <span className="text-rose-500">kiến tạo</span></>
-            ) : (
-              <>Let's chat about <span className="text-[#0369a1]">anything</span> you're <span className="text-rose-500">building</span></>
+        {/* Two Separate Contact Cards Side-by-Side (or stacked on mobile) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          
+          {/* CARD 1: Contact Hub, Direct Channels & Illustration (lg:col-span-5) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+            className={cn(
+              "lg:col-span-5 relative overflow-hidden border transition-all duration-300 shadow-xl flex flex-col justify-between h-full p-5 sm:p-7 gap-6 text-left",
+              "rounded-[var(--theme-radius-card,16px)]",
+              getGlassCardClass()
             )}
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mt-4 mx-auto max-w-xl text-[17px] font-semibold text-slate-500 leading-relaxed">
-            {isVi ? "Câu hỏi, phản hồi, hay ý tưởng dở dang lúc 2 giờ sáng. Chúng tôi luôn lắng nghe." : "Questions, feedback, a half-baked idea at 2am. We're all ears."}
-          </p>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 3. THE CONTACT CARD SECTION (Centerpiece)                                 */}
-      {/* ========================================================================= */}
-      <section id="contact" className="relative -mt-4 pb-20 select-none">
-        <div className="mx-auto max-w-6xl px-6 lg:px-8">
-          <div className="relative rounded-[36px] sm:rounded-[48px] bg-white shadow-xl ring-1 ring-sky-100/70 overflow-hidden">
+          >
             {/* Top gradient seam bar */}
-            <div className="h-1.5 w-full bg-gradient-to-r from-sky-400 via-cyan-300 to-rose-400" />
-
-            {/* Card Body */}
-            <div className="grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-16 lg:p-16">
-              
-              {/* LEFT COLUMN: Copy + Illustration panel */}
-              <div className="flex flex-col text-left justify-between h-full gap-8">
-                
-                {/* Title & description */}
-                <div className="space-y-4">
-                  <h2 className="text-[34px] font-black leading-[1.08] tracking-tight text-[#082f49] sm:text-[42px] font-play">
-                    {isVi ? (
-                      <>Chào bạn,<br />chúng tôi rất thân thiện</>
-                    ) : (
-                      <>Say hello,<br />we don't bite</>
-                    )}
-                  </h2>
-                  <p className="text-[17px] font-semibold leading-relaxed text-slate-500">
-                    {isVi ? (
-                      <>Gặp rắc rối về thiết kế? Có ý tưởng táo bạo? Hay muốn bàn về giao diện? Hãy gửi thư cho chúng tôi, hoặc <a href="mailto:hello@loop.design" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-700 text-rose-500">gửi email trực tiếp</a>. Người thật việc thật, cam kết!</>
-                    ) : (
-                      <>Stuck on a design? Got a wild idea? Just want to nerd out about UI? Drop us a line, or <a href="mailto:hello@loop.design" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-700 text-rose-500">say hi on email</a> instead. Real humans, promise.</>
-                    )}
-                  </p>
-                </div>
-
-                {/* Hand-built Illustration Panel using HTML + CSS + SVGs */}
-                <div className="relative rounded-[32px] sm:rounded-[36px] bg-gradient-to-br from-slate-50 to-sky-100/40 ring-1 ring-sky-100/70 px-7 pt-12 pb-6 overflow-hidden min-h-[220px] flex flex-col justify-end lg:mt-auto">
-                  {/* (a) Coral Sun */}
-                  <div className="absolute top-5 right-6 h-14 w-14 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 opacity-90 float-a shadow-md" />
-
-                  {/* (b) Clouds */}
-                  <svg className="absolute top-8 left-6 w-12 h-8 text-white opacity-40 float-b" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.36 10.04a6 6 0 0 0-11.11-1.5 4.5 4.5 0 0 0-3.75 4.46c0 .17.02.34.05.51a3.5 3.5 0 0 0 1.95 6.5h13a4 4 0 0 0 .5-7.97Z"/>
-                  </svg>
-                  <svg className="absolute top-16 right-16 w-10 h-6 text-white opacity-30 float-c" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.36 10.04a6 6 0 0 0-11.11-1.5 4.5 4.5 0 0 0-3.75 4.46c0 .17.02.34.05.51a3.5 3.5 0 0 0 1.95 6.5h13a4 4 0 0 0 .5-7.97Z"/>
-                  </svg>
-
-                  {/* (c) Channel Bubbles */}
-                  <div className="flex items-end justify-center gap-4 mb-4 select-none relative z-10">
-                    {/* Compass Bubble */}
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-sky-500 text-white flex items-center justify-center float-c shadow-md shrink-0">
-                      <Compass className="w-6 h-6 sm:w-7 sm:h-7" />
-                    </div>
-                    {/* Direct Mail Bubble */}
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#082f49] text-white flex items-center justify-center ring-4 ring-white float-a shadow-lg shrink-0">
-                      <Mail className="w-9 h-9 sm:w-11 sm:h-11 text-sky-300" />
-                    </div>
-                    {/* Phone Bubble */}
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-500 text-white flex items-center justify-center float-b shadow-md shrink-0">
-                      <Phone className="w-6 h-6 sm:w-7 sm:h-7" />
-                    </div>
-                  </div>
-
-                  {/* (d) Grass blades */}
-                  <div className="flex items-end justify-center gap-1.5 h-10 w-full mb-1 select-none">
-                    <div className="w-1.5 h-6 rounded-full bg-sky-300 opacity-60" />
-                    <div className="w-1.5 h-8 rounded-full bg-rose-300 opacity-70" />
-                    <div className="w-1.5 h-5 rounded-full bg-sky-400 opacity-50" />
-                    <div className="w-1.5 h-10 rounded-full bg-rose-400 opacity-80" />
-                    <div className="w-1.5 h-7 rounded-full bg-sky-300 opacity-65" />
-                    <div className="w-1.5 h-9 rounded-full bg-rose-300 opacity-75" />
-                  </div>
-
-                  {/* (e) Horizon bar */}
-                  <div className="h-2 w-full rounded-full bg-white/70" />
-                </div>
-
-                {/* Trust chips */}
-                <div className="flex flex-wrap gap-x-6 gap-y-3 text-[14px] font-extrabold text-[#082f49] mt-2">
-                  <div className="inline-flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-rose-500 fill-rose-500 shrink-0" />
-                    <span>{isVi ? "Được tin dùng bởi 57k nhà sáng tạo" : "Loved by 57k makers"}</span>
-                  </div>
-                  <div className="inline-flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-[#0369a1] fill-[#0369a1] shrink-0" />
-                    <span>{isVi ? "Phản hồi nhanh chóng, thân thiện" : "Fast, friendly replies"}</span>
-                  </div>
-                </div>
-
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-400 to-indigo-500" />
+            
+            {/* Ambient Background Glows */}
+            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-rose-400/10 dark:bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+            
+            {/* Card Title & Introduction */}
+            <div className="space-y-3 relative z-10">
+              <div className="flex items-center gap-2.5">
+                <motion.div
+                  animate={{ y: [0, -3.5, 0], rotate: [0, 4, -4, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex items-center justify-center shrink-0 cursor-pointer select-none"
+                >
+                  <MessageSquare className="w-6 h-6 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                </motion.div>
+                <h6 className="text-h6 font-bold tracking-tight font-play">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-300 dark:to-rose-300">
+                    {isVi ? "Kết nối & Trò chuyện cùng chuyên gia" : "Let's Connect & Build Together"}
+                  </span>
+                </h6>
               </div>
 
-              {/* RIGHT COLUMN: Form Field Stack */}
-              <div className="flex flex-col gap-6">
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
-                  
-                  {/* Name field */}
-                  <div className="text-left">
-                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
-                      {isVi ? "Họ và tên của bạn" : "Full name"}
-                    </label>
-                    <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
-                        <User className="w-5 h-5" />
-                      </div>
-                      <input 
-                        type="text"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Sky Walker"
-                        className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 pl-12 pr-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200"
-                      />
-                    </div>
-                  </div>
+              <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
+                {isVi ? (
+                  <>Bạn có câu hỏi, đề xuất hợp tác hoặc cần tư vấn chiến lược Contact Center & chuyển đổi số? Hãy gửi tin nhắn hoặc <a href="mailto:hungthai84@gmail.com" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-600 text-rose-500 transition-colors">gửi email trực tiếp</a>.</>
+                ) : (
+                  <>Have questions, collaboration proposals, or need advisory on Contact Center and digital transformation? Drop a message or <a href="mailto:hungthai84@gmail.com" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-600 text-rose-500 transition-colors">email directly</a>.</>
+                )}
+              </p>
+            </div>
 
-                  {/* Email field */}
-                  <div className="text-left">
-                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
-                      {isVi ? "Địa chỉ Email" : "Email address"}
-                    </label>
-                    <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
-                        <Mail className="w-5 h-5" />
-                      </div>
-                      <input 
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="hello@you.com"
-                        className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 pl-12 pr-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200"
-                      />
-                    </div>
+            {/* Direct Channels Cards */}
+            <div className="space-y-3 relative z-10">
+              {/* Email Direct Contact Card */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between gap-3 group hover:border-sky-400/50 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5" />
                   </div>
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block font-mono">Email Direct</span>
+                    <a href="mailto:hungthai84@gmail.com" className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white hover:text-sky-500 transition-colors">
+                      hungthai84@gmail.com
+                    </a>
+                  </div>
+                </div>
 
-                  {/* Message field */}
-                  <div className="text-left">
-                    <label className="block text-[13px] font-black uppercase tracking-[0.12em] text-slate-500 mb-2">
-                      {isVi ? "Bạn đang suy nghĩ gì?" : "What's on your mind?"}
-                    </label>
-                    <textarea 
-                      rows={5}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={handleCopyEmail}
+                    title={isVi ? "Sao chép Email" : "Copy Email"}
+                    className="p-2 rounded-xl bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:text-sky-500 hover:bg-sky-50 dark:hover:bg-slate-600 transition-all cursor-pointer border border-slate-200 dark:border-slate-600"
+                  >
+                    {copiedEmail ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                  <a
+                    href="mailto:hungthai84@gmail.com"
+                    title={isVi ? "Mở gửi email" : "Send mail"}
+                    className="p-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 transition-all cursor-pointer shadow-xs"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Location & Working Hours Card */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block font-mono">{isVi ? "Trụ sở làm việc" : "Base Location"}</span>
+                    <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white">
+                      TP. Hồ Chí Minh, Việt Nam
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    Hybrid / Remote
+                  </span>
+                </div>
+              </div>
+
+              {/* Response SLA Card */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block font-mono">{isVi ? "Khung giờ hỗ trợ" : "Office Hours"}</span>
+                    <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white">
+                      Thứ 2 – Thứ 6 (08:00 – 18:00 GMT+7)
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Hand-built Interactive Illustration Panel */}
+            <div 
+              style={{ borderRadius: "var(--theme-radius-inner, 14px)" }}
+              className="relative rounded-[var(--theme-radius-inner,14px)] bg-gradient-to-br from-slate-100 via-sky-50 to-indigo-50 dark:from-slate-800/80 dark:via-slate-900/80 dark:to-indigo-950/40 border border-sky-100 dark:border-slate-800 px-6 pt-8 pb-5 overflow-hidden flex flex-col justify-end relative z-10"
+            >
+              {/* Sun accent */}
+              <div className="absolute top-4 right-5 h-12 w-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 opacity-90 float-a shadow-md" />
+
+              {/* Floating Channel Bubbles */}
+              <div className="flex items-end justify-center gap-3 mb-3 select-none relative z-10">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-sky-500 text-white flex items-center justify-center float-c shadow-md shrink-0">
+                  <Compass className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#082f49] dark:bg-cyan-950 text-white flex items-center justify-center ring-4 ring-white dark:ring-slate-800 float-a shadow-lg shrink-0">
+                  <Mail className="w-8 h-8 sm:w-9 sm:h-9 text-sky-300" />
+                </div>
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-rose-500 text-white flex items-center justify-center float-b shadow-md shrink-0">
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+              </div>
+
+              {/* Horizon bar */}
+              <div className="h-2 w-full rounded-full bg-white/80 dark:bg-slate-700/80 mb-3" />
+
+              {/* Trust chips */}
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-extrabold text-slate-700 dark:text-slate-200 z-10">
+                <div className="inline-flex items-center gap-1.5">
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-500 shrink-0" />
+                  <span>{isVi ? "Cam kết bảo mật" : "Strict privacy"}</span>
+                </div>
+                <div className="inline-flex items-center gap-1.5">
+                  <Zap className="w-4 h-4 text-sky-500 fill-sky-500 shrink-0" />
+                  <span>{isVi ? "Phản hồi trong 24h" : "Replies within 24h"}</span>
+                </div>
+              </div>
+            </div>
+
+          </motion.div>
+
+          {/* CARD 2: Form Field Stack & Message Inquiry (lg:col-span-7) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+            className={cn(
+              "lg:col-span-7 relative overflow-hidden border transition-all duration-300 shadow-xl flex flex-col p-5 sm:p-7 gap-5 text-left",
+              "rounded-[var(--theme-radius-card,16px)]",
+              getGlassCardClass()
+            )}
+          >
+            {/* Top gradient seam bar */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 to-rose-400" />
+            
+            {/* Ambient Background Glows */}
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-sky-400/10 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Form Section Header */}
+            <div className="flex items-center justify-between relative z-10">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                {isVi ? "Gửi thông điệp trực tiếp" : "Send Direct Message"}
+              </span>
+              <span className="text-[11px] font-bold text-slate-400 font-mono">
+                {isVi ? "Tùy chọn chủ đề & Mẫu nhanh" : "Topic & Preset Options"}
+              </span>
+            </div>
+
+            {/* Topic Select Chips */}
+            <div className="space-y-1.5 relative z-10">
+              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+                {isVi ? "1. Chọn chủ đề trao đổi" : "1. Select Inquiry Topic"}
+              </label>
+              <div className="flex flex-wrap gap-2 select-none">
+                {topics.map((t) => {
+                  const isSelected = activeTopic === t.label;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => handleTopicClick(t.label)}
+                      className={cn(
+                        "px-3.5 py-1.5 rounded-xl text-xs font-bold font-play transition-all duration-200 cursor-pointer border flex items-center gap-1.5",
+                        isSelected
+                          ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-[1.02]"
+                          : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
+                      )}
+                    >
+                      <span>{isVi ? t.labelVi : t.label}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Message Presets */}
+            <div className="space-y-1.5 relative z-10">
+              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+                {isVi ? "2. Mẫu tin nhắn soạn sẵn (Bấm để chèn nhanh)" : "2. Quick Presets (Click to Insert)"}
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {presets.map((p, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleApplyPreset(isVi ? p.textVi : p.textEn)}
+                    className="p-2.5 rounded-xl text-left bg-slate-100/80 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all text-[11px] font-extrabold text-slate-700 dark:text-slate-300 cursor-pointer line-clamp-2 hover:border-indigo-400/50"
+                  >
+                    ⚡ {isVi ? p.labelVi : p.labelEn}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Form Body */}
+            <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 mt-1 relative z-10">
+              
+              {/* Inputs Row 1: Name + Email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Name field */}
+                <div className="text-left">
+                  <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-mono">
+                    {isVi ? "Họ và tên của bạn *" : "Full Name *"}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <input 
+                      type="text"
                       required
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder={isVi ? "Hãy chia sẻ mọi thứ với chúng tôi..." : "Tell us everything. The weirder the idea, the better."}
-                      className="w-full rounded-2xl bg-[#f8fafc] border-2 border-sky-100/70 px-4 py-4 text-[16px] font-bold text-[#082f49] placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-400/15 transition-all duration-200 resize-none"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Nguyễn Văn A"
+                      className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pl-11 pr-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition-all duration-200"
                     />
                   </div>
+                </div>
 
-                  {/* Topic Select Chips */}
-                  <div className="flex flex-wrap gap-2.5 -mt-1 select-none">
-                    {topics.map((t) => {
-                      const isSelected = activeTopic === t.label;
-                      return (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => handleTopicClick(t.label)}
-                          className={`rounded-full px-4 py-2 text-[13px] font-extrabold cursor-pointer transition-all duration-200 ${
-                            isSelected
-                              ? t.isCoral 
-                                ? "bg-rose-500 text-white shadow-sm"
-                                : "bg-sky-500 text-white shadow-sm"
-                              : t.isCoral
-                                ? "bg-rose-100/60 text-rose-950 hover:bg-rose-500 hover:text-white"
-                                : "bg-sky-100/60 text-sky-950 hover:bg-sky-500 hover:text-white"
-                          }`}
-                        >
-                          {isVi ? t.labelVi : t.label}
-                        </button>
-                      );
-                    })}
+                {/* Email field */}
+                <div className="text-left">
+                  <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-mono">
+                    {isVi ? "Địa chỉ Email *" : "Email Address *"}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <input 
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@company.com"
+                      className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pl-11 pr-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition-all duration-200"
+                    />
                   </div>
+                </div>
+              </div>
 
-                  {/* Submit Button */}
-                  <button 
-                    type="submit"
-                    className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#0369a1] to-[#082f49] px-6 py-4 text-[17px] font-black text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+              {/* Inputs Row 2: Phone + Company */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Phone field */}
+                <div className="text-left">
+                  <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-mono">
+                    {isVi ? "Số điện thoại (Không bắt buộc)" : "Phone Number (Optional)"}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                      <Phone className="w-4 h-4" />
+                    </div>
+                    <input 
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="090 123 4567"
+                      className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pl-11 pr-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition-all duration-200"
+                    />
+                  </div>
+                </div>
+
+                {/* Company field */}
+                <div className="text-left">
+                  <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-mono">
+                    {isVi ? "Tên công ty / Tổ chức" : "Company / Organization"}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <input 
+                      type="text"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Công ty ABC"
+                      className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pl-11 pr-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition-all duration-200"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Message field */}
+              <div className="text-left">
+                <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-mono">
+                  {isVi ? "Nội dung trao đổi chi tiết *" : "Your Message Details *"}
+                </label>
+                <textarea 
+                  rows={4}
+                  required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder={isVi ? "Nhập nội dung tin nhắn, yêu cầu tư vấn hoặc dự án..." : "Share your inquiry, proposal or project requirements..."}
+                  className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 px-4 py-3 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition-all duration-200 resize-none"
+                />
+              </div>
+
+              {/* Submit button */}
+              <button
+                type="submit"
+                className="w-full mt-1 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:brightness-105 active:scale-[0.99] text-white font-black text-xs sm:text-sm font-play flex items-center justify-center gap-2 shadow-lg hover:shadow-indigo-500/25 transition-all cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                <span>{isVi ? "Gửi thông điệp ngay" : "Send Message Now"}</span>
+              </button>
+
+              {formSuccess && (
+                <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 animate-fade-in">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{isVi ? "Đã soạn sẵn thư gửi qua Ứng dụng Email của bạn!" : "Message prepared in your email app!"}</span>
+                </div>
+              )}
+            </form>
+
+          </motion.div>
+
+        </div>
+
+        {/* FAQ Accordion Section */}
+        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4", getGlassCardClass())}>
+          <div className="flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
+            <h3 className="text-base sm:text-lg font-bold font-play text-slate-800 dark:text-white">
+              {isVi ? "Câu hỏi thường gặp khi liên hệ" : "Frequently Asked Questions"}
+            </h3>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 overflow-hidden transition-all"
+                >
+                  <button
+                    onClick={() => {
+                      try { playUiSound("click"); } catch {}
+                      setOpenFaqIndex(isOpen ? null : idx);
+                    }}
+                    className="w-full px-4 py-3.5 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors"
                   >
-                    <span>{isVi ? "Gửi thông điệp" : "Send message"}</span>
-                    <Send className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    <span>{isVi ? faq.qVi : faq.qEn}</span>
+                    <ChevronDown className={cn("w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0", isOpen && "rotate-180 text-indigo-500")} />
                   </button>
 
-                  {/* Privacy line */}
-                  <div className="text-center inline-flex items-center justify-center gap-1.5 text-[13px] font-bold text-slate-500 select-none">
-                    <Lock className="w-4 h-4 text-sky-400" />
-                    <span>{isVi ? "Không bao giờ spam. Chúng tôi cũng ghét nó." : "No spam, ever. We hate it too."}</span>
-                  </div>
-
-                </form>
-
-                {/* Simple form success notification banner */}
-                {formSuccess && (
-                  <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold text-left animate-pulse">
-                    {isVi ? "Ứng dụng Email của bạn đã được mở để gửi thông điệp!" : "Successfully opened your email client to send the message!"}
-                  </div>
-                )}
-              </div>
-
-            </div>
-          </div>
-
-          {/* ========================================================================= */}
-          {/* 4. THREE ALT-CONTACT CARDS                                                */}
-          {/* ========================================================================= */}
-          <div className="mt-12 grid sm:grid-cols-3 items-stretch gap-5 select-none">
-            
-            {/* Card 1: Email */}
-            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-50 text-[#0369a1] shadow-inner">
-                <Mail className="w-5.5 h-5.5" />
-              </div>
-              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Email trực tiếp" : "Email us"}</h3>
-              <span className="mt-1 text-[14px] font-semibold text-slate-500">hello@loop.design</span>
-            </div>
-
-            {/* Card 2: Live Chat */}
-            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-rose-50 text-rose-500 shadow-inner">
-                <MessageSquare className="w-5.5 h-5.5" />
-              </div>
-              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Hỗ trợ trực tuyến" : "Live chat"}</h3>
-              <span className="mt-1 text-[14px] font-semibold text-slate-500">Mon to Fri, 9 to 6</span>
-            </div>
-
-            {/* Card 3: Community */}
-            <div className="flex h-full flex-col rounded-[32px] bg-white p-6 ring-1 ring-sky-100/70 shadow-md hover:-translate-y-1 transition-all duration-200 text-left">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-50 text-[#0369a1] shadow-inner">
-                <Users className="w-5.5 h-5.5" />
-              </div>
-              <h3 className="mt-4 text-[17px] font-black text-[#082f49]">{isVi ? "Cộng đồng" : "Community"}</h3>
-              <span className="mt-1 text-[14px] font-semibold text-slate-500">Join 12k makers on Discord</span>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 5. FULL-BLEED SKY-INK FOOTER                                              */}
-      {/* ========================================================================= */}
-      <footer className="bg-[#082f49] text-sky-100/90 w-full mt-12 py-10 relative z-10 select-none">
-        <div className="mx-auto flex max-w-6xl flex-col sm:flex-row items-center justify-between gap-6 px-6 lg:px-8 text-center sm:text-left">
-          {/* Logo brand info */}
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-white">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="w-4.5 h-4.5">
-                <path d="M7 9C4.24 9 2 11.24 2 14c0 2.76 2.24 5 5 5c3.21 0 5.25-3.33 7-6c1.75-2.67 3.79-6 7-6c2.76 0 5 2.24 5 5c0 2.76-2.24 5-5 5c-3.21 0-5.25-3.33-7-6c-1.75-2.67-3.79-6-7-6Z" />
-              </svg>
-            </div>
-            <span className="text-[18px] font-black text-white tracking-tight font-play">
-              Loop
-            </span>
-          </div>
-
-          {/* Copyright content */}
-          <div className="text-[14px] font-semibold inline-flex items-center gap-1.5 text-sky-200">
-            <span>© 2026 Loop Design. Made with</span>
-            <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-            <span>for makers.</span>
-          </div>
-
-          {/* Social connections */}
-          <div className="flex items-center gap-3 text-white/80">
-            {/* Twitter/X */}
-            <a href="#twitter" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 3.778 8.502 12.54H16.17l-5.214-6.817L4.99 18.5H1.68l7.73-8.235L1.254 2.25H8.08l4.713 6.231zm-1.161 14.275h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            {/* GitHub */}
-            <a href="#github" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.51 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-              </svg>
-            </a>
-            {/* Discord */}
-            <a href="#discord" className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 hover:bg-white/20 hover:text-white transition-all duration-300">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.03c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.074 0 00-.079-.03A19.736 19.736 0 003.677 4.37a.07.069 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.072 0 00.031.057 19.9 19.9 0 005.993 3.03.078.077 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.873-.894.077.076 0 01-.008-.128c.126-.093.252-.19.372-.287a.075.072 0 01.077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.072 0 01.078.009c.12.099.246.195.373.289a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.894.077.075 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.077 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.058 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>
-              </svg>
-            </a>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="px-4 pb-4 text-xs font-semibold leading-relaxed text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-700/50 pt-3"
+                      >
+                        {isVi ? faq.aVi : faq.aEn}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </footer>
-    </div>
+
+      </div>
+    </section>
   );
 }
 

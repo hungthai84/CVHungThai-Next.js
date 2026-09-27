@@ -18,10 +18,10 @@ export function cn(...classes: (string | boolean | undefined | null | Record<str
 export function getUnifiedSurfaceStyle(theme: string): string {
   switch (theme) {
     case "glass-dark-neon":
-      return "bg-[#121218]/80 dark:bg-[#121218]/80 border border-white/12 text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%]";
+      return "bg-[#121218]/60 dark:bg-[#121218]/60 border border-white/12 text-slate-100 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-[16px] backdrop-saturate-[180%]";
     case "mritech-digital-growth":
     default:
-      return "bg-white/65 dark:bg-[#121218]/80 border border-white/50 dark:border-white/12 text-slate-800 dark:text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%]";
+      return "bg-white/55 dark:bg-[#121218]/60 border border-white/50 dark:border-white/12 text-slate-800 dark:text-slate-100 shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-[16px] backdrop-saturate-[180%]";
   }
 }
 

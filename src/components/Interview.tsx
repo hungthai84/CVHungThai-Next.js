@@ -155,19 +155,22 @@ export function Interview() {
   return (
     <section 
       id="interview" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] pb-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start relative z-10">
+      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start relative z-10 pb-[15px]">
 
         {/* Header Card Phỏng vấn */}
         <PageCardHeader pageId="interview" />
 
         {/* Thẻ Phỏng vấn chứa các thẻ con cách tiêu đề main card 15px */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch flex-1">
 
             {/* BENTO CARD 1: Video Player Hero Card (7 columns on lg) */}
-            <div className="w-full lg:col-span-7 flex flex-col h-[340px] xs:h-[400px] sm:h-[480px] lg:h-[560px]">
-              <div className="relative w-full h-full rounded-[14px] overflow-hidden border border-slate-200/80 dark:border-cyan-500/30 shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:shadow-xl transition-all duration-300 bg-slate-950 group flex flex-col">
+            <div className="w-full lg:col-span-7 flex flex-col h-full min-h-[380px] sm:min-h-[460px] lg:min-h-full">
+              <div 
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                className="relative w-full h-full rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/30 shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:shadow-xl transition-all duration-300 bg-slate-950 group flex flex-col"
+              >
                 <video
                   ref={videoRef}
                   controls={isInterviewPlaying}
@@ -281,8 +284,11 @@ export function Interview() {
             </div>
 
             {/* BENTO CARD 2: GIAO DIỆN CÂU ĐANG CHỌN (ACTIVE SELECTED QUESTION CARD - 5 cols on lg) */}
-            <div className="w-full lg:col-span-5 flex flex-col h-[500px] sm:h-[530px] lg:h-[560px]">
-              <div className="w-full h-full rounded-[14px] border-2 border-indigo-500/80 dark:border-cyan-400/80 bg-white/95 dark:bg-slate-900/90 p-4 sm:p-5 md:p-6 backdrop-blur-2xl shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(6,182,212,0.25)] transition-all duration-300 text-left flex flex-col justify-between gap-3 overflow-hidden relative">
+            <div className="w-full lg:col-span-5 flex flex-col h-full min-h-[380px] sm:min-h-[460px] lg:min-h-full">
+              <div 
+                style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-[15px] backdrop-blur-2xl shadow-xl transition-all duration-300 text-left flex flex-col justify-between gap-3 overflow-hidden relative"
+              >
                 
                 {/* Glowing Active Ring Halo on Top Right */}
                 <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />

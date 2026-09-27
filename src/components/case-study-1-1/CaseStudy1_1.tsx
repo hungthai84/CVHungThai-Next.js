@@ -46,6 +46,19 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
   const [viewMode, setViewMode] = useState<"all" | "mindmap">("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showStickyBack, setShowStickyBack] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowStickyBack(true);
+      } else {
+        setShowStickyBack(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     // Dynamic setup to prepare sections for GSAP Accordion ScrollTrigger
@@ -529,6 +542,22 @@ export function CaseStudy1_1({ project, onBack, onZoomImage }: { project: Projec
 
       {isModalOpen && <CaseStudy1_1_Modal onClose={() => setIsModalOpen(false)} />}
       
+      {showStickyBack && (
+        <button
+          type="button"
+          onClick={() => {
+            playUiSound("click");
+            onBack();
+          }}
+          className="fixed top-18 right-5 z-50 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900/90 hover:bg-slate-800 text-white text-xs font-extrabold border border-sky-400/50 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+          title="Trở về danh sách dự án"
+        >
+          <ArrowLeft className="w-4 h-4 text-sky-300 stroke-[2.5]" />
+          <span className="hidden sm:inline">Trở về danh sách dự án</span>
+          <span className="sm:hidden">Trở về</span>
+        </button>
+      )}
+
       {toastMessage && (
         <div className="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none animate-in fade-in slide-in-from-bottom-4">
           <div className="glass-base bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 font-bold text-xs backdrop-blur-2xl border border-slate-200 dark:border-slate-800">

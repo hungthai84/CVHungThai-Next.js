@@ -13,6 +13,7 @@ import {
   LayoutGrid,
   MessagesSquare,
   Mail,
+  MailOpen,
   Phone,
   FileText,
   Compass,
@@ -31,7 +32,8 @@ import {
   Rocket,
   Type,
   Server,
-  CreditCard
+  CreditCard,
+  LayoutTemplate
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
@@ -193,25 +195,27 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   // Complete Sections for Quick Jump Menu & Direct Navigation
   const ALL_14_SECTIONS = [
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
-    { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Letter", Icon: FileText, key: "2" },
+    { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Open Letter", Icon: MailOpen, key: "L" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
     { id: "domains", num: "04", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass, key: "D" },
     { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
-    { id: "education", num: "05", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
-    { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
-    { id: "projects", num: "07", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
-    { id: "interview", num: "08", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
-    { id: "tuvi", num: "09", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
-    { id: "memories", num: "10", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
-    { id: "contact", num: "11", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
-    { id: "systems", num: "12", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
-    { id: "wallpapers", num: "13", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
+    { id: "education", num: "06", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+    { id: "experience", num: "07", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
+    { id: "projects", num: "08", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
+    { id: "interview", num: "09", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
+    { id: "tuvi", num: "10", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
+    { id: "memories", num: "11", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
+    { id: "contact", num: "12", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
+    { id: "systems", num: "13", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
+    { id: "wallpapers", num: "14", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
+    { id: "customization", num: "15", labelVi: "Tùy chỉnh", labelEn: "Customization", Icon: Sliders, key: "U" },
+    { id: "template", num: "16", labelVi: "Trang mẫu", labelEn: "Template", Icon: LayoutTemplate, key: "T" },
   ];
 
   // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips
   const navItems = [
     { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Monitor },
-    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: FileText },
+    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: MailOpen },
     { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", label: t("nav.about"), Icon: User },
     { id: "domains", labelVi: "Lĩnh vực", labelEn: "Core Domains", label: t("nav.domains"), Icon: Compass },
     { id: "skills", labelVi: "Kỹ năng", labelEn: "Core Skills", label: t("nav.skills"), Icon: Brain },
@@ -242,10 +246,10 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const getHeaderContainerStyle = () => {
     switch (theme) {
       case "glass-dark-neon":
-        return "bg-[#121218]/80 dark:bg-[#121218]/80 border-b border-x border-t-0 border-white/12 text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]";
+        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-b border-x border-t-0 border-white/20 text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
       case "mritech-digital-growth":
       default:
-        return "bg-white/65 dark:bg-[#121218]/80 border-b border-x border-t-0 border-white/50 dark:border-white/12 text-slate-800 dark:text-slate-100 backdrop-blur-[16px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]";
+        return "bg-white/75 dark:bg-[#121218]/85 border-b border-x border-t-0 border-white/60 dark:border-white/20 text-slate-800 dark:text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(31,38,135,0.12)] dark:shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
     }
   };
 
@@ -291,7 +295,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           onMouseEnter={handleNavMouseEnter}
           onMouseMove={handleMouseMove}
           className={cn(
-            "hidden md:flex flex-1 shrink-0 items-center justify-between gap-1 p-1 rounded-full mx-2 lg:mx-4 min-[1250px]:mx-5 relative group/nav header-nav-container select-none overflow-visible max-w-[720px] min-[1250px]:max-w-[880px] transition-all duration-300 bg-transparent border-transparent shadow-none !backdrop-blur-none",
+            "hidden md:flex flex-1 shrink-0 items-center justify-center gap-1 p-1 rounded-full mx-2 lg:mx-4 min-[1250px]:mx-5 relative group/nav header-nav-container select-none overflow-visible max-w-[760px] min-[1250px]:max-w-[900px] transition-all duration-300 bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl",
             theme === "glass-dark-neon"
               ? "text-white"
               : "text-slate-900 dark:text-white"
@@ -302,15 +306,37 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             <div className="liquid-glare" />
           </div>
 
-          <ul className="header-nav-list flex items-center justify-between gap-0.5 sm:gap-1 w-full relative z-20 shrink-0">
+          <ul className="header-nav-list flex items-center justify-between gap-1 sm:gap-1.5 w-full relative z-20 shrink-0 px-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               const isHovered = hoveredNavId === item.id;
 
+              const getNavItemTheme = (id: string, active: boolean) => {
+                if (active) {
+                  return "bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105";
+                }
+                switch (id) {
+                  case "home": return "text-blue-600 dark:text-cyan-400 hover:bg-blue-500/15 hover:scale-110";
+                  case "letter": return "text-amber-600 dark:text-amber-400 hover:bg-amber-500/15 hover:scale-110";
+                  case "about": return "text-purple-600 dark:text-purple-400 hover:bg-purple-500/15 hover:scale-110";
+                  case "domains": return "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/15 hover:scale-110";
+                  case "skills": return "text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/15 hover:scale-110";
+                  case "education": return "text-violet-600 dark:text-violet-400 hover:bg-violet-500/15 hover:scale-110";
+                  case "experience": return "text-rose-600 dark:text-rose-400 hover:bg-rose-500/15 hover:scale-110";
+                  case "projects": return "text-teal-600 dark:text-teal-400 hover:bg-teal-500/15 hover:scale-110";
+                  case "interview": return "text-pink-600 dark:text-pink-400 hover:bg-pink-500/15 hover:scale-110";
+                  case "tuvi": return "text-orange-600 dark:text-orange-400 hover:bg-orange-500/15 hover:scale-110";
+                  case "systems": return "text-slate-600 dark:text-slate-300 hover:bg-slate-500/15 hover:scale-110";
+                  case "memories": return "text-fuchsia-600 dark:text-fuchsia-400 hover:bg-fuchsia-500/15 hover:scale-110";
+                  case "contact": return "text-red-600 dark:text-red-400 hover:bg-red-500/15 hover:scale-110";
+                  default: return "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10 hover:scale-110";
+                }
+              };
+
               return (
                 <li
                   key={item.id}
-                  className={`header-nav-item shrink-0 relative ${isActive ? "active" : ""}`}
+                  className={`shrink-0 relative group/navitem`}
                   onMouseEnter={() => setHoveredNavId(item.id)}
                   onMouseLeave={() => setHoveredNavId(null)}
                 >
@@ -318,26 +344,32 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     href={`#${item.id}`}
                     onClick={(e) => handleNavClick(e, item.id)}
                     aria-label={item.label}
-                    className="relative z-10 shrink-0"
+                    title={item.label}
+                    className={cn(
+                      "w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer relative shrink-0",
+                      getNavItemTheme(item.id, isActive)
+                    )}
                   >
-                    <span className="icon shrink-0">
-                      <item.Icon 
-                        size={22} 
-                        strokeWidth={2.2} 
-                        className={`w-[22px] h-[22px] transition-all duration-300 shrink-0 group-hover:scale-110 ${isActive ? 'text-indigo-600 dark:text-cyan-400 scale-110 drop-shadow-md' : 'text-slate-500 dark:text-slate-400 group-hover/nav:text-slate-700 dark:group-hover/nav:text-slate-300'}`} 
-                      />
-                    </span>
-                    <span className={`title shrink-0 transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold drop-shadow-sm' : ''}`}>
-                      <item.Icon 
-                        size={22} 
-                        strokeWidth={2.2} 
-                        className={`w-[22px] h-[22px] shrink-0 transition-all duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400' : ''}`} 
-                      />
-                      <span className="shrink-0">{item.label}</span>
-                    </span>
-                    <span className={`nav-label-bottom transition-colors duration-300 ${isActive ? 'text-indigo-600 dark:text-cyan-400 font-bold' : 'text-slate-600 dark:text-slate-300'}`}>
-                      {item.label}
-                    </span>
+                    <item.Icon 
+                      className={`w-4.5 h-4.5 sm:w-5 sm:h-5 transition-all duration-300 shrink-0 ${
+                        isActive 
+                          ? "text-white stroke-[2.5]" 
+                          : "group-hover/navitem:scale-110"
+                      }`} 
+                    />
+                    {/* Floating label on hover/active */}
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.span 
+                          initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.9 }}
+                          className="absolute top-full mt-2 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
                   </a>
                 </li>
               );
@@ -751,6 +783,28 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                     <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
                   </button>
 
+                  {/* 5. Nút Mở Trang Tùy chỉnh (Full Customization Page) - Bung xuống */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigate) {
+                        onNavigate("customization");
+                      } else {
+                        window.dispatchEvent(new CustomEvent("app-navigate", { detail: "customization" }));
+                      }
+                    }}
+                    className="w-full h-[38px] sm:h-[40px] px-3.5 rounded-[999px] text-xs font-semibold flex items-center justify-between transition-all duration-200 cursor-pointer bg-indigo-50/80 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200/80 dark:border-indigo-800/60 text-indigo-700 dark:text-cyan-300 hover:scale-[1.02] active:scale-98 shadow-xs"
+                    title={lang === "vi" ? "Mở trang Tùy chỉnh hệ thống toàn diện" : "Open full Customization Studio Page"}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-cyan-400 shrink-0">
+                        <Sliders className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="truncate font-bold">{lang === "vi" ? "Trang Tùy chỉnh ↗" : "Customization Page ↗"}</span>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shrink-0" />
+                  </button>
+
 
                 </motion.div>
               )}
@@ -929,13 +983,15 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             </div>
           </div>
 
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="w-[38px] h-[38px] sm:w-[40px] sm:h-[40px] text-slate-800 dark:text-slate-200 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/15 active:scale-95 transition-transform flex items-center justify-center cursor-pointer ml-1 backdrop-blur-xl"
-            aria-label="Open Navigation Menu"
-          >
-            {isMobileMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
-          </button>
+          <div className="flex items-center gap-1 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl relative ml-1">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-slate-800 dark:text-slate-200 hover:bg-slate-200/40 dark:hover:bg-white/10 active:scale-95 hover:scale-105 transition-all duration-300 cursor-pointer"
+              aria-label="Open Navigation Menu"
+            >
+              {isMobileMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
+            </button>
+          </div>
         </div>
       </header>
 

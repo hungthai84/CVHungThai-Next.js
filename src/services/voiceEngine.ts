@@ -110,10 +110,14 @@ class VoiceEngine {
       });
       
       if (res.ok) {
-        const data = await res.json();
-        if (data.audio) {
-          await this.playPCMBase64(data.audio, 24000, onEnd);
-          return;
+        try {
+          const data = await res.json();
+          if (data && data.audio) {
+            await this.playPCMBase64(data.audio, 24000, onEnd);
+            return;
+          }
+        } catch (jsonErr) {
+          console.warn("TTS JSON response parsing error:", jsonErr);
         }
       }
     } catch (e) {
