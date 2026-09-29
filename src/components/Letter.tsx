@@ -287,9 +287,10 @@ export default function OpenLetter() {
               {/* Header Title with Animated Icon */}
               <AnimatedCardTitle
                 icon={BookCheck}
-                title={isVi ? "Thông điệp hợp tác chiến lược" : "Strategic Cooperation Message"}
-                subtitle={isVi ? "Tầm nhìn & Định hướng phát triển bền vững" : "Vision & Strategic Growth Orientation"}
-                colorPreset="emerald"
+                title={isVi ? "Thông Điệp Hợp Tác" : "Cooperation Message"}
+                subtitle={isVi ? "Tầm nhìn & định hướng bền vững" : "Vision & sustainable orientation"}
+                colorPreset="auto"
+                indexForAutoColor={0}
               />
 
               {/* Salutation Line in Vibrant Orange */}
@@ -345,8 +346,9 @@ export default function OpenLetter() {
             {/* Header with Animated Icon */}
             <AnimatedCardTitle
               icon={Rocket}
-              title={isVi ? "Hành trình sự nghiệp đột phá" : "Breakthrough Career Journey Milestones"}
-              colorPreset="cyan"
+              title={isVi ? "Hành Trình Sự Nghiệp" : "Career Milestones Journey"}
+              colorPreset="auto"
+              indexForAutoColor={1}
               actionRight={
                 <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-sky-100/80 dark:bg-sky-950/50 border border-sky-200/80 dark:border-sky-800/60 shadow-2xs">
                   <Quote className="w-4 h-4 text-blue-600 dark:text-blue-400 rotate-180 shrink-0 -mt-0.5" />
@@ -357,55 +359,52 @@ export default function OpenLetter() {
               }
             />
 
-            {/* Grid Timeline Container */}
-            <div className="relative w-full py-4 px-1 md:px-4">
-              {/* Central Vertical Timeline Line (Visible on Desktop only) */}
-              <div className="absolute left-1/2 top-4 bottom-4 -translate-x-1/2 w-[3px] bg-sky-400 dark:bg-sky-500 rounded-full hidden md:block z-0 opacity-80 shadow-xs" />
+            {/* Central Vertical Timeline Line (Visible on Desktop only) */}
+            <div className="absolute left-1/2 top-[60px] bottom-2 -translate-x-1/2 w-[3px] bg-sky-400 dark:bg-sky-500 rounded-full hidden md:block z-0 opacity-80 shadow-xs" />
 
-              {/* Rows of Symmetrical Pairs */}
-              <div className="flex flex-col gap-5 sm:gap-6 relative z-10 w-full">
-                {careerPairs.map((pair, pIdx) => {
-                  const leftItem = pair.left;
-                  const rightItem = pair.right;
+            {/* Rows of Symmetrical Pairs */}
+            <div className="flex flex-col gap-5 sm:gap-6 relative z-10 w-full mt-4">
+              {careerPairs.map((pair, pIdx) => {
+                const leftItem = pair.left;
+                const rightItem = pair.right;
 
-                  return (
-                    <div key={pIdx} className="relative w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-x-10 lg:gap-x-12 items-stretch">
-                      {/* Left Card */}
-                      {renderCareerCard(leftItem)}
+                return (
+                  <div key={pIdx} className="relative w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-x-10 lg:gap-x-12 items-stretch">
+                    {/* Left Card */}
+                    {renderCareerCard(leftItem)}
 
-                      {/* Right Card */}
-                      {renderCareerCard(rightItem)}
+                    {/* Right Card */}
+                    {renderCareerCard(rightItem)}
 
-                      {/* Desktop Timeline Connections */}
+                    {/* Desktop Timeline Connections */}
+                    <div 
+                      className="absolute right-1/2 w-8 lg:w-10 h-[2px] top-1/2 -translate-y-1/2 hidden md:block z-0 pointer-events-none"
+                      style={{ 
+                        background: `linear-gradient(to right, transparent, ${leftItem.color})`,
+                        marginRight: "6px"
+                      }}
+                    />
+                    <div 
+                      className="absolute left-1/2 w-8 lg:w-10 h-[2px] top-1/2 -translate-y-1/2 hidden md:block z-0 pointer-events-none"
+                      style={{ 
+                        background: `linear-gradient(to left, transparent, ${rightItem.color})`,
+                        marginLeft: "6px"
+                      }}
+                    />
+                    {/* Dual-color Node on Center Timeline Axis */}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center gap-1.5 z-20 pointer-events-none">
                       <div 
-                        className="absolute right-1/2 w-8 lg:w-10 h-[2px] top-1/2 -translate-y-1/2 hidden md:block z-0 pointer-events-none"
-                        style={{ 
-                          background: `linear-gradient(to right, transparent, ${leftItem.color})`,
-                          marginRight: "6px"
-                        }}
+                        className="w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm transition-transform duration-300"
+                        style={{ backgroundColor: leftItem.color }}
                       />
                       <div 
-                        className="absolute left-1/2 w-8 lg:w-10 h-[2px] top-1/2 -translate-y-1/2 hidden md:block z-0 pointer-events-none"
-                        style={{ 
-                          background: `linear-gradient(to left, transparent, ${rightItem.color})`,
-                          marginLeft: "6px"
-                        }}
+                        className="w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm transition-transform duration-300"
+                        style={{ backgroundColor: rightItem.color }}
                       />
-                      {/* Dual-color Node on Center Timeline Axis */}
-                      <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center gap-1.5 z-20 pointer-events-none">
-                        <div 
-                          className="w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm transition-transform duration-300"
-                          style={{ backgroundColor: leftItem.color }}
-                        />
-                        <div 
-                          className="w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm transition-transform duration-300"
-                          style={{ backgroundColor: rightItem.color }}
-                        />
-                      </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </motion.div>
@@ -413,7 +412,7 @@ export default function OpenLetter() {
         {/* ========================================================================= */}
         {/* ROW 3: OPERATIONAL PHILOSOPHY & APPRECIATION LETTER                       */}
         {/* ========================================================================= */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-[15px] w-full relative z-10 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px] w-full relative z-10 items-stretch">
           {/* Card 1: OPERATIONAL PHILOSOPHY */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -438,8 +437,9 @@ export default function OpenLetter() {
               <div className="relative z-10 flex flex-col items-start text-left mb-4 sm:mb-5 w-full">
                 <AnimatedCardTitle
                   icon={Sparkles}
-                  title={isVi ? "Triết lý quản trị vận hành" : "Operational Management Philosophy"}
-                  colorPreset="purple"
+                  title={isVi ? "Triết Lý Vận Hành" : "Operational Philosophy"}
+                  colorPreset="auto"
+                  indexForAutoColor={2}
                 />
 
                 {/* Description Paragraph */}
@@ -511,8 +511,9 @@ export default function OpenLetter() {
                   {/* Header title with Animated Icon */}
                   <AnimatedCardTitle
                     icon={Heart}
-                    title={isVi ? "Tâm thư tri ấn phụng sự" : "Sincere Appreciation Letter"}
-                    colorPreset="rose"
+                    title={isVi ? "Tâm Thư Tri Ân" : "Appreciation Letter"}
+                    colorPreset="auto"
+                    indexForAutoColor={3}
                   />
 
                   {/* Sincere message */}
@@ -603,8 +604,9 @@ export default function OpenLetter() {
           {/* Tiêu đề Khối with Animated Icon */}
           <AnimatedCardTitle
             icon={Award}
-            title={isVi ? "Giá trị cốt lõi phát triển" : "Core Values Pursued"}
-            colorPreset="orange"
+            title={isVi ? "Giá Trị Cốt Lõi" : "Core Values Pursued"}
+            colorPreset="auto"
+            indexForAutoColor={4}
           />
 
           {/* 4 Cột Giá Trị Cốt Lõi thiết kế Bento Card Cao Cấp */}

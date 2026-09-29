@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Sliders, 
@@ -7,6 +7,7 @@ import {
   MousePointer, 
   Volume2, 
   PanelBottom, 
+  PanelTop,
   Type, 
   Check, 
   RotateCcw, 
@@ -30,35 +31,53 @@ import {
   Pin, 
   Code2, 
   SlidersHorizontal, 
-  Bot, 
   Clock, 
   CloudSun, 
-  Printer, 
   ChevronDown, 
-  LayoutTemplate,
   Monitor,
   ShieldCheck,
   Zap,
+  Save,
+  Download,
+  Upload,
+  RefreshCw,
+  FileJson,
+  Wrench,
+  AlertTriangle,
+  X,
   Play
 } from "lucide-react";
 import { PageCardHeader } from "./PageCardHeader";
 import { useLanguage } from "../i18n";
-import { useTheme, COLOR_PRESETS, ThemeType } from "../context/ThemeContext";
+import { useTheme, COLOR_PRESETS, ThemeType, ThemeMode } from "../context/ThemeContext";
 import { useCursor } from "../context/CursorContext";
 import { useSound } from "../context/SoundContext";
 import { useFooter, FooterModalTab } from "../context/FooterContext";
+import { useHeader } from "../context/HeaderContext";
 import { CURSOR_STYLE_OPTIONS, CURSOR_COLOR_OPTIONS } from "../data/cursorData";
 import { CursorStyleType } from "../types/cursor";
 import { SOUND_PACK_OPTIONS, AMBIENT_SOUND_OPTIONS } from "../data/soundData";
 import { AmbientSoundType } from "../types/sound";
 import { FOOTER_PLACEMENT_OPTIONS } from "../data/footerData";
 import { FooterPlacement } from "../types/footer";
+import { 
+  saveAsProductionDefaults, 
+  getSavedProductionDefaults, 
+  resetToFactoryDefaults, 
+  exportConfigurationFile, 
+  importConfigurationFromJson, 
+  runSystemDiagnosticAndRepair,
+  DiagnosticReport,
+  SystemProductionConfig,
+  FACTORY_DEFAULTS
+} from "../services/systemSettingsService";
 import { cn } from "../lib/utils";
 
 const RADIUS_PRESETS = [
   {
     id: "sharp",
     radius: 4,
+    cardRadius: 6,
     nameVi: "Tối Giản / Vuông (Sharp 4px)",
     nameEn: "Minimal Sharp (4px)",
     descVi: "Gọn gàng, chuẩn xác phong cách phẳng",
@@ -67,6 +86,7 @@ const RADIUS_PRESETS = [
   {
     id: "standard",
     radius: 10,
+    cardRadius: 14,
     nameVi: "Chuẩn Mực Hệ Thống (Standard 10px)",
     nameEn: "System Standard (10px)",
     descVi: "Mặc định Master Agent Design System",
@@ -75,6 +95,7 @@ const RADIUS_PRESETS = [
   {
     id: "smooth",
     radius: 14,
+    cardRadius: 18,
     nameVi: "Mềm Mại Hiện Đại (Smooth 14px)",
     nameEn: "Smooth Modern (14px)",
     descVi: "Bo cong mềm mại, thanh lịch",
@@ -83,6 +104,7 @@ const RADIUS_PRESETS = [
   {
     id: "rounded",
     radius: 18,
+    cardRadius: 22,
     nameVi: "Bo Tròn Nổi Bật (Rounded 18px)",
     nameEn: "Rounded Soft (18px)",
     descVi: "Đường cong nổi bật, thân thiện",
@@ -91,6 +113,7 @@ const RADIUS_PRESETS = [
   {
     id: "fluid",
     radius: 24,
+    cardRadius: 28,
     nameVi: "Bo Cong Tối Đa (Extra Round 24px)",
     nameEn: "Extra Round Fluid (24px)",
     descVi: "Bento bubble cao cấp, mượt mà",
@@ -116,6 +139,8 @@ export default function Customization() {
   const { 
     theme, 
     setTheme, 
+    themeMode,
+    setThemeMode,
     colorPreset, 
     setColorPreset, 
     activePalette, 
@@ -163,15 +188,20 @@ export default function Customization() {
     setFooterModalTab
   } = useFooter();
 
+  const {
+    headerConfig,
+    isHeaderPinned,
+    togglePin: toggleHeaderPin
+  } = useHeader();
+
   // Active Tab state
   const [activeTab, setActiveTab] = useState<FooterModalTab>("customization");
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [copiedCss, setCopiedCss] = useState(false);
   const [customTestText, setCustomTestText] = useState("");
-  const [activeTypoToken, setActiveTypoToken] = useState("body");
   const [resetSuccessMessage, setResetSuccessMessage] = useState<string | null>(null);
 
-  // Unsaved border radius local states for the Radius customization card
+  // Border radius state
   const [tempBorderRadius, setTempBorderRadius] = useState(borderRadius);
   const [tempBorderRadiusCard, setTempBorderRadiusCard] = useState(borderRadiusCard);
 
@@ -183,6 +213,22 @@ export default function Customization() {
   useEffect(() => {
     setTempBorderRadiusCard(borderRadiusCard);
   }, [borderRadiusCard]);
+
+  // Production Defaults Status State
+  const [productionDefaultsStatus, setProductionDefaultsStatus] = useState<string>(() => {
+    const saved = getSavedProductionDefaults();
+    return saved?.savedFormattedDate || (isVi ? "Mặc định gốc nhà phát triển" : "Factory Standard Default");
+  });
+
+  // Diagnostic Report Modal State
+  const [diagnosticReport, setDiagnosticReport] = useState<DiagnosticReport | null>(null);
+  const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
+
+  // Import JSON Modal State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importJsonText, setImportJsonText] = useState("");
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sync tab with external requested tab (if any)
   useEffect(() => {
@@ -212,8 +258,8 @@ export default function Customization() {
     const p5 = activePalette.find(p => p.id === "soft")?.hex || "#38BDF8";
 
     const cssCode = theme === "glass-dark-neon" 
-      ? `/* DARK NEON GLASS — 5 MÀU CHỦ ĐẠO */\n[data-theme="dark"] {\n  --color-primary: ${p1};   /* Main Action / Primary */\n  --color-secondary: ${p2}; /* Secondary Links / Nav */\n  --color-accent: ${p3};    /* Accent / Glow */\n  --color-highlight: ${p4}; /* Highlight Feature */\n  --color-soft: ${p5};      /* Soft Status / Positive */\n  --theme-radius-card: ${borderRadius}px;\n  --font-scale: ${fontScale};\n}`
-      : `/* LIGHT GLASS — 5 MÀU CHỦ ĐẠO */\n:root {\n  --color-primary: ${p1};   /* Primary Action */\n  --color-secondary: ${p2}; /* Secondary Indigo */\n  --color-accent: ${p3};    /* Accent Cyan */\n  --color-highlight: ${p4}; /* Highlight Violet */\n  --color-soft: ${p5};      /* Soft Sky */\n  --theme-radius-card: ${borderRadius}px;\n  --font-scale: ${fontScale};\n}`;
+      ? `/* DARK NEON GLASS — 5 MÀU CHỦ ĐẠO */\n[data-theme="dark"] {\n  --color-primary: ${p1};   /* Main Action / Primary */\n  --color-secondary: ${p2}; /* Secondary Links / Nav */\n  --color-accent: ${p3};    /* Accent / Glow */\n  --color-highlight: ${p4}; /* Highlight Feature */\n  --color-soft: ${p5};      /* Soft Status / Positive */\n  --theme-radius: ${borderRadius}px;\n  --theme-radius-card: ${borderRadiusCard}px;\n  --font-scale: ${fontScale}%;\n}`
+      : `/* LIGHT GLASS — 5 MÀU CHỦ ĐẠO */\n:root {\n  --color-primary: ${p1};   /* Primary Action */\n  --color-secondary: ${p2}; /* Secondary Indigo */\n  --color-accent: ${p3};    /* Accent Cyan */\n  --color-highlight: ${p4}; /* Highlight Violet */\n  --color-soft: ${p5};      /* Soft Sky */\n  --theme-radius: ${borderRadius}px;\n  --theme-radius-card: ${borderRadiusCard}px;\n  --font-scale: ${fontScale}%;\n}`;
     navigator.clipboard.writeText(cssCode);
     setCopiedCss(true);
     playSuccess();
@@ -223,7 +269,146 @@ export default function Customization() {
   const triggerResetFeedback = (msg: string) => {
     setResetSuccessMessage(msg);
     playSuccess();
-    setTimeout(() => setResetSuccessMessage(null), 2500);
+    setTimeout(() => setResetSuccessMessage(null), 3000);
+  };
+
+  // 1. SAVE AS PRODUCTION DEFAULT HANDLER
+  const handleSaveAsProductionDefault = () => {
+    const configToSave: Partial<SystemProductionConfig> = {
+      themeMode,
+      theme,
+      colorPreset,
+      fontScale,
+      borderRadius: tempBorderRadius,
+      borderRadiusCard: tempBorderRadiusCard,
+      cursor: cursorConfig,
+      sound: soundConfig,
+      footer: footerConfig,
+      header: {
+        isPinned: isHeaderPinned,
+      },
+      lang,
+    };
+
+    const saved = saveAsProductionDefaults(configToSave);
+    setProductionDefaultsStatus(saved.savedFormattedDate || "Vừa cập nhật");
+    triggerResetFeedback(
+      isVi 
+        ? "✅ Đã lưu cấu hình làm Cài đặt Mặc định Thực tế thành công! Mọi lượt mở website mới sẽ tự động nạp cấu hình này." 
+        : "✅ Successfully saved as Production Defaults! All future visits will open with these settings."
+    );
+  };
+
+  // 2. RELOAD PRODUCTION DEFAULTS HANDLER
+  const handleReloadProductionDefaults = () => {
+    const saved = getSavedProductionDefaults();
+    if (!saved) {
+      triggerResetFeedback(isVi ? "Hệ thống đang sử dụng cấu hình gốc xuất xưởng." : "Using factory standard defaults.");
+      return;
+    }
+
+    if (saved.themeMode) setThemeMode(saved.themeMode);
+    if (saved.theme) setTheme(saved.theme);
+    if (saved.colorPreset) setColorPreset(saved.colorPreset);
+    if (typeof saved.fontScale === "number") setFontScale(saved.fontScale);
+    if (typeof saved.borderRadius === "number") {
+      setTempBorderRadius(saved.borderRadius);
+      setBorderRadius(saved.borderRadius);
+    }
+    if (typeof saved.borderRadiusCard === "number") {
+      setTempBorderRadiusCard(saved.borderRadiusCard);
+      setBorderRadiusCard(saved.borderRadiusCard);
+    }
+    if (saved.lang) setLang(saved.lang);
+
+    triggerResetFeedback(
+      isVi 
+        ? "🔄 Đã nạp lại Cài đặt Mặc định Thực tế đã lưu trước đó!" 
+        : "🔄 Reloaded saved production defaults successfully!"
+    );
+  };
+
+  // 3. RESET TO FACTORY DEFAULTS
+  const handleResetToFactoryDefaults = () => {
+    resetToFactoryDefaults();
+    setThemeMode(FACTORY_DEFAULTS.themeMode);
+    setTheme(FACTORY_DEFAULTS.theme);
+    setColorPreset(FACTORY_DEFAULTS.colorPreset);
+    setFontScale(FACTORY_DEFAULTS.fontScale);
+    setTempBorderRadius(FACTORY_DEFAULTS.borderRadius);
+    setBorderRadius(FACTORY_DEFAULTS.borderRadius);
+    setTempBorderRadiusCard(FACTORY_DEFAULTS.borderRadiusCard);
+    setBorderRadiusCard(FACTORY_DEFAULTS.borderRadiusCard);
+    resetCursorConfig();
+    resetSoundConfig();
+    resetFooterConfig();
+    setLang(FACTORY_DEFAULTS.lang);
+    setProductionDefaultsStatus(isVi ? "Mặc định gốc nhà phát triển" : "Factory Standard Default");
+
+    triggerResetFeedback(
+      isVi 
+        ? "🔄 Đã khôi phục toàn bộ cài đặt về Chuẩn Gốc Xuất Xưởng ban đầu!" 
+        : "🔄 System restored to pristine Factory Default configuration!"
+    );
+  };
+
+  // 4. RUN DIAGNOSTIC & AUTO REPAIR
+  const handleRunDiagnostic = () => {
+    playClick();
+    const report = runSystemDiagnosticAndRepair();
+    setDiagnosticReport(report);
+    setIsDiagnosticModalOpen(true);
+    playSuccess();
+  };
+
+  // 5. EXPORT CONFIG JSON
+  const handleExportConfig = () => {
+    const currentConfig: SystemProductionConfig = {
+      version: "2.5-prod",
+      savedAt: new Date().toISOString(),
+      savedFormattedDate: `${new Date().toLocaleTimeString("vi-VN")} - ${new Date().toLocaleDateString("vi-VN")}`,
+      themeMode,
+      theme,
+      colorPreset,
+      fontScale,
+      borderRadius: tempBorderRadius,
+      borderRadiusCard: tempBorderRadiusCard,
+      cursor: cursorConfig,
+      sound: soundConfig,
+      footer: footerConfig,
+      header: { isPinned: isHeaderPinned },
+      lang,
+    };
+    exportConfigurationFile(currentConfig);
+    triggerResetFeedback(isVi ? "📥 Đã tải xuống tệp cấu hình JSON thành công!" : "📥 Exported configuration JSON file successfully!");
+  };
+
+  // 6. IMPORT CONFIG JSON
+  const handleImportJson = () => {
+    if (!importJsonText.trim()) return;
+    const result = importConfigurationFromJson(importJsonText);
+    if (!result.success) {
+      setImportError(isVi ? (result.errorVi || "Lỗi tệp") : (result.errorEn || "Error"));
+      return;
+    }
+    setImportError(null);
+    setIsImportModalOpen(false);
+    setImportJsonText("");
+    setProductionDefaultsStatus(result.config?.savedFormattedDate || "Vừa nạp từ JSON");
+    triggerResetFeedback(isVi ? "🎉 Đã nhập và áp dụng tệp cấu hình JSON thành công!" : "🎉 Successfully imported and applied JSON configuration!");
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (text) {
+        setImportJsonText(text);
+      }
+    };
+    reader.readAsText(file);
   };
 
   const getPlacementIcon = (id: FooterPlacement) => {
@@ -263,40 +448,146 @@ export default function Customization() {
     { id: "radius", nameVi: "Bo góc thẻ", nameEn: "Border Radius", Icon: Layers },
     { id: "cursor", nameVi: "Con trỏ FX", nameEn: "Cursor FX", Icon: MousePointer },
     { id: "sound", nameVi: "Âm thanh FX", nameEn: "Audio & FX", Icon: Volume2 },
-    { id: "footer", nameVi: "Chân trang Footer", nameEn: "Footer Dock", Icon: PanelBottom },
+    { id: "footer", nameVi: "Header & Footer Dock", nameEn: "Header & Footer Dock", Icon: PanelBottom },
     { id: "typography", nameVi: "Phông chữ Typography", nameEn: "Typography", Icon: Type },
   ];
 
   return (
-    <div className="w-full h-full min-h-full flex flex-col justify-start pb-12 pt-2 px-3 sm:px-6 md:px-8 max-w-[1240px] mx-auto select-none">
+    <div className="w-full h-full min-h-full flex flex-col justify-start pb-16 pt-2 px-3 sm:px-6 md:px-8 max-w-[1280px] mx-auto select-none">
       {/* 1. Standard Page Card Header */}
       <PageCardHeader pageId="customization" />
 
-      {/* Reset confirmation toast */}
+      {/* Global Success Feedback Banner */}
       <AnimatePresence>
         {resetSuccessMessage && (
           <motion.div
-            initial={{ opacity: 0, y: -15, scale: 0.95 }}
+            initial={{ opacity: 0, y: -15, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -15, scale: 0.95 }}
-            className="mb-4 px-4 py-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-md shadow-sm"
+            exit={{ opacity: 0, y: -15, scale: 0.96 }}
+            className="mb-4 px-4 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-md shadow-sm"
           >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
               <span>{resetSuccessMessage}</span>
             </div>
+            <button 
+              type="button" 
+              onClick={() => setResetSuccessMessage(null)}
+              className="p-1 rounded-lg hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 2. Top Navigation Tabs Bar (Sticky Transparent Container with Apple-style Fluid Sliding Pill & WCAG Contrast) */}
+      {/* 2. MASTER ACTION BAR: QUẢN LÝ CẤU HÌNH & LƯU MẶC ĐỊNH THỰC TẾ */}
+      <div 
+        className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm"
+        style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+      >
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                  {isVi ? "Quản lý Cấu hình & Thiết lập Mặc định Thực tế" : "Production Defaults & System Manager"}
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-3xs font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  {isVi ? "Sẵn sàng chạy thực tế" : "Production Ready"}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                {isVi ? "Mặc định thực tế hiện tại: " : "Current Default: "}
+                <span className="font-semibold text-indigo-600 dark:text-cyan-400">{productionDefaultsStatus}</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons Cluster */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* 1. PRIMARY SAVE AS DEFAULT BUTTON */}
+            <button
+              type="button"
+              onClick={handleSaveAsProductionDefault}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/25 transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              <Save className="w-4 h-4" />
+              <span>{isVi ? "Lưu làm Cài đặt Mặc định Thực tế" : "Save as Production Default"}</span>
+            </button>
+
+            {/* 2. HEALTH CHECK & AUTO REPAIR BUTTON */}
+            <button
+              type="button"
+              onClick={handleRunDiagnostic}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer"
+              title={isVi ? "Rà soát tính năng & tự động sửa chữa hệ thống" : "Audit & Auto-repair system settings"}
+            >
+              <Wrench className="w-3.5 h-3.5" />
+              <span>{isVi ? "Rà soát & Sửa chữa" : "Audit & Repair"}</span>
+            </button>
+
+            {/* 3. RELOAD PRODUCTION DEFAULTS */}
+            <button
+              type="button"
+              onClick={handleReloadProductionDefaults}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Nạp lại cấu hình mặc định thực tế" : "Reload saved defaults"}
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isVi ? "Nạp mặc định" : "Reload"}</span>
+            </button>
+
+            {/* 4. EXPORT JSON */}
+            <button
+              type="button"
+              onClick={handleExportConfig}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Xuất cấu hình ra tệp JSON" : "Export config to JSON file"}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{isVi ? "Xuất JSON" : "Export"}</span>
+            </button>
+
+            {/* 5. IMPORT JSON */}
+            <button
+              type="button"
+              onClick={() => { setIsImportModalOpen(true); playClick(); }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Nhập cấu hình từ tệp JSON" : "Import config from JSON file"}
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{isVi ? "Nhập JSON" : "Import"}</span>
+            </button>
+
+            {/* 6. RESET FACTORY */}
+            <button
+              type="button"
+              onClick={handleResetToFactoryDefaults}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Khôi phục chuẩn xuất xưởng ban đầu" : "Reset to factory defaults"}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden lg:inline">{isVi ? "Gốc xuất xưởng" : "Factory"}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Navigation Tabs Bar (Glass UI / Glass Soft Format) */}
       <div 
         className="sticky top-[64px] sm:top-[72px] z-30 w-full mb-6 py-2 overflow-x-auto no-scrollbar transition-all duration-300 bg-transparent"
       >
         <div 
-          className="flex items-center gap-1.5 p-1 bg-slate-200/40 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 min-w-max"
-          style={{ borderRadius: "calc(var(--theme-radius-card, 16px) - 2px)" }}
+          className="flex items-center gap-1.5 p-1.5 min-w-max rounded-2xl sm:rounded-full bg-white/70 dark:bg-slate-900/70 border border-white/80 dark:border-white/15 backdrop-blur-2xl shadow-[0_10px_30px_0_rgba(100,110,140,0.1)] dark:shadow-[0_10px_30px_0_rgba(0,0,0,0.35)] relative"
         >
+          {/* Subtle top reflection glow for glass surface */}
+          <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent pointer-events-none" />
+
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.Icon;
@@ -306,25 +597,25 @@ export default function Customization() {
                 type="button"
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 relative overflow-visible",
+                  "flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 relative overflow-visible rounded-xl sm:rounded-full group",
                   isActive
                     ? "text-indigo-600 dark:text-cyan-400 scale-[1.02]"
-                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-white/5"
                 )}
-                style={{ borderRadius: "var(--theme-radius, 8px)" }}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeCustomizationTab"
-                    className="absolute inset-0 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/15 shadow-xs -z-10"
-                    style={{ borderRadius: "var(--theme-radius, 8px)" }}
+                    className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/90 dark:from-slate-800 dark:via-slate-800/95 dark:to-slate-800/90 border border-white dark:border-white/20 shadow-[0_4px_16px_rgba(99,102,241,0.15)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl rounded-xl sm:rounded-full -z-10"
                     transition={{ type: "spring", stiffness: 380, damping: 28 }}
                   />
                 )}
-                <Icon className={cn("w-4 h-4 shrink-0 transition-colors duration-200", isActive ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400 dark:text-slate-500")} />
-                <span>{isVi ? tab.nameVi : tab.nameEn}</span>
+                <Icon className={cn("w-4.5 h-4.5 shrink-0 transition-all duration-200", isActive ? "text-indigo-600 dark:text-cyan-400 stroke-[2.3] drop-shadow-sm scale-105" : "text-slate-400 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200")} />
+                <span className={cn(isActive && "bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 dark:from-cyan-400 dark:via-blue-300 dark:to-indigo-300 font-extrabold")}>
+                  {isVi ? tab.nameVi : tab.nameEn}
+                </span>
                 {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 shadow-sm animate-pulse shrink-0" />
                 )}
               </button>
             );
@@ -332,7 +623,7 @@ export default function Customization() {
         </div>
       </div>
 
-      {/* 3. Main Customization Panels Container */}
+      {/* 4. Main Customization Panels Container */}
       <div className="w-full">
         {/* TAB 1: GIAO DIỆN & CHẾ ĐỘ (THEME & DISPLAY MODE) */}
         {activeTab === "customization" && (
@@ -342,16 +633,68 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
+            {/* Theme Mode Selector (Light / Dark / Auto System) */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Sun className="w-5 h-5 text-amber-500" />
+                    {isVi ? "Chế độ hiển thị chính (Light / Dark / Auto)" : "Primary Display Mode"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Tự động kích hoạt chế độ sáng, tối hoặc theo cài đặt hệ điều hành" : "Select light, dark or follow operating system preferences automatically"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSaveAsProductionDefault}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { id: "light" as ThemeMode, nameVi: "☀️ Sáng (Light Mode)", nameEn: "☀️ Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background" },
+                  { id: "dark" as ThemeMode, nameVi: "🌙 Tối (Dark Neon)", nameEn: "🌙 Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast" },
+                  { id: "system" as ThemeMode, nameVi: "💻 Theo Hệ Thống (Auto)", nameEn: "💻 Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode" },
+                ].map((m) => {
+                  const isSelected = themeMode === m.id;
+                  return (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => { setThemeMode(m.id); playClick(); }}
+                      className={cn(
+                        "p-4 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? m.nameVi : m.nameEn}</span>
+                        {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />}
+                      </div>
+                      <p className="text-2xs text-slate-500 dark:text-slate-400">{isVi ? m.descVi : m.descEn}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Theme Presets Selection */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Sun className="w-5 h-5 text-amber-500" />
-                    {isVi ? "Chế độ giao diện chính" : "Primary Theme Mode"}
+                    <Sparkles className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Phong cách thiết kế chủ đạo" : "Design Aesthetic Themes"}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Lựa chọn phong cách hiển thị thẩm mỹ và ánh sáng kính mờ toàn diện" : "Choose aesthetic display style and pervasive glassmorphism lighting"}
+                    {isVi ? "Các phong cách thị giác đã qua cân chỉnh độ chuẩn xác Master UI" : "Pre-calibrated Master UI visual styling options"}
                   </p>
                 </div>
                 <span className="text-2xs font-mono uppercase px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 font-bold border border-indigo-500/20 w-fit">
@@ -370,29 +713,26 @@ export default function Customization() {
                     tagVi: "Khuyên dùng",
                     tagEn: "Recommended",
                     colorPreview: "from-blue-600 to-indigo-600",
-                    bgClass: "bg-white/80 border-slate-200"
                   },
                   {
                     id: "glass-dark-neon" as ThemeType,
-                    nameVi: "Glass Tối Neon (Dark Neon)",
-                    nameEn: "Glass Dark Neon",
+                    nameVi: "Glass Tối Neon (Dark Neon) 🌌",
+                    nameEn: "Glass Dark Neon 🌌",
                     descVi: "Nền tối huyền ảo, ánh sáng neon cyberpunk và tương phản cao",
                     descEn: "Deep dark canvas with vibrant neon glow accents",
                     tagVi: "Chế độ Tối",
                     tagEn: "Dark Mode",
                     colorPreview: "from-cyan-400 to-purple-600",
-                    bgClass: "bg-slate-950/80 border-cyan-500/30 text-white"
                   },
                   {
                     id: "modern-light-glass" as ThemeType,
-                    nameVi: "Kính Mờ Hiện Đại (Modern Glass)",
-                    nameEn: "Modern Light Glass",
+                    nameVi: "Kính Mờ Hiện Đại (Modern Glass) 💎",
+                    nameEn: "Modern Light Glass 💎",
                     descVi: "Kính bán trong suốt nhẹ nhàng, chuyển sắc mượt mà",
                     descEn: "Soft translucency with gentle gradient touches",
                     tagVi: "Tối giản",
                     tagEn: "Minimal",
                     colorPreview: "from-sky-500 to-teal-500",
-                    bgClass: "bg-slate-50/80 border-slate-200"
                   }
                 ].map((item) => {
                   const isSelected = theme === item.id;
@@ -481,7 +821,7 @@ export default function Customization() {
         )}
 
         {/* TAB 2: BẢNG MÀU & COLOR TOKENS */}
-        {(activeTab as string) === "colors" && (
+        {activeTab === "colors" && (
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -500,14 +840,24 @@ export default function Customization() {
                     {isVi ? "Các gam màu thiết kế đã được cân chỉnh độ tương phản WCAG AAA" : "Curated color schemes with calibrated WCAG AAA contrast ratios"}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleCopyCss}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer w-fit"
-                >
-                  {copiedCss ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Code2 className="w-3.5 h-3.5 text-indigo-500" />}
-                  <span>{copiedCss ? (isVi ? "Đã sao chép CSS" : "CSS Copied") : (isVi ? "Sao chép CSS Variables" : "Copy CSS Variables")}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyCss}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer w-fit"
+                  >
+                    {copiedCss ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Code2 className="w-3.5 h-3.5 text-indigo-500" />}
+                    <span>{copiedCss ? (isVi ? "Đã sao chép CSS" : "CSS Copied") : (isVi ? "Sao chép CSS Variables" : "Copy CSS Variables")}</span>
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -618,8 +968,8 @@ export default function Customization() {
                       setTempBorderRadius(10);
                       setTempBorderRadiusCard(14);
                       setBorderRadius(10);
-                      if (setBorderRadiusCard) setBorderRadiusCard(14);
-                      triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn hệ thống 🔄" : "Reset border-radius to defaults 🔄");
+                      setBorderRadiusCard(14);
+                      triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn hệ thống (10px / 14px) 🔄" : "Reset border-radius to defaults 🔄");
                     }}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
                   >
@@ -631,18 +981,13 @@ export default function Customization() {
                     type="button"
                     onClick={() => {
                       setBorderRadius(tempBorderRadius);
-                      if (setBorderRadiusCard) setBorderRadiusCard(tempBorderRadiusCard);
-                      triggerResetFeedback(isVi ? "Đã áp dụng độ bo cong góc mới toàn website! 🎉" : "Applied new corner radius configurations site-wide! 🎉");
+                      setBorderRadiusCard(tempBorderRadiusCard);
+                      handleSaveAsProductionDefault();
                     }}
-                    className={cn(
-                      "flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer w-fit",
-                      tempBorderRadius !== borderRadius || tempBorderRadiusCard !== borderRadiusCard
-                        ? "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 scale-[1.02]"
-                        : "bg-slate-100/80 dark:bg-white/5 text-slate-400 dark:text-slate-600 cursor-not-allowed"
-                    )}
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer w-fit bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 scale-[1.02]"
                   >
-                    <Check className="w-3.5 h-3.5" />
-                    <span>{isVi ? "Lưu & Áp dụng" : "Save & Apply"}</span>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm Mặc định" : "Save as Default"}</span>
                   </button>
                 </div>
               </div>
@@ -671,8 +1016,9 @@ export default function Customization() {
                     step={1}
                     value={tempBorderRadius}
                     onChange={(e) => {
-                      setTempBorderRadius(Number(e.target.value));
-                      playClick();
+                      const val = Number(e.target.value);
+                      setTempBorderRadius(val);
+                      setBorderRadius(val);
                     }}
                     className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
                   />
@@ -700,10 +1046,58 @@ export default function Customization() {
                     step={1}
                     value={tempBorderRadiusCard}
                     onChange={(e) => {
-                      setTempBorderRadiusCard(Number(e.target.value));
-                      playClick();
+                      const val = Number(e.target.value);
+                      setTempBorderRadiusCard(val);
+                      setBorderRadiusCard(val);
                     }}
                     className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500 dark:accent-rose-400"
+                  />
+                </div>
+              </div>
+
+              {/* Live Interactive Card Morphing Preview */}
+              <div 
+                className="p-5 mb-6 border border-indigo-500/30 dark:border-cyan-500/30 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 backdrop-blur-md transition-all duration-300"
+                style={{ borderRadius: `${tempBorderRadiusCard}px` }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-8 h-8 bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 flex items-center justify-center font-bold text-xs shadow-sm transition-all"
+                      style={{ borderRadius: `${tempBorderRadius}px` }}
+                    >
+                      UI
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                        {isVi ? "Khung xem trước Bo góc tương tác thực tế" : "Live Interactive Border Radius Preview Card"}
+                      </h4>
+                      <p className="text-3xs text-slate-500">
+                        {isVi ? `Thẻ: ${tempBorderRadiusCard}px | Phần tử: ${tempBorderRadius}px` : `Card: ${tempBorderRadiusCard}px | Element: ${tempBorderRadius}px`}
+                      </p>
+                    </div>
+                  </div>
+                  <span 
+                    className="px-2.5 py-1 text-3xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-cyan-400 border border-indigo-500/20"
+                    style={{ borderRadius: `${Math.max(4, tempBorderRadius - 4)}px` }}
+                  >
+                    Live Preview
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button 
+                    type="button"
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs cursor-pointer"
+                    style={{ borderRadius: `${tempBorderRadius}px` }}
+                  >
+                    {isVi ? "Nút bấm hành động" : "Primary Action Button"}
+                  </button>
+                  <input 
+                    type="text" 
+                    readOnly 
+                    value={isVi ? "Trường nhập dữ liệu mẫu" : "Sample text input field"}
+                    className="px-3 py-2 text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200"
+                    style={{ borderRadius: `${tempBorderRadius}px` }}
                   />
                 </div>
               </div>
@@ -711,14 +1105,16 @@ export default function Customization() {
               {/* Preset Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {RADIUS_PRESETS.map((preset) => {
-                  const isSelected = tempBorderRadius === preset.radius;
+                  const isSelected = tempBorderRadius === preset.radius && tempBorderRadiusCard === preset.cardRadius;
                   return (
                     <button
                       key={preset.id}
                       type="button"
                       onClick={() => {
                         setTempBorderRadius(preset.radius);
-                        setTempBorderRadiusCard(Math.min(32, preset.radius + 4));
+                        setTempBorderRadiusCard(preset.cardRadius);
+                        setBorderRadius(preset.radius);
+                        setBorderRadiusCard(preset.cardRadius);
                         playClick();
                       }}
                       className={cn(
@@ -746,7 +1142,7 @@ export default function Customization() {
                         className="w-full h-8 bg-indigo-500/20 dark:bg-cyan-400/20 border-2 border-indigo-500/50 dark:border-cyan-400/50 flex items-center justify-center text-3xs font-mono font-bold text-indigo-600 dark:text-cyan-300"
                         style={{ borderRadius: `${preset.radius}px` }}
                       >
-                        radius: {preset.radius}px
+                        UI: {preset.radius}px | Card: {preset.cardRadius}px
                       </div>
                     </button>
                   );
@@ -775,17 +1171,27 @@ export default function Customization() {
                     {isVi ? "Hiệu ứng con trỏ chuột độc đáo tạo cảm giác công nghệ cao cấp" : "Unique pointer dynamics and interactive comet trails"}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetCursorConfig();
-                    triggerResetFeedback(isVi ? "Đã khôi phục con trỏ mặc định" : "Reset cursor to defaults");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định" : "Default"}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetCursorConfig();
+                      triggerResetFeedback(isVi ? "Đã khôi phục con trỏ mặc định" : "Reset cursor to defaults");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Cursor Styles Grid */}
@@ -829,12 +1235,12 @@ export default function Customization() {
                 })}
               </div>
 
-              {/* Secondary Cursor Controls: Trail & Size */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+              {/* Secondary Cursor Controls: Trail & Size & Color */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Hiệu ứng vệt sáng (Trail)" : "Comet Trail Effect"}</div>
-                    <div className="text-2xs text-slate-500">{isVi ? "Vệt sáng sao băng lướt theo chuột" : "Smooth comet trail follows cursor movement"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Vệt sáng sao băng lướt theo chuột" : "Smooth comet trail follows cursor"}</div>
                   </div>
                   <button
                     type="button"
@@ -854,7 +1260,7 @@ export default function Customization() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Kích thước con trỏ" : "Cursor Size"}</div>
-                    <div className="text-2xs text-slate-500">{isVi ? "Điều chỉnh kích thước vòng sáng" : "Select pointer radius scale"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Điều chỉnh kích thước vòng sáng" : "Pointer radius scale"}</div>
                   </div>
                   <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
                     {(["small", "medium", "large"] as const).map((size) => (
@@ -871,6 +1277,28 @@ export default function Customization() {
                       >
                         {size}
                       </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Màu sắc con trỏ" : "Cursor Color"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Tông màu phát quang FX" : "Luminescent FX accent"}</div>
+                  </div>
+                  <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
+                    {CURSOR_COLOR_OPTIONS.slice(0, 4).map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => { setCursorColor(c.id); playClick(); }}
+                        className={cn(
+                          "w-5 h-5 rounded-full transition-transform cursor-pointer border border-black/10",
+                          cursorConfig.colorPreset === c.id ? "scale-125 ring-2 ring-indigo-500 dark:ring-cyan-400" : "opacity-80 hover:opacity-100"
+                        )}
+                        style={{ backgroundColor: c.hex }}
+                        title={c.nameVi}
+                      />
                     ))}
                   </div>
                 </div>
@@ -899,6 +1327,14 @@ export default function Customization() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => { toggleMute(); playClick(); }}
@@ -1025,7 +1461,7 @@ export default function Customization() {
           </motion.div>
         )}
 
-        {/* TAB 6: CHÂN TRANG FOOTER (FOOTER DOCK) */}
+        {/* TAB 6: HEADER & FOOTER DOCK (THANH ĐIỀU HƯỚNG & CHÂN TRANG) */}
         {activeTab === "footer" && (
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -1033,6 +1469,70 @@ export default function Customization() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
+            {/* 1. Header Dock Settings Card */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <PanelTop className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
+                    {isVi ? "Thanh điều hướng đầu trang (Header Dock)" : "Top Navigation Header Dock"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Cấu hình ghim cố định hoặc tự động trượt ẩn để tối đa không gian màn hình" : "Configure pinned state or auto-slide up to maximize content viewport"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <span className={cn(
+                    "text-2xs font-mono font-bold px-3 py-1 rounded-full border shadow-2xs w-fit",
+                    isHeaderPinned
+                      ? "bg-blue-500/10 text-blue-700 dark:text-cyan-300 border-blue-500/30"
+                      : "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30"
+                  )}>
+                    {isHeaderPinned ? (isVi ? "📌 Đang ghim cố định" : "📌 Pinned Fixed") : (isVi ? "⚡ Tự động trượt ẩn" : "⚡ Auto-Slide Up")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
+                    isHeaderPinned ? "bg-blue-600/20 text-blue-600 dark:text-cyan-400 border-blue-500/30 shadow-xs" : "bg-slate-200/60 dark:bg-white/10 text-slate-500 border-slate-300 dark:border-white/10"
+                  )}>
+                    <Pin className={cn("w-5 h-5 transition-transform", isHeaderPinned ? "rotate-45" : "")} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">
+                      {isVi ? "Ghim cố định Header (Không tự trượt ẩn)" : "Pin Header (Prevent auto-slide up)"}
+                    </div>
+                    <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      {isVi ? "Khi bỏ ghim, thanh Header tự động trượt lên trên và xuất hiện thanh gạt chỉ báo xanh nhẹ" : "When unpinned, Header slides up leaving a sleek peek indicator at the top"}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => { toggleHeaderPin(); playClick(); }}
+                  className={cn(
+                    "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 self-end sm:self-center",
+                    isHeaderPinned ? "bg-blue-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                  )}
+                >
+                  <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                </button>
+              </div>
+            </div>
+
+            {/* 2. Footer Dock Settings Card */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1044,17 +1544,27 @@ export default function Customization() {
                     {isVi ? "Kiểu dáng hiển thị, vị trí ghim và cấu hình các nút tính năng" : "Dock placement, pinned state and widget visibility toggles"}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetFooterConfig();
-                    triggerResetFeedback(isVi ? "Đã khôi phục cài đặt chân trang" : "Reset footer to defaults");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định" : "Default"}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetFooterConfig();
+                      triggerResetFeedback(isVi ? "Đã khôi phục cài đặt chân trang" : "Reset footer to defaults");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Placement Options Grid */}
@@ -1141,28 +1651,63 @@ export default function Customization() {
                     {isVi ? "Tỷ lệ cỡ chữ linh hoạt và bộ mẫu phân cấp trực quan" : "Scalable responsive hierarchy and live preview test arena"}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetFontScale();
-                    triggerResetFeedback(isVi ? "Đã khôi phục cỡ chữ chuẩn 100%" : "Reset font scale to 100%");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định (100%)" : "Default (100%)"}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetFontScale();
+                      triggerResetFeedback(isVi ? "Đã khôi phục cỡ chữ chuẩn 100%" : "Reset font scale to 100%");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định (100%)" : "Default (100%)"}</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Font Scale Selector */}
+              {/* Font Scale Selector & Slider */}
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
-                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">{isVi ? "Tỷ lệ kích thước chữ toàn trang (Font Scale):" : "Global Font Scale:"}</div>
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {isVi ? "Tỷ lệ kích thước chữ toàn trang (Global Font Scale):" : "Global Font Scale:"}
+                    </span>
+                    <p className="text-3xs text-slate-500 mt-0.5">
+                      {isVi ? "Tự động co giãn toàn bộ phân cấp typography theo tỷ lệ chuẩn" : "Scales all typographic tokens fluidly"}
+                    </p>
+                  </div>
+                  <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2.5 py-1 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
+                    {fontScale}%
+                  </span>
+                </div>
+
+                {/* Slider */}
+                <input
+                  type="range"
+                  min={80}
+                  max={130}
+                  step={1}
+                  value={fontScale}
+                  onChange={(e) => setFontScale(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400 mb-4"
+                />
+
+                {/* Quick Presets */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
-                    { scale: 0.9, labelVi: "Gọn gàng (90%)", labelEn: "Compact (90%)" },
-                    { scale: 1.0, labelVi: "Tiêu chuẩn (100%)", labelEn: "Standard (100%)" },
-                    { scale: 1.1, labelVi: "Rõ nét (110%)", labelEn: "Clear (110%)" },
-                    { scale: 1.2, labelVi: "Lớn dễ đọc (120%)", labelEn: "Large (120%)" },
+                    { scale: 90, labelVi: "Gọn gàng (90%)", labelEn: "Compact (90%)" },
+                    { scale: 100, labelVi: "Tiêu chuẩn (100%)", labelEn: "Standard (100%)" },
+                    { scale: 110, labelVi: "Rõ nét (110%)", labelEn: "Clear (110%)" },
+                    { scale: 120, labelVi: "Lớn dễ đọc (120%)", labelEn: "Large (120%)" },
                   ].map((s) => (
                     <button
                       key={s.scale}
@@ -1181,6 +1726,31 @@ export default function Customization() {
                 </div>
               </div>
 
+              {/* Live Interactive Test Text Input */}
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    {isVi ? "Khu vực thử nghiệm văn bản trực tiếp (Live Typing Test):" : "Live Typography Test Arena:"}
+                  </span>
+                  {customTestText && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomTestText("")}
+                      className="text-3xs text-rose-500 hover:underline cursor-pointer"
+                    >
+                      {isVi ? "Xóa thử nghiệm" : "Clear test"}
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={customTestText}
+                  onChange={(e) => setCustomTestText(e.target.value)}
+                  placeholder={isVi ? "Nhập thử văn bản của bạn để xem phân cấp chữ trực tiếp..." : "Type custom text to preview typography hierarchy live..."}
+                  className="w-full px-3.5 py-2 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
+                />
+              </div>
+
               {/* Typography Hierarchy Table */}
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2">{isVi ? "Bảng phân cấp Typography Tokens:" : "Hierarchy Tokens:"}</h4>
@@ -1194,7 +1764,7 @@ export default function Customization() {
                       <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight}</div>
                     </div>
                     <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1">
-                      {token.sampleText}
+                      {customTestText || token.sampleText}
                     </div>
                   </div>
                 ))}
@@ -1203,6 +1773,201 @@ export default function Customization() {
           </motion.div>
         )}
       </div>
+
+      {/* 5. DIAGNOSTIC REPORT MODAL */}
+      <AnimatePresence>
+        {isDiagnosticModalOpen && diagnosticReport && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <Wrench className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      {isVi ? "Báo Cáo Rà Soát & Sửa Chữa Hệ Thống" : "System Audit & Auto-Repair Report"}
+                      <span className="px-2 py-0.5 rounded-full text-3xs font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        {diagnosticReport.passedChecks}/{diagnosticReport.totalChecks} {isVi ? "Đạt chuẩn" : "Passed"}
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      {isVi ? `Thời gian rà soát: ${diagnosticReport.timestamp} • Đã hiệu chỉnh: ${diagnosticReport.repairedCount} mục` : `Audited at: ${diagnosticReport.timestamp} • Repaired: ${diagnosticReport.repairedCount} items`}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsDiagnosticModalOpen(false)}
+                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body / Checklist */}
+              <div className="p-4 sm:p-6 overflow-y-auto space-y-3">
+                {diagnosticReport.items.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="p-3.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex items-start justify-between gap-3"
+                  >
+                    <div className="flex items-start gap-3">
+                      {item.status === "perfect" && <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />}
+                      {item.status === "repaired" && <Zap className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />}
+                      {item.status === "warning" && <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />}
+                      <div>
+                        <div className="text-xs font-bold text-slate-900 dark:text-white">
+                          {isVi ? item.titleVi : item.titleEn}
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                          {isVi ? item.detailVi : item.detailEn}
+                        </p>
+                      </div>
+                    </div>
+                    {item.metric && (
+                      <span className="shrink-0 px-2 py-0.5 rounded-md text-3xs font-mono font-bold bg-slate-200/60 dark:bg-white/10 text-slate-700 dark:text-slate-300">
+                        {item.metric}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs text-slate-500 font-medium">
+                  {isVi ? "Hệ thống đã tự động đồng bộ toàn bộ biến CSS & LocalStorage." : "System has synchronized all CSS tokens & storage keys."}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleSaveAsProductionDefault();
+                      setIsDiagnosticModalOpen(false);
+                    }}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer"
+                  >
+                    {isVi ? "Lưu kết quả làm mặc định" : "Save as Production Default"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsDiagnosticModalOpen(false)}
+                    className="px-4 py-2 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                  >
+                    {isVi ? "Đóng" : "Close"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* 6. IMPORT CONFIG JSON MODAL */}
+      <AnimatePresence>
+        {isImportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-cyan-400 flex items-center justify-center">
+                    <FileJson className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      {isVi ? "Nhập Cấu Hình Từ Tệp JSON" : "Import Configuration JSON"}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      {isVi ? "Dán mã JSON hoặc chọn tệp cấu hình đã xuất" : "Paste JSON string or select an exported configuration file"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(false)}
+                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5 block">
+                    {isVi ? "Chọn tệp JSON từ máy tính:" : "Select JSON file from computer:"}
+                  </label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json,application/json"
+                    onChange={handleFileUpload}
+                    className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-white/10 dark:file:text-cyan-300 hover:file:bg-indigo-100 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5 block">
+                    {isVi ? "Hoặc dán nội dung JSON vào đây:" : "Or paste JSON payload below:"}
+                  </label>
+                  <textarea
+                    rows={6}
+                    value={importJsonText}
+                    onChange={(e) => setImportJsonText(e.target.value)}
+                    placeholder='{"themeMode": "light", "colorPreset": "default", ...}'
+                    className="w-full p-3 font-mono text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                </div>
+
+                {importError && (
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>{importError}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(false)}
+                  className="px-4 py-2 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  {isVi ? "Hủy" : "Cancel"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleImportJson}
+                  disabled={!importJsonText.trim()}
+                  className={cn(
+                    "px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer flex items-center gap-1.5",
+                    importJsonText.trim()
+                      ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                      : "bg-slate-200 dark:bg-white/5 text-slate-400 cursor-not-allowed"
+                  )}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isVi ? "Nhập & Áp dụng ngay" : "Import & Apply"}</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

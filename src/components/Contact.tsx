@@ -27,6 +27,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
+import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { cn } from "../lib/utils";
 
 export function Contact() {
@@ -234,28 +235,17 @@ export function Contact() {
               getGlassCardClass()
             )}
           >
-            {/* Top gradient seam bar */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-400 to-indigo-500" />
-            
             {/* Ambient Background Glows */}
             <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-rose-400/10 dark:bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
             
             {/* Card Title & Introduction */}
             <div className="space-y-3 relative z-10">
-              <div className="flex items-center gap-2.5">
-                <motion.div
-                  animate={{ y: [0, -3.5, 0], rotate: [0, 4, -4, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="flex items-center justify-center shrink-0 cursor-pointer select-none"
-                >
-                  <MessageSquare className="w-6 h-6 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
-                </motion.div>
-                <h6 className="text-h6 font-bold tracking-tight font-play">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-300 dark:to-rose-300">
-                    {isVi ? "Kết nối & Trò chuyện cùng chuyên gia" : "Let's Connect & Build Together"}
-                  </span>
-                </h6>
-              </div>
+              <AnimatedCardTitle
+                icon={MessageSquare}
+                title={isVi ? "Kết Nối Trực Tiếp" : "Direct Connection Hub"}
+                subtitle={isVi ? "Kênh liên lạc trực tiếp & thời gian làm việc" : "Direct contact channels & work hours"}
+                colorPreset="indigo"
+              />
 
               <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
                 {isVi ? (
@@ -387,21 +377,17 @@ export function Contact() {
               getGlassCardClass()
             )}
           >
-            {/* Top gradient seam bar */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 to-rose-400" />
-            
             {/* Ambient Background Glows */}
             <div className="absolute -top-24 -right-24 w-72 h-72 bg-sky-400/10 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* Form Section Header */}
-            <div className="flex items-center justify-between relative z-10">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                {isVi ? "Gửi thông điệp trực tiếp" : "Send Direct Message"}
-              </span>
-              <span className="text-[11px] font-bold text-slate-400 font-mono">
-                {isVi ? "Tùy chọn chủ đề & Mẫu nhanh" : "Topic & Preset Options"}
-              </span>
+            <div className="relative z-10">
+              <AnimatedCardTitle
+                icon={Send}
+                title={isVi ? "Gửi Thông Điệp" : "Send Direct Message"}
+                subtitle={isVi ? "Tùy chọn chủ đề & mẫu soạn sẵn" : "Custom topic & quick message templates"}
+                colorPreset="rose"
+              />
             </div>
 
             {/* Topic Select Chips */}
@@ -575,13 +561,13 @@ export function Contact() {
         </div>
 
         {/* FAQ Accordion Section */}
-        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4", getGlassCardClass())}>
-          <div className="flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
-            <h3 className="text-base sm:text-lg font-bold font-play text-slate-800 dark:text-white">
-              {isVi ? "Câu hỏi thường gặp khi liên hệ" : "Frequently Asked Questions"}
-            </h3>
-          </div>
+        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4 text-left", getGlassCardClass())}>
+          <AnimatedCardTitle
+            icon={HelpCircle}
+            title={isVi ? "Câu Hỏi Thường Gặp" : "Frequently Asked Questions"}
+            subtitle={isVi ? "Giải đáp thắc mắc về quy trình làm việc và hỗ trợ" : "Answers on operational workflow and consultation"}
+            colorPreset="amber"
+          />
 
           <div className="space-y-3">
             {faqs.map((faq, idx) => {

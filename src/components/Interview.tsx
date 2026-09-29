@@ -7,6 +7,7 @@ import {
   Volume2,
   VolumeX,
   MessageSquare,
+  MessagesSquare,
   Sparkles,
   ChevronLeft,
   ChevronRight,
@@ -332,9 +333,28 @@ export function Interview() {
 
               <div className="space-y-4 flex-1 flex flex-col min-h-0 relative z-10">
                 
-                {/* Top Bar inside Active Response */}
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
-                  <div className="flex items-center gap-2">
+                {/* Top Bar inside Active Response: Icon không đóng khung & Tiêu đề 4 chữ hiệu ứng chuyển động bên trái */}
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0 flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <motion.div
+                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="shrink-0"
+                    >
+                      <MessagesSquare className="w-5.5 h-5.5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                    </motion.div>
+                    <motion.h4 
+                      animate={{ opacity: [0.92, 1, 0.92] }}
+                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-sm sm:text-base font-black font-play tracking-tight truncate"
+                    >
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-cyan-300 dark:via-blue-300 dark:to-indigo-300">
+                        {isVi ? "Chi Tiết Phỏng Vấn" : "Interview Details"}
+                      </span>
+                    </motion.h4>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0 ml-auto">
                     <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[11px] font-mono font-black shadow-xs tracking-wide">
                       <span>CÂU {currentQ.stt < 10 ? `0${currentQ.stt}` : currentQ.stt}</span>
                     </span>
@@ -347,11 +367,11 @@ export function Interview() {
                         {isInterviewPlaying ? (isVi ? "Đang phát" : "Playing") : (isVi ? "Đang chọn" : "Active")}
                       </span>
                     </div>
-                  </div>
 
-                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wide">
-                    {isVi ? currentQ.categoryVi : currentQ.categoryEn}
-                  </span>
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wide hidden sm:inline-block">
+                      {isVi ? currentQ.categoryVi : currentQ.categoryEn}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Progress bar of current segment */}

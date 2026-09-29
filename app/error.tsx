@@ -11,6 +11,20 @@ export default function Error({
 }) {
   useEffect(() => {
     console.error('Unhandled runtime error in page:', error);
+
+    // If it is a ChunkLoadError, auto-reload once to fetch fresh chunks
+    const isChunkError = 
+      error?.name === 'ChunkLoadError' || 
+      error?.message?.includes('Failed to load chunk') ||
+      error?.message?.includes('Loading chunk');
+
+    if (isChunkError && typeof window !== 'undefined') {
+      const reloaded = window.sessionStorage?.getItem('chunk_error_reloaded');
+      if (!reloaded) {
+        window.sessionStorage?.setItem('chunk_error_reloaded', 'true');
+        window.location.reload();
+      }
+    }
   }, [error]);
 
   return (
@@ -21,16 +35,23 @@ export default function Error({
         </svg>
       </div>
       <h2 className="text-xl sm:text-2xl font-bold mb-2 tracking-tight">
-        Đang tải lại giao diện / Loading Interface
+        Đang đồng bộ giao diện / Syncing Interface
       </h2>
       <p className="text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
-        Hệ thống đang đồng bộ dữ liệu giao diện. Vui lòng bấm thử lại để tải lại phiên làm việc.
+        Hệ thống đang đồng bộ phiên bản mới nhất. Vui lòng bấm thử lại để tiếp tục.
       </p>
       <button
-        onClick={() => reset()}
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage?.removeItem('chunk_error_reloaded');
+            window.location.reload();
+          } else {
+            reset();
+          }
+        }}
         className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-medium rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 cursor-pointer"
       >
-        Tải lại giao diện (Try Again)
+        Tải lại trang (Reload Page)
       </button>
     </div>
   );

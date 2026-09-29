@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
 export const THEMES = [
   "glass-dark-neon",
-  "mritech-digital-growth"
+  "mritech-digital-growth",
+  "modern-light-glass"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -694,6 +696,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
         return savedMode;
       }
+      const prodDefaults = getSavedProductionDefaults();
+      if (prodDefaults?.themeMode) return prodDefaults.themeMode;
     } catch {}
     return "system";
   });
@@ -717,8 +721,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           return getResolvedThemeName(savedMode as ThemeMode);
         }
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        if (savedTheme && THEMES.includes(savedTheme as ThemeType)) {
+        if (savedTheme && (THEMES as readonly string[]).includes(savedTheme)) {
           return savedTheme as ThemeType;
+        }
+        const prodDefaults = getSavedProductionDefaults();
+        if (prodDefaults?.theme && (THEMES as readonly string[]).includes(prodDefaults.theme)) {
+          return prodDefaults.theme;
         }
       }
     } catch {}
@@ -728,17 +736,24 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // 3. Color Preset State
   const [colorPreset, setColorPresetState] = useState<string>(() => {
     try {
-      return (typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null) || "default";
-    } catch {
-      return "default";
-    }
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null;
+      if (saved) return saved;
+      const prodDefaults = getSavedProductionDefaults();
+      if (prodDefaults?.colorPreset) return prodDefaults.colorPreset;
+    } catch {}
+    return "default";
   });
 
   // 4. Font Scale & Border Radius State
   const [fontScale, setFontScaleState] = useState<number>(() => {
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_font_scale") : null;
-      if (saved && !isNaN(Number(saved))) return Number(saved);
+      if (saved && !isNaN(Number(saved))) {
+        const n = Number(saved);
+        return n <= 2 ? Math.round(n * 100) : n;
+      }
+      const prodDefaults = getSavedProductionDefaults();
+      if (prodDefaults?.fontScale) return prodDefaults.fontScale;
     } catch {}
     return 100;
   });
@@ -747,6 +762,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
+      const prodDefaults = getSavedProductionDefaults();
+      if (typeof prodDefaults?.borderRadius === "number") return prodDefaults.borderRadius;
     } catch {}
     return 10;
   });
@@ -755,6 +772,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius_card") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
+      const prodDefaults = getSavedProductionDefaults();
+      if (typeof prodDefaults?.borderRadiusCard === "number") return prodDefaults.borderRadiusCard;
     } catch {}
     return 14; // Default card radius is 14px
   });
@@ -1015,7 +1034,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setFontScale = (scale: number) => {
-    const clamped = Math.max(80, Math.min(130, scale));
+    const normalized = scale <= 2 ? Math.round(scale * 100) : scale;
+    const clamped = Math.max(80, Math.min(130, normalized));
     setFontScaleState(clamped);
     try {
       localStorage.setItem("portfolio_font_scale", clamped.toString());
@@ -1024,6 +1044,38 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     } catch {}
   };
+
+  // Synchronize when system defaults are saved or updated
+  useEffect(() => {
+    const handleDefaultsUpdated = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (!detail) return;
+      if (detail.themeMode) setThemeModeState(detail.themeMode);
+      if (detail.theme) {
+        setThemeState(detail.theme);
+        applyThemeToDOM(detail.theme);
+      }
+      if (detail.colorPreset) {
+        setColorPresetState(detail.colorPreset);
+        applyColorsToDOM(detail.theme || theme, detail.colorPreset);
+      }
+      if (typeof detail.fontScale === "number") {
+        const sc = detail.fontScale <= 2 ? Math.round(detail.fontScale * 100) : detail.fontScale;
+        setFontScaleState(sc);
+        if (typeof document !== "undefined") {
+          document.documentElement.style.fontSize = `${16 * (sc / 100)}px`;
+        }
+      }
+      if (typeof detail.borderRadius === "number" && typeof detail.borderRadiusCard === "number") {
+        setBorderRadiusState(detail.borderRadius);
+        setBorderRadiusCardState(detail.borderRadiusCard);
+        applyRadiusToDom(detail.borderRadius, detail.borderRadiusCard);
+      }
+    };
+
+    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+  }, [theme]);
 
   const resetFontScale = () => {
     setFontScale(100);

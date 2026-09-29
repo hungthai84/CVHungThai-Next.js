@@ -35,6 +35,7 @@ import { NotificationProvider } from "./context/NotificationContext";
 import { CursorProvider } from "./context/CursorContext";
 import { SoundProvider, useSound } from "./context/SoundContext";
 import { FooterProvider, useFooter } from "./context/FooterContext";
+import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
@@ -113,6 +114,7 @@ function MainContent() {
   const { t, lang } = useLanguage();
   const { isSwitching } = useLayout();
   const { footerConfig, isFooterHovered } = useFooter();
+  const { isHeaderPinned, isHeaderSlidUp } = useHeader();
   const isFooterPinned = footerConfig.isPinned !== false;
   const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
@@ -218,6 +220,15 @@ function MainContent() {
     if (targetSection && cleanId !== activeSection) {
       playTransition();
       setActiveSection(cleanId);
+      if (cardContainerRef.current) {
+        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      setTimeout(() => {
+        const activeEl = document.getElementById(cleanId);
+        if (activeEl) {
+          activeEl.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 50);
     }
   };
 
@@ -427,16 +438,19 @@ function MainContent() {
         {/* Center Main Container Wrapper (Cách Header đúng 10px, cách Footer đúng 10px khi ghim hoặc trượt) */}
         <div 
           className={cn(
-            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] mt-[70px] sm:mt-[74px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isHeaderSlidUp ? "mt-[24px]" : "mt-[70px] sm:mt-[74px]",
             isFooterSlidDown ? "mb-[24px]" : "mb-[70px] sm:mb-[74px]"
           )}
         >
-          {/* Glass Container with Fluid Responsive Height (Kéo dài khi footer trượt ẩn để đảm bảo cách footer 10px) */}
+          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 10px) */}
           <div 
             ref={cardContainerRef}
             className={cn(
               "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
-              isFooterSlidDown 
+              isHeaderSlidUp && isFooterSlidDown
+                ? "h-[calc(100vh-48px)]"
+                : isHeaderSlidUp || isFooterSlidDown
                 ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
                 : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
               getMainCardStyle(),
@@ -677,7 +691,9 @@ export default function App() {
               <CursorProvider>
                 <SoundProvider>
                   <FooterProvider>
-                    <MainContent />
+                    <HeaderProvider>
+                      <MainContent />
+                    </HeaderProvider>
                   </FooterProvider>
                 </SoundProvider>
               </CursorProvider>

@@ -10,6 +10,7 @@ import { useLanguage } from "../i18n";
 import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection } from "./IndustrialStaggerContainer";
 import MasonryGallery, { MasonryItem } from "./MasonryGallery";
+import { LazyImage } from "./LazyImage";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
 
@@ -1023,11 +1024,11 @@ export default function Memories() {
                   >
                     {/* Card Image */}
                     <div className="relative w-full h-52 overflow-hidden bg-slate-950">
-                      <img
+                      <LazyImage
                         src={item.imageUrl || item.src}
                         alt={title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        referrerPolicy="no-referrer"
+                        fallbackSrc="https://placehold.co/600x400/1e293b/ffffff?text=Memory"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
 

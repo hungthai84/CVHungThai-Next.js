@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { CursorConfig, CursorStyleType, CursorColorPreset, CursorSize } from "../types/cursor";
 import { DEFAULT_CURSOR_CONFIG } from "../data/cursorData";
+import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
 interface CursorContextType {
   cursorConfig: CursorConfig;
@@ -26,6 +27,10 @@ export function CursorProvider({ children }: { children: ReactNode }) {
         if (saved) {
           return { ...DEFAULT_CURSOR_CONFIG, ...JSON.parse(saved) };
         }
+        const prodDefaults = getSavedProductionDefaults();
+        if (prodDefaults?.cursor) {
+          return { ...DEFAULT_CURSOR_CONFIG, ...prodDefaults.cursor };
+        }
       } catch (e) {
         console.warn("Could not parse saved cursor config", e);
       }
@@ -43,6 +48,18 @@ export function CursorProvider({ children }: { children: ReactNode }) {
       console.warn("Could not save cursor config to localStorage", e);
     }
   }, [cursorConfig]);
+
+  // Synchronize when system defaults are updated
+  useEffect(() => {
+    const handleDefaultsUpdated = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.cursor) {
+        setCursorConfig((prev) => ({ ...prev, ...detail.cursor }));
+      }
+    };
+    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+  }, []);
 
   const setCursorStyle = (style: CursorStyleType) => {
     setCursorConfig((prev) => ({ ...prev, style }));

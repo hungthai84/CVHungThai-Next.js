@@ -8,7 +8,7 @@ import {
   Sparkles, Play, Pause, Compass, Shield, Target,
   Search, ArrowRight, Check, Award, Layers, Zap, Eye,
   Navigation, AlertTriangle, ShieldCheck, HelpCircle,
-  Activity, BarChart3, Radio, RefreshCw
+  Activity, BarChart3, Radio, RefreshCw, MoonStar, Orbit, Stars
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { 
@@ -22,6 +22,7 @@ import {
 } from "../data/tuviData";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
+import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { cn } from "../lib/utils";
 
 export default function TuVi() {
@@ -144,7 +145,7 @@ export default function TuVi() {
           id="info-card-tuvi" 
           className="w-full flex flex-col gap-[15px] relative z-10"
         >
-          {/* Header Card Tử vi */}
+          {/* Header Card Tử vi với thanh Tab điều hướng mượt mà */}
           <PageCardHeader pageId="tuvi">
             {/* Left Side: Editorial subtitle */}
             <div className="flex items-center gap-2 shrink-0">
@@ -154,13 +155,14 @@ export default function TuVi() {
               </span>
             </div>
 
+            {/* Right Side: Tab điều hướng mượt mà giữa các mục tử vi */}
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
               {[
-                { id: "tuvi-section-1", label: isVi ? "1. Bản Mệnh Phong Thủy" : "1. Profile & Feng Shui" },
-                { id: "tuvi-section-2", label: isVi ? "2. Phong Cách Quản Trị" : "2. Work Personality" },
-                { id: "tuvi-section-3", label: isVi ? "3. Lục Cung & Ngũ Hành" : "3. Palaces & Elements" },
-                { id: "tuvi-section-4", label: isVi ? "4. Tuổi Hợp Tác (12 Giáp)" : "4. Zodiac Synergy" },
-                { id: "tuvi-section-5", label: isVi ? "5. Triết Lý Lãnh Đạo" : "5. Philosophy" },
+                { id: "tuvi-section-1", label: isVi ? "1. Bản Mệnh" : "1. Profile", icon: MoonStar },
+                { id: "tuvi-section-2", label: isVi ? "2. Phong Cách" : "2. Traits", icon: User },
+                { id: "tuvi-section-3", label: isVi ? "3. Lục Cung" : "3. Palaces", icon: Star },
+                { id: "tuvi-section-4", label: isVi ? "4. Tuổi Hợp" : "4. Synergy", icon: Users },
+                { id: "tuvi-section-5", label: isVi ? "5. Triết Lý" : "5. Philosophy", icon: Compass },
               ].map((sec) => (
                 <button
                   key={sec.id}
@@ -168,10 +170,13 @@ export default function TuVi() {
                   onClick={() => {
                     playUiSound("click");
                     const el = document.getElementById(sec.id);
-                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
                   }}
-                  className="px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs bg-white/80 dark:bg-slate-800/80 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/80 hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white"
+                  className="px-2.5 sm:px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs bg-white/80 dark:bg-slate-800/80 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/80 hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white flex items-center gap-1.5 shrink-0"
                 >
+                  <sec.icon className="w-3.5 h-3.5 shrink-0" />
                   <span>{sec.label}</span>
                 </button>
               ))}
@@ -182,21 +187,69 @@ export default function TuVi() {
           <div 
             id="tuvi-section-1" 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-purple-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
+            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-purple-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5 text-left hover:-translate-y-1 hover:scale-[1.02] hover:border-indigo-400 dark:hover:border-indigo-400 hover:shadow-xl hover:brightness-[1.02] dark:hover:brightness-110 will-change-transform group/tuvi1"
           >
+            {/* Tiêu đề thẻ Bản Mệnh Phong Thủy với biểu tượng thiên văn & huyền bí */}
+            <AnimatedCardTitle
+              icon={Moon}
+              title={
+                <span className="inline-flex items-center gap-2">
+                  <Moon className="w-5 h-5 text-indigo-500 dark:text-indigo-400 animate-pulse shrink-0" />
+                  <span>{isVi ? "Bản Mệnh Phong Thủy" : "Feng Shui Profile"}</span>
+                  <motion.span
+                    animate={{ rotate: [0, 360], scale: [1, 1.15, 1] }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    className="inline-flex items-center justify-center text-purple-600 dark:text-purple-300 drop-shadow-xs shrink-0"
+                    title={isVi ? "Tinh tú & Thiên văn học" : "Celestial Astrology"}
+                  >
+                    <Stars className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-purple-600 dark:text-purple-300 animate-pulse" />
+                  </motion.span>
+                </span>
+              }
+              subtitle={isVi ? "Tổng quan tử vi & bát trạch phong thủy" : "Astrological & Feng Shui Overview"}
+              colorPreset="purple"
+              actionRight={
+                <div className="flex items-center gap-2">
+                  <motion.div
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                    className="p-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-300 shadow-xs"
+                    title={isVi ? "Thiên văn & Tinh tượng học" : "Astrology & Celestial Orbit"}
+                  >
+                    <Orbit className="w-4 h-4 text-purple-500" />
+                  </motion.div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-500/15 to-indigo-500/15 border border-purple-400/30 text-purple-700 dark:text-purple-300 text-3xs font-mono font-bold shadow-2xs">
+                    <Sparkles className="w-3 h-3 text-amber-500 animate-pulse" />
+                    <span>{isVi ? "Giáp Tý 1984 · Hải Trung Kim" : "1984 · Sea Gold"}</span>
+                  </div>
+                </div>
+              }
+            />
+
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
               {/* Cột trái: La Bàn Âm Dương & Trình phát âm thanh thiền định */}
               <div className="lg:col-span-4 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-slate-900/5 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-slate-900/60 border border-purple-200/60 dark:border-purple-800/50 rounded-2xl p-5 flex flex-col items-center justify-between text-center space-y-4 shadow-2xs">
-                {/* Header định dạng giống Chi tiết phỏng vấn */}
-                <div className="flex items-center justify-between pb-3 border-b border-purple-200/40 dark:border-purple-800/40 w-full text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-4 bg-purple-600 rounded-full shrink-0" />
-                    <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                    <h4 className="text-xs sm:text-sm font-black text-purple-700 dark:text-purple-300 tracking-wide">
-                      {isVi ? "La Bàn Âm Dương Lưỡng Lâm" : "Yin Yang Compass"}
-                    </h4>
+                {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
+                <div className="flex items-center justify-between pb-3 border-b border-purple-200/40 dark:border-purple-800/40 w-full text-left gap-2 flex-wrap">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <motion.div
+                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="shrink-0"
+                    >
+                      <Sparkles className="w-5.5 h-5.5 text-purple-600 dark:text-purple-400 stroke-[2.2] drop-shadow-sm" />
+                    </motion.div>
+                    <motion.h4 
+                      animate={{ opacity: [0.92, 1, 0.92] }}
+                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-sm sm:text-base font-black font-play tracking-tight truncate"
+                    >
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 dark:from-purple-300 dark:via-indigo-300 dark:to-amber-300">
+                        {isVi ? "La Bàn Âm Dương" : "Yin Yang Compass"}
+                      </span>
+                    </motion.h4>
                   </div>
-                  <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20">
+                  <span className="text-[10px] font-mono font-black px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20 shrink-0">
                     1984 - 2025
                   </span>
                 </div>
@@ -273,14 +326,30 @@ export default function TuVi() {
               {/* Cột phải: Thẻ chi tiết thông tin nhân thân */}
               <div className="lg:col-span-8 flex flex-col justify-between space-y-4">
                 <div className="space-y-4 p-4.5 sm:p-5 rounded-2xl bg-white/90 dark:bg-slate-900/80 border border-purple-200/80 dark:border-purple-800/60 shadow-2xs backdrop-blur-xl h-full flex flex-col justify-between">
-                  {/* Header hồ sơ nhân thân */}
+                  {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
                   <div className="w-full flex flex-col gap-2 pb-3 border-b border-purple-200/40 dark:border-purple-800/40">
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2">
-                        <User className="w-4.5 h-4.5 text-purple-600 dark:text-purple-400 shrink-0" />
-                        <h4 className="text-sm sm:text-base font-black text-purple-800 dark:text-purple-300 tracking-wide">
-                          {TU_VI_PROFILE.fullName}
-                        </h4>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <motion.div
+                          animate={{ rotate: [0, -7, 7, 0], scale: [1, 1.1, 0.96, 1], y: [0, -2, 2, 0] }}
+                          transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="shrink-0"
+                        >
+                          <User className="w-5.5 h-5.5 text-indigo-600 dark:text-indigo-400 stroke-[2.2] drop-shadow-sm" />
+                        </motion.div>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <motion.h4 
+                            animate={{ opacity: [0.92, 1, 0.92] }}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                            className="text-sm sm:text-base font-black font-play tracking-tight truncate"
+                          >
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-300 dark:via-purple-300 dark:to-pink-300">
+                              {isVi ? "Hồ Sơ Bản Mệnh" : "Destiny Profile Matrix"}
+                            </span>
+                          </motion.h4>
+                          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 hidden sm:inline">•</span>
+                          <span className="text-xs font-extrabold text-purple-800 dark:text-purple-200 hidden sm:inline">{TU_VI_PROFILE.fullName}</span>
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100/90 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 rounded-full text-[11px] font-bold shrink-0">
@@ -381,15 +450,27 @@ export default function TuVi() {
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-blue-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Tiêu đề section 2 */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-blue-200/50 dark:border-blue-800/50">
-              <div className="flex items-center gap-2.5 text-left">
-                <Briefcase className="w-6 h-6 text-blue-500 dark:text-cyan-400 animate-pulse shrink-0 drop-shadow-md" />
-                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-500 bg-clip-text text-transparent animate-gradient">
-                  {isVi ? "2. Phong Cách Quản Trị" : "2. Governance Style"}
-                </h3>
+            {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-blue-200/50 dark:border-blue-800/50 gap-2 flex-wrap">
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <motion.div
+                  animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                  transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <Briefcase className="w-6 h-6 stroke-[2.2] text-blue-600 dark:text-cyan-400 drop-shadow-sm" />
+                </motion.div>
+                <motion.h3 
+                  animate={{ opacity: [0.92, 1, 0.92] }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-base sm:text-lg font-black font-play tracking-wide truncate"
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-300 dark:to-indigo-300">
+                    {isVi ? "Phong Cách Quản Trị" : "Governance Style Matrix"}
+                  </span>
+                </motion.h3>
               </div>
-              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 shrink-0">
                 4 Trụ Cột Quản Trị
               </span>
             </div>
@@ -437,12 +518,17 @@ export default function TuVi() {
                     className={`p-5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${colorPalette.border} ${colorPalette.glow} shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-3.5 backdrop-blur-md`}
                   >
                     <div className="space-y-2.5">
-                      {/* Tiêu đề sub card */}
+                      {/* Tiêu đề sub card: Icon (không đóng khung) + Tiêu đề format chuyển động & màu sắc bên trái */}
                       <div className={`w-full flex flex-wrap items-center justify-between gap-2.5 pb-2.5 border-b ${colorPalette.border}`}>
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2 h-5 ${colorPalette.bar} rounded-full shrink-0`} />
-                          <Sparkles className={`w-4 h-4 ${colorPalette.text} shrink-0`} />
-                          <h4 className={`text-sm sm:text-[15px] font-black ${colorPalette.text} tracking-wide`}>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <motion.div
+                            animate={{ rotate: [0, 6, -6, 0], scale: [1, 1.08, 1] }}
+                            transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                            className="shrink-0"
+                          >
+                            <Sparkles className={`w-4.5 h-4.5 ${colorPalette.text} stroke-[2.2] drop-shadow-sm`} />
+                          </motion.div>
+                          <h4 className={`text-sm sm:text-[15px] font-black ${colorPalette.text} tracking-wide truncate`}>
                             {trait.title}
                           </h4>
                         </div>
@@ -476,14 +562,27 @@ export default function TuVi() {
 
           {/* ================= PHẦN 3: CHÂN DUNG TỬ VI TRONG CÔNG VIỆC ================= */}
           <div id="tuvi-section-3" className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-emerald-400/30 rounded-2xl md:rounded-3xl p-4.5 sm:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(16,185,129,0.15)] hover:dark:border-emerald-400/50 backdrop-blur-2xl transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between pb-3.5 border-b border-emerald-200/50 dark:border-emerald-800/50">
-              <div className="flex items-center gap-2.5 text-left">
-                <Target className="w-6 h-6 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0 drop-shadow-md" />
-                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 bg-clip-text text-transparent animate-gradient">
-                  {isVi ? "3. Lục Cung Ngũ Hành" : "3. Palaces & Elements"}
-                </h3>
+            {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-emerald-200/50 dark:border-emerald-800/50 gap-2 flex-wrap">
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <motion.div
+                  animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                  transition={{ duration: 4.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <Target className="w-6 h-6 stroke-[2.2] text-emerald-600 dark:text-emerald-400 drop-shadow-sm" />
+                </motion.div>
+                <motion.h3 
+                  animate={{ opacity: [0.92, 1, 0.92] }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-base sm:text-lg font-black font-play tracking-wide truncate"
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-300">
+                    {isVi ? "Lục Cung Ngũ Hành" : "Palaces & Elements Matrix"}
+                  </span>
+                </motion.h3>
               </div>
-              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 shrink-0">
                 Lục Cung & Ngũ Hành
               </span>
             </div>
@@ -514,12 +613,17 @@ export default function TuVi() {
                       className={`p-4 sm:p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${palette.border} flex flex-col justify-between space-y-3 shadow-2xs hover:shadow-md transition-all backdrop-blur-md`}
                     >
                       <div className="space-y-2">
-                        {/* Header */}
+                        {/* Header: Icon (không đóng khung) + Tiêu đề format chuyển động & màu sắc bên trái */}
                         <div className={`w-full flex flex-wrap items-center justify-between gap-2 pb-2 border-b ${palette.border}`}>
-                          <div className="flex items-center gap-2">
-                            <span className={`w-2 h-4 ${palette.bar} rounded-full shrink-0`} />
-                            <Target className={`w-4 h-4 ${palette.text} shrink-0`} />
-                            <h5 className={`font-black text-sm ${palette.text}`}>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <motion.div
+                              animate={{ rotate: [0, -7, 7, 0], scale: [1, 1.08, 1] }}
+                              transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+                              className="shrink-0"
+                            >
+                              <Compass className={`w-4.5 h-4.5 ${palette.text} stroke-[2.2] drop-shadow-sm`} />
+                            </motion.div>
+                            <h5 className={`font-black text-sm ${palette.text} truncate`}>
                               {palace.name}
                             </h5>
                           </div>
@@ -599,14 +703,27 @@ export default function TuVi() {
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-teal-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            <div className="flex items-center justify-between pb-3.5 border-b border-teal-200/50 dark:border-teal-800/50">
-              <div className="flex items-center gap-2.5 text-left">
-                <Users className="w-6 h-6 text-teal-500 dark:text-teal-400 animate-pulse shrink-0 drop-shadow-md" />
-                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-teal-600 via-cyan-500 to-sky-500 bg-clip-text text-transparent animate-gradient">
-                  {isVi ? "4. Ma Trận Con Giáp" : "4. Zodiac Synergy"}
-                </h3>
+            {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-teal-200/50 dark:border-teal-800/50 gap-2 flex-wrap">
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <motion.div
+                  animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                  transition={{ duration: 4.3, repeat: Infinity, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <Users className="w-6 h-6 stroke-[2.2] text-teal-600 dark:text-teal-400 drop-shadow-sm" />
+                </motion.div>
+                <motion.h3 
+                  animate={{ opacity: [0.92, 1, 0.92] }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-base sm:text-lg font-black font-play tracking-wide truncate"
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-600 via-cyan-500 to-sky-500 dark:from-teal-400 dark:via-cyan-300 dark:to-sky-300">
+                    {isVi ? "Ma Trận Con Giáp" : "Zodiac Synergy Matrix"}
+                  </span>
+                </motion.h3>
               </div>
-              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20">
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20 shrink-0">
                 Ma trận 12 Con Giáp
               </span>
             </div>
@@ -785,15 +902,27 @@ export default function TuVi() {
             id="tuvi-section-5" 
             className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-amber-400/30 rounded-2xl md:rounded-3xl p-4.5 sm:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.15)] hover:dark:border-amber-400/50 backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Tiêu đề section 5 */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-amber-200/50 dark:border-amber-800/50">
-              <div className="flex items-center gap-2.5 text-left">
-                <Award className="w-6 h-6 text-amber-500 dark:text-amber-400 animate-pulse shrink-0 drop-shadow-md" />
-                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-amber-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-gradient">
-                  {isVi ? "5. Triết Lý Lãnh Đạo" : "5. Leadership Philosophy"}
-                </h3>
+            {/* Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc bên trái */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-amber-200/50 dark:border-amber-800/50 gap-2 flex-wrap">
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <motion.div
+                  animate={{ rotate: [0, 9, -9, 0], scale: [1, 1.1, 0.96, 1], y: [0, -2, 2, 0] }}
+                  transition={{ duration: 4.1, repeat: Infinity, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <Award className="w-6 h-6 stroke-[2.2] text-amber-600 dark:text-amber-400 drop-shadow-sm" />
+                </motion.div>
+                <motion.h3 
+                  animate={{ opacity: [0.92, 1, 0.92] }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-base sm:text-lg font-black font-play tracking-wide truncate"
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-600 via-orange-500 to-yellow-500 dark:from-amber-400 dark:via-orange-300 dark:to-yellow-300">
+                    {isVi ? "Triết Lý Lãnh Đạo" : "Leadership Philosophy Matrix"}
+                  </span>
+                </motion.h3>
               </div>
-              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 shrink-0">
                 {isVi ? "5 Giá Trị Cốt Lõi" : "5 Core Values"}
               </span>
             </div>
@@ -804,17 +933,17 @@ export default function TuVi() {
                 const renderIcon = () => {
                   switch (card.iconType) {
                     case "target":
-                      return <Target className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm" />;
                     case "trending":
-                      return <TrendingUp className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm" />;
                     case "heart":
-                      return <Heart className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Heart className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm" />;
                     case "compass":
-                      return <Compass className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Compass className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm" />;
                     case "award":
-                      return <Award className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Award className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2] drop-shadow-sm" />;
                     default:
-                      return <Sparkles className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400" />;
+                      return <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400 drop-shadow-sm" />;
                   }
                 };
 
@@ -825,10 +954,15 @@ export default function TuVi() {
                   >
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-700/50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        {/* Icon không đóng khung với animation mượt mà */}
+                        <motion.div
+                          animate={{ rotate: [0, 7, -7, 0], scale: [1, 1.1, 1] }}
+                          transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                          className="shrink-0"
+                        >
                           {renderIcon()}
-                        </div>
-                        <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-amber-100/70 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40">
+                        </motion.div>
+                        <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-amber-100/70 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 shrink-0">
                           0{idx + 1}
                         </span>
                       </div>

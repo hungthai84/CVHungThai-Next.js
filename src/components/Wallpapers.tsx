@@ -27,6 +27,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { PageCardHeader } from "./PageCardHeader";
 import { WALLPAPER_CATEGORIES, CSS_PRESET_TEMPLATES } from "../data/wallpapers";
+import { LazyImage } from "./LazyImage";
 import { playUiSound } from "../lib/sound";
 
 // Helper to format scoped CSS for preview containers
@@ -746,16 +747,11 @@ export default function Wallpapers() {
                       </div>
                     ) : item.type === 'codepen' ? (
                       <div className="w-full h-full relative overflow-hidden bg-slate-950">
-                        <img
+                        <LazyImage
                           src={item.previewUrl || item.url}
                           alt={item.name || "CodePen Wallpaper"}
-                          loading="lazy"
-                          decoding="async"
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400";
-                          }}
+                          fallbackSrc="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400"
                         />
                       </div>
                     ) : item.type === 'video' ? (
@@ -773,16 +769,11 @@ export default function Wallpapers() {
                         }}
                       />
                     ) : (
-                      <img
+                      <LazyImage
                         src={item.previewUrl || item.url}
                         alt={item.name || "Wallpaper"}
-                        loading="lazy"
-                        decoding="async"
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400";
-                        }}
+                        fallbackSrc="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400"
                       />
                     )}
 
@@ -922,10 +913,11 @@ export default function Wallpapers() {
                   playsInline
                 />
               ) : (
-                <img
+                <LazyImage
                   src={previewItem.previewUrl || previewItem.url}
                   alt={previewItem.name}
                   className="w-full h-full object-contain"
+                  objectFit="contain"
                 />
               )}
             </div>

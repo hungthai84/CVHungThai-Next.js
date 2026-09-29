@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/footer";
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
+import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
 export type FooterModalTab = "customization" | "colors" | "radius" | "cursor" | "sound" | "footer" | "typography";
 
@@ -33,6 +34,10 @@ export function FooterProvider({ children }: { children: ReactNode }) {
         if (saved) {
           return { ...DEFAULT_FOOTER_CONFIG, ...JSON.parse(saved) };
         }
+        const prodDefaults = getSavedProductionDefaults();
+        if (prodDefaults?.footer) {
+          return { ...DEFAULT_FOOTER_CONFIG, ...prodDefaults.footer };
+        }
       } catch (e) {
         console.warn("Could not parse saved footer config", e);
       }
@@ -59,6 +64,18 @@ export function FooterProvider({ children }: { children: ReactNode }) {
       console.warn("Could not save footer config to localStorage", e);
     }
   }, [footerConfig]);
+
+  // Synchronize when system defaults are updated
+  useEffect(() => {
+    const handleDefaultsUpdated = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.footer) {
+        setFooterConfig((prev) => ({ ...prev, ...detail.footer }));
+      }
+    };
+    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+  }, []);
 
   const setPlacement = (placement: FooterPlacement) => {
     setFooterConfig((prev) => ({ ...prev, placement }));

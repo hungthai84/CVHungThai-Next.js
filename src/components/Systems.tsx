@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
@@ -28,7 +28,11 @@ import {
   ShieldCheck,
   Activity,
   Globe2,
-  ArrowUpRight
+  ArrowUpRight,
+  Filter,
+  ChevronDown,
+  Headset,
+  Bot
 } from "lucide-react";
 
 export function Systems() {
@@ -40,6 +44,33 @@ export function Systems() {
   const [activeCategory, setActiveCategory] = useState<SystemCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSystem, setSelectedSystem] = useState<SystemItem | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  // Close filter dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
+  const getCategoryIcon = useCallback((id: SystemCategory) => {
+    switch (id) {
+      case "cskh": return Headset;
+      case "management": return ShieldCheck;
+      case "data-ai": return Bot;
+      case "all":
+      default: return Layers;
+    }
+  }, []);
 
   // Video lightbox & feedback state
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -167,58 +198,130 @@ export function Systems() {
 
               {/* Right Side: Category Tabs & Search Bar */}
               <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:ml-auto w-full md:w-auto">
-                {/* Category Tabs */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  {SYSTEM_CATEGORIES.map((cat) => {
-                    const isActive = activeCategory === cat.id;
+                {/* Category Filter Icon Button & Dropdown */}
+                <div ref={filterRef} className="relative flex flex-wrap items-center">
+                  {(() => {
+                    const currentCat = SYSTEM_CATEGORIES.find((c) => c.id === activeCategory);
                     return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => {
-                          try { playUiSound("click"); } catch {}
-                          setActiveCategory(cat.id);
-                        }}
-                        className={cn(
-                          "px-3 py-1 rounded-full text-[11px] font-semibold tracking-tight transition-all duration-200 flex items-center gap-1.5 cursor-pointer border",
-                          isActive
-                            ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border-transparent shadow-md shadow-indigo-500/20 scale-[1.02]"
-                            : "bg-white/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-white/10 hover:bg-white/80 dark:hover:bg-slate-800/80"
-                        )}
-                      >
-                        <span>{isVi ? cat.labelVi : cat.labelEn}</span>
-                        <span
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            try { playUiSound("toggle"); } catch {}
+                            setIsFilterOpen(!isFilterOpen);
+                          }}
                           className={cn(
-                            "px-1.5 py-0.2 rounded-full text-[9px] font-mono",
-                            isActive
-                              ? "bg-white/20 text-white"
-                              : "bg-slate-200/70 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300"
+                            "h-11 min-h-[44px] px-3.5 sm:px-4 rounded-2xl text-xs font-semibold flex items-center gap-2 border transition-all cursor-pointer shadow-2xs backdrop-blur-xl",
+                            activeCategory !== "all"
+                              ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border-indigo-400/80 shadow-md shadow-indigo-500/25 font-bold scale-[1.02]"
+                              : "bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-white/15 hover:bg-white dark:hover:bg-slate-800"
                           )}
+                          title={isVi ? "Bộ lọc hệ thống" : "Filter systems"}
                         >
-                          {cat.count}
-                        </span>
-                      </button>
+                          <div className={cn(
+                            "w-7 h-7 rounded-xl flex items-center justify-center shrink-0 shadow-3xs transition-transform",
+                            activeCategory !== "all" ? "bg-white/20 text-white" : "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-cyan-400"
+                          )}>
+                            <Filter className="w-4 h-4 stroke-[2.3]" />
+                          </div>
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span className="font-play font-bold tracking-tight text-xs truncate max-w-[130px] sm:max-w-[180px]">
+                              {activeCategory === "all" 
+                                ? (isVi ? "Tất cả hệ thống" : "All Systems")
+                                : (isVi ? currentCat?.labelVi : currentCat?.labelEn)}
+                            </span>
+                            <span className={cn(
+                              "text-[10px] px-2 py-0.5 rounded-full font-mono font-bold shrink-0",
+                              activeCategory !== "all" ? "bg-white/25 text-white" : "bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                            )}>
+                              {currentCat?.count || filteredSystems.length}
+                            </span>
+                          </div>
+                          <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200 opacity-70 shrink-0", isFilterOpen && "rotate-180")} />
+                        </button>
+
+                        {/* Dropdown Popover */}
+                        <AnimatePresence>
+                          {isFilterOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                              transition={{ duration: 0.18 }}
+                              className="absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-72 sm:w-80 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/15 p-2 shadow-2xl backdrop-blur-2xl z-50 space-y-1"
+                            >
+                              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                <div className="flex items-center gap-1.5">
+                                  <Filter className="w-3.5 h-3.5 text-indigo-500" />
+                                  <span>{isVi ? "Phân loại hệ thống" : "System Categories"}</span>
+                                </div>
+                                <span className="font-mono text-indigo-600 dark:text-cyan-400 text-3xs font-black">
+                                  {filteredSystems.length}/12
+                                </span>
+                              </div>
+
+                              {SYSTEM_CATEGORIES.map((cat) => {
+                                const isActive = activeCategory === cat.id;
+                                const CatIcon = getCategoryIcon(cat.id);
+                                return (
+                                  <button
+                                    key={cat.id}
+                                    type="button"
+                                    onClick={() => {
+                                      try { playUiSound("toggle"); } catch {}
+                                      setActiveCategory(cat.id);
+                                      setIsFilterOpen(false);
+                                    }}
+                                    className={cn(
+                                      "w-full text-left px-3.5 py-2.5 min-h-[44px] rounded-xl text-xs flex items-center justify-between transition-all cursor-pointer",
+                                      isActive
+                                        ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold shadow-md shadow-indigo-500/25"
+                                        : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <div className={cn(
+                                        "w-7 h-7 rounded-lg flex items-center justify-center shrink-0",
+                                        isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-cyan-400"
+                                      )}>
+                                        <CatIcon className="w-4 h-4 stroke-[2.2]" />
+                                      </div>
+                                      <span className="truncate font-semibold">{isVi ? cat.labelVi : cat.labelEn}</span>
+                                    </div>
+                                    <span className={cn(
+                                      "text-[10px] px-2 py-0.5 rounded-full font-mono font-bold shrink-0 ml-2",
+                                      isActive ? "bg-white/20 text-white" : "bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                                    )}>
+                                      {cat.count}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
                     );
-                  })}
+                  })()}
                 </div>
 
                 {/* Quick Search */}
                 <div className="relative flex-1 sm:w-56 shrink-0">
-                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={isVi ? "Tìm mã, tên hệ thống..." : "Search code, name..."}
-                    className="w-full pl-8 pr-3 py-1 rounded-full text-[11px] bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all font-play"
+                    className="w-full pl-9 pr-9 h-11 min-h-[44px] rounded-2xl text-xs bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all font-play"
                   />
                   {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                      className="w-11 h-11 min-h-[44px] min-w-[44px] absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center justify-center cursor-pointer"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -318,14 +421,28 @@ export function Systems() {
                         >
                           {/* Standard Content Surface */}
                           <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
-                            {/* Dòng 1 : Tên hệ thống */}
-                            <div className="w-full text-left mb-1.5">
-                              <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 tracking-wide leading-snug truncate font-play">
-                                {isVi ? item.nameVi : item.nameEn}
-                              </p>
+                            {/* Dòng 1 : Header có animated unframed icon & tiêu đề chuyển màu sắc */}
+                            <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <motion.div
+                                  animate={{ rotate: [0, 6, -6, 0], scale: [1, 1.1, 1], y: [0, -2, 0] }}
+                                  transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                                  className="shrink-0"
+                                >
+                                  <IconComponent className={cn("w-4.5 h-4.5 stroke-[2.2] drop-shadow-sm", item.gradientClass.includes("indigo") ? "text-indigo-600 dark:text-indigo-400" : item.gradientClass.includes("emerald") ? "text-emerald-600 dark:text-emerald-400" : item.gradientClass.includes("purple") ? "text-purple-600 dark:text-purple-400" : item.gradientClass.includes("rose") ? "text-rose-600 dark:text-rose-400" : "text-blue-600 dark:text-cyan-400")} />
+                                </motion.div>
+                                <p className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight leading-snug truncate font-play">
+                                  <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", item.gradientClass)}>
+                                    {isVi ? item.nameVi : item.nameEn}
+                                  </span>
+                                </p>
+                              </div>
+                              <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
+                                {item.code}
+                              </span>
                             </div>
 
-                            {/* Dòng 2 : Bên trái chữ viết tắt, bên phải icon avatar */}
+                            {/* Dòng 2 : Bên trái tên tiếng Anh, bên phải icon avatar tương tác */}
                             <div className="flex items-center justify-between gap-2 my-auto py-1">
                               <div>
                                 <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">

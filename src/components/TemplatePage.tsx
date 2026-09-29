@@ -43,6 +43,7 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../i18n";
 import { playUiSound } from "../lib/sound";
+import IntroductionCard from "./IntroductionCard";
 
 /* ==========================================================================
    INTERFACES & MOCK DATA
@@ -562,6 +563,12 @@ export default function TemplatePage() {
             DASHBOARD MAIN LAYOUT (1 Cột 1 Hàng mặc định hoặc Bento Grid)
             ======================================================================= */}
         <main className={viewLayout === "single-row" ? "flex flex-col gap-[15px] w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px]"}>
+          {/* ===================================================================
+              THẺ GIỚI THIỆU BẢN THÂN (Introduction Showcase Card)
+              Tái tạo tinh tế, chuẩn xác từ hình ảnh đính kèm
+              =================================================================== */}
+          <IntroductionCard viewLayout={viewLayout} />
+
           {/* ===================================================================
               CARD 1: CỔNG ĐIỀU HÀNH TÁC VỤ HỆ THỐNG
               =================================================================== */}

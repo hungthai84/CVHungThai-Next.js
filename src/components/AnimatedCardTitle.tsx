@@ -7,7 +7,7 @@ export type ColorPresetType = "emerald" | "indigo" | "purple" | "cyan" | "orange
 
 export interface AnimatedCardTitleProps {
   icon: LucideIcon;
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
   colorPreset?: ColorPresetType;
   indexForAutoColor?: number;
@@ -97,7 +97,7 @@ export function AnimatedCardTitle({
       if (match) return match;
     }
     // Pick based on string hash or index
-    const seed = indexForAutoColor + title.length;
+    const seed = indexForAutoColor + (typeof title === "string" ? title.length : 12);
     return COLOR_PRESETS[seed % COLOR_PRESETS.length];
   }, [colorPreset, indexForAutoColor, title]);
 
