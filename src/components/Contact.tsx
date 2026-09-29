@@ -27,7 +27,6 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
-import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { cn } from "../lib/utils";
 
 export function Contact() {
@@ -240,12 +239,20 @@ export function Contact() {
             
             {/* Card Title & Introduction */}
             <div className="space-y-3 relative z-10">
-              <AnimatedCardTitle
-                icon={MessageSquare}
-                title={isVi ? "Kết Nối Trực Tiếp" : "Direct Connection Hub"}
-                subtitle={isVi ? "Kênh liên lạc trực tiếp & thời gian làm việc" : "Direct contact channels & work hours"}
-                colorPreset="indigo"
-              />
+              <div className="flex items-center gap-2.5">
+                <motion.div
+                  animate={{ y: [0, -3.5, 0], rotate: [0, 4, -4, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex items-center justify-center shrink-0 cursor-pointer select-none"
+                >
+                  <MessageSquare className="w-6 h-6 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                </motion.div>
+                <h6 className="text-h6 font-bold tracking-tight font-play">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-300 dark:to-rose-300">
+                    {isVi ? "Kết nối & Trò chuyện cùng chuyên gia" : "Let's Connect & Build Together"}
+                  </span>
+                </h6>
+              </div>
 
               <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
                 {isVi ? (
@@ -381,59 +388,43 @@ export function Contact() {
             <div className="absolute -top-24 -right-24 w-72 h-72 bg-sky-400/10 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* Form Section Header */}
-            <div className="relative z-10">
-              <AnimatedCardTitle
-                icon={Send}
-                title={isVi ? "Gửi Thông Điệp" : "Send Direct Message"}
-                subtitle={isVi ? "Tùy chọn chủ đề & mẫu soạn sẵn" : "Custom topic & quick message templates"}
-                colorPreset="rose"
-              />
+            <div className="flex items-center justify-between relative z-10">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                {isVi ? "Gửi thông điệp trực tiếp" : "Send Direct Message"}
+              </span>
+              <span className="text-[11px] font-bold text-slate-400 font-mono">
+                {isVi ? "Tùy chọn chủ đề & Mẫu nhanh" : "Topic & Preset Options"}
+              </span>
             </div>
 
-            {/* Topic Select Chips */}
-            <div className="space-y-1.5 relative z-10">
+            {/* Quick Message Presets Grouped into Option Listbox */}
+            <div className="space-y-1.5 relative z-10 text-left">
               <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
-                {isVi ? "1. Chọn chủ đề trao đổi" : "1. Select Inquiry Topic"}
+                {isVi ? "Mẫu tin nhắn nhanh (Tùy chọn danh sách)" : "Quick Message Template (Option List)"}
               </label>
-              <div className="flex flex-wrap gap-2 select-none">
-                {topics.map((t) => {
-                  const isSelected = activeTopic === t.label;
-                  return (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => handleTopicClick(t.label)}
-                      className={cn(
-                        "px-3.5 py-1.5 rounded-xl text-xs font-bold font-play transition-all duration-200 cursor-pointer border flex items-center gap-1.5",
-                        isSelected
-                          ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-[1.02]"
-                          : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
-                      )}
-                    >
-                      <span>{isVi ? t.labelVi : t.label}</span>
-                      {isSelected && <Check className="w-3.5 h-3.5" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Quick Message Presets */}
-            <div className="space-y-1.5 relative z-10">
-              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
-                {isVi ? "2. Mẫu tin nhắn soạn sẵn (Bấm để chèn nhanh)" : "2. Quick Presets (Click to Insert)"}
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {presets.map((p, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleApplyPreset(isVi ? p.textVi : p.textEn)}
-                    className="p-2.5 rounded-xl text-left bg-slate-100/80 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all text-[11px] font-extrabold text-slate-700 dark:text-slate-300 cursor-pointer line-clamp-2 hover:border-indigo-400/50"
-                  >
-                    ⚡ {isVi ? p.labelVi : p.labelEn}
-                  </button>
-                ))}
+              <div className="relative">
+                <select
+                  defaultValue=""
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleApplyPreset(e.target.value);
+                    }
+                  }}
+                  className="w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-white/10 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none cursor-pointer pr-10 shadow-xs"
+                >
+                  <option value="" disabled>
+                    {isVi ? "⚡ Chọn mẫu tin nhắn soạn sẵn nhanh..." : "⚡ Select a quick message template..."}
+                  </option>
+                  {presets.map((p, idx) => (
+                    <option key={idx} value={isVi ? p.textVi : p.textEn} className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-1">
+                      {isVi ? p.labelVi : p.labelEn}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
@@ -561,13 +552,13 @@ export function Contact() {
         </div>
 
         {/* FAQ Accordion Section */}
-        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4 text-left", getGlassCardClass())}>
-          <AnimatedCardTitle
-            icon={HelpCircle}
-            title={isVi ? "Câu Hỏi Thường Gặp" : "Frequently Asked Questions"}
-            subtitle={isVi ? "Giải đáp thắc mắc về quy trình làm việc và hỗ trợ" : "Answers on operational workflow and consultation"}
-            colorPreset="amber"
-          />
+        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4", getGlassCardClass())}>
+          <div className="flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
+            <h3 className="text-base sm:text-lg font-bold font-play text-slate-800 dark:text-white">
+              {isVi ? "Câu hỏi thường gặp khi liên hệ" : "Frequently Asked Questions"}
+            </h3>
+          </div>
 
           <div className="space-y-3">
             {faqs.map((faq, idx) => {

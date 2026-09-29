@@ -1,5 +1,6 @@
 import React from 'react';
 import '../src/index.css';
+import { NextThemeProvider } from '../src/components/NextThemeProvider';
 
 export const dynamic = 'force-dynamic';
 

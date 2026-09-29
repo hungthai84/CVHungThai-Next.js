@@ -1,10 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
 export const THEMES = [
   "glass-dark-neon",
-  "mritech-digital-growth",
-  "modern-light-glass"
+  "mritech-digital-growth"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -575,6 +573,11 @@ export interface ThemeContextType {
   borderRadiusCard: number;
   setBorderRadiusCard: (radius: number) => void;
   resetBorderRadiusCard: () => void;
+  footerRadiusTopLeft: number;
+  setFooterRadiusTopLeft: (radius: number) => void;
+  footerRadiusTopRight: number;
+  setFooterRadiusTopRight: (radius: number) => void;
+  resetFooterRadius: () => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
   themeMode: ThemeMode;
@@ -696,8 +699,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
         return savedMode;
       }
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.themeMode) return prodDefaults.themeMode;
     } catch {}
     return "system";
   });
@@ -721,12 +722,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           return getResolvedThemeName(savedMode as ThemeMode);
         }
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        if (savedTheme && (THEMES as readonly string[]).includes(savedTheme)) {
+        if (savedTheme && THEMES.includes(savedTheme as ThemeType)) {
           return savedTheme as ThemeType;
-        }
-        const prodDefaults = getSavedProductionDefaults();
-        if (prodDefaults?.theme && (THEMES as readonly string[]).includes(prodDefaults.theme)) {
-          return prodDefaults.theme;
         }
       }
     } catch {}
@@ -736,24 +733,17 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // 3. Color Preset State
   const [colorPreset, setColorPresetState] = useState<string>(() => {
     try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null;
-      if (saved) return saved;
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.colorPreset) return prodDefaults.colorPreset;
-    } catch {}
-    return "default";
+      return (typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null) || "default";
+    } catch {
+      return "default";
+    }
   });
 
   // 4. Font Scale & Border Radius State
   const [fontScale, setFontScaleState] = useState<number>(() => {
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_font_scale") : null;
-      if (saved && !isNaN(Number(saved))) {
-        const n = Number(saved);
-        return n <= 2 ? Math.round(n * 100) : n;
-      }
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.fontScale) return prodDefaults.fontScale;
+      if (saved && !isNaN(Number(saved))) return Number(saved);
     } catch {}
     return 100;
   });
@@ -762,8 +752,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
-      const prodDefaults = getSavedProductionDefaults();
-      if (typeof prodDefaults?.borderRadius === "number") return prodDefaults.borderRadius;
     } catch {}
     return 10;
   });
@@ -772,14 +760,33 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius_card") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
-      const prodDefaults = getSavedProductionDefaults();
-      if (typeof prodDefaults?.borderRadiusCard === "number") return prodDefaults.borderRadiusCard;
     } catch {}
     return 14; // Default card radius is 14px
   });
 
+  const [footerRadiusTopLeft, setFooterRadiusTopLeftState] = useState<number>(() => {
+    try {
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_footer_radius_top_left") : null;
+      if (saved && !isNaN(Number(saved))) return Number(saved);
+    } catch {}
+    return 14; // Default top-left radius is 14px
+  });
+
+  const [footerRadiusTopRight, setFooterRadiusTopRightState] = useState<number>(() => {
+    try {
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_footer_radius_top_right") : null;
+      if (saved && !isNaN(Number(saved))) return Number(saved);
+    } catch {}
+    return 14; // Default top-right radius is 14px
+  });
+
   // DOM mutation helpers
-  const applyRadiusToDom = (radius: number, cardRadius: number) => {
+  const applyRadiusToDom = (
+    radius: number, 
+    cardRadius: number,
+    fTopLeft: number = footerRadiusTopLeft,
+    fTopRight: number = footerRadiusTopRight
+  ) => {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
       root.style.setProperty("--theme-radius", `${radius}px`);
@@ -790,6 +797,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty("--theme-radius-button", `${Math.max(6, radius)}px`);
       root.style.setProperty("--theme-radius-input", `${Math.max(6, radius)}px`);
       root.style.setProperty("--theme-radius-badge", `${Math.max(4, radius - 4)}px`);
+      
+      root.style.setProperty("--footer-radius-top-left", `${fTopLeft}px`);
+      root.style.setProperty("--footer-radius-top-right", `${fTopRight}px`);
       
       root.style.setProperty("--theme-radius-xs", `${Math.max(2, radius - 8)}px`);
       root.style.setProperty("--theme-radius-sm", `${Math.max(2, radius - 6)}px`);
@@ -1033,9 +1043,31 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setBorderRadiusCard(14);
   };
 
+  const setFooterRadiusTopLeft = (radius: number) => {
+    const clamped = Math.max(0, Math.min(48, radius));
+    setFooterRadiusTopLeftState(clamped);
+    try {
+      localStorage.setItem("portfolio_footer_radius_top_left", clamped.toString());
+    } catch {}
+    applyRadiusToDom(borderRadius, borderRadiusCard, clamped, footerRadiusTopRight);
+  };
+
+  const setFooterRadiusTopRight = (radius: number) => {
+    const clamped = Math.max(0, Math.min(48, radius));
+    setFooterRadiusTopRightState(clamped);
+    try {
+      localStorage.setItem("portfolio_footer_radius_top_right", clamped.toString());
+    } catch {}
+    applyRadiusToDom(borderRadius, borderRadiusCard, footerRadiusTopLeft, clamped);
+  };
+
+  const resetFooterRadius = () => {
+    setFooterRadiusTopLeft(14);
+    setFooterRadiusTopRight(14);
+  };
+
   const setFontScale = (scale: number) => {
-    const normalized = scale <= 2 ? Math.round(scale * 100) : scale;
-    const clamped = Math.max(80, Math.min(130, normalized));
+    const clamped = Math.max(80, Math.min(130, scale));
     setFontScaleState(clamped);
     try {
       localStorage.setItem("portfolio_font_scale", clamped.toString());
@@ -1044,38 +1076,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     } catch {}
   };
-
-  // Synchronize when system defaults are saved or updated
-  useEffect(() => {
-    const handleDefaultsUpdated = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (!detail) return;
-      if (detail.themeMode) setThemeModeState(detail.themeMode);
-      if (detail.theme) {
-        setThemeState(detail.theme);
-        applyThemeToDOM(detail.theme);
-      }
-      if (detail.colorPreset) {
-        setColorPresetState(detail.colorPreset);
-        applyColorsToDOM(detail.theme || theme, detail.colorPreset);
-      }
-      if (typeof detail.fontScale === "number") {
-        const sc = detail.fontScale <= 2 ? Math.round(detail.fontScale * 100) : detail.fontScale;
-        setFontScaleState(sc);
-        if (typeof document !== "undefined") {
-          document.documentElement.style.fontSize = `${16 * (sc / 100)}px`;
-        }
-      }
-      if (typeof detail.borderRadius === "number" && typeof detail.borderRadiusCard === "number") {
-        setBorderRadiusState(detail.borderRadius);
-        setBorderRadiusCardState(detail.borderRadiusCard);
-        applyRadiusToDom(detail.borderRadius, detail.borderRadiusCard);
-      }
-    };
-
-    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
-    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
-  }, [theme]);
 
   const resetFontScale = () => {
     setFontScale(100);
@@ -1167,8 +1167,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Effects
   useEffect(() => {
-    applyRadiusToDom(borderRadius, borderRadiusCard);
-  }, [borderRadius, borderRadiusCard]);
+    applyRadiusToDom(borderRadius, borderRadiusCard, footerRadiusTopLeft, footerRadiusTopRight);
+  }, [borderRadius, borderRadiusCard, footerRadiusTopLeft, footerRadiusTopRight]);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -1233,6 +1233,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       borderRadiusCard,
       setBorderRadiusCard,
       resetBorderRadiusCard,
+      footerRadiusTopLeft,
+      setFooterRadiusTopLeft,
+      footerRadiusTopRight,
+      setFooterRadiusTopRight,
+      resetFooterRadius,
       colorPreset,
       setColorPreset: handleSetColorPreset,
       activePalette,
@@ -1275,6 +1280,11 @@ export const useTheme = (): ThemeContextType => {
       borderRadiusCard: 14,
       setBorderRadiusCard: () => {},
       resetBorderRadiusCard: () => {},
+      footerRadiusTopLeft: 14,
+      setFooterRadiusTopLeft: () => {},
+      footerRadiusTopRight: 14,
+      setFooterRadiusTopRight: () => {},
+      resetFooterRadius: () => {},
       isThemeTransitioning: false,
       themeSnapshot: null,
       isApplyingTheme: false,

@@ -1,7 +1,6 @@
 import React from "react";
 import { Briefcase, CheckCircle2, ArrowLeft, Radio } from "lucide-react";
 import { ProjectCard } from "../../data/projectsData";
-import { LazyImage } from "../LazyImage";
 import { playUiSound } from "../../lib/sound";
 
 export function CaseStudy1_1_Header({ 
@@ -22,13 +21,7 @@ export function CaseStudy1_1_Header({
   return (
     <>
       <header className="relative rounded-2xl sm:rounded-3xl bg-slate-950/20 text-white py-4 xs:py-5 sm:py-8 md:py-10 px-3 xs:px-3.5 sm:px-6 md:px-10 min-h-[240px] xs:min-h-[280px] sm:min-h-[360px] flex flex-col justify-between shadow-xl border border-white/20 overflow-hidden backdrop-blur-xs w-full gap-4">
-        <LazyImage 
-          src={bannerImg} 
-          alt="Banner" 
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-95 pointer-events-none transition-opacity duration-300" 
-          fallbackSrc="https://placehold.co/1200x500/0f172a/ffffff?text=Case+Study+CSKH"
-          priority={true}
-        />
+        <img src={bannerImg} alt="Banner" className="absolute inset-0 w-full h-full object-cover object-center opacity-95 pointer-events-none transition-opacity duration-300" onError={(e) => { e.currentTarget.src = 'https://placehold.co/1200x500/0f172a/ffffff?text=Case+Study+CSKH'; }} />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/35 pointer-events-none"></div>
 
         {/* Responsive Header Top Bar with Back Button & Case Study Badge */}

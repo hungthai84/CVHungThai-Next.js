@@ -43,7 +43,7 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../i18n";
 import { playUiSound } from "../lib/sound";
-import IntroductionCard from "./IntroductionCard";
+import { cn } from "../lib/utils";
 
 /* ==========================================================================
    INTERFACES & MOCK DATA
@@ -211,6 +211,8 @@ export default function TemplatePage() {
 
   // Layout View Mode: 1 Cột 1 Hàng (Single-row stream) as default requested
   const [viewLayout, setViewLayout] = useState<"single-row" | "bento">("single-row");
+  // Active Glass Tab
+  const [activeTab, setActiveTab] = useState<"all" | "tasks" | "profile" | "analytics" | "wallet" | "checklist">("all");
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -560,18 +562,49 @@ export default function TemplatePage() {
         </header>
 
         {/* =======================================================================
+            GLASS TAB BAR (Interactive Glass Navigation for Template Modules)
+            ======================================================================= */}
+        <div className="w-full p-1.5 rounded-[12px] bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 backdrop-blur-2xl shadow-sm flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          {[
+            { id: "all" as const, labelVi: "Tất cả mô-đun", labelEn: "All Modules", icon: LayoutGrid },
+            { id: "tasks" as const, labelVi: "1. Cổng điều hành tác vụ", labelEn: "1. Task Hub", icon: Activity },
+            { id: "profile" as const, labelVi: "2. Hồ sơ lãnh đạo & Trạng thái", labelEn: "2. Profile & Status", icon: User },
+            { id: "analytics" as const, labelVi: "3. Chỉ số CSAT & Vận hành", labelEn: "3. CSAT Analytics", icon: TrendingUp },
+            { id: "wallet" as const, labelVi: "4. Tài sản số & Thẻ", labelEn: "4. Digital Wallet", icon: CreditCard },
+            { id: "checklist" as const, labelVi: "5. Checklist công việc", labelEn: "5. Checklist Hub", icon: CheckSquare },
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  playUiSound("click");
+                  setActiveTab(tab.id);
+                }}
+                className={cn(
+                  "px-3.5 py-2 rounded-[9px] text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer shrink-0",
+                  isActive
+                    ? "bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 shadow-md shadow-indigo-500/20 scale-[1.02]"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-white/5"
+                )}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{isVi ? tab.labelVi : tab.labelEn}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* =======================================================================
             DASHBOARD MAIN LAYOUT (1 Cột 1 Hàng mặc định hoặc Bento Grid)
             ======================================================================= */}
         <main className={viewLayout === "single-row" ? "flex flex-col gap-[15px] w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px]"}>
           {/* ===================================================================
-              THẺ GIỚI THIỆU BẢN THÂN (Introduction Showcase Card)
-              Tái tạo tinh tế, chuẩn xác từ hình ảnh đính kèm
-              =================================================================== */}
-          <IntroductionCard viewLayout={viewLayout} />
-
-          {/* ===================================================================
               CARD 1: CỔNG ĐIỀU HÀNH TÁC VỤ HỆ THỐNG
               =================================================================== */}
+          {(activeTab === "all" || activeTab === "tasks") && (
           <section 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between transition-all ${
@@ -769,10 +802,12 @@ export default function TemplatePage() {
               </button>
             </div>
           </section>
+          )}
 
           {/* ===================================================================
               CARD 2: HỒ SƠ NHÂN SỰ & TRẠNG THÁI (Profile Status Card)
               =================================================================== */}
+          {(activeTab === "all" || activeTab === "profile") && (
           <section 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
@@ -918,10 +953,12 @@ export default function TemplatePage() {
               </button>
             </div>
           </section>
+          )}
 
           {/* ===================================================================
               CARD 3: CHỈ SỐ & BIỂU ĐỒ PHÂN TÍCH (Analytics Sparkline Card)
               =================================================================== */}
+          {(activeTab === "all" || activeTab === "analytics") && (
           <section 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
@@ -1062,10 +1099,12 @@ export default function TemplatePage() {
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">{isVi ? "Vượt 18% cam kết SLA" : "18% Better than SLA"}</span>
             </div>
           </section>
+          )}
 
           {/* ===================================================================
               CARD 4: THẺ VÍ SỐ / TÀI CHÍNH (Digital Asset Card)
               =================================================================== */}
+          {(activeTab === "all" || activeTab === "wallet") && (
           <section 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
@@ -1198,10 +1237,12 @@ export default function TemplatePage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* ===================================================================
               CARD 5: CHECKLIST CÔNG VIỆC TƯƠNG TÁC (Interactive Checklist Card)
               =================================================================== */}
+          {(activeTab === "all" || activeTab === "checklist") && (
           <section 
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all ${
@@ -1336,6 +1377,7 @@ export default function TemplatePage() {
               </button>
             </div>
           </section>
+          )}
         </main>
       </div>
 
@@ -1610,4 +1652,4 @@ export default function TemplatePage() {
   );
 }
 
-export { TemplatePage as GlassmorphismDashboard, TemplatePage as TrangMau };
+export { TemplatePage, TemplatePage as GlassmorphismDashboard, TemplatePage as TrangMau };

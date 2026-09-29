@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
@@ -21,6 +21,7 @@ import {
   ExternalLink,
   Search,
   SlidersHorizontal,
+  Filter,
   Info,
   Copy,
   Layers,
@@ -29,10 +30,11 @@ import {
   Activity,
   Globe2,
   ArrowUpRight,
-  Filter,
-  ChevronDown,
-  Headset,
-  Bot
+  Headphones,
+  BarChart3,
+  GraduationCap,
+  Check,
+  ChevronDown
 } from "lucide-react";
 
 export function Systems() {
@@ -45,32 +47,6 @@ export function Systems() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSystem, setSelectedSystem] = useState<SystemItem | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const filterRef = useRef<HTMLDivElement>(null);
-
-  // Close filter dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setIsFilterOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, []);
-
-  const getCategoryIcon = useCallback((id: SystemCategory) => {
-    switch (id) {
-      case "cskh": return Headset;
-      case "management": return ShieldCheck;
-      case "data-ai": return Bot;
-      case "all":
-      default: return Layers;
-    }
-  }, []);
 
   // Video lightbox & feedback state
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -190,140 +166,108 @@ export function Systems() {
                 </span>
               </div>
 
-              {/* Middle Side: Summary Stats */}
-              <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/10 text-[11px] font-medium text-slate-600 dark:text-slate-300">
-                <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
-                <span>{isVi ? `Hiển thị ${filteredSystems.length}/12` : `Showing ${filteredSystems.length}/12`}</span>
-              </div>
-
-              {/* Right Side: Category Tabs & Search Bar */}
-              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:ml-auto w-full md:w-auto">
-                {/* Category Filter Icon Button & Dropdown */}
-                <div ref={filterRef} className="relative flex flex-wrap items-center">
-                  {(() => {
-                    const currentCat = SYSTEM_CATEGORIES.find((c) => c.id === activeCategory);
-                    return (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            try { playUiSound("toggle"); } catch {}
-                            setIsFilterOpen(!isFilterOpen);
-                          }}
-                          className={cn(
-                            "h-11 min-h-[44px] px-3.5 sm:px-4 rounded-2xl text-xs font-semibold flex items-center gap-2 border transition-all cursor-pointer shadow-2xs backdrop-blur-xl",
-                            activeCategory !== "all"
-                              ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border-indigo-400/80 shadow-md shadow-indigo-500/25 font-bold scale-[1.02]"
-                              : "bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-white/15 hover:bg-white dark:hover:bg-slate-800"
-                          )}
-                          title={isVi ? "Bộ lọc hệ thống" : "Filter systems"}
-                        >
-                          <div className={cn(
-                            "w-7 h-7 rounded-xl flex items-center justify-center shrink-0 shadow-3xs transition-transform",
-                            activeCategory !== "all" ? "bg-white/20 text-white" : "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-cyan-400"
-                          )}>
-                            <Filter className="w-4 h-4 stroke-[2.3]" />
-                          </div>
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            <span className="font-play font-bold tracking-tight text-xs truncate max-w-[130px] sm:max-w-[180px]">
-                              {activeCategory === "all" 
-                                ? (isVi ? "Tất cả hệ thống" : "All Systems")
-                                : (isVi ? currentCat?.labelVi : currentCat?.labelEn)}
-                            </span>
-                            <span className={cn(
-                              "text-[10px] px-2 py-0.5 rounded-full font-mono font-bold shrink-0",
-                              activeCategory !== "all" ? "bg-white/25 text-white" : "bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
-                            )}>
-                              {currentCat?.count || filteredSystems.length}
-                            </span>
-                          </div>
-                          <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200 opacity-70 shrink-0", isFilterOpen && "rotate-180")} />
-                        </button>
-
-                        {/* Dropdown Popover */}
-                        <AnimatePresence>
-                          {isFilterOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, y: 6, scale: 0.95 }}
-                              animate={{ opacity: 1, y: 0, scale: 1 }}
-                              exit={{ opacity: 0, y: 6, scale: 0.95 }}
-                              transition={{ duration: 0.18 }}
-                              className="absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-72 sm:w-80 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/15 p-2 shadow-2xl backdrop-blur-2xl z-50 space-y-1"
-                            >
-                              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                <div className="flex items-center gap-1.5">
-                                  <Filter className="w-3.5 h-3.5 text-indigo-500" />
-                                  <span>{isVi ? "Phân loại hệ thống" : "System Categories"}</span>
-                                </div>
-                                <span className="font-mono text-indigo-600 dark:text-cyan-400 text-3xs font-black">
-                                  {filteredSystems.length}/12
-                                </span>
-                              </div>
-
-                              {SYSTEM_CATEGORIES.map((cat) => {
-                                const isActive = activeCategory === cat.id;
-                                const CatIcon = getCategoryIcon(cat.id);
-                                return (
-                                  <button
-                                    key={cat.id}
-                                    type="button"
-                                    onClick={() => {
-                                      try { playUiSound("toggle"); } catch {}
-                                      setActiveCategory(cat.id);
-                                      setIsFilterOpen(false);
-                                    }}
-                                    className={cn(
-                                      "w-full text-left px-3.5 py-2.5 min-h-[44px] rounded-xl text-xs flex items-center justify-between transition-all cursor-pointer",
-                                      isActive
-                                        ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold shadow-md shadow-indigo-500/25"
-                                        : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80"
-                                    )}
-                                  >
-                                    <div className="flex items-center gap-2.5 min-w-0">
-                                      <div className={cn(
-                                        "w-7 h-7 rounded-lg flex items-center justify-center shrink-0",
-                                        isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-cyan-400"
-                                      )}>
-                                        <CatIcon className="w-4 h-4 stroke-[2.2]" />
-                                      </div>
-                                      <span className="truncate font-semibold">{isVi ? cat.labelVi : cat.labelEn}</span>
-                                    </div>
-                                    <span className={cn(
-                                      "text-[10px] px-2 py-0.5 rounded-full font-mono font-bold shrink-0 ml-2",
-                                      isActive ? "bg-white/20 text-white" : "bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                                    )}>
-                                      {cat.count}
-                                    </span>
-                                  </button>
-                                );
-                              })}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </>
-                    );
-                  })()}
-                </div>
-
-                {/* Quick Search */}
-                <div className="relative flex-1 sm:w-56 shrink-0">
-                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={isVi ? "Tìm mã, tên hệ thống..." : "Search code, name..."}
-                    className="w-full pl-9 pr-9 h-11 min-h-[44px] rounded-2xl text-xs bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all font-play"
-                  />
-                  {searchQuery && (
+              {/* Right Side: Category Filter Dropdown */}
+              <div className="flex items-center gap-2 md:ml-auto shrink-0">
+                {/* ICON FILTER DROPDOWN */}
+                <div className="relative flex items-center gap-1.5 shrink-0">
+                  {/* Category Icon Selector Dropdown Trigger */}
+                  <div className="relative">
                     <button
                       type="button"
-                      onClick={() => setSearchQuery("")}
-                      className="w-11 h-11 min-h-[44px] min-w-[44px] absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center justify-center cursor-pointer"
+                      onClick={() => {
+                        try { playUiSound("click"); } catch {}
+                        setIsFilterOpen(!isFilterOpen);
+                      }}
+                      className={cn(
+                        "h-8 px-3 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer border shadow-xs",
+                        activeCategory !== "all"
+                          ? "bg-indigo-600 text-white border-indigo-600 shadow-indigo-500/25"
+                          : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200/90 dark:border-white/15 hover:bg-slate-100 dark:hover:bg-slate-700"
+                      )}
+                      title={isVi ? "Bộ lọc danh mục hệ thống" : "Filter system category"}
                     >
-                      <X className="w-3.5 h-3.5" />
+                      <Filter className="w-3.5 h-3.5 text-indigo-400" />
+                      <span className="truncate max-w-[130px]">
+                        {(() => {
+                          const current = SYSTEM_CATEGORIES.find(c => c.id === activeCategory);
+                          return isVi ? current?.labelVi : current?.labelEn;
+                        })()}
+                      </span>
+                      <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", isFilterOpen && "rotate-180")} />
                     </button>
-                  )}
+
+                    {/* Filter Dropdown Popover */}
+                    <AnimatePresence>
+                      {isFilterOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                          transition={{ duration: 0.18 }}
+                          className="absolute right-0 top-full mt-2 w-64 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/15 shadow-2xl backdrop-blur-2xl z-50 flex flex-col gap-1 text-left"
+                        >
+                          <div className="px-2.5 py-1 text-3xs font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200/50 dark:border-white/10 mb-1 flex items-center justify-between">
+                            <span className="flex items-center gap-1.5">
+                              <SlidersHorizontal className="w-3 h-3 text-indigo-500" />
+                              <span>{isVi ? "Lọc theo nhóm hệ thống" : "Filter by domain"}</span>
+                            </span>
+                            <span className="font-mono">{SYSTEM_CATEGORIES.length} nhóm</span>
+                          </div>
+
+                          {SYSTEM_CATEGORIES.map((cat) => {
+                            const isSelected = activeCategory === cat.id;
+                            const getCatIcon = (id: string) => {
+                              switch (id) {
+                                case "cx": return Headphones;
+                                case "operations": return Server;
+                                case "training": return GraduationCap;
+                                case "analytics": return BarChart3;
+                                default: return Layers;
+                              }
+                            };
+                            const CatIcon = getCatIcon(cat.id);
+
+                            return (
+                              <button
+                                key={cat.id}
+                                type="button"
+                                onClick={() => {
+                                  try { playUiSound("click"); } catch {}
+                                  setActiveCategory(cat.id);
+                                  setIsFilterOpen(false);
+                                }}
+                                className={cn(
+                                  "w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer border text-left",
+                                  isSelected
+                                    ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                                    : "bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 border-transparent text-slate-700 dark:text-slate-300"
+                                )}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <div className={cn(
+                                    "w-6 h-6 rounded-lg flex items-center justify-center shrink-0",
+                                    isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-indigo-500 dark:text-cyan-400"
+                                  )}>
+                                    <CatIcon className="w-3.5 h-3.5" />
+                                  </div>
+                                  <span className="truncate">{isVi ? cat.labelVi : cat.labelEn}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                                  <span className={cn(
+                                    "px-1.5 py-0.5 rounded-full text-3xs font-mono font-bold",
+                                    isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                                  )}>
+                                    {cat.count}
+                                  </span>
+                                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
             </div>
@@ -401,82 +345,151 @@ export function Systems() {
                   animate="show"
                   className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-full auto-rows-fr items-stretch"
                 >
-                  {filteredSystems.map((item) => {
+                  {filteredSystems.map((item, index) => {
                     const IconComponent = item.icon;
+
+                    // 12 unique path configurations for moving background lines
+                    const linePaths = [
+                      "M 10,140 Q 60,110 120,130 T 240,110 T 310,140",
+                      "M 10,20 Q 80,80 160,20 T 310,120",
+                      "M 10,160 C 80,100 120,40 240,80 T 310,30",
+                      "M 300,10 Q 200,90 100,10 T 10,150",
+                      "M 10,10 Q 150,150 290,10",
+                      "M 10,80 C 100,10 150,150 290,80",
+                      "M 50,160 Q 150,30 250,160",
+                      "M 10,50 L 120,50 L 240,130 L 310,130",
+                      "M 20,20 C 120,20 120,150 290,150",
+                      "M 10,120 Q 90,40 180,120 T 310,40",
+                      "M 10,150 L 290,20",
+                      "M 10,10 C 140,80 140,120 290,160"
+                    ];
+                    const activePath = linePaths[index % linePaths.length];
+
+                    // 12 unique icon movement classes to make each icon animate uniquely
+                    const iconAnimations = [
+                      "animate-[float_3s_infinite_ease-in-out]",
+                      "animate-[float_2.5s_infinite_ease-in-out_0.2s]",
+                      "hover:rotate-12 transition-transform duration-300",
+                      "animate-[float_4s_infinite_ease-in-out_0.4s]",
+                      "animate-[float_3s_infinite_ease-in-out_0.1s]",
+                      "hover:-translate-y-1 transition-transform duration-300",
+                      "animate-[float_2.5s_infinite_ease-in-out_0.3s]",
+                      "animate-[float_2.5s_infinite_ease-in-out_0.5s]",
+                      "hover:scale-110 transition-transform duration-300",
+                      "animate-[float_3.5s_infinite_ease-in-out_0.2s]",
+                      "animate-[float_3.5s_infinite_ease-in-out_0.6s]",
+                      "hover:rotate-6 transition-transform duration-300"
+                    ];
+                    const activeAnimation = iconAnimations[index % iconAnimations.length];
+
+                    // Unique stroke color matching gradient styles
+                    const getLineColor = (gradClass: string) => {
+                      if (gradClass.includes("blue") || gradClass.includes("cyan")) return "#3b82f6";
+                      if (gradClass.includes("purple") || gradClass.includes("violet")) return "#8b5cf6";
+                      if (gradClass.includes("emerald") || gradClass.includes("teal")) return "#10b981";
+                      if (gradClass.includes("orange") || gradClass.includes("amber") || gradClass.includes("rose")) return "#f97316";
+                      return "#6366f1";
+                    };
+                    const strokeColor = getLineColor(item.gradientClass);
 
                     return (
                       <MagneticBentoWrapper key={item.id} className="h-full w-full">
-                        <motion.article
-                          layout
-                          variants={industrialSubSectionVariants}
+                        <div 
                           onClick={() => handleCardClick(item)}
-                          onMouseEnter={() => {
-                            try { playUiSound("hover"); } catch {}
-                          }}
-                          style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                          className={cn(
-                            "group cursor-pointer relative overflow-hidden p-4 sm:p-4.5 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[170px] w-full shadow-md hover:shadow-xl transition-all duration-300 border text-left",
-                            getGlassCardClass()
-                          )}
+                          className="w-full h-[180px] sm:h-[190px] [perspective:1000px] group cursor-pointer"
                         >
-                          {/* Standard Content Surface */}
-                          <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
-                            {/* Dòng 1 : Header có animated unframed icon & tiêu đề chuyển màu sắc */}
-                            <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <motion.div
-                                  animate={{ rotate: [0, 6, -6, 0], scale: [1, 1.1, 1], y: [0, -2, 0] }}
-                                  transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-                                  className="shrink-0"
-                                >
-                                  <IconComponent className={cn("w-4.5 h-4.5 stroke-[2.2] drop-shadow-sm", item.gradientClass.includes("indigo") ? "text-indigo-600 dark:text-indigo-400" : item.gradientClass.includes("emerald") ? "text-emerald-600 dark:text-emerald-400" : item.gradientClass.includes("purple") ? "text-purple-600 dark:text-purple-400" : item.gradientClass.includes("rose") ? "text-rose-600 dark:text-rose-400" : "text-blue-600 dark:text-cyan-400")} />
-                                </motion.div>
-                                <p className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight leading-snug truncate font-play">
-                                  <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", item.gradientClass)}>
+                          <div 
+                            className="relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                          >
+                            {/* FRONT SIDE */}
+                            <motion.article
+                              layout
+                              variants={industrialSubSectionVariants}
+                              style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                              className={cn(
+                                "absolute inset-0 [backface-visibility:hidden] p-4 sm:p-4.5 flex flex-col justify-between h-full w-full shadow-md border text-left bg-white/75 dark:bg-[#121218]/80 overflow-hidden",
+                                getGlassCardClass()
+                              )}
+                            >
+                              {/* Animated unique background line */}
+                              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 dark:opacity-30" viewBox="0 0 300 180" preserveAspectRatio="none">
+                                <path
+                                  d={activePath}
+                                  fill="none"
+                                  stroke={strokeColor}
+                                  strokeWidth="2"
+                                  strokeDasharray="8 4"
+                                  className="animate-[flowLine_4s_linear_infinite]"
+                                />
+                              </svg>
+
+                              <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
+                                {/* Dòng 1 : Tên hệ thống */}
+                                <div className="w-full text-left mb-1.5 flex items-center justify-between">
+                                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 tracking-wide leading-snug truncate font-play">
+                                    {isVi ? item.nameVi : item.nameEn}
+                                  </p>
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider font-mono">
+                                    {isVi ? "Xem thêm" : "SOP"}
+                                  </span>
+                                </div>
+
+                                {/* Dòng 2 : Bên trái chữ viết tắt, bên phải icon unframed & animated */}
+                                <div className="flex items-center justify-between gap-2 my-auto py-1">
+                                  <div>
+                                    <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
+                                      {item.code}
+                                    </h3>
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
+                                      {item.nameEn}
+                                    </p>
+                                  </div>
+
+                                  {/* UNFRAMED & ANIMATED ICON */}
+                                  <div className={cn("p-1 shrink-0 flex items-center justify-center", activeAnimation)}>
+                                    <IconComponent 
+                                      className="w-8 h-8 sm:w-9 sm:h-9 stroke-[2.2] drop-shadow-[0_2px_8px_rgba(59,130,246,0.3)]" 
+                                      style={{ color: strokeColor }}
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Dòng 3 : Indicator to flip */}
+                                <div className="w-full text-left pt-2 border-t border-slate-200/60 dark:border-slate-800/80 mt-2 flex items-center justify-between gap-2 text-slate-400 dark:text-slate-500 text-[10px]">
+                                  <span>{isVi ? "Rê chuột để lật thẻ" : "Hover to flip card"}</span>
+                                  <ArrowUpRight className="w-3.5 h-3.5" />
+                                </div>
+                              </div>
+                            </motion.article>
+
+                            {/* BACK SIDE */}
+                            <div
+                              style={{ 
+                                borderRadius: "var(--theme-radius-card, 16px)",
+                                transform: "rotateY(180deg)" 
+                              }}
+                              className={cn(
+                                "absolute inset-0 [backface-visibility:hidden] p-4 sm:p-4.5 flex flex-col justify-between h-full w-full shadow-md border text-left bg-slate-50/95 dark:bg-[#181824]/95 overflow-hidden",
+                                getGlassCardClass()
+                              )}
+                            >
+                              <div className="flex-1 flex flex-col justify-between h-full w-full relative z-10">
+                                {/* Title on back */}
+                                <div className="w-full flex items-center gap-1.5 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80 shrink-0">
+                                  <IconComponent className="w-4 h-4 shrink-0 animate-pulse" style={{ color: strokeColor }} />
+                                  <span className="text-xs font-bold text-slate-900 dark:text-white font-play truncate">
                                     {isVi ? item.nameVi : item.nameEn}
                                   </span>
-                                </p>
-                              </div>
-                              <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
-                                {item.code}
-                              </span>
-                            </div>
-
-                            {/* Dòng 2 : Bên trái tên tiếng Anh, bên phải icon avatar tương tác */}
-                            <div className="flex items-center justify-between gap-2 my-auto py-1">
-                              <div>
-                                <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
-                                  {item.code}
-                                </h3>
-                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
-                                  {item.nameEn}
-                                </p>
-                              </div>
-
-                              <div
-                                style={{ borderRadius: "12px" }}
-                                className={cn(
-                                  "w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br text-white shadow-md flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shrink-0",
-                                  item.gradientClass
-                                )}
-                              >
-                                <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] drop-shadow-sm text-white" />
-                              </div>
-                            </div>
-
-                            {/* Dòng 3 : Mô tả nghiệp vụ tóm tắt */}
-                            <div className="w-full text-left pt-2 border-t border-slate-200/60 dark:border-slate-800/80 mt-2 flex items-center justify-between gap-2">
-                              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-normal leading-relaxed line-clamp-2 font-play flex-1">
-                                {isVi ? item.descVi : item.descEn}
-                              </p>
-                              {item.url && (
-                                <div className="shrink-0 text-indigo-500 dark:text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                                  <ArrowUpRight className="w-4 h-4" />
                                 </div>
-                              )}
+
+                                {/* Business Description */}
+                                <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-normal leading-relaxed line-clamp-4 font-play my-2 text-left flex-1 flex items-center">
+                                  {isVi ? item.descVi : item.descEn}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </motion.article>
+                        </div>
                       </MagneticBentoWrapper>
                     );
                   })}

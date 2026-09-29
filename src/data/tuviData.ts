@@ -100,6 +100,12 @@ export const ACTION_PHILOSOPHY_CARDS: ActionPhilosophyCard[] = [
     title: "Lấy kết quả làm thước đo",
     description: "Đo lường thành công bằng sự hài lòng khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve) và sự trưởng thành của đội ngũ.",
     iconType: "award"
+  },
+  {
+    id: "action",
+    title: "Lấy hành động làm đường",
+    description: "Không dừng lại ở lý thuyết suông; kiên trì tối ưu từng quy trình và từng điểm chạm mỗi ngày.",
+    iconType: "trending"
   }
 ];
 
@@ -175,11 +181,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Thất Sát", main: true },
       { name: "Thiên Phủ", main: false }
     ],
-    description: "Chủ về trí tuệ, nội lực, tư duy nhạy bén và tính cách điềm tĩnh, trọng chữ Tín. Khí chất điềm đạm, dám nghĩ dám làm, tự cường và luôn hướng đến hành động thực tế.",
+    description: "Đóng vai trò là kiến trúc sư trưởng vận hành. Sở hữu tư duy hệ thống sắc bén, bình tĩnh trước khủng hoảng và quản trị rủi ro vượt trội. Lấy chữ Tín làm nền tảng chuẩn hóa quy trình và thiết lập kỷ luật thép.",
     checkpoints: [
-      "Thực tế, quyết đoán",
-      "Tư duy chiến lược",
-      "Trí tuệ & chín chắn"
+      "Tư duy hệ thống SOP",
+      "Quản trị rủi ro vận hành",
+      "Bản lĩnh lãnh đạo CX"
     ]
   },
   {
@@ -193,11 +199,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Thái Âm", main: false },
       { name: "Thiên Khôi", main: false }
     ],
-    description: "Sự nghiệp gắn liền với quản trị hệ thống, dịch vụ và kiến tạo giá trị mới. Càng đào sâu chuyên môn càng thăng tiến, phù hợp vai trò lãnh đạo, cố vấn và điều hành.",
+    description: "Thực chiến thiết kế, tối ưu hóa và tự động hóa bộ máy vận hành (Cost-to-Serve). Chuyên môn hóa ma trận phân quyền, liên tục nâng cao hiệu suất phòng ban và chuẩn hóa chất lượng đào tạo đội ngũ kế thừa.",
     checkpoints: [
-      "Hiệu quả Cost-to-Serve",
-      "Tài chính & vận hành",
-      "Phát triển con người"
+      "Tối ưu Cost-to-Serve",
+      "Chuẩn hóa quy trình 6 khối",
+      "Kiểm soát chất lượng QA"
     ]
   },
   {
@@ -211,11 +217,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Lộc Tồn", main: true },
       { name: "Hóa Lộc", main: false }
     ],
-    description: "Tài lộc tăng trưởng bền vững từ năng lực điều hành thực chiến và tối ưu hóa vận hành (Cost-to-Serve), tạo ra giá trị thặng dư dài hạn cho doanh nghiệp.",
+    description: "Quản lý dòng ngân sách tối ưu, kiểm soát chi phí cuộc gọi, chi phí trên mỗi điểm chạm khách hàng và đo lường chính xác ROI của các công cụ hỗ trợ (CRM, Omnichannel, AI Chatbot).",
     checkpoints: [
-      "Tài chính bền vững",
-      "Đầu tư dài hạn",
-      "Tăng trưởng ổn định"
+      "Tối ưu hóa ngân sách",
+      "Đo lường chỉ số ROI",
+      "Quản lý Cost-to-Serve"
     ]
   },
   {
@@ -229,11 +235,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Quý Nhân", main: true },
       { name: "Hóa Quyền", main: false }
     ],
-    description: "Ra ngoài có nhiều quý nhân tương trợ, thích ứng nhanh với môi trường đa văn hóa, tập đoàn đa quốc gia và thị trường công nghệ chuyển biến liên tục.",
+    description: "Năng lực tích hợp, mở rộng hệ thống và kết nối API đa kênh mượt mà. Linh hoạt thích ứng và chuyển dịch vận hành nhanh chóng trước những biến động thị trường và xu hướng công nghệ mới.",
     checkpoints: [
-      "Hòa nhập quốc tế",
-      "Kết nối đối tác chiến lược",
-      "Mở rộng thị trường"
+      "Chuyển dịch vận hành linh hoạt",
+      "Tích hợp Omnichannel",
+      "Kết nối API đối tác"
     ]
   },
   {
@@ -247,11 +253,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Tả Phù", main: true },
       { name: "Hữu Bật", main: false }
     ],
-    description: "Đội ngũ gắn bó, đoàn kết, tương trợ lẫn nhau hiệu quả. Tinh thần cộng tác cao, cạnh tranh lành mạnh và cùng hướng tới mục tiêu chung.",
+    description: "Xây dựng sơ đồ tổ chức phòng ban chặt chẽ, tối ưu hóa tỷ lệ phân bổ nhân sự (Headcount) giữa 6 khối chuyên trách, đào tạo văn hóa thấu cảm và hạn chế tối đa tỷ lệ tiêu hao nhân viên.",
     checkpoints: [
-      "Đồng đội vững mạnh",
-      "Hợp tác chiến lược",
-      "Phát triển bền vững"
+      "Tối ưu hóa Headcount",
+      "Văn hóa Customer-Centric",
+      "Hợp tác liên phòng ban"
     ]
   },
   {
@@ -265,11 +271,11 @@ export const SIX_CORE_PALACES: CorePalaceInfo[] = [
       { name: "Hoa Tinh", main: false },
       { name: "Long Trì", main: false }
     ],
-    description: "Gốc rễ phúc đức vững bền, tâm hồn an lạc, luôn hành thiện và giữ tâm sáng. Vận thế hanh thông, biến nguy thành an qua mọi giai đoạn thử thách.",
+    description: "Duy trì tính bền vững, đạo đức nghề nghiệp và kiến tạo giá trị nhân văn dài hạn trong dịch vụ. Giải quyết triệt để khiếu nại từ gốc rễ, biến điểm đau thành điểm chạm hạnh phúc cho khách hàng.",
     checkpoints: [
-      "Tâm an trí sáng",
-      "Hướng thiện & nhân ái",
-      "Phúc đức bền lâu"
+      "Vận hành nhân văn bền vững",
+      "Giải quyết khiếu nại gốc rễ",
+      "Bảo vệ giá trị thương hiệu"
     ]
   }
 ];
@@ -287,54 +293,54 @@ export interface FiveElementGovernance {
 
 export const FIVE_ELEMENTS_GOVERNANCE: FiveElementGovernance[] = [
   {
-    element: "Kim (Lãnh đạo)",
-    role: "Lãnh đạo",
-    subtitle: "Kim (Lãnh đạo)",
+    element: "Kim (Chuẩn hóa)",
+    role: "Chuẩn hóa",
+    subtitle: "Kim (Chuẩn hóa)",
     bgColor: "bg-amber-50/70 dark:bg-amber-950/30",
     borderColor: "border-amber-200 dark:border-amber-700/50",
     iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
     titleColor: "text-amber-800 dark:text-amber-300",
-    desc: "Quy trình, tiêu chuẩn (SOP/KPI)"
+    desc: "SOP, bộ tiêu chuẩn chất lượng cuộc gọi (QA) & quy chế tuân thủ SLA nghiêm ngặt."
   },
   {
-    element: "Thủy (Công nghệ)",
-    role: "Công nghệ",
-    subtitle: "Thủy (Công nghệ)",
+    element: "Thủy (Hệ thống)",
+    role: "Hệ thống",
+    subtitle: "Thủy (Hệ thống)",
     bgColor: "bg-sky-50/70 dark:bg-sky-950/30",
     borderColor: "border-sky-200 dark:border-sky-700/50",
     iconBg: "bg-sky-500/15 text-sky-600 dark:text-sky-400",
     titleColor: "text-sky-800 dark:text-sky-300",
-    desc: "Dữ liệu & Công nghệ AI (Omnichannel)"
+    desc: "Hệ thống dữ liệu số thực chiến, CRM thông minh, API kết nối đa kênh & AI chatbot hỗ trợ 24/7."
   },
   {
-    element: "Mộc (Tăng trưởng)",
-    role: "Tăng trưởng",
-    subtitle: "Mộc (Tăng trưởng)",
+    element: "Mộc (Con người)",
+    role: "Con người",
+    subtitle: "Mộc (Con người)",
     bgColor: "bg-emerald-50/70 dark:bg-emerald-950/30",
     borderColor: "border-emerald-200 dark:border-emerald-700/50",
     iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
     titleColor: "text-emerald-800 dark:text-emerald-300",
-    desc: "Phát triển & mở rộng thị trường"
+    desc: "Phát triển năng lực tư vấn viên, mở rộng quy mô phòng ban linh hoạt & nâng cao chỉ số FCR."
   },
   {
-    element: "Hỏa (Nhiệt huyết)",
-    role: "Nhiệt huyết",
-    subtitle: "Hỏa (Nhiệt huyết)",
+    element: "Hỏa (Văn hóa)",
+    role: "Văn hóa",
+    subtitle: "Hỏa (Văn hóa)",
     bgColor: "bg-rose-50/70 dark:bg-rose-950/30",
     borderColor: "border-rose-200 dark:border-rose-700/50",
     iconBg: "bg-rose-500/15 text-rose-600 dark:text-rose-400",
     titleColor: "text-rose-800 dark:text-rose-300",
-    desc: "Truyền cảm hứng, Văn hóa (Đào tạo/Coach)"
+    desc: "Truyền cảm hứng, văn hóa lấy khách hàng làm trọng tâm, vinh danh CSAT xuất sắc tháng."
   },
   {
-    element: "Thổ (Vận hành)",
-    role: "Vận hành",
-    subtitle: "Thổ (Vận hành)",
+    element: "Thổ (Cơ sở)",
+    role: "Cơ sở",
+    subtitle: "Thổ (Cơ sở)",
     bgColor: "bg-yellow-50/70 dark:bg-yellow-950/30",
     borderColor: "border-yellow-200 dark:border-yellow-700/50",
     iconBg: "bg-yellow-500/15 text-yellow-600 dark:text-yellow-400",
     titleColor: "text-yellow-800 dark:text-yellow-300",
-    desc: "Hệ thống & Cơ sở tầng (Chuỗi cung ứng)"
+    desc: "Bệ đỡ hạ tầng kỹ thuật vững chắc, phân bổ ca kíp tối ưu & cơ cấu quản trị tổ chức 3 tầng chặt chẽ."
   }
 ];
 

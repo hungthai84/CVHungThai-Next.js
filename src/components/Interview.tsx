@@ -7,7 +7,6 @@ import {
   Volume2,
   VolumeX,
   MessageSquare,
-  MessagesSquare,
   Sparkles,
   ChevronLeft,
   ChevronRight,
@@ -333,44 +332,37 @@ export function Interview() {
 
               <div className="space-y-4 flex-1 flex flex-col min-h-0 relative z-10">
                 
-                {/* Top Bar inside Active Response: Icon không đóng khung & Tiêu đề 4 chữ hiệu ứng chuyển động bên trái */}
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0 flex-wrap gap-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                {/* Top Bar inside Active Response */}
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
+                  <div className="flex items-center gap-2.5 text-left">
                     <motion.div
-                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
+                      animate={{ scale: [1, 1.15, 1], rotate: [0, 4, -4, 0] }}
                       transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="shrink-0"
+                      className="text-teal-500 dark:text-teal-400 shrink-0"
                     >
-                      <MessagesSquare className="w-5.5 h-5.5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                      <MessageSquare className="w-5 h-5 stroke-[2.2]" />
                     </motion.div>
-                    <motion.h4 
-                      animate={{ opacity: [0.92, 1, 0.92] }}
-                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                      className="text-sm sm:text-base font-black font-play tracking-tight truncate"
+                    <motion.h4
+                      animate={{ opacity: [0.85, 1, 0.85] }}
+                      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-xs sm:text-sm font-black text-teal-600 dark:text-teal-400 font-play select-none tracking-wide"
                     >
-                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-cyan-300 dark:via-blue-300 dark:to-indigo-300">
-                        {isVi ? "Chi Tiết Phỏng Vấn" : "Interview Details"}
-                      </span>
+                      {isVi ? "Phản hồi phỏng vấn" : "Simulated Response Dialogue"}
                     </motion.h4>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0 ml-auto">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[11px] font-mono font-black shadow-xs tracking-wide">
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[10px] font-mono font-black shadow-xs tracking-wide">
                       <span>CÂU {currentQ.stt < 10 ? `0${currentQ.stt}` : currentQ.stt}</span>
                     </span>
 
                     {/* Equalizer Wavelet Indicator */}
-                    <div className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-white/5 text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-cyan-500 h-3 animate-pulse" : "bg-slate-400 h-1.5")} />
-                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-indigo-500 h-4.5 animate-bounce" : "bg-slate-400 h-2.5")} style={{ animationDelay: "0.1s" }} />
-                      <span className="ml-1 text-xs">
-                        {isInterviewPlaying ? (isVi ? "Đang phát" : "Playing") : (isVi ? "Đang chọn" : "Active")}
+                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-white/5 text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-cyan-500 h-2.5 animate-pulse" : "bg-slate-400 h-1")} />
+                      <span className="ml-1 text-[9px] font-bold">
+                        {isInterviewPlaying ? (isVi ? "Phát" : "Play") : (isVi ? "Chọn" : "Active")}
                       </span>
                     </div>
-
-                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wide hidden sm:inline-block">
-                      {isVi ? currentQ.categoryVi : currentQ.categoryEn}
-                    </span>
                   </div>
                 </div>
 
@@ -483,13 +475,21 @@ export function Interview() {
             >
               {/* Header of Playlist Card */}
               <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-slate-800 flex items-center justify-center text-indigo-600 dark:text-cyan-400">
-                    <ListVideo className="w-4 h-4" />
-                  </div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white font-play">
-                    {isVi ? "Nội dung phỏng vấn" : "Interview Playlist"}
-                  </h4>
+                <div className="flex items-center gap-2.5 text-left">
+                  <motion.div
+                    animate={{ y: [0, -3, 0], rotate: [0, 6, -6, 0] }}
+                    transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+                    className="text-pink-500 dark:text-pink-400 shrink-0"
+                  >
+                    <ListVideo className="w-5 h-5 stroke-[2.2]" />
+                  </motion.div>
+                  <motion.h4
+                    animate={{ opacity: [0.85, 1, 0.85] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="text-xs sm:text-sm font-black text-pink-600 dark:text-pink-400 font-play select-none tracking-wide"
+                  >
+                    {isVi ? "Nội dung phỏng vấn" : "Simulated Interview Playlist"}
+                  </motion.h4>
                 </div>
                 <span className="text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded text-slate-500 dark:text-slate-400">
                   {filteredQuestions.length} {isVi ? "câu hỏi" : "questions"}

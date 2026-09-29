@@ -12,8 +12,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
-import { useTheme } from "../context/ThemeContext";
-import { cn, getGlassCardClass, getUnifiedSurfaceStyle } from "../lib/utils";
+import { cn } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
 import { PROJECTS_LIST, ProjectCard } from "../data/projectsData";
@@ -35,7 +34,6 @@ const projectCardRevealVariants: any = {
 };
 
 import { ProjectArticle } from "./ProjectArticle";
-import { LazyImage } from "./LazyImage";
 
 /**
  * Keyframers 3D Tilt Card Component with Interactive Dynamic Specular Reflection
@@ -294,7 +292,6 @@ const PRESET_15_COLORS = [
 
 export default function Projects() {
   const { lang } = useLanguage();
-  const { theme: currentTheme } = useTheme();
   const isVi = lang === "vi";
 
   const [selectedCardId, setSelectedCardId] = useState<string | null>(() => {
@@ -402,10 +399,6 @@ export default function Projects() {
     { id: "Xuyên suốt", labelVi: "Xuyên suốt · Đào tạo & Văn hóa", labelEn: "Continuous · Training", shortVi: "Xuyên suốt", count: phaseCounts["Xuyên suốt"] || 0 },
   ], [phaseCounts]);
 
-  const selectedPhaseObj = useMemo(() => {
-    return PHASE_FILTERS.find((f) => f.id === selectedPhase) || PHASE_FILTERS[0];
-  }, [selectedPhase, PHASE_FILTERS]);
-
   const filteredProjects = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return PROJECTS_LIST.filter((card) => {
@@ -433,30 +426,27 @@ export default function Projects() {
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[var(--grid-margin,15px)] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
       style={{ '--grid-margin': '15px', '--grid-gutter': '16px' } as React.CSSProperties}
     >
-      {/* Scoped CSS to format project card background for Glass Light & Dark according to active theme */}
+      {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
         __html: `
         .project-edu-glass-card,
         .project-card {
           height: auto !important;
-          background: rgba(255, 255, 255, 0.76) !important;
-          box-shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
-          backdrop-filter: blur(20px) saturate(160%) !important;
-          -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-          border: 1px solid rgba(255, 255, 255, 0.8) !important;
+          background: rgba(255, 255, 255, 0.78) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+          backdrop-filter: blur(24px) saturate(140%) !important;
+          -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.85) !important;
           border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
         .dark .project-edu-glass-card,
-        .dark .project-card,
-        [data-theme="glass-dark-neon"] .project-card {
+        .dark .project-card {
           height: auto !important;
-          background: rgba(18, 18, 24, 0.65) !important;
-          box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1.5px rgba(255, 255, 255, 0.15) !important;
-          border: 1px solid rgba(255, 255, 255, 0.14) !important;
-          backdrop-filter: blur(20px) saturate(180%) !important;
-          -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+          background: rgba(15, 23, 42, 0.82) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.2) !important;
+          border: 1px solid rgba(255, 255, 255, 0.2) !important;
           border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
         }
         `
@@ -468,7 +458,7 @@ export default function Projects() {
         <PageCardHeader 
           pageId="projects"
           actionRight={
-            <div className="flex items-center gap-2 flex-wrap" ref={filterRef}>
+            <div className="flex items-center gap-2 flex-wrap">
               {/* Ô tìm kiếm nhanh */}
               <div className="relative flex items-center">
                 <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
@@ -477,7 +467,7 @@ export default function Projects() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={isVi ? "Tìm kiếm..." : "Search..."}
-                  className="pl-8 pr-3 py-1.5 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-28 sm:w-36 md:w-44 transition-all shadow-2xs"
+                  className="pl-8 pr-3 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-32 sm:w-40 transition-all shadow-2xs"
                 />
                 {searchQuery && (
                   <button
@@ -489,87 +479,6 @@ export default function Projects() {
                   </button>
                 )}
               </div>
-
-              {/* Nút gom nhóm Icon Filter */}
-              {!activeCard && (
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playUiSound("toggle");
-                      setIsFilterOpen(!isFilterOpen);
-                    }}
-                    className={cn(
-                      "px-3 py-1.5 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer flex items-center gap-1.5 border shadow-2xs",
-                      selectedPhase !== "all"
-                        ? "bg-blue-600 text-white border-blue-500 shadow-sm font-bold"
-                        : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
-                    )}
-                    title={isVi ? "Lọc theo giai đoạn dự án" : "Filter by project phase"}
-                  >
-                    <Filter className={cn("w-3.5 h-3.5", selectedPhase !== "all" ? "text-white" : "text-blue-600 dark:text-cyan-400")} />
-                    <span className="truncate max-w-[100px] sm:max-w-[150px] text-xs">
-                      {selectedPhaseObj ? (isVi ? selectedPhaseObj.shortVi : selectedPhaseObj.labelEn) : (isVi ? "Tất cả" : "All")}
-                    </span>
-                    <span className={cn(
-                      "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0",
-                      selectedPhase !== "all" ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
-                    )}>
-                      {selectedPhaseObj?.count || phaseCounts.all}
-                    </span>
-                    <ChevronDown className={cn("w-3 h-3 transition-transform duration-200", isFilterOpen && "rotate-180")} />
-                  </button>
-
-                  {/* Filter Dropdown Popup */}
-                  <AnimatePresence>
-                    {isFilterOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 6 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-700/90 shadow-2xl backdrop-blur-2xl p-2 z-50 flex flex-col gap-1 text-left"
-                      >
-                        <div className="px-2.5 py-1.5 text-3xs font-bold font-mono uppercase text-slate-400 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                          <span>{isVi ? "Giai đoạn dự án" : "Project Phases"}</span>
-                          <Filter className="w-3 h-3" />
-                        </div>
-                        {PHASE_FILTERS.map((f) => {
-                          const isActive = selectedPhase === f.id;
-                          return (
-                            <button
-                              key={f.id}
-                              type="button"
-                              onClick={() => {
-                                playUiSound("click");
-                                setSelectedPhase(f.id);
-                                setIsFilterOpen(false);
-                              }}
-                              className={cn(
-                                "w-full px-3 py-2 rounded-xl text-caption font-medium transition-all flex items-center justify-between gap-2 text-left cursor-pointer",
-                                isActive
-                                  ? "bg-blue-600 text-white font-bold shadow-xs"
-                                  : "hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200"
-                              )}
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                <span className={cn("w-2 h-2 rounded-full shrink-0", isActive ? "bg-white" : "bg-blue-500/60")} />
-                                <span className="truncate">{isVi ? f.labelVi : f.labelEn}</span>
-                              </div>
-                              <span className={cn(
-                                "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0",
-                                isActive ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
-                              )}>
-                                {f.count}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
             </div>
           }
         >
@@ -580,6 +489,38 @@ export default function Projects() {
               {isVi ? "Dự án & Sáng kiến" : "Featured Projects & Solutions"}
             </span>
           </div>
+
+          {!activeCard && (
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
+              {PHASE_FILTERS.map((f) => {
+                const isActive = selectedPhase === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => {
+                      playUiSound("toggle");
+                      setSelectedPhase(f.id);
+                    }}
+                    className={cn(
+                      "px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs flex items-center gap-1.5",
+                      isActive
+                        ? "bg-blue-600 text-white border-blue-500 shadow-xs font-bold"
+                        : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
+                    )}
+                  >
+                    <span>{isVi ? f.labelVi : f.labelEn}</span>
+                    <span className={cn(
+                      "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
+                      isActive ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    )}>
+                      {f.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </PageCardHeader>
 
         {activeCard ? (
@@ -668,11 +609,17 @@ export default function Projects() {
                               "project-card-media relative w-full aspect-[16/9] overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
                             )} style={{ height: "200px", borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
-                              <LazyImage
+                              <img
                                 src={card.image}
                                 alt={card.branchTitle}
                                 className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                                fallbackSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop"
+                                style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+                                loading="lazy"
+                                decoding="async"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop";
+                                }}
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 

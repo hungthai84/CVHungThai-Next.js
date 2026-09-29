@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "./lib/utils";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
 import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
+import Footer from "./components/Footer";
 import About from "./components/About";
 import Domains from "./components/Domains";
 import Education from "./components/Education";
@@ -35,7 +35,6 @@ import { NotificationProvider } from "./context/NotificationContext";
 import { CursorProvider } from "./context/CursorContext";
 import { SoundProvider, useSound } from "./context/SoundContext";
 import { FooterProvider, useFooter } from "./context/FooterContext";
-import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
@@ -113,10 +112,6 @@ function MainContent() {
   const { theme, setTheme } = useTheme();
   const { t, lang } = useLanguage();
   const { isSwitching } = useLayout();
-  const { footerConfig, isFooterHovered } = useFooter();
-  const { isHeaderPinned, isHeaderSlidUp } = useHeader();
-  const isFooterPinned = footerConfig.isPinned !== false;
-  const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
   const [activeSection, setActiveSection] = useState(() => {
     if (typeof window !== "undefined") {
@@ -162,7 +157,6 @@ function MainContent() {
 
   // State for Keyboard Shortcut Toast notification
   const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
-  const [clickedRippleSec, setClickedRippleSec] = useState<string | null>(null);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
@@ -220,15 +214,6 @@ function MainContent() {
     if (targetSection && cleanId !== activeSection) {
       playTransition();
       setActiveSection(cleanId);
-      if (cardContainerRef.current) {
-        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      setTimeout(() => {
-        const activeEl = document.getElementById(cleanId);
-        if (activeEl) {
-          activeEl.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 50);
     }
   };
 
@@ -435,30 +420,21 @@ function MainContent() {
           onNavigate={navigateToSection}
         />
 
-        {/* Center Main Container Wrapper (Cách Header đúng 10px, cách Footer đúng 10px khi ghim hoặc trượt) */}
+        {/* Center Main Container Wrapper */}
         <div 
-          className={cn(
-            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            isHeaderSlidUp ? "mt-[24px]" : "mt-[70px] sm:mt-[74px]",
-            isFooterSlidDown ? "mb-[24px]" : "mb-[70px] sm:mb-[74px]"
-          )}
+          className="mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] mt-[70px] sm:mt-[74px] mb-[16px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
         >
-          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 10px) */}
+          {/* Glass Container with Fluid Responsive Height */}
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
-              isHeaderSlidUp && isFooterSlidDown
-                ? "h-[calc(100vh-48px)]"
-                : isHeaderSlidUp || isFooterSlidDown
-                ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
-                : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
+              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 hover:-translate-y-0.5",
+              "h-[calc(100vh-90px)] sm:h-[calc(100vh-94px)]",
               getMainCardStyle(),
               isSwitching ? "opacity-80" : "opacity-100"
             )}
             style={{
               borderRadius: "var(--theme-radius-card, 10px)",
-              boxShadow: "none"
             }}
           >
             <main className="relative w-full h-full overflow-hidden flex-grow">
@@ -499,97 +475,10 @@ function MainContent() {
               </AnimatePresence>
             </main>
           </div>
-
         </div>
 
-        {/* RIGHT FLOATING PAGE PROGRESS STEPPER - ADAPTS TO WEBSITE THEME */}
-        <div className={cn(
-          "fixed right-3 lg:right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-2 sm:p-2.5 rounded-2xl sm:rounded-full space-y-3 transition-all duration-300 backdrop-blur-xl border shadow-xl",
-          theme === "glass-dark-neon"
-            ? "bg-slate-950/80 border-slate-800/80 text-white shadow-indigo-950/40"
-            : "bg-white/80 dark:bg-slate-900/80 border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-white shadow-lg"
-        )}>
-          {/* Progress Line with Glass effect */}
-          <div className="absolute top-5 bottom-5 w-0.5 bg-slate-300/50 dark:bg-white/10 pointer-events-none backdrop-blur-xs">
-            <div 
-              className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-              style={{ height: `${(activeIndex / (SECTIONS.length - 1)) * 100}%` }}
-            />
-          </div>
-          
-          {SECTIONS.map((sec, idx) => {
-            const isActive = activeSection === sec.id;
-            const Icon = sec.Icon;
-            return (
-              <div key={sec.id} className="relative group/step flex items-center justify-center py-0.5">
-                {/* Tooltip Badge (Slide to the Left with Theme Glassmorphism) */}
-                <div className={cn(
-                  "absolute right-9 px-3 py-1.5 rounded-xl border text-2xs font-black tracking-wide whitespace-nowrap opacity-0 translate-x-3 scale-95 group-hover/step:opacity-100 group-hover/step:translate-x-0 group-hover/step:scale-100 transition-all duration-200 pointer-events-none flex items-center gap-2 backdrop-blur-md shadow-2xl",
-                  theme === "glass-dark-neon"
-                    ? "bg-slate-950/95 border-indigo-500/40 text-white shadow-indigo-950/50"
-                    : "bg-white/95 dark:bg-slate-900/95 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white"
-                )}>
-                  <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-blue-500/20 text-blue-500 dark:text-blue-400">
-                    <Icon className="w-3.5 h-3.5 animate-pulse" />
-                  </div>
-                  <span>{t(sec.labelKey)}</span>
-                  <span className="text-3xs text-blue-600 dark:text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded-md">({idx + 1}/{SECTIONS.length})</span>
-                </div>
-                
-                 {/* Target Indicator Button with Vertical Bars (Dấu gạch dọc) */}
-                <motion.button
-                  onClick={() => {
-                    setClickedRippleSec(sec.id);
-                    setTimeout(() => setClickedRippleSec(null), 600);
-                    navigateToSection(sec.id);
-                  }}
-                  whileHover={{ 
-                    y: isActive ? [0, -3, 0] : -1,
-                    scale: 1.15
-                  }}
-                  transition={{
-                    y: isActive ? {
-                      duration: 0.6,
-                      ease: "easeInOut",
-                      repeat: Infinity
-                    } : {
-                      duration: 0.2
-                    },
-                    scale: { duration: 0.2 }
-                  }}
-                  className={`relative z-10 rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center ${
-                    isActive 
-                      ? "w-1.5 h-6.5 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 shadow-md shadow-indigo-500/60 ring-2 ring-indigo-400/80 scale-105 animate-pulse" 
-                      : "w-1 h-3.5 bg-slate-400/80 dark:bg-slate-600 hover:w-1.5 hover:h-6 hover:bg-indigo-500 dark:hover:bg-indigo-400"
-                  }`}
-                  title={t(sec.labelKey)}
-                >
-                  {/* Click Ripple Effect */}
-                  {clickedRippleSec === sec.id && (
-                    <motion.span
-                      initial={{ scale: 0.8, opacity: 0.9 }}
-                      animate={{ scale: 3.5, opacity: 0 }}
-                      transition={{ duration: 0.55, ease: "easeOut" }}
-                      className="absolute -inset-1.5 rounded-full bg-indigo-500 pointer-events-none z-0"
-                    />
-                  )}
-
-                  {/* Shared ping wave effect for active item */}
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-stepper-glow"
-                      className="absolute -inset-1 rounded-full border border-indigo-500/60 animate-ping opacity-60 pointer-events-none"
-                    />
-                  )}
-                </motion.button>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
+        {/* Recreated Modern Glass Footer */}
         <Footer 
-          theme={theme}
           activeSection={activeSection}
           onNavigate={navigateToSection}
         />
@@ -643,12 +532,7 @@ function MainContent() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.9 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className={cn(
-                "fixed left-1/2 -translate-x-1/2 z-[45] pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                isFooterSlidDown 
-                  ? "bottom-[34px] sm:bottom-[38px] md:bottom-[42px]" 
-                  : "bottom-[74px] sm:bottom-[80px] md:bottom-[84px]"
-              )}
+              className="fixed left-1/2 -translate-x-1/2 bottom-6 sm:bottom-8 z-[45] pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="relative inline-flex items-center rounded-full p-[1.5px] overflow-hidden select-none group/scrollrem transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_8px_25px_rgba(99,102,241,0.55)]">
                 {/* Rotating border aura */}
@@ -691,9 +575,7 @@ export default function App() {
               <CursorProvider>
                 <SoundProvider>
                   <FooterProvider>
-                    <HeaderProvider>
-                      <MainContent />
-                    </HeaderProvider>
+                    <MainContent />
                   </FooterProvider>
                 </SoundProvider>
               </CursorProvider>

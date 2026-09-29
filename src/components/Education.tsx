@@ -6,7 +6,6 @@ import { useTheme } from "../context/ThemeContext";
 import { DEFAULT_EDUCATION_CARDS, EducationCard } from "../data/educationData";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
-import { LazyImage } from "./LazyImage";
 
 // Subtle Reveal-on-Scroll Entrance Motion Variants for Education Cards (Fade-in + slight slide-up)
 const educationCardRevealVariants: any = {
@@ -1537,9 +1536,9 @@ export default function Education() {
           </div>
 
           {/* Cụm phải: Bộ lọc chuyên đề + Chuyển đổi dạng xem */}
-          <div className="flex items-center gap-2 ml-auto flex-wrap text-caption text-label font-semibold">
+          <div className="flex items-center gap-1.5 ml-auto flex-wrap text-caption text-label font-semibold">
             {/* Nút lọc danh mục */}
-            <div className="flex flex-wrap items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+            <div className="flex flex-wrap items-center gap-0.5 bg-slate-100/90 dark:bg-slate-900/90 p-0.5 rounded-lg border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
               {(["all", "tech", "management"] as const).map((cat) => {
                 const isActive = categoryFilter === cat;
                 const label = cat === "all" ? (isVi ? "Tất cả" : "All") : cat === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management");
@@ -1551,7 +1550,7 @@ export default function Education() {
                       safePlay("toggle");
                       setCategoryFilter(cat);
                     }}
-                    className={`px-3 sm:px-3.5 py-1 rounded-lg text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer ${
+                    className={`h-7 sm:h-7.5 px-2.5 sm:px-3 py-0.5 rounded-md text-caption text-label font-semibold tracking-wide transition-all duration-300 cursor-pointer flex items-center justify-center ${
                       isActive
                         ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
                         : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
@@ -1564,20 +1563,20 @@ export default function Education() {
             </div>
 
             {/* Nút chuyển đổi chế độ xem */}
-            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
+            <div className="flex items-center gap-0.5 bg-slate-100/90 dark:bg-slate-900/90 p-0.5 rounded-lg border border-slate-200/60 dark:border-slate-800/80 shadow-2xs">
               <button
                 type="button"
                 onClick={() => {
                   safePlay("toggle");
                   setViewMode("grid");
                 }}
-                className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                className={`h-7 sm:h-7.5 px-2.5 sm:px-3 py-0.5 rounded-md text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer justify-center ${
                   viewMode === "grid"
                     ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
                     : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
                 }`}
               >
-                <Icons.Grid className="w-3.5 h-3.5 text-emerald-500" />
+                <Icons.Grid className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>{isVi ? "Dạng lưới" : "Grid view"}</span>
               </button>
               <button
@@ -1587,13 +1586,13 @@ export default function Education() {
                   setViewMode("book");
                   setIsBookOpen(true);
                 }}
-                className={`px-3 py-1 rounded-lg text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+                className={`h-7 sm:h-7.5 px-2.5 sm:px-3 py-0.5 rounded-md text-caption text-label font-semibold flex items-center gap-1.5 transition-all duration-300 cursor-pointer justify-center ${
                   (viewMode as any) === "book"
                     ? "bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700/50 font-bold"
                     : "text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-slate-200 font-normal"
                 }`}
               >
-                <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                <Icons.BookOpen className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>{isVi ? "Sách 3D" : "3D Book"}</span>
               </button>
             </div>
@@ -1638,7 +1637,7 @@ export default function Education() {
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => safePlay("hover")}
                     className={cn(
-                      "grid-profile-card group relative flex flex-col justify-between p-4 sm:p-4.5 border transition-all duration-300 select-none cursor-pointer h-full flex-1",
+                      "grid-profile-card group relative flex flex-col justify-between p-[15px] border transition-all duration-300 select-none cursor-pointer h-full flex-1",
                       themeCard.containerClass
                     )}
                     style={{
@@ -1648,190 +1647,71 @@ export default function Education() {
                       ...themeCard.containerStyle
                     }}
                   >
-                    <div>
-                      {/* Banner Image with overlay badges & quick zoom */}
-                      <div 
-                        className={cn(
-                          "relative w-full aspect-[16/10] overflow-hidden rounded-[14px] mb-3.5 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300 shadow-sm",
-                          themeCard.imageCardBorder
-                        )}
-                      >
-                        {/* Course Thumbnail Image */}
-                        {card.image && (
-                          <LazyImage 
-                            src={card.image} 
-                            alt={card.title} 
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 rounded-[14px]"
-                          />
-                        )}
-
-                        {/* Top-Left Category Pill */}
-                        <div className="absolute top-2.5 left-2.5 z-10">
-                          <span className={cn(
-                            "inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-md shadow-md border",
-                            card.type === "tech" 
-                              ? "bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white border-blue-400/40" 
-                              : "bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white border-purple-400/40"
-                          )}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                            <span>{card.type === "tech" ? (isVi ? "CÔNG NGHỆ" : "TECH") : (isVi ? "QUẢN LÝ" : "MANAGEMENT")}</span>
-                          </span>
-                        </div>
-
-                        {/* Top-Right Year Badge */}
-                        <div className="absolute top-2.5 right-2.5 z-10">
-                          <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-300 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-amber-400/40 shadow-md">
-                            <Icons.Calendar className="w-3 h-3 text-amber-400" />
-                            <span>{card.year}</span>
-                          </span>
-                        </div>
-
-                        {/* Bottom-Right Quick Zoom Button */}
-                        <div className="absolute bottom-2.5 right-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-auto">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              safePlay("click");
-                              openImagePreview(card.image, card.title);
-                            }}
-                            className="w-7 h-7 rounded-lg bg-slate-900/85 hover:bg-slate-900 text-white flex items-center justify-center border border-white/25 shadow-lg transition-transform hover:scale-110 cursor-pointer backdrop-blur-sm"
-                            title={isVi ? "Xem ảnh phóng to" : "Enlarge image"}
-                          >
-                            <Icons.Maximize2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-
-                        {/* Subtle Shine Sweep on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1000ms] ease-out pointer-events-none z-10 rounded-[14px]" />
-                      </div>
-
-                      {/* Title Block - Animated Unframed Icon on the Left & Dynamic Title */}
-                      <div className="w-full flex flex-col gap-1.5 mb-3">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <motion.div
-                            animate={{
-                              y: [0, -3, 0],
-                              rotate: [0, 4, -4, 0],
-                              scale: [1, 1.08, 1],
-                            }}
-                            transition={{
-                              duration: 3.5,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                            className="shrink-0 select-none"
-                          >
-                            <DynamicIcon 
-                              name={card.icon || "graduation-cap"} 
-                              className="w-5.5 h-5.5 stroke-[2.4]" 
-                              style={{ color: coverTheme.textAccent || themeCard.actionColor }}
-                            />
-                          </motion.div>
-                          <h3 
-                            className={cn("font-play font-bold leading-tight tracking-tight text-card-title truncate line-clamp-1 flex-1 text-slate-900 dark:text-white")}
-                            style={{ color: coverTheme.textAccent || themeCard.actionColor }}
-                            title={card.title}
-                          >
-                            {card.title}
-                          </h3>
-                        </div>
-                        {/* Dynamic Colored Gradient Line Below */}
-                        <div 
-                          className="h-[2px] w-full rounded-full opacity-70 transition-all duration-300"
-                          style={{
-                            background: `linear-gradient(90deg, ${coverTheme.textAccent || themeCard.actionColor || '#4f46e5'} 0%, transparent 100%)`
-                          }}
-                        />
-                      </div>
-
-                      {/* Metadata List - Cleanly Structured Rows */}
-                      <div className="space-y-2 text-body-sm text-left mb-3">
-                        {/* 1. Học tại / Institution */}
-                        <div className="flex items-start gap-1.5 text-left">
-                          <span className={cn("w-[82px] shrink-0 font-bold text-caption flex items-center gap-1.5 whitespace-nowrap", themeCard.metadataLabel)}>
-                            <Icons.School className="w-3.5 h-3.5 shrink-0" style={{ color: coverTheme.textAccent || themeCard.actionColor }} />
-                            <span className="whitespace-nowrap">{isVi ? "Học tại:" : "School:"}</span>
-                          </span>
-                          <span className={cn("font-semibold text-caption truncate flex-1", themeCard.metadataVal)} title={card.subtitle}>
-                            {card.subtitle}
-                          </span>
-                        </div>
-
-                        {/* 2. Ngành / Chuyên ngành */}
-                        <div className="flex items-start gap-1.5 text-left">
-                          <span className={cn("w-[82px] shrink-0 font-bold text-caption flex items-center gap-1.5 whitespace-nowrap", themeCard.metadataLabel)}>
-                            <Icons.GraduationCap className="w-3.5 h-3.5 shrink-0" style={{ color: coverTheme.textAccent || themeCard.actionColor }} />
-                            <span className="whitespace-nowrap">{isVi ? "Ngành:" : "Major:"}</span>
-                          </span>
-                          <span className={cn("font-semibold text-caption truncate flex-1", themeCard.metadataVal)} title={card.major || "Phát triển chuyên môn"}>
-                            {card.major || (isVi ? "Phát triển chuyên môn" : "Skill Development")}
-                          </span>
-                        </div>
-
-                        {/* 3. Mô tả / Key Summary */}
-                        <div className={cn("text-left text-caption leading-snug secondary-text", themeCard.descColor)}>
-                          <span className={cn("font-bold inline-flex items-center gap-1.5 mr-1.5", themeCard.metadataLabel)}>
-                            <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" style={{ color: coverTheme.textAccent || themeCard.actionColor }} />
-                            <span>{isVi ? "Mô tả:" : "Desc:"}</span>
-                          </span>
-                          <span className="font-normal line-clamp-3 inline">{card.desc}</span>
-                        </div>
-                      </div>
-
-                      {/* Hashtags / Skill Chips */}
-                      {card.hashtags && card.hashtags.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1 mb-3">
-                          {card.hashtags.slice(0, 4).map((tag, tIdx) => {
-                            const cleanTag = tag.replace(/^#/, '');
-                            return (
-                              <span 
-                                key={tIdx} 
-                                className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs transition-all hover:bg-white dark:hover:bg-slate-700"
-                              >
-                                <span 
-                                  className="w-1.5 h-1.5 rounded-full" 
-                                  style={{ backgroundColor: coverTheme.textAccent || themeCard.actionColor || '#4f46e5' }}
-                                />
-                                <span>{cleanTag}</span>
-                              </span>
-                            );
-                          })}
-                        </div>
+                    {/* Banner Image - Clear Clean Banner Image Style without border */}
+                    <div 
+                      className={cn(
+                        "relative w-full aspect-[16/10] overflow-hidden rounded-[10px] mb-3 pointer-events-none flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300 shadow-xs",
+                        themeCard.imageCardBorder
                       )}
+                    >
+                      {/* Course Thumbnail Image */}
+                      {card.image && (
+                        <img 
+                           src={card.image} 
+                           alt={card.title} 
+                           referrerPolicy="no-referrer"
+                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 rounded-[10px]"
+                        />
+                      )}
+
+                      {/* Subtle Shine Sweep on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1000ms] ease-out pointer-events-none z-10 rounded-[10px]" />
                     </div>
 
-                    {/* Bottom Action Footer */}
-                    <div className={cn("flex items-center justify-between pt-3 mt-auto w-full gap-2", themeCard.footerBorder)}>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          safePlay("click");
-                          openImagePreview(card.certImg || card.image, `${card.title} - Bằng cấp / Chứng nhận`);
-                        }}
-                        className="px-3 py-1.5 rounded-xl text-caption font-bold text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 bg-slate-100/90 hover:bg-indigo-50 dark:bg-slate-800/80 dark:hover:bg-indigo-950/50 border border-slate-200/80 dark:border-slate-700/80 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs hover:shadow-xs"
-                        title={isVi ? "Xem ảnh bằng cấp phóng to" : "View certificate image"}
+                    {/* Title Block - Icon without frame, title color matching icon */}
+                    <div className="flex items-center gap-2.5 mb-2.5">
+                      <DynamicIcon 
+                        name={card.icon || "graduation-cap"} 
+                        className={cn("w-5 h-5 shrink-0", themeCard.iconColor)} 
+                        style={{ color: themeCard.actionColor }}
+                      />
+                      <h3 
+                        className={cn("font-play font-bold leading-tight tracking-tight text-card-title truncate line-clamp-1", themeCard.titleColor)}
+                        style={{ color: themeCard.actionColor }}
                       >
-                        <Icons.Award className="w-4 h-4" style={{ color: coverTheme.textAccent || themeCard.actionColor }} />
-                        <span>{isVi ? "Bằng cấp" : "Certificate"}</span>
-                      </button>
+                        {card.title}
+                      </h3>
+                    </div>
 
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openBookMode(card.id);
-                        }}
-                        className="px-3.5 py-1.5 rounded-xl text-caption font-bold text-white transition-all flex items-center gap-1.5 shadow-xs cursor-pointer hover:shadow-md hover:scale-[1.03]"
-                        style={{
-                          background: `linear-gradient(135deg, ${coverTheme.textAccent || themeCard.actionColor || '#4f46e5'}, #2563eb)`
-                        }}
-                      >
-                        <Icons.BookOpen className="w-3.5 h-3.5" />
-                        <span>{isVi ? "Sách 3D" : "3D Book"}</span>
-                        <Icons.ChevronRight className="w-3.5 h-3.5" />
-                      </button>
+                    {/* Metadata List - Flat Direct Rows with Caption / Label: 12px – 13px - WCAG AA Compliant Text */}
+                    <div className="space-y-1.5 text-body-sm text-left mb-3">
+                      {/* 1. Học tại / Institution */}
+                      <div className="flex items-start gap-1.5 text-left">
+                        <span className={cn("w-[76px] shrink-0 font-bold text-caption flex items-center gap-1 whitespace-nowrap", themeCard.metadataLabel)}>
+                          <Icons.School className="w-3.5 h-3.5 shrink-0" />
+                          <span className="whitespace-nowrap">{isVi ? "Học tại:" : "School:"}</span>
+                        </span>
+                        <span className={cn("font-semibold text-caption truncate flex-1", themeCard.metadataVal)}>
+                          {card.subtitle}
+                        </span>
+                      </div>
+
+                      {/* 3. Mô tả / Key Summary */}
+                      <div className={cn("text-left text-caption leading-snug secondary-text", themeCard.descColor)}>
+                        <span className={cn("font-bold inline-flex items-center gap-1 mr-1.5", themeCard.metadataLabel)}>
+                          <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" />
+                          <span>{isVi ? "Mô tả:" : "Desc:"}</span>
+                        </span>
+                        <span className="font-normal line-clamp-4 inline">{card.desc}</span>
+                      </div>
+                    </div>
+
+                    {/* Bottom Year Badge */}
+                    <div className={cn("flex items-center justify-between pt-2.5 mt-auto w-full", themeCard.footerBorder)}>
+                      <span className={cn("inline-flex items-center gap-1 text-2xs font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-2xs", themeCard.badgeYearClass)}>
+                        <Icons.Calendar className="w-3 h-3 opacity-90" />
+                        <span>{card.year}</span>
+                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -1929,19 +1809,10 @@ export default function Education() {
                     >
                       <div className="relative z-10 flex flex-col h-full justify-between">
                         <div>
-                          {/* Header year badge & category indicator (Top of cover) */}
+                          {/* Header year badge & indicator (Top of cover) */}
                           <div className="flex items-center justify-between mb-2 pb-1 border-b border-slate-300/40 dark:border-white/20">
-                            <span className={cn(
-                              "inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-2xs",
-                              activeCard.type === "tech" 
-                                ? "bg-blue-600/80 text-white border-blue-400/30" 
-                                : "bg-purple-600/80 text-white border-purple-400/30"
-                            )}>
-                              {activeCard.type === "tech" ? (isVi ? "Công nghệ" : "Tech") : (isVi ? "Quản lý" : "Management")}
-                            </span>
-                            <span className="text-2xs font-mono font-black text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-xs flex items-center gap-1">
-                              <Icons.Calendar className="w-3 h-3 text-amber-500" />
-                              <span>{activeCard.year}</span>
+                            <span className="text-2xs font-mono font-black text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-400/40 shadow-xs">
+                              {activeCard.year}
                             </span>
                           </div>
 
@@ -1966,91 +1837,42 @@ export default function Education() {
                             </div>
                           </div>
 
-                          {/* Title Block with animated floating icon (no frame) & accent line */}
-                          <div className="my-1.5 flex flex-col gap-1">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <motion.div
-                                animate={{
-                                  y: [0, -2.5, 0],
-                                  rotate: [0, 4, -4, 0],
-                                  scale: [1, 1.05, 1],
-                                }}
-                                transition={{
-                                  duration: 3.5,
-                                  repeat: Infinity,
-                                  ease: "easeInOut",
-                                }}
-                                className="shrink-0 select-none"
-                              >
-                                <DynamicIcon 
-                                  name={activeCard.icon || "graduation-cap"} 
-                                  className="w-5 h-5 stroke-[2.3]" 
-                                  style={{ color: getBookCoverTheme(activeCard.id).textAccent }}
-                                />
-                              </motion.div>
-                              <h2 
-                                className="font-play font-bold text-slate-900 dark:text-white leading-tight tracking-tight text-base sm:text-lg flex-1 truncate line-clamp-1"
-                                style={{ color: getBookCoverTheme(activeCard.id).textAccent }}
-                              >
-                                {activeCard.title}
-                              </h2>
-                            </div>
-                            <div 
-                              className="h-[1.5px] w-full rounded-full opacity-60"
-                              style={{
-                                background: `linear-gradient(90deg, ${getBookCoverTheme(activeCard.id).textAccent}, transparent)`
-                              }}
-                            />
+                          {/* Title Block with Play font */}
+                          <div className="my-1">
+                            <h2 
+                              className="font-play font-bold text-slate-900 dark:text-white leading-tight tracking-tight text-base sm:text-lg flex items-center gap-2 truncate line-clamp-1"
+                            >
+                              <DynamicIcon name={activeCard.icon || "graduation-cap"} className="w-5 h-5 text-indigo-600 dark:text-indigo-300 shrink-0 inline-block" />
+                              <span>{activeCard.title}</span>
+                            </h2>
                           </div>
 
                           {/* Unified Metadata Grid matching Education Card - Bằng nhau chiều ngang, bỏ khung icon */}
-                          <div className="space-y-1.5 text-xs mt-2 font-play">
-                            <div className="flex items-start gap-1.5">
-                              <span className="text-slate-600 dark:text-slate-300 w-[84px] shrink-0 font-medium flex items-center gap-1">
-                                <Icons.School className="w-3.5 h-3.5 shrink-0" style={{ color: getBookCoverTheme(activeCard.id).textAccent }} />
+                          <div className="space-y-2 text-xs mt-2 font-play">
+                            <div className="flex items-start gap-2">
+                              <span className="text-slate-600 dark:text-slate-300 w-[94px] shrink-0 font-medium flex items-center gap-1">
+                                <Icons.School className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0" />
                                 <span>Học tại:</span>
                               </span>
                               <span className="font-bold text-slate-900 dark:text-white truncate flex-1">{activeCard.subtitle}</span>
                             </div>
 
-                            <div className="flex items-start gap-1.5">
-                              <span className="text-slate-600 dark:text-slate-300 w-[84px] shrink-0 font-medium flex items-center gap-1">
-                                <Icons.GraduationCap className="w-3.5 h-3.5 shrink-0" style={{ color: getBookCoverTheme(activeCard.id).textAccent }} />
+                            <div className="flex items-start gap-2">
+                              <span className="text-slate-600 dark:text-slate-300 w-[94px] shrink-0 font-medium flex items-center gap-1">
+                                <Icons.GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0" />
                                 <span>Ngành:</span>
                               </span>
-                              <span className="font-semibold text-slate-800 dark:text-white line-clamp-1 flex-1">{activeCard.major || (isVi ? "Phát triển chuyên môn" : "Skill Development")}</span>
-                            </div>
-
-                            <div className="flex items-start gap-1.5">
-                              <span className="text-slate-600 dark:text-slate-300 w-[84px] shrink-0 font-medium flex items-center gap-1">
-                                <Icons.Calendar className="w-3.5 h-3.5 shrink-0" style={{ color: getBookCoverTheme(activeCard.id).textAccent }} />
-                                <span>Thời gian:</span>
-                              </span>
-                              <span className="font-mono font-bold text-slate-900 dark:text-white">{activeCard.year}</span>
+                              <span className="font-semibold text-slate-800 dark:text-white line-clamp-1 flex-1">{activeCard.major || "Phát triển kỹ năng & Năng lực chuyên môn"}</span>
                             </div>
 
                             <div className="text-left text-xs leading-normal text-slate-700 dark:text-slate-200">
                               <span className="text-slate-600 dark:text-slate-300 font-medium inline-flex items-center gap-1 mr-1.5">
-                                <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" style={{ color: getBookCoverTheme(activeCard.id).textAccent }} />
+                                <Icons.FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300 shrink-0 inline-block align-middle" />
                                 <span>{isVi ? "Mô tả:" : "Desc:"}</span>
                               </span>
-                              <span className="font-normal line-clamp-3 inline">{activeCard.desc}</span>
+                              <span className="font-normal line-clamp-4 inline">{activeCard.desc}</span>
                             </div>
                           </div>
-
-                          {/* Hashtags on Cover */}
-                          {activeCard.hashtags && activeCard.hashtags.length > 0 && (
-                            <div className="flex flex-wrap items-center gap-1 pt-1.5">
-                              {activeCard.hashtags.slice(0, 3).map((tag, tIdx) => (
-                                <span 
-                                  key={tIdx} 
-                                  className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-white/60 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 border border-slate-300/40 dark:border-white/10"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
 
                         </div>
 
@@ -2907,12 +2729,10 @@ export default function Education() {
             </div>
 
             <div className="w-full flex-1 overflow-hidden flex items-center justify-center rounded-[16px] bg-slate-950/5 p-2 border border-slate-200/60 dark:border-slate-800">
-              <LazyImage
+              <img
                 src={previewModalImg}
                 alt="Certificate Preview"
                 className="max-h-[58vh] max-w-full object-contain rounded-[12px] shadow-md transition-transform duration-300 hover:scale-105"
-                objectFit="contain"
-                priority={true}
               />
             </div>
 

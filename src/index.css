@@ -5,27 +5,20 @@
 :root {
   --grid-margin: 16px;
   --grid-gutter: 16px;
-  scroll-behavior: smooth !important;
 }
 
-html,
-body,
-main,
-section,
-.floating-glass-main-card,
-[class*="overflow-y-auto"],
-[class*="overflow-x-auto"],
-.scroll-smooth {
-  scroll-behavior: smooth !important;
-  -webkit-overflow-scrolling: touch;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
+@keyframes flowLine {
+  to {
+    stroke-dashoffset: -40;
   }
-  100% {
-    transform: translateX(100%);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
   }
 }
 
@@ -77,13 +70,14 @@ a {
   transition: border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Thẻ Tử vi Bản Mệnh Phong Thủy Hover Elevation & Mystical Glow */
-#tuvi-section-1 {
-  transition: transform 0.3s ease, border-color 0.3s ease;
+/* Subtle floating animation effect on hover for the main content card */
+.floating-glass-main-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-#tuvi-section-1:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px -8px rgba(168, 85, 247, 0.16), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+
+.floating-glass-main-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.12), 0 0 24px -6px rgba(59, 130, 246, 0.15) !important;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -212,27 +206,6 @@ a {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  /* Completely hide browser scrollbars everywhere across the app */
-  * {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  *::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
   }
   
   h1, h2, h3, h4, h5, h6, h7 {
@@ -4806,6 +4779,16 @@ html.theme-flat-dark body,
 [id^="sec-09"] h2 svg, [id^="sec-10"] h2 svg, [id^="sec-11"] h2 svg, [id^="sec-12"] h2 svg {
   color: currentColor !important;
   stroke: currentColor !important;
+}
+
+/* Custom rule to remove background/border framing and set icon opacity to 50% for all sec-01 headers */
+[id="sec-01"] h2 svg, [id="sec-01"] h2 img {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  opacity: 0.5 !important;
 }
 
 [id^="sec-01"] h2 img, [id^="sec-02"] h2 img, [id^="sec-03"] h2 img, [id^="sec-04"] h2 img,
