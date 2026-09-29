@@ -44,6 +44,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../i18n";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
+import IntroductionCard from "./IntroductionCard";
 
 /* ==========================================================================
    INTERFACES & MOCK DATA
@@ -211,8 +212,7 @@ export default function TemplatePage() {
 
   // Layout View Mode: 1 Cột 1 Hàng (Single-row stream) as default requested
   const [viewLayout, setViewLayout] = useState<"single-row" | "bento">("single-row");
-  // Active Glass Tab
-  const [activeTab, setActiveTab] = useState<"all" | "tasks" | "profile" | "analytics" | "wallet" | "checklist">("all");
+  const [activeSubTab, setActiveSubTab] = useState<"all" | "work" | "analytics" | "profile">("all");
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -562,39 +562,39 @@ export default function TemplatePage() {
         </header>
 
         {/* =======================================================================
-            GLASS TAB BAR (Interactive Glass Navigation for Template Modules)
+            TAB NAVIGATION FOR DASHBOARD (Thêm Tab vào trang)
             ======================================================================= */}
-        <div className="w-full p-1.5 rounded-[12px] bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 backdrop-blur-2xl shadow-sm flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {[
-            { id: "all" as const, labelVi: "Tất cả mô-đun", labelEn: "All Modules", icon: LayoutGrid },
-            { id: "tasks" as const, labelVi: "1. Cổng điều hành tác vụ", labelEn: "1. Task Hub", icon: Activity },
-            { id: "profile" as const, labelVi: "2. Hồ sơ lãnh đạo & Trạng thái", labelEn: "2. Profile & Status", icon: User },
-            { id: "analytics" as const, labelVi: "3. Chỉ số CSAT & Vận hành", labelEn: "3. CSAT Analytics", icon: TrendingUp },
-            { id: "wallet" as const, labelVi: "4. Tài sản số & Thẻ", labelEn: "4. Digital Wallet", icon: CreditCard },
-            { id: "checklist" as const, labelVi: "5. Checklist công việc", labelEn: "5. Checklist Hub", icon: CheckSquare },
-          ].map((tab) => {
-            const isActive = activeTab === tab.id;
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => {
-                  playUiSound("click");
-                  setActiveTab(tab.id);
-                }}
-                className={cn(
-                  "px-3.5 py-2 rounded-[9px] text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer shrink-0",
-                  isActive
-                    ? "bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 shadow-md shadow-indigo-500/20 scale-[1.02]"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-white/5"
-                )}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{isVi ? tab.labelVi : tab.labelEn}</span>
-              </button>
-            );
-          })}
+        <div className="sticky top-[64px] sm:top-[72px] z-30 w-full mb-6 py-2 overflow-x-auto no-scrollbar transition-all duration-300 bg-transparent">
+          <div className="flex items-center gap-1.5 p-1.5 min-w-max bg-slate-100/80 dark:bg-slate-950/60 rounded-2xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none shadow-sm">
+            {[
+              { id: "all", labelVi: "Tổng Quan", labelEn: "Overview", Icon: LayoutGrid },
+              { id: "work", labelVi: "Tác Vụ & Checklist", labelEn: "Tasks & Checklist", Icon: CheckSquare },
+              { id: "analytics", labelVi: "Chỉ Số Hiệu Suất", labelEn: "Performance KPIs", Icon: TrendingUp },
+              { id: "profile", labelVi: "Hồ Sơ & Tài Chính", labelEn: "Profile & Finance", Icon: User }
+            ].map((subTab) => {
+              const isSubActive = activeSubTab === subTab.id;
+              const Icon = subTab.Icon;
+              return (
+                <button
+                  key={subTab.id}
+                  type="button"
+                  onClick={() => {
+                    playUiSound("click");
+                    setActiveSubTab(subTab.id as any);
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
+                    isSubActive
+                      ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
+                  )}
+                >
+                  <Icon className={cn("w-4 h-4 shrink-0 transition-transform", isSubActive ? "text-white scale-110" : "text-slate-400 dark:text-slate-400")} />
+                  <span>{isVi ? subTab.labelVi : subTab.labelEn}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* =======================================================================
@@ -602,15 +602,23 @@ export default function TemplatePage() {
             ======================================================================= */}
         <main className={viewLayout === "single-row" ? "flex flex-col gap-[15px] w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px]"}>
           {/* ===================================================================
+              THÈ GIỚI THIỆU BẢN THÂN (Introduction Showcase Card)
+              Tái tạo tinh tế, chuẩn xác từ hình ảnh đính kèm
+              =================================================================== */}
+          {(activeSubTab === "all" || activeSubTab === "profile") && (
+            <IntroductionCard viewLayout={viewLayout} />
+          )}
+
+          {/* ===================================================================
               CARD 1: CỔNG ĐIỀU HÀNH TÁC VỤ HỆ THỐNG
               =================================================================== */}
-          {(activeTab === "all" || activeTab === "tasks") && (
-          <section 
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between transition-all ${
-              viewLayout === "bento" ? "col-span-1 md:col-span-2 lg:col-span-2" : "col-span-1"
-            }`}
-          >
+          {(activeSubTab === "all" || activeSubTab === "work") && (
+            <section 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between transition-all ${
+                viewLayout === "bento" ? "col-span-1 md:col-span-2 lg:col-span-2" : "col-span-1"
+              }`}
+            >
             <div className="space-y-4">
               {/* Header của Task Hub */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/60 dark:border-white/10">
@@ -807,11 +815,11 @@ export default function TemplatePage() {
           {/* ===================================================================
               CARD 2: HỒ SƠ NHÂN SỰ & TRẠNG THÁI (Profile Status Card)
               =================================================================== */}
-          {(activeTab === "all" || activeTab === "profile") && (
-          <section 
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
-          >
+          {(activeSubTab === "all" || activeSubTab === "profile") && (
+            <section 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
+            >
             <div>
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -958,11 +966,11 @@ export default function TemplatePage() {
           {/* ===================================================================
               CARD 3: CHỈ SỐ & BIỂU ĐỒ PHÂN TÍCH (Analytics Sparkline Card)
               =================================================================== */}
-          {(activeTab === "all" || activeTab === "analytics") && (
-          <section 
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
-          >
+          {(activeSubTab === "all" || activeSubTab === "analytics") && (
+            <section 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
+            >
             <div className="space-y-3">
               {/* Header & Period Switcher */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -1104,11 +1112,11 @@ export default function TemplatePage() {
           {/* ===================================================================
               CARD 4: THẺ VÍ SỐ / TÀI CHÍNH (Digital Asset Card)
               =================================================================== */}
-          {(activeTab === "all" || activeTab === "wallet") && (
-          <section 
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
-          >
+          {(activeSubTab === "all" || activeSubTab === "profile") && (
+            <section 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className="w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all"
+            >
             <div className="space-y-4">
               {/* Header & Currency Switcher */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -1242,13 +1250,13 @@ export default function TemplatePage() {
           {/* ===================================================================
               CARD 5: CHECKLIST CÔNG VIỆC TƯƠNG TÁC (Interactive Checklist Card)
               =================================================================== */}
-          {(activeTab === "all" || activeTab === "checklist") && (
-          <section 
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-            className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all ${
-              viewLayout === "bento" ? "md:col-span-2 lg:col-span-1" : "col-span-1"
-            }`}
-          >
+          {(activeSubTab === "all" || activeSubTab === "work") && (
+            <section 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className={`w-full p-[15px] sm:p-6 border border-white/60 dark:border-white/10 shadow-xl backdrop-blur-2xl bg-white/75 dark:bg-slate-900/75 flex flex-col justify-between space-y-4 transition-all ${
+                viewLayout === "bento" ? "md:col-span-2 lg:col-span-1" : "col-span-1"
+              }`}
+            >
             <div className="space-y-3">
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -1652,4 +1660,4 @@ export default function TemplatePage() {
   );
 }
 
-export { TemplatePage, TemplatePage as GlassmorphismDashboard, TemplatePage as TrangMau };
+export { TemplatePage as GlassmorphismDashboard, TemplatePage as TrangMau };

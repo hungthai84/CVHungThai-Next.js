@@ -1,27 +1,25 @@
 export type CursorStyleType = 
-  | "neon-ring" 
-  | "minimal-dot" 
+  | "default" 
+  | "minimal" 
+  | "glow" 
+  | "neon" 
   | "crosshair" 
-  | "liquid-bubble" 
-  | "trailing-comet" 
+  | "ring" 
+  | "magnetic" 
+  | "spotlight"
+  | "neon-ring"
+  | "minimal-dot"
+  | "liquid-bubble"
+  | "trailing-comet"
   | "system";
 
-export type CursorColorPreset = 
-  | "auto" 
-  | "cyan" 
-  | "indigo" 
-  | "emerald" 
-  | "rose" 
-  | "amber";
-
-export type CursorSize = "small" | "medium" | "large";
+export type CursorSizeType = "small" | "medium" | "large";
 
 export interface CursorConfig {
   style: CursorStyleType;
-  colorPreset: CursorColorPreset;
-  customColor?: string;
-  size: CursorSize;
+  size: CursorSizeType;
+  colorPreset: string;
   enableTrail: boolean;
-  enableHoverEffect: boolean;
-  blendMode: "screen" | "difference" | "normal";
+  enableMagnetic: boolean;
+  speed?: number;
 }

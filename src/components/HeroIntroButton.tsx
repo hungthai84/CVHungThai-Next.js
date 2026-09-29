@@ -10,6 +10,7 @@ interface HeroIntroButtonProps {
   onCancelIntro?: () => void;
   className?: string;
   lang?: string;
+  label?: string;
 }
 
 /**
@@ -148,6 +149,7 @@ export const HeroIntroButton: React.FC<HeroIntroButtonProps> = ({
   onCancelIntro,
   className,
   lang = "vi",
+  label,
 }) => {
   const isVi = lang === "vi";
 
@@ -274,7 +276,7 @@ export const HeroIntroButton: React.FC<HeroIntroButtonProps> = ({
           ) : (
             <>
               <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] text-button text-white truncate">
-                {isVi ? "Giới thiệu" : "Introduction"}
+                {label || (isVi ? "Giới thiệu" : "Introduction")}
               </span>
               <SparkleWithPlusDot className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             </>

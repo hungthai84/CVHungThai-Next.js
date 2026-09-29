@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Sliders, 
@@ -7,12 +7,15 @@ import {
   MousePointer, 
   Volume2, 
   PanelBottom, 
+  PanelTop,
   Type, 
   Check, 
   RotateCcw, 
   Copy, 
   Sun, 
+  Moon, 
   Sparkles, 
+  Eye, 
   CheckCircle2, 
   VolumeX, 
   CloudRain, 
@@ -27,40 +30,54 @@ import {
   EyeOff, 
   Pin, 
   Code2, 
+  SlidersHorizontal, 
   Clock, 
   CloudSun, 
   ChevronDown, 
-  Globe, 
-  Images, 
-  Download, 
-  Upload, 
-  Zap, 
-  Settings2,
+  Monitor,
+  ShieldCheck,
+  Zap,
+  Save,
+  Download,
+  Upload,
   RefreshCw,
-  SlidersHorizontal,
-  Link2,
-  Unlink
+  FileJson,
+  Wrench,
+  AlertTriangle,
+  X,
+  Play
 } from "lucide-react";
 import { PageCardHeader } from "./PageCardHeader";
 import { useLanguage } from "../i18n";
-import { useTheme, COLOR_PRESETS, ThemeType } from "../context/ThemeContext";
-import { useBackground } from "../context/BackgroundContext";
+import { useTheme, COLOR_PRESETS, ThemeType, ThemeMode } from "../context/ThemeContext";
 import { useCursor } from "../context/CursorContext";
 import { useSound } from "../context/SoundContext";
-import { useFooter } from "../context/FooterContext";
-import { useLayout } from "../context/LayoutContext";
-import { CURSOR_STYLE_OPTIONS } from "../data/cursorData";
+import { useFooter, FooterModalTab } from "../context/FooterContext";
+import { useHeader } from "../context/HeaderContext";
+import { CURSOR_STYLE_OPTIONS, CURSOR_COLOR_OPTIONS } from "../data/cursorData";
 import { CursorStyleType } from "../types/cursor";
 import { SOUND_PACK_OPTIONS, AMBIENT_SOUND_OPTIONS } from "../data/soundData";
 import { AmbientSoundType } from "../types/sound";
 import { FOOTER_PLACEMENT_OPTIONS } from "../data/footerData";
 import { FooterPlacement } from "../types/footer";
+import { 
+  saveAsProductionDefaults, 
+  getSavedProductionDefaults, 
+  resetToFactoryDefaults, 
+  exportConfigurationFile, 
+  importConfigurationFromJson, 
+  runSystemDiagnosticAndRepair,
+  DiagnosticReport,
+  SystemProductionConfig,
+  FACTORY_DEFAULTS
+} from "../services/systemSettingsService";
 import { cn } from "../lib/utils";
 
 const RADIUS_PRESETS = [
   {
     id: "sharp",
     radius: 4,
+    cardRadius: 6,
     nameVi: "Tối Giản / Vuông (Sharp 4px)",
     nameEn: "Minimal Sharp (4px)",
     descVi: "Gọn gàng, chuẩn xác phong cách phẳng",
@@ -69,6 +86,7 @@ const RADIUS_PRESETS = [
   {
     id: "standard",
     radius: 10,
+    cardRadius: 14,
     nameVi: "Chuẩn Mực Hệ Thống (Standard 10px)",
     nameEn: "System Standard (10px)",
     descVi: "Mặc định Master Agent Design System",
@@ -77,6 +95,7 @@ const RADIUS_PRESETS = [
   {
     id: "smooth",
     radius: 14,
+    cardRadius: 18,
     nameVi: "Mềm Mại Hiện Đại (Smooth 14px)",
     nameEn: "Smooth Modern (14px)",
     descVi: "Bo cong mềm mại, thanh lịch",
@@ -85,6 +104,7 @@ const RADIUS_PRESETS = [
   {
     id: "rounded",
     radius: 18,
+    cardRadius: 22,
     nameVi: "Bo Tròn Nổi Bật (Rounded 18px)",
     nameEn: "Rounded Soft (18px)",
     descVi: "Đường cong nổi bật, thân thiện",
@@ -93,6 +113,7 @@ const RADIUS_PRESETS = [
   {
     id: "fluid",
     radius: 24,
+    cardRadius: 28,
     nameVi: "Bo Cong Tối Đa (Extra Round 24px)",
     nameEn: "Extra Round Fluid (24px)",
     descVi: "Bento bubble cao cấp, mượt mà",
@@ -115,10 +136,11 @@ export default function Customization() {
   const isVi = lang === "vi";
 
   // Contexts
-  const { fixedHeaderFooter, setFixedHeaderFooter } = useLayout();
   const { 
     theme, 
     setTheme, 
+    themeMode,
+    setThemeMode,
     colorPreset, 
     setColorPreset, 
     activePalette, 
@@ -127,17 +149,16 @@ export default function Customization() {
     resetFontScale, 
     borderRadius, 
     setBorderRadius, 
+    resetBorderRadius,
     borderRadiusCard,
     setBorderRadiusCard,
-    footerRadiusTopLeft,
-    setFooterRadiusTopLeft,
-    footerRadiusTopRight,
-    setFooterRadiusTopRight,
+    resetBorderRadiusCard
   } = useTheme();
 
   const {
     cursorConfig,
     setCursorStyle,
+    setCursorColor,
     setCursorSize,
     setEnableTrail,
     resetCursorConfig
@@ -159,34 +180,30 @@ export default function Customization() {
   const {
     footerConfig,
     setPlacement,
+    setStyleVariant,
     togglePin,
     toggleElementVisibility,
-    resetFooterConfig
+    resetFooterConfig,
+    footerModalTab,
+    setFooterModalTab
   } = useFooter();
 
   const {
-    config: backgroundConfig,
-    setOverlayOpacity,
-    setBlurAmount,
-    resetToDefaultGradient,
-    downloadJsonFile,
-    importConfigFromJson,
-    resetToDefaultJsonLibrary
-  } = useBackground();
+    headerConfig,
+    isHeaderPinned,
+    togglePin: toggleHeaderPin
+  } = useHeader();
 
-  // Active Category Filter for navigation
-  const [activeCategory, setActiveCategory] = useState<"all" | "theme" | "colors" | "display" | "radius" | "cursor" | "sound" | "footer" | "typography">("all");
-
+  // Active Tab state
+  const [activeTab, setActiveTab] = useState<FooterModalTab>("customization");
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [copiedCss, setCopiedCss] = useState(false);
+  const [customTestText, setCustomTestText] = useState("");
   const [resetSuccessMessage, setResetSuccessMessage] = useState<string | null>(null);
 
-  // Unsaved border radius local states
+  // Border radius state
   const [tempBorderRadius, setTempBorderRadius] = useState(borderRadius);
   const [tempBorderRadiusCard, setTempBorderRadiusCard] = useState(borderRadiusCard);
-  const [tempFooterRadiusTopLeft, setTempFooterRadiusTopLeft] = useState(footerRadiusTopLeft);
-  const [tempFooterRadiusTopRight, setTempFooterRadiusTopRight] = useState(footerRadiusTopRight);
-  const [isFooterCornersLinked, setIsFooterCornersLinked] = useState(false);
 
   // Sync temp values when context values change
   useEffect(() => {
@@ -197,13 +214,34 @@ export default function Customization() {
     setTempBorderRadiusCard(borderRadiusCard);
   }, [borderRadiusCard]);
 
-  useEffect(() => {
-    setTempFooterRadiusTopLeft(footerRadiusTopLeft);
-  }, [footerRadiusTopLeft]);
+  // Production Defaults Status State
+  const [productionDefaultsStatus, setProductionDefaultsStatus] = useState<string>(() => {
+    const saved = getSavedProductionDefaults();
+    return saved?.savedFormattedDate || (isVi ? "Mặc định gốc nhà phát triển" : "Factory Standard Default");
+  });
 
+  // Diagnostic Report Modal State
+  const [diagnosticReport, setDiagnosticReport] = useState<DiagnosticReport | null>(null);
+  const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
+
+  // Import JSON Modal State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importJsonText, setImportJsonText] = useState("");
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync tab with external requested tab (if any)
   useEffect(() => {
-    setTempFooterRadiusTopRight(footerRadiusTopRight);
-  }, [footerRadiusTopRight]);
+    if (footerModalTab) {
+      setActiveTab(footerModalTab);
+    }
+  }, [footerModalTab]);
+
+  const handleTabChange = (tabId: FooterModalTab) => {
+    setActiveTab(tabId);
+    setFooterModalTab(tabId);
+    playClick();
+  };
 
   const handleCopy = (text: string, tokenKey: string) => {
     navigator.clipboard.writeText(text);
@@ -220,8 +258,8 @@ export default function Customization() {
     const p5 = activePalette.find(p => p.id === "soft")?.hex || "#38BDF8";
 
     const cssCode = theme === "glass-dark-neon" 
-      ? `/* DARK NEON GLASS — 5 MÀU CHỦ ĐẠO */\n[data-theme="dark"] {\n  --color-primary: ${p1};   /* Main Action / Primary */\n  --color-secondary: ${p2}; /* Secondary Links / Nav */\n  --color-accent: ${p3};    /* Accent / Glow */\n  --color-highlight: ${p4}; /* Highlight Feature */\n  --color-soft: ${p5};      /* Soft Status / Positive */\n  --theme-radius-card: ${borderRadius}px;\n  --font-scale: ${fontScale}%;\n}`
-      : `/* LIGHT GLASS — 5 MÀU CHỦ ĐẠO */\n:root {\n  --color-primary: ${p1};   /* Primary Action */\n  --color-secondary: ${p2}; /* Secondary Indigo */\n  --color-accent: ${p3};    /* Accent Cyan */\n  --color-highlight: ${p4}; /* Highlight Violet */\n  --color-soft: ${p5};      /* Soft Sky */\n  --theme-radius-card: ${borderRadius}px;\n  --font-scale: ${fontScale}%;\n}`;
+      ? `/* DARK NEON GLASS — 5 MÀU CHỦ ĐẠO */\n[data-theme="dark"] {\n  --color-primary: ${p1};   /* Main Action / Primary */\n  --color-secondary: ${p2}; /* Secondary Links / Nav */\n  --color-accent: ${p3};    /* Accent / Glow */\n  --color-highlight: ${p4}; /* Highlight Feature */\n  --color-soft: ${p5};      /* Soft Status / Positive */\n  --theme-radius: ${borderRadius}px;\n  --theme-radius-card: ${borderRadiusCard}px;\n  --font-scale: ${fontScale}%;\n}`
+      : `/* LIGHT GLASS — 5 MÀU CHỦ ĐẠO */\n:root {\n  --color-primary: ${p1};   /* Primary Action */\n  --color-secondary: ${p2}; /* Secondary Indigo */\n  --color-accent: ${p3};    /* Accent Cyan */\n  --color-highlight: ${p4}; /* Highlight Violet */\n  --color-soft: ${p5};      /* Soft Sky */\n  --theme-radius: ${borderRadius}px;\n  --theme-radius-card: ${borderRadiusCard}px;\n  --font-scale: ${fontScale}%;\n}`;
     navigator.clipboard.writeText(cssCode);
     setCopiedCss(true);
     playSuccess();
@@ -231,24 +269,143 @@ export default function Customization() {
   const triggerResetFeedback = (msg: string) => {
     setResetSuccessMessage(msg);
     playSuccess();
-    setTimeout(() => setResetSuccessMessage(null), 2500);
+    setTimeout(() => setResetSuccessMessage(null), 3000);
   };
 
-  const handleImportJsonFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 1. SAVE AS PRODUCTION DEFAULT HANDLER
+  const handleSaveAsProductionDefault = () => {
+    const configToSave: Partial<SystemProductionConfig> = {
+      themeMode,
+      theme,
+      colorPreset,
+      fontScale,
+      borderRadius: tempBorderRadius,
+      borderRadiusCard: tempBorderRadiusCard,
+      cursor: cursorConfig,
+      sound: soundConfig,
+      footer: footerConfig,
+      header: {
+        isPinned: isHeaderPinned,
+      },
+      lang,
+    };
+
+    const saved = saveAsProductionDefaults(configToSave);
+    setProductionDefaultsStatus(saved.savedFormattedDate || "Vừa cập nhật");
+    triggerResetFeedback(
+      isVi 
+        ? "✅ Đã lưu cấu hình làm Cài đặt Mặc định Thực tế thành công! Mọi lượt mở website mới sẽ tự động nạp cấu hình này." 
+        : "✅ Successfully saved as Production Defaults! All future visits will open with these settings."
+    );
+  };
+
+  // 2. RELOAD PRODUCTION DEFAULTS HANDLER
+  const handleReloadProductionDefaults = () => {
+    const saved = getSavedProductionDefaults();
+    if (!saved) {
+      triggerResetFeedback(isVi ? "Hệ thống đang sử dụng cấu hình gốc xuất xưởng." : "Using factory standard defaults.");
+      return;
+    }
+
+    if (saved.themeMode) setThemeMode(saved.themeMode);
+    if (saved.theme) setTheme(saved.theme);
+    if (saved.colorPreset) setColorPreset(saved.colorPreset);
+    if (typeof saved.fontScale === "number") setFontScale(saved.fontScale);
+    if (typeof saved.borderRadius === "number") {
+      setTempBorderRadius(saved.borderRadius);
+      setBorderRadius(saved.borderRadius);
+    }
+    if (typeof saved.borderRadiusCard === "number") {
+      setTempBorderRadiusCard(saved.borderRadiusCard);
+      setBorderRadiusCard(saved.borderRadiusCard);
+    }
+    if (saved.lang) setLang(saved.lang);
+
+    triggerResetFeedback(
+      isVi 
+        ? "🔄 Đã nạp lại Cài đặt Mặc định Thực tế đã lưu trước đó!" 
+        : "🔄 Reloaded saved production defaults successfully!"
+    );
+  };
+
+  // 3. RESET TO FACTORY DEFAULTS
+  const handleResetToFactoryDefaults = () => {
+    resetToFactoryDefaults();
+    setThemeMode(FACTORY_DEFAULTS.themeMode);
+    setTheme(FACTORY_DEFAULTS.theme);
+    setColorPreset(FACTORY_DEFAULTS.colorPreset);
+    setFontScale(FACTORY_DEFAULTS.fontScale);
+    setTempBorderRadius(FACTORY_DEFAULTS.borderRadius);
+    setBorderRadius(FACTORY_DEFAULTS.borderRadius);
+    setTempBorderRadiusCard(FACTORY_DEFAULTS.borderRadiusCard);
+    setBorderRadiusCard(FACTORY_DEFAULTS.borderRadiusCard);
+    resetCursorConfig();
+    resetSoundConfig();
+    resetFooterConfig();
+    setLang(FACTORY_DEFAULTS.lang);
+    setProductionDefaultsStatus(isVi ? "Mặc định gốc nhà phát triển" : "Factory Standard Default");
+
+    triggerResetFeedback(
+      isVi 
+        ? "🔄 Đã khôi phục toàn bộ cài đặt về Chuẩn Gốc Xuất Xưởng ban đầu!" 
+        : "🔄 System restored to pristine Factory Default configuration!"
+    );
+  };
+
+  // 4. RUN DIAGNOSTIC & AUTO REPAIR
+  const handleRunDiagnostic = () => {
+    playClick();
+    const report = runSystemDiagnosticAndRepair();
+    setDiagnosticReport(report);
+    setIsDiagnosticModalOpen(true);
+    playSuccess();
+  };
+
+  // 5. EXPORT CONFIG JSON
+  const handleExportConfig = () => {
+    const currentConfig: SystemProductionConfig = {
+      version: "2.5-prod",
+      savedAt: new Date().toISOString(),
+      savedFormattedDate: `${new Date().toLocaleTimeString("vi-VN")} - ${new Date().toLocaleDateString("vi-VN")}`,
+      themeMode,
+      theme,
+      colorPreset,
+      fontScale,
+      borderRadius: tempBorderRadius,
+      borderRadiusCard: tempBorderRadiusCard,
+      cursor: cursorConfig,
+      sound: soundConfig,
+      footer: footerConfig,
+      header: { isPinned: isHeaderPinned },
+      lang,
+    };
+    exportConfigurationFile(currentConfig);
+    triggerResetFeedback(isVi ? "📥 Đã tải xuống tệp cấu hình JSON thành công!" : "📥 Exported configuration JSON file successfully!");
+  };
+
+  // 6. IMPORT CONFIG JSON
+  const handleImportJson = () => {
+    if (!importJsonText.trim()) return;
+    const result = importConfigurationFromJson(importJsonText);
+    if (!result.success) {
+      setImportError(isVi ? (result.errorVi || "Lỗi tệp") : (result.errorEn || "Error"));
+      return;
+    }
+    setImportError(null);
+    setIsImportModalOpen(false);
+    setImportJsonText("");
+    setProductionDefaultsStatus(result.config?.savedFormattedDate || "Vừa nạp từ JSON");
+    triggerResetFeedback(isVi ? "🎉 Đã nhập và áp dụng tệp cấu hình JSON thành công!" : "🎉 Successfully imported and applied JSON configuration!");
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (event) => {
-      const content = event.target?.result as string;
-      if (content) {
-        const result = importConfigFromJson(content);
-        if (result.success) {
-          playSuccess();
-          triggerResetFeedback(result.message);
-        } else {
-          triggerResetFeedback(result.message);
-        }
+      const text = event.target?.result as string;
+      if (text) {
+        setImportJsonText(text);
       }
     };
     reader.readAsText(file);
@@ -285,285 +442,462 @@ export default function Customization() {
     }
   };
 
-  // Check section visibility according to active filter
-  const isSectionVisible = (category: typeof activeCategory) => {
-    return activeCategory === "all" || activeCategory === category;
-  };
+  const TABS: { id: FooterModalTab; nameVi: string; nameEn: string; Icon: React.ElementType }[] = [
+    { id: "customization", nameVi: "Giao diện & Chế độ", nameEn: "Theme & Mode", Icon: Sun },
+    { id: "colors", nameVi: "Bảng màu Tokens", nameEn: "Color System", Icon: Palette },
+    { id: "radius", nameVi: "Bo góc thẻ", nameEn: "Border Radius", Icon: Layers },
+    { id: "cursor", nameVi: "Con trỏ FX", nameEn: "Cursor FX", Icon: MousePointer },
+    { id: "sound", nameVi: "Âm thanh FX", nameEn: "Audio & FX", Icon: Volume2 },
+    { id: "footer", nameVi: "Header & Footer Dock", nameEn: "Header & Footer Dock", Icon: PanelBottom },
+    { id: "typography", nameVi: "Phông chữ Typography", nameEn: "Typography", Icon: Type },
+  ];
 
   return (
-    <section 
-      id="customization" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-[var(--grid-margin,15px)] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
-      style={{ '--grid-margin': '15px', '--grid-gutter': '16px' } as React.CSSProperties}
-    >
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
-        {/* 1. Standard Page Card Header */}
-        <PageCardHeader pageId="customization" />
+    <div className="w-full h-full min-h-full flex flex-col justify-start pb-16 pt-2 px-3 sm:px-6 md:px-8 max-w-[1280px] mx-auto select-none">
+      {/* 1. Standard Page Card Header */}
+      <PageCardHeader pageId="customization" />
 
-      {/* Floating Confirmation Toast */}
+      {/* Global Success Feedback Banner */}
       <AnimatePresence>
         {resetSuccessMessage && (
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.96 }}
+            initial={{ opacity: 0, y: -15, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.96 }}
-            className="mb-4 px-4 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-xl shadow-lg"
+            exit={{ opacity: 0, y: -15, scale: 0.96 }}
+            className="mb-4 px-4 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-md shadow-sm"
           >
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
               <span>{resetSuccessMessage}</span>
             </div>
+            <button 
+              type="button" 
+              onClick={() => setResetSuccessMessage(null)}
+              className="p-1 rounded-lg hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 2. Interactive Quick Navigation & Category Switcher (GLASS TAB BAR - Matches Template Page format) */}
-      <div className="w-full p-1.5 rounded-[12px] bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 backdrop-blur-2xl shadow-sm flex items-center gap-1.5 overflow-x-auto no-scrollbar mb-6">
-        {[
-          { id: "all" as const, labelVi: "Tất cả mục", labelEn: "All Modules", icon: Settings2 },
-          { id: "theme" as const, labelVi: "1. Chế độ giao diện", labelEn: "1. Theme Mode", icon: Sun },
-          { id: "colors" as const, labelVi: "2. Bảng màu chủ đạo", labelEn: "2. Color Palettes", icon: Palette },
-          { id: "display" as const, labelVi: "3. Hiệu ứng hiển thị", labelEn: "3. Display FX", icon: Sliders },
-          { id: "radius" as const, labelVi: "4. Bo cong góc", labelEn: "4. Border Radius", icon: Layers },
-          { id: "cursor" as const, labelVi: "5. Chuột & Vệt sáng", labelEn: "5. Cursor FX", icon: MousePointer },
-          { id: "sound" as const, labelVi: "6. Âm thanh & Nhạc nền", labelEn: "6. Audio FX", icon: Volume2 },
-          { id: "footer" as const, labelVi: "7. Chân trang Footer", labelEn: "7. Footer Dock", icon: PanelBottom },
-          { id: "typography" as const, labelVi: "8. Phông chữ & Tỷ lệ", labelEn: "8. Typography", icon: Type },
-        ].map((tab) => {
-          const isActive = activeCategory === tab.id;
-          const Icon = tab.icon;
-          return (
+      {/* 2. MASTER ACTION BAR: QUẢN LÝ CẤU HÌNH & LƯU MẶC ĐỊNH THỰC TẾ */}
+      <div 
+        className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm"
+        style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+      >
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                  {isVi ? "Quản lý Cấu hình & Thiết lập Mặc định Thực tế" : "Production Defaults & System Manager"}
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-3xs font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  {isVi ? "Sẵn sàng chạy thực tế" : "Production Ready"}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                {isVi ? "Mặc định thực tế hiện tại: " : "Current Default: "}
+                <span className="font-semibold text-indigo-600 dark:text-cyan-400">{productionDefaultsStatus}</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons Cluster */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* 1. PRIMARY SAVE AS DEFAULT BUTTON */}
             <button
-              key={tab.id}
               type="button"
-              onClick={() => {
-                setActiveCategory(tab.id);
-                playClick();
-              }}
-              className={cn(
-                "px-3.5 py-2 rounded-[9px] text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer shrink-0",
-                isActive
-                  ? "bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 shadow-md shadow-indigo-500/20 scale-[1.02]"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-white/5"
-              )}
+              onClick={handleSaveAsProductionDefault}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/25 transition-all duration-200 cursor-pointer active:scale-95"
             >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{isVi ? tab.labelVi : tab.labelEn}</span>
+              <Save className="w-4 h-4" />
+              <span>{isVi ? "Lưu làm Cài đặt Mặc định Thực tế" : "Save as Production Default"}</span>
             </button>
-          );
-        })}
+
+            {/* 2. HEALTH CHECK & AUTO REPAIR BUTTON */}
+            <button
+              type="button"
+              onClick={handleRunDiagnostic}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer"
+              title={isVi ? "Rà soát tính năng & tự động sửa chữa hệ thống" : "Audit & Auto-repair system settings"}
+            >
+              <Wrench className="w-3.5 h-3.5" />
+              <span>{isVi ? "Rà soát & Sửa chữa" : "Audit & Repair"}</span>
+            </button>
+
+            {/* 3. RELOAD PRODUCTION DEFAULTS */}
+            <button
+              type="button"
+              onClick={handleReloadProductionDefaults}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Nạp lại cấu hình mặc định thực tế" : "Reload saved defaults"}
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isVi ? "Nạp mặc định" : "Reload"}</span>
+            </button>
+
+            {/* 4. EXPORT JSON */}
+            <button
+              type="button"
+              onClick={handleExportConfig}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Xuất cấu hình ra tệp JSON" : "Export config to JSON file"}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{isVi ? "Xuất JSON" : "Export"}</span>
+            </button>
+
+            {/* 5. IMPORT JSON */}
+            <button
+              type="button"
+              onClick={() => { setIsImportModalOpen(true); playClick(); }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Nhập cấu hình từ tệp JSON" : "Import config from JSON file"}
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{isVi ? "Nhập JSON" : "Import"}</span>
+            </button>
+
+            {/* 6. RESET FACTORY */}
+            <button
+              type="button"
+              onClick={handleResetToFactoryDefaults}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-medium transition-all cursor-pointer"
+              title={isVi ? "Khôi phục chuẩn xuất xưởng ban đầu" : "Reset to factory defaults"}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden lg:inline">{isVi ? "Gốc xuất xưởng" : "Factory"}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* 4. Configuration Modules Displayed Seamlessly */}
-      <div className="w-full space-y-6 sm:space-y-8">
+      {/* 3. Navigation Tabs Bar (Matching Template Format) */}
+      <div 
+        className="sticky top-[64px] sm:top-[72px] z-30 w-full mb-6 py-2 overflow-x-auto no-scrollbar transition-all duration-300 bg-transparent"
+      >
+        <div 
+          className="flex items-center gap-1.5 p-1.5 min-w-max bg-slate-100/80 dark:bg-slate-950/60 rounded-2xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none shadow-sm"
+        >
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const Icon = tab.Icon;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => handleTabChange(tab.id)}
+                className={cn(
+                  "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
+                  isActive
+                    ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
+                )}
+              >
+                <Icon className={cn("w-4 h-4 shrink-0 transition-transform", isActive ? "text-white scale-110" : "text-slate-400 dark:text-slate-400")} />
+                <span>{isVi ? tab.nameVi : tab.nameEn}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-        {/* ========================================================================= */}
-        {/* MỤC 1: GIAO DIỆN & NGÔN NGỮ (THEME & LANGUAGE) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("theme") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Sun className="w-5 h-5 text-amber-500" />
-                  {isVi ? "1. Chế độ giao diện & Ngôn ngữ hiển thị" : "1. Theme Mode & Display Language"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Tùy chỉnh thẩm mỹ ánh sáng kính mờ toàn diện và ngôn ngữ song ngữ" : "Curate aesthetic lighting, glassmorphism mode and bilingual system language"}
-                </p>
+      {/* 4. Main Customization Panels Container */}
+      <div className="w-full">
+        {/* TAB 1: GIAO DIỆN & CHẾ ĐỘ (THEME & DISPLAY MODE) */}
+        {activeTab === "customization" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            {/* Theme Mode Selector (Light / Dark / Auto System) */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Sun className="w-5 h-5 text-amber-500" />
+                    {isVi ? "Chế độ hiển thị chính (Light / Dark / Auto)" : "Primary Display Mode"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Tự động kích hoạt chế độ sáng, tối hoặc theo cài đặt hệ điều hành" : "Select light, dark or follow operating system preferences automatically"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSaveAsProductionDefault}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                </button>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-2xs font-mono uppercase px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 font-bold border border-indigo-500/20">
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { id: "light" as ThemeMode, nameVi: "☀️ Sáng (Light Mode)", nameEn: "☀️ Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background" },
+                  { id: "dark" as ThemeMode, nameVi: "🌙 Tối (Dark Neon)", nameEn: "🌙 Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast" },
+                  { id: "system" as ThemeMode, nameVi: "💻 Theo Hệ Thống (Auto)", nameEn: "💻 Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode" },
+                ].map((m) => {
+                  const isSelected = themeMode === m.id;
+                  return (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => { setThemeMode(m.id); playClick(); }}
+                      className={cn(
+                        "p-4 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? m.nameVi : m.nameEn}</span>
+                        {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />}
+                      </div>
+                      <p className="text-2xs text-slate-500 dark:text-slate-400">{isVi ? m.descVi : m.descEn}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Theme Presets Selection */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Phong cách thiết kế chủ đạo" : "Design Aesthetic Themes"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Các phong cách thị giác đã qua cân chỉnh độ chuẩn xác Master UI" : "Pre-calibrated Master UI visual styling options"}
+                  </p>
+                </div>
+                <span className="text-2xs font-mono uppercase px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 font-bold border border-indigo-500/20 w-fit">
                   {theme}
                 </span>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-5">
-              {[
-                {
-                  id: "mritech-digital-growth" as ThemeType,
-                  nameVi: "MRITECH Digital Growth 🚀",
-                  nameEn: "MRITECH Digital Growth 🚀",
-                  descVi: "Giao diện sáng kính mờ thanh lịch, sắc nét chuẩn doanh nghiệp",
-                  descEn: "Clean corporate glass aesthetic with modern vibrancy",
-                  tagVi: "Khuyên dùng",
-                  tagEn: "Recommended",
-                  colorPreview: "from-blue-600 to-indigo-600",
-                },
-                {
-                  id: "glass-dark-neon" as ThemeType,
-                  nameVi: "Glass Tối Neon (Dark Neon)",
-                  nameEn: "Glass Dark Neon",
-                  descVi: "Nền tối huyền ảo, ánh sáng neon cyberpunk và tương phản cao",
-                  descEn: "Deep dark canvas with vibrant neon glow accents",
-                  tagVi: "Chế độ Tối",
-                  tagEn: "Dark Mode",
-                  colorPreview: "from-cyan-400 to-purple-600",
-                }
-              ].map((item) => {
-                const isSelected = theme === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      setTheme(item.id);
-                      playClick();
-                    }}
-                    className={cn(
-                      "relative p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group/card",
-                      isSelected
-                        ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                        : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className={cn("w-6 h-6 rounded-lg bg-gradient-to-br shadow-xs", item.colorPreview)} />
-                        <span className="text-2xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300">
-                          {isVi ? item.tagVi : item.tagEn}
-                        </span>
-                      </div>
-                      {isSelected && (
-                        <div className="w-5 h-5 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                          <Check className="w-3.5 h-3.5 stroke-[3]" />
-                        </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {[
+                  {
+                    id: "mritech-digital-growth" as ThemeType,
+                    nameVi: "MRITECH Digital Growth 🚀",
+                    nameEn: "MRITECH Digital Growth 🚀",
+                    descVi: "Giao diện sáng kính mờ thanh lịch, sắc nét chuẩn doanh nghiệp",
+                    descEn: "Clean corporate glass aesthetic with modern vibrancy",
+                    tagVi: "Khuyên dùng",
+                    tagEn: "Recommended",
+                    colorPreview: "from-blue-600 to-indigo-600",
+                  },
+                  {
+                    id: "glass-dark-neon" as ThemeType,
+                    nameVi: "Glass Tối Neon (Dark Neon) 🌌",
+                    nameEn: "Glass Dark Neon 🌌",
+                    descVi: "Nền tối huyền ảo, ánh sáng neon cyberpunk và tương phản cao",
+                    descEn: "Deep dark canvas with vibrant neon glow accents",
+                    tagVi: "Chế độ Tối",
+                    tagEn: "Dark Mode",
+                    colorPreview: "from-cyan-400 to-purple-600",
+                  },
+                  {
+                    id: "modern-light-glass" as ThemeType,
+                    nameVi: "Kính Mờ Hiện Đại (Modern Glass) 💎",
+                    nameEn: "Modern Light Glass 💎",
+                    descVi: "Kính bán trong suốt nhẹ nhàng, chuyển sắc mượt mà",
+                    descEn: "Soft translucency with gentle gradient touches",
+                    tagVi: "Tối giản",
+                    tagEn: "Minimal",
+                    colorPreview: "from-sky-500 to-teal-500",
+                  }
+                ].map((item) => {
+                  const isSelected = theme === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setTheme(item.id);
+                        playClick();
+                      }}
+                      className={cn(
+                        "relative p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group/card",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
                       )}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover/card:text-indigo-600 dark:group-hover/card:text-cyan-400 transition-colors">
-                        {isVi ? item.nameVi : item.nameEn}
-                      </h4>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                        {isVi ? item.descVi : item.descEn}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className={cn("w-6 h-6 rounded-lg bg-gradient-to-br shadow-xs", item.colorPreview)} />
+                          <span className="text-2xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300">
+                            {isVi ? item.tagVi : item.tagEn}
+                          </span>
+                        </div>
+                        {isSelected && (
+                          <div className="w-5 h-5 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
+                            <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover/card:text-indigo-600 dark:group-hover/card:text-cyan-400 transition-colors">
+                          {isVi ? item.nameVi : item.nameEn}
+                        </h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                          {isVi ? item.descVi : item.descEn}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Language Selection Row */}
-            <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <Globe className="w-5 h-5 text-emerald-500 shrink-0" />
+            {/* Language Selection Bar */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                    {isVi ? "Ngôn ngữ song ngữ (Bilingual Language)" : "Bilingual Language"}
-                  </h4>
-                  <p className="text-3xs text-slate-500 dark:text-slate-400">
-                    {isVi ? "Chuyển đổi toàn bộ nội dung sang Tiếng Việt hoặc Tiếng Anh" : "Switch website copy between Vietnamese and English"}
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    {isVi ? "Ngôn ngữ hiển thị (Language)" : "Display Language"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Hỗ trợ đầy đủ song ngữ Tiếng Việt chuẩn và Tiếng Anh quốc tế" : "Fully supports Vietnamese and English translations across all sections"}
                   </p>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-white/10 shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => { setLang("vi"); playClick(); }}
-                  className={cn(
-                    "px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                    lang === "vi" 
-                      ? "bg-indigo-600 text-white shadow-xs" 
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  🇻🇳 Tiếng Việt
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setLang("en"); playClick(); }}
-                  className={cn(
-                    "px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                    lang === "en" 
-                      ? "bg-indigo-600 text-white shadow-xs" 
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  🇬🇧 English
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ========================================================================= */}
-        {/* MỤC 2: BẢNG MÀU TOKENS (COLOR SYSTEM & DESIGN TOKENS) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("colors") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Palette className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "2. Bảng màu chủ đạo & Design Tokens" : "2. Color Palettes & Design Tokens"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Các gam màu thiết kế đã được cân chỉnh độ tương phản WCAG AAA" : "Curated color schemes with calibrated WCAG AAA contrast ratios"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleCopyCss}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer w-fit"
-              >
-                {copiedCss ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Code2 className="w-3.5 h-3.5 text-indigo-500" />}
-                <span>{copiedCss ? (isVi ? "Đã sao chép CSS" : "CSS Copied") : (isVi ? "Sao chép CSS Variables" : "Copy CSS Variables")}</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
-              {COLOR_PRESETS.map((preset) => {
-                const isSelected = colorPreset === preset.id;
-                return (
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-white/5 p-1 rounded-xl border border-slate-200 dark:border-white/10">
                   <button
-                    key={preset.id}
                     type="button"
-                    onClick={() => {
-                      setColorPreset(preset.id);
-                      playClick();
-                    }}
+                    onClick={() => { setLang("vi"); playClick(); }}
                     className={cn(
-                      "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
-                      isSelected
-                        ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                        : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
+                      "px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                      lang === "vi" 
+                        ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs" 
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     )}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold text-slate-900 dark:text-white">
-                        {preset.name}
-                      </span>
-                      {isSelected && (
-                        <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                          <Check className="w-3 h-3 stroke-[3]" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-2">
-                      {(() => {
-                        const c = theme === "glass-dark-neon" ? preset.dark : preset.light;
-                        const colors = [c.primary, c.secondary, c.accent, c.highlight, c.soft];
-                        return colors.map((hex, idx) => (
-                          <div
-                            key={idx}
-                            className="flex-1 h-5 rounded-md shadow-2xs transition-transform group-hover:scale-105"
-                            style={{ backgroundColor: hex }}
-                            title={hex}
-                          />
-                        ));
-                      })()}
-                    </div>
+                    🇻🇳 Tiếng Việt
                   </button>
-                );
-              })}
+                  <button
+                    type="button"
+                    onClick={() => { setLang("en"); playClick(); }}
+                    className={cn(
+                      "px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                      lang === "en" 
+                        ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs" 
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    )}
+                  >
+                    🇬🇧 English
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* TAB 2: BẢNG MÀU & COLOR TOKENS */}
+        {activeTab === "colors" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            {/* Color Presets */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Palette className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Bộ màu sắc chủ đạo (Design Tokens)" : "Color Preset Tokens"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Các gam màu thiết kế đã được cân chỉnh độ tương phản WCAG AAA" : "Curated color schemes with calibrated WCAG AAA contrast ratios"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyCss}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer w-fit"
+                  >
+                    {copiedCss ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Code2 className="w-3.5 h-3.5 text-indigo-500" />}
+                    <span>{copiedCss ? (isVi ? "Đã sao chép CSS" : "CSS Copied") : (isVi ? "Sao chép CSS Variables" : "Copy CSS Variables")}</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {COLOR_PRESETS.map((preset) => {
+                  const isSelected = colorPreset === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setColorPreset(preset.id);
+                        playClick();
+                      }}
+                      className={cn(
+                        "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">
+                          {preset.name}
+                        </span>
+                        {isSelected && (
+                          <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        {(() => {
+                          const c = theme === "glass-dark-neon" ? preset.dark : preset.light;
+                          const colors = [c.primary, c.secondary, c.accent, c.highlight, c.soft];
+                          return colors.map((hex, idx) => (
+                            <div
+                              key={idx}
+                              className="flex-1 h-5 rounded-md shadow-2xs transition-transform group-hover:scale-105"
+                              style={{ backgroundColor: hex }}
+                              title={hex}
+                            />
+                          ));
+                        })()}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Active Palette Details & Token Swatches */}
-            <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
-                {isVi ? "Chi tiết 5 màu Tokens hiện tại (Click để copy HEX):" : "Active 5 Token Palette (Click to copy HEX):"}
+                {isVi ? "Chi tiết 5 màu Tokens hiện tại (Click để copy HEX)" : "Active 5 Token Palette (Click to copy HEX)"}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 {activePalette.map((token) => (
@@ -571,10 +905,10 @@ export default function Customization() {
                     key={token.id}
                     type="button"
                     onClick={() => handleCopy(token.hex, token.id)}
-                    className="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-left flex flex-col justify-between cursor-pointer group shadow-2xs"
+                    className="p-3.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-all text-left flex flex-col justify-between cursor-pointer group"
                   >
                     <div 
-                      className="w-full h-10 rounded-lg mb-2 shadow-inner border border-black/10 flex items-end justify-end p-1.5"
+                      className="w-full h-12 rounded-lg mb-2.5 shadow-inner border border-black/10 flex items-end justify-end p-1.5"
                       style={{ backgroundColor: token.hex }}
                     >
                       <span className="p-1 rounded bg-black/40 text-white text-3xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">
@@ -584,999 +918,1041 @@ export default function Customization() {
                     <div>
                       <div className="text-2xs font-bold uppercase text-slate-400 dark:text-slate-500">{token.name}</div>
                       <div className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5">{token.hex}</div>
-                      <div className="text-3xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{token.roleVi}</div>
+                      <div className="text-3xs text-slate-500 dark:text-slate-400 truncate mt-1">{token.usage}</div>
                     </div>
                   </button>
                 ))}
               </div>
             </div>
-          </section>
+          </motion.div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MỤC 3: TÙY CHỈNH HIỆU ỨNG HIỂN THỊ HÌNH NỀN (DISPLAY & BACKGROUND TUNING) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("display") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "3. Tùy chỉnh hiệu ứng hiển thị & Hậu cảnh (Display Tuning)" : "3. Display Tuning & Wallpaper Effects"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Độ tối lớp phủ (Overlay Dim), độ mờ hậu cảnh (Background Blur) và quản lý sao lưu kho hình nền" : "Overlay dimming, background blur and wallpaper library sync"}
-                </p>
+        {/* TAB 3: BO GÓC THẺ & KHUNG (BORDER RADIUS) */}
+        {activeTab === "radius" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Layers className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Tùy chỉnh độ bo cong góc (Border Radius)" : "Border Radius Customization"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Điều chỉnh linh hoạt các giá trị bo cong của hệ thống và thẻ bento" : "Adjust corner curvature for system details and card frames independently"}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTempBorderRadius(10);
+                      setTempBorderRadiusCard(14);
+                      setBorderRadius(10);
+                      setBorderRadiusCard(14);
+                      triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn hệ thống (10px / 14px) 🔄" : "Reset border-radius to defaults 🔄");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBorderRadius(tempBorderRadius);
+                      setBorderRadiusCard(tempBorderRadiusCard);
+                      handleSaveAsProductionDefault();
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer w-fit bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 scale-[1.02]"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm Mặc định" : "Save as Default"}</span>
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetToDefaultGradient();
-                    triggerResetFeedback(isVi ? "Đã khôi phục nền Gradient mặc định" : "Reset to default gradient");
-                  }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
-                    backgroundConfig.activeType === 'gradient'
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-blue-400'
-                  }`}
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Nền Gradient Mặc Định" : "Default Gradient"}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={downloadJsonFile}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer"
-                  title={isVi ? "Xuất dữ liệu kho hình nền ra file JSON" : "Export wallpaper library to JSON"}
-                >
-                  <Download className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-                  <span>{isVi ? "Tải JSON" : "Export JSON"}</span>
-                </button>
-                <label 
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer"
-                  title={isVi ? "Nhập dữ liệu kho hình nền từ file JSON" : "Import wallpaper library from JSON"}
-                >
-                  <Upload className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                  <span>{isVi ? "Nhập JSON" : "Import JSON"}</span>
-                  <input 
-                    type="file" 
-                    accept=".json,application/json" 
-                    onChange={handleImportJsonFile} 
-                    className="hidden" 
+
+              {/* Sliders Container (Dual Customization Panel) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {/* Slider 1: System Elements Radius */}
+                <div className="p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {isVi ? "Bo góc hệ thống (Nút, Input, Badges):" : "System Radius (Buttons, Badges):"}
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        {isVi ? "Bo góc nút bấm chính, trường văn bản & các tag trạng thái" : "Applies to UI buttons, fields, & status badges"}
+                      </p>
+                    </div>
+                    <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
+                      {tempBorderRadius}px
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={28}
+                    step={1}
+                    value={tempBorderRadius}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setTempBorderRadius(val);
+                      setBorderRadius(val);
+                    }}
+                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
                   />
-                </label>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              {/* Overlay Dim Slider */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs font-bold text-slate-800 dark:text-slate-200">
-                  <span>{isVi ? "Độ tối lớp phủ (Overlay Dim):" : "Overlay Dimming:"}</span>
-                  <span className="font-mono text-sm font-black text-blue-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-blue-500/10 dark:bg-cyan-500/10">{backgroundConfig.overlayOpacity}%</span>
                 </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="80"
-                  value={backgroundConfig.overlayOpacity}
-                  onChange={(e) => {
-                    setOverlayOpacity(Number(e.target.value));
-                    playClick();
-                  }}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-cyan-400"
-                />
-                <p className="text-[10px] text-slate-500">
-                  {isVi ? "Tăng độ tối để văn bản và thẻ kính nổi bật rõ nét hơn" : "Increase dimness for enhanced text readability over vibrant wallpapers"}
-                </p>
-              </div>
 
-              {/* Background Blur Slider */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs font-bold text-slate-800 dark:text-slate-200">
-                  <span>{isVi ? "Độ mờ hậu cảnh (Background Blur):" : "Background Blur:"}</span>
-                  <span className="font-mono text-sm font-black text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-md bg-purple-500/10 dark:bg-purple-500/10">{backgroundConfig.blurAmount}px</span>
+                {/* Slider 2: Card Radius (--theme-radius-card) */}
+                <div className="p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {isVi ? "Bo góc thẻ chứa (Cards, Bento Blocks):" : "Card Frame Radius (Bento Blocks):"}
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        {isVi ? "Điều chỉnh trực tiếp biến CSS --theme-radius-card toàn website" : "Directly adjust the --theme-radius-card CSS token website-wide"}
+                      </p>
+                    </div>
+                    <span className="text-sm font-mono font-black text-rose-500 dark:text-rose-400 px-2 py-0.5 rounded-md bg-rose-500/10 dark:bg-rose-500/10">
+                      {tempBorderRadiusCard}px
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={32}
+                    step={1}
+                    value={tempBorderRadiusCard}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setTempBorderRadiusCard(val);
+                      setBorderRadiusCard(val);
+                    }}
+                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500 dark:accent-rose-400"
+                  />
                 </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="20"
-                  value={backgroundConfig.blurAmount}
-                  onChange={(e) => {
-                    setBlurAmount(Number(e.target.value));
-                    playClick();
-                  }}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-600 dark:accent-purple-400"
-                />
-                <p className="text-[10px] text-slate-500">
-                  {isVi ? "Làm mờ ảnh/video nền để tạo chiều sâu quang học glassmorphism" : "Apply gaussian blur filter to the background media"}
-                </p>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between text-2xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200/60 dark:border-white/10">
-              <span>💡 {isVi ? "Hệ thống tự động lưu cấu hình vĩnh viễn vào bộ nhớ trình duyệt." : "Settings are permanently auto-saved in browser storage."}</span>
-              <button 
-                type="button" 
-                onClick={() => {
-                  resetToDefaultJsonLibrary();
-                  triggerResetFeedback(isVi ? "Đã khôi phục kho hình nền chuẩn hệ thống" : "Restored system wallpaper library");
-                }} 
-                className="text-blue-500 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
+              {/* Live Interactive Card Morphing Preview */}
+              <div 
+                className="p-5 mb-6 border border-indigo-500/30 dark:border-cyan-500/30 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 backdrop-blur-md transition-all duration-300"
+                style={{ borderRadius: `${tempBorderRadiusCard}px` }}
               >
-                <RotateCcw className="w-3 h-3" />
-                <span>{isVi ? "Khôi phục kho vĩnh viễn" : "Restore permanent library"}</span>
-              </button>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-8 h-8 bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 flex items-center justify-center font-bold text-xs shadow-sm transition-all"
+                      style={{ borderRadius: `${tempBorderRadius}px` }}
+                    >
+                      UI
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                        {isVi ? "Khung xem trước Bo góc tương tác thực tế" : "Live Interactive Border Radius Preview Card"}
+                      </h4>
+                      <p className="text-3xs text-slate-500">
+                        {isVi ? `Thẻ: ${tempBorderRadiusCard}px | Phần tử: ${tempBorderRadius}px` : `Card: ${tempBorderRadiusCard}px | Element: ${tempBorderRadius}px`}
+                      </p>
+                    </div>
+                  </div>
+                  <span 
+                    className="px-2.5 py-1 text-3xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-cyan-400 border border-indigo-500/20"
+                    style={{ borderRadius: `${Math.max(4, tempBorderRadius - 4)}px` }}
+                  >
+                    Live Preview
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button 
+                    type="button"
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs cursor-pointer"
+                    style={{ borderRadius: `${tempBorderRadius}px` }}
+                  >
+                    {isVi ? "Nút bấm hành động" : "Primary Action Button"}
+                  </button>
+                  <input 
+                    type="text" 
+                    readOnly 
+                    value={isVi ? "Trường nhập dữ liệu mẫu" : "Sample text input field"}
+                    className="px-3 py-2 text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200"
+                    style={{ borderRadius: `${tempBorderRadius}px` }}
+                  />
+                </div>
+              </div>
+
+              {/* Preset Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {RADIUS_PRESETS.map((preset) => {
+                  const isSelected = tempBorderRadius === preset.radius && tempBorderRadiusCard === preset.cardRadius;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setTempBorderRadius(preset.radius);
+                        setTempBorderRadiusCard(preset.cardRadius);
+                        setBorderRadius(preset.radius);
+                        setBorderRadiusCard(preset.cardRadius);
+                        playClick();
+                      }}
+                      className={cn(
+                        "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">
+                          {isVi ? preset.nameVi : preset.nameEn}
+                        </span>
+                        {isSelected && (
+                          <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-2xs text-slate-500 dark:text-slate-400 mb-3">
+                        {isVi ? preset.descVi : preset.descEn}
+                      </p>
+                      {/* Geometric Preview Box */}
+                      <div 
+                        className="w-full h-8 bg-indigo-500/20 dark:bg-cyan-400/20 border-2 border-indigo-500/50 dark:border-cyan-400/50 flex items-center justify-center text-3xs font-mono font-bold text-indigo-600 dark:text-cyan-300"
+                        style={{ borderRadius: `${preset.radius}px` }}
+                      >
+                        UI: {preset.radius}px | Card: {preset.cardRadius}px
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </section>
+          </motion.div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MỤC 4: BO GÓC THẺ & KHUNG (BORDER RADIUS SYSTEM) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("radius") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "4. Tùy chỉnh độ bo cong góc (Border Radius)" : "4. Border Radius Customization"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Điều chỉnh linh hoạt các giá trị bo cong của hệ thống và thẻ bento" : "Adjust corner curvature for system details and card frames independently"}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTempBorderRadius(10);
-                    setTempBorderRadiusCard(14);
-                    setTempFooterRadiusTopLeft(14);
-                    setTempFooterRadiusTopRight(14);
-                    setBorderRadius(10);
-                    if (setBorderRadiusCard) setBorderRadiusCard(14);
-                    if (setFooterRadiusTopLeft) setFooterRadiusTopLeft(14);
-                    if (setFooterRadiusTopRight) setFooterRadiusTopRight(14);
-                    triggerResetFeedback(isVi ? "Đã khôi phục bo góc chuẩn hệ thống 🔄" : "Reset border-radius to defaults 🔄");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định" : "Default"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setBorderRadius(tempBorderRadius);
-                    if (setBorderRadiusCard) setBorderRadiusCard(tempBorderRadiusCard);
-                    if (setFooterRadiusTopLeft) setFooterRadiusTopLeft(tempFooterRadiusTopLeft);
-                    if (setFooterRadiusTopRight) setFooterRadiusTopRight(tempFooterRadiusTopRight);
-                    triggerResetFeedback(isVi ? "Đã áp dụng độ bo cong góc mới toàn website! 🎉" : "Applied new corner radius configurations site-wide! 🎉");
-                  }}
-                  className={cn(
-                    "flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer w-fit",
-                    tempBorderRadius !== borderRadius || 
-                    tempBorderRadiusCard !== borderRadiusCard ||
-                    tempFooterRadiusTopLeft !== footerRadiusTopLeft ||
-                    tempFooterRadiusTopRight !== footerRadiusTopRight
-                      ? "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 scale-[1.02]"
-                      : "bg-slate-100/80 dark:bg-white/5 text-slate-400 dark:text-slate-600 cursor-not-allowed"
-                  )}
-                >
-                  <Check className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Lưu & Áp dụng" : "Save & Apply"}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Sliders Container (Dual Customization Panel) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-              {/* Slider 1: System Elements Radius */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                      {isVi ? "Bo góc hệ thống (Nút, Input, Badges):" : "System Radius (Buttons, Badges):"}
-                    </span>
-                    <p className="text-[10px] text-slate-500 mt-0.5">
-                      {isVi ? "Bo góc nút bấm chính, trường văn bản & các tag trạng thái" : "Applies to UI buttons, fields, & status badges"}
-                    </p>
-                  </div>
-                  <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
-                    {tempBorderRadius}px
-                  </span>
+        {/* TAB 4: CON TRỎ CHUỘT FX (CURSOR FX) */}
+        {activeTab === "cursor" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <MousePointer className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Tùy chỉnh con trỏ chuột tương tác (Cursor FX)" : "Interactive Cursor FX"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Hiệu ứng con trỏ chuột độc đáo tạo cảm giác công nghệ cao cấp" : "Unique pointer dynamics and interactive comet trails"}
+                  </p>
                 </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={28}
-                  step={1}
-                  value={tempBorderRadius}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setTempBorderRadius(val);
-                    setBorderRadius(val);
-                  }}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
-                />
-              </div>
-
-              {/* Slider 2: Card Radius (--theme-radius-card) */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                      {isVi ? "Bo góc thẻ chứa (Cards, Bento Blocks):" : "Card Frame Radius (Bento Blocks):"}
-                    </span>
-                    <p className="text-[10px] text-slate-500 mt-0.5">
-                      {isVi ? "Điều chỉnh trực tiếp biến CSS --theme-radius-card toàn website" : "Directly adjust the --theme-radius-card CSS token website-wide"}
-                    </p>
-                  </div>
-                  <span className="text-sm font-mono font-black text-rose-500 dark:text-rose-400 px-2 py-0.5 rounded-md bg-rose-500/10 dark:bg-rose-500/10">
-                    {tempBorderRadiusCard}px
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={32}
-                  step={1}
-                  value={tempBorderRadiusCard}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setTempBorderRadiusCard(val);
-                    if (setBorderRadiusCard) setBorderRadiusCard(val);
-                  }}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500 dark:accent-rose-400"
-                />
-              </div>
-            </div>
-
-            {/* Dedicated Panel: Tùy chỉnh bo cong chân trang Footer (Góc trên trái & Góc trên phải) */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-blue-50/80 via-indigo-50/50 to-slate-50/80 dark:from-slate-850 dark:via-slate-800/80 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/50 mb-5 space-y-4 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-blue-200/60 dark:border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-blue-600/10 dark:bg-cyan-400/10 text-blue-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
-                    <PanelBottom className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <span>{isVi ? "Tùy chỉnh bo cong góc trên của Footer" : "Footer Top Corners Curvature"}</span>
-                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/20">
-                        {isVi ? "Góc trên trái & Góc trên phải" : "Top-Left & Top-Right"}
-                      </span>
-                    </h4>
-                    <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      {isVi 
-                        ? "Điều chỉnh linh hoạt bo cong góc trên bên trái và góc trên bên phải của Footer dock" 
-                        : "Independently adjust top-left and top-right curvature of the bottom footer dock"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Link / Unlink Corners Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const nextLinked = !isFooterCornersLinked;
-                    setIsFooterCornersLinked(nextLinked);
-                    if (nextLinked) {
-                      setTempFooterRadiusTopRight(tempFooterRadiusTopLeft);
-                    }
-                    playClick();
-                  }}
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer w-fit self-start sm:self-auto",
-                    isFooterCornersLinked
-                      ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                      : "bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-blue-400"
-                  )}
-                  title={isFooterCornersLinked ? (isVi ? "Đang đồng bộ 2 góc (Bấm để tách riêng)" : "Corners linked (Click to unlink)") : (isVi ? "Đang tách biệt 2 góc (Bấm để đồng bộ)" : "Corners independent (Click to link)")}
-                >
-                  {isFooterCornersLinked ? <Link2 className="w-3.5 h-3.5" /> : <Unlink className="w-3.5 h-3.5" />}
-                  <span>{isFooterCornersLinked ? (isVi ? "Đồng bộ 2 góc" : "Linked Corners") : (isVi ? "Tách biệt từng góc" : "Independent Corners")}</span>
-                </button>
-              </div>
-
-              {/* Sliders for Top-Left and Top-Right */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Top-Left Slider */}
-                <div className="p-3.5 sm:p-4 rounded-xl bg-white/90 dark:bg-slate-900/70 border border-slate-200/90 dark:border-white/10 shadow-2xs">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-tl-lg rounded-tr-none rounded-bl-none rounded-br-none border-t-2 border-l-2 border-blue-600 dark:border-cyan-400 bg-blue-500/20" />
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        {isVi ? "Bo cong bên trên góc trái Footer:" : "Footer Top-Left Radius:"}
-                      </span>
-                    </div>
-                    <span className="text-xs sm:text-sm font-mono font-black text-blue-600 dark:text-cyan-400 px-2 py-0.5 rounded-md bg-blue-500/10 dark:bg-cyan-500/10 border border-blue-500/20">
-                      {tempFooterRadiusTopLeft}px
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={40}
-                    step={1}
-                    value={tempFooterRadiusTopLeft}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setTempFooterRadiusTopLeft(val);
-                      if (setFooterRadiusTopLeft) setFooterRadiusTopLeft(val);
-                      if (isFooterCornersLinked) {
-                        setTempFooterRadiusTopRight(val);
-                        if (setFooterRadiusTopRight) setFooterRadiusTopRight(val);
-                      }
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetCursorConfig();
+                      triggerResetFeedback(isVi ? "Đã khôi phục con trỏ mặc định" : "Reset cursor to defaults");
                     }}
-                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-cyan-400"
-                  />
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 mt-1 font-mono">
-                    <span>0px</span>
-                    <span>14px (chuẩn)</span>
-                    <span>40px</span>
-                  </div>
-                </div>
-
-                {/* Top-Right Slider */}
-                <div className="p-3.5 sm:p-4 rounded-xl bg-white/90 dark:bg-slate-900/70 border border-slate-200/90 dark:border-white/10 shadow-2xs">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-tr-lg rounded-tl-none rounded-bl-none rounded-br-none border-t-2 border-r-2 border-indigo-600 dark:border-indigo-400 bg-indigo-500/20" />
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        {isVi ? "Bo cong bên trên góc phải Footer:" : "Footer Top-Right Radius:"}
-                      </span>
-                    </div>
-                    <span className="text-xs sm:text-sm font-mono font-black text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-md bg-indigo-500/10 dark:bg-indigo-500/10 border border-indigo-500/20">
-                      {tempFooterRadiusTopRight}px
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={40}
-                    step={1}
-                    value={tempFooterRadiusTopRight}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setTempFooterRadiusTopRight(val);
-                      if (setFooterRadiusTopRight) setFooterRadiusTopRight(val);
-                      if (isFooterCornersLinked) {
-                        setTempFooterRadiusTopLeft(val);
-                        if (setFooterRadiusTopLeft) setFooterRadiusTopLeft(val);
-                      }
-                    }}
-                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-indigo-400"
-                  />
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 mt-1 font-mono">
-                    <span>0px</span>
-                    <span>14px (chuẩn)</span>
-                    <span>40px</span>
-                  </div>
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Quick Corner Presets for Footer */}
-              <div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 block mb-2">
-                  {isVi ? "Mẫu nhanh độ bo cong Footer:" : "Quick Footer Radius Presets:"}
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                  {[
-                    { labelVi: "Vuông góc (0px)", labelEn: "Flat (0px)", l: 0, r: 0 },
-                    { labelVi: "Thon gọn (10px)", labelEn: "Slim (10px)", l: 10, r: 10 },
-                    { labelVi: "Chuẩn (14px)", labelEn: "System (14px)", l: 14, r: 14 },
-                    { labelVi: "Mềm mại (20px)", labelEn: "Soft (20px)", l: 20, r: 20 },
-                    { labelVi: "Bo lớn (28px)", labelEn: "Curved (28px)", l: 28, r: 28 },
-                    { labelVi: "Vát lượn (24-8px)", labelEn: "Asymmetric (24-8)", l: 24, r: 8 },
-                  ].map((preset, idx) => {
-                    const isActive = tempFooterRadiusTopLeft === preset.l && tempFooterRadiusTopRight === preset.r;
-                    return (
+              {/* Cursor Styles Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                {CURSOR_STYLE_OPTIONS.map((opt) => {
+                  const isSelected = cursorConfig.style === opt.id;
+                  const Icon = getCursorStyleIcon(opt.id);
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => {
+                        setCursorStyle(opt.id);
+                        playClick();
+                      }}
+                      className={cn(
+                        "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Icon className={cn("w-4 h-4", isSelected ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">
+                            {isVi ? opt.nameVi : opt.nameEn}
+                          </span>
+                        </div>
+                        {isSelected && (
+                          <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-2xs text-slate-500 dark:text-slate-400">
+                        {isVi ? opt.descVi : opt.descEn}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Secondary Cursor Controls: Trail & Size & Color */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Hiệu ứng vệt sáng (Trail)" : "Comet Trail Effect"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Vệt sáng sao băng lướt theo chuột" : "Smooth comet trail follows cursor"}</div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEnableTrail(!cursorConfig.enableTrail);
+                      playClick();
+                    }}
+                    className={cn(
+                      "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center",
+                      cursorConfig.enableTrail ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                    )}
+                  >
+                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Kích thước con trỏ" : "Cursor Size"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Điều chỉnh kích thước vòng sáng" : "Pointer radius scale"}</div>
+                  </div>
+                  <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
+                    {(["small", "medium", "large"] as const).map((size) => (
                       <button
-                        key={idx}
+                        key={size}
                         type="button"
-                        onClick={() => {
-                          setTempFooterRadiusTopLeft(preset.l);
-                          setTempFooterRadiusTopRight(preset.r);
-                          if (setFooterRadiusTopLeft) setFooterRadiusTopLeft(preset.l);
-                          if (setFooterRadiusTopRight) setFooterRadiusTopRight(preset.r);
-                          if (preset.l === preset.r) {
-                            setIsFooterCornersLinked(true);
-                          } else {
-                            setIsFooterCornersLinked(false);
-                          }
-                          playClick();
-                        }}
+                        onClick={() => { setCursorSize(size); playClick(); }}
                         className={cn(
-                          "px-2.5 py-1.5 rounded-lg text-2xs font-semibold border transition-all text-center cursor-pointer",
-                          isActive
-                            ? "bg-blue-600 text-white border-blue-600 shadow-2xs font-bold"
-                            : "bg-white/70 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-blue-400"
+                          "px-2.5 py-1 rounded text-2xs font-bold capitalize transition-all cursor-pointer",
+                          cursorConfig.size === size 
+                            ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-cyan-400 shadow-xs" 
+                            : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                         )}
                       >
-                        {isVi ? preset.labelVi : preset.labelEn}
+                        {size}
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Interactive Live Footer Preview Component */}
-              <div className="pt-1">
-                <div className="flex items-center justify-between text-2xs text-slate-500 dark:text-slate-400 mb-1.5">
-                  <span className="font-semibold">{isVi ? "Mô phỏng hình dáng thanh Footer thực tế:" : "Live Footer Dock Simulation:"}</span>
-                  <span className="font-mono text-3xs font-bold text-blue-600 dark:text-cyan-400">
-                    Trái: {tempFooterRadiusTopLeft}px • Phải: {tempFooterRadiusTopRight}px • Đáy: 0px
-                  </span>
-                </div>
-                <div className="p-3 bg-slate-200/60 dark:bg-black/40 rounded-xl border border-slate-300/40 dark:border-white/5 flex flex-col justify-end min-h-[64px]">
-                  <div
-                    className="w-full h-11 bg-white/95 dark:bg-slate-900/95 border-t border-x border-b-0 border-blue-400/40 dark:border-cyan-400/40 backdrop-blur-md shadow-md flex items-center justify-between px-3 sm:px-4 transition-all duration-200"
-                    style={{
-                      borderTopLeftRadius: `${tempFooterRadiusTopLeft}px`,
-                      borderTopRightRadius: `${tempFooterRadiusTopRight}px`,
-                      borderBottomLeftRadius: "0px",
-                      borderBottomRightRadius: "0px",
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-200 hidden xs:inline">
-                        12:00 PM • 28°C
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-900">
-                      <span>↓ {isVi ? "Lộ trang tiếp theo" : "Peek Next"} ↓</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 text-[10px]">
-                        ⚙
-                      </div>
-                    </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Màu sắc con trỏ" : "Cursor Color"}</div>
+                    <div className="text-2xs text-slate-500">{isVi ? "Tông màu phát quang FX" : "Luminescent FX accent"}</div>
+                  </div>
+                  <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
+                    {CURSOR_COLOR_OPTIONS.slice(0, 4).map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => { setCursorColor(c.id); playClick(); }}
+                        className={cn(
+                          "w-5 h-5 rounded-full transition-transform cursor-pointer border border-black/10",
+                          cursorConfig.colorPreset === c.id ? "scale-125 ring-2 ring-indigo-500 dark:ring-cyan-400" : "opacity-80 hover:opacity-100"
+                        )}
+                        style={{ backgroundColor: c.hex }}
+                        title={c.nameVi}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Preset Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {RADIUS_PRESETS.map((preset) => {
-                const isSelected = tempBorderRadius === preset.radius;
-                return (
-                  <button
-                    key={preset.id}
-                    type="button"
-                    onClick={() => {
-                      const cardR = Math.min(32, preset.radius + 4);
-                      setTempBorderRadius(preset.radius);
-                      setTempBorderRadiusCard(cardR);
-                      setBorderRadius(preset.radius);
-                      if (setBorderRadiusCard) setBorderRadiusCard(cardR);
-                      playClick();
-                    }}
-                    className={cn(
-                      "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
-                      isSelected
-                        ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                        : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white">
-                        {isVi ? preset.nameVi : preset.nameEn}
-                      </span>
-                      {isSelected && (
-                        <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                          <Check className="w-3 h-3 stroke-[3]" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-2xs text-slate-500 dark:text-slate-400 mb-3">
-                      {isVi ? preset.descVi : preset.descEn}
-                    </p>
-                    {/* Geometric Preview Box */}
-                    <div 
-                      className="w-full h-8 bg-indigo-500/20 dark:bg-cyan-400/20 border-2 border-indigo-500/50 dark:border-cyan-400/50 flex items-center justify-center text-3xs font-mono font-bold text-indigo-600 dark:text-cyan-300"
-                      style={{ borderRadius: `${preset.radius}px` }}
-                    >
-                      radius: {preset.radius}px
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
+          </motion.div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MỤC 5: CON TRỎ CHUỘT FX (CURSOR FX) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("cursor") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <MousePointer className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "5. Con trỏ chuột tương tác (Interactive Cursor FX)" : "5. Interactive Cursor FX"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Hiệu ứng con trỏ chuột độc đáo tạo cảm giác công nghệ cao cấp" : "Unique pointer dynamics and interactive comet trails"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  resetCursorConfig();
-                  triggerResetFeedback(isVi ? "Đã khôi phục con trỏ mặc định" : "Reset cursor to defaults");
-                }}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>{isVi ? "Mặc định" : "Default"}</span>
-              </button>
-            </div>
-
-            {/* Cursor Styles Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
-              {CURSOR_STYLE_OPTIONS.map((opt) => {
-                const isSelected = cursorConfig.style === opt.id;
-                const Icon = getCursorStyleIcon(opt.id);
-                return (
+        {/* TAB 5: ÂM THANH FX & MÔI TRƯỜNG (AUDIO & FX) */}
+        {activeTab === "sound" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Volume2 className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Hệ thống âm thanh tương tác & Thư giãn" : "Audio FX & Ambient Soundscape"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Âm thanh click phản hồi UI và âm thanh môi trường thư giãn" : "Tactile UI click feedback and relaxing ambient background sounds"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
                   <button
-                    key={opt.id}
                     type="button"
-                    onClick={() => {
-                      setCursorStyle(opt.id);
-                      playClick();
-                    }}
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { toggleMute(); playClick(); }}
                     className={cn(
-                      "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
-                      isSelected
-                        ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                        : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer",
+                      soundConfig.isMuted 
+                        ? "bg-rose-500/15 text-rose-600 border border-rose-500/30" 
+                        : "bg-emerald-500/15 text-emerald-600 border border-emerald-500/30"
                     )}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Icon className={cn("w-4 h-4", isSelected ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
-                        <span className="text-xs font-bold text-slate-900 dark:text-white">
-                          {isVi ? opt.nameVi : opt.nameEn}
-                        </span>
-                      </div>
-                      {isSelected && (
-                        <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                          <Check className="w-3 h-3 stroke-[3]" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-2xs text-slate-500 dark:text-slate-400">
-                      {isVi ? opt.descVi : opt.descEn}
-                    </p>
+                    {soundConfig.isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    <span>{soundConfig.isMuted ? (isVi ? "Đang tắt tiếng" : "Muted") : (isVi ? "Đang bật tiếng" : "Audio Active")}</span>
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Secondary Cursor Controls: Trail & Size */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Hiệu ứng vệt sáng (Trail)" : "Comet Trail Effect"}</div>
-                  <div className="text-2xs text-slate-500">{isVi ? "Vệt sáng sao băng lướt theo chuột" : "Smooth comet trail follows cursor movement"}</div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetSoundConfig();
+                      triggerResetFeedback(isVi ? "Đã khôi phục cài đặt âm thanh" : "Reset audio to defaults");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
                 </div>
+              </div>
+
+              {/* Volume Sliders Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                {[
+                  { labelVi: "Âm lượng tổng (Master)", labelEn: "Master Volume", val: soundConfig.masterVolume, set: setMasterVolume },
+                  { labelVi: "Âm click UI (Interface)", labelEn: "UI Sound Volume", val: soundConfig.uiVolume, set: setUiVolume },
+                  { labelVi: "Âm nền môi trường (Ambient)", labelEn: "Ambient Volume", val: soundConfig.ambientVolume, set: setAmbientVolume }
+                ].map((vol, idx) => (
+                  <div key={idx} className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-2xs font-bold text-slate-700 dark:text-slate-300">{isVi ? vol.labelVi : vol.labelEn}</span>
+                      <span className="text-2xs font-mono font-bold text-indigo-600 dark:text-cyan-400">{Math.round(vol.val * 100)}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      value={vol.val}
+                      onChange={(e) => vol.set(Number(e.target.value))}
+                      className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Sound Packs & Ambient Selection */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Click Packs */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2.5 flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-amber-500" />
+                    {isVi ? "Gói hiệu ứng nhấp chuột (UI Sound Pack)" : "UI Click Sound Pack"}
+                  </h4>
+                  <div className="space-y-2">
+                    {SOUND_PACK_OPTIONS.map((pack) => {
+                      const isSelected = soundConfig.soundPack === pack.id;
+                      return (
+                        <button
+                          key={pack.id}
+                          type="button"
+                          onClick={() => { setSoundPack(pack.id); playClick(); }}
+                          className={cn(
+                            "w-full p-2.5 rounded-lg text-left transition-all border flex items-center justify-between cursor-pointer",
+                            isSelected
+                              ? "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/40 text-indigo-600 dark:text-cyan-400"
+                              : "hover:bg-slate-100 dark:hover:bg-white/5 border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-slate-300"
+                          )}
+                        >
+                          <div>
+                            <div className="text-xs font-bold">{isVi ? pack.nameVi : pack.nameEn}</div>
+                            <div className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? pack.descVi : pack.descEn}</div>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Ambient Soundscapes */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2.5 flex items-center gap-1.5">
+                    <Radio className="w-3.5 h-3.5 text-sky-500" />
+                    {isVi ? "Âm thanh môi trường thư giãn (Ambient)" : "Relaxing Soundscape"}
+                  </h4>
+                  <div className="space-y-2">
+                    {AMBIENT_SOUND_OPTIONS.map((amb) => {
+                      const isSelected = soundConfig.ambientSound === amb.id;
+                      const Icon = getAmbientIcon(amb.id);
+                      return (
+                        <button
+                          key={amb.id}
+                          type="button"
+                          onClick={() => { setAmbientSound(amb.id); playClick(); }}
+                          className={cn(
+                            "w-full p-2.5 rounded-lg text-left transition-all border flex items-center justify-between cursor-pointer",
+                            isSelected
+                              ? "bg-sky-500/10 dark:bg-cyan-500/10 border-sky-500/40 text-sky-600 dark:text-cyan-400"
+                              : "hover:bg-slate-100 dark:hover:bg-white/5 border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-slate-300"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon className="w-4 h-4 text-sky-500" />
+                            <div>
+                              <div className="text-xs font-bold">{isVi ? amb.nameVi : amb.nameEn}</div>
+                              <div className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? amb.descVi : amb.descEn}</div>
+                            </div>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-sky-600 dark:text-cyan-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* TAB 6: HEADER & FOOTER DOCK (THANH ĐIỀU HƯỚNG & CHÂN TRANG) */}
+        {activeTab === "footer" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            {/* 1. Header Dock Settings Card */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <PanelTop className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
+                    {isVi ? "Thanh điều hướng đầu trang (Header Dock)" : "Top Navigation Header Dock"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Cấu hình ghim cố định hoặc tự động trượt ẩn để tối đa không gian màn hình" : "Configure pinned state or auto-slide up to maximize content viewport"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <span className={cn(
+                    "text-2xs font-mono font-bold px-3 py-1 rounded-full border shadow-2xs w-fit",
+                    isHeaderPinned
+                      ? "bg-blue-500/10 text-blue-700 dark:text-cyan-300 border-blue-500/30"
+                      : "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30"
+                  )}>
+                    {isHeaderPinned ? (isVi ? "📌 Đang ghim cố định" : "📌 Pinned Fixed") : (isVi ? "⚡ Tự động trượt ẩn" : "⚡ Auto-Slide Up")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
+                    isHeaderPinned ? "bg-blue-600/20 text-blue-600 dark:text-cyan-400 border-blue-500/30 shadow-xs" : "bg-slate-200/60 dark:bg-white/10 text-slate-500 border-slate-300 dark:border-white/10"
+                  )}>
+                    <Pin className={cn("w-5 h-5 transition-transform", isHeaderPinned ? "rotate-45" : "")} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">
+                      {isVi ? "Ghim cố định Header (Không tự trượt ẩn)" : "Pin Header (Prevent auto-slide up)"}
+                    </div>
+                    <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      {isVi ? "Khi bỏ ghim, thanh Header tự động trượt lên trên và xuất hiện thanh gạt chỉ báo xanh nhẹ" : "When unpinned, Header slides up leaving a sleek peek indicator at the top"}
+                    </div>
+                  </div>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => {
-                    setEnableTrail(!cursorConfig.enableTrail);
-                    playClick();
-                  }}
+                  onClick={() => { toggleHeaderPin(); playClick(); }}
                   className={cn(
-                    "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center",
-                    cursorConfig.enableTrail ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                    "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 self-end sm:self-center",
+                    isHeaderPinned ? "bg-blue-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
                   )}
                 >
                   <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
                 </button>
               </div>
+            </div>
 
-              <div className="flex items-center justify-between">
+            {/* 2. Footer Dock Settings Card */}
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Kích thước con trỏ" : "Cursor Size"}</div>
-                  <div className="text-2xs text-slate-500">{isVi ? "Điều chỉnh kích thước vòng sáng" : "Select pointer radius scale"}</div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <PanelBottom className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Tùy chỉnh thanh chân trang (Footer Dock)" : "Footer Dock Settings"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Kiểu dáng hiển thị, vị trí ghim và cấu hình các nút tính năng" : "Dock placement, pinned state and widget visibility toggles"}
+                  </p>
                 </div>
-                <div className="flex items-center gap-1 bg-white dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-white/10">
-                  {(["small", "medium", "large"] as const).map((size) => (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetFooterConfig();
+                      triggerResetFeedback(isVi ? "Đã khôi phục cài đặt chân trang" : "Reset footer to defaults");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định" : "Default"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Placement Options Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                {FOOTER_PLACEMENT_OPTIONS.map((opt) => {
+                  const isSelected = footerConfig.placement === opt.id;
+                  const Icon = getPlacementIcon(opt.id);
+                  return (
                     <button
-                      key={size}
+                      key={opt.id}
                       type="button"
-                      onClick={() => { setCursorSize(size); playClick(); }}
+                      onClick={() => { setPlacement(opt.id); playClick(); }}
                       className={cn(
-                        "px-2.5 py-1 rounded text-2xs font-bold capitalize transition-all cursor-pointer",
-                        cursorConfig.size === size 
-                          ? "bg-indigo-600 text-white shadow-xs" 
-                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                        "p-3.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer",
+                        isSelected
+                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
+                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
                       )}
                     >
-                      {size}
+                      <div className="flex items-center justify-between mb-2">
+                        <Icon className={cn("w-4 h-4", isSelected ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
+                        {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400" />}
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? opt.nameVi : opt.nameEn}</div>
+                        <div className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">{isVi ? opt.descVi : opt.descEn}</div>
+                      </div>
                     </button>
+                  );
+                })}
+              </div>
+
+              {/* Toggles List */}
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                  {isVi ? "Bật/Tắt các thành phần trên Footer:" : "Toggle Footer Widgets:"}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { key: "isPinned" as const, labelVi: "Ghim cố định Footer (Không tự trượt ẩn)", labelEn: "Pin Footer (Prevent auto-slide down)", icon: Pin, val: footerConfig.isPinned !== false, toggle: togglePin },
+                    { key: "showClock" as const, labelVi: "Đồng hồ thời gian & Ngày tháng", labelEn: "Clock & Date Widget", icon: Clock, val: footerConfig.showClock, toggle: () => toggleElementVisibility("showClock") },
+                    { key: "showWeather" as const, labelVi: "Dự báo thời tiết TP.HCM / Tỉnh thành", labelEn: "Real-time Weather Widget", icon: CloudSun, val: footerConfig.showWeather, toggle: () => toggleElementVisibility("showWeather") },
+                    { key: "showNextPageButton" as const, labelVi: "Nút chuyển trang tiếp theo ở giữa", labelEn: "Next Page Center Trigger", icon: ChevronDown, val: footerConfig.showNextPageButton, toggle: () => toggleElementVisibility("showNextPageButton") },
+                  ].map((item) => (
+                    <div key={item.key} className="flex items-center justify-between p-2.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/10">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <item.icon className="w-4 h-4 text-slate-500 shrink-0" />
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">{isVi ? item.labelVi : item.labelEn}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { item.toggle(); playClick(); }}
+                        className={cn(
+                          "w-10 h-5 rounded-full transition-colors p-0.5 cursor-pointer flex items-center shrink-0 ml-2",
+                          item.val ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                        )}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
-          </section>
+          </motion.div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MỤC 6: ÂM THANH FX & MÔI TRƯỜNG (AUDIO & SOUNDSCAPE) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("sound") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Volume2 className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "6. Hệ thống âm thanh tương tác & Thư giãn" : "6. Audio FX & Ambient Soundscape"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Âm thanh click phản hồi UI và âm thanh môi trường thư giãn" : "Tactile UI click feedback and relaxing ambient background sounds"}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => { toggleMute(); playClick(); }}
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer",
-                    soundConfig.isMuted 
-                      ? "bg-rose-500/15 text-rose-600 border border-rose-500/30" 
-                      : "bg-emerald-500/15 text-emerald-600 border border-emerald-500/30"
-                  )}
-                >
-                  {soundConfig.isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                  <span>{soundConfig.isMuted ? (isVi ? "Đang tắt tiếng" : "Muted") : (isVi ? "Đang bật tiếng" : "Audio Active")}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetSoundConfig();
-                    triggerResetFeedback(isVi ? "Đã khôi phục cài đặt âm thanh" : "Reset audio to defaults");
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Mặc định" : "Default"}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Volume Sliders Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              {[
-                { labelVi: "Âm lượng tổng (Master)", labelEn: "Master Volume", val: soundConfig.masterVolume, set: setMasterVolume },
-                { labelVi: "Âm click UI (Interface)", labelEn: "UI Sound Volume", val: soundConfig.uiVolume, set: setUiVolume },
-                { labelVi: "Âm nền môi trường (Ambient)", labelEn: "Ambient Volume", val: soundConfig.ambientVolume, set: setAmbientVolume }
-              ].map((vol, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-2xs font-bold text-slate-700 dark:text-slate-300">{isVi ? vol.labelVi : vol.labelEn}</span>
-                    <span className="text-2xs font-mono font-bold text-indigo-600 dark:text-cyan-400">{Math.round(vol.val * 100)}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.05}
-                    value={vol.val}
-                    onChange={(e) => vol.set(Number(e.target.value))}
-                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400"
-                  />
+        {/* TAB 7: PHÔNG CHỮ & TYPOGRAPHY */}
+        {activeTab === "typography" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-6"
+          >
+            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Type className="w-5 h-5 text-indigo-500" />
+                    {isVi ? "Hệ thống phông chữ & Tỷ lệ (Typography Matrix)" : "Typography Scale Matrix"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {isVi ? "Tỷ lệ cỡ chữ linh hoạt và bộ mẫu phân cấp trực quan" : "Scalable responsive hierarchy and live preview test arena"}
+                  </p>
                 </div>
-              ))}
-            </div>
-
-            {/* Sound Packs & Ambient Selection */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Click Packs */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2.5 flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-amber-500" />
-                  {isVi ? "Gói hiệu ứng nhấp chuột (UI Sound Pack):" : "UI Click Sound Pack:"}
-                </h4>
-                <div className="space-y-2">
-                  {SOUND_PACK_OPTIONS.map((pack) => {
-                    const isSelected = soundConfig.soundPack === pack.id;
-                    return (
-                      <button
-                        key={pack.id}
-                        type="button"
-                        onClick={() => { setSoundPack(pack.id); playClick(); }}
-                        className={cn(
-                          "w-full p-2.5 rounded-lg text-left transition-all border flex items-center justify-between cursor-pointer",
-                          isSelected
-                            ? "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/40 text-indigo-600 dark:text-cyan-400"
-                            : "hover:bg-slate-100 dark:hover:bg-white/5 border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-slate-300 bg-white/60 dark:bg-slate-800/60"
-                        )}
-                      >
-                        <div>
-                          <div className="text-xs font-bold">{isVi ? pack.nameVi : pack.nameEn}</div>
-                          <div className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? pack.descVi : pack.descEn}</div>
-                        </div>
-                        {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Ambient Soundscapes */}
-              <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2.5 flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5 text-sky-500" />
-                  {isVi ? "Âm thanh môi trường thư giãn (Ambient):" : "Relaxing Soundscape:"}
-                </h4>
-                <div className="space-y-2">
-                  {AMBIENT_SOUND_OPTIONS.map((amb) => {
-                    const isSelected = soundConfig.ambientSound === amb.id;
-                    const Icon = getAmbientIcon(amb.id);
-                    return (
-                      <button
-                        key={amb.id}
-                        type="button"
-                        onClick={() => { setAmbientSound(amb.id); playClick(); }}
-                        className={cn(
-                          "w-full p-2.5 rounded-lg text-left transition-all border flex items-center justify-between cursor-pointer",
-                          isSelected
-                            ? "bg-sky-500/10 dark:bg-cyan-500/10 border-sky-500/40 text-sky-600 dark:text-cyan-400"
-                            : "hover:bg-slate-100 dark:hover:bg-white/5 border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-slate-300 bg-white/60 dark:bg-slate-800/60"
-                        )}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-4 h-4 text-sky-500" />
-                          <div>
-                            <div className="text-xs font-bold">{isVi ? amb.nameVi : amb.nameEn}</div>
-                            <div className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? amb.descVi : amb.descEn}</div>
-                          </div>
-                        </div>
-                        {isSelected && <Check className="w-4 h-4 text-sky-600 dark:text-cyan-400" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ========================================================================= */}
-        {/* MỤC 7: CHÂN TRANG FOOTER (FOOTER DOCK SETTINGS) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("footer") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <PanelBottom className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "7. Tùy chỉnh thanh chân trang (Footer Dock)" : "7. Footer Dock Settings"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Kiểu dáng hiển thị, vị trí ghim và cấu hình các nút tính năng" : "Dock placement, pinned state and widget visibility toggles"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  resetFooterConfig();
-                  triggerResetFeedback(isVi ? "Đã khôi phục cài đặt chân trang" : "Reset footer to defaults");
-                }}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>{isVi ? "Mặc định" : "Default"}</span>
-              </button>
-            </div>
-
-            {/* Placement Options Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-              {FOOTER_PLACEMENT_OPTIONS.map((opt) => {
-                const isSelected = footerConfig.placement === opt.id;
-                const Icon = getPlacementIcon(opt.id);
-                return (
+                <div className="flex items-center gap-2">
                   <button
-                    key={opt.id}
                     type="button"
-                    onClick={() => { setPlacement(opt.id); playClick(); }}
-                    className={cn(
-                      "p-3.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer",
-                      isSelected
-                        ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                        : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
-                    )}
+                    onClick={handleSaveAsProductionDefault}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <Icon className={cn("w-4 h-4", isSelected ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
-                      {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400" />}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? opt.nameVi : opt.nameEn}</div>
-                      <div className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">{isVi ? opt.descVi : opt.descEn}</div>
-                    </div>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Header & Footer Sticky Behavior Option */}
-            <div className="mb-5 p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-3">
-                {isVi ? "Tùy chỉnh Cố định Header & Footer:" : "Header & Footer Pinning Mode:"}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFixedHeaderFooter(true);
-                    playClick();
-                  }}
-                  className={cn(
-                    "p-3 rounded-xl text-left transition-all border flex items-center justify-between cursor-pointer",
-                    fixedHeaderFooter
-                      ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                      : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
-                  )}
-                >
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">
-                      {isVi ? "Cố định Header & Footer" : "Fixed Header & Footer"}
-                    </div>
-                    <div className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      {isVi ? "Luôn hiển thị thanh Header và Footer chuẩn khi qua các trang" : "Always show standard Header and Footer when browsing"}
-                    </div>
-                  </div>
-                  {fixedHeaderFooter && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400 shrink-0 ml-2" />}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFixedHeaderFooter(false);
-                    playClick();
-                  }}
-                  className={cn(
-                    "p-3 rounded-xl text-left transition-all border flex items-center justify-between cursor-pointer",
-                    !fixedHeaderFooter
-                      ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                      : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5"
-                  )}
-                >
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">
-                      {isVi ? "Không cố định Header & Footer" : "Unfixed (Peeking) Header & Footer"}
-                    </div>
-                    <div className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      {isVi ? "Lộ 1 phần trang trước/tiếp để chuyển trang; dồn menu vào góc phải" : "Peeks prev/next pages; folds all items into top-right menu"}
-                    </div>
-                  </div>
-                  {!fixedHeaderFooter && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400 shrink-0 ml-2" />}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetFontScale();
+                      triggerResetFeedback(isVi ? "Đã khôi phục cỡ chữ chuẩn 100%" : "Reset font scale to 100%");
+                    }}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isVi ? "Mặc định (100%)" : "Default (100%)"}</span>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Toggles List */}
-            <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 space-y-3">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                {isVi ? "Bật/Tắt các thành phần trên Footer:" : "Toggle Footer Widgets:"}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { key: "isPinned" as const, labelVi: "Ghim cố định Footer (Không tự trượt ẩn)", labelEn: "Pin Footer (Prevent auto-slide down)", icon: Pin, val: footerConfig.isPinned !== false, toggle: togglePin },
-                  { key: "showClock" as const, labelVi: "Đồng hồ thời gian & Ngày tháng", labelEn: "Clock & Date Widget", icon: Clock, val: footerConfig.showClock, toggle: () => toggleElementVisibility("showClock") },
-                  { key: "showWeather" as const, labelVi: "Dự báo thời tiết TP.HCM / Tỉnh thành", labelEn: "Real-time Weather Widget", icon: CloudSun, val: footerConfig.showWeather, toggle: () => toggleElementVisibility("showWeather") },
-                  { key: "showNextPageButton" as const, labelVi: "Nút chuyển trang tiếp theo ở giữa", labelEn: "Next Page Center Trigger", icon: ChevronDown, val: footerConfig.showNextPageButton, toggle: () => toggleElementVisibility("showNextPageButton") },
-                ].map((item) => (
-                  <div key={item.key} className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-white/10 shadow-2xs">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <item.icon className="w-4 h-4 text-slate-500 shrink-0" />
-                      <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">{isVi ? item.labelVi : item.labelEn}</span>
-                    </div>
+              {/* Font Scale Selector & Slider */}
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {isVi ? "Tỷ lệ kích thước chữ toàn trang (Global Font Scale):" : "Global Font Scale:"}
+                    </span>
+                    <p className="text-3xs text-slate-500 mt-0.5">
+                      {isVi ? "Tự động co giãn toàn bộ phân cấp typography theo tỷ lệ chuẩn" : "Scales all typographic tokens fluidly"}
+                    </p>
+                  </div>
+                  <span className="text-sm font-mono font-black text-indigo-600 dark:text-cyan-400 px-2.5 py-1 rounded-md bg-indigo-500/10 dark:bg-cyan-500/10">
+                    {fontScale}%
+                  </span>
+                </div>
+
+                {/* Slider */}
+                <input
+                  type="range"
+                  min={80}
+                  max={130}
+                  step={1}
+                  value={fontScale}
+                  onChange={(e) => setFontScale(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-cyan-400 mb-4"
+                />
+
+                {/* Quick Presets */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { scale: 90, labelVi: "Gọn gàng (90%)", labelEn: "Compact (90%)" },
+                    { scale: 100, labelVi: "Tiêu chuẩn (100%)", labelEn: "Standard (100%)" },
+                    { scale: 110, labelVi: "Rõ nét (110%)", labelEn: "Clear (110%)" },
+                    { scale: 120, labelVi: "Lớn dễ đọc (120%)", labelEn: "Large (120%)" },
+                  ].map((s) => (
                     <button
+                      key={s.scale}
                       type="button"
-                      onClick={() => { item.toggle(); playClick(); }}
+                      onClick={() => { setFontScale(s.scale); playClick(); }}
                       className={cn(
-                        "w-10 h-5 rounded-full transition-colors p-0.5 cursor-pointer flex items-center shrink-0 ml-2",
-                        item.val ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                        "p-2.5 rounded-lg text-xs font-bold transition-all border text-center cursor-pointer",
+                        fontScale === s.scale
+                          ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                          : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-100"
                       )}
                     >
-                      <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      {isVi ? s.labelVi : s.labelEn}
                     </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </section>
-        )}
 
-        {/* ========================================================================= */}
-        {/* MỤC 8: PHÔNG CHỮ & TYPOGRAPHY (TYPOGRAPHY SCALE MATRIX) */}
-        {/* ========================================================================= */}
-        {isSectionVisible("typography") && (
-          <section className="p-5 sm:p-6 bg-white/75 dark:bg-slate-900/75 border border-slate-200/90 dark:border-white/10 backdrop-blur-2xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Type className="w-5 h-5 text-indigo-500" />
-                  {isVi ? "8. Hệ thống phông chữ & Tỷ lệ (Typography Matrix)" : "8. Typography Scale Matrix"}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {isVi ? "Tỷ lệ cỡ chữ linh hoạt và bộ mẫu phân cấp trực quan" : "Scalable responsive hierarchy and live preview test arena"}
-                </p>
+              {/* Live Interactive Test Text Input */}
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    {isVi ? "Khu vực thử nghiệm văn bản trực tiếp (Live Typing Test):" : "Live Typography Test Arena:"}
+                  </span>
+                  {customTestText && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomTestText("")}
+                      className="text-3xs text-rose-500 hover:underline cursor-pointer"
+                    >
+                      {isVi ? "Xóa thử nghiệm" : "Clear test"}
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={customTestText}
+                  onChange={(e) => setCustomTestText(e.target.value)}
+                  placeholder={isVi ? "Nhập thử văn bản của bạn để xem phân cấp chữ trực tiếp..." : "Type custom text to preview typography hierarchy live..."}
+                  className="w-full px-3.5 py-2 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
+                />
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  resetFontScale();
-                  triggerResetFeedback(isVi ? "Đã khôi phục cỡ chữ chuẩn 100%" : "Reset font scale to 100%");
-                }}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>{isVi ? "Mặc định (100%)" : "Default (100%)"}</span>
-              </button>
-            </div>
 
-            {/* Font Scale Selector */}
-            <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 mb-5">
-              <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">{isVi ? "Tỷ lệ kích thước chữ toàn trang (Font Scale):" : "Global Font Scale:"}</div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {[
-                  { scale: 90, labelVi: "Gọn gàng (90%)", labelEn: "Compact (90%)" },
-                  { scale: 100, labelVi: "Tiêu chuẩn (100%)", labelEn: "Standard (100%)" },
-                  { scale: 110, labelVi: "Rõ nét (110%)", labelEn: "Clear (110%)" },
-                  { scale: 120, labelVi: "Lớn dễ đọc (120%)", labelEn: "Large (120%)" },
-                ].map((s) => (
-                  <button
-                    key={s.scale}
-                    type="button"
-                    onClick={() => { setFontScale(s.scale); playClick(); }}
-                    className={cn(
-                      "p-2.5 rounded-lg text-xs font-bold transition-all border text-center cursor-pointer shadow-2xs",
-                      fontScale === s.scale
-                        ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
-                        : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-100"
-                    )}
+              {/* Typography Hierarchy Table */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2">{isVi ? "Bảng phân cấp Typography Tokens:" : "Hierarchy Tokens:"}</h4>
+                {TYPO_TOKENS.map((token) => (
+                  <div
+                    key={token.id}
+                    className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                   >
-                    {isVi ? s.labelVi : s.labelEn}
-                  </button>
+                    <div className="min-w-[180px]">
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? token.labelVi : token.labelEn}</div>
+                      <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight}</div>
+                    </div>
+                    <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1">
+                      {customTestText || token.sampleText}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
+          </motion.div>
+        )}
+      </div>
 
-            {/* Typography Hierarchy Table */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2">{isVi ? "Bảng phân cấp Typography Tokens:" : "Hierarchy Tokens:"}</h4>
-              {TYPO_TOKENS.map((token) => (
-                <div
-                  key={token.id}
-                  className="p-3 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                >
-                  <div className="min-w-[180px]">
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? token.labelVi : token.labelEn}</div>
-                    <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight}</div>
+      {/* 5. DIAGNOSTIC REPORT MODAL */}
+      <AnimatePresence>
+        {isDiagnosticModalOpen && diagnosticReport && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <Wrench className="w-5 h-5" />
                   </div>
-                  <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1">
-                    {token.sampleText}
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      {isVi ? "Báo Cáo Rà Soát & Sửa Chữa Hệ Thống" : "System Audit & Auto-Repair Report"}
+                      <span className="px-2 py-0.5 rounded-full text-3xs font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        {diagnosticReport.passedChecks}/{diagnosticReport.totalChecks} {isVi ? "Đạt chuẩn" : "Passed"}
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      {isVi ? `Thời gian rà soát: ${diagnosticReport.timestamp} • Đã hiệu chỉnh: ${diagnosticReport.repairedCount} mục` : `Audited at: ${diagnosticReport.timestamp} • Repaired: ${diagnosticReport.repairedCount} items`}
+                    </p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
+                <button
+                  type="button"
+                  onClick={() => setIsDiagnosticModalOpen(false)}
+                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-      </div>
-      </div>
-    </section>
+              {/* Modal Body / Checklist */}
+              <div className="p-4 sm:p-6 overflow-y-auto space-y-3">
+                {diagnosticReport.items.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="p-3.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex items-start justify-between gap-3"
+                  >
+                    <div className="flex items-start gap-3">
+                      {item.status === "perfect" && <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />}
+                      {item.status === "repaired" && <Zap className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />}
+                      {item.status === "warning" && <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />}
+                      <div>
+                        <div className="text-xs font-bold text-slate-900 dark:text-white">
+                          {isVi ? item.titleVi : item.titleEn}
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                          {isVi ? item.detailVi : item.detailEn}
+                        </p>
+                      </div>
+                    </div>
+                    {item.metric && (
+                      <span className="shrink-0 px-2 py-0.5 rounded-md text-3xs font-mono font-bold bg-slate-200/60 dark:bg-white/10 text-slate-700 dark:text-slate-300">
+                        {item.metric}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs text-slate-500 font-medium">
+                  {isVi ? "Hệ thống đã tự động đồng bộ toàn bộ biến CSS & LocalStorage." : "System has synchronized all CSS tokens & storage keys."}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleSaveAsProductionDefault();
+                      setIsDiagnosticModalOpen(false);
+                    }}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer"
+                  >
+                    {isVi ? "Lưu kết quả làm mặc định" : "Save as Production Default"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsDiagnosticModalOpen(false)}
+                    className="px-4 py-2 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                  >
+                    {isVi ? "Đóng" : "Close"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* 6. IMPORT CONFIG JSON MODAL */}
+      <AnimatePresence>
+        {isImportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-cyan-400 flex items-center justify-center">
+                    <FileJson className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      {isVi ? "Nhập Cấu Hình Từ Tệp JSON" : "Import Configuration JSON"}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      {isVi ? "Dán mã JSON hoặc chọn tệp cấu hình đã xuất" : "Paste JSON string or select an exported configuration file"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(false)}
+                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5 block">
+                    {isVi ? "Chọn tệp JSON từ máy tính:" : "Select JSON file from computer:"}
+                  </label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json,application/json"
+                    onChange={handleFileUpload}
+                    className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-white/10 dark:file:text-cyan-300 hover:file:bg-indigo-100 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5 block">
+                    {isVi ? "Hoặc dán nội dung JSON vào đây:" : "Or paste JSON payload below:"}
+                  </label>
+                  <textarea
+                    rows={6}
+                    value={importJsonText}
+                    onChange={(e) => setImportJsonText(e.target.value)}
+                    placeholder='{"themeMode": "light", "colorPreset": "default", ...}'
+                    className="w-full p-3 font-mono text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                </div>
+
+                {importError && (
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>{importError}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsImportModalOpen(false)}
+                  className="px-4 py-2 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  {isVi ? "Hủy" : "Cancel"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleImportJson}
+                  disabled={!importJsonText.trim()}
+                  className={cn(
+                    "px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer flex items-center gap-1.5",
+                    importJsonText.trim()
+                      ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                      : "bg-slate-200 dark:bg-white/5 text-slate-400 cursor-not-allowed"
+                  )}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isVi ? "Nhập & Áp dụng ngay" : "Import & Apply"}</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

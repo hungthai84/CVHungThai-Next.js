@@ -75,7 +75,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
     return (
       <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 bg-transparent">
         {/* 01 · Tổng quan dự án & EXECUTIVE OVERVIEW */}
-        <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/50 dark:bg-[#0c1e35]/50 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
+        <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
           <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
             <h2 className="text-base sm:text-xl md:text-2xl font-bold text-sky-600 dark:text-sky-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
               <span>01</span>
@@ -458,7 +458,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-indigo-600 dark:text-indigo-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-indigo-500 text-white font-mono text-xs shadow-xs">02</span>
             <span className="text-indigo-400 dark:text-indigo-500 font-normal">·</span>
-            <Activity className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-indigo-600 dark:text-indigo-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-xs">
+              <Activity className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:to-pink-300 bg-clip-text text-transparent">Bối cảnh & Hiện trạng thực tế</span>
           </h2>
         </div>
@@ -494,7 +496,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-rose-600 dark:text-rose-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-rose-500 text-white font-mono text-xs shadow-xs">03</span>
             <span className="text-rose-400 dark:text-rose-500 font-normal">·</span>
-            <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-rose-600 dark:text-rose-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 text-white shadow-xs">
+              <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 dark:from-rose-400 dark:to-purple-300 bg-clip-text text-transparent">Vấn đề & Thách thức cốt lõi</span>
           </h2>
         </div>
@@ -539,7 +543,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-purple-500 text-white font-mono text-xs shadow-xs">04</span>
             <span className="text-purple-400 dark:text-purple-500 font-normal">·</span>
-            <Target className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-purple-600 dark:text-purple-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-xs">
+              <Target className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 dark:from-purple-400 dark:to-pink-300 bg-clip-text text-transparent">Mục tiêu chiến lược 4 phương diện</span>
           </h2>
         </div>
@@ -573,7 +579,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-cyan-600 dark:text-cyan-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-cyan-500 text-white font-mono text-xs shadow-xs">05</span>
             <span className="text-cyan-400 dark:text-cyan-500 font-normal">·</span>
-            <Cpu className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-cyan-600 dark:text-cyan-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-600 text-white shadow-xs">
+              <Cpu className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 dark:from-cyan-400 dark:to-emerald-300 bg-clip-text text-transparent">Mô hình & Giải pháp thực thi (4 Trụ cột)</span>
           </h2>
         </div>
@@ -679,7 +687,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-violet-600 dark:text-violet-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-violet-500 text-white font-mono text-xs shadow-xs">07</span>
             <span className="text-violet-400 dark:text-violet-500 font-normal">·</span>
-            <UserCheck className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-violet-600 dark:text-violet-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-xs">
+              <UserCheck className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:to-pink-300 bg-clip-text text-transparent">Vai trò & Đóng góp nòng cốt</span>
           </h2>
         </div>
@@ -714,7 +724,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-amber-600 dark:text-amber-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-amber-500 text-white font-mono text-xs shadow-xs">08</span>
             <span className="text-amber-400 dark:text-amber-500 font-normal">·</span>
-            <Layers className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-amber-600 dark:text-amber-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-xs">
+              <Layers className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 dark:from-amber-400 dark:to-red-300 bg-clip-text text-transparent">Hệ thống & Công cụ tương tác</span>
           </h2>
         </div>
@@ -735,7 +747,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-white font-mono text-xs shadow-xs">09</span>
             <span className="text-emerald-400 dark:text-emerald-500 font-normal">·</span>
-            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-xs">
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-300 bg-clip-text text-transparent">Kết quả & Tác động kinh doanh</span>
           </h2>
         </div>
@@ -770,7 +784,9 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <h2 className="text-base sm:text-xl md:text-2xl font-bold text-teal-600 dark:text-teal-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-lg bg-teal-500 text-white font-mono text-xs shadow-xs">10</span>
             <span className="text-teal-400 dark:text-teal-500 font-normal">·</span>
-            <Award className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-teal-600 dark:text-teal-400" />
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 text-white shadow-xs">
+              <Award className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            </div>
             <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 dark:from-teal-400 dark:to-blue-300 bg-clip-text text-transparent">Giá trị tạo ra & Định hướng tương lai</span>
           </h2>
         </div>

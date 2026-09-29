@@ -7,6 +7,7 @@ import {
   Volume2,
   VolumeX,
   MessageSquare,
+  MessagesSquare,
   Sparkles,
   ChevronLeft,
   ChevronRight,
@@ -20,6 +21,7 @@ import {
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { motion, AnimatePresence } from "motion/react";
 
 import {
@@ -201,10 +203,10 @@ export function Interview() {
           </div>
         </PageCardHeader>
 
-        {/* Optimised grid layout: Left (7 cols on lg) for video & response, Right (5 cols on lg) for playlist */}
+        {/* Optimised grid layout: Left (7 cols on lg) for Video & Playlist, Right (5 cols on lg) for Active Response details */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch flex-1">
 
-          {/* LEFT AREA: Video Player + Response (7 columns on lg) */}
+          {/* LEFT AREA: Video Player + Nội Dung Phỏng Vấn Chính (7 columns on lg) */}
           <div className="w-full lg:col-span-7 flex flex-col gap-4 sm:gap-5 min-h-0">
             
             {/* 1. Video Player Hero Card */}
@@ -323,46 +325,176 @@ export function Interview() {
               </div>
             </div>
 
-            {/* 2. Active Response details Card (Always displayed directly under video) */}
+            {/* 2. Nội dung phỏng vấn chính Card (Playlist card now placed in Left Column under Video) */}
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="flex-1 rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-4 relative min-h-[220px]"
+              className="w-full flex-1 rounded-[var(--theme-radius-card,10px)] border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col gap-3 relative overflow-hidden min-h-[260px]"
+            >
+              {/* Header of Playlist Card */}
+              <AnimatedCardTitle
+                icon={ListVideo}
+                title={isVi ? "Nội dung phỏng vấn chính" : "Main interview playlist"}
+                colorPreset="auto"
+                indexForAutoColor={4}
+                actionRight={
+                  <span className="text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded text-slate-500 dark:text-slate-400">
+                    {filteredQuestions.length} {isVi ? "câu hỏi" : "questions"}
+                  </span>
+                }
+              />
+
+              {/* Category Filter Tabs */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none">
+                {TABS.map((tab) => {
+                  const isActive = activeTab === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => handleSetActiveTab(tab.key)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-lg text-[11px] font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
+                        isActive
+                          ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
+                      )}
+                    >
+                      {isVi ? tab.labelVi : tab.labelEn}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Scrollable Questions list matching active category tab */}
+              <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-3 custom-scrollbar min-h-0">
+                {filteredQuestions.map((q) => {
+                  const absoluteIndex = INTERVIEW_QUESTIONS.findIndex(item => item.id === q.id);
+                  const isCurrent = currentQuestionIndex === absoluteIndex;
+                  return (
+                    <motion.button
+                      whileHover={{ y: -2, scale: 1.012 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      key={q.id}
+                      type="button"
+                      onClick={() => handleSelectQuestion(absoluteIndex)}
+                      className={cn(
+                        "w-full text-left p-3.5 rounded-xl border transition-all duration-300 flex flex-col gap-2 group/item cursor-pointer relative overflow-hidden",
+                        isCurrent
+                          ? "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/60 dark:border-cyan-400/60 shadow-[0_4px_12px_rgba(78,86,246,0.12)] ring-1 ring-indigo-500/20"
+                          : "bg-white/40 dark:bg-slate-950/25 border-slate-200/80 dark:border-white/5 hover:bg-white/80 dark:hover:bg-slate-800/40 hover:border-indigo-400/50 dark:hover:border-cyan-400/50 hover:shadow-md"
+                      )}
+                    >
+                      {/* Active Left Indicator Line */}
+                      {isCurrent && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 to-cyan-400" />
+                      )}
+
+                      {/* Question Index Badge & Time stamp */}
+                      <div className="flex items-center justify-between gap-2 w-full select-none">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className={cn(
+                            "text-[10px] font-mono font-black px-1.5 py-0.5 rounded-md tracking-wider shadow-2xs shrink-0",
+                            isCurrent
+                              ? "bg-indigo-600 dark:bg-cyan-500 text-white"
+                              : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold"
+                          )}>
+                            {isVi ? `CÂU 0${q.stt}` : `Q0${q.stt}`}
+                          </span>
+                          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold">
+                            {q.timestamp}
+                          </span>
+                        </div>
+
+                        {/* Audio wave pulse icon */}
+                        {isCurrent && isInterviewPlaying && (
+                          <div className="flex items-end gap-0.5 h-3 shrink-0 mr-1">
+                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-3" style={{ animationDuration: "0.8s", animationDelay: "0s" }} />
+                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-2" style={{ animationDuration: "0.6s", animationDelay: "0.2s" }} />
+                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-4" style={{ animationDuration: "0.9s", animationDelay: "0.1s" }} />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Question Text */}
+                      <h5 className={cn(
+                        "text-xs sm:text-sm font-extrabold leading-tight transition-colors duration-200 line-clamp-2",
+                        isCurrent
+                          ? "text-indigo-950 dark:text-cyan-300 font-black"
+                          : "text-slate-900 dark:text-slate-100 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
+                      )}>
+                        {isVi ? q.questionVi : q.questionEn}
+                      </h5>
+
+                      {/* Summary text */}
+                      <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-250/50 dark:border-white/10 mt-0.5 select-none text-[10px]">
+                        <span className="text-slate-650 dark:text-slate-350 font-semibold truncate max-w-[75%]">
+                          {isVi ? q.summaryVi : q.summaryEn}
+                        </span>
+                        <span className={cn(
+                          "font-black uppercase tracking-wider shrink-0 transition-colors",
+                          isCurrent ? "text-indigo-600 dark:text-cyan-400" : "text-slate-500 dark:text-slate-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
+                        )}>
+                          {isVi ? q.categoryVi.split(" ")[0] : q.categoryEn.split(" ")[0]}
+                        </span>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (5 columns on lg) */}
+          <div className="w-full lg:col-span-5 flex flex-col h-full">
+            
+            {/* Active Response details Card */}
+            <div 
+              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+              className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-4 relative min-h-[350px]"
             >
               <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-indigo-500/5 via-cyan-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
               <div className="space-y-4 flex-1 flex flex-col min-h-0 relative z-10">
                 
                 {/* Top Bar inside Active Response */}
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
-                  <div className="flex items-center gap-2.5 text-left">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0 flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <motion.div
-                      animate={{ scale: [1, 1.15, 1], rotate: [0, 4, -4, 0] }}
+                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
                       transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="text-teal-500 dark:text-teal-400 shrink-0"
+                      className="shrink-0"
                     >
-                      <MessageSquare className="w-5 h-5 stroke-[2.2]" />
+                      <MessagesSquare className="w-5.5 h-5.5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
                     </motion.div>
-                    <motion.h4
-                      animate={{ opacity: [0.85, 1, 0.85] }}
-                      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="text-xs sm:text-sm font-black text-teal-600 dark:text-teal-400 font-play select-none tracking-wide"
+                    <motion.h4 
+                      animate={{ opacity: [0.92, 1, 0.92] }}
+                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-sm sm:text-base font-black font-play tracking-tight truncate"
                     >
-                      {isVi ? "Phản hồi phỏng vấn" : "Simulated Response Dialogue"}
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-cyan-300 dark:via-blue-300 dark:to-indigo-300">
+                        {isVi ? "Chi Tiết Phỏng Vấn" : "Interview Details"}
+                      </span>
                     </motion.h4>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
-                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[10px] font-mono font-black shadow-xs tracking-wide">
+                  <div className="flex items-center gap-2 shrink-0 ml-auto">
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[11px] font-mono font-black shadow-xs tracking-wide">
                       <span>CÂU {currentQ.stt < 10 ? `0${currentQ.stt}` : currentQ.stt}</span>
                     </span>
 
                     {/* Equalizer Wavelet Indicator */}
-                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-white/5 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-cyan-500 h-2.5 animate-pulse" : "bg-slate-400 h-1")} />
-                      <span className="ml-1 text-[9px] font-bold">
-                        {isInterviewPlaying ? (isVi ? "Phát" : "Play") : (isVi ? "Chọn" : "Active")}
+                    <div className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-white/5 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-cyan-500 h-3 animate-pulse" : "bg-slate-400 h-1.5")} />
+                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-indigo-500 h-4.5 animate-bounce" : "bg-slate-400 h-2.5")} style={{ animationDelay: "0.1s" }} />
+                      <span className="ml-1 text-xs">
+                        {isInterviewPlaying ? (isVi ? "Đang phát" : "Playing") : (isVi ? "Đang chọn" : "Active")}
                       </span>
                     </div>
+
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wide hidden sm:inline-block">
+                      {isVi ? currentQ.categoryVi : currentQ.categoryEn}
+                    </span>
                   </div>
                 </div>
 
@@ -464,146 +596,6 @@ export function Interview() {
               </div>
             </div>
 
-          </div>
-
-          {/* RIGHT AREA: Interactive Question Playlist & Category Filters (5 columns on lg) */}
-          {/* This is a beautifully designed, highly functional, always-visible navigation system that fully solves the lost tabs bug! */}
-          <div className="w-full lg:col-span-5 flex flex-col h-full min-h-[420px] sm:min-h-[480px] lg:h-full">
-            <div 
-              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col gap-3 relative overflow-hidden"
-            >
-              {/* Header of Playlist Card */}
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
-                <div className="flex items-center gap-2.5 text-left">
-                  <motion.div
-                    animate={{ y: [0, -3, 0], rotate: [0, 6, -6, 0] }}
-                    transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-pink-500 dark:text-pink-400 shrink-0"
-                  >
-                    <ListVideo className="w-5 h-5 stroke-[2.2]" />
-                  </motion.div>
-                  <motion.h4
-                    animate={{ opacity: [0.85, 1, 0.85] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-xs sm:text-sm font-black text-pink-600 dark:text-pink-400 font-play select-none tracking-wide"
-                  >
-                    {isVi ? "Nội dung phỏng vấn" : "Simulated Interview Playlist"}
-                  </motion.h4>
-                </div>
-                <span className="text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded text-slate-500 dark:text-slate-400">
-                  {filteredQuestions.length} {isVi ? "câu hỏi" : "questions"}
-                </span>
-              </div>
-
-              {/* Category Filter Tabs (Uncollapsed & Always visible, resolving the user's specific complaint) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none">
-                {TABS.map((tab) => {
-                  const isActive = activeTab === tab.key;
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => handleSetActiveTab(tab.key)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-[11px] font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
-                        isActive
-                          ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
-                      )}
-                    >
-                      {isVi ? tab.labelVi : tab.labelEn}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Scrollable Questions list matching active category tab (giao diện bento-grid, tăng độ tương phản, hiệu ứng hover) */}
-              <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 custom-scrollbar min-h-0">
-                {filteredQuestions.map((q) => {
-                  const absoluteIndex = INTERVIEW_QUESTIONS.findIndex(item => item.id === q.id);
-                  const isCurrent = currentQuestionIndex === absoluteIndex;
-                  return (
-                    <motion.button
-                      whileHover={{ y: -2, scale: 1.012 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      key={q.id}
-                      type="button"
-                      onClick={() => handleSelectQuestion(absoluteIndex)}
-                      className={cn(
-                        "w-full text-left p-3.5 rounded-xl border transition-all duration-300 flex flex-col gap-2 group/item cursor-pointer relative overflow-hidden",
-                        isCurrent
-                          ? "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/60 dark:border-cyan-400/60 shadow-[0_4px_12px_rgba(78,86,246,0.12)] ring-1 ring-indigo-500/20"
-                          : "bg-white/40 dark:bg-slate-950/25 border-slate-200/80 dark:border-white/5 hover:bg-white/80 dark:hover:bg-slate-800/40 hover:border-indigo-400/50 dark:hover:border-cyan-400/50 hover:shadow-md"
-                      )}
-                    >
-                      {/* Active Left Indicator Line */}
-                      {isCurrent && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 to-cyan-400" />
-                      )}
-
-                      {/* Question Index Badge & Time stamp */}
-                      <div className="flex items-center justify-between gap-2 w-full select-none">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className={cn(
-                            "text-[10px] font-mono font-black px-1.5 py-0.5 rounded-md tracking-wider shadow-2xs shrink-0",
-                            isCurrent
-                              ? "bg-indigo-600 dark:bg-cyan-500 text-white"
-                              : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold"
-                          )}>
-                            {isVi ? `CÂU 0${q.stt}` : `Q0${q.stt}`}
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold">
-                            {q.timestamp}
-                          </span>
-                        </div>
-
-                        {/* Audio wave pulse icon */}
-                        {isCurrent && isInterviewPlaying && (
-                          <div className="flex items-end gap-0.5 h-3 shrink-0 mr-1">
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-3" style={{ animationDuration: "0.8s", animationDelay: "0s" }} />
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-2" style={{ animationDuration: "0.6s", animationDelay: "0.2s" }} />
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-4" style={{ animationDuration: "0.9s", animationDelay: "0.1s" }} />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Question Text with high contrast */}
-                      <h5 className={cn(
-                        "text-xs sm:text-sm font-extrabold leading-tight transition-colors duration-200 line-clamp-2",
-                        isCurrent
-                          ? "text-indigo-950 dark:text-cyan-300 font-black"
-                          : "text-slate-900 dark:text-slate-100 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
-                      )}>
-                        {isVi ? q.questionVi : q.questionEn}
-                      </h5>
-
-                      {/* Summary text and Category Key label */}
-                      <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-250/50 dark:border-white/10 mt-0.5 select-none text-[10px]">
-                        <span className="text-slate-650 dark:text-slate-350 font-semibold truncate max-w-[75%]">
-                          {isVi ? q.summaryVi : q.summaryEn}
-                        </span>
-                        <span className={cn(
-                          "font-black uppercase tracking-wider shrink-0 transition-colors",
-                          isCurrent ? "text-indigo-600 dark:text-cyan-400" : "text-slate-500 dark:text-slate-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
-                        )}>
-                          {isVi ? q.categoryVi.split(" ")[0] : q.categoryEn.split(" ")[0]}
-                        </span>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-
-                {/* Empty State when no questions match filter */}
-                {filteredQuestions.length === 0 && (
-                  <div className="text-center py-10 px-4">
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                      {isVi ? "Không tìm thấy câu hỏi phù hợp." : "No matching questions found."}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
 
         </div>

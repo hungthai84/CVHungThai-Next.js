@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
@@ -21,7 +21,6 @@ import {
   ExternalLink,
   Search,
   SlidersHorizontal,
-  Filter,
   Info,
   Copy,
   Layers,
@@ -30,11 +29,10 @@ import {
   Activity,
   Globe2,
   ArrowUpRight,
-  Headphones,
-  BarChart3,
-  GraduationCap,
-  Check,
-  ChevronDown
+  Filter,
+  ChevronDown,
+  Headset,
+  Bot
 } from "lucide-react";
 
 export function Systems() {
@@ -42,11 +40,10 @@ export function Systems() {
   const { theme } = useTheme();
   const isVi = lang === "vi";
 
-  // Filter & search states
-  const [activeCategory, setActiveCategory] = useState<SystemCategory>("all");
+  // Search & system modal states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSystem, setSelectedSystem] = useState<SystemItem | null>(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
   // Video lightbox & feedback state
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -131,21 +128,18 @@ export function Systems() {
 
   // Filter systems list
   const filteredSystems = useMemo(() => {
-    return SYSTEMS_DATA.filter((item) => {
-      const matchCategory = activeCategory === "all" || item.category === activeCategory;
-      const query = searchQuery.trim().toLowerCase();
-      if (!query) return matchCategory;
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return SYSTEMS_DATA;
 
-      const matchSearch =
+    return SYSTEMS_DATA.filter(
+      (item) =>
         item.code.toLowerCase().includes(query) ||
         item.nameVi.toLowerCase().includes(query) ||
         item.nameEn.toLowerCase().includes(query) ||
         item.descVi.toLowerCase().includes(query) ||
-        item.descEn.toLowerCase().includes(query);
-
-      return matchCategory && matchSearch;
-    });
-  }, [activeCategory, searchQuery]);
+        item.descEn.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
 
   return (
     <section
@@ -166,108 +160,32 @@ export function Systems() {
                 </span>
               </div>
 
-              {/* Right Side: Category Filter Dropdown */}
-              <div className="flex items-center gap-2 md:ml-auto shrink-0">
-                {/* ICON FILTER DROPDOWN */}
-                <div className="relative flex items-center gap-1.5 shrink-0">
-                  {/* Category Icon Selector Dropdown Trigger */}
-                  <div className="relative">
+              {/* Middle Side: Summary Stats */}
+              <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/10 text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
+                <span>{isVi ? `Hiển thị ${filteredSystems.length}/12` : `Showing ${filteredSystems.length}/12`}</span>
+              </div>
+
+              {/* Right Side: Quick Search Bar */}
+              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:ml-auto w-full md:w-auto">
+                <div className="relative flex-1 sm:w-56 shrink-0">
+                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={isVi ? "Tìm mã, tên hệ thống..." : "Search code, name..."}
+                    className="w-full pl-9 pr-9 h-11 min-h-[44px] rounded-2xl text-xs bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all font-play"
+                  />
+                  {searchQuery && (
                     <button
                       type="button"
-                      onClick={() => {
-                        try { playUiSound("click"); } catch {}
-                        setIsFilterOpen(!isFilterOpen);
-                      }}
-                      className={cn(
-                        "h-8 px-3 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer border shadow-xs",
-                        activeCategory !== "all"
-                          ? "bg-indigo-600 text-white border-indigo-600 shadow-indigo-500/25"
-                          : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200/90 dark:border-white/15 hover:bg-slate-100 dark:hover:bg-slate-700"
-                      )}
-                      title={isVi ? "Bộ lọc danh mục hệ thống" : "Filter system category"}
+                      onClick={() => setSearchQuery("")}
+                      className="w-11 h-11 min-h-[44px] min-w-[44px] absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center justify-center cursor-pointer"
                     >
-                      <Filter className="w-3.5 h-3.5 text-indigo-400" />
-                      <span className="truncate max-w-[130px]">
-                        {(() => {
-                          const current = SYSTEM_CATEGORIES.find(c => c.id === activeCategory);
-                          return isVi ? current?.labelVi : current?.labelEn;
-                        })()}
-                      </span>
-                      <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", isFilterOpen && "rotate-180")} />
+                      <X className="w-3.5 h-3.5" />
                     </button>
-
-                    {/* Filter Dropdown Popover */}
-                    <AnimatePresence>
-                      {isFilterOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 6, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 6, scale: 0.95 }}
-                          transition={{ duration: 0.18 }}
-                          className="absolute right-0 top-full mt-2 w-64 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-white/15 shadow-2xl backdrop-blur-2xl z-50 flex flex-col gap-1 text-left"
-                        >
-                          <div className="px-2.5 py-1 text-3xs font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200/50 dark:border-white/10 mb-1 flex items-center justify-between">
-                            <span className="flex items-center gap-1.5">
-                              <SlidersHorizontal className="w-3 h-3 text-indigo-500" />
-                              <span>{isVi ? "Lọc theo nhóm hệ thống" : "Filter by domain"}</span>
-                            </span>
-                            <span className="font-mono">{SYSTEM_CATEGORIES.length} nhóm</span>
-                          </div>
-
-                          {SYSTEM_CATEGORIES.map((cat) => {
-                            const isSelected = activeCategory === cat.id;
-                            const getCatIcon = (id: string) => {
-                              switch (id) {
-                                case "cx": return Headphones;
-                                case "operations": return Server;
-                                case "training": return GraduationCap;
-                                case "analytics": return BarChart3;
-                                default: return Layers;
-                              }
-                            };
-                            const CatIcon = getCatIcon(cat.id);
-
-                            return (
-                              <button
-                                key={cat.id}
-                                type="button"
-                                onClick={() => {
-                                  try { playUiSound("click"); } catch {}
-                                  setActiveCategory(cat.id);
-                                  setIsFilterOpen(false);
-                                }}
-                                className={cn(
-                                  "w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer border text-left",
-                                  isSelected
-                                    ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-                                    : "bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 border-transparent text-slate-700 dark:text-slate-300"
-                                )}
-                              >
-                                <div className="flex items-center gap-2.5 min-w-0">
-                                  <div className={cn(
-                                    "w-6 h-6 rounded-lg flex items-center justify-center shrink-0",
-                                    isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-indigo-500 dark:text-cyan-400"
-                                  )}>
-                                    <CatIcon className="w-3.5 h-3.5" />
-                                  </div>
-                                  <span className="truncate">{isVi ? cat.labelVi : cat.labelEn}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                                  <span className={cn(
-                                    "px-1.5 py-0.5 rounded-full text-3xs font-mono font-bold",
-                                    isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
-                                  )}>
-                                    {cat.count}
-                                  </span>
-                                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -304,8 +222,8 @@ export function Systems() {
         </div>
 
         {/* 12 SYSTEMS BENTO GRID */}
-        <IndustrialSubSection className="flex-1 flex flex-col">
-          <div className="w-full flex-grow rounded-[24px] p-0 border-0 bg-transparent shadow-none backdrop-blur-none flex flex-col justify-center items-center">
+        <IndustrialSubSection className="h-auto shrink-0 flex flex-col justify-start">
+          <div className="w-full h-auto rounded-[24px] p-0 border-0 bg-transparent shadow-none backdrop-blur-none flex flex-col justify-start items-center">
             {filteredSystems.length === 0 ? (
               <div
                 style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
@@ -329,7 +247,6 @@ export function Systems() {
                   type="button"
                   onClick={() => {
                     setSearchQuery("");
-                    setActiveCategory("all");
                   }}
                   className="mt-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition"
                 >
@@ -343,153 +260,144 @@ export function Systems() {
                   variants={industrialContainerVariants}
                   initial="hidden"
                   animate="show"
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-full auto-rows-fr items-stretch"
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-auto auto-rows-fr items-stretch"
                 >
-                  {filteredSystems.map((item, index) => {
+                  {filteredSystems.map((item, idx) => {
                     const IconComponent = item.icon;
-
-                    // 12 unique path configurations for moving background lines
-                    const linePaths = [
-                      "M 10,140 Q 60,110 120,130 T 240,110 T 310,140",
-                      "M 10,20 Q 80,80 160,20 T 310,120",
-                      "M 10,160 C 80,100 120,40 240,80 T 310,30",
-                      "M 300,10 Q 200,90 100,10 T 10,150",
-                      "M 10,10 Q 150,150 290,10",
-                      "M 10,80 C 100,10 150,150 290,80",
-                      "M 50,160 Q 150,30 250,160",
-                      "M 10,50 L 120,50 L 240,130 L 310,130",
-                      "M 20,20 C 120,20 120,150 290,150",
-                      "M 10,120 Q 90,40 180,120 T 310,40",
-                      "M 10,150 L 290,20",
-                      "M 10,10 C 140,80 140,120 290,160"
+                    const isFlipped = !!flippedCards[item.id];
+                    const cardThemes = [
+                      { bg: "bg-gradient-to-br from-blue-500/15 via-blue-500/5 to-cyan-500/10 dark:from-blue-950/60 dark:to-cyan-950/40 border-blue-300/60 dark:border-blue-500/35", line: "from-blue-500 via-cyan-400 to-indigo-500", iconColor: "text-blue-600 dark:text-cyan-400" },
+                      { bg: "bg-gradient-to-br from-emerald-500/15 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/60 dark:to-teal-950/40 border-emerald-300/60 dark:border-emerald-500/35", line: "from-emerald-400 via-teal-400 to-cyan-500", iconColor: "text-emerald-600 dark:text-emerald-400" },
+                      { bg: "bg-gradient-to-br from-purple-500/15 via-fuchsia-500/5 to-purple-500/10 dark:from-purple-950/60 dark:to-fuchsia-950/40 border-purple-300/60 dark:border-purple-500/35", line: "from-purple-500 via-fuchsia-400 to-pink-500", iconColor: "text-purple-600 dark:text-purple-400" },
+                      { bg: "bg-gradient-to-br from-amber-500/15 via-orange-500/5 to-amber-500/10 dark:from-amber-950/60 dark:to-orange-950/40 border-amber-300/60 dark:border-amber-500/35", line: "from-amber-400 via-orange-400 to-yellow-500", iconColor: "text-amber-600 dark:text-amber-400" },
+                      { bg: "bg-gradient-to-br from-rose-500/15 via-pink-500/5 to-rose-500/10 dark:from-rose-950/60 dark:to-red-950/40 border-rose-300/60 dark:border-rose-500/35", line: "from-rose-500 via-pink-400 to-red-500", iconColor: "text-rose-600 dark:text-rose-400" },
+                      { bg: "bg-gradient-to-br from-cyan-500/15 via-sky-500/5 to-cyan-500/10 dark:from-cyan-950/60 dark:to-sky-950/40 border-cyan-300/60 dark:border-cyan-500/35", line: "from-cyan-400 via-sky-400 to-blue-500", iconColor: "text-cyan-600 dark:text-cyan-300" },
+                      { bg: "bg-gradient-to-br from-teal-500/15 via-emerald-500/5 to-teal-500/10 dark:from-teal-950/60 dark:to-green-950/40 border-teal-300/60 dark:border-teal-500/35", line: "from-teal-400 via-emerald-400 to-green-500", iconColor: "text-teal-600 dark:text-teal-400" },
+                      { bg: "bg-gradient-to-br from-indigo-500/15 via-blue-500/5 to-indigo-500/10 dark:from-indigo-950/60 dark:to-purple-950/40 border-indigo-300/60 dark:border-indigo-500/35", line: "from-indigo-500 via-blue-400 to-purple-500", iconColor: "text-indigo-600 dark:text-indigo-400" },
+                      { bg: "bg-gradient-to-br from-violet-500/15 via-purple-500/5 to-violet-500/10 dark:from-violet-950/60 dark:to-indigo-950/40 border-violet-300/60 dark:border-violet-500/35", line: "from-violet-500 via-purple-400 to-indigo-500", iconColor: "text-violet-600 dark:text-violet-400" },
+                      { bg: "bg-gradient-to-br from-fuchsia-500/15 via-rose-500/5 to-fuchsia-500/10 dark:from-fuchsia-950/60 dark:to-pink-950/40 border-fuchsia-300/60 dark:border-fuchsia-500/35", line: "from-fuchsia-500 via-pink-400 to-rose-500", iconColor: "text-fuchsia-600 dark:text-fuchsia-400" },
+                      { bg: "bg-gradient-to-br from-orange-500/15 via-amber-500/5 to-orange-500/10 dark:from-orange-950/60 dark:to-yellow-950/40 border-orange-300/60 dark:border-orange-500/35", line: "from-orange-500 via-amber-400 to-yellow-500", iconColor: "text-orange-600 dark:text-orange-400" },
+                      { bg: "bg-gradient-to-br from-sky-500/15 via-indigo-500/5 to-sky-500/10 dark:from-sky-950/60 dark:to-blue-950/40 border-sky-300/60 dark:border-sky-500/35", line: "from-sky-400 via-blue-400 to-indigo-500", iconColor: "text-sky-600 dark:text-sky-400" },
                     ];
-                    const activePath = linePaths[index % linePaths.length];
-
-                    // 12 unique icon movement classes to make each icon animate uniquely
-                    const iconAnimations = [
-                      "animate-[float_3s_infinite_ease-in-out]",
-                      "animate-[float_2.5s_infinite_ease-in-out_0.2s]",
-                      "hover:rotate-12 transition-transform duration-300",
-                      "animate-[float_4s_infinite_ease-in-out_0.4s]",
-                      "animate-[float_3s_infinite_ease-in-out_0.1s]",
-                      "hover:-translate-y-1 transition-transform duration-300",
-                      "animate-[float_2.5s_infinite_ease-in-out_0.3s]",
-                      "animate-[float_2.5s_infinite_ease-in-out_0.5s]",
-                      "hover:scale-110 transition-transform duration-300",
-                      "animate-[float_3.5s_infinite_ease-in-out_0.2s]",
-                      "animate-[float_3.5s_infinite_ease-in-out_0.6s]",
-                      "hover:rotate-6 transition-transform duration-300"
-                    ];
-                    const activeAnimation = iconAnimations[index % iconAnimations.length];
-
-                    // Unique stroke color matching gradient styles
-                    const getLineColor = (gradClass: string) => {
-                      if (gradClass.includes("blue") || gradClass.includes("cyan")) return "#3b82f6";
-                      if (gradClass.includes("purple") || gradClass.includes("violet")) return "#8b5cf6";
-                      if (gradClass.includes("emerald") || gradClass.includes("teal")) return "#10b981";
-                      if (gradClass.includes("orange") || gradClass.includes("amber") || gradClass.includes("rose")) return "#f97316";
-                      return "#6366f1";
-                    };
-                    const strokeColor = getLineColor(item.gradientClass);
+                    const activeTheme = cardThemes[idx % cardThemes.length];
 
                     return (
                       <MagneticBentoWrapper key={item.id} className="h-full w-full">
-                        <div 
+                        <motion.article
+                          layout
+                          variants={industrialSubSectionVariants}
                           onClick={() => handleCardClick(item)}
-                          className="w-full h-[180px] sm:h-[190px] [perspective:1000px] group cursor-pointer"
+                          onDoubleClick={(e) => {
+                            e.stopPropagation();
+                            try { playUiSound("click"); } catch {}
+                            setFlippedCards((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
+                          }}
+                          onMouseEnter={() => {
+                            try { playUiSound("hover"); } catch {}
+                          }}
+                          style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                          className={cn(
+                            "group cursor-pointer relative overflow-hidden p-4 sm:p-4.5 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[170px] w-full shadow-md hover:shadow-xl transition-all duration-300 border text-left",
+                            activeTheme.bg,
+                            "backdrop-blur-xl"
+                          )}
+                          title={isVi ? "Click để truy cập • Double-click để lật thẻ xem chi tiết" : "Click to enter • Double-click to flip card"}
                         >
-                          <div 
-                            className="relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
-                          >
-                            {/* FRONT SIDE */}
-                            <motion.article
-                              layout
-                              variants={industrialSubSectionVariants}
-                              style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                              className={cn(
-                                "absolute inset-0 [backface-visibility:hidden] p-4 sm:p-4.5 flex flex-col justify-between h-full w-full shadow-md border text-left bg-white/75 dark:bg-[#121218]/80 overflow-hidden",
-                                getGlassCardClass()
-                              )}
-                            >
-                              {/* Animated unique background line */}
-                              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 dark:opacity-30" viewBox="0 0 300 180" preserveAspectRatio="none">
-                                <path
-                                  d={activePath}
-                                  fill="none"
-                                  stroke={strokeColor}
-                                  strokeWidth="2"
-                                  strokeDasharray="8 4"
-                                  className="animate-[flowLine_4s_linear_infinite]"
-                                />
-                              </svg>
+                          {/* Moving Animated Glowing Accent Line */}
+                          <motion.div 
+                            animate={{ x: ["-100%", "100%"] }} 
+                            transition={{ duration: 2.8 + (idx % 3) * 0.4, repeat: Infinity, ease: "linear" }}
+                            className={cn("absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r z-20 pointer-events-none", activeTheme.line)}
+                          />
 
-                              <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
-                                {/* Dòng 1 : Tên hệ thống */}
-                                <div className="w-full text-left mb-1.5 flex items-center justify-between">
-                                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 tracking-wide leading-snug truncate font-play">
-                                    {isVi ? item.nameVi : item.nameEn}
+                          {isFlipped ? (
+                            /* Back Side of Card */
+                            <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full bg-slate-900/90 text-white p-2 rounded-xl border border-indigo-500/30">
+                              <div className="flex items-center justify-between pb-1 border-b border-white/10">
+                                <span className="text-[10px] font-bold text-amber-300 font-mono">
+                                  {isVi ? "MẶT SAU • MÔ TẢ CHI TIẾT" : "BACK SIDE • DESCRIPTION"}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setFlippedCards((prev) => ({ ...prev, [item.id]: false }));
+                                  }}
+                                  className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 hover:bg-white/20"
+                                >
+                                  {isVi ? "Xoay lại" : "Flip back"}
+                                </button>
+                              </div>
+                              <p className="text-[11px] text-slate-200 leading-snug my-1 font-play line-clamp-3">
+                                {isVi ? item.descVi : item.descEn}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCardClick(item);
+                                }}
+                                className="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md"
+                              >
+                                <span>{isVi ? "Vào Cổng Hệ Thống" : "Enter System Portal"}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ) : (
+                            /* Front Side of Card */
+                            <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
+                              {/* Dòng 1 : Header có animated unframed icon & tiêu đề */}
+                              <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <motion.div
+                                    animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 0.95, 1], y: [0, -3, 0] }}
+                                    transition={{ duration: 3.2 + (idx % 3) * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                                    className="shrink-0"
+                                  >
+                                    <IconComponent className={cn("w-4.5 h-4.5 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
+                                  </motion.div>
+                                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight leading-snug truncate font-play">
+                                    <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", item.gradientClass)}>
+                                      {isVi ? item.nameVi : item.nameEn}
+                                    </span>
                                   </p>
-                                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider font-mono">
-                                    {isVi ? "Xem thêm" : "SOP"}
-                                  </span>
-                                </div>
-
-                                {/* Dòng 2 : Bên trái chữ viết tắt, bên phải icon unframed & animated */}
-                                <div className="flex items-center justify-between gap-2 my-auto py-1">
-                                  <div>
-                                    <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
-                                      {item.code}
-                                    </h3>
-                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
-                                      {item.nameEn}
-                                    </p>
-                                  </div>
-
-                                  {/* UNFRAMED & ANIMATED ICON */}
-                                  <div className={cn("p-1 shrink-0 flex items-center justify-center", activeAnimation)}>
-                                    <IconComponent 
-                                      className="w-8 h-8 sm:w-9 sm:h-9 stroke-[2.2] drop-shadow-[0_2px_8px_rgba(59,130,246,0.3)]" 
-                                      style={{ color: strokeColor }}
-                                    />
-                                  </div>
-                                </div>
-
-                                {/* Dòng 3 : Indicator to flip */}
-                                <div className="w-full text-left pt-2 border-t border-slate-200/60 dark:border-slate-800/80 mt-2 flex items-center justify-between gap-2 text-slate-400 dark:text-slate-500 text-[10px]">
-                                  <span>{isVi ? "Rê chuột để lật thẻ" : "Hover to flip card"}</span>
-                                  <ArrowUpRight className="w-3.5 h-3.5" />
                                 </div>
                               </div>
-                            </motion.article>
 
-                            {/* BACK SIDE */}
-                            <div
-                              style={{ 
-                                borderRadius: "var(--theme-radius-card, 16px)",
-                                transform: "rotateY(180deg)" 
-                              }}
-                              className={cn(
-                                "absolute inset-0 [backface-visibility:hidden] p-4 sm:p-4.5 flex flex-col justify-between h-full w-full shadow-md border text-left bg-slate-50/95 dark:bg-[#181824]/95 overflow-hidden",
-                                getGlassCardClass()
-                              )}
-                            >
-                              <div className="flex-1 flex flex-col justify-between h-full w-full relative z-10">
-                                {/* Title on back */}
-                                <div className="w-full flex items-center gap-1.5 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80 shrink-0">
-                                  <IconComponent className="w-4 h-4 shrink-0 animate-pulse" style={{ color: strokeColor }} />
-                                  <span className="text-xs font-bold text-slate-900 dark:text-white font-play truncate">
-                                    {isVi ? item.nameVi : item.nameEn}
-                                  </span>
+                              {/* Dòng 2 : Tên & icon avatar tương tác */}
+                              <div className="flex items-center justify-between gap-2 my-auto py-1">
+                                <div>
+                                  <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
+                                    {item.code}
+                                  </h3>
+                                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
+                                    {item.nameEn}
+                                  </p>
                                 </div>
 
-                                {/* Business Description */}
-                                <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-normal leading-relaxed line-clamp-4 font-play my-2 text-left flex-1 flex items-center">
+                                <motion.div 
+                                  animate={{ y: [0, -4, 0], scale: [1, 1.08, 1] }}
+                                  transition={{ duration: 2.5 + (idx % 4) * 0.4, repeat: Infinity, ease: "easeInOut" }}
+                                  className="shrink-0 flex items-center justify-center transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300"
+                                >
+                                  <IconComponent className={cn("w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
+                                </motion.div>
+                              </div>
+
+                              {/* Dòng 3 : Mô tả nghiệp vụ tóm tắt */}
+                              <div className="w-full text-left pt-2 border-t border-slate-200/60 dark:border-slate-800/80 mt-2 flex items-center justify-between gap-2">
+                                <p className="text-[11px] text-slate-600 dark:text-slate-300 font-normal leading-relaxed line-clamp-2 font-play flex-1">
                                   {isVi ? item.descVi : item.descEn}
                                 </p>
+                                {item.url && (
+                                  <div className="shrink-0 text-indigo-500 dark:text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                                    <ArrowUpRight className="w-4 h-4" />
+                                  </div>
+                                )}
                               </div>
                             </div>
-                          </div>
-                        </div>
+                          )}
+                        </motion.article>
                       </MagneticBentoWrapper>
                     );
                   })}

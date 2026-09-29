@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, Rea
 import { SoundConfig, SoundPackType, AmbientSoundType } from "../types/sound";
 import { DEFAULT_SOUND_CONFIG } from "../data/soundData";
 import { audioEngine } from "../services/audioEngine";
+import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
 interface SoundContextType {
   soundConfig: SoundConfig;
@@ -34,6 +35,10 @@ export function SoundProvider({ children }: { children: ReactNode }) {
         if (saved) {
           return { ...DEFAULT_SOUND_CONFIG, ...JSON.parse(saved) };
         }
+        const prodDefaults = getSavedProductionDefaults();
+        if (prodDefaults?.sound) {
+          return { ...DEFAULT_SOUND_CONFIG, ...prodDefaults.sound };
+        }
       } catch (e) {
         console.warn("Could not parse saved sound config", e);
       }
@@ -51,6 +56,18 @@ export function SoundProvider({ children }: { children: ReactNode }) {
       console.warn("Could not save sound config to localStorage", e);
     }
   }, [soundConfig]);
+
+  // Synchronize when system defaults are updated
+  useEffect(() => {
+    const handleDefaultsUpdated = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.sound) {
+        setSoundConfig((prev) => ({ ...prev, ...detail.sound }));
+      }
+    };
+    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+  }, []);
 
   // Handle ambient sound changes
   useEffect(() => {

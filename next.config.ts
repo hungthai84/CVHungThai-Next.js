@@ -19,7 +19,9 @@ const nextConfig: any = {
     'ais-dev-p3fcqewq6orsf7mo7g35ip-414821367668.asia-southeast1.run.app',
     'ais-pre-p3fcqewq6orsf7mo7g35ip-414821367668.asia-southeast1.run.app',
     'ais-dev-ydssgl7762xdlufsdggais-498435453400.asia-southeast1.run.app',
-    'ais-pre-ydssgl7762xdlufsdggais-498435453400.asia-southeast1.run.app'
+    'ais-pre-ydssgl7762xdlufsdggais-498435453400.asia-southeast1.run.app',
+    'ais-dev-v73vwckxh2raav5vufofep-498435453400.asia-southeast1.run.app',
+    'ais-pre-v73vwckxh2raav5vufofep-498435453400.asia-southeast1.run.app'
   ],
 };
 

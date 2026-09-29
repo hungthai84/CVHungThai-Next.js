@@ -1,35 +1,30 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/footer";
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
+import { getSavedProductionDefaults } from "../services/systemSettingsService";
+
+export type FooterModalTab = "customization" | "colors" | "radius" | "cursor" | "sound" | "footer" | "typography";
 
 interface FooterContextType {
   footerConfig: FooterConfig;
-  setFooterConfig: React.Dispatch<React.SetStateAction<FooterConfig>>;
-  updateFooterConfig: (partial: Partial<FooterConfig>) => void;
-  resetFooterConfig: () => void;
-  togglePin: () => void;
   setPlacement: (placement: FooterPlacement) => void;
   setStyleVariant: (variant: FooterStyleVariant) => void;
-  toggleElementVisibility: (key: keyof Omit<FooterConfig, "placement" | "styleVariant" | "blurIntensity">) => void;
+  togglePin: () => void;
+  toggleElementVisibility: (key: keyof FooterConfig) => void;
+  updateFooterConfig: (partial: Partial<FooterConfig>) => void;
+  resetFooterConfig: () => void;
+  isFooterModalOpen: boolean;
+  setIsFooterModalOpen: (open: boolean) => void;
+  footerModalTab: FooterModalTab;
+  setFooterModalTab: (tab: FooterModalTab) => void;
+  openFooterModal: (tab?: FooterModalTab) => void;
   isFooterHovered: boolean;
   setIsFooterHovered: React.Dispatch<React.SetStateAction<boolean>>;
-  isFooterModalOpen: boolean;
-  setIsFooterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  openFooterModal: (tab?: string) => void;
-  footerRadiusTopLeft: number;
-  setFooterRadiusTopLeft: (val: number) => void;
-  footerRadiusTopRight: number;
-  setFooterRadiusTopRight: (val: number) => void;
-  fixedHeaderFooter: boolean;
-  setFixedHeaderFooter: (val: boolean) => void;
 }
 
 const FooterContext = createContext<FooterContextType | undefined>(undefined);
 
 const STORAGE_KEY = "thai_portfolio_footer_config";
-const RADIUS_TL_KEY = "thai_portfolio_footer_radius_tl";
-const RADIUS_TR_KEY = "thai_portfolio_footer_radius_tr";
-const FIXED_HF_KEY = "thai_portfolio_fixed_hf";
 
 export function FooterProvider({ children }: { children: ReactNode }) {
   const [footerConfig, setFooterConfig] = useState<FooterConfig>(() => {
@@ -39,6 +34,10 @@ export function FooterProvider({ children }: { children: ReactNode }) {
         if (saved) {
           return { ...DEFAULT_FOOTER_CONFIG, ...JSON.parse(saved) };
         }
+        const prodDefaults = getSavedProductionDefaults();
+        if (prodDefaults?.footer) {
+          return { ...DEFAULT_FOOTER_CONFIG, ...prodDefaults.footer };
+        }
       } catch (e) {
         console.warn("Could not parse saved footer config", e);
       }
@@ -46,53 +45,16 @@ export function FooterProvider({ children }: { children: ReactNode }) {
     return DEFAULT_FOOTER_CONFIG;
   });
 
-  const [isFooterHovered, setIsFooterHovered] = useState(false);
   const [isFooterModalOpen, setIsFooterModalOpen] = useState(false);
+  const [footerModalTab, setFooterModalTab] = useState<FooterModalTab>("customization");
+  const [isFooterHovered, setIsFooterHovered] = useState(false);
 
-  const [footerRadiusTopLeft, setFooterRadiusTopLeftState] = useState<number>(() => {
+  const openFooterModal = (tab: FooterModalTab = "footer") => {
+    setFooterModalTab(tab);
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(RADIUS_TL_KEY);
-      if (saved) return Number(saved);
+      window.dispatchEvent(new CustomEvent("app-navigate", { detail: "customization" }));
     }
-    return 14;
-  });
-
-  const [footerRadiusTopRight, setFooterRadiusTopRightState] = useState<number>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(RADIUS_TR_KEY);
-      if (saved) return Number(saved);
-    }
-    return 14;
-  });
-
-  const [fixedHeaderFooter, setFixedHeaderFooterState] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(FIXED_HF_KEY);
-      if (saved !== null) return saved === "true";
-    }
-    return true;
-  });
-
-  const setFooterRadiusTopLeft = useCallback((val: number) => {
-    setFooterRadiusTopLeftState(val);
-    try {
-      localStorage.setItem(RADIUS_TL_KEY, String(val));
-    } catch {}
-  }, []);
-
-  const setFooterRadiusTopRight = useCallback((val: number) => {
-    setFooterRadiusTopRightState(val);
-    try {
-      localStorage.setItem(RADIUS_TR_KEY, String(val));
-    } catch {}
-  }, []);
-
-  const setFixedHeaderFooter = useCallback((val: boolean) => {
-    setFixedHeaderFooterState(val);
-    try {
-      localStorage.setItem(FIXED_HF_KEY, String(val));
-    } catch {}
-  }, []);
+  };
 
   // Sync to localStorage
   useEffect(() => {
@@ -103,59 +65,59 @@ export function FooterProvider({ children }: { children: ReactNode }) {
     }
   }, [footerConfig]);
 
-  const updateFooterConfig = useCallback((partial: Partial<FooterConfig>) => {
-    setFooterConfig((prev) => ({ ...prev, ...partial }));
+  // Synchronize when system defaults are updated
+  useEffect(() => {
+    const handleDefaultsUpdated = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.footer) {
+        setFooterConfig((prev) => ({ ...prev, ...detail.footer }));
+      }
+    };
+    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
+    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
   }, []);
 
-  const resetFooterConfig = useCallback(() => {
-    setFooterConfig(DEFAULT_FOOTER_CONFIG);
-    setFooterRadiusTopLeft(14);
-    setFooterRadiusTopRight(14);
-    setFixedHeaderFooter(true);
-  }, [setFooterRadiusTopLeft, setFooterRadiusTopRight, setFixedHeaderFooter]);
-
-  const togglePin = useCallback(() => {
-    setFooterConfig((prev) => ({ ...prev, isPinned: !prev.isPinned }));
-  }, []);
-
-  const setPlacement = useCallback((placement: FooterPlacement) => {
+  const setPlacement = (placement: FooterPlacement) => {
     setFooterConfig((prev) => ({ ...prev, placement }));
-  }, []);
+  };
 
-  const setStyleVariant = useCallback((styleVariant: FooterStyleVariant) => {
+  const setStyleVariant = (styleVariant: FooterStyleVariant) => {
     setFooterConfig((prev) => ({ ...prev, styleVariant }));
-  }, []);
+  };
 
-  const toggleElementVisibility = useCallback((key: keyof Omit<FooterConfig, "placement" | "styleVariant" | "blurIntensity">) => {
+  const togglePin = () => {
+    setFooterConfig((prev) => ({ ...prev, isPinned: !prev.isPinned }));
+  };
+
+  const toggleElementVisibility = (key: keyof FooterConfig) => {
     setFooterConfig((prev) => ({ ...prev, [key]: !prev[key] }));
-  }, []);
+  };
 
-  const openFooterModal = useCallback((_tab?: string) => {
-    setIsFooterModalOpen(true);
-  }, []);
+  const updateFooterConfig = (partial: Partial<FooterConfig>) => {
+    setFooterConfig((prev) => ({ ...prev, ...partial }));
+  };
+
+  const resetFooterConfig = () => {
+    setFooterConfig(DEFAULT_FOOTER_CONFIG);
+  };
 
   return (
     <FooterContext.Provider
       value={{
         footerConfig,
-        setFooterConfig,
-        updateFooterConfig,
-        resetFooterConfig,
-        togglePin,
         setPlacement,
         setStyleVariant,
+        togglePin,
         toggleElementVisibility,
-        isFooterHovered,
-        setIsFooterHovered,
+        updateFooterConfig,
+        resetFooterConfig,
         isFooterModalOpen,
         setIsFooterModalOpen,
+        footerModalTab,
+        setFooterModalTab,
         openFooterModal,
-        footerRadiusTopLeft,
-        setFooterRadiusTopLeft,
-        footerRadiusTopRight,
-        setFooterRadiusTopRight,
-        fixedHeaderFooter,
-        setFixedHeaderFooter,
+        isFooterHovered,
+        setIsFooterHovered
       }}
     >
       {children}
@@ -163,10 +125,24 @@ export function FooterProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const fallbackFooterContext: FooterContextType = {
+  footerConfig: DEFAULT_FOOTER_CONFIG,
+  setPlacement: () => {},
+  setStyleVariant: () => {},
+  togglePin: () => {},
+  toggleElementVisibility: () => {},
+  updateFooterConfig: () => {},
+  resetFooterConfig: () => {},
+  isFooterModalOpen: false,
+  setIsFooterModalOpen: () => {},
+  footerModalTab: "footer",
+  setFooterModalTab: () => {},
+  openFooterModal: () => {},
+  isFooterHovered: false,
+  setIsFooterHovered: () => {},
+};
+
 export function useFooter() {
   const context = useContext(FooterContext);
-  if (!context) {
-    throw new Error("useFooter must be used within a FooterProvider");
-  }
-  return context;
+  return context || fallbackFooterContext;
 }

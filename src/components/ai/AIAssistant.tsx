@@ -206,9 +206,14 @@ export const AIAssistant: React.FC = () => {
 
   const handleClearChat = () => {
     handleStopSpeak();
+    setIsLoading(false);
     const fresh = createFreshChat();
     setMessages(fresh);
-    localStorage.removeItem('ai_chat_session');
+    try {
+      localStorage.removeItem('ai_chat_session');
+      localStorage.removeItem('ai_message_queue');
+      localStorage.removeItem('ai_queued_messages');
+    } catch (e) {}
     if (config.voiceEnabled && fresh[0]?.text) {
       setTimeout(() => {
         handleSpeakText(fresh[0].text, fresh[0].id);

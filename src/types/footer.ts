@@ -13,7 +13,6 @@ export interface FooterConfig {
   showWeather: boolean;
   showClock: boolean;
   showQuickNav: boolean;
-  showCursorControl: boolean;
   showSoundControl: boolean;
   showAIAssistant: boolean;
   showNextPageButton: boolean;

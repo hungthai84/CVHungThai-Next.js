@@ -79,6 +79,7 @@ export const DEFAULT_EDUCATION_CARDS: EducationCard[] = [
     id: 2,
     title: "Phân tích Dữ liệu Big Data",
     subtitle: "Phát triển chuyên môn",
+    major: "Phân tích Dữ liệu lớn & BI Dashboard",
     year: "Năm 2019",
     type: "tech",
     image: "https://i.ibb.co/tMsL6zYH/Ph-n-t-ch-d-li-u.png",

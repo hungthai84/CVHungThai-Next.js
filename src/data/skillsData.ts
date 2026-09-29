@@ -809,163 +809,259 @@ export interface SwotSkillItem {
   color?: string;
 }
 
-// 7.1. Thế mạnh (S) - Nền tảng vận hành & lãnh đạo
+// 7.1. Điểm Mạnh (Strengths) - Nền tảng vận hành & lãnh đạo
 export const STRENGTHS_DATA: SwotSkillItem[] = [
-  { id: "cx", labelVi: "Trải nghiệm khách hàng", labelEn: "Customer Experience (CX)", percent: 98, iconName: "Sparkles" },
-  { id: "crm", labelVi: "CRM Contact Center", labelEn: "CRM & Contact Center", percent: 96, iconName: "Database" },
-  { id: "perf", labelVi: "Quản trị Hiệu suất", labelEn: "Performance Management", percent: 96, iconName: "BarChart3" },
-  { id: "lead", labelVi: "Lãnh đạo & Đội ngũ", labelEn: "Leadership & Team Management", percent: 95, iconName: "Users" },
-  { id: "sop", labelVi: "SOP & Chuẩn hóa", labelEn: "SOP & Standardization", percent: 95, iconName: "Workflow" },
-  { id: "crisis", labelVi: "Xử lý Khủng hoảng", labelEn: "Crisis Management", percent: 94, iconName: "ShieldAlert" }
+  {
+    id: "cx-experience",
+    labelVi: "Trải nghiệm khách hàng",
+    labelEn: "Customer Experience (CX)",
+    percent: 98,
+    iconName: "Heart",
+    descVi: "Xây dựng và tối ưu hóa trải nghiệm khách hàng toàn diện",
+    descEn: "Building and optimizing comprehensive end-to-end customer experience"
+  },
+  {
+    id: "crm-contact-center",
+    labelVi: "CRM Contact Center",
+    labelEn: "CRM & Contact Center",
+    percent: 96,
+    iconName: "Headphones",
+    descVi: "Quản trị và vận hành hệ thống CRM & Contact Center đa kênh",
+    descEn: "Administration and operation of omnichannel CRM & Contact Center systems"
+  },
+  {
+    id: "performance-mgmt",
+    labelVi: "Quản trị Hiệu suất",
+    labelEn: "Performance Management",
+    percent: 96,
+    iconName: "BarChart3",
+    descVi: "Thiết lập và theo dõi bộ chỉ số KPI/SLA vận hành",
+    descEn: "Establishing and tracking operational KPI/SLA metrics framework"
+  },
+  {
+    id: "leadership-team",
+    labelVi: "Lãnh đạo & Đội ngũ",
+    labelEn: "Leadership & Team Development",
+    percent: 95,
+    iconName: "Users",
+    descVi: "Lãnh đạo, đào tạo và phát triển đội ngũ quy mô lớn",
+    descEn: "Leading, training, and developing large-scale teams"
+  },
+  {
+    id: "sop-standardization",
+    labelVi: "SOP & Chuẩn hóa",
+    labelEn: "SOP & Standardization",
+    percent: 95,
+    iconName: "Settings",
+    descVi: "Xây dựng quy trình vận hành tiêu chuẩn chuẩn hóa 100%",
+    descEn: "Building 100% standardized operating procedures (SOP)"
+  },
+  {
+    id: "crisis-management",
+    labelVi: "Xử lý Khủng hoảng",
+    labelEn: "Crisis Management",
+    percent: 94,
+    iconName: "ShieldAlert",
+    descVi: "Quản trị sự cố và xử lý khủng hoảng dịch vụ khẩn cấp",
+    descEn: "Incident governance and emergency service crisis resolution"
+  }
 ];
 
-// 7.2. Hoàn thiện (W) - Nâng cao năng lực quản trị
+// 7.2. Hoàn Thiện (Weaknesses / Refinement) - Nâng cao năng lực quản trị
 export const WEAKNESSES_DATA: SwotSkillItem[] = [
-  { id: "mindset", labelVi: "Tư duy dịch vụ", labelEn: "Service Mindset", percent: 92, iconName: "HeartHandshake" },
-  { id: "comm", labelVi: "Giao tiếp & Đàm phán", labelEn: "Communication & Negotiation", percent: 90, iconName: "Lightbulb" },
-  { id: "strat", labelVi: "Tư duy Chiến lược", labelEn: "Strategic Thinking", percent: 88, iconName: "Target" },
-  { id: "pm", labelVi: "Quản trị Dự án", labelEn: "Project Management", percent: 88, iconName: "Rocket" },
-  { id: "tech", labelVi: "Công nghệ Đổi mới", labelEn: "Innovative Technology", percent: 86, iconName: "Cpu" },
-  { id: "dev", labelVi: "Thiết kế & Lập trình", labelEn: "Design & Programming", percent: 78, iconName: "Monitor" }
+  {
+    id: "service-mindset",
+    labelVi: "Tư duy dịch vụ",
+    labelEn: "Service Mindset",
+    percent: 92,
+    iconName: "Heart",
+    descVi: "Định hướng triết lý phụng sự và văn hóa thấu cảm trong tổ chức",
+    descEn: "Fostering service philosophy and empathetic culture across organization"
+  },
+  {
+    id: "comm-negotiation",
+    labelVi: "Giao tiếp & Đàm phán",
+    labelEn: "Communication & Negotiation",
+    percent: 90,
+    iconName: "MessageSquare",
+    descVi: "Kỹ năng truyền thông, thuyết phục và đàm phán cấp cao",
+    descEn: "High-level communication, persuasion, and negotiation skills"
+  },
+  {
+    id: "strat-thinking",
+    labelVi: "Tư duy Chiến lược",
+    labelEn: "Strategic Thinking",
+    percent: 88,
+    iconName: "Lightbulb",
+    descVi: "Hoạch định tầm nhìn dài hạn và chuyển đổi chiến lược CX",
+    descEn: "Long-term vision planning and CX strategy transformation"
+  },
+  {
+    id: "agile-project-mgmt",
+    labelVi: "Quản trị Dự án",
+    labelEn: "Project Management",
+    percent: 88,
+    iconName: "Target",
+    descVi: "Điều hành các dự án cải tiến theo phương pháp Agile/Kanban",
+    descEn: "Executing process improvement projects via Agile/Kanban methodologies"
+  },
+  {
+    id: "innovative-tech",
+    labelVi: "Công nghệ Đổi mới",
+    labelEn: "Innovative Technology",
+    percent: 86,
+    iconName: "Zap",
+    descVi: "Nghiên cứu và thử nghiệm công nghệ nâng cao hiệu suất",
+    descEn: "Researching and testing performance-boosting technologies"
+  },
+  {
+    id: "design-coding",
+    labelVi: "Thiết kế & Lập trình",
+    labelEn: "Design & Engineering Skills",
+    percent: 78,
+    iconName: "Cpu",
+    descVi: "Tự phát triển kỹ năng kỹ thuật để làm chủ hệ thống số",
+    descEn: "Developing technical skills to master digital ecosystems"
+  }
 ];
 
-// 7.3. Cơ hội (O) - Công nghệ & chuyển đổi dịch vụ
+// 7.3. Cơ hội (Opportunities) - Công nghệ & chuyển đổi dịch vụ
 export const OPPORTUNITIES_DATA: SwotSkillItem[] = [
   {
-    id: "ai-auto",
+    id: "ai-auto-ops",
     labelVi: "AI & Tự động hóa",
     labelEn: "AI & Automation",
     percent: 94,
-    descVi: "Ứng dụng AI, Chatbot, RPA và Tự động hóa để tối ưu vận hành & nâng tầm trải nghiệm.",
-    descEn: "Implementing AI, Chatbots, RPA and automation tools to streamline workflows & CX.",
+    descVi: "Ứng dụng Generative AI và RPA tự động hóa thao tác",
+    descEn: "Applying Generative AI and RPA to automate manual workflows",
     iconName: "Bot",
     color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {
-    id: "kaizen",
+    id: "kaizen-improvement",
     labelVi: "Kaizen & Cải tiến",
     labelEn: "Kaizen & Continuous Improvement",
     percent: 94,
-    descVi: "Cải tiến liên tục quy trình, loại bỏ lãng phí và tối ưu điểm nghẽn vận hành.",
-    descEn: "Continuous process optimization and bottleneck elimination.",
-    iconName: "TrendingUp",
-    color: "bg-pink-50/80 dark:bg-pink-950/30 text-pink-700 dark:text-pink-300 border-pink-200/80 dark:border-pink-800/60"
+    descVi: "Tư duy cải tiến liên tục quy trình và loại bỏ lãng phí",
+    descEn: "Continuous process optimization mindset and waste elimination",
+    iconName: "Rocket",
+    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {
-    id: "cost-opt",
+    id: "cost-optimization-ops",
     labelVi: "Tối ưu Chi phí",
     labelEn: "Cost Optimization",
     percent: 93,
-    descVi: "Tối ưu hóa Cost-to-Serve, nâng cao hiệu quả hoạt động với nguồn lực hợp lý.",
-    descEn: "Optimizing Cost-to-Serve while elevating service quality.",
-    iconName: "Coins",
-    color: "bg-amber-50/80 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60"
+    descVi: "Tối ưu hóa Cost-to-Serve nhưng vẫn giữ vững chất lượng CSAT",
+    descEn: "Optimizing Cost-to-Serve while maintaining peak CSAT scores",
+    iconName: "BarChart3",
+    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {
-    id: "digital-trans",
+    id: "digital-trans-cs",
     labelVi: "Chuyển đổi Số",
     labelEn: "Digital Transformation",
     percent: 92,
-    descVi: "Thúc đẩy chuyển đổi số, Omnichannel CRM và hệ sinh thái dịch vụ số.",
-    descEn: "Driving digital transformation, Omnichannel CRM, and digital service ecosystems.",
+    descVi: "Số hóa toàn diện kênh tương tác và luồng công việc CSKH",
+    descEn: "Holistic digitalization of customer touchpoints and workflows",
     iconName: "Monitor",
-    color: "bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800/60"
+    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {
-    id: "data-gov",
+    id: "data-gov-voc",
     labelVi: "Quản trị Dữ liệu",
-    labelEn: "Data Governance & BI",
+    labelEn: "Data Governance & VoC",
     percent: 91,
-    descVi: "Khai thác dữ liệu, đo lường Realtime Dashboard & cá nhân hóa trải nghiệm.",
-    descEn: "Leveraging operational data and real-time dashboards for touchpoint personalization.",
+    descVi: "Khai thác dữ liệu hành vi và phân tích cảm xúc khách hàng VoC",
+    descEn: "Leveraging behavioral data and VoC customer sentiment insights",
     iconName: "Database",
-    color: "bg-cyan-50/80 dark:bg-cyan-950/30 text-cyan-700 dark:text-cyan-300 border-cyan-200/80 dark:border-cyan-800/60"
+    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {
-    id: "system-arch",
+    id: "system-architecture",
     labelVi: "Thiết kế Hệ thống",
-    labelEn: "System Architecture Design",
+    labelEn: "System Architecture",
     percent: 87,
-    descVi: "Tư vấn và kiến tạo hệ thống Contact Center & CSKH toàn diện.",
-    descEn: "Consulting and building holistic Contact Center & CX architectures.",
+    descVi: "Kiến trúc hạ tầng Contact Center linh hoạt và mở rộng dễ dàng",
+    descEn: "Architecting flexible, scalable Contact Center infrastructure",
     iconName: "Workflow",
-    color: "bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60"
+    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   }
 ];
 
-// 7.4. Thách thức (T) - Thích ứng & quản trị biến động
+// 7.4. Thách thức (Threats) - Thích ứng & quản trị biến động
 export const THREATS_DATA: SwotSkillItem[] = [
   {
-    id: "cost-pressures",
+    id: "cost-pressure-threat",
     labelVi: "Tối ưu Chi phí",
-    labelEn: "Cost Optimization Pressures",
+    labelEn: "Cost Optimization Pressure",
     percent: 94,
     impactLabelVi: "Mức độ tác động",
     impactLabelEn: "Impact Level",
-    descVi: "Yêu cầu hiệu quả vận hành cao hơn với chi phí tối ưu trong nền kinh tế biến động.",
-    descEn: "Higher efficiency requirements under tight operating budgets.",
-    iconName: "Coins",
-    color: "bg-amber-50/80 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60"
+    descVi: "Áp lực giảm chi phí vận hành nhưng phải duy trì hiệu năng cao",
+    descEn: "Pressure to reduce operational expenditure while sustaining peak output",
+    iconName: "Globe",
+    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
   },
   {
-    id: "ai-transformation",
+    id: "ai-cs-disruption",
     labelVi: "AI & Thay đổi CSKH",
-    labelEn: "AI & CSKH Transformation",
+    labelEn: "AI & CS Disruption",
     percent: 92,
     impactLabelVi: "Mức độ tác động",
     impactLabelEn: "Impact Level",
-    descVi: "AI & Automation thay thế tác vụ lặp lại, đòi hỏi liên tục nâng cấp năng lực.",
-    descEn: "AI automation shifting customer care roles towards higher level empathy.",
-    iconName: "Bot",
-    color: "bg-red-50/80 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-200/80 dark:border-red-800/60"
-  },
-  {
-    id: "tech-disruption",
-    labelVi: "Công nghệ Đổi mới",
-    labelEn: "Rapid Tech Disruption",
-    percent: 90,
-    impactLabelVi: "Mức độ tác động",
-    impactLabelEn: "Impact Level",
-    descVi: "Công nghệ thay đổi nhanh chóng, đòi hỏi khả năng học hỏi và thích ứng liên tục.",
-    descEn: "Fast evolving tech landscape requiring rapid continuous adaptation.",
+    descVi: "Tốc độ chuyển đổi AI nhanh đòi hỏi tái đào tạo nhân sự kịp thời",
+    descEn: "Rapid AI transformation velocity requiring timely workforce reskilling",
     iconName: "Cpu",
     color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
   },
   {
-    id: "risk-governance",
-    labelVi: "Quản trị Rủi ro",
-    labelEn: "Risk Management & Compliance",
+    id: "rapid-tech-innovation",
+    labelVi: "Công nghệ Đổi mới",
+    labelEn: "Rapid Tech Innovation",
     percent: 90,
     impactLabelVi: "Mức độ tác động",
     impactLabelEn: "Impact Level",
-    descVi: "Nhận diện, phòng ngừa và kiểm soát rủi ro vận hành & bảo mật dữ liệu.",
-    descEn: "Proactive risk identification, operational controls, and data security.",
-    iconName: "ShieldAlert",
-    color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
+    descVi: "Sự xuất hiện liên tục của các công cụ số mới trên thị trường",
+    descEn: "Continuous emergence of new digital platforms and tools in the market",
+    iconName: "TrendingUp",
+    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
   },
   {
-    id: "talent-retention",
+    id: "risk-management",
+    labelVi: "Quản trị Rủi ro",
+    labelEn: "Risk Management",
+    percent: 90,
+    impactLabelVi: "Mức độ tác động",
+    impactLabelEn: "Impact Level",
+    descVi: "Rủi ro biến động nhân sự, an toàn thông tin và khủng hoảng CSKH",
+    descEn: "Turnover risks, data security compliance, and CS service crisis",
+    iconName: "ShieldAlert",
+    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
+  },
+  {
+    id: "talent-retention-cs",
     labelVi: "Cạnh tranh Nhân sự",
     labelEn: "Talent Competition & Retention",
     percent: 88,
     impactLabelVi: "Mức độ tác động",
     impactLabelEn: "Impact Level",
-    descVi: "Áp lực giữ chân và phát triển nhân tài có tư duy dịch vụ & công nghệ.",
-    descEn: "Competitive market demand for skilled service & tech talent.",
+    descVi: "Tỷ lệ xoay dòng nhân sự ngành CSKH cao, đòi hỏi chính sách giữ chân tốt",
+    descEn: "High industry attrition rates requiring robust retention strategies",
     iconName: "Users",
-    color: "bg-orange-50/80 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300 border-orange-200/80 dark:border-orange-800/60"
+    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
   },
   {
-    id: "cross-collab",
+    id: "cross-department-alignment",
     labelVi: "Phối hợp Liên phòng",
-    labelEn: "Cross-Functional Collaboration",
+    labelEn: "Cross-department Synergy",
     percent: 86,
     impactLabelVi: "Mức độ tác động",
     impactLabelEn: "Impact Level",
-    descVi: "Xóa bỏ rào cản phòng ban, xây dựng Vòng lặp phản hồi (Closed-Loop VoC).",
-    descEn: "Breaking department silos and embedding Closed-Loop VoC feedback loops.",
-    iconName: "HeartHandshake",
-    color: "bg-blue-50/80 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-800/60"
+    descVi: "Xung đột điểm nghẽn quy trình giữa CSKH, Sản phẩm và Kinh doanh",
+    descEn: "Process friction points between Customer Service, Product, and Sales",
+    iconName: "Workflow",
+    color: "bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60"
   }
 ];
 
@@ -992,7 +1088,7 @@ export const LANGUAGES_DATA: LanguageItem[] = [
     roleEn: "Native language",
     levelVi: "Thành thạo chuyên sâu",
     levelEn: "Native / Expert fluency",
-    color: "text-blue-500 dark:text-cyan-400"
+    color: "text-rose-500"
   },
   {
     id: "english",
@@ -1003,18 +1099,18 @@ export const LANGUAGES_DATA: LanguageItem[] = [
     roleEn: "Professional communication",
     levelVi: "Làm việc môi trường quốc tế",
     levelEn: "Working in global environments",
-    color: "text-purple-500"
+    color: "text-blue-600"
   },
   {
     id: "ai-multilingual",
     nameVi: "Ứng dụng AI",
-    nameEn: "AI application",
+    nameEn: "AI Application",
     percent: 85,
     roleVi: "Hỗ trợ trao đổi & hợp tác đa quốc gia",
     roleEn: "Assisting multi-national collaboration",
     levelVi: "Dịch thuật & Trợ lý thời gian thực",
     levelEn: "Real-time translation & AI assistant",
-    color: "text-emerald-500"
+    color: "text-emerald-600"
   }
 ];
 

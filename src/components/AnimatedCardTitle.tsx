@@ -7,8 +7,7 @@ export type ColorPresetType = "emerald" | "indigo" | "purple" | "cyan" | "orange
 
 export interface AnimatedCardTitleProps {
   icon: LucideIcon;
-  title: string;
-  subtitle?: string;
+  title: React.ReactNode;
   colorPreset?: ColorPresetType;
   indexForAutoColor?: number;
   actionRight?: React.ReactNode;
@@ -85,7 +84,6 @@ const COLOR_PRESETS = [
 export function AnimatedCardTitle({
   icon: IconComponent,
   title,
-  subtitle,
   colorPreset = "auto",
   indexForAutoColor = 0,
   actionRight,
@@ -97,7 +95,7 @@ export function AnimatedCardTitle({
       if (match) return match;
     }
     // Pick based on string hash or index
-    const seed = indexForAutoColor + title.length;
+    const seed = indexForAutoColor + (typeof title === "string" ? title.length : 12);
     return COLOR_PRESETS[seed % COLOR_PRESETS.length];
   }, [colorPreset, indexForAutoColor, title]);
 
@@ -129,11 +127,6 @@ export function AnimatedCardTitle({
             <h3 className={cn("text-h6 font-bold tracking-tight font-play truncate", selectedTheme.titleColor)}>
               {title}
             </h3>
-            {subtitle && (
-              <span className="text-3xs sm:text-2xs font-semibold text-slate-500 dark:text-slate-400 truncate">
-                {subtitle}
-              </span>
-            )}
           </div>
         </div>
 

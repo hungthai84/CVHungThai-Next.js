@@ -12,7 +12,8 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
-import { cn } from "../lib/utils";
+import { useTheme } from "../context/ThemeContext";
+import { cn, getGlassCardClass, getUnifiedSurfaceStyle } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
 import { PROJECTS_LIST, ProjectCard } from "../data/projectsData";
@@ -34,6 +35,7 @@ const projectCardRevealVariants: any = {
 };
 
 import { ProjectArticle } from "./ProjectArticle";
+import { LazyImage } from "./LazyImage";
 
 /**
  * Keyframers 3D Tilt Card Component with Interactive Dynamic Specular Reflection
@@ -292,6 +294,7 @@ const PRESET_15_COLORS = [
 
 export default function Projects() {
   const { lang } = useLanguage();
+  const { theme: currentTheme } = useTheme();
   const isVi = lang === "vi";
 
   const [selectedCardId, setSelectedCardId] = useState<string | null>(() => {
@@ -356,9 +359,9 @@ export default function Projects() {
   const [selectedPhase, setSelectedPhase] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("projects_selected_phase");
-      if (saved) return saved;
+      if (saved && saved !== "all") return saved;
     }
-    return "all";
+    return "Giai đoạn 1";
   });
 
   useEffect(() => {
@@ -384,7 +387,7 @@ export default function Projects() {
   }, []);
 
   const phaseCounts = useMemo(() => {
-    const map: Record<string, number> = { all: PROJECTS_LIST.length };
+    const map: Record<string, number> = {};
     PROJECTS_LIST.forEach((card) => {
       map[card.phase] = (map[card.phase] || 0) + 1;
     });
@@ -392,19 +395,19 @@ export default function Projects() {
   }, []);
 
   const PHASE_FILTERS = useMemo(() => [
-    { id: "all", labelVi: "Tất cả dự án", labelEn: "All Projects", shortVi: "Tất cả", count: phaseCounts.all || 0 },
     { id: "Giai đoạn 1", labelVi: "GĐ 1 · Xây dựng & Vận hành CSKH", labelEn: "Phase 1 · Setup & Operations", shortVi: "Giai đoạn 1", count: phaseCounts["Giai đoạn 1"] || 0 },
     { id: "Giai đoạn 2", labelVi: "GĐ 2 · Chuẩn hóa & Tối ưu kênh", labelEn: "Phase 2 · Standardization", shortVi: "Giai đoạn 2", count: phaseCounts["Giai đoạn 2"] || 0 },
     { id: "Giai đoạn 3", labelVi: "GĐ 3 · Quản trị, Dữ liệu & AI", labelEn: "Phase 3 · Governance & AI", shortVi: "Giai đoạn 3", count: phaseCounts["Giai đoạn 3"] || 0 },
     { id: "Xuyên suốt", labelVi: "Xuyên suốt · Đào tạo & Văn hóa", labelEn: "Continuous · Training", shortVi: "Xuyên suốt", count: phaseCounts["Xuyên suốt"] || 0 },
   ], [phaseCounts]);
 
+  const selectedPhaseObj = useMemo(() => {
+    return PHASE_FILTERS.find((f) => f.id === selectedPhase) || PHASE_FILTERS[0];
+  }, [selectedPhase, PHASE_FILTERS]);
+
   const filteredProjects = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return PROJECTS_LIST.filter((card) => {
-      if (selectedPhase !== "all" && card.phase !== selectedPhase) {
-        return false;
-      }
       if (!q) return true;
       const matchTitle = card.branchTitle.toLowerCase().includes(q);
       const matchDesc = card.description.toLowerCase().includes(q);
@@ -412,7 +415,7 @@ export default function Projects() {
       const matchTags = card.tags?.some((t) => t.toLowerCase().includes(q));
       return matchTitle || matchDesc || matchGroup || matchTags;
     });
-  }, [selectedPhase, searchQuery]);
+  }, [searchQuery]);
 
   const handleCardClick = (card: ProjectCard) => {
     playUiSound("click");
@@ -426,27 +429,30 @@ export default function Projects() {
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[var(--grid-margin,15px)] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
       style={{ '--grid-margin': '15px', '--grid-gutter': '16px' } as React.CSSProperties}
     >
-      {/* Scoped CSS to format project card background exactly like Education cards */}
+      {/* Scoped CSS to format project card background for Glass Light & Dark according to active theme */}
       <style dangerouslySetInnerHTML={{
         __html: `
         .project-edu-glass-card,
         .project-card {
           height: auto !important;
-          background: rgba(255, 255, 255, 0.78) !important;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
-          backdrop-filter: blur(24px) saturate(140%) !important;
-          -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
-          border: 1px solid rgba(255, 255, 255, 0.85) !important;
+          background: rgba(255, 255, 255, 0.76) !important;
+          box-shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+          backdrop-filter: blur(20px) saturate(160%) !important;
+          -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.8) !important;
           border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
         .dark .project-edu-glass-card,
-        .dark .project-card {
+        .dark .project-card,
+        [data-theme="glass-dark-neon"] .project-card {
           height: auto !important;
-          background: rgba(15, 23, 42, 0.82) !important;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.2) !important;
-          border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          background: rgba(18, 18, 24, 0.65) !important;
+          box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1.5px rgba(255, 255, 255, 0.15) !important;
+          border: 1px solid rgba(255, 255, 255, 0.14) !important;
+          backdrop-filter: blur(20px) saturate(180%) !important;
+          -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
           border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
         }
         `
@@ -457,30 +463,6 @@ export default function Projects() {
         {/* Header Card Dự án */}
         <PageCardHeader 
           pageId="projects"
-          actionRight={
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Ô tìm kiếm nhanh */}
-              <div className="relative flex items-center">
-                <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={isVi ? "Tìm kiếm..." : "Search..."}
-                  className="pl-8 pr-3 py-1 text-xs rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/80 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 w-32 sm:w-40 transition-all shadow-2xs"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-            </div>
-          }
         >
           {/* Left Side: Editorial subtitle */}
           <div className="flex items-center gap-2 shrink-0">
@@ -489,38 +471,6 @@ export default function Projects() {
               {isVi ? "Dự án & Sáng kiến" : "Featured Projects & Solutions"}
             </span>
           </div>
-
-          {!activeCard && (
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
-              {PHASE_FILTERS.map((f) => {
-                const isActive = selectedPhase === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => {
-                      playUiSound("toggle");
-                      setSelectedPhase(f.id);
-                    }}
-                    className={cn(
-                      "px-3 py-1 rounded-xl text-caption font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs flex items-center gap-1.5",
-                      isActive
-                        ? "bg-blue-600 text-white border-blue-500 shadow-xs font-bold"
-                        : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
-                    )}
-                  >
-                    <span>{isVi ? f.labelVi : f.labelEn}</span>
-                    <span className={cn(
-                      "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
-                      isActive ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
-                    )}>
-                      {f.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
         </PageCardHeader>
 
         {activeCard ? (
@@ -554,11 +504,11 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={() => {
-                    setSelectedPhase("all");
+                    setSelectedPhase("Giai đoạn 1");
                   }}
                   className="px-4 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-full border border-blue-200 dark:border-blue-800/60 transition-all cursor-pointer"
                 >
-                  {isVi ? "Xem tất cả giai đoạn" : "Show all phases"}
+                  {isVi ? "Xem giai đoạn 1" : "Show phase 1"}
                 </button>
               </div>
             ) : (
@@ -609,17 +559,11 @@ export default function Projects() {
                               "project-card-media relative w-full aspect-[16/9] overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
                             )} style={{ height: "200px", borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
-                              <img
+                              <LazyImage
                                 src={card.image}
                                 alt={card.branchTitle}
                                 className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                                style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
-                                loading="lazy"
-                                decoding="async"
-                                referrerPolicy="no-referrer"
-                                onError={(e) => {
-                                  (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop";
-                                }}
+                                fallbackSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 

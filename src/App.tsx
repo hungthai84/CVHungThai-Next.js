@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "./lib/utils";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
 import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
-import Footer from "./components/Footer";
 import About from "./components/About";
 import Domains from "./components/Domains";
 import Education from "./components/Education";
@@ -27,6 +27,16 @@ import Systems from "./components/Systems";
 import Customization from "./components/Customization";
 import TemplatePage from "./components/TemplatePage";
 import Letter from "./components/Letter";
+import XRayInspector from "./components/XRayInspector";
+import AIAssistant from "./components/ai/AIAssistant";
+import ColorSystemModal from "./components/ColorSystemModal";
+import CursorSettingsModal from "./components/CursorSettingsModal";
+import SoundSettingsModal from "./components/SoundSettingsModal";
+import FooterSettingsModal from "./components/FooterSettingsModal";
+import TypographySettings from "./components/TypographySettings";
+import ExecutiveResumeExportModal from "./components/ExecutiveResumeExportModal";
+import LeftSidebar from "./components/LeftSidebar";
+import RightSidebar from "./components/RightSidebar";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -34,14 +44,16 @@ import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { CursorProvider } from "./context/CursorContext";
 import { SoundProvider, useSound } from "./context/SoundContext";
+import { playUiSound } from "./lib/sound";
 import { FooterProvider, useFooter } from "./context/FooterContext";
+import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
   Monitor, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
   Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
-  LayoutTemplate, Sliders
+  LayoutTemplate, Sliders, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 // Helper function to dynamically import modules with automatic retry on chunk load errors
@@ -76,15 +88,7 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
 // Lazy load non-hero sections for dynamic code splitting & reduced initial bundle
 // Statically imported section components above
 
-// Lazy load heavy overlays & settings modals
-const XRayInspector = lazyWithRetry(() => import("./components/XRayInspector"));
-const AIAssistant = lazyWithRetry(() => import("./components/ai/AIAssistant"));
-const ColorSystemModal = lazyWithRetry(() => import("./components/ColorSystemModal"));
-const CursorSettingsModal = lazyWithRetry(() => import("./components/CursorSettingsModal"));
-const SoundSettingsModal = lazyWithRetry(() => import("./components/SoundSettingsModal"));
-const FooterSettingsModal = lazyWithRetry(() => import("./components/FooterSettingsModal"));
-const TypographySettings = lazyWithRetry(() => import("./components/TypographySettings"));
-const ExecutiveResumeExportModal = lazyWithRetry(() => import("./components/ExecutiveResumeExportModal"));
+// Statically imported overlays & settings modals above
 
 // Memoize Hero component
 const MemoHero = memo(Hero);
@@ -112,6 +116,10 @@ function MainContent() {
   const { theme, setTheme } = useTheme();
   const { t, lang } = useLanguage();
   const { isSwitching } = useLayout();
+  const { footerConfig, isFooterHovered } = useFooter();
+  const { isHeaderPinned, isHeaderSlidUp } = useHeader();
+  const isFooterPinned = footerConfig.isPinned !== false;
+  const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
   const [activeSection, setActiveSection] = useState(() => {
     if (typeof window !== "undefined") {
@@ -124,6 +132,8 @@ function MainContent() {
     }
     return "home";
   });
+
+  const hasSlides = activeSection === "home" || activeSection === "about";
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
 
@@ -152,11 +162,25 @@ function MainContent() {
 
   // States for Proactive Feature Modals
   const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpenLeft = () => setIsLeftSidebarOpen(true);
+    const handleOpenRight = () => setIsRightSidebarOpen(true);
+    window.addEventListener("open-left-sidebar", handleOpenLeft);
+    window.addEventListener("open-right-sidebar", handleOpenRight);
+    return () => {
+      window.removeEventListener("open-left-sidebar", handleOpenLeft);
+      window.removeEventListener("open-right-sidebar", handleOpenRight);
+    };
+  }, []);
 
   const { playTransition } = useSound();
 
   // State for Keyboard Shortcut Toast notification
   const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
+  const [clickedRippleSec, setClickedRippleSec] = useState<string | null>(null);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
@@ -214,6 +238,15 @@ function MainContent() {
     if (targetSection && cleanId !== activeSection) {
       playTransition();
       setActiveSection(cleanId);
+      if (cardContainerRef.current) {
+        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      setTimeout(() => {
+        const activeEl = document.getElementById(cleanId);
+        if (activeEl) {
+          activeEl.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 50);
     }
   };
 
@@ -225,6 +258,24 @@ function MainContent() {
       navigateToSection(SECTIONS[0].id);
     }
     setShowScrollReminder(false);
+  };
+
+  const handlePrevSection = () => {
+    const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
+    if (currentIndex > 0) {
+      navigateToSection(SECTIONS[currentIndex - 1].id);
+    } else {
+      navigateToSection(SECTIONS[SECTIONS.length - 1].id);
+    }
+  };
+
+  const handleNextSection = () => {
+    const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
+    if (currentIndex < SECTIONS.length - 1) {
+      navigateToSection(SECTIONS[currentIndex + 1].id);
+    } else {
+      navigateToSection(SECTIONS[0].id);
+    }
   };
 
   // Listen for custom app-navigate & feature modal events
@@ -420,21 +471,30 @@ function MainContent() {
           onNavigate={navigateToSection}
         />
 
-        {/* Center Main Container Wrapper */}
+        {/* Center Main Container Wrapper (Cách Header đúng 10px, cách Footer đúng 10px khi ghim hoặc trượt) */}
         <div 
-          className="mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] mt-[70px] sm:mt-[74px] mb-[16px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className={cn(
+            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isHeaderSlidUp ? "mt-[24px]" : "mt-[70px] sm:mt-[74px]",
+            isFooterSlidDown ? "mb-[24px]" : "mb-[70px] sm:mb-[74px]"
+          )}
         >
-          {/* Glass Container with Fluid Responsive Height */}
+          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 10px) */}
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 hover:-translate-y-0.5",
-              "h-[calc(100vh-90px)] sm:h-[calc(100vh-94px)]",
+              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
+              isHeaderSlidUp && isFooterSlidDown
+                ? "h-[calc(100vh-48px)]"
+                : isHeaderSlidUp || isFooterSlidDown
+                ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
+                : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
               getMainCardStyle(),
               isSwitching ? "opacity-80" : "opacity-100"
             )}
             style={{
               borderRadius: "var(--theme-radius-card, 10px)",
+              boxShadow: "none"
             }}
           >
             <main className="relative w-full h-full overflow-hidden flex-grow">
@@ -475,12 +535,35 @@ function MainContent() {
               </AnimatePresence>
             </main>
           </div>
+
         </div>
 
-        {/* Recreated Modern Glass Footer */}
+        {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
         <Footer 
+          theme={theme}
           activeSection={activeSection}
           onNavigate={navigateToSection}
+        />
+
+        {/* Left and Right Sidebars */}
+        <LeftSidebar
+          isOpen={isLeftSidebarOpen}
+          onClose={() => setIsLeftSidebarOpen(false)}
+          activeSection={activeSection}
+          onNavigate={navigateToSection}
+          onPrev={handlePrevSection}
+          onNext={handleNextSection}
+          isHeaderSlidUp={isHeaderSlidUp}
+          isFooterSlidDown={isFooterSlidDown}
+        />
+        <RightSidebar
+          isOpen={isRightSidebarOpen}
+          onClose={() => setIsRightSidebarOpen(false)}
+          onNavigate={navigateToSection}
+          onPrev={handlePrevSection}
+          onNext={handleNextSection}
+          isHeaderSlidUp={isHeaderSlidUp}
+          isFooterSlidDown={isFooterSlidDown}
         />
 
         {/* Lazy Loaded Heavy Overlays & Modals */}
@@ -532,7 +615,12 @@ function MainContent() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.9 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="fixed left-1/2 -translate-x-1/2 bottom-6 sm:bottom-8 z-[45] pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className={cn(
+                "fixed left-1/2 -translate-x-1/2 z-[45] pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                isFooterSlidDown 
+                  ? "bottom-[34px] sm:bottom-[38px] md:bottom-[42px]" 
+                  : "bottom-[74px] sm:bottom-[80px] md:bottom-[84px]"
+              )}
             >
               <div className="relative inline-flex items-center rounded-full p-[1.5px] overflow-hidden select-none group/scrollrem transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_8px_25px_rgba(99,102,241,0.55)]">
                 {/* Rotating border aura */}
@@ -555,8 +643,8 @@ function MainContent() {
           )}
         </AnimatePresence>
 
-        {/* Futuristic Custom Cursor */}
-        <CustomCursor />
+        {/* Futuristic Custom Cursor is disabled/removed as requested */}
+        {/* <CustomCursor /> */}
 
         {/* Global Smooth Theme Snapshot Dissolve Overlay */}
         <ThemeTransitionOverlay />
@@ -575,7 +663,9 @@ export default function App() {
               <CursorProvider>
                 <SoundProvider>
                   <FooterProvider>
-                    <MainContent />
+                    <HeaderProvider>
+                      <MainContent />
+                    </HeaderProvider>
                   </FooterProvider>
                 </SoundProvider>
               </CursorProvider>

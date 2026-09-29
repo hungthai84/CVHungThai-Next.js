@@ -7,12 +7,9 @@ interface LayoutContextType {
   toggleOrientation: () => void;
   setOrientation: (orientation: LayoutOrientation) => void;
   isSwitching: boolean;
-  fixedHeaderFooter: boolean;
-  setFixedHeaderFooter: (fixed: boolean) => void;
 }
 
 const STORAGE_KEY = "portfolio_layout_orientation_pref";
-const STICKY_STORAGE_KEY = "portfolio_layout_fixed_header_footer";
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
@@ -31,18 +28,6 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return "vertical";
   });
 
-  const [fixedHeaderFooter, setFixedHeaderFooterState] = useState<boolean>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const saved = localStorage.getItem(STICKY_STORAGE_KEY);
-        if (saved === "false") {
-          return false;
-        }
-      }
-    } catch {}
-    return true; // Default is true (Cố định)
-  });
-
   const [isSwitching, setIsSwitching] = useState(false);
 
   useEffect(() => {
@@ -52,17 +37,6 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       console.error("Failed to save layout preference", e);
     }
   }, [orientation]);
-
-  const setFixedHeaderFooter = (fixed: boolean) => {
-    setIsSwitching(true);
-    setFixedHeaderFooterState(fixed);
-    try {
-      localStorage.setItem(STICKY_STORAGE_KEY, fixed ? "true" : "false");
-    } catch {}
-    setTimeout(() => {
-      setIsSwitching(false);
-    }, 400);
-  };
 
   const toggleOrientation = () => {
     setIsSwitching(true);
@@ -87,8 +61,6 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         toggleOrientation,
         setOrientation,
         isSwitching,
-        fixedHeaderFooter,
-        setFixedHeaderFooter,
       }}
     >
       {children}
@@ -101,8 +73,6 @@ const fallbackLayoutContext: LayoutContextType = {
   toggleOrientation: () => {},
   setOrientation: () => {},
   isSwitching: false,
-  fixedHeaderFooter: true,
-  setFixedHeaderFooter: () => {},
 };
 
 export const useLayout = (): LayoutContextType => {
