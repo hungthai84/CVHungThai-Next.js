@@ -5,7 +5,7 @@ import {
   CloudSun, Clock, Volume2, VolumeX, Bot, ChevronDown,
   Sparkles, Play, CloudRain, Wind, Radio,
   Palette, Globe, Sun, Moon, Type, Images, Rocket, Layers, Minus, Plus, Box,
-  Square, CheckCircle2, AlignLeft, ShieldCheck, Sparkle, SlidersHorizontal, Monitor,
+  Square, CheckCircle2, AlignLeft, ShieldCheck, Sparkle, SlidersHorizontal,
   MousePointer, CircleDot, Flame, Crosshair
 } from "lucide-react";
 import { useFooter, FooterModalTab } from "../context/FooterContext";
@@ -939,7 +939,7 @@ export default function FooterSettingsModal() {
                         nameEn: "System Auto",
                         descVi: "Tự động đồng bộ theo cấu hình máy (OS)",
                         descEn: "Sync with OS prefers-color-scheme",
-                        Icon: Monitor,
+                        Icon: Sparkles,
                       },
                     ].map((th) => {
                       const isSelected = themeMode === th.mode;

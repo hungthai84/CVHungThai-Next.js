@@ -15,8 +15,7 @@ import {
   Building2,
   Layers,
   Award,
-  RotateCcw,
-  ListVideo
+  RotateCcw
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
@@ -31,6 +30,19 @@ import {
 } from "../data/interviewQuestions";
 import { SparkleWithPlusDot } from "./HeroIntroButton";
 
+export interface PersonaDef {
+  id: string;
+  titleVi: string;
+  titleEn: string;
+  roleVi: string;
+  roleEn: string;
+  badgeVi: string;
+  badgeEn: string;
+  icon: string;
+  videoUrl?: string;
+  questions: typeof INTERVIEW_QUESTIONS;
+}
+
 export function Interview() {
   const { lang } = useLanguage();
   const isVi = lang === "vi";
@@ -41,39 +53,60 @@ export function Interview() {
   const [isVideoAudioOn, setIsVideoAudioOn] = useState(false);
   const [currentTimeSec, setCurrentTimeSec] = useState(0);
 
-  // Active Question State (0 to 13)
+  // Dynamic Persona State loaded from JSON
+  const [personas, setPersonas] = useState<PersonaDef[]>([]);
+  const [selectedPersonaId, setSelectedPersonaId] = useState<string>("executive_hr");
+  const [isLoadingPersonas, setIsLoadingPersonas] = useState<boolean>(true);
+
+  // Fetch persona-based questions from public/data/interview-personas.json
+  useEffect(() => {
+    let isMounted = true;
+    fetch("/data/interview-personas.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load interview-personas.json");
+        return res.json();
+      })
+      .then((data) => {
+        if (isMounted && data && Array.isArray(data.personas) && data.personas.length > 0) {
+          setPersonas(data.personas);
+          setIsLoadingPersonas(false);
+        }
+      })
+      .catch((err) => {
+        console.warn("Interview personas fetch fallback:", err);
+        if (isMounted) setIsLoadingPersonas(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const activePersona = useMemo(() => {
+    return personas.find((p) => p.id === selectedPersonaId) || personas[0] || null;
+  }, [personas, selectedPersonaId]);
+
+  const activeQuestions = useMemo(() => {
+    if (activePersona && Array.isArray(activePersona.questions) && activePersona.questions.length > 0) {
+      return activePersona.questions;
+    }
+    return INTERVIEW_QUESTIONS;
+  }, [activePersona]);
+
+  // Active Question State
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  // Category Filter State with sessionStorage persistence
-  const [activeTab, setActiveTab] = useState(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("interview_active_tab") || "all";
-    }
-    return "all";
-  });
-
-  const handleSetActiveTab = (tabKey: string) => {
-    setActiveTab(tabKey);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("interview_active_tab", tabKey);
+  // Reset current question index when persona changes
+  const handleSelectPersona = (pId: string) => {
+    setSelectedPersonaId(pId);
+    setCurrentQuestionIndex(0);
+    if (videoRef.current && isInterviewPlaying) {
+      const p = personas.find((item) => item.id === pId);
+      const firstQ = p?.questions?.[0];
+      if (firstQ) {
+        videoRef.current.currentTime = firstQ.startSec;
+      }
     }
   };
-
-  const TABS = useMemo(() => [
-    { key: "all", labelVi: "Tất cả", labelEn: "All" },
-    { key: "intro", labelVi: "Định vị", labelEn: "Intro" },
-    { key: "management", labelVi: "Vận hành", labelEn: "Ops" },
-    { key: "tech", labelVi: "Công nghệ", labelEn: "Tech" },
-    { key: "strategy", labelVi: "Chiến lược", labelEn: "Strategy" },
-    { key: "inquiry", labelVi: "Chất vấn", labelEn: "Inquiry" },
-    { key: "closing", labelVi: "Lời kết", labelEn: "Closing" },
-  ], []);
-
-  // Filtered Questions list based on Category tab selection
-  const filteredQuestions = useMemo(() => {
-    if (activeTab === "all") return INTERVIEW_QUESTIONS;
-    return INTERVIEW_QUESTIONS.filter((q) => q.categoryKey === activeTab);
-  }, [activeTab]);
 
   // Sync Active Question with Video Playback Time
   useEffect(() => {
@@ -85,13 +118,13 @@ export function Interview() {
       setCurrentTimeSec(time);
 
       if (!isInterviewPlaying) return;
-      let idx = INTERVIEW_QUESTIONS.findIndex(
+      let idx = activeQuestions.findIndex(
         (q) => time >= q.startSec && time < q.endSec
       );
       if (idx === -1) {
         // Fallback: find the last question that started before current time
-        for (let i = INTERVIEW_QUESTIONS.length - 1; i >= 0; i--) {
-          if (time >= INTERVIEW_QUESTIONS[i].startSec) {
+        for (let i = activeQuestions.length - 1; i >= 0; i--) {
+          if (time >= activeQuestions[i].startSec) {
             idx = i;
             break;
           }
@@ -106,7 +139,7 @@ export function Interview() {
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [isInterviewPlaying, currentQuestionIndex]);
+  }, [isInterviewPlaying, currentQuestionIndex, activeQuestions]);
 
   // Handle video end event
   useEffect(() => {
@@ -134,6 +167,8 @@ export function Interview() {
     const video = videoRef.current;
     if (!video) return;
 
+    const targetVideoUrl = activePersona?.videoUrl || VIDEO_2_URL;
+
     if (isInterviewPlaying) {
       setIsInterviewPlaying(false);
       video.src = VIDEO_1_URL;
@@ -144,11 +179,12 @@ export function Interview() {
     } else {
       setIsInterviewPlaying(true);
       setIsVideoAudioOn(true);
-      video.src = VIDEO_2_URL;
+      video.src = targetVideoUrl;
       video.loop = false;
       video.muted = false;
       video.load();
-      video.currentTime = INTERVIEW_QUESTIONS[currentQuestionIndex].startSec;
+      const currentStartSec = activeQuestions[currentQuestionIndex]?.startSec || 0;
+      video.currentTime = currentStartSec;
       video.play().catch(() => {});
     }
   };
@@ -156,14 +192,16 @@ export function Interview() {
   // Seek video to specific question
   const handleSelectQuestion = (index: number) => {
     setCurrentQuestionIndex(index);
-    const q = INTERVIEW_QUESTIONS[index];
+    const q = activeQuestions[index] || activeQuestions[0];
     const video = videoRef.current;
     if (!video) return;
 
-    if (!isInterviewPlaying || video.src !== VIDEO_2_URL) {
+    const targetVideoUrl = activePersona?.videoUrl || VIDEO_2_URL;
+
+    if (!isInterviewPlaying || video.src !== targetVideoUrl) {
       setIsInterviewPlaying(true);
       setIsVideoAudioOn(true);
-      video.src = VIDEO_2_URL;
+      video.src = targetVideoUrl;
       video.loop = false;
       video.muted = false;
       video.load();
@@ -177,7 +215,7 @@ export function Interview() {
     }
   };
 
-  const currentQ = INTERVIEW_QUESTIONS[currentQuestionIndex] || INTERVIEW_QUESTIONS[0];
+  const currentQ = activeQuestions[currentQuestionIndex] || activeQuestions[0] || INTERVIEW_QUESTIONS[0];
 
   // Calculate current question playback progress
   const questionDuration = Math.max(1, currentQ.endSec - currentQ.startSec);
@@ -185,6 +223,21 @@ export function Interview() {
   const progressPercent = isInterviewPlaying 
     ? Math.min(100, Math.max(0, (elapsedInQuestion / questionDuration) * 100))
     : 0;
+
+  // Helper icon for personas
+  const renderPersonaIcon = (iconName: string) => {
+    switch (iconName) {
+      case "UserCheck":
+        return <UserCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
+      case "Building2":
+        return <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
+      case "Sparkles":
+        return <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
+      case "Video":
+      default:
+        return <Video className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
+    }
+  };
 
   return (
     <section 
@@ -198,21 +251,90 @@ export function Interview() {
           <div className="flex items-center gap-2 shrink-0">
             <span className="w-2 h-4 bg-pink-600 dark:bg-pink-400 rounded-full shrink-0" />
             <span className="text-caption font-semibold font-mono text-pink-700 dark:text-pink-300 bg-pink-500/15 px-2.5 py-0.5 rounded-full border border-pink-500/30 shadow-2xs">
-              {isVi ? "Đối thoại Mô phỏng" : "Interactive Simulated AI Q&A"}
+              {isVi ? "Đối thoại Mô phỏng AI" : "Simulated AI Persona Interview"}
             </span>
           </div>
         </PageCardHeader>
 
-        {/* Optimised grid layout: Left (7 cols on lg) for Video & Playlist, Right (5 cols on lg) for Active Response details */}
+        {/* PERSONA SELECTION BAR: Dynamic JSON-based persona switcher */}
+        {personas.length > 0 && (
+          <div className="w-full rounded-[var(--theme-radius-card,12px)] p-3 sm:p-4 bg-white/75 dark:bg-slate-900/75 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs flex flex-col gap-2.5 transition-all">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-indigo-500 dark:bg-cyan-400 animate-pulse" />
+                <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 font-mono">
+                  {isVi ? "Chọn vai trò người chất vấn / Hội đồng phỏng vấn (Persona):" : "Select Interview Persona / Panel Viewpoint:"}
+                </span>
+              </div>
+              <span className="text-[11px] font-mono font-bold text-indigo-600 dark:text-cyan-400 bg-indigo-50 dark:bg-cyan-950/60 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-cyan-800/40 w-fit">
+                {activeQuestions.length} {isVi ? "câu hỏi theo vai trò" : "persona questions"}
+              </span>
+            </div>
+
+            {/* Persona Switcher Tabs */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 w-full">
+              {personas.map((p) => {
+                const isSelected = p.id === (activePersona?.id || selectedPersonaId);
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => handleSelectPersona(p.id)}
+                    className={cn(
+                      "p-2.5 sm:p-3 rounded-xl border text-left transition-all duration-200 flex flex-col gap-1 cursor-pointer relative group",
+                      isSelected
+                        ? "bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-cyan-600 dark:to-blue-700 text-white border-transparent shadow-md shadow-indigo-500/20 scale-[1.01]"
+                        : "bg-white/60 dark:bg-slate-800/60 border-slate-200/70 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200"
+                    )}
+                  >
+                    <div className="flex items-center justify-between gap-1.5 w-full">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className={cn(
+                          "p-1.5 rounded-lg shrink-0 transition-colors",
+                          isSelected ? "bg-white/20 text-white" : "bg-indigo-50 dark:bg-cyan-950/60 text-indigo-600 dark:text-cyan-400 group-hover:scale-105"
+                        )}>
+                          {renderPersonaIcon(p.icon)}
+                        </span>
+                        <span className="font-extrabold text-xs sm:text-xs truncate tracking-tight">
+                          {isVi ? p.titleVi.split("(")[0].trim() : p.titleEn.split("(")[0].trim()}
+                        </span>
+                      </div>
+                    </div>
+                    <p className={cn(
+                      "text-[10px] leading-snug line-clamp-1 mt-0.5",
+                      isSelected ? "text-indigo-100 dark:text-cyan-100" : "text-slate-500 dark:text-slate-400"
+                    )}>
+                      {isVi ? p.roleVi : p.roleEn}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Persona Focus Summary Statement */}
+            {activePersona && (
+              <div className="flex items-center gap-2 pt-1 border-t border-slate-200/50 dark:border-white/5 text-[11px] text-slate-600 dark:text-slate-400">
+                <span className="font-bold text-indigo-600 dark:text-cyan-400 shrink-0">
+                  {isVi ? activePersona.badgeVi : activePersona.badgeEn}:
+                </span>
+                <span className="truncate italic">
+                  {isVi ? activePersona.roleVi : activePersona.roleEn}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Optimised grid layout: Left (6 cols on lg) for Video, Right (6 cols on lg) for Active Response details */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch flex-1">
 
-          {/* LEFT AREA: Video Player + Nội Dung Phỏng Vấn Chính (7 columns on lg) */}
-          <div className="w-full lg:col-span-7 flex flex-col gap-4 sm:gap-5 min-h-0">
+          {/* LEFT AREA: Video Player (6 columns on lg) */}
+          <div className="w-full lg:col-span-6 flex flex-col min-h-0">
             
             {/* 1. Video Player Hero Card */}
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="relative w-full aspect-[16/10] sm:aspect-[16/9.5] lg:h-[350px] rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col shrink-0"
+              className="relative w-full h-full min-h-[380px] sm:min-h-[440px] rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col shrink-0"
             >
               <video
                 ref={videoRef}
@@ -325,128 +447,10 @@ export function Interview() {
               </div>
             </div>
 
-            {/* 2. Nội dung phỏng vấn chính Card (Playlist card now placed in Left Column under Video) */}
-            <div 
-              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="w-full flex-1 rounded-[var(--theme-radius-card,10px)] border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col gap-3 relative overflow-hidden min-h-[260px]"
-            >
-              {/* Header of Playlist Card */}
-              <AnimatedCardTitle
-                icon={ListVideo}
-                title={isVi ? "Nội dung phỏng vấn chính" : "Main interview playlist"}
-                colorPreset="auto"
-                indexForAutoColor={4}
-                actionRight={
-                  <span className="text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded text-slate-500 dark:text-slate-400">
-                    {filteredQuestions.length} {isVi ? "câu hỏi" : "questions"}
-                  </span>
-                }
-              />
-
-              {/* Category Filter Tabs */}
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none">
-                {TABS.map((tab) => {
-                  const isActive = activeTab === tab.key;
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => handleSetActiveTab(tab.key)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-[11px] font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
-                        isActive
-                          ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
-                      )}
-                    >
-                      {isVi ? tab.labelVi : tab.labelEn}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Scrollable Questions list matching active category tab */}
-              <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-3 custom-scrollbar min-h-0">
-                {filteredQuestions.map((q) => {
-                  const absoluteIndex = INTERVIEW_QUESTIONS.findIndex(item => item.id === q.id);
-                  const isCurrent = currentQuestionIndex === absoluteIndex;
-                  return (
-                    <motion.button
-                      whileHover={{ y: -2, scale: 1.012 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      key={q.id}
-                      type="button"
-                      onClick={() => handleSelectQuestion(absoluteIndex)}
-                      className={cn(
-                        "w-full text-left p-3.5 rounded-xl border transition-all duration-300 flex flex-col gap-2 group/item cursor-pointer relative overflow-hidden",
-                        isCurrent
-                          ? "bg-indigo-500/10 dark:bg-cyan-500/10 border-indigo-500/60 dark:border-cyan-400/60 shadow-[0_4px_12px_rgba(78,86,246,0.12)] ring-1 ring-indigo-500/20"
-                          : "bg-white/40 dark:bg-slate-950/25 border-slate-200/80 dark:border-white/5 hover:bg-white/80 dark:hover:bg-slate-800/40 hover:border-indigo-400/50 dark:hover:border-cyan-400/50 hover:shadow-md"
-                      )}
-                    >
-                      {/* Active Left Indicator Line */}
-                      {isCurrent && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 to-cyan-400" />
-                      )}
-
-                      {/* Question Index Badge & Time stamp */}
-                      <div className="flex items-center justify-between gap-2 w-full select-none">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className={cn(
-                            "text-[10px] font-mono font-black px-1.5 py-0.5 rounded-md tracking-wider shadow-2xs shrink-0",
-                            isCurrent
-                              ? "bg-indigo-600 dark:bg-cyan-500 text-white"
-                              : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold"
-                          )}>
-                            {isVi ? `CÂU 0${q.stt}` : `Q0${q.stt}`}
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold">
-                            {q.timestamp}
-                          </span>
-                        </div>
-
-                        {/* Audio wave pulse icon */}
-                        {isCurrent && isInterviewPlaying && (
-                          <div className="flex items-end gap-0.5 h-3 shrink-0 mr-1">
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-3" style={{ animationDuration: "0.8s", animationDelay: "0s" }} />
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-2" style={{ animationDuration: "0.6s", animationDelay: "0.2s" }} />
-                            <span className="w-0.75 bg-indigo-600 dark:bg-cyan-400 rounded-full animate-bounce h-4" style={{ animationDuration: "0.9s", animationDelay: "0.1s" }} />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Question Text */}
-                      <h5 className={cn(
-                        "text-xs sm:text-sm font-extrabold leading-tight transition-colors duration-200 line-clamp-2",
-                        isCurrent
-                          ? "text-indigo-950 dark:text-cyan-300 font-black"
-                          : "text-slate-900 dark:text-slate-100 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
-                      )}>
-                        {isVi ? q.questionVi : q.questionEn}
-                      </h5>
-
-                      {/* Summary text */}
-                      <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-250/50 dark:border-white/10 mt-0.5 select-none text-[10px]">
-                        <span className="text-slate-650 dark:text-slate-350 font-semibold truncate max-w-[75%]">
-                          {isVi ? q.summaryVi : q.summaryEn}
-                        </span>
-                        <span className={cn(
-                          "font-black uppercase tracking-wider shrink-0 transition-colors",
-                          isCurrent ? "text-indigo-600 dark:text-cyan-400" : "text-slate-500 dark:text-slate-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-cyan-400"
-                        )}>
-                          {isVi ? q.categoryVi.split(" ")[0] : q.categoryEn.split(" ")[0]}
-                        </span>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </div>
-
           </div>
 
-          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (5 columns on lg) */}
-          <div className="w-full lg:col-span-5 flex flex-col h-full">
+          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (6 columns on lg) */}
+          <div className="w-full lg:col-span-6 flex flex-col h-full">
             
             {/* Active Response details Card */}
             <div 

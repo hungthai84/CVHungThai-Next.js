@@ -2,7 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   X, 
-  Monitor, 
+  Home, 
   MailOpen, 
   User, 
   Compass, 
@@ -40,7 +40,7 @@ interface LeftSidebarProps {
 }
 
 const SIDEBAR_SECTIONS = [
-  { id: "home", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor },
+  { id: "home", labelVi: "Trang chủ", labelEn: "Home", Icon: Home },
   { id: "letter", labelVi: "Thư ngỏ", labelEn: "Cover Letter", Icon: MailOpen },
   { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", Icon: User },
   { id: "domains", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass },

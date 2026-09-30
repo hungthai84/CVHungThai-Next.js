@@ -32,7 +32,11 @@ import {
   Filter,
   ChevronDown,
   Headset,
-  Bot
+  Bot,
+  Minimize2,
+  Volume2,
+  VolumeX,
+  Pause
 } from "lucide-react";
 
 export function Systems() {
@@ -40,10 +44,15 @@ export function Systems() {
   const { theme } = useTheme();
   const isVi = lang === "vi";
 
-  // Search & system modal states
-  const [searchQuery, setSearchQuery] = useState("");
+  // System selection & flip states
   const [selectedSystem, setSelectedSystem] = useState<SystemItem | null>(null);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+
+  // Expandable Special GIF Video Card State (starts normal, expands to 4 cards on click and plays video)
+  const [isSpecialCardExpanded, setIsSpecialCardExpanded] = useState(false);
+  const [isSpecialVideoMuted, setIsSpecialVideoMuted] = useState(false);
+  const [isSpecialVideoPlaying, setIsSpecialVideoPlaying] = useState(true);
+  const specialVideoRef = useRef<HTMLVideoElement>(null);
 
   // Video lightbox & feedback state
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -126,20 +135,8 @@ export function Systems() {
     setIsVideoOpen(false);
   };
 
-  // Filter systems list
-  const filteredSystems = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return SYSTEMS_DATA;
-
-    return SYSTEMS_DATA.filter(
-      (item) =>
-        item.code.toLowerCase().includes(query) ||
-        item.nameVi.toLowerCase().includes(query) ||
-        item.nameEn.toLowerCase().includes(query) ||
-        item.descVi.toLowerCase().includes(query) ||
-        item.descEn.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
+  // Systems list
+  const filteredSystems = SYSTEMS_DATA;
 
   return (
     <section
@@ -159,125 +156,208 @@ export function Systems() {
                   {isVi ? "Vận hành & Tự động hoá" : "Governance & Operations Hub"}
                 </span>
               </div>
-
-              {/* Middle Side: Summary Stats */}
-              <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/10 text-[11px] font-medium text-slate-600 dark:text-slate-300">
-                <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
-                <span>{isVi ? `Hiển thị ${filteredSystems.length}/12` : `Showing ${filteredSystems.length}/12`}</span>
-              </div>
-
-              {/* Right Side: Quick Search Bar */}
-              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:ml-auto w-full md:w-auto">
-                <div className="relative flex-1 sm:w-56 shrink-0">
-                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={isVi ? "Tìm mã, tên hệ thống..." : "Search code, name..."}
-                    className="w-full pl-9 pr-9 h-11 min-h-[44px] rounded-2xl text-xs bg-white/70 dark:bg-slate-900/70 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all font-play"
-                  />
-                  {searchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery("")}
-                      className="w-11 h-11 min-h-[44px] min-w-[44px] absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center justify-center cursor-pointer"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              </div>
             </div>
           </PageCardHeader>
-
-          {/* Integrated Video Play Badge */}
-          <div className="absolute top-2 right-2 sm:top-3 sm:right-4 z-30 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={openVideo}
-              className="group relative flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 dark:bg-slate-800/90 dark:hover:bg-slate-800 text-white border border-indigo-500/40 shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 cursor-pointer backdrop-blur-md"
-              title={isVi ? "Xem video giới thiệu hệ thống" : "Watch system presentation video"}
-            >
-              <div className="relative w-6 h-6 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center shrink-0">
-                <img
-                  src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif"
-                  alt="Video Logo"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80";
-                  }}
-                />
-                <span className="absolute inset-0 bg-indigo-500/20 animate-ping rounded-full pointer-events-none" />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Play className="w-3 h-3 text-amber-300 fill-amber-300 group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-bold tracking-wide font-play text-slate-100">
-                  {isVi ? "Video Giới thiệu" : "Watch Video"}
-                </span>
-              </div>
-            </button>
-          </div>
         </div>
 
         {/* 12 SYSTEMS BENTO GRID */}
         <IndustrialSubSection className="h-auto shrink-0 flex flex-col justify-start">
           <div className="w-full h-auto rounded-[24px] p-0 border-0 bg-transparent shadow-none backdrop-blur-none flex flex-col justify-start items-center">
-            {filteredSystems.length === 0 ? (
-              <div
-                style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                className={cn(
-                  "w-full py-12 px-6 flex flex-col items-center justify-center text-center gap-3 border",
-                  getGlassCardClass()
-                )}
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                layout
+                variants={industrialContainerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-auto auto-rows-fr items-stretch"
               >
-                <div className="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
-                  <Search className="w-6 h-6" />
-                </div>
-                <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200 font-play">
-                  {isVi ? "Không tìm thấy hệ thống phù hợp" : "No matching system found"}
-                </h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm">
-                  {isVi
-                    ? "Vui lòng thử lại với từ khóa khác hoặc chuyển sang danh mục tất cả hệ thống."
-                    : "Please try another search keyword or switch back to all systems category."}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery("");
-                  }}
-                  className="mt-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition"
-                >
-                  {isVi ? "Xem tất cả 12 hệ thống" : "View all 12 systems"}
-                </button>
-              </div>
-            ) : (
-              <AnimatePresence mode="popLayout">
-                <motion.div
-                  layout
-                  variants={industrialContainerVariants}
-                  initial="hidden"
-                  animate="show"
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-auto auto-rows-fr items-stretch"
-                >
+                  {/* Special High-Tech Expanding GIF & Video Card */}
+                  <motion.div
+                    layout
+                    transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+                    className={cn(
+                      "relative overflow-hidden transition-all duration-500 border shadow-lg group",
+                      isSpecialCardExpanded 
+                        ? "col-span-1 sm:col-span-2 md:col-span-2 xl:col-span-4 min-h-[380px] sm:min-h-[440px] z-30 ring-2 ring-indigo-500/50" 
+                        : "col-span-1 min-h-[160px] sm:min-h-[170px] cursor-pointer hover:shadow-xl hover:scale-[1.02]"
+                    )}
+                    style={{
+                      borderRadius: "var(--theme-radius-card, 16px)",
+                      backgroundImage: isSpecialCardExpanded ? undefined : "url('https://i.ibb.co/BKHcWL5R/Logo-VED.gif')",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center"
+                    }}
+                    onClick={() => {
+                      if (!isSpecialCardExpanded) {
+                        try { playUiSound("click"); } catch {}
+                        setIsSpecialCardExpanded(true);
+                      }
+                    }}
+                  >
+                    {/* If Expanded: Full Interactive Video Player */}
+                    {isSpecialCardExpanded ? (
+                      <div className="relative w-full h-full flex flex-col justify-between bg-slate-950 text-white p-4 sm:p-5">
+                        {/* Top Bar with title & close / minimize button */}
+                        <div className="flex items-center justify-between pb-3 border-b border-white/15 z-20">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center shrink-0 border border-indigo-400">
+                              <img src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif" alt="GIF Logo" className="w-full h-full object-cover" />
+                            </div>
+                            <div>
+                              <h4 className="text-sm sm:text-base font-bold text-white font-play">
+                                {isVi ? "Hạ Tầng Nền Tảng & Video Trình Diễn Hệ Thống" : "Enterprise Infrastructure & System Presentation"}
+                              </h4>
+                              <p className="text-[11px] text-slate-300 font-mono">
+                                {isVi ? "Tích hợp đa nền tảng · Real-time Workflow" : "Cross-platform Integration · Real-time Workflow"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (specialVideoRef.current) {
+                                  if (isSpecialVideoPlaying) {
+                                    specialVideoRef.current.pause();
+                                    setIsSpecialVideoPlaying(false);
+                                  } else {
+                                    specialVideoRef.current.play();
+                                    setIsSpecialVideoPlaying(true);
+                                  }
+                                }
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                            >
+                              {isSpecialVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                              <span>{isSpecialVideoPlaying ? (isVi ? "Tạm dừng" : "Pause") : (isVi ? "Phát" : "Play")}</span>
+                            </button>
+                            
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (specialVideoRef.current) {
+                                  specialVideoRef.current.muted = !isSpecialVideoMuted;
+                                  setIsSpecialVideoMuted(!isSpecialVideoMuted);
+                                }
+                              }}
+                              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 cursor-pointer"
+                              title={isSpecialVideoMuted ? (isVi ? "Bật âm thanh" : "Unmute") : (isVi ? "Tắt âm thanh" : "Mute")}
+                            >
+                              {isSpecialVideoMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                try { playUiSound("click"); } catch {}
+                                if (specialVideoRef.current) {
+                                  specialVideoRef.current.pause();
+                                }
+                                setIsSpecialCardExpanded(false);
+                              }}
+                              className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1 cursor-pointer shadow-md"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                              <span>{isVi ? "Thu nhỏ" : "Minimize"}</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Embedded Video */}
+                        <div className="relative w-full flex-1 my-3 rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10 shadow-inner min-h-[240px]">
+                          <video
+                            ref={specialVideoRef}
+                            src="https://cdn.scena.ai/project/8606/ac120a105730c378447fd67f5e8b6aeb9557b5e4e8854ac2e21148d5316f780b.mp4"
+                            autoPlay
+                            playsInline
+                            loop
+                            muted={isSpecialVideoMuted}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between text-xs text-slate-400 font-mono pt-1">
+                          <span className="flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            {isVi ? "Đang phát video hệ thống trực tiếp từ máy chủ VED" : "Live Streaming from VED Infrastructure"}
+                          </span>
+                          <span className="text-[11px] text-slate-400">1080p · 60fps</span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Collapsed state with GIF background */
+                      <div className="relative w-full h-full p-4 flex flex-col justify-between bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/30 text-white">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/80 text-white shadow-xs">
+                            GIF · VIDEO HUB
+                          </span>
+                          <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Play className="w-3 h-3 text-amber-300 fill-amber-300" />
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-bold font-play text-white leading-snug group-hover:text-indigo-300 transition-colors">
+                            {isVi ? "Trình Diễn Video Hạ Tầng Vận Hành" : "Infrastructure Video Showcase"}
+                          </h4>
+                          <p className="text-[11px] text-slate-300 line-clamp-1 mt-0.5">
+                            {isVi ? "Bấm vào để mở rộng 4 thẻ & phát video" : "Click to expand (4x) & stream video"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+
                   {filteredSystems.map((item, idx) => {
                     const IconComponent = item.icon;
                     const isFlipped = !!flippedCards[item.id];
+                    
+                    // 5 Radial Gradient Palettes extracted directly from CodePen
                     const cardThemes = [
-                      { bg: "bg-gradient-to-br from-blue-500/15 via-blue-500/5 to-cyan-500/10 dark:from-blue-950/60 dark:to-cyan-950/40 border-blue-300/60 dark:border-blue-500/35", line: "from-blue-500 via-cyan-400 to-indigo-500", iconColor: "text-blue-600 dark:text-cyan-400" },
-                      { bg: "bg-gradient-to-br from-emerald-500/15 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/60 dark:to-teal-950/40 border-emerald-300/60 dark:border-emerald-500/35", line: "from-emerald-400 via-teal-400 to-cyan-500", iconColor: "text-emerald-600 dark:text-emerald-400" },
-                      { bg: "bg-gradient-to-br from-purple-500/15 via-fuchsia-500/5 to-purple-500/10 dark:from-purple-950/60 dark:to-fuchsia-950/40 border-purple-300/60 dark:border-purple-500/35", line: "from-purple-500 via-fuchsia-400 to-pink-500", iconColor: "text-purple-600 dark:text-purple-400" },
-                      { bg: "bg-gradient-to-br from-amber-500/15 via-orange-500/5 to-amber-500/10 dark:from-amber-950/60 dark:to-orange-950/40 border-amber-300/60 dark:border-amber-500/35", line: "from-amber-400 via-orange-400 to-yellow-500", iconColor: "text-amber-600 dark:text-amber-400" },
-                      { bg: "bg-gradient-to-br from-rose-500/15 via-pink-500/5 to-rose-500/10 dark:from-rose-950/60 dark:to-red-950/40 border-rose-300/60 dark:border-rose-500/35", line: "from-rose-500 via-pink-400 to-red-500", iconColor: "text-rose-600 dark:text-rose-400" },
-                      { bg: "bg-gradient-to-br from-cyan-500/15 via-sky-500/5 to-cyan-500/10 dark:from-cyan-950/60 dark:to-sky-950/40 border-cyan-300/60 dark:border-cyan-500/35", line: "from-cyan-400 via-sky-400 to-blue-500", iconColor: "text-cyan-600 dark:text-cyan-300" },
-                      { bg: "bg-gradient-to-br from-teal-500/15 via-emerald-500/5 to-teal-500/10 dark:from-teal-950/60 dark:to-green-950/40 border-teal-300/60 dark:border-teal-500/35", line: "from-teal-400 via-emerald-400 to-green-500", iconColor: "text-teal-600 dark:text-teal-400" },
-                      { bg: "bg-gradient-to-br from-indigo-500/15 via-blue-500/5 to-indigo-500/10 dark:from-indigo-950/60 dark:to-purple-950/40 border-indigo-300/60 dark:border-indigo-500/35", line: "from-indigo-500 via-blue-400 to-purple-500", iconColor: "text-indigo-600 dark:text-indigo-400" },
-                      { bg: "bg-gradient-to-br from-violet-500/15 via-purple-500/5 to-violet-500/10 dark:from-violet-950/60 dark:to-indigo-950/40 border-violet-300/60 dark:border-violet-500/35", line: "from-violet-500 via-purple-400 to-indigo-500", iconColor: "text-violet-600 dark:text-violet-400" },
-                      { bg: "bg-gradient-to-br from-fuchsia-500/15 via-rose-500/5 to-fuchsia-500/10 dark:from-fuchsia-950/60 dark:to-pink-950/40 border-fuchsia-300/60 dark:border-fuchsia-500/35", line: "from-fuchsia-500 via-pink-400 to-rose-500", iconColor: "text-fuchsia-600 dark:text-fuchsia-400" },
-                      { bg: "bg-gradient-to-br from-orange-500/15 via-amber-500/5 to-orange-500/10 dark:from-orange-950/60 dark:to-yellow-950/40 border-orange-300/60 dark:border-orange-500/35", line: "from-orange-500 via-amber-400 to-yellow-500", iconColor: "text-orange-600 dark:text-orange-400" },
-                      { bg: "bg-gradient-to-br from-sky-500/15 via-indigo-500/5 to-sky-500/10 dark:from-sky-950/60 dark:to-blue-950/40 border-sky-300/60 dark:border-sky-500/35", line: "from-sky-400 via-blue-400 to-indigo-500", iconColor: "text-sky-600 dark:text-sky-400" },
+                      // Card 1: #1fe4f5 -> #3fbafe (Aqua Cyan / Sky Blue)
+                      {
+                        radialBg: "radial-gradient(125% 125% at 20% 20%, rgba(31, 228, 245, 0.26) 0%, rgba(63, 186, 254, 0.14) 100%)",
+                        borderClass: "border-[#1fe4f5]/55 dark:border-[#3fbafe]/40",
+                        glowShadow: "hover:shadow-[0_12px_28px_-5px_rgba(31,228,245,0.35)]",
+                        iconColor: "text-[#0284c7] dark:text-[#38bdf8]",
+                        tagClass: "bg-[#1fe4f5]/20 text-[#0369a1] dark:text-[#38bdf8] border-[#1fe4f5]/40",
+                      },
+                      // Card 2: #fbc1cc -> #fa99b2 (Pastel Rose / Peach Pink)
+                      {
+                        radialBg: "radial-gradient(125% 125% at 20% 20%, rgba(251, 193, 204, 0.35) 0%, rgba(250, 153, 178, 0.20) 100%)",
+                        borderClass: "border-[#fa99b2]/55 dark:border-[#fa99b2]/40",
+                        glowShadow: "hover:shadow-[0_12px_28px_-5px_rgba(250,153,178,0.35)]",
+                        iconColor: "text-[#e11d48] dark:text-[#fb7185]",
+                        tagClass: "bg-[#fa99b2]/20 text-[#be123c] dark:text-[#fb7185] border-[#fa99b2]/40",
+                      },
+                      // Card 3: #76b2fe -> #b69efe (Periwinkle Blue / Lavender)
+                      {
+                        radialBg: "radial-gradient(125% 125% at 20% 20%, rgba(118, 178, 254, 0.28) 0%, rgba(182, 158, 254, 0.18) 100%)",
+                        borderClass: "border-[#76b2fe]/55 dark:border-[#b69efe]/40",
+                        glowShadow: "hover:shadow-[0_12px_28px_-5px_rgba(118,178,254,0.35)]",
+                        iconColor: "text-[#4f46e5] dark:text-[#a5b4fc]",
+                        tagClass: "bg-[#76b2fe]/20 text-[#4338ca] dark:text-[#a5b4fc] border-[#76b2fe]/40",
+                      },
+                      // Card 4: #60efbc -> #58d5c9 (Mint Green / Seafoam Teal)
+                      {
+                        radialBg: "radial-gradient(125% 125% at 20% 20%, rgba(96, 239, 188, 0.28) 0%, rgba(88, 213, 201, 0.18) 100%)",
+                        borderClass: "border-[#60efbc]/55 dark:border-[#58d5c9]/40",
+                        glowShadow: "hover:shadow-[0_12px_28px_-5px_rgba(96,239,188,0.35)]",
+                        iconColor: "text-[#059669] dark:text-[#34d399]",
+                        tagClass: "bg-[#60efbc]/20 text-[#047857] dark:text-[#34d399] border-[#60efbc]/40",
+                      },
+                      // Card 5: #f588d8 -> #c0a3e5 (Fuchsia Pink / Orchid Violet)
+                      {
+                        radialBg: "radial-gradient(125% 125% at 20% 20%, rgba(245, 136, 216, 0.28) 0%, rgba(192, 163, 229, 0.18) 100%)",
+                        borderClass: "border-[#f588d8]/55 dark:border-[#c0a3e5]/40",
+                        glowShadow: "hover:shadow-[0_12px_28px_-5px_rgba(245,136,216,0.35)]",
+                        iconColor: "text-[#c026d3] dark:text-[#f0abfc]",
+                        tagClass: "bg-[#f588d8]/20 text-[#a21caf] dark:text-[#f0abfc] border-[#f588d8]/40",
+                      },
                     ];
                     const activeTheme = cardThemes[idx % cardThemes.length];
 
@@ -295,21 +375,17 @@ export function Systems() {
                           onMouseEnter={() => {
                             try { playUiSound("hover"); } catch {}
                           }}
-                          style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+                          style={{ 
+                            borderRadius: "var(--theme-radius-card, 16px)",
+                            background: activeTheme.radialBg
+                          }}
                           className={cn(
-                            "group cursor-pointer relative overflow-hidden p-4 sm:p-4.5 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[170px] w-full shadow-md hover:shadow-xl transition-all duration-300 border text-left",
-                            activeTheme.bg,
-                            "backdrop-blur-xl"
+                            "group cursor-pointer relative overflow-hidden p-4 sm:p-4.5 flex flex-col justify-between h-full min-h-[160px] sm:min-h-[170px] w-full shadow-md hover:scale-[1.01] transition-all duration-300 border text-left backdrop-blur-xl",
+                            activeTheme.borderClass,
+                            activeTheme.glowShadow
                           )}
                           title={isVi ? "Click để truy cập • Double-click để lật thẻ xem chi tiết" : "Click to enter • Double-click to flip card"}
                         >
-                          {/* Moving Animated Glowing Accent Line */}
-                          <motion.div 
-                            animate={{ x: ["-100%", "100%"] }} 
-                            transition={{ duration: 2.8 + (idx % 3) * 0.4, repeat: Infinity, ease: "linear" }}
-                            className={cn("absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r z-20 pointer-events-none", activeTheme.line)}
-                          />
-
                           {isFlipped ? (
                             /* Back Side of Card */
                             <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full bg-slate-900/90 text-white p-2 rounded-xl border border-indigo-500/30">
@@ -346,8 +422,8 @@ export function Systems() {
                           ) : (
                             /* Front Side of Card */
                             <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
-                              {/* Dòng 1 : Header có animated unframed icon & tiêu đề */}
-                              <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80">
+                              {/* Dòng 1 : Header có animated icon & tiêu đề */}
+                              <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/50 dark:border-white/10">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <motion.div
                                     animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 0.95, 1], y: [0, -3, 0] }}
@@ -384,13 +460,16 @@ export function Systems() {
                                 </motion.div>
                               </div>
 
-                              {/* Dòng 3 : Mô tả nghiệp vụ tóm tắt */}
-                              <div className="w-full text-left pt-2 border-t border-slate-200/60 dark:border-slate-800/80 mt-2 flex items-center justify-between gap-2">
+                              {/* Dòng 3 : Mô tả nghiệp vụ tóm tắt & Link hover effect */}
+                              <div className="w-full text-left pt-2 border-t border-slate-200/50 dark:border-white/10 mt-2 flex items-center justify-between gap-2 relative">
                                 <p className="text-[11px] text-slate-600 dark:text-slate-300 font-normal leading-relaxed line-clamp-2 font-play flex-1">
                                   {isVi ? item.descVi : item.descEn}
                                 </p>
                                 {item.url && (
-                                  <div className="shrink-0 text-indigo-500 dark:text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                                  <div className="shrink-0 text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex items-center gap-0.5 text-xs font-bold font-mono">
+                                    <span className="hidden sm:inline text-[10px] opacity-0 group-hover:opacity-100 transition-opacity underline decoration-indigo-400">
+                                      {isVi ? "Truy cập" : "Open"}
+                                    </span>
                                     <ArrowUpRight className="w-4 h-4" />
                                   </div>
                                 )}
@@ -403,7 +482,6 @@ export function Systems() {
                   })}
                 </motion.div>
               </AnimatePresence>
-            )}
           </div>
         </IndustrialSubSection>
 

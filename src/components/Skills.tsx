@@ -10,7 +10,6 @@ import {
   Bot, 
   Sparkles, 
   Database, 
-  Monitor, 
   Cpu, 
   Users, 
   Coins, 
@@ -68,7 +67,7 @@ const getSkillIcon = (name: string) => {
     case "Target": return Target;
     case "Rocket": return Rocket;
     case "Cpu": return Cpu;
-    case "Monitor": return Monitor;
+    case "Monitor": return Globe;
     case "Bot": return Bot;
     case "TrendingUp": return TrendingUp;
     case "Coins": return Coins;
@@ -160,9 +159,6 @@ export function Skills() {
             <span className="w-2 h-4 bg-blue-600 dark:bg-cyan-400 rounded-full shrink-0" />
             <span className="text-caption font-semibold font-mono text-blue-700 dark:text-cyan-300 bg-blue-500/15 px-2.5 py-0.5 rounded-full border border-blue-500/30 shadow-2xs">
               {isVi ? "Khung Năng Lực Toàn Diện" : "Comprehensive Skills & SWOT Analysis"}
-            </span>
-            <span className="text-[10px] font-mono font-black text-blue-600 dark:text-cyan-400 bg-blue-500/10 dark:bg-cyan-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
-              SOP · CRM · AI · CX
             </span>
           </div>
 

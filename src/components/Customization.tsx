@@ -34,7 +34,6 @@ import {
   Clock, 
   CloudSun, 
   ChevronDown, 
-  Monitor,
   ShieldCheck,
   Zap,
   Save,
@@ -45,7 +44,12 @@ import {
   Wrench,
   AlertTriangle,
   X,
-  Play
+  Play,
+  Music,
+  Menu,
+  LayoutTemplate,
+  FileText,
+  Tag
 } from "lucide-react";
 import { PageCardHeader } from "./PageCardHeader";
 import { useLanguage } from "../i18n";
@@ -122,13 +126,14 @@ const RADIUS_PRESETS = [
 ];
 
 const TYPO_TOKENS = [
-  { id: "display", labelVi: "Display (Tiêu đề lớn)", labelEn: "Display Heading", size: "40–52px", weight: "700", leading: "1.15", sampleText: "Nguyễn Hùng Thái" },
-  { id: "h1", labelVi: "H1 (Tiêu đề chính)", labelEn: "H1 Heading", size: "36–42px", weight: "700", leading: "1.20", sampleText: "Giám Đốc Chăm Sóc Khách Hàng" },
-  { id: "h2", labelVi: "H2 (Tiêu đề mục)", labelEn: "H2 Section Title", size: "28–34px", weight: "700", leading: "1.20", sampleText: "Kinh Nghiệm & Thành Tựu Vận Hành" },
-  { id: "h3", labelVi: "H3 (Tiêu đề phụ)", labelEn: "H3 Subtitle", size: "20–24px", weight: "700", leading: "1.25", sampleText: "Kiến trúc hệ thống CSKH chuẩn quốc tế" },
-  { id: "card", labelVi: "Card Title (Thẻ)", labelEn: "Card Title", size: "18–20px", weight: "700", leading: "1.30", sampleText: "Dự Án Vận Hành Đa Kênh Omnichannel" },
-  { id: "body", labelVi: "Body (Văn bản)", labelEn: "Body Text", size: "15–16px", weight: "400", leading: "1.60", sampleText: "Tối ưu hóa hành trình khách hàng với hiệu suất tăng trưởng vượt bậc qua công nghệ số." },
-  { id: "caption", labelVi: "Caption / Label", labelEn: "Caption/Label", size: "12–13px", weight: "600", leading: "1.40", sampleText: "22+ NĂM KINH NGHIỆM VẬN HÀNH" },
+  { id: "display", labelVi: "Display (Tiêu đề lớn)", labelEn: "Display Heading", size: "40–52px", weight: "700", leading: "1.15", sampleText: "Nguyễn Hùng Thái", Icon: Sparkles },
+  { id: "h1", labelVi: "H1 (Tiêu đề chính)", labelEn: "H1 Heading", size: "36–42px", weight: "700", leading: "1.20", sampleText: "Giám Đốc Chăm Sóc Khách Hàng", Icon: Type },
+  { id: "h2", labelVi: "H2 (Tiêu đề mục)", labelEn: "H2 Section Title", size: "28–34px", weight: "700", leading: "1.20", sampleText: "Kinh Nghiệm & Thành Tựu Vận Hành", Icon: Layers },
+  { id: "h3", labelVi: "H3 (Tiêu đề phụ)", labelEn: "H3 Subtitle", size: "20–24px", weight: "700", leading: "1.25", sampleText: "Kiến trúc hệ thống CSKH chuẩn quốc tế", Icon: SlidersHorizontal },
+  { id: "card", labelVi: "Card Title (Thẻ)", labelEn: "Card Title", size: "18–20px", weight: "700", leading: "1.30", sampleText: "Dự Án Vận Hành Đa Kênh Omnichannel", Icon: LayoutTemplate },
+  { id: "nav-menu", labelVi: "Tiêu đề icon menu (Nav Menu)", labelEn: "Icon Menu Title", size: "12–14px", weight: "600", leading: "1.25", sampleText: "Trang Chủ · Giới Thiệu · Học Vấn · Kinh Nghiệm · Kỹ Năng · Dự Án", Icon: Menu },
+  { id: "body", labelVi: "Body (Văn bản)", labelEn: "Body Text", size: "15–16px", weight: "400", leading: "1.60", sampleText: "Tối ưu hóa hành trình khách hàng với hiệu suất tăng trưởng vượt bậc qua công nghệ số.", Icon: FileText },
+  { id: "caption", labelVi: "Caption / Label", labelEn: "Caption/Label", size: "12–13px", weight: "600", leading: "1.40", sampleText: "22+ NĂM KINH NGHIỆM VẬN HÀNH", Icon: Tag },
 ];
 
 export default function Customization() {
@@ -438,6 +443,7 @@ export default function Customization() {
       case "rain": return CloudRain;
       case "zen-breeze": return Wind;
       case "space-drone": return Radio;
+      case "website-bg-music": return Music;
       default: return VolumeX;
     }
   };
@@ -446,14 +452,14 @@ export default function Customization() {
     { id: "customization", nameVi: "Giao diện & Chế độ", nameEn: "Theme & Mode", Icon: Sun },
     { id: "colors", nameVi: "Bảng màu Tokens", nameEn: "Color System", Icon: Palette },
     { id: "radius", nameVi: "Bo góc thẻ", nameEn: "Border Radius", Icon: Layers },
+    { id: "typography", nameVi: "Phông chữ Typography", nameEn: "Typography", Icon: Type },
+    { id: "footer", nameVi: "Header & Footer Dock", nameEn: "Header & Footer Dock", Icon: PanelBottom },
     { id: "cursor", nameVi: "Con trỏ FX", nameEn: "Cursor FX", Icon: MousePointer },
     { id: "sound", nameVi: "Âm thanh FX", nameEn: "Audio & FX", Icon: Volume2 },
-    { id: "footer", nameVi: "Header & Footer Dock", nameEn: "Header & Footer Dock", Icon: PanelBottom },
-    { id: "typography", nameVi: "Phông chữ Typography", nameEn: "Typography", Icon: Type },
   ];
 
   return (
-    <div className="w-full h-full min-h-full flex flex-col justify-start pb-16 pt-2 px-3 sm:px-6 md:px-8 max-w-[1280px] mx-auto select-none">
+    <div className="w-full h-full min-h-full flex flex-col justify-start gap-[20px] pb-16 pt-2 px-3 sm:px-6 md:px-8 max-w-[1280px] mx-auto select-none rounded-3xl drop-shadow-md shadow-md transition-all duration-500 ease-out hover:scale-[1.01] hover:shadow-2xl hover:shadow-indigo-500/20 hover:drop-shadow-2xl hover:ring-2 hover:ring-indigo-500/40 dark:hover:ring-cyan-400/40">
       {/* 1. Standard Page Card Header */}
       <PageCardHeader pageId="customization" />
 
@@ -464,7 +470,7 @@ export default function Customization() {
             initial={{ opacity: 0, y: -15, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -15, scale: 0.96 }}
-            className="mb-4 px-4 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-md shadow-sm"
+            className="px-4 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between backdrop-blur-md shadow-sm"
           >
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
@@ -483,7 +489,7 @@ export default function Customization() {
 
       {/* 2. MASTER ACTION BAR: QUẢN LÝ CẤU HÌNH & LƯU MẶC ĐỊNH THỰC TẾ */}
       <div 
-        className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm"
+        className="p-4 sm:p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm"
         style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -578,46 +584,11 @@ export default function Customization() {
         </div>
       </div>
 
-      {/* 3. Navigation Tabs Bar (Matching Template Format) */}
-      <div 
-        className="sticky top-[64px] sm:top-[72px] z-30 w-full mb-6 py-2 overflow-x-auto no-scrollbar transition-all duration-300 bg-transparent"
-      >
-        <div 
-          className="flex items-center gap-1.5 p-1.5 min-w-max bg-slate-100/80 dark:bg-slate-950/60 rounded-2xl border border-slate-200/40 dark:border-white/5 shrink-0 select-none shadow-sm"
-        >
-          {TABS.map((tab) => {
-            const isActive = activeTab === tab.id;
-            const Icon = tab.Icon;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => handleTabChange(tab.id)}
-                className={cn(
-                  "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0",
-                  isActive
-                    ? "bg-indigo-600 dark:bg-cyan-500 text-white shadow-md shadow-indigo-600/20 dark:shadow-cyan-500/10"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/40"
-                )}
-              >
-                <Icon className={cn("w-4 h-4 shrink-0 transition-transform", isActive ? "text-white scale-110" : "text-slate-400 dark:text-slate-400")} />
-                <span>{isVi ? tab.nameVi : tab.nameEn}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* 4. Main Customization Panels Container */}
-      <div className="w-full">
-        {/* TAB 1: GIAO DIỆN & CHẾ ĐỘ (THEME & DISPLAY MODE) */}
-        {activeTab === "customization" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+      <div className="w-full space-y-12">
+        {/* PHẦN 1: GIAO DIỆN & CHẾ ĐỘ (THEME & DISPLAY MODE) */}
+        <section id="sec-theme" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             {/* Theme Mode Selector (Light / Dark / Auto System) */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -642,9 +613,9 @@ export default function Customization() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { id: "light" as ThemeMode, nameVi: "☀️ Sáng (Light Mode)", nameEn: "☀️ Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background" },
-                  { id: "dark" as ThemeMode, nameVi: "🌙 Tối (Dark Neon)", nameEn: "🌙 Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast" },
-                  { id: "system" as ThemeMode, nameVi: "💻 Theo Hệ Thống (Auto)", nameEn: "💻 Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode" },
+                  { id: "light" as ThemeMode, nameVi: "Sáng (Light Mode)", nameEn: "Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background" },
+                  { id: "dark" as ThemeMode, nameVi: "Tối (Dark Neon)", nameEn: "Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast" },
+                  { id: "system" as ThemeMode, nameVi: "Theo Hệ Thống (Auto)", nameEn: "Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode" },
                 ].map((m) => {
                   const isSelected = themeMode === m.id;
                   return (
@@ -802,17 +773,12 @@ export default function Customization() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 2: BẢNG MÀU & COLOR TOKENS */}
-        {activeTab === "colors" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 2: BẢNG MÀU & COLOR TOKENS */}
+        <section id="sec-colors" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             {/* Color Presets */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -924,17 +890,12 @@ export default function Customization() {
                 ))}
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 3: BO GÓC THẺ & KHUNG (BORDER RADIUS) */}
-        {activeTab === "radius" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 3: BO GÓC THẺ & KHUNG (BORDER RADIUS) */}
+        <section id="sec-radius" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1134,17 +1095,12 @@ export default function Customization() {
                 })}
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 4: CON TRỎ CHUỘT FX (CURSOR FX) */}
-        {activeTab === "cursor" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 4: CON TRỎ CHUỘT FX (CURSOR FX) */}
+        <section id="sec-cursor" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1289,17 +1245,12 @@ export default function Customization() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 5: ÂM THANH FX & MÔI TRƯỜNG (AUDIO & FX) */}
-        {activeTab === "sound" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 5: ÂM THANH FX & MÔI TRƯỜNG (AUDIO & FX) */}
+        <section id="sec-sound" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1441,19 +1392,68 @@ export default function Customization() {
                     })}
                   </div>
                 </div>
+
+                {/* Website Background Music Player Card */}
+                <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-cyan-500/10 dark:from-indigo-950/40 dark:to-cyan-950/30 border border-indigo-200/80 dark:border-indigo-500/30 flex flex-col gap-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
+                        <Music className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight font-play">
+                          {isVi ? "Âm thanh nền Website chính thức" : "Official Website Background Audio"}
+                        </h4>
+                        <p className="text-3xs text-slate-500 dark:text-slate-400 font-mono">
+                          Scena Audio • Ambient Soundscape MP3
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (soundConfig.ambientSound === "website-bg-music") {
+                          setAmbientSound("none");
+                        } else {
+                          setAmbientSound("website-bg-music");
+                        }
+                        playClick();
+                      }}
+                      className={cn(
+                        "px-3.5 py-1.5 rounded-full text-xs font-bold font-play flex items-center gap-1.5 transition-all shadow-sm cursor-pointer",
+                        soundConfig.ambientSound === "website-bg-music"
+                          ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/30 ring-2 ring-indigo-400/40"
+                          : "bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700"
+                      )}
+                    >
+                      {soundConfig.ambientSound === "website-bg-music" ? (
+                        <>
+                          <VolumeX className="w-3.5 h-3.5" />
+                          <span>{isVi ? "Tạm dừng" : "Pause Audio"}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                          <span>{isVi ? "Phát âm nền" : "Play Soundtrack"}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1 text-3xs text-slate-600 dark:text-slate-400 font-mono bg-white/60 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-200/60 dark:border-white/5 truncate">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+                    <span className="truncate">https://cdn.scena.ai/project/10169/b831e310df79c84abab30fc7ee7fc5939213230d5895a09b3617382849f52afe.mp3</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 6: HEADER & FOOTER DOCK (THANH ĐIỀU HƯỚNG & CHÂN TRANG) */}
-        {activeTab === "footer" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 6: HEADER & FOOTER DOCK (THANH ĐIỀU HƯỚNG & CHÂN TRANG) */}
+        <section id="sec-footer" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             {/* 1. Header Dock Settings Card */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
@@ -1614,17 +1614,12 @@ export default function Customization() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
 
-        {/* TAB 7: PHÔNG CHỮ & TYPOGRAPHY */}
-        {activeTab === "typography" && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-6"
-          >
+        {/* PHẦN 7: PHÔNG CHỮ & TYPOGRAPHY */}
+        <section id="sec-typography" className="space-y-6 scroll-mt-28">
+          <div className="space-y-6">
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1739,24 +1734,32 @@ export default function Customization() {
               {/* Typography Hierarchy Table */}
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2">{isVi ? "Bảng phân cấp Typography Tokens:" : "Hierarchy Tokens:"}</h4>
-                {TYPO_TOKENS.map((token) => (
-                  <div
-                    key={token.id}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                  >
-                    <div className="min-w-[180px]">
-                      <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? token.labelVi : token.labelEn}</div>
-                      <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight}</div>
+                {TYPO_TOKENS.map((token) => {
+                  const IconComp = token.Icon;
+                  return (
+                    <div
+                      key={token.id}
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-indigo-400/40 transition-all"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-[220px]">
+                        <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                          <IconComp className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? token.labelVi : token.labelEn}</div>
+                          <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight} | Leading: {token.leading}</div>
+                        </div>
+                      </div>
+                      <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1 font-play">
+                        {customTestText || token.sampleText}
+                      </div>
                     </div>
-                    <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1">
-                      {customTestText || token.sampleText}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </section>
       </div>
 
       {/* 5. DIAGNOSTIC REPORT MODAL */}

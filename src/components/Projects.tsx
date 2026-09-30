@@ -577,9 +577,9 @@ export default function Projects() {
                                 </span>
                               </div>
 
-                              {/* Group Title Badge (Góc trên cùng bên phải) */}
+                              {/* Group Title Badge (Góc trên cùng bên phải) - Kích thước chuẩn hoá đồng bộ với badge số */}
                               <div className={cn(
-                                "absolute top-2.5 right-2.5 z-20 px-2.5 py-1 rounded-full text-3xs font-extrabold backdrop-blur-md border shadow-md max-w-[170px] truncate",
+                                "absolute top-2.5 right-2.5 z-20 h-8 px-3 rounded-full flex items-center justify-center font-mono text-2xs font-bold backdrop-blur-md border shadow-md max-w-[200px] truncate",
                                 theme.phaseBadge
                               )}>
                                 <span className="truncate block">
@@ -590,22 +590,38 @@ export default function Projects() {
                             </div>
                           </div>
 
-                          {/* Standardized Content Area with Color Bar Header & Description */}
-                          <div className="project-card-content p-[15px] flex flex-col min-w-0 text-left gap-2.5">
-                            {/* Standardized Subcard Header with Sleek Color Bar */}
-                            <div className="w-full flex items-start gap-2.5 pb-2 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
-                              <div className={cn("w-2.5 h-8 sm:h-9 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
-                              <div className="flex-1 min-w-0 text-left">
-                                <h3 className={cn("text-h6 tracking-tight line-clamp-2 leading-snug font-bold", theme.title)}>
-                                  {card.branchTitle}
-                                </h3>
+                          {/* Standardized Content Area with Color Bar Header, Description & Tags */}
+                          <div className="project-card-content p-4 flex flex-col min-w-0 text-left gap-2.5 flex-1 justify-between bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-b-[inherit]">
+                            <div className="space-y-2">
+                              {/* Standardized Subcard Header with Sleek Color Bar */}
+                              <div className="w-full flex items-start gap-2.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/60 z-10">
+                                <div className={cn("w-2 h-7 sm:h-8 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
+                                <div className="flex-1 min-w-0 text-left">
+                                  <h3 className={cn("text-sm sm:text-base font-play font-bold tracking-tight line-clamp-2 leading-snug", theme.title)}>
+                                    {card.branchTitle}
+                                  </h3>
+                                </div>
                               </div>
+
+                              {/* Project Description Paragraph */}
+                              <p className="text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3 font-normal font-play">
+                                {card.description}
+                              </p>
                             </div>
 
-                            {/* Project Description Paragraph */}
-                            <p className="text-body-sub text-subcontent text-slate-600 dark:text-slate-300 line-clamp-2 font-normal">
-                              {card.description}
-                            </p>
+                            {/* Project Tags Badge Strip */}
+                            {card.tags && card.tags.length > 0 && (
+                              <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 mt-auto">
+                                {card.tags.map((tag, tagIdx) => (
+                                  <span
+                                    key={tagIdx}
+                                    className="inline-flex items-center text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-2xs hover:bg-slate-200/80 transition-colors"
+                                  >
+                                    {tag.startsWith("#") ? tag : `#${tag}`}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </KeyframersTiltCard>
                         </motion.div>

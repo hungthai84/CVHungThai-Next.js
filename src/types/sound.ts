@@ -1,6 +1,6 @@
 export type SoundPackType = "modern" | "cyber" | "mechanical" | "zen";
 
-export type AmbientSoundType = "none" | "rain" | "space-drone" | "zen-breeze";
+export type AmbientSoundType = "none" | "rain" | "space-drone" | "zen-breeze" | "website-bg-music";
 
 export interface SoundConfig {
   isMuted: boolean;

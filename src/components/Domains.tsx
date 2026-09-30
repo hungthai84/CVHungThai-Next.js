@@ -160,39 +160,21 @@ export function Domains() {
                 selectedDomain.colorTheme.border
               )}
             >
-              {/* Top Action Bar */}
-              <div className="w-full flex items-center justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <motion.div
-                    animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
-                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative flex items-center justify-center shrink-0"
-                  >
-                    {(() => {
-                      const Icon = getIconComponent(selectedDomain.iconName);
-                      return <Icon className="w-5 h-5 text-blue-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />;
-                    })()}
-                  </motion.div>
-                  <h6 className="text-h6 font-bold tracking-tight font-play">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 dark:from-blue-400 dark:via-indigo-300 dark:to-cyan-300">
-                      {isVi ? `Chi tiết lĩnh vực ${selectedDomain.code}: ${selectedDomain.titleVi}` : `Domain ${selectedDomain.code}: ${selectedDomain.titleEn}`}
-                    </span>
-                  </h6>
-                </div>
-
-                <button
-                  onClick={() => setSelectedDomainId(null)}
-                  className="px-3.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Đóng chi tiết" : "Close"}</span>
-                </button>
-              </div>
+              {/* Close Button - Icon X only on top right corner */}
+              <button
+                type="button"
+                onClick={() => setSelectedDomainId(null)}
+                aria-label={isVi ? "Đóng chi tiết" : "Close"}
+                title={isVi ? "Đóng chi tiết" : "Close"}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100/90 hover:bg-slate-200 dark:bg-slate-800/90 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700/80 shadow-xs flex items-center justify-center transition-all cursor-pointer z-20 hover:scale-110 active:scale-95"
+              >
+                <X className="w-4 h-4" />
+              </button>
 
               {/* ========================================================================= */}
               {/* BENTO + MASONRY HYBRID LAYOUT FOR DOMAIN DETAIL VIEW                     */}
               {/* ========================================================================= */}
-              <div className="flex flex-col gap-5 w-full pt-1">
+              <div className="flex flex-col gap-5 w-full pt-2">
                 
                 {/* 1. TOP BENTO ROW: Featured Hero Banner (8 cols) + Key Parameters Tile (4 cols) */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch w-full">

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTheme, ThemeMode } from '../context/ThemeContext';
-import { Sun, Moon, Sparkles, Monitor, Check } from 'lucide-react';
+import { Sun, Moon, Sparkles, Check } from 'lucide-react';
 
 export interface ThemeToggleProps {
   /** Display variant: 'segmented' (3-button pill), 'cycle' (single button), or 'dropdown' */
@@ -68,7 +68,7 @@ export function ThemeToggle({
       id: 'system',
       labelVi: 'Hệ thống',
       labelEn: 'System',
-      icon: <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 dark:text-cyan-400" />,
+      icon: <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 dark:text-cyan-400" />,
       desc: 'Tự động theo cấu hình OS thiết bị',
     },
   ];
@@ -102,7 +102,7 @@ export function ThemeToggle({
         type="button"
         onClick={cycleMode}
         aria-label={`Chế độ giao diện: ${currentModeObj.labelVi} (Click để đổi sang chế độ tiếp theo)`}
-        title={`Chế độ: ${currentModeObj.labelVi} (${currentModeObj.desc}) - Click để chuyển Sáng ☀️ / Tối 🌙 / Hệ thống 💻`}
+        title={`Chế độ: ${currentModeObj.labelVi} (${currentModeObj.desc}) - Click để chuyển đổi chế độ`}
         className={`group relative inline-flex items-center justify-center rounded-full border transition-all duration-300 active:scale-95 cursor-pointer select-none backdrop-blur-xl ${
           isDark
             ? 'bg-slate-900/80 border-white/20 text-slate-100 hover:border-cyan-400/60 shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_0_15px_rgba(0,240,255,0.25)]'

@@ -964,7 +964,7 @@ export const OPPORTUNITIES_DATA: SwotSkillItem[] = [
     percent: 92,
     descVi: "Số hóa toàn diện kênh tương tác và luồng công việc CSKH",
     descEn: "Holistic digitalization of customer touchpoints and workflows",
-    iconName: "Monitor",
+    iconName: "Globe",
     color: "bg-purple-50/80 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/60"
   },
   {

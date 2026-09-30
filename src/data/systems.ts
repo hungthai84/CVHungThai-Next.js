@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Monitor,
+  Globe,
   Scale,
   HeartPulse,
   UserCheck,
@@ -91,7 +91,7 @@ export const SYSTEMS_DATA: SystemItem[] = [
     descEn: "Service Delivery Platform: Centered portal for all Customer Service operations and integrations.",
     url: "https://www.sdpplatfrom.powerservice.one",
     gradientClass: "from-[#6366f1] via-[#4f46e5] to-[#3730a3]",
-    icon: Monitor,
+    icon: Globe,
     watermarkIcon: LogIn
   },
   {

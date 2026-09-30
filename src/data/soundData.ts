@@ -88,5 +88,12 @@ export const AMBIENT_SOUND_OPTIONS: AmbientSoundOption[] = [
     nameEn: "Zen Breeze",
     descVi: "Âm thanh gió nhẹ thoảng qua đồng cỏ mang lại sự bình yên",
     descEn: "Organic resonant pink noise filter simulating a gentle mountain breeze"
+  },
+  {
+    id: "website-bg-music",
+    nameVi: "Nhạc nền website (Acoustic Ambient)",
+    nameEn: "Website Background Music",
+    descVi: "Âm thanh nền du dương, thư giãn và chuyên nghiệp cho website",
+    descEn: "Melodic relaxing background soundtrack for immersive website experience"
   }
 ];

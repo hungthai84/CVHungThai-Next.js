@@ -4,7 +4,6 @@ import { PageCardHeader } from "./PageCardHeader";
 import {
   Sun,
   Moon,
-  Monitor,
   Search,
   ExternalLink,
   Plus,
@@ -507,7 +506,7 @@ export default function TemplatePage() {
                 }`}
                 title={isVi ? "Tự động theo hệ điều hành" : "System Mode"}
               >
-                <Monitor className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                 <span className="hidden sm:inline">{isVi ? "Hệ thống" : "System"}</span>
               </button>
             </div>

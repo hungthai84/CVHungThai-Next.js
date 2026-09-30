@@ -22,6 +22,57 @@
         "updatedAt": { "type": "string" }
       },
       "required": ["updatedAt"]
+    },
+    "XRayTemplate": {
+      "title": "XRayTemplate",
+      "description": "Long-term persistent X-RAY design templates and configuration presets",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "description": { "type": "string" },
+        "wallpaperName": { "type": "string" },
+        "wallpaperUrl": { "type": "string" },
+        "uiConfig": { "type": "string" },
+        "colors": { "type": "string" },
+        "font": { "type": "string" },
+        "layout": { "type": "string" },
+        "content": { "type": "string" },
+        "settings": { "type": "string" },
+        "version": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "authorId": { "type": "string" }
+      },
+      "required": ["id", "name", "createdAt", "updatedAt", "version", "status"]
+    },
+    "SystemSettings": {
+      "title": "SystemSettings",
+      "description": "User production default configurations, sound, cursor, theme, font, and layout",
+      "type": "object",
+      "properties": {
+        "themeMode": { "type": "string" },
+        "theme": { "type": "string" },
+        "colorPreset": { "type": "string" },
+        "fontScale": { "type": "number" },
+        "borderRadius": { "type": "number" },
+        "borderRadiusCard": { "type": "number" },
+        "savedAt": { "type": "string" },
+        "syncedToCloud": { "type": "boolean" }
+      },
+      "required": ["savedAt"]
+    },
+    "CustomFaq": {
+      "title": "CustomFaq",
+      "description": "Custom FAQ question-answer pairs migrated from local cache",
+      "type": "object",
+      "properties": {
+        "faqs": { "type": "string" },
+        "totalCount": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["updatedAt"]
     }
   },
   "firestore": {
@@ -32,6 +83,14 @@
     "users/{userId}/preferences/{prefId}": {
       "schema": "UserPreferences",
       "description": "User preferences and wallpaper storage"
+    },
+    "users/{userId}/xray_templates/{templateId}": {
+      "schema": "XRayTemplate",
+      "description": "User-specific X-Ray design templates"
+    },
+    "xray_templates/{templateId}": {
+      "schema": "XRayTemplate",
+      "description": "Public and shared X-Ray templates"
     }
   }
 }

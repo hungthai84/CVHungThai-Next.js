@@ -346,8 +346,45 @@ export function Contact() {
                 </div>
               </div>
 
-              {/* Horizon bar */}
-              <div className="h-2 w-full rounded-full bg-white/80 dark:bg-slate-700/80 mb-3" />
+              {/* Zalo QR Code Section */}
+              <div className="w-full my-3 p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-blue-200/80 dark:border-blue-500/30 shadow-sm flex items-center gap-3.5 relative z-10">
+                <a
+                  href="https://zalo.me/0909097882"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative p-1.5 rounded-xl bg-white border border-slate-200 dark:border-slate-700 shadow-xs shrink-0 group/qr hover:scale-105 transition-transform"
+                  title={isVi ? "Quét mã để kết nối Zalo trực tiếp" : "Scan QR code to connect on Zalo"}
+                >
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fzalo.me%2F0909097882&color=0068ff"
+                    alt="Zalo QR Code - 0909097882"
+                    className="w-16 h-16 sm:w-18 sm:h-18 object-contain rounded-lg"
+                  />
+                  <span className="absolute -bottom-1 -right-1 px-1 py-0.2 text-[8px] font-black font-mono bg-blue-600 text-white rounded shadow-xs">
+                    ZALO
+                  </span>
+                </a>
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[11px] font-bold text-blue-700 dark:text-cyan-400 font-mono">
+                      {isVi ? "MÃ QR ZALO TRỰC TIẾP" : "DIRECT ZALO QR"}
+                    </span>
+                  </div>
+                  <p className="text-xs font-bold text-slate-800 dark:text-white truncate font-play mt-0.5">
+                    Nguyễn Hùng Thái · 0909 097 882
+                  </p>
+                  <a
+                    href="https://zalo.me/0909097882"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[10px] text-blue-600 dark:text-blue-400 font-semibold hover:underline mt-1"
+                  >
+                    <span>{isVi ? "Nhấn để mở Zalo chat" : "Click to open Zalo chat"}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
 
               {/* Trust chips */}
               <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-extrabold text-slate-700 dark:text-slate-200 z-10">

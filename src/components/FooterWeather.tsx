@@ -246,7 +246,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           onClick={() => {
             setIsOpen(!isOpen);
           }}
-          className="group flex items-center gap-1 xs:gap-1.5 sm:gap-2.5 p-1 xs:p-1.5 sm:p-2 pr-2 xs:pr-2.5 sm:pr-4 rounded-full h-[36px] xs:h-[40px] sm:h-[44px] bg-transparent hover:bg-slate-100/50 dark:hover:bg-slate-800/50 border-0 shadow-none transition-all duration-200 active:scale-95 cursor-pointer text-left font-['Play',sans-serif] shrink-0 max-w-full"
+          className="group flex items-center gap-1 xs:gap-1.5 sm:gap-2.5 p-1 xs:p-1.5 sm:p-2 pr-2 xs:pr-2.5 sm:pr-4 rounded-full h-[36px] xs:h-[40px] sm:h-[44px] bg-transparent hover:bg-transparent border-0 shadow-none transition-all duration-200 active:scale-95 cursor-pointer text-left font-['Play',sans-serif] shrink-0 max-w-full"
           title={lang === "vi" ? `Thời tiết: ${weather.temp}°C tại ${weather.city}` : `Weather: ${weather.temp}°C in ${weather.city}`}
         >
           {/* Time & Date Block */}

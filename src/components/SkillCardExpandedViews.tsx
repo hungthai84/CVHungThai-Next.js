@@ -23,7 +23,6 @@ import {
   Zap,
   MessageSquare,
   BadgeDollarSign,
-  Monitor,
   Languages,
   ShieldAlert,
   PieChart,
@@ -255,7 +254,7 @@ export function ExpandedCardOpportunities({ isVi, onClose, onContact }: Expanded
         : "Optimizing CSKH operating budgets via digital transformation and lean automation models."
     },
     {
-      icon: Monitor,
+      icon: Globe,
       title: isVi ? "Chuyển đổi Số" : "Digital Transformation & Cloud CX",
       percent: 92,
       desc: isVi 
@@ -443,7 +442,7 @@ export function ExpandedCardWeaknesses({ isVi, onClose, onContact }: ExpandedCar
       desc: isVi ? "Cập nhật và tích hợp liên tục các công nghệ mới như GenAI, Cloud Native và tự động hóa quy trình." : "Continuous integration of emerging technologies like GenAI, Cloud Native, and workflow automation."
     },
     {
-      icon: Monitor,
+      icon: Globe,
       label: isVi ? "Thiết kế & Lập trình" : "Design & Software Engineering",
       percent: 78,
       target: 90,

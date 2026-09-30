@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { BackgroundItem, BackgroundConfig, BackgroundType } from "../types/background";
 import { PERMANENT_WALLPAPERS_DATA } from "../data/wallpapers";
+import { persistentStorageService } from "../services/persistentStorageService";
 
 // Initial wallpapers imported directly from dedicated data file
 export const INITIAL_WALLPAPERS_FROM_JSON: BackgroundItem[] = PERMANENT_WALLPAPERS_DATA;
@@ -65,9 +66,10 @@ interface BackgroundContextType {
   setBlurAmount: (blur: number) => void;
   resetToDefaultGradient: () => void;
   exportConfigToJson: () => string;
-  importConfigFromJson: (jsonString: string) => { success: boolean; message: string };
+  importConfigFromJson: (jsonString: string, overwriteMode?: boolean) => { success: boolean; message: string };
   downloadJsonFile: () => void;
   resetToDefaultJsonLibrary: () => void;
+  uploadWallpaperFile?: (file: File) => Promise<string>;
 }
 
 const STORAGE_KEY = "portfolio_persistent_background_config_v2";
@@ -143,13 +145,43 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Sync to localStorage on every change so it is permanently saved in the website
+  // 1. CLOUD SYNC ON MOUNT: Load saved wallpaper config from Cloud Database if localStorage was wiped or user is on another device
+  useEffect(() => {
+    let isMounted = true;
+    persistentStorageService.loadWallpaperConfigFromDatabase()
+      .then((cloudConfig) => {
+        if (isMounted && cloudConfig) {
+          console.info("Restoring wallpaper configuration from Cloud Database...");
+          setConfig((prev) => ({
+            ...prev,
+            ...cloudConfig,
+            items: cloudConfig.items && cloudConfig.items.length > 0 ? cloudConfig.items : prev.items
+          }));
+        }
+      })
+      .catch((err) => {
+        console.warn("Background cloud database sync catch:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // 2. Sync to localStorage (Cache) and Cloud Database (Source of Truth)
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
     } catch (e) {
       console.error("Failed to save background config to localStorage", e);
     }
+
+    // Debounce save to Cloud Database for persistent storage
+    const timer = setTimeout(() => {
+      persistentStorageService.saveWallpaperConfigToDatabase(config).catch(() => {});
+    }, 1200);
+
+    return () => clearTimeout(timer);
   }, [config]);
 
   const openModal = () => setIsModalOpen(true);
@@ -420,11 +452,11 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
     downloadAnchor.remove();
   };
 
-  const importConfigFromJson = (jsonString: string): { success: boolean; message: string } => {
+  const importConfigFromJson = (jsonString: string, overwriteMode: boolean = false): { success: boolean; message: string } => {
     try {
       const parsed = JSON.parse(jsonString);
       if (!parsed || (typeof parsed !== 'object' && !Array.isArray(parsed))) {
-        return { success: false, message: "Định dạng file JSON không hợp lệ." };
+        return { success: false, message: "Định dạng tệp JSON không hợp lệ." };
       }
 
       const rawCandidateList: any[] = [];
@@ -432,18 +464,16 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
       // Collect from all possible arrays inside parsed JSON
       if (Array.isArray(parsed)) {
         rawCandidateList.push(...parsed);
-      }
-      if (Array.isArray(parsed.allLinks)) {
-        rawCandidateList.push(...parsed.allLinks);
-      }
-      if (Array.isArray(parsed.customWallpapers)) {
-        rawCandidateList.push(...parsed.customWallpapers);
-      }
-      if (Array.isArray(parsed.items)) {
-        rawCandidateList.push(...parsed.items);
-      }
-      if (Array.isArray(parsed.wallpapers)) {
-        rawCandidateList.push(...parsed.wallpapers);
+      } else {
+        if (Array.isArray(parsed.allLinks)) {
+          rawCandidateList.push(...parsed.allLinks);
+        } else if (Array.isArray(parsed.items)) {
+          rawCandidateList.push(...parsed.items);
+        } else if (Array.isArray(parsed.wallpapers)) {
+          rawCandidateList.push(...parsed.wallpapers);
+        } else if (Array.isArray(parsed.customWallpapers)) {
+          rawCandidateList.push(...parsed.customWallpapers);
+        }
       }
 
       // If parsed is an object with single wallpaper
@@ -451,24 +481,12 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         rawCandidateList.push(parsed);
       }
 
-      // Convert and deduplicate against existing items first
-      const seenKeys = new Set<string>();
-      
-      // Populate seenKeys with existing wallpaper items to avoid adding duplicates of existing ones
-      if (config && Array.isArray(config.items)) {
-        for (const item of config.items) {
-          if (!item) continue;
-          const isCss = item.type === 'css';
-          const cssCode = item.cssCode || "";
-          const url = item.url || "";
-          const dedupKey = isCss 
-            ? `css:${cssCode.replace(/\s+/g, ' ').slice(0, 100)}` 
-            : `url:${url.toLowerCase().split('?')[0]}`;
-          seenKeys.add(dedupKey);
-        }
+      if (rawCandidateList.length === 0) {
+        return { success: false, message: "Không tìm thấy dữ liệu hình nền hợp lệ trong JSON." };
       }
 
-      const processedItems: BackgroundItem[] = [];
+      const parsedItems: BackgroundItem[] = [];
+      const seenKeysInInput = new Set<string>();
 
       for (const it of rawCandidateList) {
         if (!it || typeof it !== 'object') continue;
@@ -482,17 +500,14 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         const isCodePen = it.type === 'codepen' || url.toLowerCase().includes('codepen.io') || url.toLowerCase().includes('cdpn.io');
         const isVideo = it.type === 'video' || url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.webm');
 
-        const resolvedType: BackgroundType = isCss ? 'css' : isCodePen ? 'codepen' : isVideo ? 'video' : 'image';
+        const resolvedType: BackgroundType = isCss ? 'css' : isCodePen ? 'codepen' : isVideo ? 'video' : (it.type || 'image');
 
-        // Unique deduplication key: url (case-insensitive) or normalized css code
         const dedupKey = isCss 
           ? `css:${cssCode.replace(/\s+/g, ' ').slice(0, 100)}` 
           : `url:${url.toLowerCase().split('?')[0]}`;
 
-        if (seenKeys.has(dedupKey)) {
-          continue; // Loại trùng lặp
-        }
-        seenKeys.add(dedupKey);
+        if (seenKeysInInput.has(dedupKey)) continue;
+        seenKeysInInput.add(dedupKey);
 
         // Extract thumbnail for CodePen
         let preview = (it.previewUrl || it.thumbnail || it.thumb || "").toString().trim();
@@ -503,9 +518,9 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         }
 
         const id = it.id || `custom-wp-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
-        const name = it.name || (isCss ? `Hình nền CSS #${processedItems.length + 1}` : isCodePen ? `CodePen #${processedItems.length + 1}` : `Hình nền #${processedItems.length + 1}`);
+        const name = it.name || (isCss ? `Hình nền CSS #${parsedItems.length + 1}` : isCodePen ? `CodePen #${parsedItems.length + 1}` : `Hình nền #${parsedItems.length + 1}`);
 
-        processedItems.push({
+        parsedItems.push({
           id,
           name,
           type: resolvedType,
@@ -518,30 +533,78 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         });
       }
 
-      if (processedItems.length === 0) {
-        return { success: false, message: "Không tìm thấy hình nền mới hoặc toàn bộ hình nền nhập vào đã tồn tại (lọc trùng)." };
+      if (parsedItems.length === 0) {
+        return { success: false, message: "Không xử lý được hình nền nào từ cấu trúc JSON." };
       }
 
-      const finalItems = [
-        ...(config?.items || []),
-        ...processedItems
-      ];
+      let updatedList: BackgroundItem[] = [];
+      let addedCount = 0;
+      let updatedCount = 0;
 
-      const activeId = config?.activeId || processedItems[0]?.id || "custom-wp-1787476757058";
-      const targetItem = finalItems.find(it => it.id === activeId) || finalItems[0];
+      if (overwriteMode) {
+        updatedList = parsedItems;
+        addedCount = parsedItems.length;
+      } else {
+        const currentItems = [...(config?.items || [])];
+        updatedList = [...currentItems];
+
+        for (const newItem of parsedItems) {
+          const key = newItem.type === 'css'
+            ? `css:${(newItem.cssCode || "").replace(/\s+/g, ' ').slice(0, 100)}`
+            : `url:${(newItem.url || "").toLowerCase().split('?')[0]}`;
+
+          const existingByIdIndex = updatedList.findIndex(x => x.id === newItem.id);
+          const existingByKeyIndex = key ? updatedList.findIndex(x => {
+            const xKey = x.type === 'css'
+              ? `css:${(x.cssCode || "").replace(/\s+/g, ' ').slice(0, 100)}`
+              : `url:${(x.url || "").toLowerCase().split('?')[0]}`;
+            return xKey === key;
+          }) : -1;
+
+          if (existingByIdIndex >= 0) {
+            updatedList[existingByIdIndex] = { ...updatedList[existingByIdIndex], ...newItem };
+            updatedCount++;
+          } else if (existingByKeyIndex >= 0) {
+            updatedList[existingByKeyIndex] = { ...updatedList[existingByKeyIndex], ...newItem };
+            updatedCount++;
+          } else {
+            updatedList.push(newItem);
+            addedCount++;
+          }
+        }
+      }
+
+      let targetActiveId = parsed.selectedWallpaperId || parsed.activeId || config?.activeId;
+      if (!targetActiveId || !updatedList.some(x => x.id === targetActiveId)) {
+        targetActiveId = updatedList[0]?.id || "custom-wp-1787476757058";
+      }
+
+      const targetItem = updatedList.find(it => it.id === targetActiveId) || updatedList[0];
+
+      const overlayOpacity = typeof parsed.overlayOpacity === 'number' 
+        ? parsed.overlayOpacity 
+        : (typeof config?.overlayOpacity === 'number' ? config.overlayOpacity : 25);
+
+      const blurAmount = typeof parsed.blurAmount === 'number'
+        ? parsed.blurAmount
+        : (typeof config?.blurAmount === 'number' ? config.blurAmount : 0);
+
+      const isWallpaperHidden = typeof parsed.isWallpaperHidden === 'boolean'
+        ? parsed.isWallpaperHidden
+        : !!config?.isWallpaperHidden;
 
       const newConfig: BackgroundConfig = {
         version: 1,
         savedAt: new Date().toISOString(),
         selectedWallpaperId: targetItem.id,
-        isWallpaperHidden: !!config?.isWallpaperHidden,
+        isWallpaperHidden,
         activeId: targetItem.id,
         activeType: targetItem.type,
         activeUrl: targetItem.url,
-        activeCssCode: targetItem?.cssCode || config?.activeCssCode || "",
-        overlayOpacity: typeof config?.overlayOpacity === 'number' ? config.overlayOpacity : 25,
-        blurAmount: typeof config?.blurAmount === 'number' ? config.blurAmount : 0,
-        items: finalItems
+        activeCssCode: targetItem?.cssCode || "",
+        overlayOpacity,
+        blurAmount,
+        items: updatedList
       };
 
       setConfig(newConfig);
@@ -557,9 +620,30 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         }));
       } catch (e) {}
 
-      return { success: true, message: `Đã nhập thêm và lọc trùng thành công ${processedItems.length} hình nền từ JSON!` };
+      const msg = overwriteMode
+        ? `✓ Đã ghi đè toàn bộ danh sách hình nền thành công (${parsedItems.length} hình nền)!`
+        : updatedCount > 0 && addedCount > 0
+          ? `✓ Đã cập nhật ${updatedCount} hình nền và thêm mới ${addedCount} hình nền thành công!`
+          : updatedCount > 0
+            ? `✓ Đã cập nhật thành công ${updatedCount} hình nền hiện có!`
+            : `✓ Đã thêm mới ${addedCount} hình nền từ JSON!`;
+
+      return { success: true, message: msg };
     } catch (e: any) {
-      return { success: false, message: `Lỗi đọc JSON: ${e.message}` };
+      return { success: false, message: `Lỗi đọc dữ liệu JSON: ${e.message}` };
+    }
+  };
+
+  const uploadWallpaperFile = async (file: File): Promise<string> => {
+    try {
+      const url = await persistentStorageService.uploadWallpaperImage(file);
+      if (url) {
+        addBackgroundLink(url, "image", file.name.replace(/\.[^/.]+$/, ""), "upload");
+      }
+      return url;
+    } catch (e) {
+      console.error("Upload error:", e);
+      return "";
     }
   };
 
@@ -580,7 +664,8 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
         exportConfigToJson,
         importConfigFromJson,
         downloadJsonFile,
-        resetToDefaultJsonLibrary
+        resetToDefaultJsonLibrary,
+        uploadWallpaperFile
       }}
     >
       {children}

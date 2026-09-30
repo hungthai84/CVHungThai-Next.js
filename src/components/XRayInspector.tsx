@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Scan, X, Copy, Check, Sparkles, Layers, Crosshair, Terminal, FolderTree, ChevronDown, ChevronRight, Edit3, Trash2, PlusCircle, ArrowRightLeft, ExternalLink, Globe, Tag, Target, Zap, RefreshCw, Sun, Moon, Info, CheckCircle2, ListPlus, AlertCircle, FileCode, RotateCw, Filter, Layout, Code2, Image, Boxes, Wrench, ShieldCheck, Play, Sliders, Palette, BookOpen, Save, User, Monitor, GraduationCap, Briefcase, Brain, ClipboardList, Video, LayoutGrid, MessagesSquare, Film, Navigation, Search, Eye, Grid, List, Type, Baseline, SlidersHorizontal, Columns, Heading } from "lucide-react";
+import { Scan, X, Copy, Check, Sparkles, Layers, Crosshair, Terminal, FolderTree, ChevronDown, ChevronRight, Edit3, Trash2, PlusCircle, ArrowRightLeft, ExternalLink, Globe, Tag, Target, Zap, RefreshCw, Sun, Moon, Info, CheckCircle2, ListPlus, AlertCircle, FileCode, RotateCw, Filter, Layout, Code2, Image, Boxes, Wrench, ShieldCheck, Play, Sliders, Palette, BookOpen, Save, User, Home, GraduationCap, Briefcase, Brain, ClipboardList, Video, LayoutGrid, MessagesSquare, Film, Navigation, Search, Eye, Grid, List, Type, Baseline, SlidersHorizontal, Columns, Heading } from "lucide-react";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
+import { persistentStorageService, XRayTemplateRecord } from "../services/persistentStorageService";
 
 export interface TypographyTokenDef {
   id: string;
@@ -919,7 +920,7 @@ export const WEBSITE_PAGES_META: WebsitePageInfo[] = [
     category: "main",
     categoryVi: "Trang chính",
     categoryColor: "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/30",
-    icon: Monitor,
+    icon: Home,
     descriptionVi: "Khu vực đón tiếp, chức danh CX/CS Leader, các chỉ số thành tựu cốt lõi và nút kêu gọi hành động.",
     childCount: 5
   },
@@ -1344,7 +1345,121 @@ export default function XRayInspector() {
       return [];
     }
   });
-  const [savedModalTab, setSavedModalTab] = useState<"saved" | "history">("saved");
+  const [savedModalTab, setSavedModalTab] = useState<"saved" | "history" | "cloud_templates">("saved");
+
+  // Cloud Database X-Ray Templates State (Long-term persistent storage)
+  const [cloudXRayTemplates, setCloudXRayTemplates] = useState<XRayTemplateRecord[]>([]);
+  const [isLoadingCloudTemplates, setIsLoadingCloudTemplates] = useState<boolean>(true);
+
+  // Load X-Ray templates from Cloud Database on mount
+  useEffect(() => {
+    let isMounted = true;
+    persistentStorageService.loadXRayTemplates()
+      .then((templates) => {
+        if (isMounted) {
+          setCloudXRayTemplates(templates);
+          setIsLoadingCloudTemplates(false);
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not load cloud X-Ray templates:", err);
+        if (isMounted) setIsLoadingCloudTemplates(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Save current configuration & design as an X-Ray Template to Cloud Database
+  const handleSaveXRayTemplateToCloud = async (customName?: string) => {
+    try {
+      playUiSound("success");
+      const name = customName || (selectedElement ? `Mẫu X-RAY: ${selectedElement.componentType} (${selectedElement.sectionName})` : `Mẫu X-RAY ${new Date().toLocaleDateString("vi-VN")}`);
+      
+      let bgUrl = "";
+      let bgName = "Hình nền mặc định";
+      try {
+        const bgConf = localStorage.getItem("portfolio_persistent_background_config_v2");
+        if (bgConf) {
+          const parsed = JSON.parse(bgConf);
+          bgUrl = parsed.activeUrl || "";
+          bgName = parsed.items?.find((i: any) => i.id === parsed.activeId)?.name || "Hình nền hiện tại";
+        }
+      } catch (e) {}
+
+      const newTemplate = await persistentStorageService.saveXRayTemplate({
+        name,
+        description: userInstruction.trim() || "Cấu hình Mẫu X-RAY thiết kế lưu trữ lâu dài trên Cloud Database.",
+        wallpaperName: bgName,
+        wallpaperUrl: bgUrl,
+        uiConfig: {
+          theme: document.documentElement.classList.contains("dark") ? "dark" : "light",
+          editPreset,
+          addPreset
+        },
+        colors: {
+          accent: "#06b6d4",
+          border: "rgba(255,255,255,0.2)"
+        },
+        font: "Plus Jakarta Sans / Play",
+        layout: "Bento Grid 12 Columns",
+        content: {
+          actionQueue,
+          selectedElement: selectedElement?.fullSelector,
+          userInstruction
+        },
+        settings: {
+          deleteMode,
+          timestamp: new Date().toISOString()
+        },
+        status: "active"
+      });
+
+      setCloudXRayTemplates((prev) => {
+        const filtered = prev.filter((t) => t.id !== newTemplate.id);
+        return [newTemplate, ...filtered];
+      });
+
+      showToast(`Đã lưu Mẫu X-RAY "${name}" (v${newTemplate.version}) vào Cloud Database lâu dài!`);
+    } catch (err) {
+      console.error("Save template error:", err);
+      showToast("Lỗi khi lưu Mẫu X-RAY vào Cloud Database!");
+    }
+  };
+
+  // Delete / Archive template in Cloud Database
+  const handleDeleteCloudTemplate = async (templateId: string) => {
+    try {
+      playUiSound("pop");
+      await persistentStorageService.deleteXRayTemplate(templateId);
+      setCloudXRayTemplates((prev) => prev.filter((t) => t.id !== templateId));
+      showToast("Đã xóa Mẫu X-RAY khỏi Cloud Database!");
+    } catch (err) {
+      showToast("Lỗi khi xóa Mẫu X-RAY!");
+    }
+  };
+
+  // Restore earlier version of template from Cloud Database
+  const handleRestoreCloudTemplateVersion = async (templateId: string, version: number) => {
+    try {
+      playUiSound("success");
+      const restored = await persistentStorageService.restoreTemplateVersion(templateId, version);
+      if (restored) {
+        setCloudXRayTemplates((prev) => prev.map((t) => (t.id === restored.id ? restored : t)));
+        showToast(`Đã khôi phục thành công Mẫu X-RAY về phiên bản v${version}!`);
+      }
+    } catch (err) {
+      showToast("Không thể khôi phục phiên bản!");
+    }
+  };
+
+  // Apply template content directly to prompt
+  const handleApplyCloudTemplate = (template: XRayTemplateRecord) => {
+    playUiSound("click");
+    setUserInstruction(template.description || `Áp dụng Mẫu X-RAY [${template.name}]`);
+    showToast(`Đã nạp Mẫu X-RAY "${template.name}" vào bảng yêu cầu!`);
+    setShowSavedListModal(false);
+  };
 
   const [showSavedListModal, setShowSavedListModal] = useState<boolean>(false);
   const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
@@ -5582,11 +5697,34 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <Terminal className="w-3 h-3 text-amber-400" />
                       <span>Lịch Sử Chat ({chatHistory.length})</span>
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => { playUiSound("click"); setSavedModalTab("cloud_templates"); }}
+                      className={cn(
+                        "px-2.5 py-0.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
+                        savedModalTab === "cloud_templates"
+                          ? "bg-cyan-600 text-white shadow-xs"
+                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      )}
+                    >
+                      <Sparkles className="w-3 h-3 text-cyan-400" />
+                      <span>Mẫu X-RAY Cloud ({cloudXRayTemplates.length})</span>
+                    </button>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
+                {savedModalTab === "cloud_templates" && (
+                  <button
+                    onClick={() => handleSaveXRayTemplateToCloud()}
+                    className="px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+                    title="Lưu cấu hình hiện tại thành Mẫu X-RAY lưu trữ đám mây lâu dài"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    <span>Lưu Mẫu Hiện Tại</span>
+                  </button>
+                )}
                 {savedModalTab === "saved" && savedPrompts.length > 0 && (
                   <>
                     <button
@@ -5684,7 +5822,164 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             )}
 
             <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh] custom-scrollbar">
-              {savedModalTab === "saved" ? (
+              {savedModalTab === "cloud_templates" ? (
+                /* TAB 3: MẪU X-RAY LƯU TRỮ CLOUD DATABASE LÂU DÀI */
+                cloudXRayTemplates.length === 0 ? (
+                  <div className="text-center py-12 space-y-3">
+                    <div className="w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Chưa có Mẫu X-RAY nào trên Cloud Database.</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+                      Bấm nút "Lưu Mẫu Hiện Tại" để lưu cấu hình thiết kế, hình nền, màu sắc và layout lên Cloud Database lâu dài!
+                    </p>
+                  </div>
+                ) : (
+                  cloudXRayTemplates.map((tmpl) => (
+                    <div
+                      key={tmpl.id}
+                      className={cn(
+                        "p-4 rounded-2xl border space-y-3 transition-all",
+                        isLight ? "bg-slate-50 border-slate-200" : "bg-slate-950 border-slate-800"
+                      )}
+                    >
+                      {/* Top Header of Template */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 dark:border-white/10 pb-2.5">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="font-mono text-3xs font-bold text-slate-400 bg-slate-200/60 dark:bg-white/10 px-2 py-0.5 rounded">
+                            {tmpl.id}
+                          </span>
+                          <h4 className="font-extrabold text-sm text-cyan-600 dark:text-cyan-400 truncate">
+                            {tmpl.name}
+                          </h4>
+                          <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30">
+                            v{tmpl.version}
+                          </span>
+                          <span className={cn(
+                            "px-2 py-0.5 rounded-full text-3xs font-bold uppercase",
+                            tmpl.status === "active" ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30" : "bg-slate-500/15 text-slate-500"
+                          )}>
+                            {tmpl.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-3xs font-mono text-slate-400">
+                          <span>Tạo: {new Date(tmpl.createdAt).toLocaleDateString("vi-VN")}</span>
+                          <span>·</span>
+                          <span>Cập nhật: {new Date(tmpl.updatedAt).toLocaleDateString("vi-VN")}</span>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {tmpl.description}
+                      </p>
+
+                      {/* Full Specifications Grid (All 15 Required Metadata Fields) */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 p-2.5 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/5 text-[11px]">
+                        <div>
+                          <span className="text-slate-400 font-semibold">Hình nền: </span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 truncate block">
+                            {tmpl.wallpaperName || "Mặc định"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 font-semibold">URL Hình nền: </span>
+                          <span className="font-mono text-slate-600 dark:text-slate-400 truncate block text-[10px]" title={tmpl.wallpaperUrl}>
+                            {tmpl.wallpaperUrl ? `${tmpl.wallpaperUrl.slice(0, 32)}...` : "N/A"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 font-semibold">Cấu hình Giao diện: </span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
+                            {tmpl.uiConfig?.themeId || "Chuẩn Glass Bento"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 font-semibold">Màu sắc: </span>
+                          <span className="font-bold text-cyan-600 dark:text-cyan-400 block truncate">
+                            {tmpl.colors?.presetId || tmpl.colors?.primary || "Đa sắc Cyan/Indigo"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 font-semibold">Bộ Font: </span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
+                            {tmpl.font}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 font-semibold">Bố cục (Layout): </span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
+                            {tmpl.layout}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Version History & Restore (Yêu cầu khôi phục phiên bản) */}
+                      {tmpl.versionHistory && tmpl.versionHistory.length > 0 && (
+                        <div className="p-2 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/40 dark:border-indigo-800/30 text-3xs space-y-1.5">
+                          <span className="font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
+                            Lịch sử phiên bản trước ({tmpl.versionHistory.length}):
+                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            {tmpl.versionHistory.map((hist) => (
+                              <button
+                                key={hist.version}
+                                type="button"
+                                onClick={() => handleRestoreCloudTemplateVersion(tmpl.id, hist.version)}
+                                className="px-2 py-1 rounded bg-white dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300/40 dark:border-indigo-700/40 text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                                title={`Khôi phục về phiên bản v${hist.version}`}
+                              >
+                                <RotateCw className="w-2.5 h-2.5 text-indigo-500" />
+                                <span>Khôi phục v{hist.version} ({new Date(hist.updatedAt).toLocaleDateString("vi-VN")})</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-200/50 dark:border-white/5">
+                        <span className="text-3xs text-slate-400 font-mono">
+                          Người tạo: {tmpl.authorName || "Hệ thống"}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playUiSound("success");
+                              navigator.clipboard.writeText(JSON.stringify(tmpl, null, 2));
+                              showToast("Đã sao chép cấu hình JSON mẫu X-RAY!");
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
+                            title="Sao chép JSON mẫu X-RAY"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>JSON</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleApplyCloudTemplate(tmpl)}
+                            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+                          >
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Áp Dụng Mẫu</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteCloudTemplate(tmpl.id)}
+                            className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
+                            title="Xóa mẫu X-RAY khỏi Cloud Database"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : savedModalTab === "saved" ? (
                 savedPrompts.length === 0 ? (
                   <div className="text-center py-12 space-y-3">
                     <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
@@ -5823,7 +6118,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             )}>
               <div className="flex items-center gap-3">
                 <span className="text-slate-500">
-                  {savedModalTab === "saved" ? `Tổng số: ${savedPrompts.length} prompt` : `Tổng số: ${chatHistory.length} lịch sử chat`}
+                  {savedModalTab === "cloud_templates"
+                    ? `Tổng số: ${cloudXRayTemplates.length} Mẫu X-RAY Cloud Database (Lưu trữ lâu dài)`
+                    : savedModalTab === "saved"
+                    ? `Tổng số: ${savedPrompts.length} prompt`
+                    : `Tổng số: ${chatHistory.length} lịch sử chat`}
                 </span>
                 {savedModalTab === "saved" && savedPrompts.length > 0 && (
                   <button

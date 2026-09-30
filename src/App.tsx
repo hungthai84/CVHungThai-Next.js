@@ -37,6 +37,7 @@ import TypographySettings from "./components/TypographySettings";
 import ExecutiveResumeExportModal from "./components/ExecutiveResumeExportModal";
 import LeftSidebar from "./components/LeftSidebar";
 import RightSidebar from "./components/RightSidebar";
+import { AuthProvider } from "./context/AuthContext";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -50,7 +51,7 @@ import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
-  Monitor, MailOpen, User, GraduationCap, Compass, 
+  Home, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
   Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
   LayoutTemplate, Sliders, ChevronLeft, ChevronRight
@@ -94,7 +95,7 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
 const MemoHero = memo(Hero);
 
 const SECTIONS: SectionMeta[] = [
-  { id: "home", labelKey: "nav.home", Icon: Monitor, Component: MemoHero, padding: "p-0 overflow-hidden" },
+  { id: "home", labelKey: "nav.home", Icon: Home, Component: MemoHero, padding: "p-0 overflow-hidden" },
   { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: Letter, padding: "p-0 overflow-y-auto" },
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
   { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: Domains, padding: "p-0 overflow-y-auto" },
@@ -453,13 +454,61 @@ function MainContent() {
   const currentSection = SECTIONS[activeIndex] || SECTIONS[0];
   const CurrentComponent = currentSection.Component;
 
+  const prevIndex = activeIndex > 0 ? activeIndex - 1 : SECTIONS.length - 1;
+  const nextIndex = activeIndex < SECTIONS.length - 1 ? activeIndex + 1 : 0;
+  const prevSection = SECTIONS[prevIndex];
+  const nextSection = SECTIONS[nextIndex];
+
+  // Keyboard navigation support (ArrowLeft / ArrowRight)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
+      const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
+      if (e.key === "ArrowLeft") {
+        if (currentIndex > 0) {
+          navigateToSection(SECTIONS[currentIndex - 1].id);
+        } else {
+          navigateToSection(SECTIONS[SECTIONS.length - 1].id);
+        }
+      } else if (e.key === "ArrowRight") {
+        if (currentIndex < SECTIONS.length - 1) {
+          navigateToSection(SECTIONS[currentIndex + 1].id);
+        } else {
+          navigateToSection(SECTIONS[0].id);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeSection]);
+
   const getMainCardStyle = () => {
     return getUnifiedSurfaceStyle(theme);
   };
 
+  const isLastSection = activeSection === SECTIONS[SECTIONS.length - 1].id;
+
+  const handleScreenClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isFooterPinned || isLastSection) return;
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("textarea") || target.closest("dialog") || target.closest("nav") || target.closest("header") || target.closest("footer") || target.closest(".modal")) {
+      return;
+    }
+    const clientY = e.clientY;
+    const windowHeight = window.innerHeight;
+    if (clientY < windowHeight / 2) {
+      handlePrevSection();
+    } else {
+      handleNextSection();
+    }
+  };
+
   return (
     <SectionProvider activeSection={activeSection} setActiveSection={setActiveSection} sections={SECTIONS}>
-      <div className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent">
+      <div 
+        onClick={handleScreenClick}
+        className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent"
+      >
         {/* Dynamic Persistent Background Renderer (Video / Image / Gradient) */}
         <BackgroundRenderer />
 
@@ -471,14 +520,30 @@ function MainContent() {
           onNavigate={navigateToSection}
         />
 
-        {/* Center Main Container Wrapper (Cách Header đúng 10px, cách Footer đúng 10px khi ghim hoặc trượt) */}
+        {/* Center Main Container Wrapper with Left & Right 15px Peek Slides */}
         <div 
           className={cn(
-            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            "mx-auto flex items-center justify-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
             isHeaderSlidUp ? "mt-[24px]" : "mt-[70px] sm:mt-[74px]",
             isFooterSlidDown ? "mb-[24px]" : "mb-[70px] sm:mb-[74px]"
           )}
         >
+          {/* Left Peek Slide (Previous) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
+          {hasSlides && (
+            <div 
+              onClick={() => navigateToSection(prevSection.id)}
+              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+              className="hidden sm:flex absolute right-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
+              title={lang === "vi" ? `Slide trước: ${prevSection.id}` : `Previous Slide: ${prevSection.id}`}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-transparent pointer-events-none" />
+              <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:-translate-x-1.5 transition-transform font-play">
+                <ChevronLeft className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0" />
+                <span className="capitalize truncate font-bold text-slate-900 dark:text-white">{lang === "vi" ? "Slide trước" : "Prev"}</span>
+              </div>
+            </div>
+          )}
+
           {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 10px) */}
           <div 
             ref={cardContainerRef}
@@ -503,28 +568,26 @@ function MainContent() {
                   key={activeSection}
                   id={activeSection}
                   initial={{ 
-                    y: 35, 
+                    x: 60, 
                     opacity: 0, 
                     scale: 1,
                     filter: "blur(4px)" 
                   }}
                   animate={{ 
-                    y: 0, 
+                    x: 0, 
                     opacity: 1, 
                     scale: 1,
                     filter: "blur(0px)" 
                   }}
                   exit={{ 
-                    y: -25, 
+                    x: -60, 
                     opacity: 0, 
                     scale: 1,
                     filter: "blur(4px)" 
                   }}
                   transition={{ 
                     duration: 0.4, 
-                    ease: [0.16, 1, 0.3, 1],
-                    staggerChildren: 0.08,
-                    delayChildren: 0.04
+                    ease: [0.16, 1, 0.3, 1]
                   }}
                   className={`w-full h-full ${currentSection.padding} no-scrollbar scroll-smooth`}
                 >
@@ -536,6 +599,21 @@ function MainContent() {
             </main>
           </div>
 
+          {/* Right Peek Slide (Next) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
+          {hasSlides && (
+            <div 
+              onClick={() => navigateToSection(nextSection.id)}
+              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+              className="hidden sm:flex absolute left-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
+              title={lang === "vi" ? `Slide sau: ${nextSection.id}` : `Next Slide: ${nextSection.id}`}
+            >
+              <div className="absolute inset-0 bg-gradient-to-l from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
+              <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:translate-x-1.5 transition-transform font-play">
+                <span className="capitalize truncate font-bold text-slate-900 dark:text-white">{lang === "vi" ? "Slide sau" : "Next"}</span>
+                <ChevronRight className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
@@ -655,25 +733,27 @@ function MainContent() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <NotificationProvider>
-        <BackgroundProvider>
-          <LayoutProvider>
-            <LanguageProvider>
-              <CursorProvider>
-                <SoundProvider>
-                  <FooterProvider>
-                    <HeaderProvider>
-                      <MainContent />
-                    </HeaderProvider>
-                  </FooterProvider>
-                </SoundProvider>
-              </CursorProvider>
-            </LanguageProvider>
-          </LayoutProvider>
-        </BackgroundProvider>
-      </NotificationProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <NotificationProvider>
+          <BackgroundProvider>
+            <LayoutProvider>
+              <LanguageProvider>
+                <CursorProvider>
+                  <SoundProvider>
+                    <FooterProvider>
+                      <HeaderProvider>
+                        <MainContent />
+                      </HeaderProvider>
+                    </FooterProvider>
+                  </SoundProvider>
+                </CursorProvider>
+              </LanguageProvider>
+            </LayoutProvider>
+          </BackgroundProvider>
+        </NotificationProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

@@ -7,7 +7,6 @@ export interface WallpaperCategory {
 }
 
 export const WALLPAPER_CATEGORIES: WallpaperCategory[] = [
-  { id: "all", labelVi: "Tất cả hình nền", labelEn: "All Wallpapers" },
   { id: "css", labelVi: "Mã CSS Shader", labelEn: "CSS & Shaders" },
   { id: "codepen", labelVi: "CodePen Live", labelEn: "CodePen Interactive" },
   { id: "video", labelVi: "Video Chuyển động", labelEn: "Live Motion Videos" },

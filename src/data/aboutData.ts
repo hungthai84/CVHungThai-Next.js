@@ -100,11 +100,11 @@ export const ABOUT_PROFILE_STATS: ProfileStatBadge[] = [
 
 export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
-    id: "gender",
-    labelVi: "Giới tính",
-    labelEn: "Gender",
-    valueVi: "Nam giới",
-    valueEn: "Male",
+    id: "gender_ethnicity",
+    labelVi: "Giới tính / Dân tộc",
+    labelEn: "Gender / Ethnicity",
+    valueVi: "Nam giới / Kinh",
+    valueEn: "Male / Kinh",
     iconName: "User",
     type: "text",
     colorTheme: {
@@ -118,27 +118,9 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
     }
   },
   {
-    id: "ethnicity",
-    labelVi: "Dân tộc",
-    labelEn: "Ethnicity",
-    valueVi: "Kinh",
-    valueEn: "Kinh",
-    iconName: "Users",
-    type: "text",
-    colorTheme: {
-      bg: "bg-indigo-50/40 dark:bg-indigo-950/20",
-      border: "border-indigo-100/80 dark:border-indigo-900/45 hover:border-indigo-300",
-      iconBg: "bg-indigo-500/15 border-indigo-400/30",
-      iconColor: "text-indigo-600 dark:text-indigo-400",
-      labelColor: "text-indigo-500",
-      valueColor: "text-indigo-900 dark:text-indigo-300",
-      arrowColor: "text-indigo-400"
-    }
-  },
-  {
     id: "marital_status",
-    labelVi: "Tình trạng",
-    labelEn: "Status",
+    labelVi: "Tình trạng hôn nhân",
+    labelEn: "Marital Status",
     valueVi: "Độc thân",
     valueEn: "Single",
     iconName: "Heart",
@@ -156,9 +138,9 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
     id: "dob",
     labelVi: "Sinh nhật",
-    labelEn: "Date of birth",
-    valueVi: "22/06/1984",
-    valueEn: "22/06/1984",
+    labelEn: "Date of Birth",
+    valueVi: "22/06/1984 (Giáp Tý - Mệnh Hải Trung Kim, Cung Đoài Kim)",
+    valueEn: "June 22, 1984 (Wood Rat - Sea Metal, Dui Kim)",
     iconName: "Calendar",
     type: "text",
     colorTheme: {
@@ -174,14 +156,14 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
     id: "temp_address",
     labelVi: "Tạm trú",
-    labelEn: "Residence",
-    valueVi: "Q7, Hồ Chí Minh",
-    valueEn: "District 7, HCMC",
+    labelEn: "Current Residence",
+    valueVi: "Quận 7, TP. Hồ Chí Minh",
+    valueEn: "District 7, Ho Chi Minh City",
     iconName: "MapPin",
     type: "map",
     mapTitle: "Địa Chỉ Tạm Trú",
-    mapQuery: "Chung Cư Tân Mỹ, Quận 7, TP Hồ Chí Minh",
-    href: "Chung Cư Tân Mỹ, Q7, TP. Hồ Chí Minh",
+    mapQuery: "Quận 7, TP. Hồ Chí Minh",
+    href: "Quận 7, TP. Hồ Chí Minh",
     colorTheme: {
       bg: "bg-purple-50/40 dark:bg-purple-950/20",
       border: "border-purple-100/80 dark:border-purple-900/45 hover:border-purple-400",
@@ -194,15 +176,15 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "perm_address",
-    labelVi: "Cư trú",
+    labelVi: "Cư trú gốc",
     labelEn: "Hometown",
-    valueVi: "Mỹ Tho, Tiền Giang",
-    valueEn: "My Tho, Tien Giang",
+    valueVi: "TP. Mỹ Tho, Tỉnh Tiền Giang",
+    valueEn: "My Tho City, Tien Giang Province",
     iconName: "Home",
     type: "map",
-    mapTitle: "Địa Chỉ Cư Trú",
-    mapQuery: "7D7 Hoàng Hoa Thám, Phường Mỹ Tho, Tỉnh Đồng Tháp",
-    href: "7D7 Hoàng Hoa Thám, Phường Mỹ Tho, Tỉnh Đồng Tháp",
+    mapTitle: "Địa Chỉ Cư Trú Gốc",
+    mapQuery: "TP. Mỹ Tho, Tỉnh Tiền Giang",
+    href: "TP. Mỹ Tho, Tỉnh Tiền Giang",
     colorTheme: {
       bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
       border: "border-emerald-100/80 dark:border-emerald-900/45 hover:border-emerald-400",
@@ -215,8 +197,8 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "email",
-    labelVi: "Email",
-    labelEn: "Email",
+    labelVi: "Email liên hệ chính thức",
+    labelEn: "Official Email",
     valueVi: "hungthai84@gmail.com",
     valueEn: "hungthai84@gmail.com",
     iconName: "Mail",
@@ -234,13 +216,13 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "phone",
-    labelVi: "Điện thoại / Zalo",
-    labelEn: "Phone / Zalo",
-    valueVi: "0909097882",
-    valueEn: "0909097882",
+    labelVi: "Điện thoại & Zalo",
+    labelEn: "Phone & Zalo",
+    valueVi: "+84 0909097882",
+    valueEn: "+84 0909097882",
     iconName: "Phone",
     type: "phone",
-    href: "tel:0909097882",
+    href: "https://zalo.me/0909097882",
     colorTheme: {
       bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
       border: "border-emerald-100/80 dark:border-emerald-900/45 hover:border-emerald-300",
@@ -252,9 +234,28 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
     }
   },
   {
-    id: "website",
-    labelVi: "Website",
-    labelEn: "Website",
+    id: "website_portfolio",
+    labelVi: "Website Portfolio Netlify",
+    labelEn: "Portfolio Netlify",
+    valueVi: "nguyenhungthaiportfolio.netlify.app",
+    valueEn: "nguyenhungthaiportfolio.netlify.app",
+    iconName: "Globe",
+    type: "link",
+    href: "https://nguyenhungthaiportfolio.netlify.app/",
+    colorTheme: {
+      bg: "bg-teal-50/40 dark:bg-teal-950/20",
+      border: "border-teal-100/80 dark:border-teal-900/45 hover:border-teal-300",
+      iconBg: "bg-teal-500/15 border-teal-400/30",
+      iconColor: "text-teal-600 dark:text-teal-400",
+      labelColor: "text-teal-500",
+      valueColor: "text-teal-900 dark:text-teal-300",
+      arrowColor: "text-teal-400"
+    }
+  },
+  {
+    id: "website_official",
+    labelVi: "Website chính thức",
+    labelEn: "Official Website",
     valueVi: "nguyenhungthai.powerservice.one",
     valueEn: "nguyenhungthai.powerservice.one",
     iconName: "Globe",
@@ -272,8 +273,8 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "linkedin",
-    labelVi: "LinkedIn",
-    labelEn: "LinkedIn",
+    labelVi: "LinkedIn Profile",
+    labelEn: "LinkedIn Profile",
     valueVi: "linkedin.com/in/hungthai84",
     valueEn: "linkedin.com/in/hungthai84",
     iconName: "Linkedin",

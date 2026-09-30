@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import AppIcon from "./AppIcon";
 import PageBanner from "./PageBanner";
-import { Calendar, Users, Camera, Star, Gamepad2, MapPin, Trophy, ClipboardList, Folder, CheckCircle2, Quote, Building2, X, Maximize2, Minimize2, Sparkles, ChevronRight, ChevronsRight, ChevronLeft, ArrowLeft, ArrowRight, Monitor, Smartphone, Megaphone, ClipboardCheck, FileText, Layers, Filter, Briefcase, Image as ImageIcon, Target, Server, Award, Clock, TrendingUp, Check, Phone, ShoppingBag, Heart, Radio, Tv, Activity, CreditCard, ShieldCheck, Bot, Zap, ZoomIn, ZoomOut, RotateCcw, User, FolderKanban, List } from "lucide-react";
+import { Calendar, Users, Camera, Star, Gamepad2, MapPin, Trophy, ClipboardList, Folder, CheckCircle2, Quote, Building2, X, Maximize2, Minimize2, Sparkles, ChevronRight, ChevronsRight, ChevronLeft, ArrowLeft, ArrowRight, Smartphone, Megaphone, ClipboardCheck, FileText, Layers, Filter, Briefcase, Image as ImageIcon, Target, Server, Award, Clock, TrendingUp, Check, Phone, ShoppingBag, Heart, Radio, Tv, Activity, CreditCard, ShieldCheck, Bot, Zap, ZoomIn, ZoomOut, RotateCcw, User, FolderKanban, List } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
@@ -1237,7 +1237,7 @@ const renderBottomIcon = (iconType: string, hexColor: string) => {
       return <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "ved":
     case "garena":
-      return <Monitor className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
+      return <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "gcafe":
       return <Server className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" style={{ color: hexColor }} />;
     case "shopee":
@@ -2158,32 +2158,63 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                 { title: "Lãnh đạo CSKH", desc: "Quản trị đội ngũ & đào tạo thế hệ kế thừa", tag: "Leadership" }
                               ];
 
-                              return domainItems.map((item, tIdx) => (
-                                <div 
-                                  key={tIdx} 
-                                  style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                  className="glass-surface-subtle p-2 px-2.5 border border-white/30 dark:border-white/10 flex items-center justify-between gap-2 hover:border-violet-400/50 transition-all group"
-                                >
-                                  <div className="flex items-center gap-2 min-w-0">
-                                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs group-hover:scale-105 transition-transform">
-                                      <Sparkles className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="min-w-0">
-                                      <div className="flex items-center gap-1.5 flex-wrap">
-                                        <span className="text-xs font-bold text-slate-900 dark:text-white block leading-tight truncate font-play">
-                                          {item.title}
-                                        </span>
-                                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-violet-500/15 text-violet-600 dark:text-violet-300 font-extrabold border border-violet-500/25 shrink-0 font-mono">
-                                          {item.tag}
-                                        </span>
+                              return domainItems.map((item, tIdx) => {
+                                const logoUrl = (() => {
+                                  const t = item.title.toLowerCase();
+                                  if (t.includes("garena")) return "https://i.ibb.co/h1Md65yV/Garena.png";
+                                  if (t.includes("shopee") && !t.includes("pay")) return "https://i.ibb.co/BSVS4xf/Shopee.png";
+                                  if (t.includes("airpay") || t.includes("shopeepay")) return "https://i.ibb.co/LdYv3TJy/Shopee-Paye.png";
+                                  if (t.includes("lol") || t.includes("liên minh") || t.includes("aov") || t.includes("liên quân")) return "https://i.ibb.co/h1Md65yV/Garena.png";
+                                  if (t.includes("gcafe") || t.includes("ved") || t.includes("esports")) return "https://i.ibb.co/BKHcWL5R/Logo-VED.gif";
+                                  if (t.includes("mobifone")) return "https://i.ibb.co/5W06J1T9/mobifone.png";
+                                  if (t.includes("v247") || t.includes("viễn liên")) return "https://i.ibb.co/wNXqg8r/v247.png";
+                                  if (t.includes("lbc") || t.includes("htv")) return "https://i.ibb.co/JjC4wT1X/htvc.png";
+                                  if (t.includes("prudential")) return "https://i.ibb.co/5gnD911C/prudential.png";
+                                  if (t.includes("momo")) return "https://i.ibb.co/mC210d7Q/Mo-Mo.png";
+                                  if (t.includes("finviet") || t.includes("eco")) return "https://i.ibb.co/k2Q2cM1T/finviet.png";
+                                  return null;
+                                })();
+
+                                return (
+                                  <div 
+                                    key={tIdx} 
+                                    style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
+                                    className="glass-surface-subtle p-2 px-2.5 border border-white/30 dark:border-white/10 flex items-center justify-between gap-2 hover:border-violet-400/50 transition-all group"
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <div className="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 shadow-xs flex items-center justify-center shrink-0 overflow-hidden p-0.5 group-hover:scale-110 transition-transform">
+                                        {logoUrl ? (
+                                          <img 
+                                            src={logoUrl} 
+                                            alt={item.title} 
+                                            className="w-full h-full object-cover rounded-lg"
+                                            onError={(e) => {
+                                              (e.currentTarget as HTMLImageElement).style.display = "none";
+                                            }}
+                                          />
+                                        ) : (
+                                          <div className="w-full h-full rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+                                            <Sparkles className="w-3.5 h-3.5" />
+                                          </div>
+                                        )}
                                       </div>
-                                      <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1 mt-0.5">
-                                        {item.desc}
-                                      </p>
+                                      <div className="min-w-0">
+                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                          <span className="text-xs font-bold text-slate-900 dark:text-white block leading-tight truncate font-play">
+                                            {item.title}
+                                          </span>
+                                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-violet-500/15 text-violet-600 dark:text-violet-300 font-extrabold border border-violet-500/25 shrink-0 font-mono">
+                                            {item.tag}
+                                          </span>
+                                        </div>
+                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1 mt-0.5">
+                                          {item.desc}
+                                        </p>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              ));
+                                );
+                              });
                             })()}
                           </div>
                         </div>
