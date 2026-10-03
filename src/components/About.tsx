@@ -300,13 +300,12 @@ export default function About() {
   };
 
   return (
-    <>
-      <section 
-        id="about" 
-        className="relative w-full h-full flex flex-col justify-start items-stretch p-3 sm:p-4 md:p-5 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
-      >
-      {/* 1. TOP PINNED HEADER CHO TRANG GIỚI THIỆU - CARD BOX TIÊU ĐỀ THẺ (CHIỀU NGANG BẰNG HEADER, BO CONG 4 GÓC, NỀN HEADER) */}
-      <div className="w-full shrink-0 mb-3 relative z-30 max-w-7xl mx-auto">
+    <section 
+      id="about" 
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] gap-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+    >
+      {/* 1. TOP PINNED HEADER CHO TRANG GIỚI THIỆU - THẺ 1: HỒ SƠ GIỚI THIỆU */}
+      <div className="w-full shrink-0 relative z-30 max-w-7xl mx-auto">
         <PageCardHeader 
           pageId="about" 
           className="w-full h-full rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-white/70 dark:border-white/10 backdrop-blur-2xl shadow-sm hover:shadow-md transition-all duration-300"
@@ -328,7 +327,7 @@ export default function About() {
         {/* ========================================================================= */}
         {/* HÀNG 1: UPPER HERO & THÔNG TIN CÁ NHÂN (1:1 THEO HÌNH ẢNH MINH HỌA)     */}
         {/* ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 w-full items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[15px] w-full items-stretch">
           
           {/* Main Hero Video Card (lg:col-span-8) - Thẻ chính Giới thiệu có hỗ trợ Giao Diện Sáng & Tối Neon */}
           <motion.div 
@@ -379,8 +378,24 @@ export default function About() {
               />
             )}
 
-            {/* Content Inside Hero: Left text & CTA, Right 4 Bento Stat Cards */}
-            <div className="relative z-10 w-full grid grid-cols-1 md:grid-cols-12 gap-5 items-center flex-grow pt-4">
+            {/* Content Inside Hero: Left text & CTA, Right 4 Bento Stat Cards - Card Box Container */}
+            <div className="relative z-10 w-full h-full flex flex-col justify-between flex-grow pt-2 gap-3">
+              {/* Card Title Box: Tiêu đề thẻ Trợ Lý Ảo */}
+              <div className="flex items-center justify-between pb-2 border-b border-white/20 dark:border-white/10 w-full text-left gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-600 dark:text-cyan-300 border border-blue-400/30 shadow-xs shrink-0">
+                    <Bot className="w-4 h-4 stroke-[2.2]" />
+                  </div>
+                  <h4 className="text-xs sm:text-sm font-black font-play text-slate-900 dark:text-white truncate">
+                    {isVi ? "Trợ Lý Ảo Tương Tác & Video Trực Quan" : "Interactive AI Assistant & Video Showcase"}
+                  </h4>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-2xs font-mono font-bold bg-blue-500/15 text-blue-700 dark:text-cyan-300 border border-blue-500/30 shrink-0">
+                  {isVi ? "Tương tác 24/7" : "Interactive 24/7"}
+                </span>
+              </div>
+
+              <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-5 items-center flex-grow h-full min-h-0">
               
               {/* Left Zone: Text & Action Button */}
               <div className="md:col-span-7 flex flex-col justify-center items-start text-left space-y-3.5">
@@ -529,6 +544,7 @@ export default function About() {
               </div>
 
             </div>
+          </div>
           </motion.div>
 
           {/* Right Card: Thông tin cá nhân (lg:col-span-4) */}
@@ -722,39 +738,45 @@ export default function About() {
         {/* ========================================================================= */}
         {/* HÀNG 3: TRIẾT LÝ VẬN HÀNH & BA TRỤ CỘT                                     */}
         {/* ========================================================================= */}
-        <div className="w-full">
+        <div className="w-full h-full">
           
-          {/* Cột Triết Lý Vận Hành & Ba Trụ Cột */}
+          {/* Cột Triết Lý Vận Hành & Ba Trụ Cột - Full width & full height card box */}
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
             style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
-            className="w-full rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 p-5 sm:p-6 flex flex-col gap-4 shadow-md backdrop-blur-2xl relative transition-all duration-300 hover:shadow-lg text-left"
+            className="w-full h-full min-h-full rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-md backdrop-blur-2xl relative transition-all duration-300 hover:shadow-lg text-left"
           >
             
-            {/* Header: Triết Lý Vận Hành & Ba Trụ Cột */}
-            <div className="flex items-center gap-3 min-w-0 pb-2 border-b border-slate-200/60 dark:border-white/10">
-              <motion.div
-                animate={{ 
-                  rotate: [-8, 8, -6, 6, 0], 
-                  scale: [1, 1.15, 1, 1.1, 1], 
-                  y: [0, -3, 0, -2, 0] 
-                }}
-                transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-                className="shrink-0"
-              >
-                <MessagesSquare className="w-6 h-6 text-blue-600 dark:text-cyan-400 stroke-[2.3] drop-shadow-[0_2px_10px_rgba(37,99,235,0.45)]" />
-              </motion.div>
-              <motion.h4 
-                animate={{ opacity: [0.94, 1, 0.94], scale: [1, 1.01, 1] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                className="text-base sm:text-lg font-black font-play tracking-tight truncate text-left"
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-cyan-300 dark:via-purple-300 dark:to-pink-300 bg-[length:200%_auto] animate-gradient">
-                  {isVi ? "Triết Lý Vận Hành & Ba Trụ Cột" : "Operational Philosophy & 3 Pillars"}
-                </span>
-              </motion.h4>
+            {/* Header: Tiêu đề thẻ Triết Lý Vận Hành & Ba Trụ Cột */}
+            <div className="flex items-center justify-between gap-3 min-w-0 pb-2 border-b border-slate-200/60 dark:border-white/10 w-full">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <motion.div
+                  animate={{ 
+                    rotate: [-8, 8, -6, 6, 0], 
+                    scale: [1, 1.15, 1, 1.1, 1], 
+                    y: [0, -3, 0, -2, 0] 
+                  }}
+                  transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <MessagesSquare className="w-6 h-6 text-blue-600 dark:text-cyan-400 stroke-[2.3] drop-shadow-[0_2px_10px_rgba(37,99,235,0.45)]" />
+                </motion.div>
+                <motion.h4 
+                  animate={{ opacity: [0.94, 1, 0.94], scale: [1, 1.01, 1] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-base sm:text-lg font-black font-play tracking-tight truncate text-left"
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-cyan-300 dark:via-purple-300 dark:to-pink-300 bg-[length:200%_auto] animate-gradient">
+                    {isVi ? "Triết Lý Vận Hành & Ba Trụ Cột" : "Operational Philosophy & 3 Pillars"}
+                  </span>
+                </motion.h4>
+              </div>
+
+              <span className="px-3 py-1 rounded-full text-2xs font-mono font-bold bg-blue-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/20 shrink-0">
+                {isVi ? "3 Trụ Cột Cốt Lõi" : "3 Core Pillars"}
+              </span>
             </div>
 
             {/* 3 Pillar Cards */}
@@ -1095,139 +1117,7 @@ export default function About() {
             </motion.div>
           </div>
         )}
-        {/* Extra Card Section: Tầm Nhìn & Giá Trị Cốt Lõi Lãnh Đạo */}
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
-          className="w-full rounded-3xl bg-gradient-to-br from-white/95 via-indigo-50/40 to-blue-50/50 dark:from-slate-900/90 dark:via-slate-900/95 dark:to-indigo-950/40 border border-indigo-200/80 dark:border-white/15 p-5 sm:p-6 md:p-7 flex flex-col gap-4 relative shadow-md text-left transition-all backdrop-blur-xl mt-4"
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-indigo-200/60 dark:border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center shadow-md">
-                <Sparkles className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <div>
-                <h4 className="text-base font-black font-play text-slate-900 dark:text-white">
-                  {isVi ? "Tầm Nhìn & Giá Trị Cốt Lõi Lãnh Đạo" : "Leadership Vision & Core Values"}
-                </h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {isVi ? "Định hướng chiến lược phát triển dịch vụ khách hàng 2026+" : "Strategic guidance for CS operations 2026+"}
-                </p>
-              </div>
-            </div>
-            <span className="px-3 py-1 rounded-full text-2xs font-mono font-bold bg-indigo-500/15 text-indigo-700 dark:text-cyan-300 border border-indigo-500/30">
-              {isVi ? "Độc quyền • Chuẩn Quốc Tế" : "Exclusive • International Standard"}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-indigo-100 dark:border-white/10 space-y-1.5 shadow-2xs">
-              <span className="text-xs font-mono font-bold text-indigo-600 dark:text-cyan-400">01</span>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white">
-                {isVi ? "Thấu Cảm Khách Hàng" : "Customer Empathy"}
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {isVi ? "Lắng nghe sâu sắc để chuyển hóa mọi điểm chạm thành lòng trung thành." : "Deep listening to turn every touchpoint into lasting loyalty."}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-indigo-100 dark:border-white/10 space-y-1.5 shadow-2xs">
-              <span className="text-xs font-mono font-bold text-indigo-600 dark:text-cyan-400">02</span>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white">
-                {isVi ? "Vận Hành Bằng Dữ Liệu" : "Data-Driven Operations"}
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {isVi ? "Sử dụng Dashboard & AI phân tích thời gian thực để tối ưu năng suất." : "Real-time analytics and AI Dashboards for maximum productivity."}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-indigo-100 dark:border-white/10 space-y-1.5 shadow-2xs">
-              <span className="text-xs font-mono font-bold text-indigo-600 dark:text-cyan-400">03</span>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white">
-                {isVi ? "Phát Triển Đội Ngũ Kế Thừa" : "Succession & Team Growth"}
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {isVi ? "Xây dựng hệ thống đào tạo quản lý cấp trung vững mạnh, bền vững." : "Building robust, self-sustaining middle management layers."}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
       </AnimatePresence>
     </section>
-
-    {/* BẢN SAO THỨ 2 CỦA TRANG GIỚI THIỆU (DUPLICATED ABOUT SECTION INSTANCE) */}
-    <section 
-      id="about-instance-2" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-3 sm:p-4 md:p-5 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar border-t border-slate-200/50 dark:border-white/10 pt-8"
-    >
-      <div className="w-full shrink-0 mb-3 relative z-30 max-w-7xl mx-auto">
-        <PageCardHeader 
-          pageId="about" 
-          className="w-full h-full rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-white/70 dark:border-white/10 backdrop-blur-2xl shadow-sm hover:shadow-md transition-all duration-300"
-        >
-          <div className="flex items-center justify-between w-full text-2xs sm:text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-            <span className="flex items-center gap-1.5 text-blue-600 dark:text-cyan-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-              {isVi ? "Thực chiến: 22+ Năm (Bản sao 2)" : "Track Record: 22+ Years (Copy 2)"}
-            </span>
-            <span className="text-slate-600 dark:text-slate-300 font-medium">
-              {isVi ? "Lãnh đạo Vận hành • Trải nghiệm Khách hàng (CX) • Tối ưu hóa hiệu suất" : "CX Leadership • Operations • High Performance"}
-            </span>
-          </div>
-        </PageCardHeader>
-      </div>
-
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
-          className="w-full rounded-3xl bg-gradient-to-r from-[#F0F6FF] via-[#E8F1FD] to-[#F0F6FF] dark:from-slate-900/90 dark:via-slate-900/95 dark:to-slate-950/90 border border-blue-200/80 dark:border-white/15 p-5 sm:p-6 md:p-7 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 relative shadow-md text-left transition-all backdrop-blur-xl"
-        >
-          <div className="space-y-3 max-w-4xl min-w-0">
-            <div className="flex items-center gap-2.5 min-w-0 pb-1 border-b border-blue-200/50 dark:border-white/10 w-fit">
-              <User className="w-5.5 h-5.5 text-blue-600 dark:text-cyan-400 stroke-[2.3]" />
-              <h5 className="text-base font-black font-play tracking-tight truncate">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-500 dark:from-cyan-300 dark:via-blue-300 dark:to-indigo-300">
-                  {isVi ? "Giới Thiệu Bản Thân (Bản Sao 2)" : "About Myself (Copy 2)"}
-                </span>
-              </h5>
-            </div>
-            <p className="text-xs sm:text-[13px] md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-              {isVi ? (
-                <>
-                  Một chuyên gia dịch vụ khách hàng với hơn{" "}
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-cyan-300 font-bold border border-blue-400/30 text-xs inline-block">
-                    22 năm kinh nghiệm
-                  </span>{" "}
-                  thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                </>
-              ) : (
-                <>
-                  A customer service expert with over{" "}
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-cyan-300 font-bold border border-blue-400/30 text-xs inline-block">
-                    22 years of experience
-                  </span>{" "}
-                  hands-on. For me, Customer Care is not just service, but true companionship.
-                </>
-              )}
-            </p>
-          </div>
-          <div className="flex items-center gap-4 shrink-0 self-end md:self-center pt-2 md:pt-0 border-t md:border-t-0 md:border-l border-blue-200/60 dark:border-white/10 md:pl-6">
-            <span className="font-[Caveat,cursive] text-blue-600 dark:text-cyan-400 text-2xl font-bold select-none transform -rotate-3 block whitespace-nowrap">
-              Luôn bên bạn ♡
-            </span>
-            <div className="transform scale-90 select-none pointer-events-none shrink-0">
-              <CuteMouseMascot className="scale-90" />
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-    </>
   );
 }

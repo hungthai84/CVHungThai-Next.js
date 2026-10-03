@@ -135,21 +135,18 @@ export default function TuVi() {
   return (
     <section 
       id="tuvi" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-3.5 sm:p-5 font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar select-none"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] gap-[15px] max-w-7xl mx-auto font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar select-none"
     >
-      {/* Main Container */}
-      <div className="w-full flex-grow flex flex-col gap-6 max-w-7xl mx-auto justify-start relative z-10">
-
-          {/* Header Card với thanh Tab điều hướng */}
-          <PageCardHeader pageId="tuvi">
-            {/* Left Side: Subtitle */}
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="w-2.5 h-4.5 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full shrink-0 shadow-2xs" />
-              <span className="text-caption font-bold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-3 py-1 rounded-full border border-purple-500/30 shadow-2xs">
-                {isVi ? "Tử Vi & Phong Thủy Quản Trị" : "Astrology & Feng Shui Matrix"}
-              </span>
-            </div>
-          </PageCardHeader>
+      {/* Header Card với thanh Tab điều hướng */}
+      <PageCardHeader pageId="tuvi">
+        {/* Left Side: Subtitle */}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="w-2.5 h-4.5 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full shrink-0 shadow-2xs" />
+          <span className="text-caption font-bold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-3 py-1 rounded-full border border-purple-500/30 shadow-2xs">
+            {isVi ? "Tử Vi & Phong Thủy Quản Trị" : "Astrology & Feng Shui Matrix"}
+          </span>
+        </div>
+      </PageCardHeader>
 
           {/* ================= PHẦN 1: BẢN MỆNH PHONG THỦY ================= */}
           <div 
@@ -987,8 +984,6 @@ export default function TuVi() {
               </p>
             </div>
           </div>
-
-      </div>
     </section>
   );
 }

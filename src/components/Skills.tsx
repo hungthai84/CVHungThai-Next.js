@@ -169,8 +169,8 @@ export function Skills() {
         </PageCardHeader>
 
         {/* SWOT 4-QUADRANT BENTO GRID & NĂNG LỰC NGÔN NGỮ */}
-        <div className="w-full flex flex-col gap-5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full items-stretch">
+        <div className="w-full flex flex-col gap-[15px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[15px] w-full items-stretch">
             {/* 1. ĐIỂM MẠNH (STRENGTHS - BLUE THEME) */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -179,7 +179,7 @@ export function Skills() {
                 style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
                 onClick={() => setSelectedSwot('S')}
                 className={cn(
-                  "p-4 sm:p-5 border transition-all duration-300 flex flex-col h-fit self-start overflow-hidden relative text-left",
+                  "p-[15px] sm:p-[15px] border transition-all duration-300 flex flex-col h-full self-stretch overflow-hidden relative text-left",
                   "rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-blue-100 dark:border-blue-900/30 shadow-[0_10px_30px_rgba(37,99,235,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]",
                   selectedSwot === 'S' && "ring-2 ring-blue-500/30 border-blue-400 dark:border-cyan-400"
                 )}
@@ -235,12 +235,12 @@ export function Skills() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2 min-w-0">
                               <ItemIcon className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0 group-hover/item:scale-110 transition-transform" />
-                              <span className="text-body-sm text-slate-800 dark:text-slate-100 font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
+                              <span className="text-body-sm font-extrabold text-slate-900 dark:text-white font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
                                 {isVi ? item.labelVi : item.labelEn}
                               </span>
                             </div>
                             
-                            <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/40 text-blue-600 dark:text-cyan-400 text-[11px] font-mono font-bold shrink-0">
+                            <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/40 text-blue-600 dark:text-cyan-400 text-[11px] font-mono font-black shrink-0">
                               {item.percent}%
                             </span>
                           </div>
@@ -285,7 +285,7 @@ export function Skills() {
                 style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
                 onClick={() => setSelectedSwot('O')}
                 className={cn(
-                  "p-4 sm:p-5 border transition-all duration-300 flex flex-col h-fit self-start overflow-hidden relative text-left lg:col-start-2",
+                  "p-[15px] sm:p-[15px] border transition-all duration-300 flex flex-col h-full self-stretch overflow-hidden relative text-left lg:col-start-2",
                   "rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-purple-100 dark:border-purple-900/30 shadow-[0_10px_30px_rgba(124,58,237,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]",
                   selectedSwot === 'O' && "ring-2 ring-purple-500/30 border-purple-400 dark:border-purple-400"
                 )}
@@ -342,12 +342,12 @@ export function Skills() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2 min-w-0">
                               <ItemIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
-                              <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
+                              <span className="text-xs sm:text-[13px] font-extrabold text-slate-900 dark:text-white font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
                                 {isVi ? item.labelVi : item.labelEn}
                               </span>
                             </div>
                             
-                            <span className="px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200/60 dark:border-purple-800/40 text-purple-600 dark:text-purple-300 text-[11px] font-mono font-bold shrink-0">
+                            <span className="px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200/60 dark:border-purple-800/40 text-purple-600 dark:text-purple-300 text-[11px] font-mono font-black shrink-0">
                               {item.percent}%
                             </span>
                           </div>
@@ -376,7 +376,7 @@ export function Skills() {
                 style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
                 onClick={() => setSelectedSwot('W')}
                 className={cn(
-                  "p-4 sm:p-5 border transition-all duration-300 flex flex-col h-fit self-start overflow-hidden relative text-left",
+                  "p-[15px] sm:p-[15px] border transition-all duration-300 flex flex-col h-full self-stretch overflow-hidden relative text-left",
                   "rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-amber-100 dark:border-amber-900/30 shadow-[0_10px_30px_rgba(245,158,11,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]",
                   selectedSwot === 'W' && "ring-2 ring-amber-500/30 border-amber-400 dark:border-amber-400"
                 )}
@@ -438,12 +438,12 @@ export function Skills() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2 min-w-0">
                               <ItemIcon className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                              <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
+                              <span className="text-xs sm:text-[13px] font-extrabold text-slate-900 dark:text-white font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
                                 {isVi ? item.labelVi : item.labelEn}
                               </span>
                             </div>
                             
-                            <span className="px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/40 text-amber-600 dark:text-amber-400 text-[11px] font-mono font-bold shrink-0">
+                            <span className="px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/40 text-amber-600 dark:text-amber-400 text-[11px] font-mono font-black shrink-0">
                               {item.percent}%
                             </span>
                           </div>
@@ -472,7 +472,7 @@ export function Skills() {
                 style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
                 onClick={() => setSelectedSwot('T')}
                 className={cn(
-                  "p-4 sm:p-5 border transition-all duration-300 flex flex-col h-fit self-start overflow-hidden relative text-left lg:col-start-2",
+                  "p-[15px] sm:p-[15px] border transition-all duration-300 flex flex-col h-full self-stretch overflow-hidden relative text-left lg:col-start-2",
                   "rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-rose-100 dark:border-rose-900/30 shadow-[0_10px_30px_rgba(225,29,72,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]",
                   selectedSwot === 'T' && "ring-2 ring-rose-500/30 border-rose-400 dark:border-rose-400"
                 )}
@@ -534,14 +534,14 @@ export function Skills() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2 min-w-0">
                               <ItemIcon className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
-                              <span className="text-xs sm:text-[13px] font-bold text-slate-800 dark:text-slate-100 font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
+                              <span className="text-xs sm:text-[13px] font-extrabold text-slate-900 dark:text-white font-play truncate" title={isVi ? item.labelVi : item.labelEn}>
                                 {isVi ? item.labelVi : item.labelEn}
                               </span>
                             </div>
                             
                             {/* CRITICAL UX: Label 'Mức độ tác động' for Threat percentage */}
                             <span 
-                              className="px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 border border-rose-200/60 dark:border-rose-800/40 text-rose-600 dark:text-rose-400 text-[11px] font-mono font-bold shrink-0"
+                              className="px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 border border-rose-200/60 dark:border-rose-800/40 text-rose-600 dark:text-rose-400 text-[11px] font-mono font-black shrink-0"
                               title={isVi ? "Mức độ tác động: " + item.percent + "%" : "Impact level: " + item.percent + "%"}
                             >
                               {item.percent}%
@@ -565,19 +565,19 @@ export function Skills() {
               </motion.div>
           </div>
 
-            {/* 5. NĂNG LỰC NGÔN NGỮ (LANGUAGES PROFICIENCY - EMERALD THEME) */}
+            {/* 5. NĂNG LỰC NGÔN NGỮ (LANGUAGES PROFICIENCY - EMERALD THEME) - Bằng kích thước chiều cao thẻ Mục Tiêu Hoàn Thiện */}
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
               style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
-              className="w-full p-6 sm:p-7 border select-none flex flex-col gap-5 text-left transition-all duration-300 rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-emerald-100 dark:border-emerald-900/30 shadow-[0_10px_30px_rgba(16,185,129,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] relative overflow-hidden"
+              className="w-full p-[15px] sm:p-[15px] border select-none flex flex-col gap-3.5 text-left transition-all duration-300 rounded-[var(--theme-radius-card,24px)] bg-white/95 dark:bg-slate-900/90 border-emerald-100 dark:border-emerald-900/30 shadow-[0_10px_30px_rgba(16,185,129,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] relative overflow-hidden"
             >
               {/* Background watermark icon & subtle glow */}
               <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-emerald-500/10 rounded-full filter blur-[50px] pointer-events-none" />
               <Languages className="absolute -bottom-6 -right-6 w-48 h-48 text-emerald-500/10 dark:text-emerald-400/10 pointer-events-none -rotate-12" />
               {/* Card Header: Icon (không đóng khung) + Tiêu đề 4 chữ format hiệu ứng chuyển động & màu sắc ngẫu nhiên bên trái */}
-              <div className="flex flex-col items-start w-full text-left gap-2 pb-2 border-b border-slate-200/50 dark:border-white/10 mb-3">
+              <div className="flex flex-col items-start w-full text-left gap-1.5 pb-2 border-b border-slate-200/50 dark:border-white/10 mb-2">
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2.5 min-w-0">
                     <motion.div
@@ -596,22 +596,22 @@ export function Skills() {
                     </motion.h4>
                   </div>
                 </div>
-                <div className="h-[2px] w-12 bg-gradient-to-r from-emerald-600 to-teal-400 mt-1" />
+                <div className="h-[2px] w-12 bg-gradient-to-r from-emerald-600 to-teal-400 mt-0.5" />
               </div>
 
               {/* 3 Circular Language Cards Matching image.png */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 
                 {/* Column 1: Tiếng Việt */}
-                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-md transition-all">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <Star className="w-5 h-5 text-rose-500 fill-rose-500 shrink-0 mt-0.5" />
+                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-xl p-2.5 sm:p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:shadow-xs transition-all">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2 min-w-0">
+                      <Star className="w-4 h-4 text-rose-500 fill-rose-500 shrink-0 mt-0.5" />
                       <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-rose-600 dark:text-rose-400 text-sm sm:text-base font-play">
+                        <span className="font-bold text-rose-600 dark:text-rose-400 text-xs sm:text-sm font-play">
                           {isVi ? "Tiếng Việt" : "Vietnamese"}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                           ({isVi ? "Ngôn ngữ bản xứ" : "Native language"})
                         </span>
                       </div>
@@ -623,24 +623,24 @@ export function Skills() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 pt-2 border-t border-slate-150/60 dark:border-slate-800/80">
-                    <CheckCircle2 className="w-4 h-4 text-rose-500 shrink-0" />
-                    <span className="text-xs sm:text-sm font-bold text-rose-600 dark:text-rose-400 font-play">
+                  <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-150/60 dark:border-slate-800/80">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400 font-play">
                       {isVi ? "Thành thạo chuyên sâu" : "Native / Expert fluency"}
                     </span>
                   </div>
                 </div>
 
                 {/* Column 2: Tiếng Anh */}
-                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-md transition-all">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <Globe className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0 mt-0.5" />
+                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-xl p-2.5 sm:p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:shadow-xs transition-all">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2 min-w-0">
+                      <Globe className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0 mt-0.5" />
                       <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-blue-600 dark:text-cyan-400 text-sm sm:text-base font-play">
+                        <span className="font-bold text-blue-600 dark:text-cyan-400 text-xs sm:text-sm font-play">
                           {isVi ? "Tiếng Anh" : "English"}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                           ({isVi ? "Giao tiếp chuyên nghiệp" : "Professional communication"})
                         </span>
                       </div>
@@ -652,24 +652,24 @@ export function Skills() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 pt-2 border-t border-slate-150/60 dark:border-slate-800/80">
-                    <User className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
-                    <span className="text-xs sm:text-sm font-bold text-blue-600 dark:text-cyan-400 font-play">
+                  <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-150/60 dark:border-slate-800/80">
+                    <User className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
+                    <span className="text-xs font-bold text-blue-600 dark:text-cyan-400 font-play">
                       {isVi ? "Làm việc môi trường quốc tế" : "Working in global environments"}
                     </span>
                   </div>
                 </div>
 
                 {/* Column 3: Ứng dụng AI */}
-                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-md transition-all">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <Cpu className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                <div className="bg-white dark:bg-slate-950/70 border border-slate-100 dark:border-white/10 rounded-xl p-2.5 sm:p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:shadow-xs transition-all">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2 min-w-0">
+                      <Cpu className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm sm:text-base font-play">
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-play">
                           {isVi ? "Ứng dụng AI" : "AI Application"}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
                           ({isVi ? "Hỗ trợ trao đổi & hợp tác đa quốc gia" : "Assisting multi-national collaboration"})
                         </span>
                       </div>
@@ -681,8 +681,8 @@ export function Skills() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 pt-2 border-t border-slate-150/60 dark:border-slate-800/80">
-                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-150/60 dark:border-slate-800/80">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span className="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 font-play">
                       {isVi ? "Dịch thuật & Trợ lý thời gian thực" : "Real-time translation & AI assistant"}
                     </span>

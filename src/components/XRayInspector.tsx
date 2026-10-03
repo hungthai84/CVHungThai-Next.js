@@ -2799,7 +2799,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
         <div className="fixed inset-0 z-[10000] bg-white/70 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
           <div 
             className={cn(
-              "w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-300 max-h-[92vh] border",
+              "w-full max-w-5xl xl:max-w-6xl rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-300 max-h-[92vh] border",
               isLight
                 ? "bg-white text-slate-900 border-slate-200 shadow-[0_25px_70px_rgba(0,0,0,0.2)]"
                 : "bg-slate-900 text-slate-100 border-emerald-500/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)]"

@@ -4,7 +4,6 @@ import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "../lib/utils";
-import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection, industrialContainerVariants, industrialSubSectionVariants } from "./IndustrialStaggerContainer";
 import { MagneticBentoWrapper } from "./MagneticBentoWrapper";
 import {
@@ -147,25 +146,40 @@ export function Systems() {
   return (
     <section
       id="systems"
-      className="relative w-full h-auto overflow-hidden flex flex-col justify-start items-stretch p-3.5 sm:p-5 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
+      className="relative w-full h-auto overflow-hidden flex flex-col justify-start items-stretch p-[15px] gap-[15px] max-w-7xl mx-auto font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
     >
-        {/* Top Header Card */}
-        <div className="relative w-full">
-          <PageCardHeader pageId="systems">
-            <div className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-0.5 w-full">
-              {/* Left Side: Editorial subtitle */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-4 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
-                <span className="text-caption font-semibold font-mono text-indigo-700 dark:text-indigo-300 bg-indigo-500/15 px-2.5 py-0.5 rounded-full border border-indigo-500/30 shadow-2xs">
-                  {isVi ? "Vận hành & Tự động hoá" : "Governance & Operations Hub"}
-                </span>
-              </div>
+        {/* Tiêu đề Card Hệ Thống Vận Hành */}
+        <div
+          style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+          className={cn(
+            "w-full p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-left border bento-card shadow-sm hover:shadow-md transition-all",
+            getGlassCardClass()
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-blue-500/15 to-indigo-600/25 border border-indigo-200/60 dark:border-indigo-800/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm shrink-0">
+              <Server className="w-5 h-5" />
             </div>
-          </PageCardHeader>
+            <div>
+              <h2 className="text-lg sm:text-xl font-black font-play text-slate-900 dark:text-white leading-snug">
+                {isVi ? "Hệ Thống Vận Hành" : "Operations Systems"}
+              </h2>
+              <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                {isVi ? "Hệ sinh thái công cụ & giải pháp chuyển đổi số toàn diện" : "Ecosystem of comprehensive digital transformation tools"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-4 bg-indigo-600 dark:bg-indigo-400 rounded-full shrink-0" />
+            <span className="text-caption font-semibold font-mono text-indigo-700 dark:text-indigo-300 bg-indigo-500/15 px-2.5 py-1 rounded-full border border-indigo-500/30 shadow-2xs">
+              {isVi ? "Vận hành & Tự động hoá" : "Governance & Operations Hub"}
+            </span>
+          </div>
         </div>
 
         {/* 12 SYSTEMS BENTO GRID */}
-        <IndustrialSubSection className="h-auto shrink-0 flex flex-col justify-start">
+        <IndustrialSubSection className="h-auto shrink-0 flex flex-col justify-start w-full">
           <div className="w-full h-auto rounded-[24px] p-0 border-0 bg-transparent shadow-none backdrop-blur-none flex flex-col justify-start items-center">
             <AnimatePresence mode="popLayout">
               <motion.div
@@ -173,7 +187,7 @@ export function Systems() {
                 variants={industrialContainerVariants}
                 initial="hidden"
                 animate="show"
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-auto auto-rows-fr items-stretch"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[15px] w-full h-auto auto-rows-fr items-stretch"
               >
                    {/* Special High-Tech Expanding GIF & Video Card */}
                    <motion.div
@@ -530,8 +544,6 @@ export function Systems() {
                                   <IconComponent className={cn("w-8 h-8 sm:w-9 sm:h-9 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
                                 </motion.div>
                               </div>
-                              {/* Bottom spacing */}
-                              <div className="h-2" />
                             </div>
                           )}
                         </motion.article>

@@ -434,7 +434,9 @@ export default function Projects() {
         __html: `
         .project-edu-glass-card,
         .project-card {
-          height: auto !important;
+          height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
           background: rgba(255, 255, 255, 0.76) !important;
           box-shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
           backdrop-filter: blur(20px) saturate(160%) !important;
@@ -447,7 +449,9 @@ export default function Projects() {
         .dark .project-edu-glass-card,
         .dark .project-card,
         [data-theme="glass-dark-neon"] .project-card {
-          height: auto !important;
+          height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
           background: rgba(18, 18, 24, 0.65) !important;
           box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1.5px rgba(255, 255, 255, 0.15) !important;
           border: 1px solid rgba(255, 255, 255, 0.14) !important;
@@ -458,8 +462,8 @@ export default function Projects() {
         `
       }} />
 
-      {/* Main Container Dự án */}
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start">
+      {/* Main Container Dự án - chiều cao bằng nội dung thẻ dự án */}
+      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start h-auto">
         {/* Header Card Dự án */}
         <PageCardHeader 
           pageId="projects"
@@ -544,7 +548,7 @@ export default function Projects() {
                         }}
                         style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                         className={cn(
-                          "card-item project-card project-edu-glass-card keyframers-tilt-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full min-h-[460px] sm:min-h-[480px] justify-between relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
+                          "card-item project-card project-edu-glass-card keyframers-tilt-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full justify-between relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
                           theme.border,
                           theme.cardBg,
                           theme.shadow,

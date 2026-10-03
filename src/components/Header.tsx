@@ -108,6 +108,18 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
 
   const navRef = useRef<HTMLElement>(null);
   const navRectRef = useRef<DOMRect | null>(null);
+  const activeNavRef = useRef<HTMLAnchorElement>(null);
+
+  // Auto-scroll active nav item into view smoothly on all device screen sizes
+  useEffect(() => {
+    if (activeNavRef.current && navRef.current) {
+      activeNavRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [activeSection]);
 
   const handleNavMouseEnter = () => {
     if (navRef.current) {
@@ -223,23 +235,21 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "customization", num: "15", labelVi: "Tùy chỉnh", labelEn: "Customization", Icon: Sliders, key: "U" },
   ];
 
-  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips (HIỂN THỊ TẤT CẢ CÁC TRANG ĐANG CÓ)
+  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips (HIỂN THỊ TẤT CẢ CÁC TRANG ĐANG CÓ - MỖI ICON MỘT MÀU SẮC ĐẶC TRƯNG)
   const navItems = [
-    { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Home },
-    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: FileText },
-    { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", label: t("nav.about"), Icon: User },
-    { id: "domains", labelVi: "Lĩnh vực", labelEn: "Core Domains", label: t("nav.domains"), Icon: Compass },
-    { id: "skills", labelVi: "Kỹ năng", labelEn: "Core Skills", label: t("nav.skills"), Icon: Brain },
-    { id: "education", labelVi: "Học vấn", labelEn: "Academic Path", label: t("nav.education"), Icon: GraduationCap },
-    { id: "experience", labelVi: "Kinh nghiệm", labelEn: "Career Journey", label: t("nav.experience"), Icon: Briefcase },
-    { id: "projects", labelVi: "Dự án", labelEn: "Key Projects", label: t("nav.projects"), Icon: ClipboardList },
-    { id: "interview", labelVi: "Phỏng vấn", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video },
-    { id: "tuvi", labelVi: "Tử vi", labelEn: "Wisdom Profile", label: t("nav.tuvi"), Icon: Sparkles },
-    { id: "systems", labelVi: "Hệ thống", labelEn: "Systems Hub", label: t("nav.systems"), Icon: Server },
-    { id: "memories", labelVi: "Kỷ niệm", labelEn: "Team Memories", label: t("nav.memories"), Icon: Images },
-    { id: "contact", labelVi: "Liên hệ", labelEn: "Contact Hub", label: t("nav.contact"), Icon: MessagesSquare },
-    { id: "wallpapers", labelVi: "Hình nền", labelEn: "Wallpapers", label: t("nav.wallpapers"), Icon: Film },
-    { id: "customization", labelVi: "Tùy chỉnh", labelEn: "Customization", label: t("nav.customization"), Icon: Sliders },
+    { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Home, iconColor: "text-blue-500 dark:text-blue-400 group-hover:text-blue-600" },
+    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: FileText, iconColor: "text-indigo-500 dark:text-indigo-400 group-hover:text-indigo-600" },
+    { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", label: t("nav.about"), Icon: User, iconColor: "text-cyan-500 dark:text-cyan-400 group-hover:text-cyan-600" },
+    { id: "domains", labelVi: "Lĩnh vực", labelEn: "Core Domains", label: t("nav.domains"), Icon: Compass, iconColor: "text-amber-500 dark:text-amber-400 group-hover:text-amber-600" },
+    { id: "skills", labelVi: "Kỹ năng", labelEn: "Core Skills", label: t("nav.skills"), Icon: Brain, iconColor: "text-purple-500 dark:text-purple-400 group-hover:text-purple-600" },
+    { id: "education", labelVi: "Học vấn", labelEn: "Academic Path", label: t("nav.education"), Icon: GraduationCap, iconColor: "text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600" },
+    { id: "experience", labelVi: "Kinh nghiệm", labelEn: "Career Journey", label: t("nav.experience"), Icon: Briefcase, iconColor: "text-sky-500 dark:text-sky-400 group-hover:text-sky-600" },
+    { id: "projects", labelVi: "Dự án", labelEn: "Key Projects", label: t("nav.projects"), Icon: ClipboardList, iconColor: "text-rose-500 dark:text-rose-400 group-hover:text-rose-600" },
+    { id: "interview", labelVi: "Phỏng vấn", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video, iconColor: "text-red-500 dark:text-red-400 group-hover:text-red-600" },
+    { id: "tuvi", labelVi: "Tử vi", labelEn: "Wisdom Profile", label: t("nav.tuvi"), Icon: Sparkles, iconColor: "text-yellow-500 dark:text-yellow-400 group-hover:text-yellow-600" },
+    { id: "systems", labelVi: "Hệ thống", labelEn: "Systems Hub", label: t("nav.systems"), Icon: Server, iconColor: "text-teal-500 dark:text-teal-400 group-hover:text-teal-600" },
+    { id: "memories", labelVi: "Kỷ niệm", labelEn: "Team Memories", label: t("nav.memories"), Icon: Images, iconColor: "text-pink-500 dark:text-pink-400 group-hover:text-pink-600" },
+    { id: "contact", labelVi: "Liên hệ", labelEn: "Contact Hub", label: t("nav.contact"), Icon: MessagesSquare, iconColor: "text-violet-500 dark:text-violet-400 group-hover:text-violet-600" },
   ];
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -281,12 +291,13 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
         id="header"
         onMouseEnter={() => setIsHeaderHovered(true)}
         onMouseLeave={() => setIsHeaderHovered(false)}
-        className={`group border-t-0 rounded-b-[10px] rounded-t-none px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between cursor-default ${getHeaderPlacementClass()} ${getHeaderContainerStyle()}`}
+        className={`group border-t-0 rounded-b-[10px] rounded-t-none p-[15px] flex flex-row items-center justify-between cursor-default ${getHeaderPlacementClass()} ${getHeaderContainerStyle()}`}
         style={{
           borderTopLeftRadius: "0px",
           borderTopRightRadius: "0px",
           borderBottomLeftRadius: "var(--theme-radius-card, 10px)",
           borderBottomRightRadius: "var(--theme-radius-card, 10px)",
+          padding: "15px",
           boxShadow: "none"
         }}
       >
@@ -315,16 +326,16 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
         )}
 
         {/* LEFT CONTAINER: Left Sidebar Menu Button & Avatar */}
-        <div className="flex items-center gap-2.5 shrink-0 z-10">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 z-10">
           <button
             type="button"
             onClick={() => {
               window.dispatchEvent(new CustomEvent("open-left-sidebar"));
             }}
-            className="md:hidden flex w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 items-center justify-center transition-all cursor-pointer shadow-2xs"
+            className="md:hidden flex w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 items-center justify-center transition-all cursor-pointer shadow-2xs"
             title={isVi ? "Mở danh mục (Left Sidebar)" : "Open Left Sidebar"}
           >
-            <Menu className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+            <Menu className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
           </button>
 
           {/* Ngăn chứa Avatar (Avatar Drawer Capsule) */}
@@ -340,7 +351,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   src="https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif" 
                   alt="Hùng Thái Avata Gif"
                   decoding="async"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-brand-primary/80 shadow-md group-hover:scale-105 transition-transform duration-300 ring-2 ring-brand-primary/25"
+                  className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full object-cover border-2 border-brand-primary/80 shadow-md group-hover:scale-105 transition-transform duration-300 ring-2 ring-brand-primary/25"
                   referrerPolicy="no-referrer"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-brand-card rounded-full" title="Online" />
@@ -348,11 +359,11 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             </a>
           </div>
 
-          {/* Line vách ngăn Avatar (Avatar Divider Line) */}
-          <div className="hidden sm:block w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mx-0.5 rounded-full shrink-0" />
+          {/* Line vách ngăn Avatar (Avatar Divider Line) - Hiển thị ở mọi kích thước thiết bị */}
+          <div className="w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mx-0.5 rounded-full shrink-0" />
         </div>
 
-        {/* CENTER CONTAINER: Tailwind iOS 26 Floating Glass Capsule Tab Bar (HIỂN THỊ TẤT CẢ TRANG) */}
+        {/* CENTER CONTAINER: Menu Icon Bar - Full chiều dài đến line vách ngăn ở mọi kích thước thiết bị */}
         <nav 
           ref={navRef}
           data-compact={isCompact ? "true" : "false"}
@@ -364,7 +375,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           onFocusCapture={() => setIsCompact(false)}
           onMouseMove={handleMouseMove}
           className={cn(
-            "group hidden md:flex w-full flex-1 items-center justify-between sm:justify-around h-11 sm:h-12 px-3 sm:px-4 py-1.5 rounded-full mx-2 relative group/nav header-nav-container select-none overflow-x-auto no-scrollbar max-w-full",
+            "group flex w-full flex-1 min-w-0 items-center justify-between h-10 sm:h-11 md:h-12 px-2 sm:px-3 md:px-4 py-1.5 rounded-full mx-1.5 sm:mx-2 md:mx-2.5 relative group/nav header-nav-container select-none overflow-x-auto no-scrollbar scroll-smooth max-w-full",
             "isolate bg-white/50 dark:bg-slate-950/50 border border-white/80 dark:border-white/20",
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_30px_0_rgba(100,110,140,0.08)] backdrop-blur-[20px] backdrop-saturate-[180%]",
             "transition-[padding,gap] duration-[450ms] ease-[cubic-bezier(0.34,1.4,0.5,1)] motion-reduce:transition-none",
@@ -387,6 +398,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             return (
               <a
                 key={item.id}
+                ref={isActive ? activeNavRef : undefined}
                 href={`#${item.id}`}
                 onClick={(e) => handleNavClick(e, item.id)}
                 aria-current={isActive ? "page" : undefined}
@@ -395,12 +407,12 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 onMouseEnter={() => setHoveredNavId(item.id)}
                 onMouseLeave={() => setHoveredNavId(null)}
                 className={cn(
-                  "flex items-center gap-1.5 h-8 sm:h-9 rounded-full no-underline transition-all duration-300 cursor-pointer relative shrink-0 z-20 border",
+                  "flex items-center gap-1.5 h-7.5 sm:h-8 md:h-9 rounded-full no-underline transition-all duration-300 cursor-pointer relative shrink-0 z-20 border",
                   "focus-visible:outline-3 focus-visible:outline-blue-500 focus-visible:outline-offset-2",
                   isActive
-                    ? "px-3 bg-gradient-to-r from-blue-600/95 to-indigo-600/95 dark:from-blue-500/95 dark:to-cyan-500/95 text-white border-white/45 dark:border-cyan-400/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),0_6px_20px_-4px_rgba(37,99,235,0.5)] backdrop-blur-xl group-data-[compact=true]:px-2.5 font-bold scale-100"
+                    ? "px-2.5 sm:px-3 bg-gradient-to-r from-blue-600/95 to-indigo-600/95 dark:from-blue-500/95 dark:to-cyan-500/95 text-white border-white/45 dark:border-cyan-400/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),0_6px_20px_-4px_rgba(37,99,235,0.5)] backdrop-blur-xl group-data-[compact=true]:px-2 font-bold scale-100"
                     : cn(
-                        "px-2.5 border-transparent text-slate-700 dark:text-slate-200 group-data-[compact=true]:px-2 font-medium",
+                        "px-2 sm:px-2.5 border-transparent text-slate-700 dark:text-slate-200 group-data-[compact=true]:px-1.5 font-medium",
                         isHovered 
                           ? "bg-white/80 dark:bg-white/15 border-white/60 dark:border-white/20 text-blue-600 dark:text-cyan-400 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_4px_12px_rgba(0,0,0,0.06)] scale-[1.03]" 
                           : "hover:bg-white/40 dark:hover:bg-white/10"
@@ -409,17 +421,17 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
               >
                 <item.Icon 
                   className={cn(
-                    "w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform",
+                    "w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-all duration-300",
                     isActive 
                       ? "text-white stroke-[2.2] drop-shadow-xs" 
-                      : "text-slate-600 dark:text-slate-300 group-hover:scale-110"
+                      : cn(item.iconColor, "group-hover:scale-115 drop-shadow-2xs")
                   )} 
                 />
                 {/* Chỉ hiển thị tiêu đề của tab đang chọn (isActive), không hiển thị toàn bộ khi rê chuột vào thanh */}
                 <span className={cn(
                   "overflow-hidden whitespace-nowrap text-xs font-semibold tracking-normal transition-[max-width,opacity] duration-[400ms] ease-[cubic-bezier(0.34,1.4,0.5,1)] font-play",
                   isActive
-                    ? "max-w-28 opacity-100 group-data-[compact=true]:max-w-0 group-data-[compact=true]:opacity-0 ml-0.5"
+                    ? "max-w-24 sm:max-w-28 opacity-100 group-data-[compact=true]:max-w-0 group-data-[compact=true]:opacity-0 ml-0.5"
                     : "max-w-0 opacity-0"
                 )}>
                   {formatTitleCase(item.label)}
@@ -443,49 +455,21 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           })}
         </nav>
 
-        {/* RIGHT CONTAINER: Controls & Actions */}
-        <div className="hidden md:flex items-center justify-end gap-1 ml-auto shrink-0 z-50 relative">
-          {/* Line vách ngăn giữa menu và Chat AI */}
-          <div className="w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mr-1.5 rounded-full shrink-0" />
+        {/* RIGHT CONTAINER: Controls & Actions (Responsive at every device size) */}
+        <div className="flex items-center justify-end gap-1 shrink-0 z-50 relative">
+          {/* Line vách ngăn giữa menu và Controls - Hiển thị ở mọi kích thước thiết bị */}
+          <div className="w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mr-1 sm:mr-1.5 rounded-full shrink-0" />
 
-          {/* Chat AI Button (Được đặt liền kề cạnh icon Ghim) */}
-          <button
-            type="button"
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent('toggle-ai-assistant'));
-            }}
-            onMouseEnter={() => setHoveredHeaderIcon("chatai")}
-            onMouseLeave={() => setHoveredHeaderIcon(null)}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl flex items-center justify-center transition-all duration-300 cursor-pointer text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300 relative group/headicon shrink-0"
-            title={isVi ? "Trợ lý Chat AI" : "Chat AI Assistant"}
-          >
-            <Bot className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2] animate-pulse" />
-            <AnimatePresence>
-              {hoveredHeaderIcon === "chatai" && (
-                <motion.span 
-                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                  className="absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
-                >
-                  Chat AI
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
-        </div>
-
-        {/* MOBILE CONTROLS (Identical circular button format with separated Pin capsule) */}
-        <div className="flex md:hidden items-center justify-end gap-1.5 z-40">
-          <div className="flex items-center gap-1 p-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl">
+          {/* Quick Tablet Lang & Theme Capsule */}
+          <div className="hidden sm:flex md:hidden items-center gap-1 p-0.5 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl">
             {/* Mobile Lang Button */}
             <button
               onClick={() => setLang(lang === "vi" ? "en" : "vi")}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/15 active:scale-95 transition-all cursor-pointer relative"
+              className="w-7 h-7 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/15 active:scale-95 transition-all cursor-pointer relative"
               title={lang === "vi" ? "Tiếng Việt / English" : "English / Tiếng Việt"}
             >
-              <Globe className="w-4 h-4" />
-              <span className="absolute -top-0.5 -right-0.5 px-0.8 py-0.1 rounded-full text-[8px] font-mono font-black bg-emerald-500 text-white">
+              <Globe className="w-3.5 h-3.5" />
+              <span className="absolute -top-0.5 -right-0.5 px-0.5 rounded-full text-[7px] font-mono font-black bg-emerald-500 text-white leading-none">
                 {lang === "vi" ? "VI" : "EN"}
               </span>
             </button>
@@ -498,47 +482,60 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   : "glass-dark-neon";
                 setTheme(nextTheme);
               }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-amber-500 dark:text-cyan-400 hover:bg-amber-500/15 dark:hover:bg-cyan-500/15 active:scale-95 transition-all cursor-pointer"
+              className="w-7 h-7 rounded-full flex items-center justify-center text-amber-500 dark:text-cyan-400 hover:bg-amber-500/15 dark:hover:bg-cyan-500/15 active:scale-95 transition-all cursor-pointer"
               title="Toggle Theme"
             >
-              <Sparkles className="w-4 h-4" />
-            </button>
-
-            {/* Mobile Chat AI Button */}
-            <button
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('toggle-ai-assistant'));
-              }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-blue-600 dark:text-cyan-400 hover:bg-blue-500/15 active:scale-95 transition-all cursor-pointer"
-              title="Chat AI"
-            >
-              <Bot className="w-4 h-4 animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Mobile PIN Button - Chỉ hiển thị icon, không đóng khung tròn */}
+          {/* Chat AI Button (Accessible on all devices) */}
+          <button
+            type="button"
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('toggle-ai-assistant'));
+            }}
+            onMouseEnter={() => setHoveredHeaderIcon("chatai")}
+            onMouseLeave={() => setHoveredHeaderIcon(null)}
+            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl flex items-center justify-center transition-all duration-300 cursor-pointer text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300 relative group/headicon shrink-0 active:scale-95"
+            title={isVi ? "Trợ lý Chat AI" : "Chat AI Assistant"}
+          >
+            <Bot className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 stroke-[2.2] animate-pulse" />
+            <AnimatePresence>
+              {hoveredHeaderIcon === "chatai" && (
+                <motion.span 
+                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
+                  className="hidden md:block absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
+                >
+                  Chat AI
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+
+          {/* Mobile PIN Button */}
           <button
             onClick={handleTogglePin}
-            className="p-1.5 flex items-center justify-center active:scale-90 transition-all cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+            className="md:hidden p-1.5 flex items-center justify-center active:scale-90 transition-all cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white shrink-0"
             title={
               isHeaderPinned
                 ? (isVi ? "Đã ghim header (Click để bỏ ghim)" : "Header pinned (Click to unpin)")
                 : (isVi ? "Bỏ ghim header (Click để ghim)" : "Header unpinned (Click to pin)")
             }
           >
-            <Pin className={`w-4 h-4 transition-all ${isHeaderPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 stroke-[2.5]" : "stroke-[2]"}`} />
+            <Pin className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all ${isHeaderPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 stroke-[2.5]" : "stroke-[2]"}`} />
           </button>
-
-          {/* Vertical divider line between PIN button and Menu icon */}
-          <div className="h-5 w-[1px] bg-slate-200 dark:bg-white/20 mx-0.5 shrink-0" />
 
           {/* Mobile Navigation Drawer Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="w-9 h-9 text-slate-800 dark:text-slate-200 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/15 active:scale-95 transition-transform flex items-center justify-center cursor-pointer backdrop-blur-xl shrink-0"
+            className="md:hidden w-8 h-8 sm:w-9 sm:h-9 text-slate-800 dark:text-slate-200 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/15 active:scale-95 transition-transform flex items-center justify-center cursor-pointer backdrop-blur-xl shrink-0"
             aria-label="Open Navigation Menu"
+            title={isVi ? "Mở menu chi tiết" : "Open Drawer"}
           >
-            {isMobileMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
 

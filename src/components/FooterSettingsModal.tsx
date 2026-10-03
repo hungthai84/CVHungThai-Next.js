@@ -919,7 +919,7 @@ export default function FooterSettingsModal() {
                     {[
                       {
                         mode: "light" as const,
-                        nameVi: "MRITECH Sáng (Light)",
+                        nameVi: "MRITECH Sáng",
                         nameEn: "Light Glass",
                         descVi: "Nền kính sáng cao cấp, tương phản chuẩn AAA",
                         descEn: "Clean Pearl Glass canvas",
@@ -927,7 +927,7 @@ export default function FooterSettingsModal() {
                       },
                       {
                         mode: "dark" as const,
-                        nameVi: "Glass Tối Neon (Dark)",
+                        nameVi: "Glass Tối Neon",
                         nameEn: "Dark Neon",
                         descVi: "Giao diện tối chuyên nghiệp với viền neon",
                         descEn: "Dark glassmorphism with neon",
@@ -935,7 +935,7 @@ export default function FooterSettingsModal() {
                       },
                       {
                         mode: "system" as const,
-                        nameVi: "Hệ thống (System Auto)",
+                        nameVi: "Hệ thống",
                         nameEn: "System Auto",
                         descVi: "Tự động đồng bộ theo cấu hình máy (OS)",
                         descEn: "Sync with OS prefers-color-scheme",

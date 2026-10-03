@@ -200,20 +200,16 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
 
   const isFullWidth = footerConfig.placement === "full-width";
 
-  // Footer corner radius: Chỉ bo cong 2 góc trên (trái & phải), không bo cong bên dưới (0px)
+  // Footer corner radius: Bo cong góc trên bên trái & góc trên bên phải theo tùy chỉnh bo cong hệ thống
   const configuredRadius = footerConfig.borderRadius !== undefined ? footerConfig.borderRadius : borderRadiusCard;
-  const radiusValue = configuredRadius >= 999 ? "24px" : `${configuredRadius || 24}px`;
+  const radiusValue = configuredRadius >= 999 ? "var(--theme-radius-card, 24px)" : `${configuredRadius || 20}px`;
 
   const footerCustomStyle: React.CSSProperties = {
-    borderRadius: "0px",
-    borderTopLeftRadius: radiusValue,
-    borderTopRightRadius: radiusValue,
+    borderTopLeftRadius: "var(--theme-radius-card, 20px)",
+    borderTopRightRadius: "var(--theme-radius-card, 20px)",
     borderBottomLeftRadius: "0px",
     borderBottomRightRadius: "0px",
-    paddingTop: "15px",
-    paddingBottom: "15px",
-    paddingLeft: "15px",
-    paddingRight: "15px",
+    padding: "15px",
     borderBottom: "0px",
     transition: "border-radius 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
   };
@@ -232,13 +228,13 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
 
   return (
     <>
-      {/* Main Footer Dock Container */}
+      {/* Main Footer Dock Container - Bo cong góc trên bên trái & góc trên bên phải với padding 15px */}
       <footer 
         id="footer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={footerCustomStyle}
-        className={`group py-1.5 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between cursor-default rounded-none !rounded-none ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
+        className={`group footer-bento-container p-[15px] flex flex-row items-center justify-between cursor-default rounded-b-none ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
       >
         {/* Unpinned / Auto-hide Grab Handle & Peek Indicator */}
         {(!isPinned || footerConfig.placement === "auto-hide") && (
@@ -352,24 +348,24 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
                     {[
                       { 
                         id: "system", 
-                        label: lang === "vi" ? "Hệ thống (Auto)" : "System (Auto)", 
-                        desc: lang === "vi" ? "Tự động theo cấu hình OS" : "Auto adjust to OS setting", 
+                        label: lang === "vi" ? "Hệ thống" : "System", 
+                        desc: lang === "vi" ? "Tự động theo cấu hình máy" : "Auto adjust to OS setting", 
                         Icon: Sparkles, 
                         color: "text-indigo-500 dark:text-cyan-400",
                         isSystem: true
                       },
                       { 
                         id: "mritech-digital-growth", 
-                        label: lang === "vi" ? "Sáng (Light)" : "Light Mode", 
-                        desc: lang === "vi" ? "Kính mờ Light Mode sang trọng" : "Modern Light Glass", 
+                        label: lang === "vi" ? "Sáng" : "Light Mode", 
+                        desc: lang === "vi" ? "Kính mờ sáng sang trọng" : "Modern Light Glass", 
                         Icon: Sun, 
                         color: "text-amber-500",
                         isSystem: false
                       },
                       { 
                         id: "glass-dark-neon", 
-                        label: lang === "vi" ? "Tối Neon (Dark)" : "Dark Neon", 
-                        desc: lang === "vi" ? "Kính mờ Dark Mode phát sáng Neon" : "Modern Dark Neon", 
+                        label: lang === "vi" ? "Tối Neon" : "Dark Neon", 
+                        desc: lang === "vi" ? "Kính mờ tối phát sáng Neon" : "Modern Dark Neon", 
                         Icon: Moon, 
                         color: "text-cyan-400",
                         isSystem: false

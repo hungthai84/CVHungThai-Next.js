@@ -637,7 +637,7 @@ export default function Customization() {
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Sun className="w-5 h-5 text-amber-500" />
-                    {isVi ? "Chế độ hiển thị chính (Light / Dark / Auto)" : "Primary Display Mode"}
+                    {isVi ? "Chế độ hiển thị chính" : "Primary Display Mode"}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     {isVi ? "Tự động kích hoạt chế độ sáng, tối hoặc theo cài đặt hệ điều hành" : "Select light, dark or follow operating system preferences automatically"}
@@ -655,9 +655,9 @@ export default function Customization() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { id: "light" as ThemeMode, nameVi: "Sáng (Light Mode)", nameEn: "Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background", Icon: Sun, iconColor: "text-amber-500" },
-                  { id: "dark" as ThemeMode, nameVi: "Tối (Dark Neon)", nameEn: "Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast", Icon: Moon, iconColor: "text-indigo-400" },
-                  { id: "system" as ThemeMode, nameVi: "Theo Hệ Thống (Auto)", nameEn: "Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode", Icon: Monitor, iconColor: "text-cyan-400" },
+                  { id: "light" as ThemeMode, nameVi: "Sáng", nameEn: "Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background", Icon: Sun, iconColor: "text-amber-500" },
+                  { id: "dark" as ThemeMode, nameVi: "Tối Neon", nameEn: "Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast", Icon: Moon, iconColor: "text-indigo-400" },
+                  { id: "system" as ThemeMode, nameVi: "Theo Hệ Thống", nameEn: "Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode", Icon: Monitor, iconColor: "text-cyan-400" },
                 ].map((m) => {
                   const isSelected = themeMode === m.id;
                   const ThemeIcon = m.Icon;

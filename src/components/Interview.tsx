@@ -244,7 +244,7 @@ export function Interview() {
       id="interview" 
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] pb-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-grow h-auto min-h-0 flex flex-col justify-start gap-[10px] max-w-7xl mx-auto relative z-10 pb-2 overflow-hidden">
+      <div className="w-full flex-1 h-full min-h-0 flex flex-col justify-start gap-[10px] max-w-7xl mx-auto relative z-10 overflow-hidden">
 
         {/* Header Card Phỏng vấn */}
         <PageCardHeader pageId="interview">
@@ -256,16 +256,16 @@ export function Interview() {
           </div>
         </PageCardHeader>
 
-        {/* Optimised grid layout: Left (6 cols on lg) for Video, Right (6 cols on lg) for Active Response details */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch flex-1">
+        {/* Optimised grid layout: Left (70% / 7 cols on lg) for Video, Right (30% / 3 cols on lg) for Active Response details - Chiều cao đến thẻ chính padding 15px */}
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-[15px] w-full items-stretch flex-1 min-h-0 h-full">
 
-          {/* LEFT AREA: Video Player (6 columns on lg) */}
-          <div className="w-full lg:col-span-6 flex flex-col min-h-0">
+          {/* LEFT AREA: Video Player (70% / 7 columns on lg) */}
+          <div className="w-full lg:col-span-7 flex flex-col h-full min-h-0 flex-1">
             
-            {/* 1. Video Player Hero Card */}
+            {/* 1. Video Player Hero Card - Chiều cao đến thẻ chính padding 15px */}
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="relative w-full h-full min-h-[380px] sm:min-h-[440px] rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col shrink-0"
+              className="relative w-full h-full min-h-[320px] rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col flex-1 shrink-0"
             >
               <video
                 ref={videoRef}
@@ -380,13 +380,13 @@ export function Interview() {
 
           </div>
 
-          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (6 columns on lg) */}
-          <div className="w-full lg:col-span-6 flex flex-col h-full">
+          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (30% / 3 columns on lg) */}
+          <div className="w-full lg:col-span-3 flex flex-col h-full min-h-0 flex-1">
             
-            {/* Active Response details Card */}
+            {/* Active Response details Card - Chiều cao đến thẻ chính padding 15px */}
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-4 relative min-h-[350px]"
+              className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4 sm:p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-4 relative min-h-[320px] flex-1 shrink-0"
             >
               <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-indigo-500/5 via-cyan-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
