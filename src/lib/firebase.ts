@@ -1,12 +1,22 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, doc, getDoc } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firestore with specific database ID from config
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+// Initialize Firestore with specific database ID and robust networking options
+let firestoreInstance;
+try {
+  firestoreInstance = initializeFirestore(app, {
+    experimentalAutoDetectLongPolling: true,
+    ignoreUndefinedProperties: true
+  }, firebaseConfig.firestoreDatabaseId);
+} catch {
+  firestoreInstance = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+}
+
+export const db = firestoreInstance;
 export const auth = getAuth(app);
 export const googleAuthProvider = new GoogleAuthProvider();
 
@@ -53,19 +63,17 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     operationType,
     path
   };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
+  console.warn('Firestore Operation Notice: ', JSON.stringify(errInfo));
+  return errInfo;
 }
 
-// Validate connection to Firestore on initialization
+// Validate connection to Firestore gracefully
 export async function testConnection(): Promise<boolean> {
   try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
+    const docRef = doc(db, 'xray_templates', 'init_check');
+    await getDoc(docRef);
     return true;
-  } catch (error: any) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.warn('Firebase client is offline. Check Firebase configuration.');
-    }
+  } catch {
     return false;
   }
 }

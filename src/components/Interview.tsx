@@ -244,7 +244,7 @@ export function Interview() {
       id="interview" 
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] pb-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start relative z-10 pb-[15px]">
+      <div className="w-full flex-grow h-auto min-h-0 flex flex-col justify-start gap-[10px] max-w-7xl mx-auto relative z-10 pb-2 overflow-hidden">
 
         {/* Header Card Phỏng vấn */}
         <PageCardHeader pageId="interview">
@@ -255,75 +255,6 @@ export function Interview() {
             </span>
           </div>
         </PageCardHeader>
-
-        {/* PERSONA SELECTION BAR: Dynamic JSON-based persona switcher */}
-        {personas.length > 0 && (
-          <div className="w-full rounded-[var(--theme-radius-card,12px)] p-3 sm:p-4 bg-white/75 dark:bg-slate-900/75 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs flex flex-col gap-2.5 transition-all">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-indigo-500 dark:bg-cyan-400 animate-pulse" />
-                <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 font-mono">
-                  {isVi ? "Chọn vai trò người chất vấn / Hội đồng phỏng vấn (Persona):" : "Select Interview Persona / Panel Viewpoint:"}
-                </span>
-              </div>
-              <span className="text-[11px] font-mono font-bold text-indigo-600 dark:text-cyan-400 bg-indigo-50 dark:bg-cyan-950/60 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-cyan-800/40 w-fit">
-                {activeQuestions.length} {isVi ? "câu hỏi theo vai trò" : "persona questions"}
-              </span>
-            </div>
-
-            {/* Persona Switcher Tabs */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 w-full">
-              {personas.map((p) => {
-                const isSelected = p.id === (activePersona?.id || selectedPersonaId);
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => handleSelectPersona(p.id)}
-                    className={cn(
-                      "p-2.5 sm:p-3 rounded-xl border text-left transition-all duration-200 flex flex-col gap-1 cursor-pointer relative group",
-                      isSelected
-                        ? "bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-cyan-600 dark:to-blue-700 text-white border-transparent shadow-md shadow-indigo-500/20 scale-[1.01]"
-                        : "bg-white/60 dark:bg-slate-800/60 border-slate-200/70 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200"
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-1.5 w-full">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className={cn(
-                          "p-1.5 rounded-lg shrink-0 transition-colors",
-                          isSelected ? "bg-white/20 text-white" : "bg-indigo-50 dark:bg-cyan-950/60 text-indigo-600 dark:text-cyan-400 group-hover:scale-105"
-                        )}>
-                          {renderPersonaIcon(p.icon)}
-                        </span>
-                        <span className="font-extrabold text-xs sm:text-xs truncate tracking-tight">
-                          {isVi ? p.titleVi.split("(")[0].trim() : p.titleEn.split("(")[0].trim()}
-                        </span>
-                      </div>
-                    </div>
-                    <p className={cn(
-                      "text-[10px] leading-snug line-clamp-1 mt-0.5",
-                      isSelected ? "text-indigo-100 dark:text-cyan-100" : "text-slate-500 dark:text-slate-400"
-                    )}>
-                      {isVi ? p.roleVi : p.roleEn}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active Persona Focus Summary Statement */}
-            {activePersona && (
-              <div className="flex items-center gap-2 pt-1 border-t border-slate-200/50 dark:border-white/5 text-[11px] text-slate-600 dark:text-slate-400">
-                <span className="font-bold text-indigo-600 dark:text-cyan-400 shrink-0">
-                  {isVi ? activePersona.badgeVi : activePersona.badgeEn}:
-                </span>
-                <span className="truncate italic">
-                  {isVi ? activePersona.roleVi : activePersona.roleEn}
-                </span>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Optimised grid layout: Left (6 cols on lg) for Video, Right (6 cols on lg) for Active Response details */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 w-full items-stretch flex-1">

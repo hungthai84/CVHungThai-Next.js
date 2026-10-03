@@ -1413,6 +1413,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
 }) => {
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [activeSubCard, setActiveSubCard] = useState<number | null>(null);
+  const [isJobModalOpen, setIsJobModalOpen] = useState<boolean>(false);
   
   // State for sub-card expand modal and gallery controls
   const [activeSubCardModal, setActiveSubCardModal] = useState<{ id: string; title: string } | null>(null);
@@ -1483,7 +1484,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
   const currentHex = currentItem?.hexColor;
   const primaryColor = activePalette?.find((p) => p.id === "primary")?.hex || currentHex || "#6366f1";
 
-  const filteredItems = INFOGRAPHIC_TIMELINE_ITEMS.filter((item) => {
+  const filteredItems = INFOGRAPHIC_TIMELINE_ITEMS.filter((item) => item.key !== "2013").filter((item) => {
     if (filterCategory === "all") return true;
     const milestone = MILESTONES_DATA[item.key];
     return milestone?.tagCategory === filterCategory;
@@ -1681,7 +1682,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                   return (
                     <div 
                       key={item.key}
-                      onClick={() => setActiveYear(item.key)}
+                      onClick={() => {
+                        setActiveYear(item.key);
+                        setIsJobModalOpen(true);
+                      }}
                       className="flex flex-col items-center relative cursor-pointer group transition-transform duration-300 min-w-0"
                     >
                       {/* 1. Top Year Pill Badge with downward triangle tip */}
@@ -1728,6 +1732,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     setActiveYear(subLogo.key);
+                                    setIsJobModalOpen(true);
                                   }}
                                   className={cn(
                                     "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-0 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer origin-center hover:scale-125 hover:z-40",
@@ -1783,6 +1788,7 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     setActiveYear(subLogo.key);
+                                    setIsJobModalOpen(true);
                                   }}
                                   className={cn(
                                     "w-[50px] h-[50px] sm:w-[62px] sm:h-[62px] rounded-full border-0 shadow-md overflow-hidden flex items-center justify-center bg-white dark:bg-slate-950 transition-all duration-500 absolute cursor-pointer hover:scale-120 hover:z-40",
@@ -1816,6 +1822,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                         ) : (
                           /* Standard Ring Container for single-brand years: scales up on hover */
                           <div 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveYear(item.key);
+                              setIsJobModalOpen(true);
+                            }}
                             className={cn(
                               "w-11 h-11 xs:w-13 xs:h-13 sm:w-15 sm:h-15 md:w-[68px] md:h-[68px] rounded-full border-0 p-0 relative flex items-center justify-center transition-all duration-300 shrink-0 bg-white dark:bg-slate-950 z-10 overflow-hidden hover:scale-115 cursor-pointer",
                               isSelected ? "scale-110" : "group-hover:scale-110"
@@ -1856,20 +1867,112 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* THỂ CỘT MỐC JOB: THẺ JOB CHÍNH BENTO CO GIẢN CHIỀU CAO KHI CLICK */}
+        {/* COMPACT BENTO CONTROL STRIP (ẨN THẺ JOB TRỰC TIẾP TRÊN TRANG KINH NGHIỆM) */}
         {/* ========================================================================= */}
-        <AnimatePresence mode="wait">
-            {current && (
+        <div 
+          onClick={() => setIsJobModalOpen(true)}
+          className="w-full p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/10 backdrop-blur-2xl shadow-sm hover:shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 text-left transition-all duration-300 cursor-pointer group/strip"
+        >
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 w-full sm:w-auto">
+            {/* Logo Avatar Node */}
+            <div className="relative shrink-0">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 p-0.5 shadow-md">
+                <div className="w-full h-full rounded-full bg-white dark:bg-slate-950 p-1 flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={current.logo} 
+                    alt={current.company} 
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      if (current.fallbackLogo) {
+                        (e.currentTarget as HTMLImageElement).src = current.fallbackLogo;
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+              <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-2xs" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-2xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-700 dark:text-cyan-400 border border-blue-500/30">
+                  {current.cardYearLabel}
+                </span>
+                <span className="text-xs sm:text-sm md:text-base font-bold font-play truncate text-slate-900 dark:text-white">
+                  {current.company}
+                </span>
+                {current.subCompanies && (
+                  <span className="text-3xs sm:text-2xs text-indigo-700 dark:text-indigo-300 font-extrabold bg-indigo-50 dark:bg-indigo-950/80 px-2 py-0.5 rounded-md border border-indigo-200/80 dark:border-indigo-800/60 hidden sm:inline-block">
+                    {current.subCompanies}
+                  </span>
+                )}
+              </div>
+              <p className="text-2xs sm:text-xs text-slate-600 dark:text-slate-400 truncate mt-1">
+                {current.role} • {current.period || `Từ ${current.cardYearLabel}`} • {current.headcount || 20} {isVi ? "nhân sự trực thuộc" : "team members"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => setIsJobModalOpen(true)}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs sm:text-sm font-bold font-play shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer hover:scale-102 active:scale-98"
+            >
+              <Maximize2 className="w-4 h-4" />
+              <span>{isVi ? "Xem Thẻ Job chi tiết" : "View Job Card Details"}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* POPUP THẺ JOB CHÍNH BENTO (KÍCH THƯỚC BẰNG THẺ KINH NGHIỆM MAX-W-7XL)     */}
+        {/* ========================================================================= */}
+        <AnimatePresence>
+          {isJobModalOpen && current && (
+            <div 
+              onClick={() => setIsJobModalOpen(false)}
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+            >
               <motion.div
-                key={current.key}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                style={{ borderRadius: "var(--theme-radius-card, 24px)" }}
-                className="w-full h-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-4 sm:p-6 border border-slate-200/80 dark:border-white/10 space-y-4 shadow-xl text-left"
+                initial={{ opacity: 0, scale: 0.94, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 15 }}
+                transition={{ duration: 0.25 }}
+                onClick={(e) => e.stopPropagation()}
+                style={{ borderRadius: "var(--theme-radius-card, 20px)" }}
+                className="relative w-full max-w-7xl max-h-[92vh] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-2xl flex flex-col overflow-hidden text-left"
               >
-                  
+                {/* Modal Top Bar with Close Button */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4.5 border-b border-slate-200/80 dark:border-white/10 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-md shrink-0">
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                      <Briefcase className="w-4.5 h-4.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xs sm:text-sm md:text-base font-bold font-play text-slate-900 dark:text-white truncate">
+                        {current.company} — {isVi ? "Hồ sơ công việc chi tiết" : "Job Profile Overview"}
+                      </h3>
+                      <p className="text-3xs sm:text-2xs text-slate-500 font-mono">
+                        {current.period || `Từ ${current.cardYearLabel}`} • {current.tag}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setIsJobModalOpen(false)}
+                      className="w-8 h-8 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs cursor-pointer transition-all hover:scale-105"
+                      title={isVi ? "Đóng popup" : "Close popup"}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Scrollable Container with Complete Job Card Content */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
                   {/* 1. Header / Icon / Title / Period Badge */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/15">
                     <div className="flex items-center gap-3 min-w-0">
@@ -2545,8 +2648,10 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                     </div>
 
                   </div>
+                </div>
               </motion.div>
-            )}
+            </div>
+          )}
         </AnimatePresence>
       </div>
 
@@ -3315,10 +3420,10 @@ export default function Experience() {
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200">
             <div 
               className={cn(
-                "relative w-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-card overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
+                "relative w-full h-full max-w-7xl mx-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-card overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transition-all duration-300 my-auto",
                 isDetailModalFullscreen 
-                  ? "h-full max-h-[96vh] rounded-card" 
-                  : "h-auto max-h-[88vh] rounded-card"
+                  ? "h-full max-h-[98vh] rounded-card" 
+                  : "h-full max-h-[95vh] rounded-card"
               )}
             >
               

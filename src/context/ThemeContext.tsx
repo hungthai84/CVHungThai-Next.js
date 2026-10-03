@@ -971,25 +971,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     applyColorsToDOM(theme, presetId);
   };
 
-  const handleSetColorPreset = async (presetId: string) => {
+  const handleSetColorPreset = (presetId: string) => {
     if (presetId === colorPreset) return;
-
-    setIsThemeTransitioning(true);
-    const snapshotUrl = await captureSnapshot();
-    if (snapshotUrl) {
-      setThemeSnapshot(snapshotUrl);
-    }
-
-    const executePresetChange = () => {
+    safeStartViewTransition(() => {
       setColorPreset(presetId);
-    };
-
-    safeStartViewTransition(executePresetChange);
-
-    setTimeout(() => {
-      setIsThemeTransitioning(false);
-      setThemeSnapshot(null);
-    }, 450);
+    });
   };
 
   const setThemeMode = async (mode: ThemeMode) => {

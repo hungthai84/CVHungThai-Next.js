@@ -120,11 +120,11 @@ function Hero() {
             backgroundImage: slide.videoUrl ? undefined : `url('${slide.bgImage}')`, 
             borderRadius: "var(--theme-radius-card, 10px)" 
           }}
-          className="relative w-full h-full flex-1 overflow-hidden p-6 sm:p-10 flex flex-col justify-between border border-white/25 dark:border-white/15 shadow-2xl bg-cover bg-center group text-left transition-all duration-500 bg-slate-950"
+          className="relative w-full h-full flex-1 overflow-hidden p-6 sm:p-10 flex flex-col justify-between border border-white/25 dark:border-white/15 shadow-2xl bg-cover bg-center group text-left transition-all duration-500 bg-transparent"
         >
           {/* If video slide: render background video */}
           {slide.videoUrl && (
-            <div className="absolute inset-0 z-0 overflow-hidden">
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
               <video
                 key={slide.id}
                 ref={slideVideoRef}
@@ -134,13 +134,13 @@ function Hero() {
                 playsInline
                 loop
                 muted
-                className="w-full h-full object-cover opacity-60"
+                className="w-full h-full object-cover opacity-75"
               />
             </div>
           )}
 
-          {/* Transparent Scrim Overlay to clearly show background image/video */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-slate-950/20 backdrop-blur-none z-0" />
+          {/* 100% Transparent Background Layer with minimal text readability protection */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none z-0" />
 
           {/* Top Badge & Number & Controls */}
           <div className="relative z-10 flex items-center justify-between w-full">

@@ -18,4 +18,5 @@ export interface FooterConfig {
   showNextPageButton: boolean;
   showCopyright: boolean;
   blurIntensity: "low" | "medium" | "high";
+  borderRadius?: number;
 }

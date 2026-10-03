@@ -45,8 +45,7 @@ const SECTION_ORDER = [
   "systems",
   "contact",
   "wallpapers",
-  "customization",
-  "template"
+  "customization"
 ];
 
 function Footer({ theme: propTheme, activeSection = "home", onNavigate }: FooterProps) {
@@ -162,30 +161,23 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
 
   // Base container styles matched exactly to Header's glass container styling
   const getFooterSurfaceStyle = () => {
+    const isPill = footerConfig.placement === "floating-pill";
+    const borderClasses = isPill 
+      ? "border border-white/60 dark:border-white/20" 
+      : "border-t border-x border-b-0 border-white/60 dark:border-white/20";
+
     switch (theme) {
       case "glass-dark-neon":
-        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-t border-x border-b-0 border-white/20 text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
+        return `bg-[#121218]/85 dark:bg-[#121218]/85 ${borderClasses} text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]`;
       case "mritech-digital-growth":
       default:
-        return "bg-white/75 dark:bg-[#121218]/85 border-t border-x border-b-0 border-white/60 dark:border-white/20 text-slate-800 dark:text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(31,38,135,0.12)] dark:shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]";
+        return `bg-white/75 dark:bg-[#121218]/85 ${borderClasses} text-slate-800 dark:text-slate-100 backdrop-blur-2xl backdrop-saturate-[180%] shadow-[0_10px_35px_0_rgba(31,38,135,0.12)] dark:shadow-[0_10px_35px_0_rgba(0,0,0,0.4)]`;
     }
   };
 
-  // Placement class resolver (Áp dụng linh hoạt bo cong góc từ Tùy chỉnh độ bo cong)
+  // Placement class resolver: footer neo đáy, chỉ bo cong 2 góc trên
   const getPlacementClass = () => {
     switch (footerConfig.placement) {
-      case "floating-pill":
-        return cn(
-          "fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-20px)] sm:w-[92%] md:w-[86%] lg:w-[82%] xl:w-[78%] max-w-[1180px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
-          isPinned
-            ? "bottom-2.5 sm:bottom-3.5 translate-y-0 opacity-100"
-            : cn(
-                "bottom-0",
-                isSlidDown 
-                  ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100" 
-                  : "translate-y-0 opacity-100"
-              )
-        );
       case "full-width":
         return cn(
           "fixed bottom-0 left-0 right-0 z-50 w-full h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
@@ -193,6 +185,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
         );
+      case "floating-pill":
       case "auto-hide":
       case "fixed-bottom":
       default:
@@ -205,14 +198,24 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     }
   };
 
-  const isFloatingPillPinned = footerConfig.placement === "floating-pill" && isPinned;
+  const isFullWidth = footerConfig.placement === "full-width";
+
+  // Footer corner radius: Chỉ bo cong 2 góc trên (trái & phải), không bo cong bên dưới (0px)
+  const configuredRadius = footerConfig.borderRadius !== undefined ? footerConfig.borderRadius : borderRadiusCard;
+  const radiusValue = configuredRadius >= 999 ? "24px" : `${configuredRadius || 24}px`;
 
   const footerCustomStyle: React.CSSProperties = {
-    borderTopLeftRadius: `var(--theme-radius-card, ${borderRadiusCard}px)`,
-    borderTopRightRadius: `var(--theme-radius-card, ${borderRadiusCard}px)`,
-    borderBottomLeftRadius: isFloatingPillPinned ? `var(--theme-radius-card, ${borderRadiusCard}px)` : "0px",
-    borderBottomRightRadius: isFloatingPillPinned ? `var(--theme-radius-card, ${borderRadiusCard}px)` : "0px",
-    transition: "border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
+    borderRadius: "0px",
+    borderTopLeftRadius: radiusValue,
+    borderTopRightRadius: radiusValue,
+    borderBottomLeftRadius: "0px",
+    borderBottomRightRadius: "0px",
+    paddingTop: "15px",
+    paddingBottom: "15px",
+    paddingLeft: "15px",
+    paddingRight: "15px",
+    borderBottom: "0px",
+    transition: "border-radius 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
   };
 
   const getActionCircleStyle = (_type?: "ai" | "sound" | "cursor" | "settings") => {
@@ -235,7 +238,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={footerCustomStyle}
-        className={`group py-1 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-col justify-center cursor-default ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
+        className={`group py-1.5 footer-bento-container px-3 sm:px-5 md:px-6 flex flex-row items-center justify-between cursor-default rounded-none !rounded-none ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
       >
         {/* Unpinned / Auto-hide Grab Handle & Peek Indicator */}
         {(!isPinned || footerConfig.placement === "auto-hide") && (
@@ -261,7 +264,6 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
           />
         )}
 
-      <div className="w-full flex flex-row justify-between items-center gap-2 relative">
         {/* LEFT CONTAINER: Time/Date & Weather Widget Capsule Drawer */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0 z-10">
           {(footerConfig.showWeather || footerConfig.showClock) && (
@@ -594,38 +596,39 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
 
           </div>
 
-          {/* 6. PIN Button (Nút Ghim) - Chỉ hiển thị icon, xóa bỏ khung */}
-          {footerConfig.isPinned !== undefined && (
-            <button
-              type="button"
-              onClick={handleTogglePin}
-              onMouseEnter={() => setHoveredFooterIcon("pin")}
-              onMouseLeave={() => setHoveredFooterIcon(null)}
-              className="p-1.5 flex items-center justify-center transition-all duration-300 cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white relative shrink-0"
-              title={
-                footerConfig.isPinned
-                  ? (isVi ? "Đã ghim footer (Click để bỏ ghim & tự động trượt ẩn)" : "Footer pinned (Click to unpin & auto-hide)")
-                  : (isVi ? "Đang bỏ ghim (Click để ghim giữ cố định)" : "Footer unpinned (Click to pin fixed)")
-              }
-            >
-              <Pin className={`w-5 h-5 transition-all duration-300 ${footerConfig.isPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
-              <AnimatePresence>
-                {hoveredFooterIcon === "pin" && (
-                  <motion.span 
-                    initial={{ opacity: 0, y: -6, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -6, scale: 0.9 }}
-                    className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
-                  >
-                    {footerConfig.isPinned ? (isVi ? "Bỏ ghim" : "Unpin") : (isVi ? "Ghim" : "Pin")}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-          )}
-
         </div>
-      </div>
+
+      {/* 6. PIN Button (Nút Ghim) - Đem ra ngoài footer nằm bên phải cách 10px */}
+      {footerConfig.isPinned !== undefined && (
+        <div className="absolute left-[calc(100%+10px)] top-1/2 -translate-y-1/2 hidden sm:flex items-center z-50 pointer-events-auto">
+          <button
+            type="button"
+            onClick={handleTogglePin}
+            onMouseEnter={() => setHoveredFooterIcon("pin")}
+            onMouseLeave={() => setHoveredFooterIcon(null)}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/85 dark:bg-slate-900/85 backdrop-blur-2xl border border-white/60 dark:border-white/20 shadow-md hover:shadow-lg text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 relative shrink-0 hover:scale-105 active:scale-95 p-1.5"
+            title={
+              footerConfig.isPinned
+                ? (isVi ? "Đã ghim footer (Click để bỏ ghim & tự động trượt ẩn)" : "Footer pinned (Click to unpin & auto-hide)")
+                : (isVi ? "Đang bỏ ghim (Click để ghim giữ cố định)" : "Footer unpinned (Click to pin fixed)")
+            }
+          >
+            <Pin className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-all duration-300 ${footerConfig.isPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
+            <AnimatePresence>
+              {hoveredFooterIcon === "pin" && (
+                <motion.span 
+                  initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.9 }}
+                  className="absolute bottom-full mb-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 uppercase tracking-wider"
+                >
+                  {footerConfig.isPinned ? (isVi ? "Bỏ ghim" : "Unpin") : (isVi ? "Ghim" : "Pin")}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+      )}
     </footer>
     </>
   );

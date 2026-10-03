@@ -356,7 +356,7 @@ interface ElementInfo {
   fullSelector: string;
 }
 
-type InspectorMode = "site_structure" | "element" | "tree" | "full_website";
+type InspectorMode = "site_structure" | "element" | "tree";
 
 export interface SiteStructureNode {
   id: string;
@@ -2597,18 +2597,18 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
           <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 shrink-0" />
 
-          {/* Toàn bộ Website Button */}
+          {/* Open X-Ray Panel Button */}
           <button
             onClick={() => {
               playUiSound("click");
-              setMode("full_website");
+              setMode("element");
               setInspectorOpen(true);
             }}
             onMouseEnter={() => playUiSound("hover")}
-            className="px-3 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-2xs font-bold flex items-center gap-1 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 hover:shadow-md hover:shadow-sky-500/10"
+            className="px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-2xs font-bold flex items-center gap-1.5 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
           >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Toàn Bộ Website</span>
+            <Scan className="w-3.5 h-3.5" />
+            <span>X-Ray Inspector</span>
           </button>
 
 
@@ -2813,33 +2813,25 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             )}>
               <div className="flex items-center gap-3">
                 <div className={cn(
-                  "p-2 rounded-xl border flex items-center justify-center shadow-xs",
-                  mode === "tree"
-                    ? "bg-indigo-500/20 text-indigo-500 border-indigo-500/30"
-                    : mode === "full_website"
-                      ? "bg-sky-500/20 text-sky-500 border-sky-500/30"
-                      : "bg-emerald-500/20 text-emerald-500 border-emerald-500/30"
+                  "w-10 h-10 rounded-xl border flex items-center justify-center shadow-xs shrink-0",
+                  isLight ? "bg-emerald-50 border-emerald-200 text-emerald-600" : "bg-emerald-950/60 border-emerald-500/30 text-emerald-400"
                 )}>
-                  {mode === "tree" ? <FolderTree className="w-5 h-5" /> : mode === "full_website" ? <Globe className="w-5 h-5" /> : <Scan className="w-5 h-5" />}
+                  <Scan className="w-5.5 h-5.5 stroke-[2.2]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-black tracking-tight">
-                      X-Ray Inspector • Trình Quản Lý & Xuất Lệnh AI
+                    <h3 className="text-sm sm:text-base font-black tracking-tight flex items-center gap-1.5">
+                      <span>X-Ray Inspector</span>
                     </h3>
                     <span className={cn(
-                      "px-2 py-0.5 rounded-full text-3xs font-bold border",
-                      isLight ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-indigo-950/60 text-indigo-300 border-indigo-500/30"
+                      "px-2 py-0.5 rounded-full text-3xs font-mono font-bold border",
+                      isLight ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
                     )}>
                       v3.0 Pro
                     </span>
                   </div>
-                  <p className={cn("text-xs", isLight ? "text-slate-500" : "text-slate-400")}>
-                    {mode === "tree"
-                      ? "Cấu trúc cây đối tượng: Xem danh sách, Chỉnh / Xóa / Thêm / Chuyển và Xuất Prompt"
-                      : mode === "full_website"
-                        ? "Tạo chỉ thị và prompt tổng thể áp dụng cho toàn bộ cấu trúc website"
-                        : "Định danh chính xác phần tử và tạo prompt thay đổi riêng biệt"}
+                  <p className={cn("text-xs mt-0.5 font-medium", isLight ? "text-slate-500" : "text-slate-400")}>
+                    Định danh & tinh chỉnh phần tử giao diện
                   </p>
                 </div>
               </div>
@@ -2878,60 +2870,25 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
               </div>
             </div>
 
-            {/* Scope Selection Tabs: Phần tử đã chọn & Chỉnh sửa Font & Toàn bộ Website */}
+            {/* Scope Selection Header Bar */}
             <div className={cn(
               "flex items-center border-b p-1.5 sm:p-2 gap-2 transition-colors",
               isLight ? "bg-slate-100/90 border-slate-200" : "bg-slate-950/70 border-slate-800"
             )}>
-              <button
-                onClick={() => {
-                  playUiSound("click");
-                  setMode("element");
-                  setGeneratedPrompt("");
-                }}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs",
-                  mode === "element"
-                    ? isLight
-                      ? "bg-white text-emerald-700 border border-emerald-300 ring-2 ring-emerald-500/20"
-                      : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 ring-2 ring-emerald-500/30"
-                    : isLight
-                      ? "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                )}
-              >
-                <Crosshair className="w-4 h-4 text-emerald-500" />
-                <span>Phần tử đã chọn</span>
+              <div className="flex-1 py-2 px-3.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all bg-white dark:bg-slate-900 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 shadow-xs">
+                <div className="flex items-center gap-2">
+                  <Crosshair className="w-4 h-4 text-emerald-500" />
+                  <span>Kiểm tra Phần tử đã chọn</span>
+                </div>
                 {selectedElement && (
                   <span className={cn(
-                    "text-3xs px-2 py-0.5 rounded font-mono font-bold",
-                    isLight ? "bg-emerald-100 text-emerald-800" : "bg-emerald-500/30 text-emerald-300"
+                    "text-3xs px-2.5 py-0.5 rounded-full font-mono font-bold border",
+                    isLight ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-emerald-500/30 text-emerald-300 border-emerald-500/40"
                   )}>
-                    &lt;{selectedElement.tag}&gt;
+                    &lt;{selectedElement.tag}&gt; {selectedElement.componentType}
                   </span>
                 )}
-              </button>
-
-              <button
-                onClick={() => {
-                  playUiSound("click");
-                  setMode("full_website");
-                  setGeneratedPrompt("");
-                }}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs",
-                  mode === "full_website"
-                    ? isLight
-                      ? "bg-white text-sky-700 border border-sky-300 ring-2 ring-sky-500/20"
-                      : "bg-sky-50/20 text-sky-300 border border-sky-500/40 ring-2 ring-sky-500/30"
-                    : isLight
-                      ? "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                )}
-              >
-                <Globe className="w-4 h-4 text-sky-500" />
-                <span>Toàn bộ Website</span>
-              </button>
+              </div>
             </div>
 
             {/* Modal Body Container */}
@@ -3407,18 +3364,9 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <div>
                         <h4 className="font-black text-sm text-slate-900 dark:text-white">Chưa chọn phần tử nào</h4>
                         <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-                          Vui lòng bật X-Ray trên màn hình và nhấp trực tiếp vào bất kỳ phần tử nào trên website để kiểm tra và tùy chỉnh, hoặc chuyển qua tab "Toàn bộ Website".
+                          Vui lòng nhấp chọn trực tiếp bất kỳ phần tử nào trên giao diện để kiểm tra và tùy chỉnh.
                         </p>
                       </div>
-                      <button
-                        onClick={() => {
-                          playUiSound("click");
-                          setMode("full_website");
-                        }}
-                        className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
-                      >
-                        Chuyển sang Tab Toàn Bộ Website
-                      </button>
                     </div>
                   ) : (
                     <div className="space-y-3.5">
@@ -4652,8 +4600,8 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 </div>
               )}
 
-              {/* ================= TAB 3: FULL WEBSITE MODE ================= */}
-              {mode === "full_website" && (
+              {/* ================= TAB 3: FULL WEBSITE MODE (REMOVED AS REQUESTED) ================= */}
+              {false && (
                 <div className={cn(
                   "p-4 rounded-2xl border space-y-3.5 animate-in fade-in duration-200 shadow-sm",
                   isLight ? "bg-slate-50/80 border-indigo-200/80" : "bg-slate-950/90 border-indigo-500/30"
@@ -5126,9 +5074,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                   placeholder={
                     mode === "tree"
                       ? "Ví dụ: Áp dụng các thay đổi trong danh sách trên, đồng thời làm nổi bật các thẻ tiêu đề và tối ưu khoảng cách..."
-                      : mode === "full_website"
-                        ? "Ví dụ: Đồng bộ lại tông màu xanh navy cao cấp, thêm hiệu ứng chuyển trang mượt mà..."
-                        : "Ví dụ: Đổi màu nút thành xanh ngọc gradient, làm đậm chữ và thêm hiệu ứng hover..."
+                      : "Ví dụ: Đổi màu nút thành xanh ngọc gradient, làm đậm chữ và thêm hiệu ứng hover..."
                   }
                   rows={2}
                   className={cn(

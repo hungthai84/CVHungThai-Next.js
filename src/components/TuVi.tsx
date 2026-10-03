@@ -140,11 +140,6 @@ export default function TuVi() {
       {/* Main Container */}
       <div className="w-full flex-grow flex flex-col gap-6 max-w-7xl mx-auto justify-start relative z-10">
 
-        {/* Outer Section Wrapper */}
-        <div 
-          id="info-card-tuvi" 
-          className="w-full flex flex-col gap-6 relative z-10"
-        >
           {/* Header Card với thanh Tab điều hướng */}
           <PageCardHeader pageId="tuvi">
             {/* Left Side: Subtitle */}
@@ -153,33 +148,6 @@ export default function TuVi() {
               <span className="text-caption font-bold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-3 py-1 rounded-full border border-purple-500/30 shadow-2xs">
                 {isVi ? "Tử Vi & Phong Thủy Quản Trị" : "Astrology & Feng Shui Matrix"}
               </span>
-            </div>
-
-            {/* Right Side: Navigation Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold flex-1 justify-start md:justify-end">
-              {[
-                { id: "tuvi-section-1", label: isVi ? "1. Bản Mệnh" : "1. Profile", icon: MoonStar },
-                { id: "tuvi-section-2", label: isVi ? "2. Phong Cách" : "2. Traits", icon: User },
-                { id: "tuvi-section-3", label: isVi ? "3. Lục Cung" : "3. Palaces", icon: Star },
-                { id: "tuvi-section-4", label: isVi ? "4. Tuổi Hợp" : "4. Synergy", icon: Users },
-                { id: "tuvi-section-5", label: isVi ? "5. Triết Lý" : "5. Philosophy", icon: Compass },
-              ].map((sec) => (
-                <button
-                  key={sec.id}
-                  type="button"
-                  onClick={() => {
-                    playUiSound("click");
-                    const el = document.getElementById(sec.id);
-                    if (el) {
-                      el.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
-                  }}
-                  className="px-3 py-1.5 rounded-xl text-caption font-bold transition-all duration-300 cursor-pointer whitespace-nowrap border shadow-2xs bg-white/80 dark:bg-slate-800/80 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-800/80 hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white flex items-center gap-1.5 shrink-0 active:scale-95"
-                >
-                  <sec.icon className="w-3.5 h-3.5 shrink-0" />
-                  <span>{sec.label}</span>
-                </button>
-              ))}
             </div>
           </PageCardHeader>
 
@@ -1020,7 +988,6 @@ export default function TuVi() {
             </div>
           </div>
 
-        </div>
       </div>
     </section>
   );

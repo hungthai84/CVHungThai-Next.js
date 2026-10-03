@@ -2,12 +2,6 @@ export type Language = 'vi' | 'en';
 
 export const translations: Record<Language, Record<string, string>> = {
   vi: {
-    'nav.nec': 'Trang UI NEC',
-    'nav.bento': 'Bento Dark Dashboard',
-    'nav.glass_dashboard': 'Trang mẫu',
-    'nav.template': 'Trang mẫu',
-    'nav.components': 'UI Components',
-    'nav.ui_glass': 'UI Glass',
     'nav.home': 'Trang chủ',
     'nav.letter': 'Thư ngỏ',
     'nav.about': 'Giới thiệu',
@@ -87,12 +81,6 @@ export const translations: Record<Language, Record<string, string>> = {
     'footer.rights': '© 2026 Nguyễn Hùng Thái. Mọi quyền được bảo lưu.'
   },
   en: {
-    'nav.nec': 'UI NEC Page',
-    'nav.bento': 'Bento Dark Dashboard',
-    'nav.glass_dashboard': 'Sample Template',
-    'nav.template': 'Sample Template',
-    'nav.components': 'UI Template',
-    'nav.ui_glass': 'UI Glass',
     'nav.home': 'Home',
     'nav.letter': 'Open letter',
     'nav.about': 'About',

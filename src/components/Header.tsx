@@ -29,6 +29,7 @@ import {
   Pin,
   Server,
   LayoutTemplate,
+  Film,
   Bot
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
@@ -68,6 +69,42 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
   const [hoveredNavId, setHoveredNavId] = useState<string | null>(null);
   const [hoveredHeaderIcon, setHoveredHeaderIcon] = useState<string | null>(null);
+  const [isCompact, setIsCompact] = useState(false);
+
+  // iOS 26 Floating Tab Bar: Auto-collapse on scroll-down, expand on scroll-up / hover / idle
+  useEffect(() => {
+    const THRESHOLD = 10;
+    let lastScrollY = 0;
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const handleScroll = (e?: Event) => {
+      const target = (e?.target as HTMLElement) || document.documentElement;
+      const currentScrollY = target.scrollTop !== undefined && target.scrollTop > 0 
+        ? target.scrollTop 
+        : window.scrollY || document.documentElement.scrollTop;
+
+      if (currentScrollY > lastScrollY + THRESHOLD && currentScrollY > 40) {
+        setIsCompact(true);
+      } else if (currentScrollY < lastScrollY - THRESHOLD) {
+        setIsCompact(false);
+      }
+      lastScrollY = currentScrollY;
+
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        setIsCompact(false);
+      }, 600);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    document.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("scroll", handleScroll, { capture: true });
+      if (idleTimer) clearTimeout(idleTimer);
+    };
+  }, []);
 
   const navRef = useRef<HTMLElement>(null);
   const navRectRef = useRef<DOMRect | null>(null);
@@ -184,10 +221,9 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "systems", num: "13", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
     { id: "wallpapers", num: "14", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
     { id: "customization", num: "15", labelVi: "Tùy chỉnh", labelEn: "Customization", Icon: Sliders, key: "U" },
-    { id: "template", num: "16", labelVi: "Trang mẫu", labelEn: "Template", Icon: LayoutTemplate, key: "T" },
   ];
 
-  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips
+  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips (HIỂN THỊ TẤT CẢ CÁC TRANG ĐANG CÓ)
   const navItems = [
     { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Home },
     { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: FileText },
@@ -197,11 +233,13 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "education", labelVi: "Học vấn", labelEn: "Academic Path", label: t("nav.education"), Icon: GraduationCap },
     { id: "experience", labelVi: "Kinh nghiệm", labelEn: "Career Journey", label: t("nav.experience"), Icon: Briefcase },
     { id: "projects", labelVi: "Dự án", labelEn: "Key Projects", label: t("nav.projects"), Icon: ClipboardList },
-    { id: "interview", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video },
+    { id: "interview", labelVi: "Phỏng vấn", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video },
     { id: "tuvi", labelVi: "Tử vi", labelEn: "Wisdom Profile", label: t("nav.tuvi"), Icon: Sparkles },
     { id: "systems", labelVi: "Hệ thống", labelEn: "Systems Hub", label: t("nav.systems"), Icon: Server },
     { id: "memories", labelVi: "Kỷ niệm", labelEn: "Team Memories", label: t("nav.memories"), Icon: Images },
     { id: "contact", labelVi: "Liên hệ", labelEn: "Contact Hub", label: t("nav.contact"), Icon: MessagesSquare },
+    { id: "wallpapers", labelVi: "Hình nền", labelEn: "Wallpapers", label: t("nav.wallpapers"), Icon: Film },
+    { id: "customization", labelVi: "Tùy chỉnh", labelEn: "Customization", label: t("nav.customization"), Icon: Sliders },
   ];
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -314,84 +352,103 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           <div className="hidden sm:block w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mx-0.5 rounded-full shrink-0" />
         </div>
 
-        {/* CENTER CONTAINER: Navigation Menu with exact height matching controls capsule */}
+        {/* CENTER CONTAINER: Tailwind iOS 26 Floating Glass Capsule Tab Bar (HIỂN THỊ TẤT CẢ TRANG) */}
         <nav 
           ref={navRef}
-          onMouseEnter={handleNavMouseEnter}
+          data-compact={isCompact ? "true" : "false"}
+          onMouseEnter={(e) => {
+            handleNavMouseEnter();
+            setIsCompact(false);
+          }}
+          onPointerEnter={() => setIsCompact(false)}
+          onFocusCapture={() => setIsCompact(false)}
           onMouseMove={handleMouseMove}
           className={cn(
-            "hidden md:flex flex-1 shrink-0 items-center justify-center h-11 sm:h-12 p-1 rounded-full mx-2 lg:mx-3 xl:mx-4 relative group/nav header-nav-container select-none overflow-visible max-w-[850px] min-[1250px]:max-w-[1050px] transition-all duration-300 bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl",
+            "group hidden md:flex w-full flex-1 items-center justify-between sm:justify-around h-11 sm:h-12 px-3 sm:px-4 py-1.5 rounded-full mx-2 relative group/nav header-nav-container select-none overflow-x-auto no-scrollbar max-w-full",
+            "isolate bg-white/50 dark:bg-slate-950/50 border border-white/80 dark:border-white/20",
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_30px_0_rgba(100,110,140,0.08)] backdrop-blur-[20px] backdrop-saturate-[180%]",
+            "transition-[padding,gap] duration-[450ms] ease-[cubic-bezier(0.34,1.4,0.5,1)] motion-reduce:transition-none",
+            "gap-1 data-[compact=true]:gap-0.5 data-[compact=true]:p-1",
             theme === "glass-dark-neon"
               ? "text-white"
               : "text-slate-900 dark:text-white"
           )}
+          aria-label="Primary"
         >
           {/* Interactive 3D Liquid Glare */}
-          <div className="liquid-glare-container">
+          <div className="liquid-glare-container pointer-events-none">
             <div className="liquid-glare" />
           </div>
 
-          <ul className="header-nav-list flex items-center justify-between gap-0.5 lg:gap-1 xl:gap-1.5 w-full h-full relative z-20 shrink-0 px-1">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.id;
-              const isHovered = hoveredNavId === item.id;
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
+            const isHovered = hoveredNavId === item.id;
 
-              return (
-                <li
-                  key={item.id}
-                  className="shrink-0 relative group/navitem flex items-center h-full"
-                  onMouseEnter={() => setHoveredNavId(item.id)}
-                  onMouseLeave={() => setHoveredNavId(null)}
-                >
-                  <a
-                    href={`#${item.id}`}
-                    onClick={(e) => handleNavClick(e, item.id)}
-                    aria-label={item.label}
-                    title={item.label}
-                    className={cn(
-                      "h-9 sm:h-10 transition-all duration-300 cursor-pointer relative shrink-0 overflow-hidden flex items-center",
-                      isActive
-                        ? "flex-row items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105"
-                        : "w-9 sm:w-10 justify-center rounded-full text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400 hover:bg-blue-500/15"
-                    )}
-                  >
-                    <item.Icon 
-                      className={cn(
-                        "w-4 h-4 transition-transform shrink-0",
-                        isActive 
-                          ? "text-white stroke-[2.2]" 
-                          : "group-hover/navitem:scale-110"
-                      )} 
-                    />
-                    {isActive && (
-                      <span className="inline text-[9px] sm:text-[10px] font-mono font-bold tracking-tight truncate max-w-[90px] leading-tight text-white whitespace-nowrap">
-                        {formatTitleCase(item.label)}
-                      </span>
-                    )}
-                    {/* Floating Tooltip in exact Footer style for sub-desktop */}
-                    <AnimatePresence>
-                      {isHovered && !isActive && (
-                        <motion.span 
-                          initial={{ opacity: 0, y: 6, scale: 0.9 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                          className="lg:hidden absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
-                        >
-                          {formatTitleCase(item.label)}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => handleNavClick(e, item.id)}
+                aria-current={isActive ? "page" : undefined}
+                aria-label={item.label}
+                title={item.label}
+                onMouseEnter={() => setHoveredNavId(item.id)}
+                onMouseLeave={() => setHoveredNavId(null)}
+                className={cn(
+                  "flex items-center gap-1.5 h-8 sm:h-9 rounded-full no-underline transition-all duration-300 cursor-pointer relative shrink-0 z-20 border",
+                  "focus-visible:outline-3 focus-visible:outline-blue-500 focus-visible:outline-offset-2",
+                  isActive
+                    ? "px-3 bg-gradient-to-r from-blue-600/95 to-indigo-600/95 dark:from-blue-500/95 dark:to-cyan-500/95 text-white border-white/45 dark:border-cyan-400/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),0_6px_20px_-4px_rgba(37,99,235,0.5)] backdrop-blur-xl group-data-[compact=true]:px-2.5 font-bold scale-100"
+                    : cn(
+                        "px-2.5 border-transparent text-slate-700 dark:text-slate-200 group-data-[compact=true]:px-2 font-medium",
+                        isHovered 
+                          ? "bg-white/80 dark:bg-white/15 border-white/60 dark:border-white/20 text-blue-600 dark:text-cyan-400 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_4px_12px_rgba(0,0,0,0.06)] scale-[1.03]" 
+                          : "hover:bg-white/40 dark:hover:bg-white/10"
+                      )
+                )}
+              >
+                <item.Icon 
+                  className={cn(
+                    "w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform",
+                    isActive 
+                      ? "text-white stroke-[2.2] drop-shadow-xs" 
+                      : "text-slate-600 dark:text-slate-300 group-hover:scale-110"
+                  )} 
+                />
+                {/* Chỉ hiển thị tiêu đề của tab đang chọn (isActive), không hiển thị toàn bộ khi rê chuột vào thanh */}
+                <span className={cn(
+                  "overflow-hidden whitespace-nowrap text-xs font-semibold tracking-normal transition-[max-width,opacity] duration-[400ms] ease-[cubic-bezier(0.34,1.4,0.5,1)] font-play",
+                  isActive
+                    ? "max-w-28 opacity-100 group-data-[compact=true]:max-w-0 group-data-[compact=true]:opacity-0 ml-0.5"
+                    : "max-w-0 opacity-0"
+                )}>
+                  {formatTitleCase(item.label)}
+                </span>
+
+                {/* Floating Tooltip khi rê chuột vào từng item riêng biệt */}
+                <AnimatePresence>
+                  {isHovered && !isActive && (
+                    <motion.span 
+                      initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.9 }}
+                      className="absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900/90 text-white dark:bg-white/95 dark:text-slate-950 backdrop-blur-md border border-white/20 dark:border-slate-800/20 shadow-lg pointer-events-none z-50 tracking-wider"
+                    >
+                      {formatTitleCase(item.label)}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </a>
+            );
+          })}
         </nav>
 
         {/* RIGHT CONTAINER: Controls & Actions */}
-        <div className="hidden md:flex items-center justify-end gap-1 sm:gap-1.5 ml-auto shrink-0 z-50 relative">
+        <div className="hidden md:flex items-center justify-end gap-1 ml-auto shrink-0 z-50 relative">
+          {/* Line vách ngăn giữa menu và Chat AI */}
+          <div className="w-[1.5px] h-5 sm:h-6 bg-slate-300 dark:bg-slate-700/80 mr-1.5 rounded-full shrink-0" />
 
-          {/* Chat AI Button */}
+          {/* Chat AI Button (Được đặt liền kề cạnh icon Ghim) */}
           <button
             type="button"
             onClick={() => {
@@ -399,10 +456,10 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             }}
             onMouseEnter={() => setHoveredHeaderIcon("chatai")}
             onMouseLeave={() => setHoveredHeaderIcon(null)}
-            className="p-1.5 flex items-center justify-center transition-all duration-300 cursor-pointer text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300 relative group/headicon"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-white/15 shadow-sm backdrop-blur-2xl flex items-center justify-center transition-all duration-300 cursor-pointer text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300 relative group/headicon shrink-0"
             title={isVi ? "Trợ lý Chat AI" : "Chat AI Assistant"}
           >
-            <Bot className="w-5 h-5 stroke-[2.2] animate-pulse" />
+            <Bot className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2] animate-pulse" />
             <AnimatePresence>
               {hoveredHeaderIcon === "chatai" && (
                 <motion.span 
@@ -412,37 +469,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                   className="absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
                 >
                   Chat AI
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
-
-          {/* Vertical divider line */}
-          <div className="h-5 w-[1px] bg-slate-200 dark:bg-white/20 mx-0.5" />
-
-          {/* 7. PIN Button (Nút Ghim) - Chỉ hiển thị icon, xóa bỏ đóng khung */}
-          <button
-            type="button"
-            onClick={handleTogglePin}
-            onMouseEnter={() => setHoveredHeaderIcon("pin")}
-            onMouseLeave={() => setHoveredHeaderIcon(null)}
-            className="p-1.5 flex items-center justify-center transition-all duration-300 cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white relative group/headicon"
-            title={
-              isHeaderPinned
-                ? (isVi ? "Đã ghim header (Click để bỏ ghim & tự động trượt ẩn)" : "Header pinned (Click to unpin & auto-hide)")
-                : (isVi ? "Đang bỏ ghim (Click để ghim giữ cố định)" : "Header unpinned (Click to pin fixed)")
-            }
-          >
-            <Pin className={`w-5 h-5 transition-all duration-300 ${isHeaderPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
-            <AnimatePresence>
-              {hoveredHeaderIcon === "pin" && (
-                <motion.span 
-                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                  className="absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
-                >
-                  {isHeaderPinned ? (isVi ? "Bỏ ghim" : "Unpin") : (isVi ? "Ghim" : "Pin")}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -513,6 +539,37 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
             aria-label="Open Navigation Menu"
           >
             {isMobileMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
+          </button>
+        </div>
+
+        {/* 7. PIN Button (Nút Ghim) - Đem ra ngoài header nằm bên phải cách 10px */}
+        <div className="absolute left-[calc(100%+10px)] top-1/2 -translate-y-1/2 hidden md:flex items-center z-50 pointer-events-auto">
+          <button
+            type="button"
+            onClick={handleTogglePin}
+            onMouseEnter={() => setHoveredHeaderIcon("pin")}
+            onMouseLeave={() => setHoveredHeaderIcon(null)}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className="p-1.5 flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/85 dark:bg-slate-900/85 backdrop-blur-2xl border border-white/60 dark:border-white/20 shadow-md hover:shadow-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white relative group/headicon shrink-0 hover:scale-105 active:scale-95"
+            title={
+              isHeaderPinned
+                ? (isVi ? "Đã ghim header (Click để bỏ ghim & tự động trượt ẩn)" : "Header pinned (Click to unpin & auto-hide)")
+                : (isVi ? "Đang bỏ ghim (Click để ghim giữ cố định)" : "Header unpinned (Click to pin fixed)")
+            }
+          >
+            <Pin className={`w-5 h-5 transition-all duration-300 ${isHeaderPinned ? "rotate-45 text-blue-600 dark:text-cyan-400 fill-blue-500/30 dark:fill-cyan-400/30 stroke-[2.5]" : "stroke-[2]"}`} />
+            <AnimatePresence>
+              {hoveredHeaderIcon === "pin" && (
+                <motion.span 
+                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
+                  className="absolute top-full mt-2.5 px-2.5 py-1 rounded-lg text-3xs font-extrabold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-lg pointer-events-none z-50 tracking-wider"
+                >
+                  {isHeaderPinned ? (isVi ? "Bỏ ghim" : "Unpin") : (isVi ? "Ghim" : "Pin")}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </header>

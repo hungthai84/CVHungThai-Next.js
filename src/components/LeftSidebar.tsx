@@ -55,7 +55,6 @@ const SIDEBAR_SECTIONS = [
   { id: "contact", labelVi: "Liên hệ trực tiếp", labelEn: "Contact", Icon: MessagesSquare },
   { id: "wallpapers", labelVi: "Thư viện Wallpapers", labelEn: "Wallpapers", Icon: Film },
   { id: "customization", labelVi: "Tùy chỉnh hệ thống", labelEn: "Customization", Icon: Sliders },
-  { id: "template", labelVi: "Trang mẫu chuẩn", labelEn: "Template Page", Icon: LayoutTemplate },
 ];
 
 export default function LeftSidebar({ 

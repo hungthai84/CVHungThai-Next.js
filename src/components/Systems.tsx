@@ -52,7 +52,13 @@ export function Systems() {
   const [isSpecialCardExpanded, setIsSpecialCardExpanded] = useState(false);
   const [isSpecialVideoMuted, setIsSpecialVideoMuted] = useState(false);
   const [isSpecialVideoPlaying, setIsSpecialVideoPlaying] = useState(true);
+  const [activeSpecialVideoIndex, setActiveSpecialVideoIndex] = useState<0 | 1>(0);
   const specialVideoRef = useRef<HTMLVideoElement>(null);
+
+  const VIDEO_HUB_URLS = [
+    "https://cdn.scena.ai/project/8606/581097478f9de72616d982e302e1c8d0aab6d66cbee040430c610424c0c72a44.mp4",
+    "https://cdn.scena.ai/project/8606/ac120a105730c378447fd67f5e8b6aeb9557b5e4e8854ac2e21148d5316f780b.mp4"
+  ];
 
   // Video lightbox & feedback state
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -143,8 +149,6 @@ export function Systems() {
       id="systems"
       className="relative w-full h-auto overflow-hidden flex flex-col justify-start items-stretch p-3.5 sm:p-5 font-sans text-slate-800 dark:text-slate-100 transition-colors duration-500 select-none"
     >
-      <div className="w-full flex-grow flex flex-col gap-4 sm:gap-5 max-w-7xl mx-auto justify-start relative z-10">
-        
         {/* Top Header Card */}
         <div className="relative w-full">
           <PageCardHeader pageId="systems">
@@ -171,34 +175,43 @@ export function Systems() {
                 animate="show"
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4 w-full h-auto auto-rows-fr items-stretch"
               >
-                  {/* Special High-Tech Expanding GIF & Video Card */}
-                  <motion.div
-                    layout
-                    transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
-                    className={cn(
-                      "relative overflow-hidden transition-all duration-500 border shadow-lg group",
-                      isSpecialCardExpanded 
-                        ? "col-span-1 sm:col-span-2 md:col-span-2 xl:col-span-4 min-h-[380px] sm:min-h-[440px] z-30 ring-2 ring-indigo-500/50" 
-                        : "col-span-1 min-h-[160px] sm:min-h-[170px] cursor-pointer hover:shadow-xl hover:scale-[1.02]"
-                    )}
-                    style={{
-                      borderRadius: "var(--theme-radius-card, 16px)",
-                      backgroundImage: isSpecialCardExpanded ? undefined : "url('https://i.ibb.co/BKHcWL5R/Logo-VED.gif')",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center"
-                    }}
-                    onClick={() => {
-                      if (!isSpecialCardExpanded) {
-                        try { playUiSound("click"); } catch {}
-                        setIsSpecialCardExpanded(true);
-                      }
-                    }}
-                  >
-                    {/* If Expanded: Full Interactive Video Player */}
-                    {isSpecialCardExpanded ? (
+                   {/* Special High-Tech Expanding GIF & Video Card */}
+                   <motion.div
+                     layout
+                     transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+                     className={cn(
+                       "relative overflow-hidden transition-all duration-500 border shadow-lg group",
+                       isSpecialCardExpanded 
+                         ? "col-span-1 sm:col-span-2 md:col-span-2 xl:col-span-4 min-h-[380px] sm:min-h-[440px] z-30 ring-2 ring-indigo-500/50" 
+                         : "col-span-1 min-h-[160px] sm:min-h-[170px] cursor-pointer hover:shadow-xl hover:scale-[1.02]"
+                     )}
+                     style={{
+                       borderRadius: "var(--theme-radius-card, 16px)"
+                     }}
+                     onClick={() => {
+                       if (!isSpecialCardExpanded) {
+                         try { playUiSound("click"); } catch {}
+                         setIsSpecialCardExpanded(true);
+                       }
+                     }}
+                   >
+                     {/* Background Video playing Video 1 when collapsed */}
+                     {!isSpecialCardExpanded && (
+                       <video
+                         src="https://cdn.scena.ai/project/8606/581097478f9de72616d982e302e1c8d0aab6d66cbee040430c610424c0c72a44.mp4"
+                         autoPlay
+                         loop
+                         muted
+                         playsInline
+                         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+                       />
+                     )}
+
+                     {/* If Expanded: Full Interactive Video Player */}
+                     {isSpecialCardExpanded ? (
                       <div className="relative w-full h-full flex flex-col justify-between bg-slate-950 text-white p-4 sm:p-5">
                         {/* Top Bar with title & close / minimize button */}
-                        <div className="flex items-center justify-between pb-3 border-b border-white/15 z-20">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 pb-3 border-b border-white/15 z-20">
                           <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center shrink-0 border border-indigo-400">
                               <img src="https://i.ibb.co/BKHcWL5R/Logo-VED.gif" alt="GIF Logo" className="w-full h-full object-cover" />
@@ -213,7 +226,43 @@ export function Systems() {
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {/* Video 1 & Video 2 Selector Buttons */}
+                            <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/10 border border-white/15">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveSpecialVideoIndex(0);
+                                  setIsSpecialVideoPlaying(true);
+                                }}
+                                className={cn(
+                                  "px-2 py-0.5 rounded-md text-[11px] font-mono font-bold transition-all cursor-pointer",
+                                  activeSpecialVideoIndex === 0
+                                    ? "bg-indigo-600 text-white shadow-xs"
+                                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                                )}
+                              >
+                                {isVi ? "Video 01" : "Video 01"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveSpecialVideoIndex(1);
+                                  setIsSpecialVideoPlaying(true);
+                                }}
+                                className={cn(
+                                  "px-2 py-0.5 rounded-md text-[11px] font-mono font-bold transition-all cursor-pointer",
+                                  activeSpecialVideoIndex === 1
+                                    ? "bg-indigo-600 text-white shadow-xs"
+                                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                                )}
+                              >
+                                {isVi ? "Video 02" : "Video 02"}
+                              </button>
+                            </div>
+
                             <button
                               type="button"
                               onClick={(e) => {
@@ -267,11 +316,12 @@ export function Systems() {
                           </div>
                         </div>
 
-                        {/* Embedded Video */}
+                        {/* Embedded Video Player with Active Video URL */}
                         <div className="relative w-full flex-1 my-3 rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10 shadow-inner min-h-[240px]">
                           <video
+                            key={VIDEO_HUB_URLS[activeSpecialVideoIndex]}
                             ref={specialVideoRef}
-                            src="https://cdn.scena.ai/project/8606/ac120a105730c378447fd67f5e8b6aeb9557b5e4e8854ac2e21148d5316f780b.mp4"
+                            src={VIDEO_HUB_URLS[activeSpecialVideoIndex]}
                             autoPlay
                             playsInline
                             loop
@@ -387,42 +437,53 @@ export function Systems() {
                           title={isVi ? "Click để truy cập • Double-click để lật thẻ xem chi tiết" : "Click to enter • Double-click to flip card"}
                         >
                           {isFlipped ? (
-                            /* Back Side of Card */
-                            <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full bg-slate-900/90 text-white p-2 rounded-xl border border-indigo-500/30">
-                              <div className="flex items-center justify-between pb-1 border-b border-white/10">
-                                <span className="text-[10px] font-bold text-amber-300 font-mono">
-                                  {isVi ? "MẶT SAU • MÔ TẢ CHI TIẾT" : "BACK SIDE • DESCRIPTION"}
-                                </span>
+                            /* Back Side of Card - Holds Detail Title Header & Full Description */
+                            <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full bg-slate-900/95 text-white p-3 rounded-xl border border-indigo-500/40 shadow-inner">
+                              <div className="flex items-center justify-between pb-1.5 border-b border-white/15">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <IconComponent className={cn("w-4 h-4 shrink-0", activeTheme.iconColor)} />
+                                  <span className="text-xs font-bold text-amber-300 truncate font-play">
+                                    {isVi ? item.nameVi : item.nameEn}
+                                  </span>
+                                </div>
                                 <button
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     setFlippedCards((prev) => ({ ...prev, [item.id]: false }));
                                   }}
-                                  className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 hover:bg-white/20"
+                                  className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/15 text-slate-200 hover:bg-white/25 shrink-0 cursor-pointer"
                                 >
-                                  {isVi ? "Xoay lại" : "Flip back"}
+                                  {isVi ? "Mặt trước ↺" : "Front ↺"}
                                 </button>
                               </div>
-                              <p className="text-[11px] text-slate-200 leading-snug my-1 font-play line-clamp-3">
-                                {isVi ? item.descVi : item.descEn}
-                              </p>
+
+                              {/* Description Text Component Moved to Back Side */}
+                              <div className="w-full text-left my-2 space-y-1">
+                                <p className="text-[10px] font-mono text-indigo-300 font-semibold uppercase tracking-wider">
+                                  {item.nameEn}
+                                </p>
+                                <p className="text-xs text-slate-200 leading-relaxed font-play line-clamp-4">
+                                  {isVi ? item.descVi : item.descEn}
+                                </p>
+                              </div>
+
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleCardClick(item);
                                 }}
-                                className="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md"
+                                className="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md mt-auto cursor-pointer"
                               >
-                                <span>{isVi ? "Vào Cổng Hệ Thống" : "Enter System Portal"}</span>
+                                <span>{isVi ? "Truy Cập Cổng Hệ Thống" : "Enter Portal"}</span>
                                 <ArrowUpRight className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           ) : (
-                            /* Front Side of Card */
+                            /* Front Side of Card - Clean & Prominent Code View */
                             <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
-                              {/* Dòng 1 : Header có animated icon & tiêu đề */}
+                              {/* Dòng 1 : Top badge with animated icon */}
                               <div className="w-full text-left mb-2 flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/50 dark:border-white/10">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <motion.div
@@ -432,22 +493,32 @@ export function Systems() {
                                   >
                                     <IconComponent className={cn("w-4.5 h-4.5 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
                                   </motion.div>
-                                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight leading-snug truncate font-play">
-                                    <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", item.gradientClass)}>
-                                      {isVi ? item.nameVi : item.nameEn}
-                                    </span>
-                                  </p>
+                                  <span className={cn("text-2xs font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border", activeTheme.tagClass)}>
+                                    {item.category.toUpperCase()}
+                                  </span>
                                 </div>
+
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setFlippedCards((prev) => ({ ...prev, [item.id]: true }));
+                                  }}
+                                  className="text-[10px] font-mono font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-cyan-400 underline decoration-dotted"
+                                  title={isVi ? "Xem mô tả chi tiết mặt sau" : "View description on back side"}
+                                >
+                                  {isVi ? "Chi tiết ↻" : "Details ↻"}
+                                </button>
                               </div>
 
-                              {/* Dòng 2 : Tên & icon avatar tương tác */}
-                              <div className="flex items-center justify-between gap-2 my-auto py-1">
+                              {/* Dòng 2 : Code & Icon lớn */}
+                              <div className="flex items-center justify-between gap-2 my-auto py-2">
                                 <div>
-                                  <h3 className="text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
+                                  <h3 className="text-2xl sm:text-3xl font-black tracking-wider text-slate-900 dark:text-white font-mono select-none leading-none truncate">
                                     {item.code}
                                   </h3>
-                                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium italic tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
-                                    {item.nameEn}
+                                  <p className="text-xs text-slate-600 dark:text-slate-300 font-bold tracking-tight leading-tight truncate font-play mt-1 max-w-[160px] sm:max-w-[180px]">
+                                    {isVi ? item.nameVi : item.nameEn}
                                   </p>
                                 </div>
 
@@ -456,24 +527,11 @@ export function Systems() {
                                   transition={{ duration: 2.5 + (idx % 4) * 0.4, repeat: Infinity, ease: "easeInOut" }}
                                   className="shrink-0 flex items-center justify-center transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300"
                                 >
-                                  <IconComponent className={cn("w-7 h-7 sm:w-8 sm:h-8 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
+                                  <IconComponent className={cn("w-8 h-8 sm:w-9 sm:h-9 stroke-[2.2] drop-shadow-sm", activeTheme.iconColor)} />
                                 </motion.div>
                               </div>
-
-                              {/* Dòng 3 : Mô tả nghiệp vụ tóm tắt & Link hover effect */}
-                              <div className="w-full text-left pt-2 border-t border-slate-200/50 dark:border-white/10 mt-2 flex items-center justify-between gap-2 relative">
-                                <p className="text-[11px] text-slate-600 dark:text-slate-300 font-normal leading-relaxed line-clamp-2 font-play flex-1">
-                                  {isVi ? item.descVi : item.descEn}
-                                </p>
-                                {item.url && (
-                                  <div className="shrink-0 text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex items-center gap-0.5 text-xs font-bold font-mono">
-                                    <span className="hidden sm:inline text-[10px] opacity-0 group-hover:opacity-100 transition-opacity underline decoration-indigo-400">
-                                      {isVi ? "Truy cập" : "Open"}
-                                    </span>
-                                    <ArrowUpRight className="w-4 h-4" />
-                                  </div>
-                                )}
-                              </div>
+                              {/* Bottom spacing */}
+                              <div className="h-2" />
                             </div>
                           )}
                         </motion.article>
@@ -484,8 +542,6 @@ export function Systems() {
               </AnimatePresence>
           </div>
         </IndustrialSubSection>
-
-      </div>
 
       {/* SYSTEM DETAIL MODAL */}
       <AnimatePresence>
@@ -667,7 +723,7 @@ export function Systems() {
                   poster="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
                 >
                   <source
-                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                    src={VIDEO_HUB_URLS[activeSpecialVideoIndex] || "https://cdn.scena.ai/project/8606/ac120a105730c378447fd67f5e8b6aeb9557b5e4e8854ac2e21148d5316f780b.mp4"}
                     type="video/mp4"
                   />
                   {isVi

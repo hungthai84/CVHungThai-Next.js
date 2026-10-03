@@ -516,7 +516,7 @@ export default function Projects() {
                 id="card-projects-list-content"
                 className="w-full flex flex-col gap-4"
               >
-                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-start">
+                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-stretch">
                   {filteredProjects.map((card, cardIndex) => {
                     const theme = getCardColorTheme(card, cardIndex);
                     const isSelected = selectedCardId === card.id;
@@ -529,7 +529,7 @@ export default function Projects() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
-                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-auto"
+                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-full items-stretch"
                       >
                       <KeyframersTiltCard
                         role="button"
@@ -544,7 +544,7 @@ export default function Projects() {
                         }}
                         style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
                         className={cn(
-                          "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-auto relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
+                          "card-item project-card project-edu-glass-card keyframers-tilt-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full min-h-[460px] sm:min-h-[480px] justify-between relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
                           theme.border,
                           theme.cardBg,
                           theme.shadow,
@@ -553,12 +553,12 @@ export default function Projects() {
                       >
 
 
-                          {/* Media Area - Framed Inside Padded Container */}
-                          <div className={cn("shrink-0", cardIndex === 10 ? "p-2.5" : "p-3 pb-0")}>
+                          {/* Media Area - Framed Inside Padded Container with consistent height */}
+                          <div className="shrink-0 p-3 pb-0">
                             <div className={cn(
-                              "project-card-media relative w-full aspect-[16/9] overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
+                              "project-card-media relative w-full overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300 h-[180px] sm:h-[190px]",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
-                            )} style={{ height: "200px", borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
+                            )} style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
                               <LazyImage
                                 src={card.image}
                                 alt={card.branchTitle}
@@ -567,7 +567,7 @@ export default function Projects() {
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 
-                              {/* Bento Grid Index Badge (Góc trên cùng bên trái) - Dạng hình tròn với 15 màu sắc ngẫu nhiên/chuẩn hóa */}
+                              {/* Bento Grid Index Badge */}
                               <div className={cn(
                                 "absolute top-2.5 left-2.5 z-20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border shadow-lg transition-transform duration-300 group-hover/img:scale-110",
                                 theme.badgeBg
@@ -577,7 +577,7 @@ export default function Projects() {
                                 </span>
                               </div>
 
-                              {/* Group Title Badge (Góc trên cùng bên phải) - Kích thước chuẩn hoá đồng bộ với badge số */}
+                              {/* Group Title Badge */}
                               <div className={cn(
                                 "absolute top-2.5 right-2.5 z-20 h-8 px-3 rounded-full flex items-center justify-center font-mono text-2xs font-bold backdrop-blur-md border shadow-md max-w-[200px] truncate",
                                 theme.phaseBadge
@@ -592,36 +592,38 @@ export default function Projects() {
 
                           {/* Standardized Content Area with Color Bar Header, Description & Tags */}
                           <div className="project-card-content p-4 flex flex-col min-w-0 text-left gap-2.5 flex-1 justify-between bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-b-[inherit]">
-                            <div className="space-y-2">
+                            <div className="space-y-2 flex flex-col flex-1">
                               {/* Standardized Subcard Header with Sleek Color Bar */}
                               <div className="w-full flex items-start gap-2.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/60 z-10">
                                 <div className={cn("w-2 h-7 sm:h-8 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
                                 <div className="flex-1 min-w-0 text-left">
-                                  <h3 className={cn("text-sm sm:text-base font-play font-bold tracking-tight line-clamp-2 leading-snug", theme.title)}>
+                                  <h3 className={cn("text-sm sm:text-base font-play font-bold tracking-tight line-clamp-2 min-h-[2.6rem] flex items-center leading-snug", theme.title)}>
                                     {card.branchTitle}
                                   </h3>
                                 </div>
                               </div>
 
                               {/* Project Description Paragraph */}
-                              <p className="text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3 font-normal font-play">
+                              <p className="text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3 min-h-[3.8rem] font-normal font-play">
                                 {card.description}
                               </p>
                             </div>
 
-                            {/* Project Tags Badge Strip */}
-                            {card.tags && card.tags.length > 0 && (
-                              <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 mt-auto">
-                                {card.tags.map((tag, tagIdx) => (
+                            {/* Project Tags Badge Strip pinned to bottom */}
+                            <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 mt-auto min-h-[2rem]">
+                              {card.tags && card.tags.length > 0 ? (
+                                card.tags.map((tag, tagIdx) => (
                                   <span
                                     key={tagIdx}
                                     className="inline-flex items-center text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-2xs hover:bg-slate-200/80 transition-colors"
                                   >
                                     {tag.startsWith("#") ? tag : `#${tag}`}
                                   </span>
-                                ))}
-                              </div>
-                            )}
+                                ))
+                              ) : (
+                                <span className="opacity-0 text-[10px]">&nbsp;</span>
+                              )}
+                            </div>
                           </div>
                         </KeyframersTiltCard>
                         </motion.div>

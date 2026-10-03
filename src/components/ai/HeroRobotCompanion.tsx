@@ -89,15 +89,11 @@ export const HeroRobotCompanion: React.FC<HeroRobotCompanionProps> = ({
       {/* 2. CENTERED ROBOT COMPANION VIDEO */}
       {/* ========================================================================= */}
       <div className={`relative flex items-center justify-center ${fillCard ? "w-full h-full absolute inset-0" : "w-full max-w-[600px]"}`}>
-        <video
-          src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          controls={false}
+        <img
+          src="https://i.ibb.co/C3scYNz7/output-onlinegiftools.gif"
+          alt="output onlinegiftools"
           style={{ filter: "brightness(1.02) contrast(1.04)" }}
-          className={`select-none block ${fillCard ? "w-full h-full object-cover rounded-none" : "w-full h-auto rounded-[24px] object-contain"}`}
+          className={`select-none block bg-transparent ${fillCard ? "w-full h-full object-cover rounded-none" : "w-full h-auto rounded-[24px] object-contain"}`}
         />
 
         {/* ========================================================================= */}

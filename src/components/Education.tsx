@@ -1768,15 +1768,6 @@ export default function Education() {
                             {card.major || (isVi ? "Phát triển chuyên môn" : "Skill Development")}
                           </span>
                         </div>
-
-                        {/* 3. Mô tả / Key Summary */}
-                        <div className={cn("text-left text-caption leading-snug secondary-text", themeCard.descColor)}>
-                          <span className={cn("font-bold inline-flex items-center gap-1.5 mr-1.5", themeCard.metadataLabel)}>
-                            <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" style={{ color: coverTheme.textAccent || themeCard.actionColor }} />
-                            <span>{isVi ? "Mô tả:" : "Desc:"}</span>
-                          </span>
-                          <span className="font-normal line-clamp-3 inline">{card.desc}</span>
-                        </div>
                       </div>
 
                       {/* Hashtags / Skill Chips */}
@@ -2027,14 +2018,6 @@ export default function Education() {
                                 <span>Thời gian:</span>
                               </span>
                               <span className="font-mono font-bold text-slate-900 dark:text-white">{activeCard.year}</span>
-                            </div>
-
-                            <div className="text-left text-xs leading-normal text-slate-700 dark:text-slate-200">
-                              <span className="text-slate-600 dark:text-slate-300 font-medium inline-flex items-center gap-1 mr-1.5">
-                                <Icons.FileText className="w-3.5 h-3.5 shrink-0 inline-block align-middle" style={{ color: getBookCoverTheme(activeCard.id).textAccent }} />
-                                <span>{isVi ? "Mô tả:" : "Desc:"}</span>
-                              </span>
-                              <span className="font-normal line-clamp-3 inline">{activeCard.desc}</span>
                             </div>
                           </div>
 

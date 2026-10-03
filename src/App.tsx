@@ -25,7 +25,6 @@ import Contact from "./components/Contact";
 import Wallpapers from "./components/Wallpapers";
 import Systems from "./components/Systems";
 import Customization from "./components/Customization";
-import TemplatePage from "./components/TemplatePage";
 import Letter from "./components/Letter";
 import XRayInspector from "./components/XRayInspector";
 import AIAssistant from "./components/ai/AIAssistant";
@@ -110,7 +109,6 @@ const SECTIONS: SectionMeta[] = [
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
   { id: "customization", labelKey: "nav.customization", Icon: Sliders, Component: Customization, padding: "p-0 overflow-y-auto" },
-  { id: "template", labelKey: "nav.template", Icon: LayoutTemplate, Component: TemplatePage, padding: "p-0 overflow-y-auto" },
 ];
 
 function MainContent() {
@@ -503,11 +501,29 @@ function MainContent() {
     }
   };
 
+  const handleSlideAdvanceAction = (direction: "prev" | "next") => {
+    playUiSound("click");
+    if (activeSection === "home") {
+      window.dispatchEvent(new CustomEvent(direction === "next" ? "app-slide-next" : "app-slide-prev"));
+    } else {
+      // Find scrollable card container inside active page and scroll to next card
+      const mainEl = cardContainerRef.current?.querySelector("main > div");
+      if (mainEl) {
+        const delta = direction === "next" ? 380 : -380;
+        mainEl.scrollBy({ top: delta, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <SectionProvider activeSection={activeSection} setActiveSection={setActiveSection} sections={SECTIONS}>
       <div 
         onClick={handleScreenClick}
         className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent"
+        style={{
+          borderTopLeftRadius: "var(--theme-radius-card, 16px)",
+          borderTopRightRadius: "var(--theme-radius-card, 16px)"
+        }}
       >
         {/* Dynamic Persistent Background Renderer (Video / Image / Gradient) */}
         <BackgroundRenderer />
@@ -531,10 +547,10 @@ function MainContent() {
           {/* Left Peek Slide (Previous) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
           {hasSlides && (
             <div 
-              onClick={() => navigateToSection(prevSection.id)}
+              onClick={() => handleSlideAdvanceAction("prev")}
               style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
               className="hidden sm:flex absolute right-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
-              title={lang === "vi" ? `Slide trước: ${prevSection.id}` : `Previous Slide: ${prevSection.id}`}
+              title={lang === "vi" ? "Chuyển thẻ / slide tiếp theo trong trang" : "Next card / slide in page"}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-transparent pointer-events-none" />
               <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:-translate-x-1.5 transition-transform font-play">
@@ -602,10 +618,10 @@ function MainContent() {
           {/* Right Peek Slide (Next) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
           {hasSlides && (
             <div 
-              onClick={() => navigateToSection(nextSection.id)}
+              onClick={() => handleSlideAdvanceAction("next")}
               style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
               className="hidden sm:flex absolute left-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
-              title={lang === "vi" ? `Slide sau: ${nextSection.id}` : `Next Slide: ${nextSection.id}`}
+              title={lang === "vi" ? "Chuyển thẻ / slide tiếp theo trong trang" : "Next card / slide in page"}
             >
               <div className="absolute inset-0 bg-gradient-to-l from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
               <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:translate-x-1.5 transition-transform font-play">

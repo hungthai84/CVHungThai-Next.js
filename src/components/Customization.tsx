@@ -14,6 +14,9 @@ import {
   Copy, 
   Sun, 
   Moon, 
+  Monitor,
+  Minus,
+  Plus,
   Sparkles, 
   Eye, 
   CheckCircle2, 
@@ -126,14 +129,14 @@ const RADIUS_PRESETS = [
 ];
 
 const TYPO_TOKENS = [
-  { id: "display", labelVi: "Display (Tiêu đề lớn)", labelEn: "Display Heading", size: "40–52px", weight: "700", leading: "1.15", sampleText: "Nguyễn Hùng Thái", Icon: Sparkles },
-  { id: "h1", labelVi: "H1 (Tiêu đề chính)", labelEn: "H1 Heading", size: "36–42px", weight: "700", leading: "1.20", sampleText: "Giám Đốc Chăm Sóc Khách Hàng", Icon: Type },
-  { id: "h2", labelVi: "H2 (Tiêu đề mục)", labelEn: "H2 Section Title", size: "28–34px", weight: "700", leading: "1.20", sampleText: "Kinh Nghiệm & Thành Tựu Vận Hành", Icon: Layers },
-  { id: "h3", labelVi: "H3 (Tiêu đề phụ)", labelEn: "H3 Subtitle", size: "20–24px", weight: "700", leading: "1.25", sampleText: "Kiến trúc hệ thống CSKH chuẩn quốc tế", Icon: SlidersHorizontal },
-  { id: "card", labelVi: "Card Title (Thẻ)", labelEn: "Card Title", size: "18–20px", weight: "700", leading: "1.30", sampleText: "Dự Án Vận Hành Đa Kênh Omnichannel", Icon: LayoutTemplate },
-  { id: "nav-menu", labelVi: "Tiêu đề icon menu (Nav Menu)", labelEn: "Icon Menu Title", size: "12–14px", weight: "600", leading: "1.25", sampleText: "Trang Chủ · Giới Thiệu · Học Vấn · Kinh Nghiệm · Kỹ Năng · Dự Án", Icon: Menu },
-  { id: "body", labelVi: "Body (Văn bản)", labelEn: "Body Text", size: "15–16px", weight: "400", leading: "1.60", sampleText: "Tối ưu hóa hành trình khách hàng với hiệu suất tăng trưởng vượt bậc qua công nghệ số.", Icon: FileText },
-  { id: "caption", labelVi: "Caption / Label", labelEn: "Caption/Label", size: "12–13px", weight: "600", leading: "1.40", sampleText: "22+ NĂM KINH NGHIỆM VẬN HÀNH", Icon: Tag },
+  { id: "display", labelVi: "Display (Tiêu đề lớn)", labelEn: "Display Heading", basePx: 48, size: "40–52px", weight: "700", leading: "1.15", sampleText: "Nguyễn Hùng Thái", Icon: Sparkles },
+  { id: "h1", labelVi: "H1 (Tiêu đề chính)", labelEn: "H1 Heading", basePx: 36, size: "36–42px", weight: "700", leading: "1.20", sampleText: "Giám Đốc Chăm Sóc Khách Hàng", Icon: Type },
+  { id: "h2", labelVi: "H2 (Tiêu đề mục)", labelEn: "H2 Section Title", basePx: 30, size: "28–34px", weight: "700", leading: "1.20", sampleText: "Kinh Nghiệm & Thành Tựu Vận Hành", Icon: Layers },
+  { id: "h3", labelVi: "H3 (Tiêu đề phụ)", labelEn: "H3 Subtitle", basePx: 22, size: "20–24px", weight: "700", leading: "1.25", sampleText: "Kiến trúc hệ thống CSKH chuẩn quốc tế", Icon: SlidersHorizontal },
+  { id: "card", labelVi: "Card Title (Thẻ)", labelEn: "Card Title", basePx: 19, size: "18–20px", weight: "700", leading: "1.30", sampleText: "Dự Án Vận Hành Đa Kênh Omnichannel", Icon: LayoutTemplate },
+  { id: "nav-menu", labelVi: "Tiêu đề icon menu (Nav Menu)", labelEn: "Icon Menu Title", basePx: 13, size: "12–14px", weight: "600", leading: "1.25", sampleText: "Trang Chủ · Giới Thiệu · Học Vấn · Kinh Nghiệm", Icon: Menu },
+  { id: "body", labelVi: "Body (Văn bản)", labelEn: "Body Text", basePx: 15, size: "15–16px", weight: "400", leading: "1.60", sampleText: "Tối ưu hóa hành trình khách hàng với hiệu suất tăng trưởng vượt bậc qua công nghệ số.", Icon: FileText },
+  { id: "caption", labelVi: "Caption / Label", labelEn: "Caption/Label", basePx: 12, size: "12–13px", weight: "600", leading: "1.40", sampleText: "22+ NĂM KINH NGHIỆM VẬN HÀNH", Icon: Tag },
 ];
 
 export default function Customization() {
@@ -188,6 +191,7 @@ export default function Customization() {
     setStyleVariant,
     togglePin,
     toggleElementVisibility,
+    updateFooterConfig,
     resetFooterConfig,
     footerModalTab,
     setFooterModalTab
@@ -203,8 +207,51 @@ export default function Customization() {
   const [activeTab, setActiveTab] = useState<FooterModalTab>("customization");
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [copiedCss, setCopiedCss] = useState(false);
-  const [customTestText, setCustomTestText] = useState("");
   const [resetSuccessMessage, setResetSuccessMessage] = useState<string | null>(null);
+
+  // Typography Token Size Adjustments (±px per token)
+  const [tokenAdjustments, setTokenAdjustments] = useState<Record<string, number>>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("portfolio_typo_token_adjustments");
+        return saved ? JSON.parse(saved) : {};
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  });
+
+  const handleAdjustTokenSize = (tokenId: string, delta: number) => {
+    playClick();
+    setTokenAdjustments(prev => {
+      const current = prev[tokenId] || 0;
+      const next = Math.max(-8, Math.min(12, current + delta));
+      const updated = { ...prev, [tokenId]: next };
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("portfolio_typo_token_adjustments", JSON.stringify(updated));
+          document.documentElement.style.setProperty(`--token-adjust-${tokenId}`, `${next}px`);
+        } catch {}
+      }
+      return updated;
+    });
+  };
+
+  const handleResetTokenSize = (tokenId: string) => {
+    playClick();
+    setTokenAdjustments(prev => {
+      const updated = { ...prev };
+      delete updated[tokenId];
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("portfolio_typo_token_adjustments", JSON.stringify(updated));
+          document.documentElement.style.removeProperty(`--token-adjust-${tokenId}`);
+        } catch {}
+      }
+      return updated;
+    });
+  };
 
   // Border radius state
   const [tempBorderRadius, setTempBorderRadius] = useState(borderRadius);
@@ -459,9 +506,12 @@ export default function Customization() {
   ];
 
   return (
-    <div className="w-full h-full min-h-full flex flex-col justify-start gap-[20px] pb-16 pt-2 px-3 sm:px-6 md:px-8 max-w-[1280px] mx-auto select-none rounded-3xl drop-shadow-md shadow-md transition-all duration-500 ease-out hover:scale-[1.01] hover:shadow-2xl hover:shadow-indigo-500/20 hover:drop-shadow-2xl hover:ring-2 hover:ring-indigo-500/40 dark:hover:ring-cyan-400/40">
-      {/* 1. Standard Page Card Header */}
-      <PageCardHeader pageId="customization" />
+    <section 
+      id="customization" 
+      className="relative w-full h-full flex flex-col justify-start items-center p-3 sm:p-5 md:p-6 max-w-7xl mx-auto gap-6 font-sans text-slate-900 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar scroll-smooth"
+    >
+        {/* 1. Standard Page Card Header */}
+        <PageCardHeader pageId="customization" />
 
       {/* Global Success Feedback Banner */}
       <AnimatePresence>
@@ -487,99 +537,91 @@ export default function Customization() {
         )}
       </AnimatePresence>
 
-      {/* 2. MASTER ACTION BAR: QUẢN LÝ CẤU HÌNH & LƯU MẶC ĐỊNH THỰC TẾ */}
+      {/* 2. MASTER ACTION BAR: QUẢN LÝ CẤU HÌNH & LƯU MẶC ĐỊNH THỰC TẾ (SẮP XẾP GỌN GÀNG) */}
       <div 
-        className="p-4 sm:p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm"
+        className="p-3.5 sm:p-4 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-cyan-500/10 dark:from-indigo-950/40 dark:via-blue-950/40 dark:to-cyan-950/40 border border-indigo-500/30 dark:border-cyan-500/30 backdrop-blur-xl shadow-xs"
         style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shrink-0 shadow-md">
-              <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                  {isVi ? "Quản lý Cấu hình & Thiết lập Mặc định Thực tế" : "Production Defaults & System Manager"}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
+                  {isVi ? "Quản lý Cấu hình & Thiết lập Mặc định" : "Production Defaults Manager"}
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-3xs font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  {isVi ? "Sẵn sàng chạy thực tế" : "Production Ready"}
+                  {productionDefaultsStatus}
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                {isVi ? "Mặc định thực tế hiện tại: " : "Current Default: "}
-                <span className="font-semibold text-indigo-600 dark:text-cyan-400">{productionDefaultsStatus}</span>
-              </p>
             </div>
           </div>
 
-          {/* Action Buttons Cluster */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* 1. PRIMARY SAVE AS DEFAULT BUTTON */}
+          {/* Action Buttons Cluster - Sắp xếp gọn gàng theo 2 cụm: Chính & Tiện ích */}
+          <div className="flex items-center gap-1.5 flex-wrap self-end md:self-auto">
+            {/* Primary Save button */}
             <button
               type="button"
               onClick={handleSaveAsProductionDefault}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/25 transition-all duration-200 cursor-pointer active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-indigo-500/25 transition-all cursor-pointer active:scale-95"
+              title={isVi ? "Lưu làm Cài đặt Mặc định Thực tế" : "Save as Production Default"}
             >
-              <Save className="w-4 h-4" />
-              <span>{isVi ? "Lưu làm Cài đặt Mặc định Thực tế" : "Save as Production Default"}</span>
+              <Save className="w-3.5 h-3.5" />
+              <span>{isVi ? "Lưu Mặc Định" : "Save Default"}</span>
             </button>
 
-            {/* 2. HEALTH CHECK & AUTO REPAIR BUTTON */}
+            {/* Diagnostic Auto Repair */}
             <button
               type="button"
               onClick={handleRunDiagnostic}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer"
               title={isVi ? "Rà soát tính năng & tự động sửa chữa hệ thống" : "Audit & Auto-repair system settings"}
             >
               <Wrench className="w-3.5 h-3.5" />
-              <span>{isVi ? "Rà soát & Sửa chữa" : "Audit & Repair"}</span>
+              <span className="hidden sm:inline">{isVi ? "Sửa chữa" : "Repair"}</span>
             </button>
 
-            {/* 3. RELOAD PRODUCTION DEFAULTS */}
-            <button
-              type="button"
-              onClick={handleReloadProductionDefaults}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
-              title={isVi ? "Nạp lại cấu hình mặc định thực tế" : "Reload saved defaults"}
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{isVi ? "Nạp mặc định" : "Reload"}</span>
-            </button>
+            {/* Compact Tool Actions Group */}
+            <div className="flex items-center gap-1 bg-white/70 dark:bg-white/10 p-0.5 rounded-xl border border-slate-200/80 dark:border-white/10">
+              <button
+                type="button"
+                onClick={handleReloadProductionDefaults}
+                className="p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 text-xs transition-all cursor-pointer"
+                title={isVi ? "Nạp lại cấu hình mặc định thực tế" : "Reload saved defaults"}
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
 
-            {/* 4. EXPORT JSON */}
-            <button
-              type="button"
-              onClick={handleExportConfig}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
-              title={isVi ? "Xuất cấu hình ra tệp JSON" : "Export config to JSON file"}
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">{isVi ? "Xuất JSON" : "Export"}</span>
-            </button>
+              <button
+                type="button"
+                onClick={handleExportConfig}
+                className="p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 text-xs transition-all cursor-pointer"
+                title={isVi ? "Xuất cấu hình ra tệp JSON" : "Export config to JSON file"}
+              >
+                <Download className="w-3.5 h-3.5" />
+              </button>
 
-            {/* 5. IMPORT JSON */}
-            <button
-              type="button"
-              onClick={() => { setIsImportModalOpen(true); playClick(); }}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 text-xs font-medium transition-all cursor-pointer"
-              title={isVi ? "Nhập cấu hình từ tệp JSON" : "Import config from JSON file"}
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">{isVi ? "Nhập JSON" : "Import"}</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => { setIsImportModalOpen(true); playClick(); }}
+                className="p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 text-xs transition-all cursor-pointer"
+                title={isVi ? "Nhập cấu hình từ tệp JSON" : "Import config from JSON file"}
+              >
+                <Upload className="w-3.5 h-3.5" />
+              </button>
 
-            {/* 6. RESET FACTORY */}
-            <button
-              type="button"
-              onClick={handleResetToFactoryDefaults}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-medium transition-all cursor-pointer"
-              title={isVi ? "Khôi phục chuẩn xuất xưởng ban đầu" : "Reset to factory defaults"}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">{isVi ? "Gốc xuất xưởng" : "Factory"}</span>
-            </button>
+              <button
+                type="button"
+                onClick={handleResetToFactoryDefaults}
+                className="p-1.5 rounded-lg hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs transition-all cursor-pointer"
+                title={isVi ? "Khôi phục chuẩn xuất xưởng ban đầu" : "Reset to factory defaults"}
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -613,11 +655,12 @@ export default function Customization() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { id: "light" as ThemeMode, nameVi: "Sáng (Light Mode)", nameEn: "Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background" },
-                  { id: "dark" as ThemeMode, nameVi: "Tối (Dark Neon)", nameEn: "Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast" },
-                  { id: "system" as ThemeMode, nameVi: "Theo Hệ Thống (Auto)", nameEn: "Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode" },
+                  { id: "light" as ThemeMode, nameVi: "Sáng (Light Mode)", nameEn: "Light Mode", descVi: "Nền kính sáng, sạch sẽ và rõ nét", descEn: "Crisp bright glass background", Icon: Sun, iconColor: "text-amber-500" },
+                  { id: "dark" as ThemeMode, nameVi: "Tối (Dark Neon)", nameEn: "Dark Neon", descVi: "Nền tối huyền ảo, ánh sáng neon", descEn: "Dark neon atmosphere & contrast", Icon: Moon, iconColor: "text-indigo-400" },
+                  { id: "system" as ThemeMode, nameVi: "Theo Hệ Thống (Auto)", nameEn: "Auto System", descVi: "Tự động đồng bộ theo hệ điều hành", descEn: "Sync with OS light/dark mode", Icon: Monitor, iconColor: "text-cyan-400" },
                 ].map((m) => {
                   const isSelected = themeMode === m.id;
+                  const ThemeIcon = m.Icon;
                   return (
                     <button
                       key={m.id}
@@ -631,103 +674,13 @@ export default function Customization() {
                       )}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? m.nameVi : m.nameEn}</span>
+                        <div className="flex items-center gap-2">
+                          <ThemeIcon className={cn("w-4 h-4 shrink-0", m.iconColor)} />
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? m.nameVi : m.nameEn}</span>
+                        </div>
                         {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />}
                       </div>
                       <p className="text-2xs text-slate-500 dark:text-slate-400">{isVi ? m.descVi : m.descEn}</p>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Theme Presets Selection */}
-            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-indigo-500" />
-                    {isVi ? "Phong cách thiết kế chủ đạo" : "Design Aesthetic Themes"}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Các phong cách thị giác đã qua cân chỉnh độ chuẩn xác Master UI" : "Pre-calibrated Master UI visual styling options"}
-                  </p>
-                </div>
-                <span className="text-2xs font-mono uppercase px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 font-bold border border-indigo-500/20 w-fit">
-                  {theme}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                {[
-                  {
-                    id: "mritech-digital-growth" as ThemeType,
-                    nameVi: "MRITECH Digital Growth 🚀",
-                    nameEn: "MRITECH Digital Growth 🚀",
-                    descVi: "Giao diện sáng kính mờ thanh lịch, sắc nét chuẩn doanh nghiệp",
-                    descEn: "Clean corporate glass aesthetic with modern vibrancy",
-                    tagVi: "Khuyên dùng",
-                    tagEn: "Recommended",
-                    colorPreview: "from-blue-600 to-indigo-600",
-                  },
-                  {
-                    id: "glass-dark-neon" as ThemeType,
-                    nameVi: "Glass Tối Neon (Dark Neon) 🌌",
-                    nameEn: "Glass Dark Neon 🌌",
-                    descVi: "Nền tối huyền ảo, ánh sáng neon cyberpunk và tương phản cao",
-                    descEn: "Deep dark canvas with vibrant neon glow accents",
-                    tagVi: "Chế độ Tối",
-                    tagEn: "Dark Mode",
-                    colorPreview: "from-cyan-400 to-purple-600",
-                  },
-                  {
-                    id: "modern-light-glass" as ThemeType,
-                    nameVi: "Kính Mờ Hiện Đại (Modern Glass) 💎",
-                    nameEn: "Modern Light Glass 💎",
-                    descVi: "Kính bán trong suốt nhẹ nhàng, chuyển sắc mượt mà",
-                    descEn: "Soft translucency with gentle gradient touches",
-                    tagVi: "Tối giản",
-                    tagEn: "Minimal",
-                    colorPreview: "from-sky-500 to-teal-500",
-                  }
-                ].map((item) => {
-                  const isSelected = theme === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        setTheme(item.id);
-                        playClick();
-                      }}
-                      className={cn(
-                        "relative p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group/card",
-                        isSelected
-                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
-                      )}
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className={cn("w-6 h-6 rounded-lg bg-gradient-to-br shadow-xs", item.colorPreview)} />
-                          <span className="text-2xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300">
-                            {isVi ? item.tagVi : item.tagEn}
-                          </span>
-                        </div>
-                        {isSelected && (
-                          <div className="w-5 h-5 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                            <Check className="w-3.5 h-3.5 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover/card:text-indigo-600 dark:group-hover/card:text-cyan-400 transition-colors">
-                          {isVi ? item.nameVi : item.nameEn}
-                        </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          {isVi ? item.descVi : item.descEn}
-                        </p>
-                      </div>
                     </button>
                   );
                 })}
@@ -858,38 +811,6 @@ export default function Customization() {
                 })}
               </div>
             </div>
-
-            {/* Active Palette Details & Token Swatches */}
-            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-500" />
-                {isVi ? "Chi tiết 5 màu Tokens hiện tại (Click để copy HEX)" : "Active 5 Token Palette (Click to copy HEX)"}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                {activePalette.map((token) => (
-                  <button
-                    key={token.id}
-                    type="button"
-                    onClick={() => handleCopy(token.hex, token.id)}
-                    className="p-3.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-all text-left flex flex-col justify-between cursor-pointer group"
-                  >
-                    <div 
-                      className="w-full h-12 rounded-lg mb-2.5 shadow-inner border border-black/10 flex items-end justify-end p-1.5"
-                      style={{ backgroundColor: token.hex }}
-                    >
-                      <span className="p-1 rounded bg-black/40 text-white text-3xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">
-                        {copiedToken === token.id ? "Copied!" : <Copy className="w-3 h-3" />}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="text-2xs font-bold uppercase text-slate-400 dark:text-slate-500">{token.name}</div>
-                      <div className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5">{token.hex}</div>
-                      <div className="text-3xs text-slate-500 dark:text-slate-400 truncate mt-1">{token.usage}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
@@ -971,7 +892,10 @@ export default function Customization() {
                 </div>
 
                 {/* Slider 2: Card Radius (--theme-radius-card) */}
-                <div className="p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10">
+                <div 
+                  style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+                  className="p-4 bg-slate-50/50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <div>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
@@ -997,53 +921,6 @@ export default function Customization() {
                       setBorderRadiusCard(val);
                     }}
                     className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500 dark:accent-rose-400"
-                  />
-                </div>
-              </div>
-
-              {/* Live Interactive Card Morphing Preview */}
-              <div 
-                className="p-5 mb-6 border border-indigo-500/30 dark:border-cyan-500/30 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 backdrop-blur-md transition-all duration-300"
-                style={{ borderRadius: `${tempBorderRadiusCard}px` }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div 
-                      className="w-8 h-8 bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 flex items-center justify-center font-bold text-xs shadow-sm transition-all"
-                      style={{ borderRadius: `${tempBorderRadius}px` }}
-                    >
-                      UI
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                        {isVi ? "Khung xem trước Bo góc tương tác thực tế" : "Live Interactive Border Radius Preview Card"}
-                      </h4>
-                      <p className="text-3xs text-slate-500">
-                        {isVi ? `Thẻ: ${tempBorderRadiusCard}px | Phần tử: ${tempBorderRadius}px` : `Card: ${tempBorderRadiusCard}px | Element: ${tempBorderRadius}px`}
-                      </p>
-                    </div>
-                  </div>
-                  <span 
-                    className="px-2.5 py-1 text-3xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-cyan-400 border border-indigo-500/20"
-                    style={{ borderRadius: `${Math.max(4, tempBorderRadius - 4)}px` }}
-                  >
-                    Live Preview
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <button 
-                    type="button"
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs cursor-pointer"
-                    style={{ borderRadius: `${tempBorderRadius}px` }}
-                  >
-                    {isVi ? "Nút bấm hành động" : "Primary Action Button"}
-                  </button>
-                  <input 
-                    type="text" 
-                    readOnly 
-                    value={isVi ? "Trường nhập dữ liệu mẫu" : "Sample text input field"}
-                    className="px-3 py-2 text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200"
-                    style={{ borderRadius: `${tempBorderRadius}px` }}
                   />
                 </div>
               </div>
@@ -1093,156 +970,6 @@ export default function Customization() {
                     </button>
                   );
                 })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* PHẦN 4: CON TRỎ CHUỘT FX (CURSOR FX) */}
-        <section id="sec-cursor" className="space-y-6 scroll-mt-28">
-          <div className="space-y-6">
-            <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <MousePointer className="w-5 h-5 text-indigo-500" />
-                    {isVi ? "Tùy chỉnh con trỏ chuột tương tác (Cursor FX)" : "Interactive Cursor FX"}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Hiệu ứng con trỏ chuột độc đáo tạo cảm giác công nghệ cao cấp" : "Unique pointer dynamics and interactive comet trails"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handleSaveAsProductionDefault}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-cyan-950/30 text-indigo-600 dark:text-cyan-400 border border-indigo-200 dark:border-cyan-800/50 text-xs font-bold hover:bg-indigo-100 transition-all cursor-pointer w-fit"
-                  >
-                    <Save className="w-3.5 h-3.5" />
-                    <span>{isVi ? "Lưu làm mặc định" : "Save as Default"}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      resetCursorConfig();
-                      triggerResetFeedback(isVi ? "Đã khôi phục con trỏ mặc định" : "Reset cursor to defaults");
-                    }}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer w-fit"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>{isVi ? "Mặc định" : "Default"}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Cursor Styles Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                {CURSOR_STYLE_OPTIONS.map((opt) => {
-                  const isSelected = cursorConfig.style === opt.id;
-                  const Icon = getCursorStyleIcon(opt.id);
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => {
-                        setCursorStyle(opt.id);
-                        playClick();
-                      }}
-                      className={cn(
-                        "p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between group",
-                        isSelected
-                          ? "ring-2 ring-indigo-500 dark:ring-cyan-400 bg-indigo-500/5 dark:bg-cyan-500/10 border-indigo-500/40 shadow-sm"
-                          : "hover:bg-slate-50 dark:hover:bg-white/5 border-slate-200 dark:border-white/10"
-                      )}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <Icon className={cn("w-4 h-4", isSelected ? "text-indigo-600 dark:text-cyan-400" : "text-slate-400")} />
-                          <span className="text-xs font-bold text-slate-900 dark:text-white">
-                            {isVi ? opt.nameVi : opt.nameEn}
-                          </span>
-                        </div>
-                        {isSelected && (
-                          <div className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-cyan-400 text-white dark:text-slate-950 flex items-center justify-center">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-2xs text-slate-500 dark:text-slate-400">
-                        {isVi ? opt.descVi : opt.descEn}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Secondary Cursor Controls: Trail & Size & Color */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Hiệu ứng vệt sáng (Trail)" : "Comet Trail Effect"}</div>
-                    <div className="text-2xs text-slate-500">{isVi ? "Vệt sáng sao băng lướt theo chuột" : "Smooth comet trail follows cursor"}</div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEnableTrail(!cursorConfig.enableTrail);
-                      playClick();
-                    }}
-                    className={cn(
-                      "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center",
-                      cursorConfig.enableTrail ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
-                    )}
-                  >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Kích thước con trỏ" : "Cursor Size"}</div>
-                    <div className="text-2xs text-slate-500">{isVi ? "Điều chỉnh kích thước vòng sáng" : "Pointer radius scale"}</div>
-                  </div>
-                  <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
-                    {(["small", "medium", "large"] as const).map((size) => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => { setCursorSize(size); playClick(); }}
-                        className={cn(
-                          "px-2.5 py-1 rounded text-2xs font-bold capitalize transition-all cursor-pointer",
-                          cursorConfig.size === size 
-                            ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-cyan-400 shadow-xs" 
-                            : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                        )}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{isVi ? "Màu sắc con trỏ" : "Cursor Color"}</div>
-                    <div className="text-2xs text-slate-500">{isVi ? "Tông màu phát quang FX" : "Luminescent FX accent"}</div>
-                  </div>
-                  <div className="flex items-center gap-1 bg-slate-200/60 dark:bg-white/10 p-1 rounded-lg">
-                    {CURSOR_COLOR_OPTIONS.slice(0, 4).map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => { setCursorColor(c.id); playClick(); }}
-                        className={cn(
-                          "w-5 h-5 rounded-full transition-transform cursor-pointer border border-black/10",
-                          cursorConfig.colorPreset === c.id ? "scale-125 ring-2 ring-indigo-500 dark:ring-cyan-400" : "opacity-80 hover:opacity-100"
-                        )}
-                        style={{ backgroundColor: c.hex }}
-                        title={c.nameVi}
-                      />
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -1486,38 +1213,72 @@ export default function Customization() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
-                    isHeaderPinned ? "bg-blue-600/20 text-blue-600 dark:text-cyan-400 border-blue-500/30 shadow-xs" : "bg-slate-200/60 dark:bg-white/10 text-slate-500 border-slate-300 dark:border-white/10"
-                  )}>
-                    <Pin className={cn("w-5 h-5 transition-transform", isHeaderPinned ? "rotate-45" : "")} />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">
-                      {isVi ? "Ghim cố định Header (Không tự trượt ẩn)" : "Pin Header (Prevent auto-slide up)"}
+              <div className="space-y-3">
+                {/* 1. Header Pin Toggle */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
+                      isHeaderPinned ? "bg-blue-600/20 text-blue-600 dark:text-cyan-400 border-blue-500/30 shadow-xs" : "bg-slate-200/60 dark:bg-white/10 text-slate-500 border-slate-300 dark:border-white/10"
+                    )}>
+                      <Pin className={cn("w-5 h-5 transition-transform", isHeaderPinned ? "rotate-45" : "")} />
                     </div>
-                    <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      {isVi ? "Khi bỏ ghim, thanh Header tự động trượt lên trên và xuất hiện thanh gạt chỉ báo xanh nhẹ" : "When unpinned, Header slides up leaving a sleek peek indicator at the top"}
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">
+                        {isVi ? "Ghim cố định Header (Không tự trượt ẩn)" : "Pin Header (Prevent auto-slide up)"}
+                      </div>
+                      <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isVi ? "Khi bỏ ghim, thanh Header tự động trượt lên trên và xuất hiện thanh gạt chỉ báo xanh nhẹ" : "When unpinned, Header slides up leaving a sleek peek indicator at the top"}
+                      </div>
                     </div>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => { toggleHeaderPin(); playClick(); }}
+                    className={cn(
+                      "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 self-end sm:self-center",
+                      isHeaderPinned ? "bg-blue-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                    )}
+                  >
+                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                  </button>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => { toggleHeaderPin(); playClick(); }}
-                  className={cn(
-                    "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 self-end sm:self-center",
-                    isHeaderPinned ? "bg-blue-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
-                  )}
-                >
-                  <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-                </button>
+                {/* 2. Footer Pin Toggle (Tính năng Ghim cố định footer) */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
+                      footerConfig.isPinned !== false ? "bg-indigo-600/20 text-indigo-600 dark:text-cyan-400 border-indigo-500/30 shadow-xs" : "bg-slate-200/60 dark:bg-white/10 text-slate-500 border-slate-300 dark:border-white/10"
+                    )}>
+                      <PanelBottom className={cn("w-5 h-5 transition-transform", footerConfig.isPinned !== false ? "rotate-12" : "")} />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">
+                        {isVi ? "Ghim cố định Footer (Không tự trượt ẩn)" : "Pin Footer (Prevent auto-slide down)"}
+                      </div>
+                      <div className="text-2xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isVi ? "Thanh Footer Dock luôn nằm cố định ở đáy trang, áp dụng hiển thị toàn hệ thống" : "Footer Dock remains pinned at bottom without auto sliding down"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => { togglePin(); playClick(); }}
+                    className={cn(
+                      "w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 self-end sm:self-center",
+                      footerConfig.isPinned !== false ? "bg-indigo-600 dark:bg-cyan-400 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
+                    )}
+                  >
+                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* 2. Footer Dock Settings Card */}
+            {/* 2. Footer Dock Settings Card (Vị trí & Tiện ích Widgets) */}
             <div className="p-5 sm:p-6 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-xl shadow-xs" style={{ borderRadius: "var(--theme-radius-card, 16px)" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200/60 dark:border-white/10">
                 <div>
@@ -1526,7 +1287,7 @@ export default function Customization() {
                     {isVi ? "Tùy chỉnh thanh chân trang (Footer Dock)" : "Footer Dock Settings"}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {isVi ? "Kiểu dáng hiển thị, vị trí ghim và cấu hình các nút tính năng" : "Dock placement, pinned state and widget visibility toggles"}
+                    {isVi ? "Kiểu dáng vị trí ghim và cấu hình bật/tắt các nút tính năng" : "Dock placement and widget visibility toggles"}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1706,52 +1467,120 @@ export default function Customization() {
                 </div>
               </div>
 
-              {/* Live Interactive Test Text Input */}
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6">
+              {/* Typography Hierarchy Table */}
+              <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                    {isVi ? "Khu vực thử nghiệm văn bản trực tiếp (Live Typing Test):" : "Live Typography Test Arena:"}
-                  </span>
-                  {customTestText && (
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <SlidersHorizontal className="w-4 h-4 text-indigo-500 dark:text-cyan-400" />
+                      <span>{isVi ? "Bảng phân cấp Typography Tokens (Tùy chỉnh tăng giảm kích thước):" : "Typography Hierarchy Tokens (Custom Size Adjusters):"}</span>
+                    </h4>
+                    <p className="text-3xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      {isVi ? "Hiển thị thông số kích thước thực tế đang áp dụng và tinh chỉnh linh hoạt từng token" : "Real-time active font size in pixels with per-token scale adjusters"}
+                    </p>
+                  </div>
+                  {Object.keys(tokenAdjustments).length > 0 && (
                     <button
                       type="button"
-                      onClick={() => setCustomTestText("")}
-                      className="text-3xs text-rose-500 hover:underline cursor-pointer"
+                      onClick={() => {
+                        setTokenAdjustments({});
+                        if (typeof window !== "undefined") {
+                          try {
+                            localStorage.removeItem("portfolio_typo_token_adjustments");
+                            TYPO_TOKENS.forEach(t => document.documentElement.style.removeProperty(`--token-adjust-${t.id}`));
+                          } catch {}
+                        }
+                      }}
+                      className="text-3xs text-rose-500 hover:underline cursor-pointer flex items-center gap-1 shrink-0"
                     >
-                      {isVi ? "Xóa thử nghiệm" : "Clear test"}
+                      <RotateCcw className="w-2.5 h-2.5" />
+                      <span>{isVi ? "Đặt lại tất cả tokens" : "Reset all tokens"}</span>
                     </button>
                   )}
                 </div>
-                <input
-                  type="text"
-                  value={customTestText}
-                  onChange={(e) => setCustomTestText(e.target.value)}
-                  placeholder={isVi ? "Nhập thử văn bản của bạn để xem phân cấp chữ trực tiếp..." : "Type custom text to preview typography hierarchy live..."}
-                  className="w-full px-3.5 py-2 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
-                />
-              </div>
-
-              {/* Typography Hierarchy Table */}
-              <div className="space-y-2">
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-2">{isVi ? "Bảng phân cấp Typography Tokens:" : "Hierarchy Tokens:"}</h4>
                 {TYPO_TOKENS.map((token) => {
                   const IconComp = token.Icon;
+                  const adjustment = tokenAdjustments[token.id] || 0;
+                  const currentComputedPx = Math.round(token.basePx * (fontScale / 100) + adjustment);
+
                   return (
                     <div
                       key={token.id}
-                      className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-indigo-400/40 transition-all"
+                      className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-indigo-400/40 transition-all"
                     >
-                      <div className="flex items-center gap-2.5 min-w-[220px]">
-                        <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
-                          <IconComp className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-2.5 min-w-[260px]">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                          <IconComp className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-slate-900 dark:text-white">{isVi ? token.labelVi : token.labelEn}</div>
-                          <div className="text-3xs font-mono text-slate-400">Size: {token.size} | Weight: {token.weight} | Leading: {token.leading}</div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <span>{isVi ? token.labelVi : token.labelEn}</span>
+                            {/* Current Real-time Size Badge */}
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-md font-black bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 shadow-2xs">
+                              {currentComputedPx}px
+                            </span>
+                            {adjustment !== 0 && (
+                              <span className={cn(
+                                "text-[10px] font-mono px-1.5 py-0.2 rounded-md font-extrabold",
+                                adjustment > 0 ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" : "bg-rose-500/15 text-rose-600 dark:text-rose-400"
+                              )}>
+                                {adjustment > 0 ? `+${adjustment}px` : `${adjustment}px`}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-3xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">
+                            {isVi ? `Gốc: ${token.size} | Weight: ${token.weight} | Leading: ${token.leading} | Tỷ lệ: ${fontScale}%` : `Base: ${token.size} | Weight: ${token.weight} | Leading: ${token.leading} | Scale: ${fontScale}%`}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1 font-play">
-                        {customTestText || token.sampleText}
+
+                      {/* Sample Preview Text with live applied size */}
+                      <div 
+                        className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex-1 font-play px-2"
+                        style={{ fontSize: `${currentComputedPx}px` }}
+                      >
+                        {token.sampleText}
+                      </div>
+
+                      {/* Interactive Size Increase / Decrease Controller */}
+                      <div className="flex items-center gap-1 shrink-0 bg-white dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-white/10 shadow-2xs self-end sm:self-auto">
+                        <button
+                          type="button"
+                          onClick={() => handleAdjustTokenSize(token.id, -1)}
+                          className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                          title={isVi ? `Giảm kích thước ${token.labelVi} (-1px)` : `Decrease ${token.labelEn} (-1px)`}
+                        >
+                          <Minus className="w-3.5 h-3.5" />
+                        </button>
+                        <div className="flex flex-col items-center px-1.5 min-w-[42px] leading-tight">
+                          <span className={cn(
+                            "text-2xs font-mono font-bold text-center",
+                            adjustment !== 0 ? "text-indigo-600 dark:text-cyan-400 font-extrabold" : "text-slate-700 dark:text-slate-300"
+                          )}>
+                            {currentComputedPx}px
+                          </span>
+                          <span className="text-3xs font-mono text-slate-400 text-center scale-90">
+                            {adjustment > 0 ? `+${adjustment}` : adjustment < 0 ? `${adjustment}` : "±0"}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleAdjustTokenSize(token.id, 1)}
+                          className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                          title={isVi ? `Tăng kích thước ${token.labelVi} (+1px)` : `Increase ${token.labelEn} (+1px)`}
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                        </button>
+                        {adjustment !== 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleResetTokenSize(token.id)}
+                            className="p-1 rounded-lg text-slate-400 hover:text-rose-500 transition-colors ml-0.5 cursor-pointer"
+                            title={isVi ? "Khôi phục kích thước chuẩn" : "Reset to default"}
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -1956,6 +1785,6 @@ export default function Customization() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }
