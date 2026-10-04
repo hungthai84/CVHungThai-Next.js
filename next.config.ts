@@ -4,7 +4,7 @@ const nextConfig: any = {
   output: 'standalone',
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   allowedDevOrigins: [
     '*.run.app',

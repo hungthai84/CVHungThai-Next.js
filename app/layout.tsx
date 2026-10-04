@@ -4,11 +4,11 @@ import '../src/index.css';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Remix Nguyễn Hùng Thái Portfolio - React - Đẩy Github',
-  description: 'Portfolio & Thư ngỏ của Nguyễn Hùng Thái - Chuyên gia & Trưởng phòng Chăm sóc Khách hàng (Customer Experience & Customer Service Leader)',
+  title: 'Nguyễn Hùng Thái — Customer Experience & Service Leader',
+  description: 'Portfolio tương tác của Nguyễn Hùng Thái: hành trình nghề nghiệp, năng lực Customer Experience, Contact Center và chuyển đổi số.',
   openGraph: {
-    title: 'Remix Nguyễn Hùng Thái Portfolio - React - Đẩy Github',
-    description: 'Portfolio & Thư ngỏ của Nguyễn Hùng Thái - Chuyên gia & Trưởng phòng Chăm sóc Khách hàng (Customer Experience & Customer Service Leader)',
+    title: 'Nguyễn Hùng Thái — Customer Experience & Service Leader',
+    description: 'Khám phá hành trình nghề nghiệp, các dự án và định hướng CX 2026+ của Nguyễn Hùng Thái.',
     type: 'website',
   },
 };
