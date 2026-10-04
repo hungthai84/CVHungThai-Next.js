@@ -10,30 +10,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
-import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
-import About from "./components/About";
-import Domains from "./components/Domains";
-import Education from "./components/Education";
-import Skills from "./components/Skills";
-import Experience from "./components/Experience";
-import Projects from "./components/Projects";
-import Interview from "./components/Interview";
-import TuVi from "./components/TuVi";
-import Memories from "./components/Memories";
-import Contact from "./components/Contact";
-import Wallpapers from "./components/Wallpapers";
-import Systems from "./components/Systems";
-import Customization from "./components/Customization";
-import Letter from "./components/Letter";
-import XRayInspector from "./components/XRayInspector";
-import AIAssistant from "./components/ai/AIAssistant";
-import ColorSystemModal from "./components/ColorSystemModal";
-import CursorSettingsModal from "./components/CursorSettingsModal";
-import SoundSettingsModal from "./components/SoundSettingsModal";
-import FooterSettingsModal from "./components/FooterSettingsModal";
-import TypographySettings from "./components/TypographySettings";
-import ExecutiveResumeExportModal from "./components/ExecutiveResumeExportModal";
 import LeftSidebar from "./components/LeftSidebar";
 import RightSidebar from "./components/RightSidebar";
 import { AuthProvider } from "./context/AuthContext";
@@ -85,10 +62,32 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
   });
 }
 
-// Lazy load non-hero sections for dynamic code splitting & reduced initial bundle
-// Statically imported section components above
+// Keep the initial shell focused on the Hero. Secondary sections and tools are
+// loaded only when selected/opened, preserving all existing functionality while
+// reducing the first-load JavaScript cost.
+const Letter = lazyWithRetry(() => import("./components/Letter"));
+const About = lazyWithRetry(() => import("./components/About"));
+const Domains = lazyWithRetry(() => import("./components/Domains"));
+const Skills = lazyWithRetry(() => import("./components/Skills"));
+const Education = lazyWithRetry(() => import("./components/Education"));
+const Experience = lazyWithRetry(() => import("./components/Experience"));
+const Projects = lazyWithRetry(() => import("./components/Projects"));
+const Interview = lazyWithRetry(() => import("./components/Interview"));
+const TuVi = lazyWithRetry(() => import("./components/TuVi"));
+const Memories = lazyWithRetry(() => import("./components/Memories"));
+const Systems = lazyWithRetry(() => import("./components/Systems"));
+const Contact = lazyWithRetry(() => import("./components/Contact"));
+const Wallpapers = lazyWithRetry(() => import("./components/Wallpapers"));
+const Customization = lazyWithRetry(() => import("./components/Customization"));
 
-// Statically imported overlays & settings modals above
+const XRayInspector = lazyWithRetry(() => import("./components/XRayInspector"));
+const AIAssistant = lazyWithRetry(() => import("./components/ai/AIAssistant"));
+const ColorSystemModal = lazyWithRetry(() => import("./components/ColorSystemModal"));
+const CursorSettingsModal = lazyWithRetry(() => import("./components/CursorSettingsModal"));
+const SoundSettingsModal = lazyWithRetry(() => import("./components/SoundSettingsModal"));
+const FooterSettingsModal = lazyWithRetry(() => import("./components/FooterSettingsModal"));
+const TypographySettings = lazyWithRetry(() => import("./components/TypographySettings"));
+const ExecutiveResumeExportModal = lazyWithRetry(() => import("./components/ExecutiveResumeExportModal"));
 
 // Memoize Hero component
 const MemoHero = memo(Hero);
@@ -772,5 +771,4 @@ export default function App() {
     </AuthProvider>
   );
 }
-
 
