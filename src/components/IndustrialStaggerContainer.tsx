@@ -1,6 +1,11 @@
 import React, { ReactNode } from "react";
 import { motion, Variants } from "motion/react";
 import { cn } from "../lib/utils";
+import { useTheme } from "../context/ThemeContext";
+import { 
+  bentoStaggerContainerVariants, 
+  bentoFloatInCardVariants 
+} from "../lib/bentoAnimation";
 
 export const industrialContainerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -38,9 +43,12 @@ export function IndustrialSubSection({
   hasIndustrialAccent = false,
   ...props
 }: IndustrialSubSectionProps) {
+  const { theme } = useTheme();
+  const isBento = theme === "soft-floating-bento";
+
   return (
     <motion.div
-      variants={industrialSubSectionVariants}
+      variants={isBento ? bentoFloatInCardVariants : industrialSubSectionVariants}
       className={cn("w-full", hasIndustrialAccent && "relative", className)}
       {...props}
     >
@@ -49,4 +57,30 @@ export function IndustrialSubSection({
   );
 }
 
+export function BentoStaggerContainer({
+  children,
+  className,
+  ...props
+}: {
+  children?: ReactNode;
+  className?: string;
+  [key: string]: any;
+}) {
+  const { theme } = useTheme();
+  const isBento = theme === "soft-floating-bento";
+
+  return (
+    <motion.div
+      initial="hidden"
+      animate="show"
+      variants={isBento ? bentoStaggerContainerVariants : industrialContainerVariants}
+      className={cn("w-full", className)}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default IndustrialSubSection;
+

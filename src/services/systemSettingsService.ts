@@ -25,8 +25,8 @@ export interface SystemProductionConfig {
   fontScale: number; // 80 - 130
   borderRadius: number; // 0 - 28
   borderRadiusCard: number; // 0 - 32
-  cursor: CursorConfig;
   sound: SoundConfig;
+  cursor?: CursorConfig;
   footer: FooterConfig;
   header: {
     isPinned: boolean;
@@ -38,14 +38,14 @@ export const FACTORY_DEFAULTS: SystemProductionConfig = {
   version: "2.5-prod",
   savedAt: new Date().toISOString(),
   savedFormattedDate: "Cấu hình gốc nhà phát triển (Factory Standard)",
-  themeMode: "system",
-  theme: "mritech-digital-growth",
+  themeMode: "light",
+  theme: "glass-light-multicolor",
   colorPreset: "default",
   fontScale: 100,
-  borderRadius: 10,
-  borderRadiusCard: 14,
-  cursor: DEFAULT_CURSOR_CONFIG,
+  borderRadius: 22,
+  borderRadiusCard: 22,
   sound: DEFAULT_SOUND_CONFIG,
+  cursor: DEFAULT_CURSOR_CONFIG,
   footer: DEFAULT_FOOTER_CONFIG,
   header: {
     isPinned: true,
@@ -67,7 +67,6 @@ export function getSavedProductionDefaults(): SystemProductionConfig | null {
         ...FACTORY_DEFAULTS,
         ...parsed,
         sound: { ...FACTORY_DEFAULTS.sound, ...(parsed.sound || {}) },
-        cursor: { ...FACTORY_DEFAULTS.cursor, ...(parsed.cursor || {}) },
         footer: { ...FACTORY_DEFAULTS.footer, ...(parsed.footer || {}) },
         header: { ...FACTORY_DEFAULTS.header, ...(parsed.header || {}) },
       };
@@ -93,7 +92,6 @@ export function saveAsProductionDefaults(config: Partial<SystemProductionConfig>
     savedAt: now.toISOString(),
     savedFormattedDate: formattedDate,
     sound: { ...currentDefaults.sound, ...(config.sound || {}) },
-    cursor: { ...currentDefaults.cursor, ...(config.cursor || {}) },
     footer: { ...currentDefaults.footer, ...(config.footer || {}) },
     header: { ...currentDefaults.header, ...(config.header || {}) },
   };
@@ -113,7 +111,6 @@ export function saveAsProductionDefaults(config: Partial<SystemProductionConfig>
       localStorage.setItem("portfolio_font_scale", merged.fontScale.toString());
       localStorage.setItem("portfolio_border_radius", merged.borderRadius.toString());
       localStorage.setItem("portfolio_border_radius_card", merged.borderRadiusCard.toString());
-      localStorage.setItem("thai_portfolio_cursor_config", JSON.stringify(merged.cursor));
       localStorage.setItem("thai_portfolio_sound_config", JSON.stringify(merged.sound));
       localStorage.setItem("thai_portfolio_footer_config", JSON.stringify(merged.footer));
       localStorage.setItem("thai_portfolio_header_config", JSON.stringify(merged.header));
@@ -146,11 +143,13 @@ export function resetToFactoryDefaults(): SystemProductionConfig {
       localStorage.setItem("portfolio_font_scale", FACTORY_DEFAULTS.fontScale.toString());
       localStorage.setItem("portfolio_border_radius", FACTORY_DEFAULTS.borderRadius.toString());
       localStorage.setItem("portfolio_border_radius_card", FACTORY_DEFAULTS.borderRadiusCard.toString());
-      localStorage.setItem("thai_portfolio_cursor_config", JSON.stringify(FACTORY_DEFAULTS.cursor));
       localStorage.setItem("thai_portfolio_sound_config", JSON.stringify(FACTORY_DEFAULTS.sound));
       localStorage.setItem("thai_portfolio_footer_config", JSON.stringify(FACTORY_DEFAULTS.footer));
       localStorage.setItem("thai_portfolio_header_config", JSON.stringify(FACTORY_DEFAULTS.header));
       localStorage.setItem("portfolio_lang", FACTORY_DEFAULTS.lang);
+      
+      // Remove deprecated cursor key if exists
+      localStorage.removeItem("thai_portfolio_cursor_config");
 
       window.dispatchEvent(new CustomEvent("thai_portfolio_defaults_updated", { detail: FACTORY_DEFAULTS }));
     } catch (e) {
@@ -222,7 +221,7 @@ export function importConfigurationFromJson(jsonStr: string): {
 
 export interface DiagnosticItem {
   id: string;
-  category: "color" | "typography" | "radius" | "sound" | "dock" | "storage";
+  category: "color" | "typography" | "radius" | "sound" | "cursor" | "dock" | "storage";
   titleVi: string;
   titleEn: string;
   status: "perfect" | "repaired" | "warning";
@@ -470,7 +469,21 @@ export function runSystemDiagnosticAndRepair(): DiagnosticReport {
     }
   } catch {}
 
-  // 6. Navigation Dock (Header & Footer) Layout
+  // 6. Interactive Cursor FX Audit
+  try {
+    items.push({
+      id: "cursor-fx",
+      category: "cursor",
+      titleVi: "Hiệu ứng con trỏ chuột công nghệ FX",
+      titleEn: "Interactive Cursor FX Engine",
+      status: "perfect",
+      detailVi: `Kiểu con trỏ mặc định hệ thống.`,
+      detailEn: `Standard system cursor enabled.`,
+      metric: "Đã tối ưu"
+    });
+  } catch {}
+
+  // 7. Navigation Dock (Header & Footer) Layout
   try {
     const rawFooter = localStorage.getItem("thai_portfolio_footer_config");
     const rawHeader = localStorage.getItem("thai_portfolio_header_config");

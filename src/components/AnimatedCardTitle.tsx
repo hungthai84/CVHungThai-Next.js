@@ -7,7 +7,8 @@ export type ColorPresetType = "emerald" | "indigo" | "purple" | "cyan" | "orange
 
 export interface AnimatedCardTitleProps {
   icon: LucideIcon;
-  title: React.ReactNode;
+  title: string;
+  subtitle?: string;
   colorPreset?: ColorPresetType;
   indexForAutoColor?: number;
   actionRight?: React.ReactNode;
@@ -83,19 +84,31 @@ const COLOR_PRESETS = [
 
 export function AnimatedCardTitle({
   icon: IconComponent,
-  title,
+  title: rawTitle,
+  subtitle,
   colorPreset = "auto",
   indexForAutoColor = 0,
   actionRight,
   className,
 }: AnimatedCardTitleProps) {
+  // Format: Đúng 4 chữ, viết hoa chữ đầu còn lại viết thường
+  const title = useMemo(() => {
+    if (!rawTitle) return "";
+    const trimmed = rawTitle.trim();
+    const words = trimmed.split(/\s+/);
+    const fourWords = words.length > 4 ? words.slice(0, 4) : words;
+    const joined = fourWords.join(" ");
+    const lower = joined.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  }, [rawTitle]);
+
   const selectedTheme = useMemo(() => {
     if (colorPreset !== "auto") {
       const match = COLOR_PRESETS.find((p) => p.name === colorPreset);
       if (match) return match;
     }
     // Pick based on string hash or index
-    const seed = indexForAutoColor + (typeof title === "string" ? title.length : 12);
+    const seed = indexForAutoColor + title.length;
     return COLOR_PRESETS[seed % COLOR_PRESETS.length];
   }, [colorPreset, indexForAutoColor, title]);
 
@@ -104,27 +117,27 @@ export function AnimatedCardTitle({
       {/* Upper Title Row */}
       <div className="w-full flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2.5 min-w-0">
-          {/* Animated Icon (Không đóng khung icon, kích thước đồng bộ bằng tiêu đề) */}
+          {/* Animated Icon (Chuyển động tại chỗ, Không đóng khung icon) */}
           <motion.div
             animate={{
-              y: [0, -3, 0],
+              y: [0, -3.5, 0],
               rotate: [0, 3, -3, 0],
-              scale: [1, 1.05, 1],
+              scale: [1, 1.06, 1],
             }}
             transition={{
-              duration: 3.5,
+              duration: 3.6,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            whileHover={{ scale: 1.25, rotate: 10 }}
+            whileHover={{ scale: 1.2, rotate: 6 }}
             className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
           >
-            <IconComponent className={cn("w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2] drop-shadow-sm transition-transform duration-300", selectedTheme.iconColor)} />
+            <IconComponent className={cn("w-5 h-5 stroke-[2.2] drop-shadow-sm transition-transform duration-300", selectedTheme.iconColor)} />
           </motion.div>
 
-          {/* Title Text */}
+          {/* Title Text: Đúng 4 chữ, font 15px, màu tiêu đề giống màu icon */}
           <div className="flex flex-col min-w-0">
-            <h3 className={cn("text-h6 font-bold tracking-tight font-play truncate", selectedTheme.titleColor)}>
+            <h3 className={cn("text-[15px] font-bold tracking-tight font-play truncate", selectedTheme.iconColor)}>
               {title}
             </h3>
           </div>
@@ -133,7 +146,7 @@ export function AnimatedCardTitle({
         {actionRight && <div className="shrink-0">{actionRight}</div>}
       </div>
 
-      {/* Dynamic Colored Gradient Line Below */}
+      {/* Dynamic Colored Gradient Line Below (Line có màu giống màu icon) */}
       <div className={cn("h-[2px] sm:h-[2.5px] w-full rounded-full shadow-2xs transition-all duration-300", selectedTheme.lineGradient)} />
     </div>
   );

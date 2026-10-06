@@ -85,3 +85,6 @@ export function CaseStudy1_1_Header({
 }
 
 
+
+
+export default CaseStudy1_1_Header;

@@ -22,9 +22,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const SIZE_STYLES: Record<ButtonSize, string> = {
-  small: "h-[36px] px-3.5 text-xs rounded-[12px] gap-1.5",
-  medium: "h-[44px] px-4 sm:px-5 text-sm rounded-[14px] gap-2",
-  large: "h-[48px] px-5 sm:px-6 text-base rounded-[16px] gap-2.5",
+  small: "h-[36px] min-h-[36px] px-3 text-xs rounded-[10px] gap-1.5",
+  medium: "h-[40px] min-h-[40px] px-4 text-[15px] font-semibold rounded-[10px] gap-2",
+  large: "h-[48px] min-h-[48px] px-5 sm:px-6 text-base rounded-[12px] gap-2.5",
 };
 
 export const Button: React.FC<ButtonProps> = ({

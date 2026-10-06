@@ -23,56 +23,25 @@
       },
       "required": ["updatedAt"]
     },
-    "XRayTemplate": {
-      "title": "XRayTemplate",
-      "description": "Long-term persistent X-RAY design templates and configuration presets",
+    "TabError": {
+      "title": "TabError",
+      "description": "Error and bug reports submitted for tabs or system features",
       "type": "object",
       "properties": {
         "id": { "type": "string", "maxLength": 128 },
-        "name": { "type": "string", "maxLength": 256 },
-        "description": { "type": "string" },
-        "wallpaperName": { "type": "string" },
-        "wallpaperUrl": { "type": "string" },
-        "uiConfig": { "type": "string" },
-        "colors": { "type": "string" },
-        "font": { "type": "string" },
-        "layout": { "type": "string" },
-        "content": { "type": "string" },
-        "settings": { "type": "string" },
-        "version": { "type": "number" },
-        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "tabId": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "category": { "type": "string", "maxLength": 64, "enum": ["UI/Layout", "Performance", "Data/Logic", "Crash/Freeze", "Audio/Video", "Responsive/Mobile", "Other"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "status": { "type": "string", "enum": ["open", "investigating", "resolved", "pending", "in_progress", "fixed"] },
+        "deviceInfo": { "type": "string", "maxLength": 500 },
+        "reporterEmail": { "type": "string", "maxLength": 256 },
+        "reporterName": { "type": "string", "maxLength": 128 },
         "createdAt": { "type": "string" },
-        "updatedAt": { "type": "string" },
-        "authorId": { "type": "string" }
+        "syncedOffline": { "type": "boolean" }
       },
-      "required": ["id", "name", "createdAt", "updatedAt", "version", "status"]
-    },
-    "SystemSettings": {
-      "title": "SystemSettings",
-      "description": "User production default configurations, sound, cursor, theme, font, and layout",
-      "type": "object",
-      "properties": {
-        "themeMode": { "type": "string" },
-        "theme": { "type": "string" },
-        "colorPreset": { "type": "string" },
-        "fontScale": { "type": "number" },
-        "borderRadius": { "type": "number" },
-        "borderRadiusCard": { "type": "number" },
-        "savedAt": { "type": "string" },
-        "syncedToCloud": { "type": "boolean" }
-      },
-      "required": ["savedAt"]
-    },
-    "CustomFaq": {
-      "title": "CustomFaq",
-      "description": "Custom FAQ question-answer pairs migrated from local cache",
-      "type": "object",
-      "properties": {
-        "faqs": { "type": "string" },
-        "totalCount": { "type": "number" },
-        "updatedAt": { "type": "string" }
-      },
-      "required": ["updatedAt"]
+      "required": ["tabId", "title", "description", "category", "severity", "createdAt"]
     }
   },
   "firestore": {
@@ -84,13 +53,9 @@
       "schema": "UserPreferences",
       "description": "User preferences and wallpaper storage"
     },
-    "users/{userId}/xray_templates/{templateId}": {
-      "schema": "XRayTemplate",
-      "description": "User-specific X-Ray design templates"
-    },
-    "xray_templates/{templateId}": {
-      "schema": "XRayTemplate",
-      "description": "Public and shared X-Ray templates"
+    "tabErrors/{errorId}": {
+      "schema": "TabError",
+      "description": "Reported errors and bugs across application tabs"
     }
   }
 }

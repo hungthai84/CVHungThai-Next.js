@@ -348,21 +348,6 @@ class AudioEngine {
             } catch (e) {}
           }
         };
-      } else if (type === "website-bg-music") {
-        // Stream official background music track
-        const audio = new Audio("https://cdn.scena.ai/project/10169/b831e310df79c84abab30fc7ee7fc5939213230d5895a09b3617382849f52afe.mp3");
-        audio.loop = true;
-        audio.volume = Math.max(0, Math.min(1, volume * 0.7));
-        audio.play().catch(() => {});
-
-        this.ambientSource = {
-          stop: () => {
-            try {
-              audio.pause();
-              audio.currentTime = 0;
-            } catch (e) {}
-          }
-        };
       }
     } catch (e) {}
   }

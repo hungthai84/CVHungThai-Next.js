@@ -49,7 +49,7 @@ export function getBentoGridClasses(extraClass?: string): string {
  */
 export function getModernGlassClasses(extraClass?: string): string {
   return cn(
-    "bg-white/65 dark:bg-white/[0.06] backdrop-blur-[16px] dark:backdrop-blur-[20px] border border-white/65 dark:border-white/12 shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] rounded-[10px] text-slate-900 dark:text-white transition-all duration-200",
+    "bg-white/65 dark:bg-white/[0.06] backdrop-blur-[16px] dark:backdrop-blur-[20px] border border-white/65 dark:border-white/12 shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] rounded-[20px] text-slate-900 dark:text-white transition-all duration-200",
     extraClass
   );
 }

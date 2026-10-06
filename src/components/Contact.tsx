@@ -42,7 +42,7 @@ export function Contact() {
         return "bg-[#121218]/85 dark:bg-[#121218]/85 border-cyan-400/25 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_0_20px_rgba(0,240,255,0.15)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.25)]";
       case "modern-light-glass":
         return "bg-white/70 dark:bg-slate-900/75 border-white/80 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_10px_30px_0_rgba(100,110,140,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_14px_40px_0_rgba(100,110,140,0.15)]";
-      case "mritech-digital-growth":
+      case "glass-light-multicolor":
       default:
         return "bg-white/75 dark:bg-[#121218]/80 border-white/70 dark:border-white/12 backdrop-blur-[18px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_12px_40px_0_rgba(31,38,135,0.12)]";
     }
@@ -208,7 +208,7 @@ export function Contact() {
         .float-c { animation: floatC 8s ease-in-out infinite; }
       `}} />
 
-      <div className="w-full flex-grow flex flex-col gap-5 max-w-7xl mx-auto justify-start pb-12">
+      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-5 mx-auto justify-start pb-12">
         
         {/* Header Bar */}
         <PageCardHeader pageId="contact">
@@ -228,25 +228,34 @@ export function Contact() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
             className={cn(
               "lg:col-span-5 relative overflow-hidden border transition-all duration-300 shadow-xl flex flex-col justify-between h-full p-5 sm:p-7 gap-6 text-left",
-              "rounded-[var(--theme-radius-card,16px)]",
+              "rounded-[var(--theme-radius-card,14px)]",
               getGlassCardClass()
             )}
           >
-            {/* Ambient Background Glows */}
-            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-rose-400/10 dark:bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-            
-            {/* Card Title & Introduction */}
+            {/* Card Title & Introduction: 4 chữ, font 15px, màu giống icon */}
             <div className="space-y-3 relative z-10">
-              <AnimatedCardTitle
-                icon={MessageSquare}
-                title={isVi ? "Kết Nối Trực Tiếp" : "Direct Connection Hub"}
-                colorPreset="indigo"
-              />
+              <div className="flex items-center gap-2.5">
+                <motion.div
+                  animate={{ y: [0, -3.5, 0], rotate: [0, 4, -4, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex items-center justify-center shrink-0 cursor-pointer select-none"
+                >
+                  <MessageSquare className="w-5 h-5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                </motion.div>
+                <h3 className="text-[15px] font-bold tracking-tight font-play">
+                  <span className="text-indigo-600 dark:text-cyan-400 font-play font-bold text-[15px]">
+                    {isVi ? "Kết nối trực tiếp" : "Direct contact hub"}
+                  </span>
+                </h3>
+              </div>
 
-              <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
+              {/* Line cùng màu icon */}
+              <div className="h-[2px] w-full rounded-full bg-indigo-500/30 dark:bg-cyan-400/30" />
+
+              <p className="text-[15px] font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
                 {isVi ? (
                   <>Bạn có câu hỏi, đề xuất hợp tác hoặc cần tư vấn chiến lược Contact Center & chuyển đổi số? Hãy gửi tin nhắn hoặc <a href="mailto:hungthai84@gmail.com" className="font-extrabold underline decoration-rose-500 decoration-2 underline-offset-4 hover:text-rose-600 text-rose-500 transition-colors">gửi email trực tiếp</a>.</>
                 ) : (
@@ -346,45 +355,8 @@ export function Contact() {
                 </div>
               </div>
 
-              {/* Zalo QR Code Section */}
-              <div className="w-full my-3 p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-blue-200/80 dark:border-blue-500/30 shadow-sm flex items-center gap-3.5 relative z-10">
-                <a
-                  href="https://zalo.me/0909097882"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative p-1.5 rounded-xl bg-white border border-slate-200 dark:border-slate-700 shadow-xs shrink-0 group/qr hover:scale-105 transition-transform"
-                  title={isVi ? "Quét mã để kết nối Zalo trực tiếp" : "Scan QR code to connect on Zalo"}
-                >
-                  <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fzalo.me%2F0909097882&color=0068ff"
-                    alt="Zalo QR Code - 0909097882"
-                    className="w-16 h-16 sm:w-18 sm:h-18 object-contain rounded-lg"
-                  />
-                  <span className="absolute -bottom-1 -right-1 px-1 py-0.2 text-[8px] font-black font-mono bg-blue-600 text-white rounded shadow-xs">
-                    ZALO
-                  </span>
-                </a>
-                <div className="flex-1 min-w-0 text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[11px] font-bold text-blue-700 dark:text-cyan-400 font-mono">
-                      {isVi ? "MÃ QR ZALO TRỰC TIẾP" : "DIRECT ZALO QR"}
-                    </span>
-                  </div>
-                  <p className="text-xs font-bold text-slate-800 dark:text-white truncate font-play mt-0.5">
-                    Nguyễn Hùng Thái · 0909 097 882
-                  </p>
-                  <a
-                    href="https://zalo.me/0909097882"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[10px] text-blue-600 dark:text-blue-400 font-semibold hover:underline mt-1"
-                  >
-                    <span>{isVi ? "Nhấn để mở Zalo chat" : "Click to open Zalo chat"}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              </div>
+              {/* Horizon bar */}
+              <div className="h-2 w-full rounded-full bg-white/80 dark:bg-slate-700/80 mb-3" />
 
               {/* Trust chips */}
               <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-extrabold text-slate-700 dark:text-slate-200 z-10">
@@ -406,35 +378,37 @@ export function Contact() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
             className={cn(
               "lg:col-span-7 relative overflow-hidden border transition-all duration-300 shadow-xl flex flex-col p-5 sm:p-7 gap-5 text-left",
-              "rounded-[var(--theme-radius-card,16px)]",
+              "rounded-[var(--theme-radius-card,14px)]",
               getGlassCardClass()
             )}
           >
             {/* Ambient Background Glows */}
             <div className="absolute -top-24 -right-24 w-72 h-72 bg-sky-400/10 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Form Section Header */}
-            <div className="relative z-10">
-              <AnimatedCardTitle
-                icon={Send}
-                title={isVi ? "Gửi Thông Điệp" : "Send Direct Message"}
-                colorPreset="rose"
-              />
+            {/* Form Section Header: 4 chữ, font 15px, màu giống icon, không sub tiêu đề */}
+            <div className="w-full flex flex-col gap-2 pb-1 relative z-10">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4.5 h-4.5 text-amber-500 shrink-0" />
+                <h3 className="text-[15px] font-bold tracking-tight font-play text-amber-600 dark:text-amber-400">
+                  {isVi ? "Gửi thông điệp" : "Send direct message"}
+                </h3>
+              </div>
+              <div className="h-[2px] w-full rounded-full bg-amber-500/30" />
             </div>
 
-            {/* Topic Select Option List Box */}
-            <div className="space-y-1.5 relative z-10">
+            {/* Dropdown 1: Topic Select Dropdown */}
+            <div className="space-y-1.5 relative z-10 text-left">
               <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
-                {isVi ? "1. Chọn chủ đề trao đổi" : "1. Select Inquiry Topic"}
+                {isVi ? "1. Chủ đề trao đổi" : "1. Inquiry Topic"}
               </label>
               <div className="relative">
                 <select
                   value={activeTopic}
                   onChange={(e) => handleTopicClick(e.target.value)}
-                  className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 cursor-pointer appearance-none shadow-xs pr-10"
+                  className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 pr-10 shadow-2xs transition-all"
                 >
                   {topics.map((t) => (
                     <option key={t.id} value={t.label} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white py-2">
@@ -442,27 +416,30 @@ export function Contact() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
-            {/* Quick Message Presets Option List Box */}
-            <div className="space-y-1.5 relative z-10">
+            {/* Dropdown 2: Quick Message Presets Dropdown */}
+            <div className="space-y-1.5 relative z-10 text-left">
               <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
                 {isVi ? "2. Mẫu tin nhắn soạn sẵn (Chọn để chèn nhanh)" : "2. Quick Presets (Select to Insert)"}
               </label>
               <div className="relative">
                 <select
+                  defaultValue=""
                   onChange={(e) => {
                     if (e.target.value) {
                       handleApplyPreset(e.target.value);
+                      e.target.value = "";
                     }
                   }}
-                  defaultValue=""
-                  className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 cursor-pointer appearance-none shadow-xs pr-10"
+                  className="w-full rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 pr-10 shadow-2xs transition-all"
                 >
                   <option value="" disabled className="bg-white dark:bg-slate-900 text-slate-400">
-                    {isVi ? "-- Chọn mẫu tin nhắn tư vấn --" : "-- Select quick message template --"}
+                    {isVi ? "⚡ -- Chọn mẫu tin nhắn soạn sẵn --" : "⚡ -- Select a quick message preset --"}
                   </option>
                   {presets.map((p, idx) => (
                     <option key={idx} value={isVi ? p.textVi : p.textEn} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white py-2">
@@ -470,7 +447,9 @@ export function Contact() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
@@ -598,12 +577,13 @@ export function Contact() {
         </div>
 
         {/* FAQ Accordion Section */}
-        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4 text-left", getGlassCardClass())}>
-          <AnimatedCardTitle
-            icon={HelpCircle}
-            title={isVi ? "Câu Hỏi Thường Gặp" : "Frequently Asked Questions"}
-            colorPreset="amber"
-          />
+        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4", getGlassCardClass())}>
+          <div className="flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
+            <h3 className="text-base sm:text-lg font-bold font-play text-slate-800 dark:text-white">
+              {isVi ? "Câu hỏi thường gặp khi liên hệ" : "Frequently Asked Questions"}
+            </h3>
+          </div>
 
           <div className="space-y-3">
             {faqs.map((faq, idx) => {

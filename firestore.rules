@@ -45,17 +45,27 @@ service cloud.firestore {
       match /preferences/{prefId} {
         allow read, write: if isSignedIn() && isValidId(userId) && userId == request.auth.uid && isValidId(prefId);
       }
-
-      // 6. User X-Ray Templates Subcollection
-      match /xray_templates/{templateId} {
-        allow read, write: if isSignedIn() && isValidId(userId) && userId == request.auth.uid && isValidId(templateId);
-      }
     }
 
-    // 7. Global / Shared X-Ray Templates Collection (Long-term persistent storage)
-    match /xray_templates/{templateId} {
+    // 6. TabErrors Collection - Error tracking and offline background sync
+    match /tabErrors/{errorId} {
+      // Allow read so dashboard can show aggregate frequencies and status
       allow read: if true;
-      allow write: if isSignedIn() && isValidId(templateId);
+
+      // Allow creating error reports (online or synced from offline queue)
+      allow create: if isValidId(errorId)
+                    && incoming().tabId is string && incoming().tabId.size() <= 64
+                    && incoming().title is string && incoming().title.size() <= 200
+                    && incoming().description is string && incoming().description.size() <= 2000
+                    && incoming().category in ['UI/Layout', 'Performance', 'Data/Logic', 'Crash/Freeze', 'Audio/Video', 'Responsive/Mobile', 'Other']
+                    && incoming().severity in ['low', 'medium', 'high', 'critical']
+                    && incoming().createdAt is string;
+
+      // Allow updating status or resolving bugs
+      allow update: if isValidId(errorId);
+
+      // Allow deleting resolved reports if authenticated
+      allow delete: if isSignedIn() && isValidId(errorId);
     }
   }
 }

@@ -1,20 +1,20 @@
-# Nguyễn Hùng Thái — Interactive Portfolio
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Portfolio tương tác xây dựng với Next.js, React, TypeScript, Tailwind CSS và Motion.
-Website tập trung vào hành trình nghề nghiệp, năng lực Customer Experience / Contact Center,
-các dự án chuyển đổi số và định hướng Head of CS / CS Director 2026+.
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/6db6eba3-c027-4a07-be83-c2c8502f6691
 
 ## Run Locally
 
 **Prerequisites:**  Node.js
 
 
-1. Cài dependencies: `npm install`
-2. (Tuỳ chọn) Sao chép `.env.example` thành `.env.local` và thêm `GEMINI_API_KEY` để bật các tính năng AI.
-3. Chạy môi trường phát triển: `npm run dev`
-4. Kiểm tra TypeScript: `npm run lint`
-5. Build production: `npm run build`
-
-Ứng dụng dùng một route Next.js chính (`/`) với điều hướng section bằng hash như
-`#experience`, `#projects` và `#contact`. Danh sách route được khai báo tại
-`public/manus-routes.json`.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

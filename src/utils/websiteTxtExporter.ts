@@ -49,7 +49,7 @@ export const INITIAL_VALIDATION_STEPS: ValidationStep[] = [
     id: 6,
     title: "Trang 06: Học Vấn (Nền tảng Học vấn & Chứng chỉ Quốc tế)",
     detail: "Cử nhân CNTT STU, Dale Carnegie Executive, Cisco CCNA, MCSA, Big Data Analytics...",
-    itemCount: `${DEFAULT_EDUCATION_CARDS.length}/${DEFAULT_EDUCATION_CARDS.length} Bằng cấp`,
+    itemCount: "4/4 Bằng cấp",
     status: "pending"
   },
   {

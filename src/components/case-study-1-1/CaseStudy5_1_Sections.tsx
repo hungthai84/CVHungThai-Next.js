@@ -418,3 +418,6 @@ export function CaseStudy5_1_Sections({ project: _project }: { project: ProjectC
     </div>
   );
 }
+
+
+export default CaseStudy5_1_Sections;

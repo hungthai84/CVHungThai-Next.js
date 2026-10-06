@@ -110,10 +110,10 @@ const ACCENT_STYLES: Record<BentoCardAccent, {
 };
 
 const SIZE_PADDING: Record<BentoCardSize, string> = {
-  small: "p-3.5 sm:p-4",       // 14-16px
-  medium: "p-4 sm:p-5",        // 16-20px
+  small: "p-4",                // 16px
+  medium: "p-5",               // 20px (Standard Card Padding)
   large: "p-5 sm:p-6",         // 20-24px
-  hero: "p-6 sm:p-8",          // 24-32px
+  hero: "p-6 sm:p-7",          // 24-28px
 };
 
 export const BentoCard: React.FC<BentoCardProps> = ({
@@ -177,7 +177,7 @@ export const BentoCard: React.FC<BentoCardProps> = ({
       transition={{ duration: 0.2 }}
       className={cn(
         // Modern Glass & Bento Surface
-        "relative rounded-[10px] bg-white/65 dark:bg-white/[0.06] backdrop-blur-[16px] dark:backdrop-blur-[20px]",
+        "relative rounded-[20px] bg-white/65 dark:bg-white/[0.06] backdrop-blur-[16px] dark:backdrop-blur-[20px]",
         "border border-white/65 dark:border-white/12",
         "shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)]",
         "text-slate-900 dark:text-white flex flex-col justify-between overflow-hidden will-change-transform",

@@ -7,7 +7,6 @@ import {
   Volume2,
   VolumeX,
   MessageSquare,
-  MessagesSquare,
   Sparkles,
   ChevronLeft,
   ChevronRight,
@@ -15,12 +14,12 @@ import {
   Building2,
   Layers,
   Award,
-  RotateCcw
+  RotateCcw,
+  ListVideo
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
-import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { motion, AnimatePresence } from "motion/react";
 
 import {
@@ -29,19 +28,6 @@ import {
   INTERVIEW_VIDEO_2_URL as VIDEO_2_URL,
 } from "../data/interviewQuestions";
 import { SparkleWithPlusDot } from "./HeroIntroButton";
-
-export interface PersonaDef {
-  id: string;
-  titleVi: string;
-  titleEn: string;
-  roleVi: string;
-  roleEn: string;
-  badgeVi: string;
-  badgeEn: string;
-  icon: string;
-  videoUrl?: string;
-  questions: typeof INTERVIEW_QUESTIONS;
-}
 
 export function Interview() {
   const { lang } = useLanguage();
@@ -53,60 +39,39 @@ export function Interview() {
   const [isVideoAudioOn, setIsVideoAudioOn] = useState(false);
   const [currentTimeSec, setCurrentTimeSec] = useState(0);
 
-  // Dynamic Persona State loaded from JSON
-  const [personas, setPersonas] = useState<PersonaDef[]>([]);
-  const [selectedPersonaId, setSelectedPersonaId] = useState<string>("executive_hr");
-  const [isLoadingPersonas, setIsLoadingPersonas] = useState<boolean>(true);
-
-  // Fetch persona-based questions from public/data/interview-personas.json
-  useEffect(() => {
-    let isMounted = true;
-    fetch("/data/interview-personas.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load interview-personas.json");
-        return res.json();
-      })
-      .then((data) => {
-        if (isMounted && data && Array.isArray(data.personas) && data.personas.length > 0) {
-          setPersonas(data.personas);
-          setIsLoadingPersonas(false);
-        }
-      })
-      .catch((err) => {
-        console.warn("Interview personas fetch fallback:", err);
-        if (isMounted) setIsLoadingPersonas(false);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const activePersona = useMemo(() => {
-    return personas.find((p) => p.id === selectedPersonaId) || personas[0] || null;
-  }, [personas, selectedPersonaId]);
-
-  const activeQuestions = useMemo(() => {
-    if (activePersona && Array.isArray(activePersona.questions) && activePersona.questions.length > 0) {
-      return activePersona.questions;
-    }
-    return INTERVIEW_QUESTIONS;
-  }, [activePersona]);
-
-  // Active Question State
+  // Active Question State (0 to 13)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  // Reset current question index when persona changes
-  const handleSelectPersona = (pId: string) => {
-    setSelectedPersonaId(pId);
-    setCurrentQuestionIndex(0);
-    if (videoRef.current && isInterviewPlaying) {
-      const p = personas.find((item) => item.id === pId);
-      const firstQ = p?.questions?.[0];
-      if (firstQ) {
-        videoRef.current.currentTime = firstQ.startSec;
-      }
+  // Category Filter State with sessionStorage persistence
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("interview_active_tab") || "all";
+    }
+    return "all";
+  });
+
+  const handleSetActiveTab = (tabKey: string) => {
+    setActiveTab(tabKey);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("interview_active_tab", tabKey);
     }
   };
+
+  const TABS = useMemo(() => [
+    { key: "all", labelVi: "Tất cả", labelEn: "All" },
+    { key: "intro", labelVi: "Định vị", labelEn: "Intro" },
+    { key: "management", labelVi: "Vận hành", labelEn: "Ops" },
+    { key: "tech", labelVi: "Công nghệ", labelEn: "Tech" },
+    { key: "strategy", labelVi: "Chiến lược", labelEn: "Strategy" },
+    { key: "inquiry", labelVi: "Chất vấn", labelEn: "Inquiry" },
+    { key: "closing", labelVi: "Lời kết", labelEn: "Closing" },
+  ], []);
+
+  // Filtered Questions list based on Category tab selection
+  const filteredQuestions = useMemo(() => {
+    if (activeTab === "all") return INTERVIEW_QUESTIONS;
+    return INTERVIEW_QUESTIONS.filter((q) => q.categoryKey === activeTab);
+  }, [activeTab]);
 
   // Sync Active Question with Video Playback Time
   useEffect(() => {
@@ -118,13 +83,13 @@ export function Interview() {
       setCurrentTimeSec(time);
 
       if (!isInterviewPlaying) return;
-      let idx = activeQuestions.findIndex(
+      let idx = INTERVIEW_QUESTIONS.findIndex(
         (q) => time >= q.startSec && time < q.endSec
       );
       if (idx === -1) {
         // Fallback: find the last question that started before current time
-        for (let i = activeQuestions.length - 1; i >= 0; i--) {
-          if (time >= activeQuestions[i].startSec) {
+        for (let i = INTERVIEW_QUESTIONS.length - 1; i >= 0; i--) {
+          if (time >= INTERVIEW_QUESTIONS[i].startSec) {
             idx = i;
             break;
           }
@@ -139,7 +104,7 @@ export function Interview() {
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [isInterviewPlaying, currentQuestionIndex, activeQuestions]);
+  }, [isInterviewPlaying, currentQuestionIndex]);
 
   // Handle video end event
   useEffect(() => {
@@ -167,8 +132,6 @@ export function Interview() {
     const video = videoRef.current;
     if (!video) return;
 
-    const targetVideoUrl = activePersona?.videoUrl || VIDEO_2_URL;
-
     if (isInterviewPlaying) {
       setIsInterviewPlaying(false);
       video.src = VIDEO_1_URL;
@@ -179,12 +142,11 @@ export function Interview() {
     } else {
       setIsInterviewPlaying(true);
       setIsVideoAudioOn(true);
-      video.src = targetVideoUrl;
+      video.src = VIDEO_2_URL;
       video.loop = false;
       video.muted = false;
       video.load();
-      const currentStartSec = activeQuestions[currentQuestionIndex]?.startSec || 0;
-      video.currentTime = currentStartSec;
+      video.currentTime = INTERVIEW_QUESTIONS[currentQuestionIndex].startSec;
       video.play().catch(() => {});
     }
   };
@@ -192,16 +154,14 @@ export function Interview() {
   // Seek video to specific question
   const handleSelectQuestion = (index: number) => {
     setCurrentQuestionIndex(index);
-    const q = activeQuestions[index] || activeQuestions[0];
+    const q = INTERVIEW_QUESTIONS[index];
     const video = videoRef.current;
     if (!video) return;
 
-    const targetVideoUrl = activePersona?.videoUrl || VIDEO_2_URL;
-
-    if (!isInterviewPlaying || video.src !== targetVideoUrl) {
+    if (!isInterviewPlaying || video.src !== VIDEO_2_URL) {
       setIsInterviewPlaying(true);
       setIsVideoAudioOn(true);
-      video.src = targetVideoUrl;
+      video.src = VIDEO_2_URL;
       video.loop = false;
       video.muted = false;
       video.load();
@@ -215,7 +175,7 @@ export function Interview() {
     }
   };
 
-  const currentQ = activeQuestions[currentQuestionIndex] || activeQuestions[0] || INTERVIEW_QUESTIONS[0];
+  const currentQ = INTERVIEW_QUESTIONS[currentQuestionIndex] || INTERVIEW_QUESTIONS[0];
 
   // Calculate current question playback progress
   const questionDuration = Math.max(1, currentQ.endSec - currentQ.startSec);
@@ -224,48 +184,33 @@ export function Interview() {
     ? Math.min(100, Math.max(0, (elapsedInQuestion / questionDuration) * 100))
     : 0;
 
-  // Helper icon for personas
-  const renderPersonaIcon = (iconName: string) => {
-    switch (iconName) {
-      case "UserCheck":
-        return <UserCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
-      case "Building2":
-        return <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
-      case "Sparkles":
-        return <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
-      case "Video":
-      default:
-        return <Video className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
-    }
-  };
-
   return (
     <section 
       id="interview" 
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] pb-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-1 h-full min-h-0 flex flex-col justify-start gap-[10px] max-w-7xl mx-auto relative z-10 overflow-hidden">
+      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-[15px] mx-auto justify-start relative z-10 pb-[15px]">
 
         {/* Header Card Phỏng vấn */}
         <PageCardHeader pageId="interview">
           <div className="flex items-center gap-2 shrink-0">
             <span className="w-2 h-4 bg-pink-600 dark:bg-pink-400 rounded-full shrink-0" />
             <span className="text-caption font-semibold font-mono text-pink-700 dark:text-pink-300 bg-pink-500/15 px-2.5 py-0.5 rounded-full border border-pink-500/30 shadow-2xs">
-              {isVi ? "Đối thoại Mô phỏng AI" : "Simulated AI Persona Interview"}
+              {isVi ? "Đối thoại Mô phỏng" : "Interactive Simulated AI Q&A"}
             </span>
           </div>
         </PageCardHeader>
 
-        {/* Optimised grid layout: Left (70% / 7 cols on lg) for Video, Right (30% / 3 cols on lg) for Active Response details - Chiều cao đến thẻ chính padding 15px */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-[15px] w-full items-stretch flex-1 min-h-0 h-full">
+        {/* Optimised grid layout: Left for Video Presentation (70%), Right for Response Details (30%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 sm:gap-5 w-full items-stretch flex-1 p-[15px] h-full min-h-[520px] lg:h-[600px] overflow-hidden rounded-2xl max-w-full">
 
-          {/* LEFT AREA: Video Player (70% / 7 columns on lg) */}
-          <div className="w-full lg:col-span-7 flex flex-col h-full min-h-0 flex-1">
+          {/* LEFT AREA: Video Presentation Screen Card (70% on Desktop) */}
+          <div className="w-full lg:col-span-7 flex flex-col h-full min-h-0">
             
-            {/* 1. Video Player Hero Card - Chiều cao đến thẻ chính padding 15px */}
+            {/* 1. Video Player Hero Card */}
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="relative w-full h-full min-h-[320px] rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col flex-1 shrink-0"
+              className="relative w-full h-full rounded-[var(--theme-radius-card,10px)] overflow-hidden border border-slate-200/80 dark:border-cyan-500/25 shadow-md hover:shadow-lg transition-all duration-300 bg-slate-950 group flex flex-col flex-1 min-h-0"
             >
               <video
                 ref={videoRef}
@@ -298,21 +243,21 @@ export function Interview() {
                 </span>
               </div>
 
-              {/* Bottom Bar: Laser Play/Pause Capsule Button */}
+              {/* Bottom Bar: Laser Play/Pause Capsule Button (Phỏng vấn mẫu) */}
               <div className="pointer-events-auto absolute right-3 sm:right-4 bottom-3 sm:bottom-4 z-20">
                 <div 
-                  className="relative inline-flex items-center justify-between rounded-full p-[2px] select-none group/container transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] w-auto max-w-fit h-[40px] sm:h-[44px] overflow-hidden shadow-[0_0_20px_rgba(78,86,246,0.5)] ring-2 ring-indigo-400/50"
+                  className="relative inline-flex items-center justify-between rounded-full p-[2px] select-none group/container transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] w-auto max-w-fit h-[40px] sm:h-[44px] overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.5)] ring-2 ring-cyan-400/50"
                 >
                   {/* Rotating Glowing Laser Beam Border */}
-                  <div className="absolute -inset-[220%] animate-[spin_4s_linear_infinite] pointer-events-none bg-[conic-gradient(from_0deg,transparent_0_200deg,#4E56F6_250deg,#F125D6_300deg,#ffffff_340deg,#4E56F6_360deg)] opacity-100" />
+                  <div className="absolute -inset-[220%] animate-[spin_4s_linear_infinite] pointer-events-none bg-[conic-gradient(from_0deg,transparent_0_200deg,#06b6d4_250deg,#3b82f6_300deg,#ffffff_340deg,#06b6d4_360deg)] opacity-100" />
 
                   {/* Subtle Animated Glowing Ring when Audio is Active */}
                   {isVideoAudioOn && isInterviewPlaying && (
-                    <div className="absolute -inset-[3px] rounded-full bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-pink-400 opacity-70 blur-xs animate-pulse pointer-events-none" />
+                    <div className="absolute -inset-[3px] rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 opacity-70 blur-xs animate-pulse pointer-events-none" />
                   )}
 
                   {/* Capsule Outer Shell */}
-                  <div className="relative z-10 inline-flex items-center justify-between w-auto max-w-fit h-full rounded-full bg-gradient-to-r from-[#4E56F6] via-[#8938F8] to-[#F125D6] px-2 py-1 gap-2 shadow-inner backdrop-blur-md">
+                  <div className="relative z-10 inline-flex items-center justify-between w-auto max-w-fit h-full rounded-full bg-gradient-to-r from-[#06b6d4] via-[#2563eb] to-[#7c3aed] px-2.5 py-1 gap-2 shadow-inner backdrop-blur-md">
                     
                     {/* Speaker Toggle Button */}
                     <button
@@ -328,7 +273,7 @@ export function Interview() {
                       className={cn(
                         "w-6.5 h-6.5 sm:w-7.5 sm:h-7.5 rounded-full flex items-center justify-center shrink-0 p-0 transition-all duration-300 cursor-pointer active:scale-95 shadow-md",
                         isVideoAudioOn 
-                          ? "bg-[#4E56F6] hover:bg-[#3b43e3] text-white shadow-[0_0_12px_rgba(78,86,246,0.9)]" 
+                          ? "bg-[#06b6d4] hover:bg-[#0891b2] text-white shadow-[0_0_12px_rgba(6,182,212,0.9)]" 
                           : "bg-[#E60026] hover:bg-red-500 text-white shadow-[0_0_12px_rgba(230,0,38,0.9)]"
                       )}
                       title={isVideoAudioOn ? (isVi ? "Tắt âm thanh" : "Mute audio") : (isVi ? "Bật âm thanh" : "Unmute audio")}
@@ -355,19 +300,19 @@ export function Interview() {
                         "text-white font-extrabold text-xs sm:text-xs tracking-wide transition-all duration-300 cursor-pointer",
                         "hover:opacity-95 active:scale-98"
                       )}
-                      title={isInterviewPlaying ? (isVi ? "Dừng" : "Pause") : (isVi ? "Phát" : "Play")}
+                      title={isInterviewPlaying ? (isVi ? "Dừng phỏng vấn" : "Pause") : (isVi ? "Phỏng vấn mẫu" : "Sample Interview")}
                     >
                       {isInterviewPlaying ? (
                         <>
                           <span className="drop-shadow-sm font-black uppercase tracking-wider text-2xs sm:text-xs truncate">
-                            {isVi ? "Dừng phát" : "Pause"}
+                            {isVi ? "Dừng phỏng vấn" : "Pause"}
                           </span>
                           <Pause className="w-3.5 h-3.5 shrink-0 fill-current text-white" />
                         </>
                       ) : (
                         <>
                           <span className="drop-shadow-sm font-black uppercase tracking-wider text-2xs sm:text-xs text-white truncate">
-                            {isVi ? "Phát phỏng vấn" : "Play Interview"}
+                            {isVi ? "Phỏng vấn mẫu" : "Sample Interview"}
                           </span>
                           <SparkleWithPlusDot className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform duration-300" />
                         </>
@@ -377,70 +322,50 @@ export function Interview() {
                 </div>
               </div>
             </div>
-
           </div>
 
-          {/* RIGHT AREA: Chi Tiết Phỏng Vấn Response Card (30% / 3 columns on lg) */}
-          <div className="w-full lg:col-span-3 flex flex-col h-full min-h-0 flex-1">
-            
-            {/* Active Response details Card - Chiều cao đến thẻ chính padding 15px */}
+          {/* RIGHT AREA: Active Response details Card (30% on Desktop, matching height) */}
+          <div className="w-full lg:col-span-3 flex flex-col h-full min-h-0">
             <div 
-              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="w-full h-full rounded-[var(--theme-radius-card,10px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4 sm:p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-4 relative min-h-[320px] flex-1 shrink-0"
+              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+              className="w-full h-full flex-1 rounded-[var(--theme-radius-card,14px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-3.5 relative overflow-hidden min-h-0"
             >
               <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-indigo-500/5 via-cyan-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
-              <div className="space-y-4 flex-1 flex flex-col min-h-0 relative z-10">
+              <div className="space-y-3 flex-1 flex flex-col min-h-0 relative z-10">
                 
-                {/* Top Bar inside Active Response */}
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0 flex-wrap gap-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                {/* Header Tiêu đề thẻ : Dòng 1 (Icon không đóng khung chuyển động + Tiêu đề 4 từ, font 15px, màu giống icon) */}
+                <div className="space-y-2 shrink-0">
+                  <div className="flex items-center gap-2">
                     <motion.div
-                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="shrink-0"
+                      animate={{ y: [0, -3, 0], scale: [1, 1.08, 1], rotate: [0, 3, -3, 0] }}
+                      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="shrink-0 flex items-center justify-center bg-transparent border-0 p-0 shadow-none"
                     >
-                      <MessagesSquare className="w-5.5 h-5.5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                      <MessageSquare className="w-5 h-5 text-indigo-600 dark:text-cyan-400 stroke-[2.3]" />
                     </motion.div>
-                    <motion.h4 
-                      animate={{ opacity: [0.92, 1, 0.92] }}
-                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                      className="text-sm sm:text-base font-black font-play tracking-tight truncate"
-                    >
-                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-cyan-300 dark:via-blue-300 dark:to-indigo-300">
-                        {isVi ? "Chi Tiết Phỏng Vấn" : "Interview Details"}
-                      </span>
-                    </motion.h4>
+                    <h3 className="text-[15px] font-bold text-indigo-600 dark:text-cyan-400 font-play tracking-tight leading-none">
+                      {isVi ? "Chi tiết câu hỏi" : "Interview response detail"}
+                    </h3>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0 ml-auto">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[11px] font-mono font-black shadow-xs tracking-wide">
-                      <span>CÂU {currentQ.stt < 10 ? `0${currentQ.stt}` : currentQ.stt}</span>
-                    </span>
-
-                    {/* Equalizer Wavelet Indicator */}
-                    <div className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-white/5 text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-cyan-500 h-3 animate-pulse" : "bg-slate-400 h-1.5")} />
-                      <span className={cn("w-1 rounded-full transition-all duration-300", isInterviewPlaying ? "bg-indigo-500 h-4.5 animate-bounce" : "bg-slate-400 h-2.5")} style={{ animationDelay: "0.1s" }} />
-                      <span className="ml-1 text-xs">
-                        {isInterviewPlaying ? (isVi ? "Đang phát" : "Playing") : (isVi ? "Đang chọn" : "Active")}
-                      </span>
-                    </div>
-
-                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wide hidden sm:inline-block">
-                      {isVi ? currentQ.categoryVi : currentQ.categoryEn}
-                    </span>
-                  </div>
+                  {/* Dòng 2 : Line có màu sắc giống icon */}
+                  <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500/20 dark:from-cyan-400 dark:via-indigo-400 dark:to-cyan-400/20 shadow-2xs" />
                 </div>
 
-                {/* Progress bar of current segment */}
-                <div className="flex items-center justify-between gap-3 px-3 py-1.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100/50 dark:border-indigo-900/30 shrink-0 text-xs font-semibold">
-                  <div className="flex items-center gap-1.5 text-indigo-700 dark:text-cyan-300 font-mono">
-                    <Clock size={12} className="text-indigo-600 dark:text-cyan-400" />
-                    <span>{currentQ.timestamp}</span>
+                {/* DÒNG CÂU 01 HIỂN THỊ CÙNG HÀNG VỚI THỜI GIAN VÀ TIẾN ĐỘ */}
+                <div className="flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100/70 dark:border-indigo-900/40 shrink-0 text-xs font-semibold">
+                  <div className="flex items-center gap-2 text-indigo-700 dark:text-cyan-300 font-mono">
+                    <span className="px-2 py-0.5 rounded-md bg-indigo-600 dark:bg-cyan-500 text-white text-[11px] font-mono font-black shadow-xs tracking-wide shrink-0">
+                      CÂU {currentQ.stt < 10 ? `0${currentQ.stt}` : currentQ.stt}
+                    </span>
+                    <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                      <Clock size={12} className="text-indigo-600 dark:text-cyan-400 shrink-0" />
+                      <span>{currentQ.timestamp}</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-1 max-w-[200px]">
+                  <div className="flex items-center gap-2 flex-1 max-w-[140px] ml-auto">
                     <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                       <div 
                         className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-200"
@@ -453,8 +378,8 @@ export function Interview() {
                   </div>
                 </div>
 
-                {/* Question & Response Dialogue bubble container */}
-                <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0 text-xs sm:text-sm">
+                {/* Question & Response Dialogue bubble container: font 15px */}
+                <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0 text-[15px]">
                   
                   {/* Asker and Question */}
                   <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
@@ -464,7 +389,7 @@ export function Interview() {
                         {isVi ? currentQ.askerVi : currentQ.askerEn}
                       </span>
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                    <h3 className="text-[15px] font-bold text-slate-900 dark:text-white leading-snug">
                       {isVi ? currentQ.questionVi : currentQ.questionEn}
                     </h3>
                   </div>
@@ -477,7 +402,7 @@ export function Interview() {
                         {isVi ? currentQ.answererVi : currentQ.answererEn}
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
+                    <p className="text-[15px] text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
                       {isVi ? currentQ.answerVi : currentQ.answerEn}
                     </p>
                   </div>
@@ -486,7 +411,7 @@ export function Interview() {
                   {currentQ.keyTakeawayVi && (
                     <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2 shrink-0">
                       <Award className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                      <div className="text-xs text-amber-950 dark:text-amber-300 font-medium leading-relaxed">
+                      <div className="text-[15px] text-amber-950 dark:text-amber-300 font-medium leading-relaxed">
                         <span className="font-bold">{isVi ? "🎯 Trọng tâm: " : "🎯 Strategic focus: "}</span>
                         {isVi ? currentQ.keyTakeawayVi : currentQ.keyTakeawayEn}
                       </div>
@@ -530,7 +455,6 @@ export function Interview() {
                 </button>
               </div>
             </div>
-
           </div>
 
         </div>

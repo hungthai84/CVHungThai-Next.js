@@ -3,7 +3,13 @@ import { Headset, X, HelpCircle } from "lucide-react";
 import { playUiSound } from "../../lib/sound";
 import { cn } from "../../lib/utils";
 
-export function CaseStudy1_1_Modal({ onClose }: { onClose: () => void }) {
+interface CaseStudy1_1_ModalProps {
+  isOpen?: boolean;
+  onClose: () => void;
+  project?: any;
+}
+
+export function CaseStudy1_1_Modal({ onClose }: CaseStudy1_1_ModalProps) {
   const [result, setResult] = useState<number | null>(null);
 
   const handleSelect = (type: number) => {
@@ -72,3 +78,6 @@ export function CaseStudy1_1_Modal({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
+
+
+export default CaseStudy1_1_Modal;

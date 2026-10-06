@@ -5,6 +5,8 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
+  ArrowLeft,
+  BookOpen,
   Check,
   Search,
   Filter,
@@ -12,8 +14,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
-import { useTheme } from "../context/ThemeContext";
-import { cn, getGlassCardClass, getUnifiedSurfaceStyle } from "../lib/utils";
+import { cn } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
 import { PROJECTS_LIST, ProjectCard } from "../data/projectsData";
@@ -35,7 +36,6 @@ const projectCardRevealVariants: any = {
 };
 
 import { ProjectArticle } from "./ProjectArticle";
-import { LazyImage } from "./LazyImage";
 
 /**
  * Keyframers 3D Tilt Card Component with Interactive Dynamic Specular Reflection
@@ -294,7 +294,6 @@ const PRESET_15_COLORS = [
 
 export default function Projects() {
   const { lang } = useLanguage();
-  const { theme: currentTheme } = useTheme();
   const isVi = lang === "vi";
 
   const [selectedCardId, setSelectedCardId] = useState<string | null>(() => {
@@ -359,16 +358,15 @@ export default function Projects() {
   const [selectedPhase, setSelectedPhase] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("projects_selected_phase");
-      if (saved && saved !== "all") return saved;
+      if (saved) return saved;
     }
-    return "Giai đoạn 1";
+    return "all";
   });
 
   useEffect(() => {
     localStorage.setItem("projects_selected_phase", selectedPhase);
   }, [selectedPhase]);
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -387,7 +385,7 @@ export default function Projects() {
   }, []);
 
   const phaseCounts = useMemo(() => {
-    const map: Record<string, number> = {};
+    const map: Record<string, number> = { all: PROJECTS_LIST.length };
     PROJECTS_LIST.forEach((card) => {
       map[card.phase] = (map[card.phase] || 0) + 1;
     });
@@ -395,27 +393,21 @@ export default function Projects() {
   }, []);
 
   const PHASE_FILTERS = useMemo(() => [
+    { id: "all", labelVi: "Tất cả dự án", labelEn: "All Projects", shortVi: "Tất cả", count: phaseCounts.all || 0 },
     { id: "Giai đoạn 1", labelVi: "GĐ 1 · Xây dựng & Vận hành CSKH", labelEn: "Phase 1 · Setup & Operations", shortVi: "Giai đoạn 1", count: phaseCounts["Giai đoạn 1"] || 0 },
     { id: "Giai đoạn 2", labelVi: "GĐ 2 · Chuẩn hóa & Tối ưu kênh", labelEn: "Phase 2 · Standardization", shortVi: "Giai đoạn 2", count: phaseCounts["Giai đoạn 2"] || 0 },
     { id: "Giai đoạn 3", labelVi: "GĐ 3 · Quản trị, Dữ liệu & AI", labelEn: "Phase 3 · Governance & AI", shortVi: "Giai đoạn 3", count: phaseCounts["Giai đoạn 3"] || 0 },
     { id: "Xuyên suốt", labelVi: "Xuyên suốt · Đào tạo & Văn hóa", labelEn: "Continuous · Training", shortVi: "Xuyên suốt", count: phaseCounts["Xuyên suốt"] || 0 },
   ], [phaseCounts]);
 
-  const selectedPhaseObj = useMemo(() => {
-    return PHASE_FILTERS.find((f) => f.id === selectedPhase) || PHASE_FILTERS[0];
-  }, [selectedPhase, PHASE_FILTERS]);
-
   const filteredProjects = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
     return PROJECTS_LIST.filter((card) => {
-      if (!q) return true;
-      const matchTitle = card.branchTitle.toLowerCase().includes(q);
-      const matchDesc = card.description.toLowerCase().includes(q);
-      const matchGroup = card.groupTitle.toLowerCase().includes(q);
-      const matchTags = card.tags?.some((t) => t.toLowerCase().includes(q));
-      return matchTitle || matchDesc || matchGroup || matchTags;
+      if (selectedPhase !== "all" && card.phase !== selectedPhase) {
+        return false;
+      }
+      return true;
     });
-  }, [searchQuery]);
+  }, [selectedPhase]);
 
   const handleCardClick = (card: ProjectCard) => {
     playUiSound("click");
@@ -429,52 +421,164 @@ export default function Projects() {
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[var(--grid-margin,15px)] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
       style={{ '--grid-margin': '15px', '--grid-gutter': '16px' } as React.CSSProperties}
     >
-      {/* Scoped CSS to format project card background for Glass Light & Dark according to active theme */}
+      {/* Scoped CSS to format project card background exactly like Education cards */}
       <style dangerouslySetInnerHTML={{
         __html: `
         .project-edu-glass-card,
         .project-card {
-          height: 100% !important;
-          display: flex !important;
-          flex-direction: column !important;
-          background: rgba(255, 255, 255, 0.76) !important;
-          box-shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
-          backdrop-filter: blur(20px) saturate(160%) !important;
-          -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-          border: 1px solid rgba(255, 255, 255, 0.8) !important;
-          border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
+          height: auto !important;
+          background: rgba(255, 255, 255, 0.78) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+          backdrop-filter: blur(24px) saturate(140%) !important;
+          -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.85) !important;
+          border-radius: var(--theme-radius-card, 14px) !important;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
         .dark .project-edu-glass-card,
-        .dark .project-card,
-        [data-theme="glass-dark-neon"] .project-card {
-          height: 100% !important;
-          display: flex !important;
-          flex-direction: column !important;
-          background: rgba(18, 18, 24, 0.65) !important;
-          box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1.5px rgba(255, 255, 255, 0.15) !important;
-          border: 1px solid rgba(255, 255, 255, 0.14) !important;
-          backdrop-filter: blur(20px) saturate(180%) !important;
-          -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-          border-radius: var(--theme-radius-card, var(--theme-radius, 10px)) !important;
+        .dark .project-card {
+          height: auto !important;
+          background: rgba(15, 23, 42, 0.82) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.2) !important;
+          border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          border-radius: var(--theme-radius-card, 14px) !important;
         }
         `
       }} />
 
-      {/* Main Container Dự án - chiều cao bằng nội dung thẻ dự án */}
-      <div className="w-full flex-grow flex flex-col gap-[15px] max-w-7xl mx-auto justify-start h-auto">
+      {/* Main Container Dự án */}
+      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-[15px] mx-auto justify-start">
         {/* Header Card Dự án */}
         <PageCardHeader 
-          pageId="projects"
+          pageId={activeCard ? undefined : "projects"}
+          title={activeCard ? activeCard.branchTitle : undefined}
+          icon={FolderKanban}
+          actionRight={
+            activeCard ? (
+              <button
+                type="button"
+                onClick={() => {
+                  playUiSound("click");
+                  setActiveCard(null);
+                }}
+                className="px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-white dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-400/40 border border-slate-700 text-xs font-bold shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 ml-auto"
+                title={isVi ? "Trở về danh sách dự án" : "Back to projects list"}
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{isVi ? "Trở về" : "Back"}</span>
+              </button>
+            ) : null
+          }
         >
-          {/* Left Side: Editorial subtitle */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="w-2 h-4 bg-teal-600 dark:bg-teal-400 rounded-full shrink-0" />
-            <span className="text-caption font-semibold font-mono text-teal-700 dark:text-teal-300 bg-teal-500/15 px-2.5 py-0.5 rounded-full border border-teal-500/30 shadow-2xs">
-              {isVi ? "Dự án & Sáng kiến" : "Featured Projects & Solutions"}
-            </span>
-          </div>
+          {/* Left Side: Editorial subtitle / Mục lục dự án */}
+          {activeCard ? (
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  playUiSound("click");
+                  const tocBtn = document.querySelector('[aria-label="Mở mục lục"], [aria-label="Đóng mục lục"]') as HTMLButtonElement;
+                  if (tocBtn) {
+                    tocBtn.click();
+                  } else {
+                    setActiveCard(null);
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-caption font-bold font-mono text-teal-700 dark:text-teal-300 bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/30 shadow-2xs transition-all cursor-pointer"
+                title={isVi ? "Mở mục lục chi tiết bài viết dự án" : "Project Table of Contents"}
+              >
+                <BookOpen className="w-3.5 h-3.5 text-teal-600 dark:text-cyan-400" />
+                <span>{isVi ? "Mục lục dự án" : "Project Index"}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-4 bg-teal-600 dark:bg-teal-400 rounded-full shrink-0" />
+              <span className="text-caption font-semibold font-mono text-teal-700 dark:text-teal-300 bg-teal-500/15 px-2.5 py-0.5 rounded-full border border-teal-500/30 shadow-2xs">
+                {isVi ? "Dự án & Sáng kiến" : "Featured Projects & Solutions"}
+              </span>
+            </div>
+          )}
+
+          {!activeCard && (
+            <div ref={filterRef} className="relative flex items-center md:ml-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  playUiSound("toggle");
+                  setIsFilterOpen((prev) => !prev);
+                }}
+                className={cn(
+                  "px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer border shadow-2xs flex items-center gap-2",
+                  selectedPhase !== "all"
+                    ? "bg-blue-600 text-white border-blue-500 shadow-xs"
+                    : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-700"
+                )}
+                title={isVi ? "Bộ lọc giai đoạn dự án" : "Filter project phases"}
+              >
+                <Filter className="w-4 h-4 stroke-[2.2] text-teal-500 dark:text-teal-400 shrink-0" />
+                <span className="font-play">
+                  {selectedPhase === "all" 
+                    ? (isVi ? "Bộ lọc dự án" : "Filter") 
+                    : (PHASE_FILTERS.find((f) => f.id === selectedPhase)?.[isVi ? "shortVi" : "labelEn"] || (isVi ? "Bộ lọc" : "Filter"))}
+                </span>
+                <span className={cn(
+                  "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
+                  selectedPhase !== "all" ? "bg-white/25 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                )}>
+                  {PHASE_FILTERS.find((f) => f.id === selectedPhase)?.count ?? PROJECTS_LIST.length}
+                </span>
+                <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", isFilterOpen && "rotate-180")} />
+              </button>
+
+              <AnimatePresence>
+                {isFilterOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-full mt-2 w-64 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-800 shadow-xl backdrop-blur-xl z-50 flex flex-col gap-1 text-left"
+                  >
+                    <div className="px-2.5 py-1 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider font-mono">
+                      {isVi ? "Chọn giai đoạn" : "Select Phase"}
+                    </div>
+                    {PHASE_FILTERS.map((f) => {
+                      const isActive = selectedPhase === f.id;
+                      return (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => {
+                            playUiSound("toggle");
+                            setSelectedPhase(f.id);
+                            setIsFilterOpen(false);
+                          }}
+                          className={cn(
+                            "w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer text-left",
+                            isActive
+                              ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 font-bold"
+                              : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                          )}
+                        >
+                          <span className="truncate">{isVi ? f.labelVi : f.labelEn}</span>
+                          <span className={cn(
+                            "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0 ml-2",
+                            isActive
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                          )}>
+                            {f.count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </PageCardHeader>
 
         {activeCard ? (
@@ -508,11 +612,11 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={() => {
-                    setSelectedPhase("Giai đoạn 1");
+                    setSelectedPhase("all");
                   }}
                   className="px-4 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-full border border-blue-200 dark:border-blue-800/60 transition-all cursor-pointer"
                 >
-                  {isVi ? "Xem giai đoạn 1" : "Show phase 1"}
+                  {isVi ? "Xem tất cả giai đoạn" : "Show all phases"}
                 </button>
               </div>
             ) : (
@@ -520,7 +624,7 @@ export default function Projects() {
                 id="card-projects-list-content"
                 className="w-full flex flex-col gap-4"
               >
-                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-stretch">
+                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-start">
                   {filteredProjects.map((card, cardIndex) => {
                     const theme = getCardColorTheme(card, cardIndex);
                     const isSelected = selectedCardId === card.id;
@@ -533,7 +637,7 @@ export default function Projects() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
-                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-full items-stretch"
+                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-auto"
                       >
                       <KeyframersTiltCard
                         role="button"
@@ -546,9 +650,9 @@ export default function Projects() {
                             handleCardClick(card);
                           }
                         }}
-                        style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}
+                        style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
                         className={cn(
-                          "card-item project-card project-edu-glass-card keyframers-tilt-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-full justify-between relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20",
+                          "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-auto relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20 rounded-[14px]",
                           theme.border,
                           theme.cardBg,
                           theme.shadow,
@@ -557,21 +661,27 @@ export default function Projects() {
                       >
 
 
-                          {/* Media Area - Framed Inside Padded Container with consistent height */}
-                          <div className="shrink-0 p-3 pb-0">
+                          {/* Media Area - Framed Inside Padded Container */}
+                          <div className={cn("shrink-0", cardIndex === 10 ? "p-2.5" : "p-3 pb-0")}>
                             <div className={cn(
-                              "project-card-media relative w-full overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300 h-[180px] sm:h-[190px]",
+                              "project-card-media relative w-full aspect-[16/9] overflow-hidden border bg-slate-100 dark:bg-slate-950 group/img transition-all duration-300",
                               isSelected ? "border-blue-400/80 dark:border-blue-500/80 shadow-inner" : "border-slate-200/80 dark:border-slate-800/80"
-                            )} style={{ borderRadius: "var(--theme-radius-card, var(--theme-radius, 10px))" }}>
-                              <LazyImage
+                            )} style={{ height: "200px", borderRadius: "14px" }}>
+                              <img
                                 src={card.image}
                                 alt={card.branchTitle}
                                 className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                                fallbackSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop"
+                                style={{ borderRadius: "14px" }}
+                                loading="lazy"
+                                decoding="async"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop";
+                                }}
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
 
-                              {/* Bento Grid Index Badge */}
+                              {/* Bento Grid Index Badge (Góc trên cùng bên trái) - Dạng hình tròn với 15 màu sắc ngẫu nhiên/chuẩn hóa */}
                               <div className={cn(
                                 "absolute top-2.5 left-2.5 z-20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border shadow-lg transition-transform duration-300 group-hover/img:scale-110",
                                 theme.badgeBg
@@ -581,9 +691,9 @@ export default function Projects() {
                                 </span>
                               </div>
 
-                              {/* Group Title Badge */}
+                              {/* Group Title Badge (Góc trên cùng bên phải) */}
                               <div className={cn(
-                                "absolute top-2.5 right-2.5 z-20 h-8 px-3 rounded-full flex items-center justify-center font-mono text-2xs font-bold backdrop-blur-md border shadow-md max-w-[200px] truncate",
+                                "absolute top-2.5 right-2.5 z-20 px-2.5 py-1 rounded-full text-3xs font-extrabold backdrop-blur-md border shadow-md max-w-[170px] truncate",
                                 theme.phaseBadge
                               )}>
                                 <span className="truncate block">
@@ -594,40 +704,22 @@ export default function Projects() {
                             </div>
                           </div>
 
-                          {/* Standardized Content Area with Color Bar Header, Description & Tags */}
-                          <div className="project-card-content p-4 flex flex-col min-w-0 text-left gap-2.5 flex-1 justify-between bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-b-[inherit]">
-                            <div className="space-y-2 flex flex-col flex-1">
-                              {/* Standardized Subcard Header with Sleek Color Bar */}
-                              <div className="w-full flex items-start gap-2.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/60 z-10">
-                                <div className={cn("w-2 h-7 sm:h-8 rounded-full shrink-0 shadow-xs transition-all duration-300 mt-0.5", theme.bar)} />
-                                <div className="flex-1 min-w-0 text-left">
-                                  <h3 className={cn("text-sm sm:text-base font-play font-bold tracking-tight line-clamp-2 min-h-[2.6rem] flex items-center leading-snug", theme.title)}>
-                                    {card.branchTitle}
-                                  </h3>
-                                </div>
+                          {/* Standardized Content Area with Color Bar Header & Description */}
+                          <div className="project-card-content p-[15px] flex flex-col min-w-0 text-left gap-2.5">
+                            {/* Standardized Subcard Header with Sleek Color Bar: 4 chữ, font 15px, màu giống icon/bar */}
+                            <div className="w-full flex items-center gap-2.5 pb-2 border-b border-slate-200/50 dark:border-slate-800/50 z-10">
+                              <div className={cn("w-2.5 h-6 rounded-full shrink-0 shadow-xs transition-all duration-300", theme.bar)} />
+                              <div className="flex-1 min-w-0 text-left">
+                                <h3 className={cn("text-[15px] font-bold tracking-tight truncate leading-snug font-play", theme.title)}>
+                                  {card.branchTitle.split(/\s+/).slice(0, 4).join(" ")}
+                                </h3>
                               </div>
-
-                              {/* Project Description Paragraph */}
-                              <p className="text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3 min-h-[3.8rem] font-normal font-play">
-                                {card.description}
-                              </p>
                             </div>
 
-                            {/* Project Tags Badge Strip pinned to bottom */}
-                            <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 mt-auto min-h-[2rem]">
-                              {card.tags && card.tags.length > 0 ? (
-                                card.tags.map((tag, tagIdx) => (
-                                  <span
-                                    key={tagIdx}
-                                    className="inline-flex items-center text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-2xs hover:bg-slate-200/80 transition-colors"
-                                  >
-                                    {tag.startsWith("#") ? tag : `#${tag}`}
-                                  </span>
-                                ))
-                              ) : (
-                                <span className="opacity-0 text-[10px]">&nbsp;</span>
-                              )}
-                            </div>
+                            {/* Project Description Paragraph: font 15px */}
+                            <p className="text-[15px] text-slate-600 dark:text-slate-300 line-clamp-2 font-normal leading-relaxed">
+                              {card.description}
+                            </p>
                           </div>
                         </KeyframersTiltCard>
                         </motion.div>

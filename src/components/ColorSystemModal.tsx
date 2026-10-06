@@ -18,6 +18,7 @@ import { useTheme, COLOR_PRESETS } from "../context/ThemeContext";
 import { useLanguage } from "../i18n";
 import PrimaryButton from "./PrimaryButton";
 import SecondaryButton from "./SecondaryButton";
+import InteractiveColorPalette from "./InteractiveColorPalette";
 
 export const ColorSystemModal: React.FC = () => {
   const { theme, setTheme, isColorModalOpen, closeColorModal, activePalette, colorPreset, setColorPreset } = useTheme();
@@ -110,7 +111,7 @@ export const ColorSystemModal: React.FC = () => {
               {/* Quick Theme Switcher */}
               <button
                 onClick={() => {
-                  setTheme(isDark ? "mritech-digital-growth" : "glass-dark-neon");
+                  setTheme(isDark ? "glass-light-multicolor" : "glass-dark-neon");
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all active:scale-95 bg-slate-100/80 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 border-slate-200 dark:border-white/15 text-slate-800 dark:text-slate-200"
                 title={isDark ? "Đổi sang Light Glass Theme" : "Đổi sang Dark Neon Glass Theme"}
@@ -334,6 +335,9 @@ export const ColorSystemModal: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Interactive 3D Color Palette Widget */}
+                <InteractiveColorPalette />
               </div>
             )}
 

@@ -1,12 +1,10 @@
-import React, { useMemo, lazy, Suspense } from "react";
+import React, { useMemo, Suspense } from "react";
 import { motion } from "motion/react";
 import { cn } from "../lib/utils";
 import { useSection } from "../context/SectionContext";
 import { useTheme } from "../context/ThemeContext";
 import { Sparkles } from "lucide-react";
-
-// Lazy load 3D banner icon component for performance code-splitting
-const BannerIcon3D = lazy(() => import("./BannerIcon3D").then((m) => ({ default: m.BannerIcon3D })));
+import { BannerIcon3D } from "./BannerIcon3D";
 
 export interface SectionHeaderProps {
   sectionId?: string;
@@ -79,7 +77,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(({
     switch (theme as any) {
       case "glass-dark-neon":
         return "bg-[#121218]/80 dark:bg-[#121218]/80 border border-white/12 text-slate-100 shadow-[0_8px_32px_0_rgba(0,0,0,0.45)] backdrop-blur-[16px] backdrop-saturate-[180%]";
-      case "mritech-digital-growth":
+      case "glass-light-multicolor":
       default:
         return "bg-white/70 dark:bg-slate-900/70 border border-white/60 dark:border-white/10 text-slate-800 dark:text-slate-100 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] backdrop-blur-[16px] backdrop-saturate-[180%]";
     }

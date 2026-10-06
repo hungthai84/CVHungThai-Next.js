@@ -579,3 +579,6 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
     </div>
   );
 }
+
+
+export default CaseStudy5_1_Tools;

@@ -7,6 +7,7 @@ export const DEFAULT_FOOTER_CONFIG: FooterConfig = {
   showWeather: true,
   showClock: true,
   showQuickNav: true,
+  showCursorControl: true,
   showSoundControl: true,
   showAIAssistant: true,
   showNextPageButton: true,

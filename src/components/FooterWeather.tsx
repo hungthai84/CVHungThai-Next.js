@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Wind,
   Droplets,
@@ -10,7 +10,9 @@ import {
   Umbrella
 } from "lucide-react";
 import GlassWeatherIcon from "./GlassWeatherIcon";
+import FlipClock from "./FlipClock";
 import { useLanguage } from "../i18n";
+import { cn } from "../lib/utils";
 
 interface WeatherData {
   city: string;
@@ -140,45 +142,70 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
     };
   }, [isOpen]);
 
-  // Fetch weather data from Open-Meteo
+  // Fetch weather data via API proxy route with fallback
   const fetchWeather = async (lat: number, lon: number, cityName: string) => {
     setIsLoading(true);
     try {
-      const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=auto`
-      );
-      if (!res.ok) throw new Error("Weather fetch failed");
-      const data = await res.json();
-      const current = data.current;
+      // First try internal Next.js API proxy to avoid CORS/network sandbox blocks
+      let current: any = null;
+      try {
+        const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.current) {
+            current = data.current;
+          }
+        }
+      } catch {
+        // Silently try direct fallback
+      }
+
+      // If internal proxy was not reachable or failed, try direct Open-Meteo
+      if (!current) {
+        try {
+          const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=auto`
+          );
+          if (res.ok) {
+            const data = await res.json();
+            current = data.current;
+          }
+        } catch {
+          // Handled below with default state
+        }
+      }
 
       const now = new Date();
+      const vnHour = (now.getUTCHours() + 7) % 24;
+      const isDayDefault = vnHour >= 6 && vnHour < 18;
       const timeStr = now.toLocaleTimeString(lang === "vi" ? "vi-VN" : "en-US", {
         hour: "2-digit",
         minute: "2-digit",
       });
 
-      setWeather({
-        city: cityName,
-        temp: Math.round(current.temperature_2m),
-        feelsLike: Math.round(current.apparent_temperature),
-        humidity: Math.round(current.relative_humidity_2m),
-        windSpeed: Math.round(current.wind_speed_10m),
-        precipitation: current.precipitation || 0,
-        weatherCode: current.weather_code,
-        isDay: current.is_day === 1,
-        time: timeStr,
-      });
-    } catch (err) {
-      console.warn("Using fallback weather data:", err);
-      // Fallback sensible default for Vietnam
-      setWeather((prev) => ({
-        ...prev,
-        city: cityName,
-        time: new Date().toLocaleTimeString(lang === "vi" ? "vi-VN" : "en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      }));
+      if (current) {
+        setWeather({
+          city: cityName,
+          temp: Math.round(current.temperature_2m ?? 30),
+          feelsLike: Math.round(current.apparent_temperature ?? current.temperature_2m ?? 32),
+          humidity: Math.round(current.relative_humidity_2m ?? 70),
+          windSpeed: Math.round(current.wind_speed_10m ?? 12),
+          precipitation: current.precipitation || 0,
+          weatherCode: current.weather_code ?? 1,
+          isDay: typeof current.is_day === "number" ? current.is_day === 1 : isDayDefault,
+          time: timeStr,
+        });
+      } else {
+        // Sensible fallback for Vietnam regions
+        setWeather((prev) => ({
+          ...prev,
+          city: cityName,
+          isDay: isDayDefault,
+          time: timeStr,
+        }));
+      }
+    } catch {
+      // Catch-all safe handling
     } finally {
       setIsLoading(false);
     }
@@ -235,51 +262,95 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
     ? (lang === "vi" ? "Vị trí" : "Live") 
     : (currentCityObj?.shortName || "TP.HCM");
 
+  const weatherCard = useMemo(() => {
+    const code = weather.weatherCode;
+    if (code === 0) {
+      return {
+        gradient: "bg-gradient-to-r from-[#17c5d9] via-[#21b7f0] to-[#2e9ef2]",
+        condition: "Sunny",
+        conditionVi: "Nắng đẹp",
+        sunAura: true,
+      };
+    }
+    if (code <= 3) {
+      return {
+        gradient: "bg-gradient-to-r from-[#29aaf4] via-[#3d8ef4] to-[#4670e8]",
+        condition: code === 1 ? "Mainly Clear" : "Cloudy",
+        conditionVi: code === 1 ? "Trời trong" : "Có mây",
+        sunAura: false,
+      };
+    }
+    if (code === 45 || code === 48) {
+      return {
+        gradient: "bg-gradient-to-r from-[#7c91b5] via-[#6f83a7] to-[#5e7194]",
+        condition: "Overcast",
+        conditionVi: "Nhiều mây",
+        sunAura: false,
+      };
+    }
+    if (code >= 51 && code <= 82) {
+      return {
+        gradient: "bg-gradient-to-r from-[#274885] via-[#1c3563] to-[#122240]",
+        condition: "Heavy Rain",
+        conditionVi: "Mưa rào",
+        sunAura: false,
+      };
+    }
+    return {
+      gradient: "bg-gradient-to-r from-[#5a2eab] via-[#6b25aa] to-[#882194]",
+      condition: "Thunder Storm",
+      conditionVi: "Dông sét",
+      sunAura: false,
+    };
+  }, [weather.weatherCode]);
+
   return (
     <div className="relative inline-flex items-center" ref={popoverRef}>
       {/* ========================================================================= */}
-      {/* COMPACT PILL / TRIGGER BUTTON */}
+      {/* GLOSSY GLASS WEATHER CARD AS IN REFERENCE ATTACHED IMAGE */}
       {/* ========================================================================= */}
       {layoutMode === "vertical" ? (
         <button
           type="button"
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-          className="group flex items-center gap-1 xs:gap-1.5 sm:gap-2.5 p-1 xs:p-1.5 sm:p-2 pr-2 xs:pr-2.5 sm:pr-4 rounded-full h-[36px] xs:h-[40px] sm:h-[44px] bg-transparent hover:bg-transparent border-0 shadow-none transition-all duration-200 active:scale-95 cursor-pointer text-left font-['Play',sans-serif] shrink-0 max-w-full"
+          onClick={() => setIsOpen(!isOpen)}
+          className={cn(
+            "relative group flex items-center gap-2 xs:gap-2.5 px-3 py-1.5 rounded-[14px] overflow-hidden text-left cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-[0_4px_16px_rgba(0,0,0,0.18)] border border-white/30 active:scale-95 shrink-0 select-none",
+            weatherCard.gradient
+          )}
+          style={{ height: "46px" }}
           title={lang === "vi" ? `Thời tiết: ${weather.temp}°C tại ${weather.city}` : `Weather: ${weather.temp}°C in ${weather.city}`}
         >
-          {/* Time & Date Block */}
-          {timeString && dateString && (
-            <div className="flex flex-col items-start px-1 xs:px-1.5 sm:px-2 py-0.5 border-r border-slate-300/50 dark:border-slate-600/50 pr-1.5 xs:pr-2 sm:pr-3 font-['Play',sans-serif] shrink-0">
-              <span className="text-[11px] xs:text-xs sm:text-sm font-bold tracking-wider text-blue-600 dark:text-blue-400 font-['Play',sans-serif] leading-tight">{timeString}</span>
-              <span className="text-[8px] xs:text-[9px] sm:text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase font-['Play',sans-serif] leading-tight">{dateString}</span>
-            </div>
-          )}
+          {/* Top glossy glass reflection highlight line */}
+          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 via-white/10 to-transparent pointer-events-none rounded-t-[14px]" />
 
-          {/* Weather Icon with 3D Glassmorphism Look */}
-          <div className="relative flex items-center justify-center pl-0.5 shrink-0">
+          {/* Left: 3D Weather Icon visual with soft aura */}
+          <div className="relative flex items-center justify-center shrink-0">
+            {weatherCard.sunAura && (
+              <div className="absolute w-8 h-8 rounded-full bg-amber-300/40 blur-md -z-10 animate-pulse" />
+            )}
             <GlassWeatherIcon 
               weatherCode={weather.weatherCode} 
               isDay={weather.isDay} 
-              className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8.5 sm:h-8.5 group-hover:scale-110 transition-transform duration-300 drop-shadow-md" 
+              className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow-md group-hover:scale-110 transition-transform duration-300" 
             />
-            {isLoading && (
-              <span className="absolute inset-0 rounded-full bg-sky-400/20 animate-ping" />
-            )}
           </div>
 
-          {/* Temperature & City pill */}
-          <div className="flex items-center gap-1 xs:gap-1.5 shrink-0">
-            <span className="text-xs xs:text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
-              {weather.temp}°C
+          {/* Center: Big Bold Temperature */}
+          <span className="text-[22px] sm:text-[24px] font-black text-white leading-none tracking-tight drop-shadow-sm font-sans shrink-0">
+            {weather.temp}°
+          </span>
+
+          {/* Right: Weather condition and Location Current Time */}
+          <div className="flex flex-col justify-center min-w-0 pr-1 text-left">
+            <span className="text-[12px] sm:text-[13px] font-bold text-white leading-tight drop-shadow-xs truncate font-sans">
+              {lang === "vi" ? weatherCard.conditionVi : weatherCard.condition}
             </span>
-            <span className="text-[10px] xs:text-2xs sm:text-xs font-bold text-slate-500 dark:text-slate-400 hidden xs:inline truncate max-w-[60px] sm:max-w-[90px]">
-              • {displayCityShort}
+            <span className="text-[9px] sm:text-[9.5px] font-medium text-white/85 leading-tight truncate whitespace-nowrap">
+              {displayCityShort} · {weather.time}
             </span>
           </div>
 
-          <ChevronDown className={`w-3 h-3 xs:w-3.5 xs:h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 ml-0.5 xs:ml-1 ${isOpen ? "rotate-180 text-blue-500" : ""}`} />
+          <ChevronDown className={`w-3.5 h-3.5 text-white/70 group-hover:text-white transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : ""}`} />
         </button>
       ) : (
         /* HORIZONTAL SIDEBAR RIGHT TRIGGER */
@@ -312,19 +383,19 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             layoutMode === "vertical" 
               ? "bottom-full left-0 mb-2.5 origin-bottom-left" 
               : "right-full top-0 mr-2.5 origin-top-right"
-          } w-[280px] sm:w-[320px] rounded-2xl sm:rounded-3xl glass-surface backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl p-4 text-slate-800 dark:text-slate-100 animate-in fade-in zoom-in-95 duration-200`}
+          } w-[280px] sm:w-[320px] rounded-2xl sm:rounded-3xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/90 dark:border-cyan-500/25 shadow-2xl dark:shadow-[0_16px_50px_rgba(0,0,0,0.8)] p-4 text-slate-800 dark:text-slate-100 animate-in fade-in zoom-in-95 duration-200`}
         >
           {/* Header: Location & Close Button */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100 dark:border-white/10">
             <div className="flex items-center gap-1.5 min-w-0">
-              <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+              <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-cyan-500/20 text-blue-600 dark:text-cyan-400">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="min-w-0">
                 <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
                   {weather.city}
                 </h4>
-                <p className="text-3xs text-slate-500 dark:text-slate-400 dark:text-slate-500 font-medium">
+                <p className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                   {lang === "vi" ? `Cập nhật lúc ${weather.time}` : `Updated at ${weather.time}`}
                 </p>
               </div>
@@ -337,7 +408,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                   const city = CITIES.find((c) => c.id === selectedCityId) || CITIES[0];
                   fetchWeather(city.lat, city.lon, customLocationName || (lang === "vi" ? city.nameVi : city.nameEn));
                 }}
-                className={`p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${isLoading ? "animate-spin text-blue-500" : ""}`}
+                className={`p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors ${isLoading ? "animate-spin text-blue-500" : ""}`}
                 title={lang === "vi" ? "Làm mới dữ liệu" : "Refresh"}
               >
                 <RefreshCw className="w-3.5 h-3.5" />
@@ -345,7 +416,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-100 dark:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
                 title={lang === "vi" ? "Đóng" : "Close"}
               >
                 <X className="w-3.5 h-3.5" />
@@ -354,7 +425,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           </div>
 
           {/* Big Temperature Hero Section */}
-          <div className="my-3 p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-slate-800/80 dark:to-slate-800/40 border border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+          <div className="my-3 p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-[#13192b] dark:to-[#0f1424] border border-slate-100 dark:border-white/10 flex items-center justify-between shadow-xs">
             <div className="space-y-0.5">
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -364,7 +435,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                   C
                 </span>
               </div>
-              <p className="text-xs font-bold text-blue-600 dark:text-blue-400">
+              <p className="text-xs font-bold text-blue-600 dark:text-cyan-400">
                 {weatherInfo.text}
               </p>
               <p className="text-3xs font-medium text-slate-500 dark:text-slate-400">
@@ -372,7 +443,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
               </p>
             </div>
 
-            <div className="p-2.5 rounded-2xl glass-surface border border-slate-200/80 dark:border-slate-700 shadow-sm flex items-center justify-center">
+            <div className="p-2.5 rounded-2xl bg-white/70 dark:bg-white/10 border border-slate-200/80 dark:border-white/15 shadow-sm flex items-center justify-center">
               <GlassWeatherIcon 
                 weatherCode={weather.weatherCode} 
                 isDay={weather.isDay} 
@@ -384,8 +455,8 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           {/* 3 Detail Metric Pills (Humidity, Wind, Precipitation) */}
           <div className="grid grid-cols-3 gap-2 mb-3">
             {/* Humidity */}
-            <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
-              <Droplets className="w-3.5 h-3.5 text-blue-500 mb-0.5" />
+            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
+              <Droplets className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-400 mb-0.5" />
               <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Độ ẩm" : "Humidity"}
               </span>
@@ -395,8 +466,8 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             </div>
 
             {/* Wind */}
-            <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
-              <Wind className="w-3.5 h-3.5 text-teal-500 mb-0.5" />
+            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
+              <Wind className="w-3.5 h-3.5 text-teal-500 dark:text-emerald-400 mb-0.5" />
               <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Gió" : "Wind"}
               </span>
@@ -406,8 +477,8 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
             </div>
 
             {/* Precipitation */}
-            <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center text-center">
-              <Umbrella className="w-3.5 h-3.5 text-cyan-500 mb-0.5" />
+            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
+              <Umbrella className="w-3.5 h-3.5 text-cyan-500 dark:text-sky-400 mb-0.5" />
               <span className="text-3xs text-slate-500 dark:text-slate-400 font-medium">
                 {lang === "vi" ? "Lượng mưa" : "Precip"}
               </span>
@@ -418,7 +489,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           </div>
 
           {/* City Selection Pills + GPS Locate Button */}
-          <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/10">
             <div className="flex items-center justify-between">
               <span className="text-3xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {lang === "vi" ? "Chọn tỉnh / thành phố" : "Select location"}
@@ -427,7 +498,7 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                 type="button"
                 onClick={handleGetLocation}
                 disabled={isLocating}
-                className="inline-flex items-center gap-1 text-3xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-3xs font-bold text-blue-600 dark:text-cyan-400 hover:underline cursor-pointer"
                 title={lang === "vi" ? "Lấy vị trí hiện tại qua GPS" : "Use GPS location"}
               >
                 <Navigation className={`w-3 h-3 ${isLocating ? "animate-spin" : ""}`} />
@@ -448,8 +519,8 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                     }}
                     className={`px-2 py-1 rounded-lg text-3xs font-bold transition-all ${
                       isSelected
-                        ? "bg-blue-600 text-white shadow-2xs"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                        ? "bg-blue-600 dark:bg-cyan-500 text-white dark:text-slate-950 shadow-2xs font-extrabold"
+                        : "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/15"
                     }`}
                   >
                     {c.shortName}

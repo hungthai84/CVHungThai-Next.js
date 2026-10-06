@@ -270,3 +270,6 @@ export function CaseStudy6_1_Mindmap({
     </section>
   );
 }
+
+
+export default CaseStudy6_1_Mindmap;

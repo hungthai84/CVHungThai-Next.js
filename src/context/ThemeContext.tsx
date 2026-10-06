@@ -1,10 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import { getSavedProductionDefaults } from "../services/systemSettingsService";
+import { USER_GRADIENTS, UserGradientItem, WEBSITE_BASE_BACKGROUND } from "../data/userGradientsData";
 
 export const THEMES = [
+  "default",
+  "flat",
+  "soft",
+  "bento",
+  "minimal",
+  "dark",
+  "soft-floating-bento",
+  "pastel-glass",
   "glass-dark-neon",
-  "mritech-digital-growth",
-  "modern-light-glass"
+  "glass-light-multicolor"
 ] as const;
 
 export type ThemeType = typeof THEMES[number];
@@ -204,366 +211,202 @@ export interface ColorGroupPreset {
 
 export const COLOR_PRESETS: ColorGroupPreset[] = [
   {
-    id: "electric-blue",
-    name: "01 🔵 Electric Blue",
-    nameVi: "01 🔵 Electric Blue",
-    descriptionVi: "#0066FF → #00C6FF | #00E5FF",
+    id: "default",
+    name: "05 ⚡ Cobalt Cyan Electric (Gradient 5 & 4)",
+    nameVi: "05 ⚡ Lam Ngọc & Xanh Coban (Gradient 5 & 4)",
+    descriptionVi: "#5583EE → #41D8DD | #6CACFF",
     light: {
-      primary: "#0066FF",
-      secondary: "#0099FF",
-      accent: "#00C6FF",
-      highlight: "#00E5FF",
-      soft: "#38BDF8",
-      primaryRgb: "0, 102, 255",
-      secondaryRgb: "0, 153, 255",
-      accentRgb: "0, 198, 255",
-      highlightRgb: "0, 229, 255",
-      softRgb: "56, 189, 248",
+      primary: "#5583EE",
+      secondary: "#41D8DD",
+      accent: "#6CACFF",
+      highlight: "#8DEBFF",
+      soft: "#ABC7FF",
+      primaryRgb: "85, 131, 238",
+      secondaryRgb: "65, 216, 221",
+      accentRgb: "108, 172, 255",
+      highlightRgb: "141, 235, 255",
+      softRgb: "171, 199, 255",
     },
     dark: {
-      primary: "#00C6FF",
-      secondary: "#0066FF",
-      accent: "#00E5FF",
-      highlight: "#38BDF8",
-      soft: "#00F5FF",
-      primaryRgb: "0, 198, 255",
-      secondaryRgb: "0, 102, 255",
-      accentRgb: "0, 229, 255",
-      highlightRgb: "56, 189, 248",
-      softRgb: "0, 245, 255",
+      primary: "#5583EE",
+      secondary: "#41D8DD",
+      accent: "#6CACFF",
+      highlight: "#8DEBFF",
+      soft: "#ABC7FF",
+      primaryRgb: "85, 131, 238",
+      secondaryRgb: "65, 216, 221",
+      accentRgb: "108, 172, 255",
+      highlightRgb: "141, 235, 255",
+      softRgb: "171, 199, 255",
     },
   },
   {
-    id: "neon-purple",
-    name: "02 🟣 Neon Purple",
-    nameVi: "02 🟣 Neon Purple",
-    descriptionVi: "#5B21FF → #B000FF | #D946EF",
+    id: "gradient-fresh-mint",
+    name: "01 🌿 Fresh Emerald & Lime (Gradient 0, 1, 2)",
+    nameVi: "01 🌿 Ngọc Lục Bảo & Vàng Chanh (Gradient 0, 1, 2)",
+    descriptionVi: "#41C7AF → #54E38E | #6DE195",
     light: {
-      primary: "#5B21FF",
-      secondary: "#7C3AED",
-      accent: "#B000FF",
-      highlight: "#D946EF",
-      soft: "#E879F9",
-      primaryRgb: "91, 33, 255",
-      secondaryRgb: "124, 58, 237",
-      accentRgb: "176, 0, 255",
-      highlightRgb: "217, 70, 239",
-      softRgb: "232, 121, 249",
+      primary: "#41C7AF",
+      secondary: "#54E38E",
+      accent: "#6DE195",
+      highlight: "#C4E759",
+      soft: "#D4FC78",
+      primaryRgb: "65, 199, 175",
+      secondaryRgb: "84, 227, 142",
+      accentRgb: "109, 225, 149",
+      highlightRgb: "196, 231, 89",
+      softRgb: "212, 252, 120",
     },
     dark: {
-      primary: "#B000FF",
-      secondary: "#5B21FF",
-      accent: "#D946EF",
-      highlight: "#A855F7",
-      soft: "#F472B6",
-      primaryRgb: "176, 0, 255",
-      secondaryRgb: "91, 33, 255",
-      accentRgb: "217, 70, 239",
-      highlightRgb: "168, 85, 247",
-      softRgb: "244, 114, 182",
+      primary: "#41C7AF",
+      secondary: "#54E38E",
+      accent: "#6DE195",
+      highlight: "#C4E759",
+      soft: "#D4FC78",
+      primaryRgb: "65, 199, 175",
+      secondaryRgb: "84, 227, 142",
+      accentRgb: "109, 225, 149",
+      highlightRgb: "196, 231, 89",
+      softRgb: "212, 252, 120",
     },
   },
   {
-    id: "cyber-pink",
-    name: "03 🩷 Cyber Pink",
-    nameVi: "03 🩷 Cyber Pink",
-    descriptionVi: "#EC008C → #FF4D6D | #FF1493",
+    id: "gradient-orchid-sunset",
+    name: "02 🌸 Orchid Lavender & Peach Sunset (Gradient 6, 7, 8)",
+    nameVi: "02 🌸 Tím Oải Hương & Hoàng Hôn Đào (Gradient 6, 7, 8)",
+    descriptionVi: "#A16BFE → #D279EE | #F8C390",
     light: {
-      primary: "#EC008C",
-      secondary: "#FF1493",
-      accent: "#FF4D6D",
-      highlight: "#FB7185",
-      soft: "#FDA4AF",
-      primaryRgb: "236, 0, 140",
-      secondaryRgb: "255, 20, 147",
-      accentRgb: "255, 77, 109",
-      highlightRgb: "251, 113, 133",
-      softRgb: "253, 164, 175",
+      primary: "#A16BFE",
+      secondary: "#D279EE",
+      accent: "#F8C390",
+      highlight: "#F78FAD",
+      soft: "#FDEB82",
+      primaryRgb: "161, 107, 254",
+      secondaryRgb: "210, 121, 238",
+      accentRgb: "248, 195, 144",
+      highlightRgb: "247, 143, 173",
+      softRgb: "253, 235, 130",
     },
     dark: {
-      primary: "#FF1493",
-      secondary: "#EC008C",
-      accent: "#FF4D6D",
-      highlight: "#FF007F",
-      soft: "#F43F5E",
-      primaryRgb: "255, 20, 147",
-      secondaryRgb: "236, 0, 140",
-      accentRgb: "255, 77, 109",
-      highlightRgb: "255, 0, 127",
-      softRgb: "244, 63, 94",
+      primary: "#A16BFE",
+      secondary: "#D279EE",
+      accent: "#F8C390",
+      highlight: "#F78FAD",
+      soft: "#FDEB82",
+      primaryRgb: "161, 107, 254",
+      secondaryRgb: "210, 121, 238",
+      accentRgb: "248, 195, 144",
+      highlightRgb: "247, 143, 173",
+      softRgb: "253, 235, 130",
     },
   },
   {
-    id: "sunset-orange",
-    name: "04 🔥 Sunset Orange",
-    nameVi: "04 🔥 Sunset Orange",
-    descriptionVi: "#FF8A00 → #FF1744 | #FF5252",
+    id: "gradient-berry-plum",
+    name: "03 🍇 Crimson Flame & Deep Berry (Gradient 9, 10, 11)",
+    nameVi: "03 🍇 Lửa Đỏ & Dâu Rừng Quý Tộc (Gradient 9, 10, 11)",
+    descriptionVi: "#BC3D2F → #A43AB2 | #E13680",
     light: {
-      primary: "#FF8A00",
-      secondary: "#FF5252",
-      accent: "#FF1744",
-      highlight: "#FB923C",
-      soft: "#FDBA74",
-      primaryRgb: "255, 138, 0",
-      secondaryRgb: "255, 82, 82",
-      accentRgb: "255, 23, 68",
-      highlightRgb: "251, 146, 60",
-      softRgb: "253, 186, 116",
+      primary: "#A43AB2",
+      secondary: "#E13680",
+      accent: "#BC3D2F",
+      highlight: "#9D2E7D",
+      soft: "#E16E93",
+      primaryRgb: "164, 58, 178",
+      secondaryRgb: "225, 54, 128",
+      accentRgb: "188, 61, 47",
+      highlightRgb: "157, 46, 125",
+      softRgb: "225, 110, 147",
     },
     dark: {
-      primary: "#FF8A00",
-      secondary: "#FF1744",
-      accent: "#FF5252",
-      highlight: "#FFA726",
-      soft: "#FF7043",
-      primaryRgb: "255, 138, 0",
-      secondaryRgb: "255, 23, 68",
-      accentRgb: "255, 82, 82",
-      highlightRgb: "255, 167, 38",
-      softRgb: "255, 112, 67",
+      primary: "#A43AB2",
+      secondary: "#E13680",
+      accent: "#BC3D2F",
+      highlight: "#9D2E7D",
+      soft: "#E16E93",
+      primaryRgb: "164, 58, 178",
+      secondaryRgb: "225, 54, 128",
+      accentRgb: "188, 61, 47",
+      highlightRgb: "157, 46, 125",
+      softRgb: "225, 110, 147",
     },
   },
   {
-    id: "neon-emerald",
-    name: "05 🟢 Neon Emerald",
-    nameVi: "05 🟢 Neon Emerald",
-    descriptionVi: "#00C853 → #00E5A0 | #00FF87",
+    id: "gradient-minimal-onyx",
+    name: "04 🌑 Charcoal Onyx & Pearl Mist (Gradient 12, 13, 14)",
+    nameVi: "04 🌑 Than Đá Onyx & Sương Ngọc Trai (Gradient 12, 13, 14)",
+    descriptionVi: "#323B42 → #121317 | #F5CCF6",
     light: {
-      primary: "#00C853",
-      secondary: "#00E5A0",
-      accent: "#059669",
-      highlight: "#00FF87",
-      soft: "#6EE7B7",
-      primaryRgb: "0, 200, 83",
-      secondaryRgb: "0, 229, 160",
-      accentRgb: "5, 150, 105",
-      highlightRgb: "0, 255, 135",
-      softRgb: "110, 231, 183",
+      primary: "#323B42",
+      secondary: "#121317",
+      accent: "#F5CCF6",
+      highlight: "#F0EFF0",
+      soft: "#FAF8F9",
+      primaryRgb: "50, 59, 66",
+      secondaryRgb: "18, 19, 23",
+      accentRgb: "245, 204, 246",
+      highlightRgb: "240, 239, 240",
+      softRgb: "250, 248, 249",
     },
     dark: {
-      primary: "#00FF87",
-      secondary: "#00E5A0",
-      accent: "#00C853",
-      highlight: "#10B981",
-      soft: "#69F0AE",
-      primaryRgb: "0, 255, 135",
-      secondaryRgb: "0, 229, 160",
-      accentRgb: "0, 200, 83",
-      highlightRgb: "16, 185, 129",
-      softRgb: "105, 240, 174",
-    },
-  },
-  {
-    id: "aqua-cyan",
-    name: "06 🩵 Aqua Cyan",
-    nameVi: "06 🩵 Aqua Cyan",
-    descriptionVi: "#00B4DB → #00F2FE | #00E5FF",
-    light: {
-      primary: "#00B4DB",
-      secondary: "#0284C7",
-      accent: "#00F2FE",
-      highlight: "#00E5FF",
-      soft: "#7DD3FC",
-      primaryRgb: "0, 180, 219",
-      secondaryRgb: "2, 132, 199",
-      accentRgb: "0, 242, 254",
-      highlightRgb: "0, 229, 255",
-      softRgb: "125, 211, 252",
-    },
-    dark: {
-      primary: "#00F2FE",
-      secondary: "#00E5FF",
-      accent: "#00B4DB",
-      highlight: "#38BDF8",
-      soft: "#00E5FF",
-      primaryRgb: "0, 242, 254",
-      secondaryRgb: "0, 229, 255",
-      accentRgb: "0, 180, 219",
-      highlightRgb: "56, 189, 248",
-      softRgb: "0, 229, 255",
-    },
-  },
-  {
-    id: "royal-indigo",
-    name: "07 💙 Royal Indigo",
-    nameVi: "07 💙 Royal Indigo",
-    descriptionVi: "#304FFE → #7C4DFF | #536DFE",
-    light: {
-      primary: "#304FFE",
-      secondary: "#536DFE",
-      accent: "#7C4DFF",
-      highlight: "#8C9EFF",
-      soft: "#B388FF",
-      primaryRgb: "48, 79, 254",
-      secondaryRgb: "83, 109, 254",
-      accentRgb: "124, 77, 255",
-      highlightRgb: "140, 158, 255",
-      softRgb: "179, 136, 255",
-    },
-    dark: {
-      primary: "#7C4DFF",
-      secondary: "#536DFE",
-      accent: "#304FFE",
-      highlight: "#651FFF",
-      soft: "#8C9EFF",
-      primaryRgb: "124, 77, 255",
-      secondaryRgb: "83, 109, 254",
-      accentRgb: "48, 79, 254",
-      highlightRgb: "101, 31, 255",
-      softRgb: "140, 158, 255",
-    },
-  },
-  {
-    id: "golden-neon",
-    name: "08 🟡 Golden Neon",
-    nameVi: "08 🟡 Golden Neon",
-    descriptionVi: "#FFB300 → #FFD600 | #FFEA00",
-    light: {
-      primary: "#FFB300",
-      secondary: "#F59E0B",
-      accent: "#FFD600",
-      highlight: "#FFEA00",
-      soft: "#FDE047",
-      primaryRgb: "255, 179, 0",
-      secondaryRgb: "245, 158, 11",
-      accentRgb: "255, 214, 0",
-      highlightRgb: "255, 234, 0",
-      softRgb: "253, 224, 71",
-    },
-    dark: {
-      primary: "#FFD600",
-      secondary: "#FFEA00",
-      accent: "#FFB300",
-      highlight: "#FFA000",
-      soft: "#FFEE58",
-      primaryRgb: "255, 214, 0",
-      secondaryRgb: "255, 234, 0",
-      accentRgb: "255, 179, 0",
-      highlightRgb: "255, 160, 0",
-      softRgb: "255, 238, 88",
-    },
-  },
-  {
-    id: "cosmic-violet",
-    name: "09 🌌 Cosmic Violet",
-    nameVi: "09 🌌 Cosmic Violet",
-    descriptionVi: "#7B2FF7 → #F107A3 | #E040FB",
-    light: {
-      primary: "#7B2FF7",
-      secondary: "#F107A3",
-      accent: "#E040FB",
-      highlight: "#D500F9",
-      soft: "#EA80FC",
-      primaryRgb: "123, 47, 247",
-      secondaryRgb: "241, 7, 163",
-      accentRgb: "224, 64, 251",
-      highlightRgb: "213, 0, 249",
-      softRgb: "234, 128, 252",
-    },
-    dark: {
-      primary: "#F107A3",
-      secondary: "#E040FB",
-      accent: "#7B2FF7",
-      highlight: "#FF4081",
-      soft: "#D500F9",
-      primaryRgb: "241, 7, 163",
-      secondaryRgb: "224, 64, 251",
-      accentRgb: "123, 47, 247",
-      highlightRgb: "255, 64, 129",
-      softRgb: "213, 0, 249",
-    },
-  },
-  {
-    id: "ocean-mint",
-    name: "10 🌊 Ocean Mint",
-    nameVi: "10 🌊 Ocean Mint",
-    descriptionVi: "#0099F7 → #00F2C3 | #00D9A5",
-    light: {
-      primary: "#0099F7",
-      secondary: "#00D9A5",
-      accent: "#00F2C3",
-      highlight: "#38BDF8",
-      soft: "#5EEAD4",
-      primaryRgb: "0, 153, 247",
-      secondaryRgb: "0, 217, 165",
-      accentRgb: "0, 242, 195",
-      highlightRgb: "56, 189, 248",
-      softRgb: "94, 234, 212",
-    },
-    dark: {
-      primary: "#00F2C3",
-      secondary: "#00D9A5",
-      accent: "#0099F7",
-      highlight: "#26A69A",
-      soft: "#80CBC4",
-      primaryRgb: "0, 242, 195",
-      secondaryRgb: "0, 217, 165",
-      accentRgb: "0, 153, 247",
-      highlightRgb: "38, 166, 154",
-      softRgb: "128, 203, 196",
-    },
-  },
-  {
-    id: "fintech-soft-ui",
-    name: "11 💳 Fintech Soft UI",
-    nameVi: "11 💳 Fintech Soft UI",
-    descriptionVi: "#304FFE → #FB923C | #F59E0B (Fintech Neumorphic)",
-    light: {
-      primary: "#2563EB",
-      secondary: "#FB923C",
-      accent: "#F59E0B",
-      highlight: "#8B5CF6",
-      soft: "#10B981",
-      primaryRgb: "37, 99, 235",
-      secondaryRgb: "251, 146, 60",
-      accentRgb: "245, 158, 11",
-      highlightRgb: "139, 92, 246",
-      softRgb: "16, 185, 129",
-    },
-    dark: {
-      primary: "#3B82F6",
-      secondary: "#FB923C",
-      accent: "#FBBF24",
-      highlight: "#A78BFA",
-      soft: "#34D399",
-      primaryRgb: "59, 130, 246",
-      secondaryRgb: "251, 146, 60",
-      accentRgb: "251, 191, 36",
-      highlightRgb: "167, 139, 250",
-      softRgb: "52, 211, 153",
-    },
-  },
-  {
-    id: "glass-soft-clay",
-    name: "12 ☁️ Glass Soft Clay",
-    nameVi: "12 ☁️ Glass Soft Clay UI",
-    descriptionVi: "#5850EC → #7C3AED | #FF8A65 (Soft Claymorphism & Glassmorphism)",
-    light: {
-      primary: "#5850EC",
-      secondary: "#7C3AED",
-      accent: "#FF8A65",
-      highlight: "#10B981",
-      soft: "#38BDF8",
-      primaryRgb: "88, 80, 236",
-      secondaryRgb: "124, 58, 237",
-      accentRgb: "255, 138, 101",
-      highlightRgb: "16, 185, 129",
-      softRgb: "56, 189, 248",
-    },
-    dark: {
-      primary: "#6366F1",
-      secondary: "#A78BFA",
-      accent: "#FF8A65",
-      highlight: "#34D399",
-      soft: "#38BDF8",
-      primaryRgb: "99, 102, 241",
-      secondaryRgb: "167, 139, 250",
-      accentRgb: "255, 138, 101",
-      highlightRgb: "52, 211, 153",
-      softRgb: "56, 189, 248",
+      primary: "#F5CCF6",
+      secondary: "#F1EEF9",
+      accent: "#FAF8F9",
+      highlight: "#323B42",
+      soft: "#121317",
+      primaryRgb: "245, 204, 246",
+      secondaryRgb: "241, 238, 249",
+      accentRgb: "250, 248, 249",
+      highlightRgb: "50, 59, 66",
+      softRgb: "18, 19, 23",
     },
   },
 ];
+
+export interface TypoCustomSizes {
+  "hero-h1": number;
+  "h1": number;
+  "h2": number;
+  "h3": number;
+  "h4": number;
+  "card-title-lg": number;
+  "card-title": number;
+  "card-subtitle": number;
+  "card-icon": number;
+  "counter": number;
+  "body": number;
+  "body-sm": number;
+  "caption": number;
+  "label": number;
+  "badge": number;
+  "navigation": number;
+  "button": number;
+  "input": number;
+  "tooltip": number;
+  "header-height": number;
+}
+
+export const DEFAULT_TYPO_SIZES: TypoCustomSizes = {
+  "hero-h1": 48,
+  "h1": 44,
+  "h2": 32,
+  "h3": 24,
+  "h4": 20,
+  "card-title-lg": 20,
+  "card-title": 20,
+  "card-subtitle": 15,
+  "card-icon": 20,
+  "counter": 36,
+  "body": 16,
+  "body-sm": 14,
+  "caption": 13,
+  "label": 13,
+  "badge": 12,
+  "navigation": 15,
+  "button": 15,
+  "input": 15,
+  "tooltip": 13,
+  "header-height": 64,
+};
 
 export interface ThemeContextType {
   fontScale: number;
@@ -575,6 +418,10 @@ export interface ThemeContextType {
   borderRadiusCard: number;
   setBorderRadiusCard: (radius: number) => void;
   resetBorderRadiusCard: () => void;
+  typoSizes: TypoCustomSizes;
+  updateTypoSizes: (sizes: TypoCustomSizes) => void;
+  resetTypoSizes: () => void;
+  applyTypoSizesToDom: (sizes: TypoCustomSizes) => void;
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
   themeMode: ThemeMode;
@@ -582,6 +429,8 @@ export interface ThemeContextType {
   resolvedTheme: "light" | "dark";
   colorPreset: string;
   setColorPreset: (presetId: string) => void;
+  activeUserGradient: number | null;
+  applyUserGradient: (gradientId: number) => void;
   activePalette: ColorTokenItem[];
   buttonForeground: string;
   checkContrast: (bgHex: string) => {
@@ -603,6 +452,11 @@ export interface ThemeContextType {
   setIsTypographyModalOpen: (open: boolean) => void;
   openTypographyModal: () => void;
   closeTypographyModal: () => void;
+  isThemeModalOpen: boolean;
+  setIsThemeModalOpen: (open: boolean) => void;
+  openThemeModal: () => void;
+  closeThemeModal: () => void;
+  resetTheme: () => void;
 }
 
 /**
@@ -683,11 +537,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [themeSnapshot, setThemeSnapshot] = useState<string | null>(null);
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
   const [isTypographyModalOpen, setIsTypographyModalOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
 
   const openColorModal = () => setIsColorModalOpen(true);
   const closeColorModal = () => setIsColorModalOpen(false);
   const openTypographyModal = () => setIsTypographyModalOpen(true);
   const closeTypographyModal = () => setIsTypographyModalOpen(false);
+  const openThemeModal = () => setIsThemeModalOpen(true);
+  const closeThemeModal = () => setIsThemeModalOpen(false);
 
   // 1. Theme Mode State (light | dark | system)
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
@@ -696,64 +553,88 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
         return savedMode;
       }
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.themeMode) return prodDefaults.themeMode;
     } catch {}
     return "system";
   });
 
   const getResolvedThemeName = (mode: ThemeMode): ThemeType => {
-    if (mode === "dark") return "glass-dark-neon";
-    if (mode === "light") return "mritech-digital-growth";
+    if (mode === "dark") return "dark";
+    if (mode === "light") return "default";
     // System Mode: Detect OS preference
     if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "glass-dark-neon";
+      return "dark";
     }
-    return "mritech-digital-growth";
+    return "default";
   };
 
   // 2. Theme State
   const [theme, setThemeState] = useState<ThemeType>(() => {
     try {
-      if (typeof localStorage !== 'undefined') {
-        const savedMode = localStorage.getItem(THEME_MODE_STORAGE_KEY);
-        if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
-          return getResolvedThemeName(savedMode as ThemeMode);
-        }
-        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        if (savedTheme && (THEMES as readonly string[]).includes(savedTheme)) {
-          return savedTheme as ThemeType;
-        }
-        const prodDefaults = getSavedProductionDefaults();
-        if (prodDefaults?.theme && (THEMES as readonly string[]).includes(prodDefaults.theme)) {
-          return prodDefaults.theme;
-        }
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_STORAGE_KEY) : null;
+      if (saved && (THEMES as readonly string[]).includes(saved)) {
+        return saved as ThemeType;
       }
     } catch {}
-    return getResolvedThemeName("system");
+    return "glass-light-multicolor";
   });
 
   // 3. Color Preset State
   const [colorPreset, setColorPresetState] = useState<string>(() => {
     try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null;
-      if (saved) return saved;
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.colorPreset) return prodDefaults.colorPreset;
-    } catch {}
-    return "default";
+      return (typeof localStorage !== 'undefined' ? localStorage.getItem(COLOR_PRESET_STORAGE_KEY) : null) || "default";
+    } catch {
+      return "default";
+    }
   });
+
+  // Active User Gradient State (0 to 14)
+  const [activeUserGradient, setActiveUserGradient] = useState<number | null>(() => {
+    try {
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_user_gradient") : null;
+      return saved !== null ? Number(saved) : 5; // Default gradient 5 (Cobalt / Cyan)
+    } catch {
+      return 5;
+    }
+  });
+
+  const applyUserGradient = (gradientId: number) => {
+    const item = USER_GRADIENTS.find((g) => g.id === gradientId);
+    if (!item) return;
+    setActiveUserGradient(gradientId);
+    try {
+      localStorage.setItem("portfolio_user_gradient", gradientId.toString());
+    } catch {}
+
+    if (typeof document !== "undefined") {
+      const root = document.documentElement;
+      root.style.setProperty("--color-primary", item.start);
+      root.style.setProperty("--color-secondary", item.end);
+      root.style.setProperty("--gradient-start", item.start);
+      root.style.setProperty("--gradient-end", item.end);
+      root.style.setProperty("--gradient-active", `linear-gradient(${item.angle}deg, ${item.start}, ${item.end})`);
+
+      const pRgb = parseInt(item.start.slice(1, 3), 16) + ", " + parseInt(item.start.slice(3, 5), 16) + ", " + parseInt(item.start.slice(5, 7), 16);
+      const sRgb = parseInt(item.end.slice(1, 3), 16) + ", " + parseInt(item.end.slice(3, 5), 16) + ", " + parseInt(item.end.slice(5, 7), 16);
+      root.style.setProperty("--color-primary-rgb", pRgb);
+      root.style.setProperty("--color-secondary-rgb", sRgb);
+
+      const contrast = getAutoContrastForeground(item.start);
+      root.style.setProperty("--color-primary-foreground", contrast.fgColor);
+      root.style.setProperty("--primary-foreground", contrast.fgColor);
+    }
+  };
+
+  useEffect(() => {
+    if (activeUserGradient !== null) {
+      applyUserGradient(activeUserGradient);
+    }
+  }, []);
 
   // 4. Font Scale & Border Radius State
   const [fontScale, setFontScaleState] = useState<number>(() => {
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_font_scale") : null;
-      if (saved && !isNaN(Number(saved))) {
-        const n = Number(saved);
-        return n <= 2 ? Math.round(n * 100) : n;
-      }
-      const prodDefaults = getSavedProductionDefaults();
-      if (prodDefaults?.fontScale) return prodDefaults.fontScale;
+      if (saved && !isNaN(Number(saved))) return Number(saved);
     } catch {}
     return 100;
   });
@@ -762,84 +643,101 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
-      const prodDefaults = getSavedProductionDefaults();
-      if (typeof prodDefaults?.borderRadius === "number") return prodDefaults.borderRadius;
     } catch {}
-    return 10;
+    return 20;
   });
 
   const [borderRadiusCard, setBorderRadiusCardState] = useState<number>(() => {
     try {
       const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius_card") : null;
       if (saved && !isNaN(Number(saved))) return Number(saved);
-      const prodDefaults = getSavedProductionDefaults();
-      if (typeof prodDefaults?.borderRadiusCard === "number") return prodDefaults.borderRadiusCard;
     } catch {}
-    return 14; // Default card radius is 14px
+    return 20; // Official Design System card radius is 20px
+  });
+
+  const [typoSizes, setTypoSizesState] = useState<TypoCustomSizes>(() => {
+    try {
+      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_typo_sizes") : null;
+      if (saved) {
+        return { ...DEFAULT_TYPO_SIZES, ...JSON.parse(saved) };
+      }
+    } catch {}
+    return DEFAULT_TYPO_SIZES;
   });
 
   // DOM mutation helpers
   const applyRadiusToDom = (radius: number, cardRadius: number) => {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
-      root.style.setProperty("--theme-radius", `${radius}px`);
-      root.style.setProperty("--theme-radius-card", `${cardRadius}px`);
-      root.style.setProperty("--theme-radius-container", `${cardRadius}px`);
-      root.style.setProperty("--theme-radius-modal", `${Math.min(32, cardRadius + 4)}px`);
-      root.style.setProperty("--theme-radius-inner", `${Math.max(2, cardRadius - 4)}px`);
-      root.style.setProperty("--theme-radius-button", `${Math.max(6, radius)}px`);
-      root.style.setProperty("--theme-radius-input", `${Math.max(6, radius)}px`);
-      root.style.setProperty("--theme-radius-badge", `${Math.max(4, radius - 4)}px`);
+      const targetCardRadius = cardRadius || 20;
+      const targetCompRadius = radius || 20;
+
+      root.style.setProperty("--theme-radius", `${targetCompRadius}px`);
+      root.style.setProperty("--theme-radius-card", `${targetCardRadius}px`);
+      root.style.setProperty("--theme-radius-container", `${targetCardRadius}px`);
+      root.style.setProperty("--theme-radius-modal", `${targetCardRadius}px`);
+      root.style.setProperty("--theme-radius-inner", `${Math.max(4, targetCardRadius - 4)}px`);
+      root.style.setProperty("--theme-radius-button", "10px");
+      root.style.setProperty("--theme-radius-input", "10px");
+      root.style.setProperty("--theme-radius-badge", "999px");
+      root.style.setProperty("--theme-radius-pill", "999px");
       
-      root.style.setProperty("--theme-radius-xs", `${Math.max(2, radius - 8)}px`);
-      root.style.setProperty("--theme-radius-sm", `${Math.max(2, radius - 6)}px`);
-      root.style.setProperty("--theme-radius-md", `${Math.max(4, radius - 4)}px`);
-      root.style.setProperty("--theme-radius-lg", `${Math.max(4, radius - 2)}px`);
-      root.style.setProperty("--theme-radius-xl", `${radius}px`);
-      root.style.setProperty("--theme-radius-2xl", `${radius}px`);
-      root.style.setProperty("--theme-radius-3xl", `${Math.min(36, radius + 4)}px`);
+      root.style.setProperty("--theme-radius-xs", "4px");
+      root.style.setProperty("--theme-radius-sm", "6px");
+      root.style.setProperty("--theme-radius-md", "10px");
+      root.style.setProperty("--theme-radius-lg", "16px");
+      root.style.setProperty("--theme-radius-xl", `${targetCompRadius}px`);
+      root.style.setProperty("--theme-radius-2xl", `${targetCompRadius}px`);
+      root.style.setProperty("--theme-radius-3xl", "24px");
 
-      root.style.setProperty("--radius", `${radius}px`);
-      root.style.setProperty("--radius-xs", `${Math.max(2, radius - 8)}px`);
-      root.style.setProperty("--radius-sm", `${Math.max(2, radius - 6)}px`);
-      root.style.setProperty("--radius-md", `${Math.max(4, radius - 4)}px`);
-      root.style.setProperty("--radius-lg", `${Math.max(4, radius - 2)}px`);
-      root.style.setProperty("--radius-xl", `${radius}px`);
-      root.style.setProperty("--radius-2xl", `${radius}px`);
-      root.style.setProperty("--radius-3xl", `${Math.min(36, radius + 4)}px`);
-      root.style.setProperty("--radius-4xl", `${Math.min(40, radius + 6)}px`);
+      root.style.setProperty("--radius", `${targetCompRadius}px`);
+      root.style.setProperty("--radius-xs", "4px");
+      root.style.setProperty("--radius-sm", "6px");
+      root.style.setProperty("--radius-md", "10px");
+      root.style.setProperty("--radius-lg", "16px");
+      root.style.setProperty("--radius-xl", `${targetCompRadius}px`);
+      root.style.setProperty("--radius-2xl", `${targetCompRadius}px`);
+      root.style.setProperty("--radius-3xl", "24px");
+      root.style.setProperty("--radius-4xl", "28px");
 
-      root.style.setProperty("--radius-card", `${cardRadius}px`);
-      root.style.setProperty("--radius-button", `${Math.max(6, radius)}px`);
-      root.style.setProperty("--radius-small-card", `${Math.max(4, cardRadius - 2)}px`);
-      root.style.setProperty("--radius-hero-card", `${Math.min(32, cardRadius + 4)}px`);
-      root.style.setProperty("--radius-modal", `${Math.min(32, cardRadius + 4)}px`);
-      root.style.setProperty("--icon-radius", `${Math.max(6, radius)}px`);
+      root.style.setProperty("--card-padding", "20px");
+      root.style.setProperty("--card-gap", "16px");
+      root.style.setProperty("--card-radius", `${targetCardRadius}px`);
+      root.style.setProperty("--radius-card", `${targetCardRadius}px`);
+      root.style.setProperty("--radius-button", "10px");
+      root.style.setProperty("--radius-input", "10px");
+      root.style.setProperty("--radius-small-card", `${targetCardRadius}px`);
+      root.style.setProperty("--radius-hero-card", "24px");
+      root.style.setProperty("--radius-modal", `${targetCardRadius}px`);
+      root.style.setProperty("--icon-radius", "10px");
+      root.style.setProperty("--radius-pill", "999px");
+
+      root.style.setProperty("--control-height", "40px");
+      root.style.setProperty("--button-height", "40px");
+      root.style.setProperty("--input-height", "40px");
+      root.style.setProperty("--select-height", "40px");
+      root.style.setProperty("--page-padding-desktop", "32px");
+      root.style.setProperty("--page-padding-mobile", "16px");
     }
   };
 
   const applyThemeToDOM = (themeName: ThemeType) => {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
-    root.classList.remove(
-      "dark", 
-      "theme-light", 
-      "theme-dark",
-      "theme-glass-dark-neon",
-      "theme-modern-light-glass",
-      "theme-mritech-aurora-glass",
-      "theme-mritech-digital-growth",
-      "theme-fintech-soft-glass",
-      "theme-glass-soft-clay",
-      "theme-true-dark-high-contrast",
-      "theme-flat-light",
-      "theme-flat-dark"
-    );
     
+    // Cleanly strip all previous theme classes (e.g. theme-*, dark)
+    Array.from(root.classList).forEach((cls) => {
+      if (cls === "dark" || cls.startsWith("theme-")) {
+        root.classList.remove(cls);
+      }
+    });
+    
+    root.dataset.theme = themeName;
     root.setAttribute("data-theme", themeName);
     root.setAttribute("data-theme-mode", themeMode);
     
-    if (themeName === "glass-dark-neon") {
+    const isDarkTheme = themeName === "dark" || themeName === "glass-dark-neon" || themeMode === "dark";
+    if (isDarkTheme) {
       root.classList.add("dark", `theme-${themeName}`);
     } else {
       root.classList.add(`theme-${themeName}`);
@@ -850,9 +748,27 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
 
-    const preset = COLOR_PRESETS.find((p) => p.id === presetId) || COLOR_PRESETS[0];
-    const isDark = themeName === "glass-dark-neon";
-    const colors = isDark ? preset.dark : preset.light;
+    if (themeName === "soft-floating-bento" && presetId === "default") {
+      root.style.setProperty("--primary", "#5865E8");
+      root.style.setProperty("--primary-hover", "#4853cc");
+      root.style.setProperty("--color-primary", "#5865E8");
+      root.style.setProperty("--color-secondary", "#7C5CDB");
+      root.style.setProperty("--color-accent", "#39BFC5");
+      root.style.setProperty("--color-highlight", "#4D8EF7");
+      root.style.setProperty("--color-soft", "#D778E8");
+      root.style.setProperty("--color-primary-rgb", "88, 101, 232");
+      root.style.setProperty("--color-secondary-rgb", "124, 92, 219");
+      root.style.setProperty("--color-accent-rgb", "57, 191, 197");
+      root.style.setProperty("--color-primary-foreground", "#ffffff");
+      root.style.setProperty("--theme-primary-foreground", "#ffffff");
+      root.style.setProperty("--primary-foreground", "#ffffff");
+      return;
+    }
+
+    const selectedPreset = COLOR_PRESETS.find((p) => p.id === presetId) || COLOR_PRESETS[0];
+      
+    const isDark = themeName === "dark" || themeName === "glass-dark-neon";
+    const colors = isDark ? selectedPreset.dark : selectedPreset.light;
 
     root.style.setProperty("--primary", colors.primary);
     root.style.setProperty("--primary-hover", `${colors.primary}e6`);
@@ -930,52 +846,34 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setTheme = async (newTheme: ThemeType) => {
-    if (newTheme === theme) return;
-
     setIsThemeTransitioning(true);
-
-    const snapshotUrl = await captureSnapshot();
-    if (snapshotUrl) {
-      setThemeSnapshot(snapshotUrl);
-    }
-
-    const executeThemeChange = () => {
+    safeStartViewTransition(() => {
       setThemeState(newTheme);
-      applyThemeToDOM(newTheme);
-      applyColorsToDOM(newTheme, colorPreset);
-
       try {
         localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-        localStorage.setItem("theme", newTheme);
-        localStorage.setItem(OLD_THEME_PREF_KEY, newTheme);
-      } catch (e) {
-        console.error("Failed to save theme preference", e);
-      }
-    };
-
-    safeStartViewTransition(executeThemeChange);
-
+      } catch {}
+      applyThemeToDOM(newTheme);
+      applyColorsToDOM(newTheme, colorPreset);
+    });
     setTimeout(() => {
       setIsThemeTransitioning(false);
-      setThemeSnapshot(null);
     }, 450);
+  };
+
+  const resetTheme = () => {
+    setTheme("glass-light-multicolor");
   };
 
   const setColorPreset = (presetId: string) => {
     setColorPresetState(presetId);
     try {
       localStorage.setItem(COLOR_PRESET_STORAGE_KEY, presetId);
-    } catch (e) {
-      console.error("Failed to save color preset", e);
-    }
+    } catch {}
     applyColorsToDOM(theme, presetId);
   };
 
-  const handleSetColorPreset = (presetId: string) => {
-    if (presetId === colorPreset) return;
-    safeStartViewTransition(() => {
-      setColorPreset(presetId);
-    });
+  const handleSetColorPreset = async (presetId: string) => {
+    setColorPreset(presetId);
   };
 
   const setThemeMode = async (mode: ThemeMode) => {
@@ -984,12 +882,17 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
     } catch {}
 
-    const resolved = getResolvedThemeName(mode);
-    if (resolved !== theme) {
-      await setTheme(resolved);
+    if (mode === "dark") {
+      setTheme("glass-dark-neon");
+    } else if (mode === "light") {
+      setTheme("glass-light-multicolor");
     } else {
-      applyThemeToDOM(resolved);
-      applyColorsToDOM(resolved, colorPreset);
+      // system
+      if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setTheme("glass-dark-neon");
+      } else {
+        setTheme("glass-light-multicolor");
+      }
     }
   };
 
@@ -1003,7 +906,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const resetBorderRadius = () => {
-    setBorderRadius(10);
+    setBorderRadius(14);
   };
 
   const setBorderRadiusCard = (radius: number) => {
@@ -1020,8 +923,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setFontScale = (scale: number) => {
-    const normalized = scale <= 2 ? Math.round(scale * 100) : scale;
-    const clamped = Math.max(80, Math.min(130, normalized));
+    const clamped = Math.max(80, Math.min(130, scale));
     setFontScaleState(clamped);
     try {
       localStorage.setItem("portfolio_font_scale", clamped.toString());
@@ -1031,38 +933,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } catch {}
   };
 
-  // Synchronize when system defaults are saved or updated
-  useEffect(() => {
-    const handleDefaultsUpdated = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (!detail) return;
-      if (detail.themeMode) setThemeModeState(detail.themeMode);
-      if (detail.theme) {
-        setThemeState(detail.theme);
-        applyThemeToDOM(detail.theme);
-      }
-      if (detail.colorPreset) {
-        setColorPresetState(detail.colorPreset);
-        applyColorsToDOM(detail.theme || theme, detail.colorPreset);
-      }
-      if (typeof detail.fontScale === "number") {
-        const sc = detail.fontScale <= 2 ? Math.round(detail.fontScale * 100) : detail.fontScale;
-        setFontScaleState(sc);
-        if (typeof document !== "undefined") {
-          document.documentElement.style.fontSize = `${16 * (sc / 100)}px`;
-        }
-      }
-      if (typeof detail.borderRadius === "number" && typeof detail.borderRadiusCard === "number") {
-        setBorderRadiusState(detail.borderRadius);
-        setBorderRadiusCardState(detail.borderRadiusCard);
-        applyRadiusToDom(detail.borderRadius, detail.borderRadiusCard);
-      }
-    };
-
-    window.addEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
-    return () => window.removeEventListener("thai_portfolio_defaults_updated", handleDefaultsUpdated);
-  }, [theme]);
-
   const resetFontScale = () => {
     setFontScale(100);
     if (typeof document !== 'undefined') {
@@ -1070,11 +940,48 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const resolvedTheme: "light" | "dark" = theme === "glass-dark-neon" ? "dark" : "light";
+  const applyTypoSizesToDom = (sizes: TypoCustomSizes) => {
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      root.style.setProperty("--font-size-display", `${sizes["hero-h1"]}px`);
+      root.style.setProperty("--font-size-h1", `${sizes["h1"]}px`);
+      root.style.setProperty("--font-size-h2", `${sizes["h2"]}px`);
+      root.style.setProperty("--font-size-h3", `${sizes["h3"]}px`);
+      root.style.setProperty("--font-size-h4", `${sizes["h4"]}px`);
+      root.style.setProperty("--font-size-h5", `${sizes["card-title-lg"]}px`);
+      root.style.setProperty("--font-size-card-title", `${sizes["card-title"]}px`);
+      root.style.setProperty("--font-size-h7", `${sizes["card-subtitle"]}px`);
+      root.style.setProperty("--font-size-icon", `${sizes["card-icon"]}px`);
+      root.style.setProperty("--font-size-stat", `${sizes["counter"]}px`);
+      root.style.setProperty("--font-size-body", `${sizes["body"]}px`);
+      root.style.setProperty("--font-size-body-sm", `${sizes["body-sm"]}px`);
+      root.style.setProperty("--font-size-caption", `${sizes["caption"]}px`);
+      root.style.setProperty("--font-size-label", `${sizes["label"]}px`);
+      root.style.setProperty("--font-size-3xs", `${sizes["badge"]}px`);
+      root.style.setProperty("--font-size-nav", `${sizes["navigation"]}px`);
+      root.style.setProperty("--font-size-button", `${sizes["button"]}px`);
+      root.style.setProperty("--font-size-input", `${sizes["input"]}px`);
+      root.style.setProperty("--font-size-tooltip", `${sizes["tooltip"]}px`);
+      root.style.setProperty("--header-height", `${sizes["header-height"]}px`);
+      root.style.setProperty("--footer-height", `${sizes["header-height"]}px`);
+    }
+  };
 
-  // Active color token list calculation
-  const selectedPresetObj = COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0];
-  const isDark = theme === "glass-dark-neon";
+  const updateTypoSizes = (newSizes: TypoCustomSizes) => {
+    setTypoSizesState(newSizes);
+    try {
+      localStorage.setItem("portfolio_typo_sizes", JSON.stringify(newSizes));
+    } catch {}
+    applyTypoSizesToDom(newSizes);
+  };
+
+  const resetTypoSizes = () => {
+    updateTypoSizes(DEFAULT_TYPO_SIZES);
+  };
+
+  const isDark = theme === "glass-dark-neon" || theme === "dark" || themeMode === "dark";
+  const resolvedTheme: "light" | "dark" = isDark ? "dark" : "light";
+  const selectedPresetObj = (COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0]);
   const activeColorSet = isDark ? selectedPresetObj.dark : selectedPresetObj.light;
   const currentPrimaryContrast = getAutoContrastForeground(activeColorSet.primary);
 
@@ -1168,12 +1075,16 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [theme, colorPreset]);
 
   useEffect(() => {
+    applyTypoSizesToDom(typoSizes);
+  }, [typoSizes]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = () => {
       if (themeMode === "system") {
-        const newResolvedTheme = mediaQuery.matches ? "glass-dark-neon" : "mritech-digital-growth";
+        const newResolvedTheme = mediaQuery.matches ? "glass-dark-neon" : "glass-light-multicolor";
         setThemeState(newResolvedTheme);
         applyThemeToDOM(newResolvedTheme);
         applyColorsToDOM(newResolvedTheme, colorPreset);
@@ -1219,8 +1130,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       borderRadiusCard,
       setBorderRadiusCard,
       resetBorderRadiusCard,
+      typoSizes,
+      updateTypoSizes,
+      resetTypoSizes,
+      applyTypoSizesToDom,
       colorPreset,
       setColorPreset: handleSetColorPreset,
+      activeUserGradient,
+      applyUserGradient,
       activePalette,
       buttonForeground: currentPrimaryContrast.fgColor,
       checkContrast: getAutoContrastForeground,
@@ -1236,7 +1153,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       isTypographyModalOpen,
       setIsTypographyModalOpen,
       openTypographyModal,
-      closeTypographyModal
+      closeTypographyModal,
+      isThemeModalOpen,
+      setIsThemeModalOpen,
+      openThemeModal,
+      closeThemeModal,
+      resetTheme
     }}>
       {children}
     </ThemeContext.Provider>
@@ -1247,7 +1169,7 @@ export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     return {
-      theme: "mritech-digital-growth",
+      theme: "default",
       setTheme: () => {},
       themeMode: "system",
       setThemeMode: () => {},
@@ -1255,12 +1177,16 @@ export const useTheme = (): ThemeContextType => {
       fontScale: 100,
       setFontScale: () => {},
       resetFontScale: () => {},
-      borderRadius: 10,
+      borderRadius: 14,
       setBorderRadius: () => {},
       resetBorderRadius: () => {},
       borderRadiusCard: 14,
       setBorderRadiusCard: () => {},
       resetBorderRadiusCard: () => {},
+      typoSizes: DEFAULT_TYPO_SIZES,
+      updateTypoSizes: () => {},
+      resetTypoSizes: () => {},
+      applyTypoSizesToDom: () => {},
       isThemeTransitioning: false,
       themeSnapshot: null,
       isApplyingTheme: false,
@@ -1274,8 +1200,15 @@ export const useTheme = (): ThemeContextType => {
       setIsTypographyModalOpen: () => {},
       openTypographyModal: () => {},
       closeTypographyModal: () => {},
+      isThemeModalOpen: false,
+      setIsThemeModalOpen: () => {},
+      openThemeModal: () => {},
+      closeThemeModal: () => {},
+      resetTheme: () => {},
       colorPreset: "default",
       setColorPreset: () => {},
+      activeUserGradient: 5,
+      applyUserGradient: () => {},
       activePalette: LIGHT_GLASS_PALETTE,
       buttonForeground: "#ffffff",
       checkContrast: getAutoContrastForeground

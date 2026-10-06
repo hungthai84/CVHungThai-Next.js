@@ -7,6 +7,7 @@ export interface WallpaperCategory {
 }
 
 export const WALLPAPER_CATEGORIES: WallpaperCategory[] = [
+  { id: "all", labelVi: "Tất cả hình nền", labelEn: "All Wallpapers" },
   { id: "css", labelVi: "Mã CSS Shader", labelEn: "CSS & Shaders" },
   { id: "codepen", labelVi: "CodePen Live", labelEn: "CodePen Interactive" },
   { id: "video", labelVi: "Video Chuyển động", labelEn: "Live Motion Videos" },
@@ -119,12 +120,37 @@ background-size: 80px 40px;`
     code: `background: radial-gradient(circle at 30% 30%, #312e81 0%, transparent 45%),
 radial-gradient(circle at 70% 70%, #4c1d95 0%, transparent 50%),
 radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);`
+  },
+  {
+    name: "15 Gradients Soft Ambient (#ECEFFC)",
+    category: "css",
+    code: `background-color: #ECEFFC;
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+background-image: 
+  radial-gradient(circle at 10% 20%, rgba(85, 131, 238, 0.16) 0%, transparent 40%),
+  radial-gradient(circle at 90% 25%, rgba(65, 216, 221, 0.16) 0%, transparent 45%),
+  radial-gradient(circle at 50% 85%, rgba(161, 107, 254, 0.14) 0%, transparent 50%),
+  radial-gradient(circle at 20% 80%, rgba(247, 143, 173, 0.12) 0%, transparent 45%),
+  linear-gradient(33deg, rgba(109, 225, 149, 0.08), rgba(196, 231, 89, 0.08));`
   }
 ];
 
 // Permanent default wallpapers data list
 // All links checked & updated with durable high-res CDN images and HTML5 MP4 videos
 export const PERMANENT_WALLPAPERS_DATA: BackgroundItem[] = [
+  {
+    id: "canvas-luminous-orbs-particles",
+    name: "Luminous Orbs Particles (Canvas Animated 5-Color)",
+    url: "canvas://floating-particles",
+    previewUrl: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=400",
+    type: "floating-particles",
+    category: "css",
+    isCustom: false,
+    tags: ["canvas", "particles", "neon", "animated", "orbs", "luminous", "cyberpunk"],
+  },
   {
     id: "css-bryce-4color-gradient",
     name: "Cực quang Bryce 4 Màu (CodePen Animated)",

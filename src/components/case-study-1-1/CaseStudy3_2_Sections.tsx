@@ -434,3 +434,6 @@ export function CaseStudy3_2_Sections({ project }: { project: ProjectCard }) {
     </div>
   );
 }
+
+
+export default CaseStudy3_2_Sections;

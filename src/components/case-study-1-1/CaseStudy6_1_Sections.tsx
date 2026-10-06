@@ -440,3 +440,6 @@ export function CaseStudy6_1_Sections({ project: _project }: { project: ProjectC
     </div>
   );
 }
+
+
+export default CaseStudy6_1_Sections;

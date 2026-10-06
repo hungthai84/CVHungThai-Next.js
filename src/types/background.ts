@@ -1,4 +1,4 @@
-export type BackgroundType = 'image' | 'video' | 'gradient' | 'beach' | 'animated-gradient' | 'css' | 'codepen';
+export type BackgroundType = 'image' | 'video' | 'gradient' | 'beach' | 'animated-gradient' | 'css' | 'codepen' | 'floating-particles';
 
 export interface BackgroundItem {
   id: string;

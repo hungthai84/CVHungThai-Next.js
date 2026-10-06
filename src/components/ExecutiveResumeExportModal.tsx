@@ -162,7 +162,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
                   <div className="border-l-2 border-indigo-500 pl-3">
                     <div className="flex justify-between items-center text-xs font-bold text-slate-900">
                       <span>GIÁM ĐỐC ĐIỀU HÀNH VẬN HÀNH (COO / HEAD OF BPO)</span>
-                      <span className="text-indigo-600 font-mono">2021 - 2024</span>
+                      <span className="text-indigo-600 font-mono">2021 - 2026</span>
                     </div>
                     <p className="text-xs text-slate-600 font-medium">BPO & CSKH Enterprise Solutions</p>
                     <p className="text-2xs text-slate-600 mt-1 leading-relaxed">

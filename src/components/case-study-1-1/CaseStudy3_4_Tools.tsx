@@ -449,3 +449,6 @@ Bước 3: Nếu ngân hàng đã trừ tiền nhưng cổng chưa ghi nhận: G
     </div>
   );
 }
+
+
+export default CaseStudy3_4_Tools;

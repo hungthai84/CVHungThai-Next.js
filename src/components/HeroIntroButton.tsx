@@ -1,5 +1,4 @@
 import React from "react";
-import AppIcon from "./AppIcon";
 import { cn } from "../lib/utils";
 
 interface HeroIntroButtonProps {
@@ -270,7 +269,15 @@ export const HeroIntroButton: React.FC<HeroIntroButtonProps> = ({
                 {isVi ? "Dừng Lời Chào" : "Stop Intro"}
               </span>
               <div className="animate-spin text-white shrink-0 flex items-center justify-center">
-                <AppIcon name="rotate-ccw" size={14} ariaLabel="Stop intro" />
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                >
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                </svg>
               </div>
             </>
           ) : (

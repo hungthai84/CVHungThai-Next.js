@@ -100,11 +100,11 @@ export const ABOUT_PROFILE_STATS: ProfileStatBadge[] = [
 
 export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
-    id: "gender_ethnicity",
-    labelVi: "Giới tính / Dân tộc",
-    labelEn: "Gender / Ethnicity",
-    valueVi: "Nam giới / Kinh",
-    valueEn: "Male / Kinh",
+    id: "gender",
+    labelVi: "Giới tính",
+    labelEn: "Gender",
+    valueVi: "Nam giới",
+    valueEn: "Male",
     iconName: "User",
     type: "text",
     colorTheme: {
@@ -118,9 +118,27 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
     }
   },
   {
+    id: "ethnicity",
+    labelVi: "Dân tộc",
+    labelEn: "Ethnicity",
+    valueVi: "Kinh",
+    valueEn: "Kinh",
+    iconName: "Users",
+    type: "text",
+    colorTheme: {
+      bg: "bg-indigo-50/40 dark:bg-indigo-950/20",
+      border: "border-indigo-100/80 dark:border-indigo-900/45 hover:border-indigo-300",
+      iconBg: "bg-indigo-500/15 border-indigo-400/30",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
+      labelColor: "text-indigo-500",
+      valueColor: "text-indigo-900 dark:text-indigo-300",
+      arrowColor: "text-indigo-400"
+    }
+  },
+  {
     id: "marital_status",
-    labelVi: "Tình trạng hôn nhân",
-    labelEn: "Marital Status",
+    labelVi: "Tình trạng",
+    labelEn: "Status",
     valueVi: "Độc thân",
     valueEn: "Single",
     iconName: "Heart",
@@ -138,9 +156,9 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
     id: "dob",
     labelVi: "Sinh nhật",
-    labelEn: "Date of Birth",
-    valueVi: "22/06/1984 (Giáp Tý - Mệnh Hải Trung Kim, Cung Đoài Kim)",
-    valueEn: "June 22, 1984 (Wood Rat - Sea Metal, Dui Kim)",
+    labelEn: "Date of birth",
+    valueVi: "22/06/1984",
+    valueEn: "22/06/1984",
     iconName: "Calendar",
     type: "text",
     colorTheme: {
@@ -156,14 +174,14 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   {
     id: "temp_address",
     labelVi: "Tạm trú",
-    labelEn: "Current Residence",
-    valueVi: "Quận 7, TP. Hồ Chí Minh",
-    valueEn: "District 7, Ho Chi Minh City",
+    labelEn: "Residence",
+    valueVi: "Q7, Hồ Chí Minh",
+    valueEn: "District 7, HCMC",
     iconName: "MapPin",
     type: "map",
     mapTitle: "Địa Chỉ Tạm Trú",
-    mapQuery: "Quận 7, TP. Hồ Chí Minh",
-    href: "Quận 7, TP. Hồ Chí Minh",
+    mapQuery: "Chung Cư Tân Mỹ, Quận 7, TP Hồ Chí Minh",
+    href: "Chung Cư Tân Mỹ, Q7, TP. Hồ Chí Minh",
     colorTheme: {
       bg: "bg-purple-50/40 dark:bg-purple-950/20",
       border: "border-purple-100/80 dark:border-purple-900/45 hover:border-purple-400",
@@ -176,15 +194,15 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "perm_address",
-    labelVi: "Cư trú gốc",
+    labelVi: "Cư trú",
     labelEn: "Hometown",
-    valueVi: "TP. Mỹ Tho, Tỉnh Tiền Giang",
-    valueEn: "My Tho City, Tien Giang Province",
+    valueVi: "Mỹ Tho, Tiền Giang",
+    valueEn: "My Tho, Tien Giang",
     iconName: "Home",
     type: "map",
-    mapTitle: "Địa Chỉ Cư Trú Gốc",
-    mapQuery: "TP. Mỹ Tho, Tỉnh Tiền Giang",
-    href: "TP. Mỹ Tho, Tỉnh Tiền Giang",
+    mapTitle: "Địa Chỉ Cư Trú",
+    mapQuery: "7D7 Hoàng Hoa Thám, Phường Mỹ Tho, Tỉnh Đồng Tháp",
+    href: "7D7 Hoàng Hoa Thám, Phường Mỹ Tho, Tỉnh Đồng Tháp",
     colorTheme: {
       bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
       border: "border-emerald-100/80 dark:border-emerald-900/45 hover:border-emerald-400",
@@ -197,8 +215,8 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "email",
-    labelVi: "Email liên hệ chính thức",
-    labelEn: "Official Email",
+    labelVi: "Email",
+    labelEn: "Email",
     valueVi: "hungthai84@gmail.com",
     valueEn: "hungthai84@gmail.com",
     iconName: "Mail",
@@ -216,13 +234,13 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "phone",
-    labelVi: "Điện thoại & Zalo",
-    labelEn: "Phone & Zalo",
-    valueVi: "+84 0909097882",
-    valueEn: "+84 0909097882",
+    labelVi: "Điện thoại / Zalo",
+    labelEn: "Phone / Zalo",
+    valueVi: "0909097882",
+    valueEn: "0909097882",
     iconName: "Phone",
     type: "phone",
-    href: "https://zalo.me/0909097882",
+    href: "tel:0909097882",
     colorTheme: {
       bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
       border: "border-emerald-100/80 dark:border-emerald-900/45 hover:border-emerald-300",
@@ -234,28 +252,9 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
     }
   },
   {
-    id: "website_portfolio",
-    labelVi: "Website Portfolio Netlify",
-    labelEn: "Portfolio Netlify",
-    valueVi: "nguyenhungthaiportfolio.netlify.app",
-    valueEn: "nguyenhungthaiportfolio.netlify.app",
-    iconName: "Globe",
-    type: "link",
-    href: "https://nguyenhungthaiportfolio.netlify.app/",
-    colorTheme: {
-      bg: "bg-teal-50/40 dark:bg-teal-950/20",
-      border: "border-teal-100/80 dark:border-teal-900/45 hover:border-teal-300",
-      iconBg: "bg-teal-500/15 border-teal-400/30",
-      iconColor: "text-teal-600 dark:text-teal-400",
-      labelColor: "text-teal-500",
-      valueColor: "text-teal-900 dark:text-teal-300",
-      arrowColor: "text-teal-400"
-    }
-  },
-  {
-    id: "website_official",
-    labelVi: "Website chính thức",
-    labelEn: "Official Website",
+    id: "website",
+    labelVi: "Website",
+    labelEn: "Website",
     valueVi: "nguyenhungthai.powerservice.one",
     valueEn: "nguyenhungthai.powerservice.one",
     iconName: "Globe",
@@ -273,8 +272,8 @@ export const PERSONAL_DEMOGRAPHICS: PersonalInfoItem[] = [
   },
   {
     id: "linkedin",
-    labelVi: "LinkedIn Profile",
-    labelEn: "LinkedIn Profile",
+    labelVi: "LinkedIn",
+    labelEn: "LinkedIn",
     valueVi: "linkedin.com/in/hungthai84",
     valueEn: "linkedin.com/in/hungthai84",
     iconName: "Linkedin",
@@ -331,5 +330,188 @@ export const SERVICE_PHILOSOPHY_VALUES: ServicePhilosophyValue[] = [
     badgeText: "text-emerald-500",
     titleColor: "text-emerald-700 dark:text-emerald-300",
     borderClass: "border-emerald-100/50 dark:border-emerald-900/40"
+  }
+];
+
+export const EXECUTIVE_COMPETENCIES: PersonalInfoItem[] = [
+  {
+    id: "role_target",
+    labelVi: "Chức danh",
+    labelEn: "Position",
+    valueVi: "Trưởng phòng CSKH & CX",
+    valueEn: "Customer Service & CX Manager",
+    iconName: "User",
+    type: "text",
+    colorTheme: {
+      bg: "bg-blue-50/40 dark:bg-blue-950/20",
+      border: "border-blue-100/80 dark:border-blue-900/45 hover:border-blue-300",
+      iconBg: "bg-blue-500/15 border-blue-400/30",
+      iconColor: "text-blue-600 dark:text-cyan-400",
+      labelColor: "text-blue-500",
+      valueColor: "text-blue-900 dark:text-cyan-300",
+      arrowColor: "text-blue-400"
+    }
+  },
+  {
+    id: "experience_years",
+    labelVi: "Kinh nghiệm",
+    labelEn: "Experience",
+    valueVi: "22+ Năm vận hành CSKH",
+    valueEn: "22+ Years CX Operations",
+    iconName: "Calendar",
+    type: "text",
+    colorTheme: {
+      bg: "bg-indigo-50/40 dark:bg-indigo-950/20",
+      border: "border-indigo-100/80 dark:border-indigo-900/45 hover:border-indigo-300",
+      iconBg: "bg-indigo-500/15 border-indigo-400/30",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
+      labelColor: "text-indigo-500",
+      valueColor: "text-indigo-900 dark:text-indigo-300",
+      arrowColor: "text-indigo-400"
+    }
+  },
+  {
+    id: "team_management",
+    labelVi: "Quy mô đội ngũ",
+    labelEn: "Team Scale",
+    valueVi: "Tuyển dụng & Đào tạo 100+",
+    valueEn: "Recruited & Trained 100+",
+    iconName: "Users",
+    type: "text",
+    colorTheme: {
+      bg: "bg-purple-50/40 dark:bg-purple-950/20",
+      border: "border-purple-100/80 dark:border-purple-900/45 hover:border-purple-300",
+      iconBg: "bg-purple-500/15 border-purple-400/30",
+      iconColor: "text-purple-600 dark:text-purple-400",
+      labelColor: "text-purple-500",
+      valueColor: "text-purple-900 dark:text-purple-300",
+      arrowColor: "text-purple-400"
+    }
+  },
+  {
+    id: "quality_csat",
+    labelVi: "Chỉ số chất lượng",
+    labelEn: "Quality Index",
+    valueVi: "CSAT >= 98%, FCR >= 85%",
+    valueEn: "CSAT >= 98%, FCR >= 85%",
+    iconName: "Heart",
+    type: "text",
+    colorTheme: {
+      bg: "bg-rose-50/40 dark:bg-rose-950/20",
+      border: "border-rose-100/80 dark:border-rose-900/45 hover:border-rose-300",
+      iconBg: "bg-rose-500/15 border-rose-400/30",
+      iconColor: "text-rose-600 dark:text-rose-400",
+      labelColor: "text-rose-500",
+      valueColor: "text-rose-900 dark:text-rose-300",
+      arrowColor: "text-rose-400"
+    }
+  },
+  {
+    id: "system_crm",
+    labelVi: "Trọng tâm hệ thống",
+    labelEn: "System Focus",
+    valueVi: "Omnichannel, CRM, AI Bot",
+    valueEn: "Omnichannel, CRM, AI Bot",
+    iconName: "Home",
+    type: "text",
+    colorTheme: {
+      bg: "bg-sky-50/40 dark:bg-sky-950/20",
+      border: "border-sky-100/80 dark:border-sky-900/45 hover:border-sky-300",
+      iconBg: "bg-sky-500/15 border-sky-400/30",
+      iconColor: "text-sky-600 dark:text-cyan-400",
+      labelColor: "text-sky-500",
+      valueColor: "text-sky-900 dark:text-cyan-300",
+      arrowColor: "text-sky-400"
+    }
+  },
+  {
+    id: "domain_fields",
+    labelVi: "Lĩnh vực nổi bật",
+    labelEn: "Key Domains",
+    valueVi: "Fintech, E-commerce, Telecom",
+    valueEn: "Fintech, E-commerce, Telecom",
+    iconName: "Globe",
+    type: "text",
+    colorTheme: {
+      bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
+      border: "border-emerald-100/80 dark:border-emerald-900/45 hover:border-emerald-300",
+      iconBg: "bg-emerald-500/15 border-emerald-400/30",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
+      labelColor: "text-emerald-500",
+      valueColor: "text-emerald-900 dark:text-emerald-300",
+      arrowColor: "text-emerald-400"
+    }
+  },
+  {
+    id: "working_lang",
+    labelVi: "Ngôn ngữ",
+    labelEn: "Languages",
+    valueVi: "Tiếng Việt & Tiếng Anh",
+    valueEn: "Vietnamese & English",
+    iconName: "Linkedin",
+    type: "text",
+    colorTheme: {
+      bg: "bg-amber-50/40 dark:bg-amber-950/20",
+      border: "border-amber-100/80 dark:border-amber-900/45 hover:border-amber-300",
+      iconBg: "bg-amber-500/15 border-amber-400/30",
+      iconColor: "text-amber-600 dark:text-amber-400",
+      labelColor: "text-amber-500",
+      valueColor: "text-amber-900 dark:text-amber-300",
+      arrowColor: "text-amber-400"
+    }
+  },
+  {
+    id: "culture_service",
+    labelVi: "Văn hóa dịch vụ",
+    labelEn: "Service Culture",
+    valueVi: "Thấu cảm & Chuẩn mực SOP",
+    valueEn: "Empathy & SOP Standard",
+    iconName: "Mail",
+    type: "text",
+    colorTheme: {
+      bg: "bg-purple-50/40 dark:bg-purple-950/20",
+      border: "border-purple-100/80 dark:border-purple-900/45 hover:border-purple-300",
+      iconBg: "bg-purple-500/15 border-purple-400/30",
+      iconColor: "text-purple-600 dark:text-purple-400",
+      labelColor: "text-purple-500",
+      valueColor: "text-purple-900 dark:text-purple-300",
+      arrowColor: "text-purple-400"
+    }
+  },
+  {
+    id: "key_companies",
+    labelVi: "Tập đoàn lớn",
+    labelEn: "Major Brands",
+    valueVi: "MobiFone, Shopee, MoMo",
+    valueEn: "MobiFone, Shopee, MoMo",
+    iconName: "MapPin",
+    type: "text",
+    colorTheme: {
+      bg: "bg-blue-50/40 dark:bg-blue-950/20",
+      border: "border-blue-100/80 dark:border-blue-900/45 hover:border-blue-300",
+      iconBg: "bg-blue-500/15 border-blue-400/30",
+      iconColor: "text-blue-600 dark:text-cyan-400",
+      labelColor: "text-blue-500",
+      valueColor: "text-blue-900 dark:text-cyan-300",
+      arrowColor: "text-blue-400"
+    }
+  },
+  {
+    id: "leadership_philosophy",
+    labelVi: "Triết lý quản trị",
+    labelEn: "Management Philosophy",
+    valueVi: "Thấu hiểu, Hiệu quả, Bền vững",
+    valueEn: "Insight, Efficiency, Growth",
+    iconName: "Phone",
+    type: "text",
+    colorTheme: {
+      bg: "bg-indigo-50/40 dark:bg-indigo-950/20",
+      border: "border-indigo-100/80 dark:border-indigo-900/45 hover:border-indigo-300",
+      iconBg: "bg-indigo-500/15 border-indigo-400/30",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
+      labelColor: "text-indigo-500",
+      valueColor: "text-indigo-900 dark:text-indigo-300",
+      arrowColor: "text-indigo-400"
+    }
   }
 ];

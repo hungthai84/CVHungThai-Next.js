@@ -1,0 +1,577 @@
+:root {
+  /* ========================================================
+     SINGLE SOURCE OF TRUTH DESIGN SYSTEM TOKENS
+     ======================================================== */
+  --font-body: 16px;
+  --font-body-sm: clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem);
+  --font-h6: clamp(0.9375rem, 0.2vw + 0.875rem, 1rem);
+  --font-h5: clamp(1rem, 0.25vw + 0.9375rem, 1.125rem);
+  --font-card-title: 20px;
+  --font-h3: 24px;
+  --font-h2: 32px;
+  --font-h1: clamp(40px, 4vw, 48px);
+  --font-h1-min: 40px;
+  --font-h1-max: 48px;
+
+  --font-button: 15px;
+  --font-input: 15px;
+  --font-caption: 13px;
+  --font-label: 13px;
+  --font-badge: 12px;
+
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+
+  --control-height: 40px;
+  --button-height: 40px;
+  --input-height: 40px;
+  --select-height: 40px;
+
+  --card-padding: 20px;
+  --card-gap: 16px;
+  --card-radius: 20px;
+  --theme-radius-card: 20px;
+  --theme-radius: 20px;
+  --radius-card: 20px;
+  --radius-button: 10px;
+  --theme-radius-button: 10px;
+  --radius-input: 10px;
+  --theme-radius-input: 10px;
+  --radius-pill: 999px;
+  --theme-radius-pill: 999px;
+  --font-icon-sm: 16px;
+  --font-icon-md: 20px;
+  --font-icon-lg: 24px;
+
+  --page-padding-desktop: 32px;
+  --page-padding-mobile: 16px;
+
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --gap-lg: 16px;
+  --gap-xl: 20px;
+  --gap-2xl: 24px;
+  --gap-3xl: 32px;
+  --gap-4xl: 40px;
+  --gap-5xl: 48px;
+
+  --grid-margin: 32px;
+  --grid-gutter: 16px;
+
+  /* Default Visual Design Tokens - Powered by User Color Palette */
+  --color-primary: #5583EE;
+  --color-secondary: #41D8DD;
+  --color-accent: #6CACFF;
+  --color-background: #ECEFFC;
+  --color-surface: rgba(255, 255, 255, 0.7);
+  --color-surface-secondary: rgba(241, 245, 249, 0.8);
+  --color-text: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-border: rgba(255, 255, 255, 0.6);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 2px 8px rgba(31, 38, 135, 0.06);
+  --shadow-md: 0 8px 32px rgba(31, 38, 135, 0.08);
+  --shadow-lg: 0 16px 48px rgba(31, 38, 135, 0.12);
+
+  /* 3 CẤP GLASS UI DESIGN SYSTEM */
+  --glass-main-opacity: 0.24;
+  --glass-main-blur: 34px;
+  --glass-parent-opacity: 0.48;
+  --glass-parent-blur: 24px;
+  --glass-child-opacity: 0.72;
+  --glass-child-blur: 16px;
+
+  --spacing-unit: 4px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+
+  /* Responsive Columns for Layout System */
+  --columns: 12;
+}
+
+/* 3 CẤP GLASS CLASSES */
+.glass-main {
+  background: rgba(255, 255, 255, var(--glass-main-opacity, 0.24)) !important;
+  backdrop-filter: blur(var(--glass-main-blur, 34px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-main-blur, 34px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.dark .glass-main {
+  background: rgba(11, 19, 43, var(--glass-main-opacity, 0.24)) !important;
+  backdrop-filter: blur(var(--glass-main-blur, 34px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-main-blur, 34px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.glass-parent {
+  background: rgba(255, 255, 255, var(--glass-parent-opacity, 0.48)) !important;
+  backdrop-filter: blur(var(--glass-parent-blur, 24px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-parent-blur, 24px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+}
+
+.dark .glass-parent {
+  background: rgba(11, 19, 43, var(--glass-parent-opacity, 0.48)) !important;
+  backdrop-filter: blur(var(--glass-parent-blur, 24px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-parent-blur, 24px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+.glass-child {
+  background: rgba(255, 255, 255, var(--glass-child-opacity, 0.72)) !important;
+  backdrop-filter: blur(var(--glass-child-blur, 16px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-child-blur, 16px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark .glass-child {
+  background: rgba(11, 19, 43, var(--glass-child-opacity, 0.72)) !important;
+  backdrop-filter: blur(var(--glass-child-blur, 16px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-child-blur, 16px)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Bento Section Card Duplicate */
+.bento-section-card-duplicate {
+  padding: 20px !important;
+  gap: 16px !important;
+  border-radius: 20px !important;
+  margin-bottom: 15px !important;
+}
+
+/* CodeFronts CSS Liquid Glass Navbar (nb-10) */
+.nb-10__bar {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  padding: 5px !important;
+  border-radius: var(--theme-radius-card, 9999px);
+  isolation: isolate;
+  background: color-mix(in oklab, white 14%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 20px 44px -22px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  transition: border-radius 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              backdrop-filter 300ms ease,
+              background-color 300ms ease,
+              border-color 300ms ease,
+              box-shadow 300ms ease;
+}
+
+.dark .nb-10__bar {
+  background: color-mix(in oklab, rgba(15, 23, 42, 0.6) 85%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 20px 44px -22px rgba(0, 0, 0, 0.8);
+}
+
+.nb-10__pill {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: calc(var(--theme-radius-card, 9999px) - 4px);
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 1;
+  transition: left 0.5s cubic-bezier(0.34, 1.56, 0.5, 1),
+              width 0.5s cubic-bezier(0.34, 1.56, 0.5, 1),
+              border-radius 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.dark .nb-10__pill {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.nb-10__link {
+  position: relative;
+  z-index: 2;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease-in-out;
+}
+
+.nb-10__link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-10__pill {
+    transition: none !important;
+  }
+}
+
+/* UNIFIED INTERACTION STATES FOR HEADER MENU ICONS & NAVIGATION (Normal, Hover, Focus, Active, Pressed, Disabled) */
+.header-nav-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  border-radius: 9999px;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: var(--nav-text-color, currentColor);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none !important;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  /* Smooth 200ms GPU-friendly transition avoiding layout shifts */
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, background-color;
+  transform: translateZ(0);
+}
+
+.dark .header-nav-btn {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+}
+
+/* 1. HOVER STATE: Glass background, icon scale 1.05, accent color & soft glow, 200ms transition */
+.header-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: var(--theme-primary, #00B8D9) !important;
+}
+
+.dark .header-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  color: var(--theme-primary, #00F5FF) !important;
+}
+
+.header-nav-btn:hover .header-nav-icon {
+  transform: scale(1.05) !important;
+  filter: drop-shadow(0 0 6px var(--theme-primary, rgba(6, 182, 212, 0.4))) !important;
+}
+
+/* 2. ACTIVE / SELECTED STATE: Clearer glass background, 1px accent border, filled/vibrant icon, 100% text opacity/weight, soft glow, 3px indicator on left */
+.header-nav-btn.header-nav-btn-active,
+.header-nav-btn[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.32) !important;
+  border: 1px solid var(--theme-primary, #00B8D9) !important;
+  box-shadow: 0 0 15px var(--theme-primary, rgba(6, 182, 212, 0.25)), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  color: var(--theme-primary, #00B8D9) !important;
+}
+
+.header-nav-btn.header-nav-btn-active .header-nav-icon,
+.header-nav-btn[aria-selected="true"] .header-nav-icon {
+  color: var(--theme-primary, #00B8D9) !important;
+  filter: drop-shadow(0 0 8px var(--theme-primary, rgba(6, 182, 212, 0.5))) !important;
+}
+
+.header-nav-btn.header-nav-btn-active::before,
+.header-nav-btn[aria-selected="true"]::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 5px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 3px !important;
+  height: 12px !important;
+  background: var(--theme-primary, #00B8D9) !important;
+  border-radius: 99px !important;
+  box-shadow: 0 0 8px var(--theme-primary, #00B8D9) !important;
+  opacity: 1 !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark .header-nav-btn.header-nav-btn-active,
+.dark .header-nav-btn[aria-selected="true"] {
+  background: rgba(15, 23, 42, 0.45) !important;
+  border: 1px solid var(--theme-primary, #00F5FF) !important;
+  box-shadow: 0 0 18px var(--theme-primary, rgba(34, 211, 238, 0.3)), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  color: var(--theme-primary, #00F5FF) !important;
+}
+
+.dark .header-nav-btn.header-nav-btn-active .header-nav-icon,
+.dark .header-nav-btn[aria-selected="true"] .header-nav-icon {
+  color: var(--theme-primary, #00F5FF) !important;
+  filter: drop-shadow(0 0 8px var(--theme-primary, rgba(34, 211, 238, 0.5))) !important;
+}
+
+.dark .header-nav-btn.header-nav-btn-active::before,
+.dark .header-nav-btn[aria-selected="true"]::before {
+  background: var(--theme-primary, #00F5FF) !important;
+  box-shadow: 0 0 8px var(--theme-primary, #00F5FF) !important;
+}
+
+/* 3. FOCUS STATE: Soft ring accent */
+.header-nav-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--theme-primary, #00B8D9), 0 0 12px var(--theme-primary, rgba(6, 182, 212, 0.4)) !important;
+}
+
+/* 4. PRESSED STATE: Scale 0.96 */
+.header-nav-btn:active {
+  transform: scale(0.96) translateZ(0);
+}
+
+/* 5. DISABLED STATE: Opacity 0.4, cursor-not-allowed */
+.header-nav-btn:disabled,
+.header-nav-btn[aria-disabled="true"] {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+/* Icon transition inside nav btn */
+.header-nav-icon {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              filter 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, filter;
+}
+
+/* Header menu container: padding 5px and full-width at all breakpoints */
+.header-nav-container {
+  padding: 5px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 0% !important;
+}
+
+.header-nav-list {
+  padding: 5px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* RESPONSIVE MENU ICON HEADER RULES (WAI-ARIA & CodeFronts Liquid Glass Compatible):
+   1. Small Screens (< 768px, e.g. 375x667 px): Hide center nav completely. Menu icons are moved into the "Danh mục" dropdown button.
+   2. Medium/Tablet Screens (768px to 1105px, e.g. 768x1024 px): Show icon-only by default. When the page is active/selected, show both icon and title label.
+   3. Large/Laptop Screens (>= 1106px, e.g. 1106x785 px, 1646x881 px): Show BOTH icon and title label for all items.
+*/
+
+/* 1. Small Screens (< 768px) */
+@media screen and (max-width: 767px) {
+  #nb-10-bar, .nb-10__bar {
+    display: flex !important;
+    overflow-x: auto !important;
+  }
+}
+
+/* 2. Medium/Tablet Screens (768px to 1105px) */
+@media screen and (min-width: 768px) and (max-width: 1105px) {
+  .header-nav-label {
+    display: none !important;
+  }
+  /* Show label only when active / selected */
+  .header-nav-btn.header-nav-btn-active .header-nav-label,
+  .header-nav-btn[aria-selected="true"] .header-nav-label {
+    display: inline-block !important;
+  }
+  .header-nav-list {
+    display: flex !important;
+    justify-content: space-evenly !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  .header-nav-btn {
+    border-radius: 999px !important;
+    padding: 5px 12px 5px 12px !important; /* Fixed padding to prevent layout shifts */
+  }
+  /* When label is shown in active item, give it left indicator padding space */
+  .header-nav-btn.header-nav-btn-active,
+  .header-nav-btn[aria-selected="true"] {
+    padding: 5px 12px 5px 18px !important;
+  }
+}
+
+/* 3. Large/Laptop Screens (>= 1106px) */
+@media screen and (min-width: 1106px) {
+  .header-nav-label {
+    display: inline-block !important;
+  }
+  .header-nav-list {
+    display: flex !important;
+    justify-content: space-evenly !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  .header-nav-btn {
+    border-radius: 999px !important;
+    padding: 5px 14px 5px 14px !important; /* Fixed padding to prevent layout shifts */
+  }
+  /* When active, add left-padding space for indicator */
+  .header-nav-btn.header-nav-btn-active,
+  .header-nav-btn[aria-selected="true"] {
+    padding: 5px 14px 5px 20px !important;
+  }
+}
+
+/* ========================================================
+   RESPONSIVE DEVICE BREAKPOINT SYSTEM (CSS VIEWPORT WIDTH)
+   ======================================================== */
+
+/* 1. Large Desktop (≥1440px) */
+@media screen and (min-width: 1440px) {
+  :root {
+    --grid-margin: 32px;
+    --card-padding: 24px;
+    --card-gap: 20px;
+    --columns: 12;
+  }
+}
+
+/* 2. Desktop / Laptop (1107px - 1439px) */
+@media screen and (min-width: 1107px) and (max-width: 1439px) {
+  :root {
+    --grid-margin: 28px;
+    --card-padding: 20px;
+    --card-gap: 16px;
+    --columns: 12;
+  }
+}
+
+/* 3. Tablet Landscape / Small Laptop (769px - 1106px) */
+@media screen and (min-width: 769px) and (max-width: 1106px) {
+  :root {
+    --grid-margin: 24px;
+    --card-padding: 18px;
+    --card-gap: 16px;
+    --columns: 8;
+  }
+}
+
+/* 4. Tablet Portrait (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --grid-margin: 16px;
+    --card-padding: 16px;
+    --card-gap: 14px;
+    --columns: 6;
+  }
+}
+
+/* 5. Mobile (≤480px) */
+@media screen and (max-width: 480px) {
+  :root {
+    --grid-margin: 12px;
+    --card-padding: 14px;
+    --card-gap: 12px;
+    --columns: 4;
+  }
+}
+
+/* 6. Mobile nhỏ (≤375px) */
+@media screen and (max-width: 375px) {
+  :root {
+    --grid-margin: 8px;
+    --card-padding: 12px;
+    --card-gap: 10px;
+    --columns: 2;
+  }
+}
+
+/* ========================================================
+   STANDARDIZED WEBSITE LAYOUT SYSTEM CLASSES
+   (PAGE PADDING: DESKTOP 32px, MOBILE 16px)
+   (CARD: PADDING 20px, GAP 16px, RADIUS 20px)
+   ======================================================== */
+.page,
+.page-section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 20px var(--page-padding-desktop, 32px) !important;
+  overflow-y: auto;
+}
+
+@media (max-width: 767px) {
+  .page,
+  .page-section {
+    padding: 16px var(--page-padding-mobile, 16px) !important;
+  }
+}
+
+.section-container {
+  width: 100%;
+  max-width: 100%;
+  flex-grow: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap, 16px);
+  margin-inline: auto;
+}
+
+.section-header {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--card-gap, 16px);
+  width: 100%;
+}
+
+.content-card,
+.card,
+.glass-card {
+  position: relative;
+  padding: var(--card-padding, 20px);
+  border-radius: var(--card-radius, 20px);
+  gap: var(--card-gap, 16px);
+  transition: all 0.3s ease;
+}
+
+.button,
+button.standard-button {
+  height: var(--button-height, 40px);
+  min-height: var(--button-height, 40px);
+  padding: 0 16px;
+  font-size: var(--font-button, 15px);
+  font-weight: 600;
+  border-radius: var(--radius-button, 10px);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+  height: var(--input-height, 40px);
+  min-height: var(--input-height, 40px);
+  font-size: var(--font-input, 15px);
+  padding: 0 14px;
+  border-radius: var(--radius-input, 10px);
+}

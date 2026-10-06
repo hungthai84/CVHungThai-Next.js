@@ -329,3 +329,6 @@ export function CaseStudy4_2_Tools() {
     </div>
   );
 }
+
+
+export default CaseStudy4_2_Tools;

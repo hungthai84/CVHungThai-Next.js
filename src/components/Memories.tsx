@@ -10,7 +10,6 @@ import { useLanguage } from "../i18n";
 import { PageCardHeader } from "./PageCardHeader";
 import { IndustrialSubSection } from "./IndustrialStaggerContainer";
 import MasonryGallery, { MasonryItem } from "./MasonryGallery";
-import { LazyImage } from "./LazyImage";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
 
@@ -806,22 +805,12 @@ export default function Memories() {
       id="memories" 
       className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      <div className="w-full flex-grow flex flex-col gap-4 max-w-7xl mx-auto justify-start">
+      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-4 mx-auto justify-start">
+        {/* Header Card */}
+        <PageCardHeader pageId="memories" className="w-full mb-1" />
 
         {/* 1. TOP PAGE HEADER WITH CONSOLIDATED FILTERS */}
-        <IndustrialSubSection hasIndustrialAccent>
-          <PageCardHeader pageId="memories">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 w-full">
-              {/* Left Side: Editorial subtitle */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-4 bg-rose-600 dark:bg-rose-400 rounded-full shrink-0" />
-                <span className="text-caption font-semibold font-mono text-rose-700 dark:text-rose-300 bg-rose-500/15 px-2.5 py-0.5 rounded-full border border-rose-500/30 shadow-2xs">
-                  {isVi ? "Khoảnh khắc & Cột mốc Sự nghiệp" : "Moments & Career Milestones"}
-                </span>
-              </div>
-
-              {/* Right Side: Consolidated Controls */}
-              <div className="flex flex-wrap items-center gap-2 md:ml-auto w-full md:w-auto justify-start sm:justify-end">
+        <div className="w-full flex items-center justify-end gap-2 md:ml-auto w-full md:w-auto justify-start sm:justify-end pt-2">
                 {/* Compact Search Input */}
                 <div className="relative w-full sm:w-[190px] shrink-0">
                   <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -939,10 +928,7 @@ export default function Memories() {
                     <Grid className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              </div>
-            </div>
-          </PageCardHeader>
-        </IndustrialSubSection>
+        </div>
 
         {/* Toast Notification */}
         <AnimatePresence>
@@ -1024,11 +1010,11 @@ export default function Memories() {
                   >
                     {/* Card Image */}
                     <div className="relative w-full h-52 overflow-hidden bg-slate-950">
-                      <LazyImage
+                      <img
                         src={item.imageUrl || item.src}
                         alt={title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        fallbackSrc="https://placehold.co/600x400/1e293b/ffffff?text=Memory"
+                        referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
 

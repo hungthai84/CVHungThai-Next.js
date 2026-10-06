@@ -1,423 +1,441 @@
+export interface TuViProfile {
+  fullName: string;
+  birthDateSolar: string;
+  birthDateLunar: string;
+  birthHourLunar: string;
+  elementNapAm: string;
+  menhQuai: string;
+  menhCung: string;
+  cucVan: string;
+}
+
+export interface WorkPersonalityTrait {
+  id: string;
+  title: string;
+  tag: string;
+  subtitle: string;
+  description: string;
+  highlights: string[];
+}
+
+export interface PalaceStar {
+  name: string;
+  main: boolean;
+}
+
+export interface PalaceItem {
+  id: string;
+  name: string;
+  tag: string;
+  description: string;
+  stars: PalaceStar[];
+  checkpoints: string[];
+}
+
+export interface FiveElementGovernance {
+  element: string;
+  subtitle: string;
+  desc: string;
+  bgColor: string;
+  borderColor: string;
+  iconBg: string;
+  titleColor: string;
+}
+
 export interface ZodiacSynergyItem {
   id: string;
   nameVi: string;
   animalVi: string;
-  relationshipVi: string;
   icon: string;
-  score: string;
   tier: "best" | "support" | "luc_hop" | "caution";
   tierLabelVi: string;
+  score: string;
+  relationshipVi: string;
   years: string;
   workplaceFitVi: string;
   deskDirectionVi: string;
   workplaceAdviceVi: string;
 }
 
-export const TU_VI_PROFILE = {
+export interface ActionPhilosophyCard {
+  id: string;
+  title: string;
+  description: string;
+  iconType: "target" | "trending" | "heart" | "compass" | "award";
+}
+
+export const TU_VI_PROFILE: TuViProfile = {
   fullName: "Nguyễn Hùng Thái",
-  birthDateSolar: "22/06/1984 (Dương lịch)",
-  birthDateLunar: "24/05 Giáp Tý (Âm lịch)",
-  birthHourLunar: "Giờ Quý Dậu (17h00 - 19h00)",
+  birthDateSolar: "17/06/1984 (Dương lịch)",
+  birthDateLunar: "18/05 Giáp Tý (Âm lịch)",
+  birthHourLunar: "Giờ Quý Dậu (17h - 19h)",
   elementNapAm: "Hải Trung Kim (Vàng trong biển)",
   menhQuai: "Đoài Kim (Tây Tứ Mệnh)",
-  canChi: "Giáp Tý (Can Giáp Mộc - Chi Tý Thủy)",
-  cuc: "Kim Tứ Cục",
-  cungMenh: "Tý (Hải Trung Kim)",
-  thanCu: "Quan Lộc (Thìn)",
-  huongTot: "Tây Bắc (Sinh Khí), Tây Nam (Thiên Y), Đông Bắc (Diên Niên), Tây (Phục Vị)",
+  menhCung: "Cung Tý • Thân cư Quan Lộc (Thìn)",
+  cucVan: "Kim Tứ Cục (Khởi vận năm 4 tuổi)",
 };
 
-export const WORK_PERSONALITY_TRAITS = [
+export const WORK_PERSONALITY_TRAITS: WorkPersonalityTrait[] = [
   {
     id: "trait-1",
-    title: "Tư Duy Chiến Lược & Tổng Thể",
-    subtitle: "Hoạch định cấu trúc & Kiến tạo hệ thống",
-    tag: "Chiến Lược",
-    description: "Khả năng nhìn nhận bức tranh tổng thể đa chiều từ vận hành Call Center đến chuyển đổi số CRM, dự báo sớm rủi ro và xây dựng giải pháp tối ưu nguồn lực bền vững.",
-    highlights: ["Tư duy hệ thống SOP", "Phân tích dự báo rủi ro", "Tối ưu hóa tổng chi phí"]
+    title: "Tư duy Chiến lược & Quản trị Hệ thống",
+    tag: "Kiến tạo nền tảng",
+    subtitle: "Lập trình quy trình chuẩn mực, tự động hóa dòng chảy công việc",
+    description: "Khả năng nhìn thấu bức tranh tổng thể và chia nhỏ mục tiêu thành các chỉ số hành động rõ ràng (KPI/SLA). Luôn xây dựng nền móng vững chắc trước khi mở rộng quy mô (Scale-up).",
+    highlights: ["Quy chuẩn SOP chuẩn quốc tế", "Dự báo WFM theo khoa học dữ liệu", "Thiết lập SLA đa kênh"],
   },
   {
     id: "trait-2",
-    title: "Kỷ Luật, Chuẩn Hóa & Đo Lường",
-    subtitle: "Quản trị bằng số liệu & Quy chuẩn SLA",
-    tag: "Kỷ Luật",
-    description: "Lấy dữ liệu thực tế (CSAT, NPS, FCR, AHT) làm cơ sở đưa ra quyết định. Thiết lập khung kiểm soát chất lượng QA chặt chẽ, đảm bảo tính nhất quán và cam kết chuẩn dịch vụ cao nhất.",
-    highlights: ["Quản trị theo dữ liệu", "Chuẩn hóa SLA > 98%", "Kiểm soát chất lượng QA"]
+    title: "Lãnh đạo Đồng cảm & Truyền cảm hứng",
+    tag: "Tâm thế phụng sự",
+    subtitle: "Thấu hiểu nhân tâm, khơi dậy tiềm năng từng cá nhân",
+    description: "Lãnh đạo bằng sự chân thành, lắng nghe thấu đáo và trao quyền có kiểm soát. Xây dựng môi trường làm việc tích cực, nơi mọi thành viên cảm thấy được tôn trọng và ghi nhận xứng đáng.",
+    highlights: ["Giảm tỷ lệ nghỉ việc 45%", "Đào tạo cố vấn 1-1 chuyên sâu", "Văn hóa phản hồi cởi mở"],
   },
   {
     id: "trait-3",
-    title: "Thấu Cảm & Lãnh Đạo Con Người",
-    subtitle: "Tận tâm đồng hành & Phát triển đội ngũ",
-    tag: "Nhân Văn",
-    description: "Lắng nghe sâu sắc góc nhìn của khách hàng và nhân sự. Phong cách lãnh đạo truyền cảm hứng, kiên nhẫn đào tạo nâng tầm kỹ năng cho đội ngũ 50 - 150+ thành viên.",
-    highlights: ["Lắng nghe thấu cảm", "Đào tạo & Cố vấn", "Gắn kết đội ngũ vững mạnh"]
+    title: "Hành động Quyết đoán & Thực thi Kỷ luật",
+    tag: "Hiệu quả đo lường",
+    subtitle: "Nói đi đôi với làm, hướng đến kết quả thực chất",
+    description: "Kỷ luật thép trong tuân thủ cam kết chất lượng dịch vụ. Luôn có phương án dự phòng cho mọi rủi ro vận hành và quyết đoán ra quyết định trong thời khắc khủng hoảng.",
+    highlights: ["Sẵn sàng ứng cứu sự cố 24/7", "Đo lường kết quả theo thời gian thực", "Kiểm soát chi phí chặt chẽ"],
   },
   {
     id: "trait-4",
-    title: "Thích Ứng Nhanh & Đổi Mới AI",
-    subtitle: "Chuyển đổi số & Ứng dụng công nghệ mới",
-    tag: "Đổi Mới",
-    description: "Chủ động nghiên cứu và tiên phong ứng dụng Generative AI, Chatbot, Voicebot và Automation CRM vào quy trình chăm sóc khách hàng nhằm nâng cao năng suất và trải nghiệm người dùng.",
-    highlights: ["Ứng dụng AI Chatbot/Voicebot", "Tự động hóa Ticket CRM", "Tiên phong đổi mới sáng tạo"]
-  }
+    title: "Đổi mới Sáng tạo & Thích ứng Công nghệ",
+    tag: "Tiên phong chuyển đổi",
+    subtitle: "Không ngừng ứng dụng AI, Automation để bứt phá",
+    description: "Nhạy bén với các xu hướng công nghệ mới nổi. Chủ động ứng dụng GenAI Chatbot, Speech Analytics và CRM thông minh để giải phóng sức lao động con người và tối ưu trải nghiệm khách hàng.",
+    highlights: ["Ứng dụng AI Chatbot tự phục vụ", "Tối ưu hóa hành trình số Omni", "Liên tục học hỏi và thử nghiệm"],
+  },
 ];
 
-export const SIX_CORE_PALACES = [
+export const SIX_CORE_PALACES: PalaceItem[] = [
   {
     id: "palace-menh",
-    name: "1. Cung Mệnh (Tý)",
-    tag: "Bản Thể Cốt Lõi",
-    description: "Tầm nhìn chiến lược sắc bén, bản lĩnh vững vàng trong quản trị khủng hoảng vận hành và giữ vững kỷ luật thép trong chuẩn mực chất lượng dịch vụ khách hàng.",
+    name: "Cung Mệnh (Tý)",
+    tag: "Bản lĩnh nội tại",
+    description: "Chủ về tính cách kiên định, trọng chữ tín, tư duy phân tích sắc bén và khả năng chịu áp lực cao trong môi trường nhiều biến động.",
     stars: [
-      { name: "Thiên Phủ", main: true },
-      { name: "Hóa Khoa", main: true },
-      { name: "Tả Phụ" },
-      { name: "Hữu Bật" }
+      { name: "Thiên Đồng", main: true },
+      { name: "Thái Âm", main: true },
+      { name: "Hóa Khoa", main: false },
+      { name: "Tả Phù", main: false },
     ],
-    checkpoints: [
-      "Bản lĩnh xử lý sự cố & khủng hoảng vận hành",
-      "Giữ vững kỷ luật và chuẩn mực SLA khắt khe",
-      "Khả năng chịu áp lực cao trong môi trường đa nhiệm"
-    ]
+    checkpoints: ["Tâm định như núi trước sóng gió", "Trí tuệ minh triết trong giải quyết tranh chấp", "Chính trực và liêm chính tuyệt đối"],
   },
   {
     id: "palace-quan",
-    name: "2. Cung Quan Lộc (Thìn)",
-    tag: "Sự Nghiệp & Vận Hành",
-    description: "Thân cư Quan Lộc - chuyên gia điều hành hệ thống Contact Center và Chăm sóc khách hàng quy mô lớn, tối ưu các chỉ số cốt lõi (CSAT, NPS, FCR, AHT) và chuẩn hóa toàn bộ SOP.",
+    name: "Cung Quan Lộc (Thìn)",
+    tag: "Thân cư Quan",
+    description: "Thân cư Quan Lộc thể hiện sự tận tâm và cống hiến hết mình cho sự nghiệp quản trị. Nắm giữ vai trò trụ cột trong việc thiết lập và vận hành các bộ máy lớn.",
     stars: [
-      { name: "Vũ Khúc", main: true },
-      { name: "Thiên Tướng", main: true },
-      { name: "Quốc Ấn" },
-      { name: "Tam Thai" }
+      { name: "Thiên Cơ", main: true },
+      { name: "Thiên Lương", main: true },
+      { name: "Hóa Quyền", main: false },
+      { name: "Văn Khúc", main: false },
     ],
-    checkpoints: [
-      "Quản trị vận hành Contact Center 100+ - 500+ agents",
-      "Tối ưu hóa các chỉ số hiệu suất SLA, CSAT, FCR",
-      "Chuẩn hóa và số hóa toàn bộ hệ thống quy trình SOP"
-    ]
+    checkpoints: ["Kiến trúc sư hệ thống dịch vụ", "Khả năng điều phối liên phòng ban vượt trội", "Kiên trì theo đuổi mục tiêu dài hạn"],
   },
   {
     id: "palace-tai",
-    name: "3. Cung Tài Bạch (Thân)",
-    tag: "Hiệu Quả & Ngân Sách",
-    description: "Tối ưu hóa chi phí vận hành (OPEX), phân bổ nguồn lực thông minh giữa con người và công nghệ AI Automation, định lượng rõ ràng ROI cho từng dự án chuyển đổi số.",
+    name: "Cung Tài Bạch (Thân)",
+    tag: "Quản trị dòng tiền",
+    description: "Chủ về khả năng quản lý ngân sách vận hành tối ưu, biến trung tâm chi phí thành trung tâm sinh lời và mang lại giá trị thặng dư bền vững.",
     stars: [
-      { name: "Liêm Trinh", main: true },
-      { name: "Thiên Khôi", main: true },
-      { name: "Lộc Tồn" },
-      { name: "Bát Tọa" }
-    ],
-    checkpoints: [
-      "Tối ưu chi phí vận hành & phân bổ nguồn lực",
-      "Định lượng chính xác ROI các dự án công nghệ",
-      "Quản trị ngân sách tài chính minh bạch, hiệu quả"
-    ]
-  },
-  {
-    id: "palace-di",
-    name: "4. Cung Thiên Di (Ngọ)",
-    tag: "Ngoại Giao & Đối Tác",
-    description: "Năng lực kết nối và đàm phán chiến lược với các đối tác cung cấp giải pháp công nghệ, BPO quốc tế và các khối chức năng nội bộ (IT, Sales, Marketing, C-Suite).",
-    stars: [
+      { name: "Cự Môn", main: true },
       { name: "Thái Dương", main: true },
-      { name: "Thiên Việt", main: true },
-      { name: "Thiên Mã" }
+      { name: "Lộc Tồn", main: false },
+      { name: "Hữu Bật", main: false },
     ],
-    checkpoints: [
-      "Đàm phán chiến lược với nhà cung cấp & đối tác lớn",
-      "Kết nối liên phòng ban (IT - Sales - Marketing - CS)",
-      "Mở rộng hệ sinh thái dịch vụ khách hàng đa kênh"
-    ]
+    checkpoints: ["Tối ưu OPEX lên đến 35%", "Đo lường ROI cho từng dự án công nghệ", "Phát triển dòng doanh thu từ CSKH"],
   },
   {
-    id: "palace-no",
-    name: "5. Cung Nô Bộc (Tỵ)",
-    tag: "Quản Trị Nhân Sự",
-    description: "Xây dựng và phát triển đội ngũ nhân sự gắn kết, đào tạo các thế hệ Leader kế cận tài năng, duy trì tỷ lệ gắn kết nhân sự (Retention Rate) cao và văn hóa hỗ trợ lẫn nhau.",
+    id: "palace-thien-di",
+    name: "Cung Thiên Di (Ngọ)",
+    tag: "Giao thiệp & Đối ngoại",
+    description: "Khả năng thích ứng nhanh trong các môi trường đa văn hóa, xây dựng mối quan hệ đối tác tin cậy với các nhà cung cấp giải pháp hàng đầu thế giới.",
     stars: [
-      { name: "Thiên Đồng", main: true },
-      { name: "Ân Quang" },
-      { name: "Thiên Quý" }
+      { name: "Văn Xương", main: false },
+      { name: "Thiên Khôi", main: false },
+      { name: "Thiên Việt", main: false },
     ],
-    checkpoints: [
-      "Đào tạo và phát triển đội ngũ quản lý cấp trung",
-      "Duy trì tỷ lệ giữ chân nhân sự (Retention) xuất sắc",
-      "Xây dựng văn hóa đội ngũ chuyên nghiệp, thấu cảm"
-    ]
+    checkpoints: ["Đàm phán hợp đồng cung cấp dịch vụ", "Giao tiếp đối ngoại chuẩn mực", "Mở rộng mạng lưới kết nối chiến lược"],
   },
   {
-    id: "palace-phuc",
-    name: "6. Cung Phúc Đức (Dần)",
-    tag: "Văn Hóa & Bền Vững",
-    description: "Kiến tạo giá trị cốt lõi lấy khách hàng làm trọng tâm (Customer-Centric), đảm bảo sự phát triển bền vững, uy tín thương hiệu và chất lượng dịch vụ dài lâu cho tổ chức.",
+    id: "palace-no-boc",
+    name: "Cung Nô Bộc (Tỵ)",
+    tag: "Đồng đội & Nhân sự",
+    description: "Hội tụ nhiều sao phò tá, thể hiện sự được lòng cấp dưới, thu hút nhân tài và đào tạo ra nhiều thế hệ quản lý kế cận xuất sắc.",
+    stars: [
+      { name: "Thiên Tướng", main: true },
+      { name: "Thiên Hỷ", main: false },
+      { name: "Đào Hoa", main: false },
+    ],
+    checkpoints: ["Xây dựng đội ngũ kế thừa vững mạnh", "Gắn kết đội nhóm trên 500 nhân sự", "Tôn trọng và nâng đỡ cộng sự"],
+  },
+  {
+    id: "palace-phuc-duc",
+    name: "Cung Phúc Đức (Dần)",
+    tag: "Nền tảng tâm đức",
+    description: "Cốt lõi lấy nhân tâm làm gốc rễ. Làm việc gì cũng đặt lợi ích khách hàng và giá trị nhân văn lên hàng đầu, tạo phước lành lâu dài.",
     stars: [
       { name: "Tử Vi", main: true },
-      { name: "Thiên Đức" },
-      { name: "Phúc Đức" }
+      { name: "Thiên Phủ", main: true },
+      { name: "Quang Quý", main: false },
     ],
-    checkpoints: [
-      "Kiến tạo văn hóa doanh nghiệp lấy khách hàng làm gốc",
-      "Xây dựng uy tín thương hiệu dịch vụ bền vững",
-      "Cam kết giá trị dài hạn cho đối tác và tổ chức"
-    ]
-  }
+    checkpoints: ["Lấy chữ Tâm dẫn đường chữ Tài", "Trách nhiệm xã hội và cộng đồng", "Lan tỏa năng lượng tích cực"],
+  },
 ];
 
-export const FIVE_ELEMENTS_GOVERNANCE = [
+export const FIVE_ELEMENTS_GOVERNANCE: FiveElementGovernance[] = [
   {
-    element: "Kim",
-    subtitle: "Kỷ Luật & Tiêu Chuẩn SLA",
-    desc: "Quy chuẩn SOP rõ ràng, sắc bén, kiểm soát chất lượng QA minh bạch và chính xác tuyệt đối.",
-    bgColor: "bg-amber-500/10 dark:bg-amber-950/30",
-    borderColor: "border-amber-500/30 dark:border-amber-500/40",
-    iconBg: "bg-amber-500/20 text-amber-800 dark:text-amber-300",
-    titleColor: "text-amber-800 dark:text-amber-300"
+    element: "Kim (Tài Chính & Kỷ Luật)",
+    subtitle: "Chính xác & Rõ ràng",
+    desc: "Quy chuẩn hóa toàn bộ chỉ số KPI, ngân sách, hợp đồng và chính sách minh bạch.",
+    bgColor: "bg-amber-500/10 dark:bg-amber-950/20",
+    borderColor: "border-amber-500/30",
+    iconBg: "bg-amber-500/20 text-amber-700 dark:text-amber-300",
+    titleColor: "text-amber-800 dark:text-amber-300",
   },
   {
-    element: "Thủy",
-    subtitle: "Linh Hoạt & Đa Kênh Omni",
-    desc: "Thích ứng nhanh nhạy, luân chuyển luồng tương tác mượt mà giữa Hotline, Chat, Ticket và Social.",
-    bgColor: "bg-blue-500/10 dark:bg-blue-950/30",
-    borderColor: "border-blue-500/30 dark:border-blue-500/40",
-    iconBg: "bg-blue-500/20 text-blue-800 dark:text-blue-300",
-    titleColor: "text-blue-800 dark:text-blue-300"
+    element: "Mộc (Phát Triển Nhân Sự)",
+    subtitle: "Nuôi dưỡng & Nảy mầm",
+    desc: "Đào tạo liên tục, xây dựng lộ trình thăng tiến và chăm sóc sức khỏe tinh thần cho đội ngũ.",
+    bgColor: "bg-emerald-500/10 dark:bg-emerald-950/20",
+    borderColor: "border-emerald-500/30",
+    iconBg: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
+    titleColor: "text-emerald-800 dark:text-emerald-300",
   },
   {
-    element: "Mộc",
-    subtitle: "Phát Triển & Đào Tạo Con Người",
-    desc: "Nuôi dưỡng nhân tài, xây dựng lộ trình thăng tiến rõ ràng cho từng chuyên viên chăm sóc khách hàng.",
-    bgColor: "bg-emerald-500/10 dark:bg-emerald-950/30",
-    borderColor: "border-emerald-500/30 dark:border-emerald-500/40",
-    iconBg: "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300",
-    titleColor: "text-emerald-800 dark:text-emerald-300"
+    element: "Thủy (Dòng Chảy Quy Trình)",
+    subtitle: "Linh hoạt & Uyển chuyển",
+    desc: "Tối ưu hóa quy trình liên phòng ban không điểm nghẽn, thích ứng nhanh với khủng hoảng.",
+    bgColor: "bg-cyan-500/10 dark:bg-cyan-950/20",
+    borderColor: "border-cyan-500/30",
+    iconBg: "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300",
+    titleColor: "text-cyan-800 dark:text-cyan-300",
   },
   {
-    element: "Hỏa",
-    subtitle: "Nhiệt Huyết & Động Lực Đội Ngũ",
-    desc: "Truyền cảm hứng, duy trì năng lượng tích cực và tạo môi trường làm việc năng động, thăng hoa.",
-    bgColor: "bg-rose-500/10 dark:bg-rose-950/30",
-    borderColor: "border-rose-500/30 dark:border-rose-500/40",
-    iconBg: "bg-rose-500/20 text-rose-800 dark:text-rose-300",
-    titleColor: "text-rose-800 dark:text-rose-300"
+    element: "Hỏa (Nhiệt Huyết & Đổi Mới)",
+    subtitle: "Đột phá & Tiên phong",
+    desc: "Ứng dụng công nghệ mới AI, truyền lửa đam mê phục vụ khách hàng từ trái tim.",
+    bgColor: "bg-rose-500/10 dark:bg-rose-950/20",
+    borderColor: "border-rose-500/30",
+    iconBg: "bg-rose-500/20 text-rose-700 dark:text-rose-300",
+    titleColor: "text-rose-800 dark:text-rose-300",
   },
   {
-    element: "Thổ",
-    subtitle: "Nền Tảng Cơ Sở & Hệ Thống CRM",
-    desc: "Xây dựng hạ tầng dữ liệu vững chắc, bảo mật thông tin và tạo điểm tựa ổn định cho toàn bộ vận hành.",
-    bgColor: "bg-amber-600/10 dark:bg-amber-900/30",
-    borderColor: "border-amber-600/30 dark:border-amber-600/40",
-    iconBg: "bg-amber-600/20 text-amber-900 dark:text-amber-200",
-    titleColor: "text-amber-900 dark:text-amber-200"
-  }
+    element: "Thổ (Văn Hóa Vững Bền)",
+    subtitle: "Điểm tựa & Niềm tin",
+    desc: "Gìn giữ giá trị cốt lõi, uy tín thương hiệu và lòng trung thành của khách hàng lâu năm.",
+    bgColor: "bg-amber-700/10 dark:bg-amber-950/30",
+    borderColor: "border-amber-700/30",
+    iconBg: "bg-amber-700/20 text-amber-800 dark:text-amber-200",
+    titleColor: "text-amber-900 dark:text-amber-200",
+  },
 ];
 
 export const ZODIAC_SYNERGY_LIST: ZodiacSynergyItem[] = [
   {
     id: "than",
-    nameVi: "Thân",
-    animalVi: "Khỉ",
-    relationshipVi: "Tam Hợp (Thân - Tý - Thìn)",
+    nameVi: "Thân (Khỉ)",
+    animalVi: "Thân",
     icon: "🐒",
-    score: "98%",
     tier: "best",
-    tierLabelVi: "Tam Hợp Đỉnh Cao",
-    years: "1980, 1992, 2004, 2016",
-    workplaceFitVi: "Phối hợp chiến lược, điều hành dự án lớn, phát triển kinh doanh và đột phá sáng tạo công nghệ.",
-    deskDirectionVi: "Tây Nam hoặc Tây Bắc",
-    workplaceAdviceVi: "Bộ đôi ăn ý vượt bậc: Tuổi Thân nhanh nhẹn, sáng tạo kết hợp cùng tuổi Tý thâm sâu, quyết đoán tạo nên sức mạnh vận hành vô song."
+    tierLabelVi: "Tam Hợp (Thân - Tý - Thìn)",
+    score: "98%",
+    relationshipVi: "Đồng chí hướng & Tương trợ hoàn hảo",
+    years: "1968, 1980, 1992, 2004, 2016",
+    workplaceFitVi: "Đổi mới công nghệ, Chiến lược sản phẩm, Xử lý tình huống linh hoạt",
+    deskDirectionVi: "Hướng Tây Nam hoặc Tây",
+    workplaceAdviceVi: "Người tuổi Thân nhanh nhẹn, sáng tạo, phối hợp ăn ý với tính cẩn trọng và chiến lược của Giáp Tý, tạo nên bộ đôi bứt phá ngoạn mục.",
   },
   {
     id: "thin",
-    nameVi: "Thìn",
-    animalVi: "Rồng",
-    relationshipVi: "Tam Hợp (Thân - Tý - Thìn)",
-    icon: "🐲",
-    score: "96%",
+    nameVi: "Thìn (Rồng)",
+    animalVi: "Thìn",
+    icon: "🐉",
     tier: "best",
-    tierLabelVi: "Tam Hợp Quyền Lực",
-    years: "1976, 1988, 2000, 2012",
-    workplaceFitVi: "Lãnh đạo cấp cao, hoạch định chiến lược vĩ mô, mở rộng thị trường và quản lý rủi ro quy mô lớn.",
-    deskDirectionVi: "Đông Nam hoặc Đông Bắc",
-    workplaceAdviceVi: "Tuổi Thìn mang uy thế và tầm nhìn rộng lớn kết hợp cùng sự cẩn trọng, kỷ luật của tuổi Tý giúp dự án luôn đạt thành tựu rực rỡ."
+    tierLabelVi: "Tam Hợp (Thân - Tý - Thìn)",
+    score: "96%",
+    relationshipVi: "Thủ lĩnh tiên phong & Cánh tay đắc lực",
+    years: "1964, 1976, 1988, 2000, 2012",
+    workplaceFitVi: "Lãnh đạo cấp cao, Mở rộng quy mô, Phát triển thị trường lớn",
+    deskDirectionVi: "Hướng Đông Nam",
+    workplaceAdviceVi: "Người tuổi Thìn mang tầm nhìn vĩ mô và uy quyền, kết hợp với tài năng quản trị chi tiết của Giáp Tý sẽ tạo ra nền móng doanh nghiệp vững mạnh.",
   },
   {
     id: "suu",
-    nameVi: "Sửu",
-    animalVi: "Trâu",
-    relationshipVi: "Lục Hợp (Tý - Sửu)",
-    icon: "🐮",
-    score: "95%",
+    nameVi: "Sửu (Trâu)",
+    animalVi: "Sửu",
+    icon: "🐂",
     tier: "luc_hop",
-    tierLabelVi: "Lục Hợp Bền Vững",
-    years: "1973, 1985, 1997, 2009",
-    workplaceFitVi: "Vận hành chi tiết, kiểm soát chất lượng QA, tài chính kế toán và quản lý cơ sở dữ liệu.",
-    deskDirectionVi: "Đông Bắc hoặc Bắc",
-    workplaceAdviceVi: "Sự kiên nhẫn, bền bỉ của tuổi Sửu bổ trợ hoàn hảo cho tư duy chiến lược của tuổi Tý, xây dựng nền tảng vững chắc không thể lay chuyển."
+    tierLabelVi: "Lục Hợp (Tý - Sửu)",
+    score: "95%",
+    relationshipVi: "Tri kỷ tri âm & Hậu phương vững chắc",
+    years: "1961, 1973, 1985, 1997, 2009",
+    workplaceFitVi: "Kiểm soát chất lượng, Quản lý tài chính, Giám sát vận hành",
+    deskDirectionVi: "Hướng Đông Bắc",
+    workplaceAdviceVi: "Tuổi Sửu kiên nhẫn, trung thành và tỉ mỉ, là người đồng hành đáng tin cậy nhất trong các dự án đòi hỏi tính chính xác cao độ.",
   },
   {
     id: "hoi",
-    nameVi: "Hợi",
-    animalVi: "Heo",
-    relationshipVi: "Tam Hội (Hợi - Tý - Sửu)",
-    icon: "🐷",
-    score: "90%",
+    nameVi: "Hợi (Heo)",
+    animalVi: "Hợi",
+    icon: "🐖",
     tier: "support",
-    tierLabelVi: "Tam Hội Tương Trợ",
-    years: "1971, 1983, 1995, 2007",
-    workplaceFitVi: "Chăm sóc khách hàng, văn hóa doanh nghiệp, nhân sự và gắn kết cộng đồng nội bộ.",
-    deskDirectionVi: "Tây Bắc hoặc Tây",
-    workplaceAdviceVi: "Tuổi Hợi hòa nhã, nhân hậu giúp làm dịu áp lực, tăng cường sự thấu hiểu và tạo không khí làm việc tràn đầy năng lượng tích cực."
-  },
-  {
-    id: "dau",
-    nameVi: "Dậu",
-    animalVi: "Gà",
-    relationshipVi: "Tương Sinh Đồng Hành",
-    icon: "🐔",
+    tierLabelVi: "Tương Trợ (Cùng hành Thủy)",
     score: "88%",
-    tier: "support",
-    tierLabelVi: "Tương Sinh Kim - Thủy",
-    years: "1981, 1993, 2005, 2017",
-    workplaceFitVi: "Đào tạo kỹ năng mềm, thuyết trình, truyền thông nội bộ và kiểm soát quy chuẩn SOP.",
-    deskDirectionVi: "Chính Tây hoặc Tây Bắc",
-    workplaceAdviceVi: "Tuổi Dậu sắc sảo, cẩn thận từng chi tiết giúp tinh chỉnh các quy trình dịch vụ đạt độ hoàn mỹ cao nhất."
+    relationshipVi: "Hòa đồng & Đồng cảm sâu sắc",
+    years: "1971, 1983, 1995, 2007, 2019",
+    workplaceFitVi: "Chăm sóc khách hàng, Trải nghiệm nhân viên, Nhân sự văn hóa",
+    deskDirectionVi: "Hướng Tây Bắc",
+    workplaceAdviceVi: "Người tuổi Hợi hòa nhã, nhân hậu, giúp duy trì năng lượng tích cực và sự ấm áp trong môi trường làm việc nhiều áp lực.",
   },
   {
     id: "tuat",
-    nameVi: "Tuất",
-    animalVi: "Chó",
-    relationshipVi: "Bình Hòa Tương Hỗ",
-    icon: "🐶",
-    score: "85%",
+    nameVi: "Tuất (Chó)",
+    animalVi: "Tuất",
+    icon: "🐕",
     tier: "support",
-    tierLabelVi: "Bình Hòa Tin Cậy",
-    years: "1982, 1994, 2006, 2018",
-    workplaceFitVi: "Bảo mật hệ thống, an ninh thông tin, giám sát tuân thủ chính sách và bảo vệ dữ liệu.",
-    deskDirectionVi: "Tây Bắc hoặc Đông Bắc",
-    workplaceAdviceVi: "Sự trung thành và tinh thần trách nhiệm cao của tuổi Tuất là điểm tựa đáng tin cậy trong các dự án đòi hỏi tính bảo mật."
+    tierLabelVi: "Tương Trợ Đồng Lòng",
+    score: "85%",
+    relationshipVi: "Chính trực & Tận tụy cống hiến",
+    years: "1970, 1982, 1994, 2006, 2018",
+    workplaceFitVi: "Bảo mật thông tin, Tuân thủ pháp chế, Kiểm toán nội bộ",
+    deskDirectionVi: "Hướng Tây Bắc",
+    workplaceAdviceVi: "Tuổi Tuất thẳng thắn, công bằng và hết lòng vì tập thể, là người gác cổng bảo vệ an toàn cho hệ thống vận hành.",
+  },
+  {
+    id: "dau",
+    nameVi: "Dậu (Gà)",
+    animalVi: "Dậu",
+    icon: "🐓",
+    tier: "support",
+    tierLabelVi: "Tương Trợ Kim Sinh Thủy",
+    score: "84%",
+    relationshipVi: "Chỉn chu & Ngăn nắp chuẩn mực",
+    years: "1969, 1981, 1993, 2005, 2017",
+    workplaceFitVi: "Phân tích dữ liệu, Biên soạn tài liệu SOP, Đào tạo",
+    deskDirectionVi: "Hướng Chính Tây",
+    workplaceAdviceVi: "Người tuổi Dậu chú ý từng chi tiết nhỏ, hỗ trợ đắc lực trong việc hoàn thiện các quy trình nghiệp vụ phức tạp.",
   },
   {
     id: "ty",
-    nameVi: "Tý",
-    animalVi: "Chuột",
-    relationshipVi: "Đồng Mệnh Tương Hợp",
-    icon: "🐭",
-    score: "86%",
+    nameVi: "Tý (Chuột)",
+    animalVi: "Tý",
+    icon: "🐀",
     tier: "support",
-    tierLabelVi: "Đồng Điệu Tư Duy",
-    years: "1972, 1984, 1996, 2008",
-    workplaceFitVi: "Nghiên cứu thị trường, phân tích dữ liệu chuyên sâu và hoạch định chỉ số KPI/SLA.",
-    deskDirectionVi: "Chính Bắc hoặc Tây Bắc",
-    workplaceAdviceVi: "Cùng tần số tư duy và nhạy bén thông tin; cần phân chia rõ vai trò để tránh trùng lặp thế mạnh."
-  },
-  {
-    id: "ty_snake",
-    nameVi: "Tỵ",
-    animalVi: "Rắn",
-    relationshipVi: "Tương Trợ Linh Hoạt",
-    icon: "🐍",
+    tierLabelVi: "Đồng Tuế Tương Hợp",
     score: "82%",
-    tier: "support",
-    tierLabelVi: "Linh Hoạt Biến Hóa",
-    years: "1977, 1989, 2001, 2013",
-    workplaceFitVi: "Xử lý khiếu nại phức tạp, đàm phán hợp đồng khó và xử lý khủng hoảng truyền thông.",
-    deskDirectionVi: "Đông Nam hoặc Tây Nam",
-    workplaceAdviceVi: "Tuổi Tỵ khôn khéo và sâu sắc, phối hợp tốt trong các tình huống đòi hỏi nghệ thuật ứng biến tinh tế."
-  },
-  {
-    id: "dan",
-    nameVi: "Dần",
-    animalVi: "Hổ",
-    relationshipVi: "Bình Hòa Phát Triển",
-    icon: "🐯",
-    score: "80%",
-    tier: "support",
-    tierLabelVi: "Bình Hòa Năng Động",
-    years: "1974, 1986, 1998, 2010",
-    workplaceFitVi: "Tiên phong khai phá thị trường mới, phát động phong trào và triển khai chiến dịch ngắn hạn.",
-    deskDirectionVi: "Đông Bắc hoặc Tây Bắc",
-    workplaceAdviceVi: "Tuổi Dần xông xáo kết hợp cùng tuổi Tý cẩn trọng lập kế hoạch sẽ mang lại kết quả bứt phá."
-  },
-  {
-    id: "mao",
-    nameVi: "Mão",
-    animalVi: "Mèo",
-    relationshipVi: "Hình Khắc Nhẹ (Cần Thấu Hiểu)",
-    icon: "🐱",
-    score: "70%",
-    tier: "caution",
-    tierLabelVi: "Cần Phối Hợp Khéo",
-    years: "1975, 1987, 1999, 2011",
-    workplaceFitVi: "Thiết kế sáng tạo UI/UX, hỗ trợ văn phòng và truyền thông thị giác.",
-    deskDirectionVi: "Chính Đông hoặc Tây Nam",
-    workplaceAdviceVi: "Cần giao tiếp cởi mở và minh bạch trong phân công nhiệm vụ để phát huy tối đa sở trường mỗi bên."
+    relationshipVi: "Đồng cảm tư duy & Hiểu ý nhanh",
+    years: "1960, 1972, 1984, 1996, 2008",
+    workplaceFitVi: "Nghiên cứu thị trường, Tối ưu công cụ, Sáng tạo giải pháp",
+    deskDirectionVi: "Hướng Chính Bắc",
+    workplaceAdviceVi: "Cùng tuổi nên dễ thấu hiểu suy nghĩ của nhau, cần phân chia rõ ràng phạm vi trách nhiệm để phát huy tối đa thế mạnh.",
   },
   {
     id: "mui",
-    nameVi: "Mùi",
-    animalVi: "Dê",
-    relationshipVi: "Tương Hại Nhẹ (Cần Nhường Nhịn)",
-    icon: "🐑",
-    score: "68%",
+    nameVi: "Mùi (Dê)",
+    animalVi: "Mùi",
+    icon: "🐐",
     tier: "caution",
-    tierLabelVi: "Cần Tôn Trọng Khác Biệt",
-    years: "1979, 1991, 2003, 2015",
-    workplaceFitVi: "Hậu cần sự kiện, chăm sóc đời sống nhân viên và hỗ trợ hành chính tổng vụ.",
-    deskDirectionVi: "Tây Nam hoặc Tây",
-    workplaceAdviceVi: "Tập trung vào thế mạnh chuyên môn của từng người và thống nhất mục tiêu chung ngay từ đầu."
+    tierLabelVi: "Hòa Hợp Khi Biết Nhường Nhịn",
+    score: "70%",
+    relationshipVi: "Cần lắng nghe & Bổ trợ điểm khuyết",
+    years: "1967, 1979, 1991, 2003, 2015",
+    workplaceFitVi: "Thiết kế giao diện, Viết nội dung sáng tạo, Tổ chức sự kiện",
+    deskDirectionVi: "Hướng Tây Nam",
+    workplaceAdviceVi: "Nên trao đổi thẳng thắn trên tinh thần xây dựng, tôn trọng cá tính riêng để cùng hướng đến mục tiêu chung.",
+  },
+  {
+    id: "dan",
+    nameVi: "Dần (Hổ)",
+    animalVi: "Dần",
+    icon: "🐅",
+    tier: "support",
+    tierLabelVi: "Tương Trợ Bổ Khuyết",
+    score: "78%",
+    relationshipVi: "Khí chất dũng mãnh & Quyết đoán",
+    years: "1962, 1974, 1986, 1998, 2010",
+    workplaceFitVi: "Dẫn dắt dự án mới, Đàm phán khó, Xử lý tình huống khẩn",
+    deskDirectionVi: "Hướng Đông Bắc",
+    workplaceAdviceVi: "Người tuổi Dần giàu nhiệt huyết và tính tiên phong, kết hợp với sự điềm đạm của Giáp Tý sẽ tạo nên sự cân bằng hoàn hảo.",
+  },
+  {
+    id: "mao",
+    nameVi: "Mão (Mèo)",
+    animalVi: "Mão",
+    icon: "🐈",
+    tier: "caution",
+    tierLabelVi: "Khéo Léo Phối Hợp",
+    score: "72%",
+    relationshipVi: "Mềm mỏng & Tinh tế nghệ thuật",
+    years: "1963, 1975, 1987, 1999, 2011",
+    workplaceFitVi: "Quan hệ công chúng, Truyền thông nội bộ, Chăm sóc VIP",
+    deskDirectionVi: "Hướng Chính Đông",
+    workplaceAdviceVi: "Tuổi Mão tinh tế, giao tiếp khéo léo, hỗ trợ làm dịu các cuộc tranh luận căng thẳng trong nội bộ.",
+  },
+  {
+    id: "ty_snake",
+    nameVi: "Tỵ (Rắn)",
+    animalVi: "Tỵ",
+    icon: "🐍",
+    tier: "support",
+    tierLabelVi: "Sâu Sắc & Cơ Biến",
+    score: "80%",
+    relationshipVi: "Chiến thuật tinh tế & Kín đáo",
+    years: "1965, 1977, 1989, 2001, 2013",
+    workplaceFitVi: "Nghiên cứu đối thủ, Quản trị rủi ro, Hoạch định chính sách",
+    deskDirectionVi: "Hướng Đông Nam",
+    workplaceAdviceVi: "Người tuổi Tỵ có trực giác sắc bén và suy nghĩ thấu đáo, đưa ra các lời khuyên chiến lược giá trị cao.",
   },
   {
     id: "ngo",
-    nameVi: "Ngọ",
-    animalVi: "Ngựa",
-    relationshipVi: "Tứ Hành Xung (Tý - Ngọ)",
-    icon: "🐴",
-    score: "65%",
+    nameVi: "Ngọ (Ngựa)",
+    animalVi: "Ngọ",
+    icon: "🐎",
     tier: "caution",
-    tierLabelVi: "Tứ Hành Xung - Bổ Khuyết",
-    years: "1978, 1990, 2002, 2014",
-    workplaceFitVi: "Công tác thị trường bên ngoài, tìm kiếm khách hàng mới, độc lập tác chiến.",
-    deskDirectionVi: "Tây Nam hoặc Đông Bắc",
-    workplaceAdviceVi: "Hai thái cực bổ trợ nếu biết lắng nghe: Tuổi Ngọ hướng ngoại tốc độ, tuổi Tý hướng nội chiều sâu - tạo thành cặp bài trùng nếu tôn trọng nguyên tắc hợp tác."
-  }
+    tierLabelVi: "Tương Xung Cần Cân Bằng",
+    score: "65%",
+    relationshipVi: "Tốc độ bứt phá & Cần kiềm chế nóng vội",
+    years: "1966, 1978, 1990, 2002, 2014",
+    workplaceFitVi: "Bán hàng trực tiếp, Mở thị trường thần tốc, Đội ngũ lưu động",
+    deskDirectionVi: "Hướng Chính Nam",
+    workplaceAdviceVi: "Tuổi Ngọ hành động nhanh, cần Giáp Tý giữ nhịp và điều hướng chiến lược để tránh rủi ro nóng vội.",
+  },
 ];
 
-export const ACTION_PHILOSOPHY_CARDS = [
+export const ACTION_PHILOSOPHY_CARDS: ActionPhilosophyCard[] = [
   {
     id: "phil-1",
+    title: "Lấy Khách Hàng Làm Trọng Tâm (Customer Centricity)",
+    description: "Mọi quyết định cải tiến quy trình và công nghệ đều bắt đầu từ việc thấu hiểu nỗi đau và mong đợi thực tế của khách hàng.",
     iconType: "target",
-    title: "Lấy Khách Hàng Làm Trọng Tâm",
-    description: "Mọi quy trình, cải tiến công nghệ và quyết định vận hành đều bắt nguồn từ nhu cầu thực và sự hài lòng bền vững của khách hàng."
   },
   {
     id: "phil-2",
+    title: "Quản Trị Bằng Dữ Liệu Thời Gian Thực (Data-Driven)",
+    description: "Không dựa vào cảm tính; đo lường, giám sát và ra quyết định chính xác dựa trên dữ liệu định lượng và phân tích xu hướng.",
     iconType: "trending",
-    title: "Quản Trị Bằng Dữ Liệu Thực Tế",
-    description: "Đo lường chi tiết từng chỉ số CSAT, NPS, FCR, AHT và SLA để đưa ra quyết định tối ưu chuẩn xác, không cảm tính."
   },
   {
     id: "phil-3",
+    title: "Tâm Thế Phụng Sự & Đồng Cảm (Empathetic Leadership)",
+    description: "Lắng nghe nhân viên tuyến đầu, chăm sóc sức khỏe tinh thần đội ngũ để họ mang lại trải nghiệm ấm áp nhất đến khách hàng.",
     iconType: "heart",
-    title: "Lắng Nghe & Thấu Cảm Sâu Sắc",
-    description: "Dịch vụ xuất sắc được tạo nên từ sự đồng cảm chân thành với nỗi đau của người dùng và sự thấu hiểu khó khăn của đội ngũ tuyến đầu."
   },
   {
     id: "phil-4",
+    title: "Chính Trực & Trọng Chữ Tín (Integrity First)",
+    description: "Cam kết đúng hạn, minh bạch thông tin và bảo vệ uy tín thương hiệu như tài sản quý giá nhất của tổ chức.",
     iconType: "compass",
-    title: "Tiên Phong Đổi Mới Công Nghệ AI",
-    description: "Không ngừng cập nhật xu hướng công nghệ mới, tự động hóa quy trình để nâng cao năng suất và giải phóng sức sáng tạo của nhân sự."
   },
   {
     id: "phil-5",
+    title: "Không Ngừng Cải Tiến & Đổi Mới (Continuous Kaizen)",
+    description: "Mỗi ngày tối ưu hóa một điểm chạm nhỏ, ứng dụng AI và công nghệ mới để nâng tầm dịch vụ vượt kỳ vọng.",
     iconType: "award",
-    title: "Giữ Trọn Chữ Tín & Đạo Đức Nghề",
-    description: "Cam kết đồng hành trách nhiệm, minh bạch thông tin và kiên định kiến tạo giá trị dài hạn cho tổ chức và đối tác."
   },
-  {
-    id: "phil-6",
-    iconType: "bar-chart",
-    title: "Lấy kết quả làm thước đo",
-    description: "Đo lường thành công bằng sự hài lòng của khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve), sự trưởng thành của đội ngũ."
-  }
 ];

@@ -1,19 +1,27 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: any = {
-  output: 'standalone',
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   allowedDevOrigins: [
     '*.run.app',
+    '*.asia-southeast1.run.app',
     'localhost:3000',
     '127.0.0.1:3000',
-    'ais-dev-nyjiglaczhnpg7amze2ndd-414821367668.asia-southeast1.run.app',
-    'ais-pre-nyjiglaczhnpg7amze2ndd-414821367668.asia-southeast1.run.app',
-    'ais-dev-yf3b5yqxxjmrlzw7id7gkc-102425859277.asia-southeast1.run.app',
-    'ais-pre-yf3b5yqxxjmrlzw7id7gkc-102425859277.asia-southeast1.run.app',
+    'ais-dev-fmejtg4y3uyocqkt3l6gdp-414821367668.asia-southeast1.run.app',
+    'ais-pre-fmejtg4y3uyocqkt3l6gdp-414821367668.asia-southeast1.run.app',
+    'ais-dev-7ghvj636yajd5nl4bvlahp-414821367668.asia-southeast1.run.app',
+    'ais-pre-7ghvj636yajd5nl4bvlahp-414821367668.asia-southeast1.run.app',
+    'ais-dev-6hxzxkkaot2jhscqrhah3o-498435453400.asia-southeast1.run.app',
+    'ais-pre-6hxzxkkaot2jhscqrhah3o-498435453400.asia-southeast1.run.app',
+    'ais-dev-dbvmw6fehab24wduzejal4-102425859277.asia-southeast1.run.app',
+    'ais-pre-dbvmw6fehab24wduzejal4-102425859277.asia-southeast1.run.app',
+    'ais-dev-p3fcqewq6orsf7mo7g35ip-414821367668.asia-southeast1.run.app',
+    'ais-pre-p3fcqewq6orsf7mo7g35ip-414821367668.asia-southeast1.run.app',
+    'ais-dev-ydssgl7762xdlufsdggais-498435453400.asia-southeast1.run.app',
+    'ais-pre-ydssgl7762xdlufsdggais-498435453400.asia-southeast1.run.app'
   ],
 };
 

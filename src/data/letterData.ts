@@ -44,8 +44,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2002",
     yearNumber: "2002",
-    yearLabelVi: "Năm 2002",
-    yearLabelEn: "Year 2002",
+    yearLabelVi: "NĂM 2002",
+    yearLabelEn: "YEAR 2002",
     yearBadgeGradient: "bg-gradient-to-r from-blue-600 to-sky-500",
     company: "MobiFone",
     titleColor: "#0284c7",
@@ -66,8 +66,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2007",
     yearNumber: "2007",
-    yearLabelVi: "Năm 2007",
-    yearLabelEn: "Year 2007",
+    yearLabelVi: "NĂM 2007",
+    yearLabelEn: "YEAR 2007",
     yearBadgeGradient: "bg-gradient-to-r from-purple-600 to-indigo-600",
     company: "Viễn Liên V247",
     titleColor: "#7c3aed",
@@ -88,8 +88,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2011",
     yearNumber: "2011",
-    yearLabelVi: "Năm 2011",
-    yearLabelEn: "Year 2011",
+    yearLabelVi: "NĂM 2011",
+    yearLabelEn: "YEAR 2011",
     yearBadgeGradient: "bg-gradient-to-r from-emerald-600 to-teal-500",
     company: "LBC – HTV",
     titleColor: "#059669",
@@ -110,8 +110,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2013",
     yearNumber: "2013",
-    yearLabelVi: "Năm 2013",
-    yearLabelEn: "Year 2013",
+    yearLabelVi: "NĂM 2013",
+    yearLabelEn: "YEAR 2013",
     yearBadgeGradient: "bg-gradient-to-r from-rose-600 to-red-500",
     company: "Garena",
     titleColor: "#e11d48",
@@ -133,8 +133,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2013-shopee",
     yearNumber: "2013",
-    yearLabelVi: "Năm 2013",
-    yearLabelEn: "Year 2013",
+    yearLabelVi: "NĂM 2013",
+    yearLabelEn: "YEAR 2013",
     yearBadgeGradient: "bg-gradient-to-r from-orange-500 to-amber-500",
     company: "Shopee",
     titleColor: "#ea580c",
@@ -155,8 +155,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2016",
     yearNumber: "2016",
-    yearLabelVi: "Năm 2016",
-    yearLabelEn: "Year 2016",
+    yearLabelVi: "NĂM 2016",
+    yearLabelEn: "YEAR 2016",
     yearBadgeGradient: "bg-gradient-to-r from-pink-600 to-rose-500",
     company: "Prudential",
     titleColor: "#db2777",
@@ -177,8 +177,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2018",
     yearNumber: "2018",
-    yearLabelVi: "Năm 2018",
-    yearLabelEn: "Year 2018",
+    yearLabelVi: "NĂM 2018",
+    yearLabelEn: "YEAR 2018",
     yearBadgeGradient: "bg-gradient-to-r from-pink-500 to-fuchsia-600",
     company: "MoMo FinTech",
     titleColor: "#db2777",
@@ -199,8 +199,8 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
   {
     id: "card-2023",
     yearNumber: "2023",
-    yearLabelVi: "Năm 2023",
-    yearLabelEn: "Year 2023",
+    yearLabelVi: "NĂM 2023",
+    yearLabelEn: "YEAR 2023",
     yearBadgeGradient: "bg-gradient-to-r from-amber-500 to-yellow-600",
     company: "Finviet",
     titleColor: "#059669",
@@ -223,7 +223,7 @@ export const CAREER_MILESTONES_DATA: CareerMilestoneItem[] = [
 export const CORE_VALUES_DATA = [
   {
     number: "01",
-    idName: "Dedication",
+    idName: "DEDICATION",
     titleVi: "Tận tâm",
     titleEn: "Dedication",
     descVi: "Đặt khách hàng làm trọng tâm mọi quyết định và hành động.",
@@ -240,7 +240,7 @@ export const CORE_VALUES_DATA = [
   },
   {
     number: "02",
-    idName: "Professionalism",
+    idName: "PROFESSIONALISM",
     titleVi: "Chuyên nghiệp",
     titleEn: "Professionalism",
     descVi: "Đặt chuẩn mực làm nền tảng mọi quy trình và hoạt động.",
@@ -257,7 +257,7 @@ export const CORE_VALUES_DATA = [
   },
   {
     number: "03",
-    idName: "Innovation",
+    idName: "INNOVATION",
     titleVi: "Đổi mới",
     titleEn: "Innovation",
     descVi: "Đặt công nghệ làm động lực mọi sáng tạo và cải tiến.",
@@ -274,7 +274,7 @@ export const CORE_VALUES_DATA = [
   },
   {
     number: "04",
-    idName: "Partnership",
+    idName: "PARTNERSHIP",
     titleVi: "Đồng hành",
     titleEn: "Partnership",
     descVi: "Đặt tin tưởng làm nền tảng mọi hợp tác và phát triển.",

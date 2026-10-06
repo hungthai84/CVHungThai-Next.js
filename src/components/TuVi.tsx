@@ -8,7 +8,7 @@ import {
   Sparkles, Play, Pause, Compass, Shield, Target,
   Search, ArrowRight, Check, Award, Layers, Zap, Eye,
   Navigation, AlertTriangle, ShieldCheck, HelpCircle,
-  Activity, BarChart3, Radio, RefreshCw, MoonStar, Orbit, Stars
+  Activity, BarChart3, Radio, RefreshCw
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { 
@@ -82,7 +82,6 @@ export default function TuVi() {
   const filteredZodiacList = useMemo(() => {
     return ZODIAC_SYNERGY_LIST.filter(item => {
       if (zodiacFilterTier === "all") return true;
-      if (zodiacFilterTier === "best") return item.tier === "best" || item.tier === "luc_hop";
       return item.tier === zodiacFilterTier;
     });
   }, [zodiacFilterTier]);
@@ -135,79 +134,43 @@ export default function TuVi() {
   return (
     <section 
       id="tuvi" 
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] gap-[15px] max-w-7xl mx-auto font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar select-none"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
-      {/* Header Card với thanh Tab điều hướng */}
-      <PageCardHeader pageId="tuvi">
-        {/* Left Side: Subtitle */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="w-2.5 h-4.5 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full shrink-0 shadow-2xs" />
-          <span className="text-caption font-bold font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 px-3 py-1 rounded-full border border-purple-500/30 shadow-2xs">
-            {isVi ? "Tử Vi & Phong Thủy Quản Trị" : "Astrology & Feng Shui Matrix"}
-          </span>
-        </div>
-      </PageCardHeader>
+      {/* Main Container - Thẻ chứa toàn bộ trang Tử vi */}
+      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-[15px] mx-auto justify-start">
+        {/* Header Card */}
+        <PageCardHeader pageId="tuvi" className="w-full mb-1" />
 
-          {/* ================= PHẦN 1: BẢN MỆNH PHONG THỦY ================= */}
+        {/* Container Tử vi */}
+        <div 
+          id="info-card-tuvi" 
+          className="w-full flex flex-col gap-[15px] relative z-10"
+        >
+
+          {/* ================= PHẦN 1: THÔNG TIN CHUNG & BÁT TRẠCH PHONG THỦY ================= */}
           <div 
             id="tuvi-section-1" 
-            className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-purple-500/25 rounded-3xl p-5 sm:p-7 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-6 text-left hover:shadow-xl group/tuvi1"
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-purple-400/30 rounded-[14px] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Title Header */}
-            <div className="flex flex-col items-start w-full text-left gap-2 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div className="flex items-center justify-between w-full flex-wrap gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <motion.div
-                    animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="shrink-0 p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20"
-                  >
-                    <Moon className="w-5.5 h-5.5 stroke-[2.2] drop-shadow-xs" />
-                  </motion.div>
-                  <div>
-                    <motion.h3 
-                      animate={{ opacity: [0.92, 1, 0.92] }}
-                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                      className="text-lg sm:text-xl font-black font-play tracking-tight text-slate-900 dark:text-white"
-                    >
-                      {isVi ? "Bản Mệnh Phong Thủy" : "Your Feng Shui Profile"}
-                    </motion.h3>
-                    <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                      {isVi ? "Hồ sơ lá số tử vi & La bàn Bát trạch định hướng" : "Astrological destiny matrix & Eight-Mansion compass"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-purple-500/15 border border-purple-400/30 text-purple-700 dark:text-purple-300 text-xs font-mono font-bold shadow-2xs">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                  <span>{isVi ? "Giáp Tý 1984 · Hải Trung Kim" : "1984 · Sea Gold"}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-              {/* Left Column: Yin-Yang Compass & Audio Meditation */}
-              <div className="lg:col-span-4 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-slate-900/10 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-slate-900/60 border border-purple-200/80 dark:border-purple-800/50 rounded-2xl p-5 flex flex-col items-center justify-between text-center space-y-4 shadow-2xs">
-                {/* Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-purple-200/50 dark:border-purple-800/40 w-full text-left gap-2 flex-wrap">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <motion.div
-                      animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1] }}
-                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="shrink-0"
-                    >
-                      <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400 stroke-[2.2]" />
-                    </motion.div>
-                    <h4 className="text-sm sm:text-base font-black font-play tracking-tight text-slate-900 dark:text-white">
-                      {isVi ? "La Bàn Âm Dương" : "Yin & Yang Compass"}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+              {/* Cột trái: La Bàn Âm Dương & Trình phát âm thanh thiền định */}
+              <div className="lg:col-span-4 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-slate-900/5 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-slate-900/60 border border-purple-200/60 dark:border-purple-800/50 rounded-2xl p-5 flex flex-col items-center justify-between text-center space-y-4 shadow-2xs">
+                {/* Header định dạng 4 chữ, font 15px, màu giống icon */}
+                <div className="flex items-center justify-between pb-3 border-b border-purple-200/40 dark:border-purple-800/40 w-full text-left">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-4 bg-purple-600 rounded-full shrink-0" />
+                    <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                    <h4 className="text-[15px] font-bold text-purple-600 dark:text-purple-400 tracking-wide font-play">
+                      {isVi ? "La bàn âm dương" : "Yin yang compass"}
                     </h4>
                   </div>
-                  <span className="text-[10px] font-mono font-black px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20 shrink-0">
+                  <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20">
                     1984 - 2025
                   </span>
                 </div>
 
-                {/* Yin-Yang Compass Wheel */}
+                {/* Vòng quay Âm Dương tương tác */}
                 <div className="relative my-2">
                   <div 
                     role="button"
@@ -238,7 +201,7 @@ export default function TuVi() {
                         />
                       </div>
                       
-                      {/* Center Play/Pause Overlay Button */}
+                      {/* Nút Play/Pause ở tâm */}
                       <div className="absolute inset-0 bg-slate-950/20 dark:bg-slate-950/30 rounded-full flex items-center justify-center transition-opacity group-hover:bg-slate-950/45">
                         <div className={`p-3 rounded-full text-white shadow-xl backdrop-blur-sm border border-white/50 transition-all ${
                             isAudioPlaying ? "bg-amber-500 scale-110 shadow-amber-500/50 ring-2 ring-white" : "bg-black/70 group-hover:scale-110"
@@ -255,7 +218,7 @@ export default function TuVi() {
                   </div>
                 </div>
 
-                {/* Audio Wave Visualizer */}
+                {/* Sóng âm thanh động khi phát */}
                 <div className="w-full flex flex-col items-center gap-2">
                   <div className="flex items-center gap-1.5 h-3.5">
                     {[40, 70, 100, 60, 90, 50, 80, 40].map((height, i) => (
@@ -276,31 +239,21 @@ export default function TuVi() {
                 </div>
               </div>
 
-              {/* Right Column: Destiny Profile Details */}
+              {/* Cột phải: Thẻ chi tiết thông tin nhân thân */}
               <div className="lg:col-span-8 flex flex-col justify-between space-y-4">
-                <div className="space-y-4 p-5 rounded-2xl bg-white/90 dark:bg-slate-900/80 border border-purple-200/80 dark:border-purple-800/60 shadow-2xs backdrop-blur-xl h-full flex flex-col justify-between">
-                  {/* Header */}
-                  <div className="w-full flex flex-col gap-2 pb-3 border-b border-purple-200/50 dark:border-purple-800/40">
+                <div className="space-y-4 p-4.5 sm:p-5 rounded-2xl bg-white/90 dark:bg-slate-900/80 border border-purple-200/80 dark:border-purple-800/60 shadow-2xs backdrop-blur-xl h-full flex flex-col justify-between">
+                  {/* Header hồ sơ nhân thân */}
+                  <div className="w-full flex flex-col gap-2 pb-3 border-b border-purple-200/40 dark:border-purple-800/40">
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <motion.div
-                          animate={{ rotate: [0, -7, 7, 0], scale: [1, 1.1, 0.96, 1] }}
-                          transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-                          className="shrink-0"
-                        >
-                          <User className="w-5.5 h-5.5 text-indigo-600 dark:text-indigo-400 stroke-[2.2]" />
-                        </motion.div>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <h4 className="text-sm sm:text-base font-black font-play tracking-tight truncate text-indigo-600 dark:text-indigo-400">
-                            {isVi ? "Hồ sơ bản mệnh" : "Your destiny profile matrix"}
-                          </h4>
-                          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 hidden sm:inline">•</span>
-                          <span className="text-xs font-black text-purple-800 dark:text-purple-200 hidden sm:inline">{TU_VI_PROFILE.fullName}</span>
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <User className="w-4.5 h-4.5 text-purple-600 dark:text-purple-400 shrink-0" />
+                        <h4 className="text-sm sm:text-base font-black text-purple-800 dark:text-purple-300 tracking-wide">
+                          {TU_VI_PROFILE.fullName}
+                        </h4>
                       </div>
 
-                      <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-100/90 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 rounded-full text-[11px] font-bold shrink-0">
-                        <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 shrink-0" />
+                      <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100/90 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 rounded-full text-[11px] font-bold shrink-0">
+                        <Star className="w-3 h-3 fill-amber-500 text-amber-500 shrink-0" />
                         <span>Cung Mệnh: Tý • Thân cư Quan Lộc (Thìn)</span>
                       </div>
                     </div>
@@ -312,77 +265,77 @@ export default function TuVi() {
                     </div>
                   </div>
 
-                  {/* 6 Grid Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  {/* Lưới 6 thẻ thông số nhân thân với Icon minh họa trực quan */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {/* 1. Dương lịch */}
-                    <div className="p-3.5 bg-indigo-50/70 dark:bg-indigo-950/30 rounded-xl border border-indigo-200/60 dark:border-indigo-800/40 flex items-start gap-3 transition-all hover:border-indigo-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Calendar className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-indigo-50/70 dark:bg-indigo-950/30 rounded-xl border border-indigo-200/50 dark:border-indigo-800/40 flex items-start gap-2.5 transition-all hover:border-indigo-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Calendar className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">DƯƠNG LỊCH</div>
-                        <div className="text-xs font-black text-slate-900 dark:text-slate-100 mt-0.5">{TU_VI_PROFILE.birthDateSolar}</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Đinh Hợi 17/05 Giáp Tý)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">DƯƠNG LỊCH</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateSolar}</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Đinh Hợi 17/05 Giáp Tý)</div>
                       </div>
                     </div>
 
                     {/* 2. Âm lịch */}
-                    <div className="p-3.5 bg-purple-50/70 dark:bg-purple-950/30 rounded-xl border border-purple-200/60 dark:border-purple-800/40 flex items-start gap-3 transition-all hover:border-purple-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Moon className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-purple-50/70 dark:bg-purple-950/30 rounded-xl border border-purple-200/50 dark:border-purple-800/40 flex items-start gap-2.5 transition-all hover:border-purple-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Moon className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400">ÂM LỊCH</div>
-                        <div className="text-xs font-black text-slate-900 dark:text-slate-100 mt-0.5">{TU_VI_PROFILE.birthDateLunar}</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Năm Giáp Tý 1984)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-400">ÂM LỊCH</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthDateLunar}</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Năm Giáp Tý 1984)</div>
                       </div>
                     </div>
 
                     {/* 3. Giờ sinh can chi */}
-                    <div className="p-3.5 bg-amber-50/70 dark:bg-amber-950/30 rounded-xl border border-amber-200/60 dark:border-amber-800/40 flex items-start gap-3 transition-all hover:border-amber-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Clock className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-amber-50/70 dark:bg-amber-950/30 rounded-xl border border-amber-200/50 dark:border-amber-800/40 flex items-start gap-2.5 transition-all hover:border-amber-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Clock className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">GIỜ SINH CAN CHI</div>
-                        <div className="text-xs font-black text-slate-900 dark:text-slate-100 mt-0.5">{TU_VI_PROFILE.birthHourLunar}</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Thiên Can: Quý, Địa Chi: Dậu)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400">GIỜ SINH CAN CHI</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-slate-100">{TU_VI_PROFILE.birthHourLunar}</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Thiên Can: Quý, Địa Chi: Dậu)</div>
                       </div>
                     </div>
 
                     {/* 4. Bản mệnh nạp âm */}
-                    <div className="p-3.5 bg-emerald-50/70 dark:bg-emerald-950/30 rounded-xl border border-emerald-200/60 dark:border-emerald-800/40 flex items-start gap-3 transition-all hover:border-emerald-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <ShieldCheck className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-emerald-50/70 dark:bg-emerald-950/30 rounded-xl border border-emerald-200/50 dark:border-emerald-800/40 flex items-start gap-2.5 transition-all hover:border-emerald-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <ShieldCheck className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">NĂM SINH (NẠP ÂM)</div>
-                        <div className="text-xs font-black text-emerald-800 dark:text-emerald-300 mt-0.5">{TU_VI_PROFILE.elementNapAm}</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Vàng ròng đáy biển sâu)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">NĂM SINH (NẠP ÂM)</div>
+                        <div className="text-xs font-black text-emerald-800 dark:text-emerald-300">{TU_VI_PROFILE.elementNapAm}</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Vàng ròng đáy biển sâu)</div>
                       </div>
                     </div>
 
                     {/* 5. Cung mệnh phi */}
-                    <div className="p-3.5 bg-cyan-50/70 dark:bg-cyan-950/30 rounded-xl border border-cyan-200/60 dark:border-cyan-800/40 flex items-start gap-3 transition-all hover:border-cyan-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Compass className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-cyan-50/70 dark:bg-cyan-950/30 rounded-xl border border-cyan-200/50 dark:border-cyan-800/40 flex items-start gap-2.5 transition-all hover:border-cyan-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Compass className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400">CUNG MỆNH QUÁI</div>
-                        <div className="text-xs font-black text-cyan-800 dark:text-cyan-300 mt-0.5">{TU_VI_PROFILE.menhQuai}</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Đoài Kim - Tây Tứ Mệnh)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">CUNG MỆNH QUÁI</div>
+                        <div className="text-xs font-black text-cyan-800 dark:text-cyan-300">{TU_VI_PROFILE.menhQuai}</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Đoài Kim - Tây Tứ Mệnh)</div>
                       </div>
                     </div>
 
                     {/* 6. Con số may mắn / Cục vận */}
-                    <div className="p-3.5 bg-rose-50/70 dark:bg-rose-950/30 rounded-xl border border-rose-200/60 dark:border-rose-800/40 flex items-start gap-3 transition-all hover:border-rose-400 shadow-2xs">
-                      <div className="w-8.5 h-8.5 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Hash className="w-4.5 h-4.5" />
+                    <div className="p-3 bg-rose-50/70 dark:bg-rose-950/30 rounded-xl border border-rose-200/50 dark:border-rose-800/40 flex items-start gap-2.5 transition-all hover:border-rose-400 shadow-2xs">
+                      <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Hash className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">CỤC VẬN HÀM SỐ</div>
-                        <div className="text-xs font-black text-rose-700 dark:text-rose-300 mt-0.5">Kim Tứ Cục (Số 4)</div>
-                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">(Khởi đại vận năm 4 tuổi)</div>
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-rose-600 dark:text-rose-400">CỤC VẬN HÀM SỐ</div>
+                        <div className="text-xs font-black text-rose-700 dark:text-rose-300">Kim Tứ Cục (Số 4)</div>
+                        <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">(Khởi đại vận năm 4 tuổi)</div>
                       </div>
                     </div>
                   </div>
@@ -391,41 +344,30 @@ export default function TuVi() {
             </div>
           </div>
 
-          {/* ================= PHẦN 2: TÍNH CÁCH QUẢN TRỊ ================= */}
+          {/* ================= PHẦN 2: TÍNH CÁCH TRONG CÔNG VIỆC ================= */}
           <div 
             id="tuvi-section-2" 
-            className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-blue-500/25 rounded-3xl p-5 sm:p-7 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-6"
+            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-blue-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Header */}
-            <div className="flex flex-col items-start w-full text-left gap-2 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div className="flex items-center justify-between w-full flex-wrap gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <motion.div
-                    animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="shrink-0 p-2 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20"
-                  >
-                    <Briefcase className="w-5.5 h-5.5 stroke-[2.2]" />
-                  </motion.div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black font-play tracking-tight text-slate-900 dark:text-white">
-                      {isVi ? "Phong cách quản trị" : "Your management style matrix"}
-                    </h3>
-                    <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                      {isVi ? "4 trụ cột tư duy & phong cách điều hành doanh nghiệp" : "4 core pillars of leadership and decision making"}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-black px-3 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 shrink-0">
-                  4 Trụ Cột Quản Trị
-                </span>
+            {/* Tiêu đề section 2 */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-blue-200/50 dark:border-blue-800/50">
+              <div className="flex items-center gap-2.5 text-left">
+                <Briefcase className="w-6 h-6 text-blue-500 dark:text-cyan-400 animate-pulse shrink-0 drop-shadow-md" />
+                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-500 bg-clip-text text-transparent animate-gradient">
+                  {isVi ? "2. Phong Cách Quản Trị" : "2. Governance Style"}
+                </h3>
               </div>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
+                4 Trụ Cột Quản Trị
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {WORK_PERSONALITY_TRAITS.map((trait, index) => {
                 const colorPalette = [
                   { 
+                    bar: "bg-sky-600", 
                     text: "text-sky-700 dark:text-sky-300", 
                     bg: "bg-sky-500/10", 
                     badgeText: "text-sky-800 dark:text-sky-300", 
@@ -433,6 +375,7 @@ export default function TuVi() {
                     glow: "hover:border-sky-400 dark:hover:border-sky-400/70"
                   },
                   { 
+                    bar: "bg-violet-600", 
                     text: "text-violet-700 dark:text-violet-300", 
                     bg: "bg-violet-500/10", 
                     badgeText: "text-violet-800 dark:text-violet-300", 
@@ -440,6 +383,7 @@ export default function TuVi() {
                     glow: "hover:border-violet-400 dark:hover:border-violet-400/70"
                   },
                   { 
+                    bar: "bg-emerald-600", 
                     text: "text-emerald-700 dark:text-emerald-300", 
                     bg: "bg-emerald-500/10", 
                     badgeText: "text-emerald-800 dark:text-emerald-300", 
@@ -447,6 +391,7 @@ export default function TuVi() {
                     glow: "hover:border-emerald-400 dark:hover:border-emerald-400/70"
                   },
                   { 
+                    bar: "bg-amber-600", 
                     text: "text-amber-700 dark:text-amber-300", 
                     bg: "bg-amber-500/10", 
                     badgeText: "text-amber-800 dark:text-amber-300", 
@@ -458,20 +403,15 @@ export default function TuVi() {
                 return (
                   <div 
                     key={trait.id}
-                    className={`p-5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${colorPalette.border} ${colorPalette.glow} shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4 backdrop-blur-md`}
+                    className={`p-5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${colorPalette.border} ${colorPalette.glow} shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-3.5 backdrop-blur-md`}
                   >
-                    <div className="space-y-3">
-                      {/* Subcard Header */}
+                    <div className="space-y-2.5">
+                      {/* Tiêu đề sub card */}
                       <div className={`w-full flex flex-wrap items-center justify-between gap-2.5 pb-2.5 border-b ${colorPalette.border}`}>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <motion.div
-                            animate={{ rotate: [0, 6, -6, 0], scale: [1, 1.08, 1] }}
-                            transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-                            className="shrink-0"
-                          >
-                            <Sparkles className={`w-4.5 h-4.5 ${colorPalette.text} stroke-[2.2]`} />
-                          </motion.div>
-                          <h4 className={`text-sm sm:text-[15px] font-black ${colorPalette.text} tracking-wide truncate`}>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2 h-5 ${colorPalette.bar} rounded-full shrink-0`} />
+                          <Sparkles className={`w-4 h-4 ${colorPalette.text} shrink-0`} />
+                          <h4 className={`text-sm sm:text-[15px] font-black ${colorPalette.text} tracking-wide`}>
                             {trait.title}
                           </h4>
                         </div>
@@ -484,7 +424,7 @@ export default function TuVi() {
                         {trait.subtitle}
                       </div>
 
-                      <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 text-justify leading-relaxed">
+                      <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-200 text-justify pt-1 leading-relaxed">
                         {trait.description}
                       </p>
                     </div>
@@ -503,78 +443,56 @@ export default function TuVi() {
             </div>
           </div>
 
-          {/* ================= PHẦN 3: LỤC CUNG & NGŨ HÀNH ================= */}
-          <div 
-            id="tuvi-section-3" 
-            className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-emerald-500/25 rounded-3xl p-5 sm:p-7 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-6"
-          >
-            {/* Header */}
-            <div className="flex flex-col items-start w-full text-left gap-2 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div className="flex items-center justify-between w-full flex-wrap gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <motion.div
-                    animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="shrink-0 p-2 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                  >
-                    <Target className="w-5.5 h-5.5 stroke-[2.2]" />
-                  </motion.div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black font-play tracking-tight text-slate-900 dark:text-white">
-                      {isVi ? "Lục Cung Ngũ Hành" : "Palaces and Elements Matrix"}
-                    </h3>
-                    <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                      {isVi ? "Các cung tử vi cốt lõi & Vận hành ngũ hành trong quản trị SOP/CRM/CX" : "Core astrological palaces & Five Elements SOP governance"}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-black px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 shrink-0">
-                  Lục Cung & Ngũ Hành
-                </span>
+          {/* ================= PHẦN 3: CHÂN DUNG TỬ VI TRONG CÔNG VIỆC ================= */}
+          <div id="tuvi-section-3" className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-emerald-400/30 rounded-2xl md:rounded-3xl p-4.5 sm:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(16,185,129,0.15)] hover:dark:border-emerald-400/50 backdrop-blur-2xl transition-all duration-300 space-y-5">
+            <div className="flex items-center justify-between pb-3.5 border-b border-emerald-200/50 dark:border-emerald-800/50">
+              <div className="flex items-center gap-2.5 text-left">
+                <Target className="w-6 h-6 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0 drop-shadow-md" />
+                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 bg-clip-text text-transparent animate-gradient">
+                  {isVi ? "3. Lục Cung Ngũ Hành" : "3. Palaces & Elements"}
+                </h3>
               </div>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                Lục Cung & Ngũ Hành
+              </span>
             </div>
 
-            {/* 6 Core Palaces */}
-            <div className="space-y-4">
+            {/* 6 Cung cốt lõi */}
+            <div className="space-y-3.5">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-4 bg-emerald-500 rounded-full shrink-0" />
-                <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <span className="w-1.5 h-4 bg-emerald-500 rounded-full shrink-0" />
+                <h4 className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                   Lục cung trọng yếu (Tam hợp Thân – Tý – Thìn)
                 </h4>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {SIX_CORE_PALACES.map((palace, index) => {
                   const palette = [
-                    { text: "text-rose-700 dark:text-rose-300", bg: "bg-rose-500/10", badgeText: "text-rose-800 dark:text-rose-300", border: "border-rose-500/25 dark:border-rose-500/35" },
-                    { text: "text-amber-700 dark:text-amber-300", bg: "bg-amber-500/10", badgeText: "text-amber-800 dark:text-amber-300", border: "border-amber-500/25 dark:border-amber-500/35" },
-                    { text: "text-emerald-700 dark:text-emerald-300", bg: "bg-emerald-500/10", badgeText: "text-emerald-800 dark:text-emerald-300", border: "border-emerald-500/25 dark:border-emerald-500/35" },
-                    { text: "text-cyan-700 dark:text-cyan-300", bg: "bg-cyan-500/10", badgeText: "text-cyan-800 dark:text-cyan-300", border: "border-cyan-500/25 dark:border-cyan-500/35" },
-                    { text: "text-indigo-700 dark:text-indigo-300", bg: "bg-indigo-500/10", badgeText: "text-indigo-800 dark:text-indigo-300", border: "border-indigo-500/25 dark:border-indigo-500/35" },
-                    { text: "text-fuchsia-700 dark:text-fuchsia-300", bg: "bg-fuchsia-500/10", badgeText: "text-fuchsia-800 dark:text-fuchsia-300", border: "border-fuchsia-500/25 dark:border-fuchsia-500/35" },
+                    { bar: "bg-rose-600", text: "text-rose-700 dark:text-rose-300", bg: "bg-rose-500/10", badgeText: "text-rose-800 dark:text-rose-300", border: "border-rose-500/25 dark:border-rose-500/35" },
+                    { bar: "bg-amber-600", text: "text-amber-700 dark:text-amber-300", bg: "bg-amber-500/10", badgeText: "text-amber-800 dark:text-amber-300", border: "border-amber-500/25 dark:border-amber-500/35" },
+                    { bar: "bg-emerald-600", text: "text-emerald-700 dark:text-emerald-300", bg: "bg-emerald-500/10", badgeText: "text-emerald-800 dark:text-emerald-300", border: "border-emerald-500/25 dark:border-emerald-500/35" },
+                    { bar: "bg-cyan-600", text: "text-cyan-700 dark:text-cyan-300", bg: "bg-cyan-500/10", badgeText: "text-cyan-800 dark:text-cyan-300", border: "border-cyan-500/25 dark:border-cyan-500/35" },
+                    { bar: "bg-indigo-600", text: "text-indigo-700 dark:text-indigo-300", bg: "bg-indigo-500/10", badgeText: "text-indigo-800 dark:text-indigo-300", border: "border-indigo-500/25 dark:border-indigo-500/35" },
+                    { bar: "bg-fuchsia-600", text: "text-fuchsia-700 dark:text-fuchsia-300", bg: "bg-fuchsia-500/10", badgeText: "text-fuchsia-800 dark:text-fuchsia-300", border: "border-fuchsia-500/25 dark:border-fuchsia-500/35" },
                   ][index % 6];
 
                   return (
                     <div 
                       key={palace.id}
-                      className={`p-5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${palette.border} flex flex-col justify-between space-y-4 shadow-2xs hover:shadow-md transition-all backdrop-blur-md`}
+                      className={`p-4 sm:p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/75 border ${palette.border} flex flex-col justify-between space-y-3 shadow-2xs hover:shadow-md transition-all backdrop-blur-md`}
                     >
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {/* Header */}
-                        <div className={`w-full flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b ${palette.border}`}>
-                          <div className="flex items-center gap-2 min-w-0">
-                            <motion.div
-                              animate={{ rotate: [0, -7, 7, 0], scale: [1, 1.08, 1] }}
-                              transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
-                              className="shrink-0"
-                            >
-                              <Compass className={`w-4.5 h-4.5 ${palette.text} stroke-[2.2]`} />
-                            </motion.div>
-                            <h5 className={`font-black text-sm sm:text-base ${palette.text} truncate`}>
+                        <div className={`w-full flex flex-wrap items-center justify-between gap-2 pb-2 border-b ${palette.border}`}>
+                          <div className="flex items-center gap-2">
+                            <span className={`w-2 h-4 ${palette.bar} rounded-full shrink-0`} />
+                            <Target className={`w-4 h-4 ${palette.text} shrink-0`} />
+                            <h5 className={`font-black text-sm ${palette.text}`}>
                               {palace.name}
                             </h5>
                           </div>
-                          <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${palette.bg} ${palette.badgeText} border ${palette.border} shrink-0`}>
+                          <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${palette.bg} ${palette.badgeText} border ${palette.border} shrink-0`}>
                             {palace.tag}
                           </span>
                         </div>
@@ -599,7 +517,7 @@ export default function TuVi() {
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-200/50 dark:border-slate-800/50 space-y-1.5">
+                      <div className="pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 space-y-1.5">
                         {palace.checkpoints.map((cp, idx) => (
                           <div key={idx} className="flex items-center gap-2 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
@@ -613,11 +531,11 @@ export default function TuVi() {
               </div>
             </div>
 
-            {/* Five Elements Governance */}
-            <div className="space-y-4 pt-4 border-t border-emerald-200/40 dark:border-emerald-800/40">
+            {/* Ma trận 5 hành tố trong vận hành quản trị */}
+            <div className="space-y-3.5 pt-3 border-t border-emerald-200/40 dark:border-emerald-800/40">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-4 bg-teal-500 rounded-full shrink-0" />
-                <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <span className="w-1.5 h-4 bg-teal-500 rounded-full shrink-0" />
+                <h4 className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                   Ứng dụng ngũ hành trong quản trị vận hành (SOP - CRM - CX)
                 </h4>
               </div>
@@ -627,7 +545,7 @@ export default function TuVi() {
                   <div key={i} className={`p-4 rounded-2xl border flex flex-col justify-between shadow-2xs transition-all hover:scale-[1.02] ${el.bgColor} ${el.borderColor} backdrop-blur-md`}>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-1">
-                        <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${el.iconBg}`}>
+                        <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${el.iconBg}`}>
                           {el.element}
                         </span>
                       </div>
@@ -644,64 +562,52 @@ export default function TuVi() {
             </div>
           </div>
 
-          {/* ================= PHẦN 4: KIỂM TRA TUỔI HỢP CÔNG VIỆC ================= */}
+          {/* ================= PHẦN 4: CÁC TUỔI HỢP TÁC LÀM VIỆC ================= */}
           <div 
             id="tuvi-section-4" 
-            className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-teal-500/25 rounded-3xl p-5 sm:p-7 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-6"
+            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-teal-400/30 rounded-[var(--theme-radius-card,10px)] p-4.5 sm:p-6 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Header */}
-            <div className="flex flex-col items-start w-full text-left gap-2 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div className="flex items-center justify-between w-full flex-wrap gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <motion.div
-                    animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="shrink-0 p-2 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20"
-                  >
-                    <Users className="w-5.5 h-5.5 stroke-[2.2]" />
-                  </motion.div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black font-play tracking-tight text-slate-900 dark:text-white">
-                      {isVi ? "Công cụ kiểm tra phù hợp trong công việc" : "Workplace Synergy & Compatibility Checker"}
-                    </h3>
-                    <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                      {isVi ? "Ma trận 12 con giáp - Tra cứu độ tương hợp, phong thủy bàn làm việc & lời khuyên" : "12 Zodiac compatibility matrix - Workplace desk alignment & advice"}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-black px-3 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20 shrink-0">
-                  Ma trận 12 Con Giáp
-                </span>
+            <div className="flex items-center justify-between pb-3.5 border-b border-teal-200/50 dark:border-teal-800/50">
+              <div className="flex items-center gap-2.5 text-left">
+                <Users className="w-6 h-6 text-teal-500 dark:text-teal-400 animate-pulse shrink-0 drop-shadow-md" />
+                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-teal-600 via-cyan-500 to-sky-500 bg-clip-text text-transparent animate-gradient">
+                  {isVi ? "4. Ma Trận Con Giáp" : "4. Zodiac Synergy"}
+                </h3>
               </div>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20">
+                Ma trận 12 Con Giáp
+              </span>
             </div>
 
-            {/* 2-Column Interactive Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* 2-Column Layout: Left Column = Search & Zodiac Ribbon Grid; Right Column = Detailed Result */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+              {/* LEFT COLUMN: Search & Selection Grid */}
               <div className="lg:col-span-6 space-y-4 flex flex-col justify-between">
-                {/* Search & Filter Bar */}
-                <div className="flex flex-col gap-3 bg-slate-500/5 border border-slate-200/80 dark:border-slate-800/80 p-4 rounded-2xl">
+                {/* Filter pills & Year Search */}
+                <div className="flex flex-col gap-2.5 bg-slate-500/5 border border-slate-200/70 dark:border-slate-800/70 p-3.5 rounded-2xl">
                   <div className="flex items-center gap-2 shrink-0 w-full">
                     <div className="relative flex-1">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                       <input
                         type="number"
                         placeholder="Nhập năm sinh tra cứu (vd: 1992, 1988, 1976)..."
                         value={searchYearInput}
                         onChange={(e) => setSearchYearInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleYearSearch()}
-                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 shadow-2xs font-semibold"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 shadow-2xs font-semibold"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={handleYearSearch}
-                      className="px-4 py-2.5 rounded-xl text-xs font-black bg-teal-600 hover:bg-teal-700 text-white transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
+                      className="px-4 py-2 rounded-xl text-xs font-black bg-teal-600 hover:bg-teal-700 text-white transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
                     >
                       Tra cứu
                     </button>
                   </div>
 
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
                     {[
                       { id: "all", label: "Tất cả 12 Giáp" },
                       { id: "best", label: "Tam Hợp / Lục Hợp" },
@@ -727,7 +633,7 @@ export default function TuVi() {
                   </div>
                 </div>
 
-                {/* 12 Zodiac Grid */}
+                {/* Grid 12 Con Giáp Ribbon */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
                   {filteredZodiacList.map((item) => {
                     const isSelected = selectedZodiacId === item.id;
@@ -764,13 +670,13 @@ export default function TuVi() {
                 </div>
               </div>
 
-              {/* Active Zodiac Detail Card */}
+              {/* RIGHT COLUMN: Detailed Zodiac Result Info */}
               <div className="lg:col-span-6 h-full">
                 {currentZodiac ? (() => {
                   const activeTheme = getZodiacTheme(currentZodiac.tier);
                   return (
-                    <div className={`p-5 sm:p-6 rounded-2xl md:rounded-3xl bg-gradient-to-br ${activeTheme.gradientBox} border space-y-4 h-full flex flex-col justify-between shadow-md backdrop-blur-xl transition-all duration-300`}>
-                      <div className="space-y-4">
+                    <div className={`p-5 rounded-2xl md:rounded-3xl bg-gradient-to-br ${activeTheme.gradientBox} border space-y-4 h-full flex flex-col justify-between shadow-md backdrop-blur-xl transition-all duration-300`}>
+                      <div className="space-y-3.5">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-200/50 dark:border-slate-800/60">
                           <div className="flex items-center gap-3">
                             <span className="text-4xl sm:text-5xl drop-shadow-md">{currentZodiac.icon}</span>
@@ -813,6 +719,7 @@ export default function TuVi() {
                         </div>
                       </div>
 
+                      {/* Thẻ % tạo thành thẻ nằm cuối cùng */}
                       <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${activeTheme.gradientBox} border shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 mt-3`}>
                         <div className="flex items-center gap-2.5">
                           <div className={`w-8 h-8 rounded-full ${activeTheme.badge} flex items-center justify-center font-black text-sm shadow-md shrink-0`}>
@@ -842,79 +749,60 @@ export default function TuVi() {
             </div>
           </div>
 
-          {/* ================= PHẦN 5: TRIẾT LÝ LÃNH ĐẠO ================= */}
+          {/* ================= PHẦN 5: NGUYÊN TẮC & TRIẾT LÝ HÀNH ĐỘNG LÃNH ĐẠO ================= */}
           <div 
             id="tuvi-section-5" 
-            className="w-full bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-amber-500/25 rounded-3xl p-5 sm:p-7 shadow-sm backdrop-blur-2xl transition-all duration-300 space-y-6"
+            className="w-full bg-white/85 dark:bg-slate-900/85 border border-slate-200/90 dark:border-amber-400/30 rounded-2xl md:rounded-3xl p-4.5 sm:p-6 shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.15)] hover:dark:border-amber-400/50 backdrop-blur-2xl transition-all duration-300 space-y-5"
           >
-            {/* Header */}
-            <div className="flex flex-col items-start w-full text-left gap-2 pb-3 border-b border-slate-200/60 dark:border-white/10">
-              <div className="flex items-center justify-between w-full flex-wrap gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <motion.div
-                    animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.1, 0.95, 1], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="shrink-0 p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
-                  >
-                    <Award className="w-5.5 h-5.5 stroke-[2.2]" />
-                  </motion.div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black font-play tracking-tight text-slate-900 dark:text-white">
-                      {isVi ? "Triết Lý Lãnh Đạo" : "Leadership Philosophy"}
-                    </h3>
-                    <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                      {isVi ? "Kim chỉ nam tư duy & 5 giá trị cốt lõi trong văn hóa quản trị" : "5 core leadership values & action principles"}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-black px-3 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 shrink-0">
-                  {isVi ? "5 Giá Trị Cốt Lõi" : "5 Core Values"}
-                </span>
+            {/* Tiêu đề section 5 */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-amber-200/50 dark:border-amber-800/50">
+              <div className="flex items-center gap-2.5 text-left">
+                <Award className="w-6 h-6 text-amber-500 dark:text-amber-400 animate-pulse shrink-0 drop-shadow-md" />
+                <h3 className="text-base sm:text-lg font-black tracking-wide font-play bg-gradient-to-r from-amber-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-gradient">
+                  {isVi ? "5. Triết Lý Lãnh Đạo" : "5. Leadership Philosophy"}
+                </h3>
               </div>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                {isVi ? "5 Giá Trị Cốt Lõi" : "5 Core Values"}
+              </span>
             </div>
 
-            {/* Philosophy Cards Grid */}
-            <div id="tuvi-philosophy-cards" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 w-full">
+            {/* Grid 5 thẻ nguyên tắc & triết lý hành động */}
+            <div id="tuvi-philosophy-cards" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4 w-full">
               {ACTION_PHILOSOPHY_CARDS.map((card, idx) => {
                 const renderIcon = () => {
                   switch (card.iconType) {
                     case "target":
-                      return <Target className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Target className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
                     case "trending":
-                      return <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <TrendingUp className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
                     case "heart":
-                      return <Heart className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Heart className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
                     case "compass":
-                      return <Compass className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Compass className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
                     case "award":
-                      return <Award className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
-                    case "bar-chart":
-                      return <BarChart3 className="w-5 h-5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
+                      return <Award className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400 stroke-[2.2]" />;
                     default:
-                      return <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
+                      return <Sparkles className="w-4.5 h-4.5 text-amber-600 dark:text-amber-400" />;
                   }
                 };
 
                 return (
                   <div 
                     key={card.id}
-                    className="rounded-2xl p-5 bg-white dark:bg-slate-900/90 border border-amber-200/90 dark:border-amber-500/25 shadow-2xs hover:shadow-md hover:border-amber-400 dark:hover:border-amber-400/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between text-left gap-3 group"
+                    className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-slate-900/90 border border-amber-200/90 dark:border-amber-500/25 shadow-2xs hover:shadow-md hover:border-amber-400 dark:hover:border-amber-400/50 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between text-left gap-3 group"
                   >
-                    <div className="space-y-3">
+                    <div className="space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
-                        <motion.div
-                          animate={{ rotate: [0, 7, -7, 0], scale: [1, 1.1, 1] }}
-                          transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-                          className="shrink-0 p-2 rounded-xl bg-amber-500/10 border border-amber-500/20"
-                        >
+                        <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-700/50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           {renderIcon()}
-                        </motion.div>
-                        <span className="text-[10px] font-mono font-black px-2.5 py-1 rounded-full bg-amber-100/70 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 shrink-0">
+                        </div>
+                        <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-amber-100/70 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40">
                           0{idx + 1}
                         </span>
                       </div>
 
-                      <h4 className="text-sm sm:text-base font-bold text-amber-950 dark:text-amber-200 tracking-tight leading-snug pt-0.5">
+                      <h4 className="text-sm font-bold text-amber-950 dark:text-amber-200 tracking-tight leading-snug pt-0.5">
                         {card.title}
                       </h4>
 
@@ -923,7 +811,7 @@ export default function TuVi() {
                       </p>
                     </div>
 
-                    <div className="pt-2.5 border-t border-amber-100 dark:border-amber-900/40 flex items-center gap-1.5 text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                    <div className="pt-2 border-t border-amber-100 dark:border-amber-900/40 flex items-center gap-1.5 text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
                       <Sparkles className="w-3 h-3 shrink-0" />
                       <span>{isVi ? "Giá trị cốt lõi" : "Core Value"}</span>
                     </div>
@@ -931,36 +819,11 @@ export default function TuVi() {
                 );
               })}
             </div>
-
-            {/* Sub Card: Result Driven */}
-            <div className="pt-3 border-t border-amber-200/40 dark:border-amber-800/40 w-full">
-              <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs backdrop-blur-md text-left">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-11 h-11 rounded-2xl bg-amber-500/25 border border-amber-400/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0 shadow-3xs">
-                    <BarChart3 className="w-5.5 h-5.5 stroke-[2.2]" />
-                  </div>
-                  <div>
-                    <h5 className="text-sm font-extrabold text-amber-950 dark:text-amber-200 uppercase tracking-wide">
-                      {isVi ? "Lấy kết quả làm thước đo" : "Measuring Success by Results"}
-                    </h5>
-                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mt-1 font-medium">
-                      {isVi 
-                        ? "Đo lường thành công bằng sự hài lòng của khách hàng (CSAT), hiệu quả chi phí (Cost-to-Serve) và sự trưởng thành của đội ngũ."
-                        : "Measuring success through customer satisfaction (CSAT), cost-to-serve efficiency, and team maturity."}
-                    </p>
-                  </div>
-                </div>
-                <div className="shrink-0 py-1.5 px-3.5 rounded-xl bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-mono font-black border border-amber-400/30 uppercase tracking-widest">
-                  Result-Driven
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* ================= HERO QUOTE BANNER ================= */}
-          <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-950 text-white border border-indigo-500/30 shadow-xl backdrop-blur-xl">
-            <div className="absolute -right-10 -top-10 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 flex flex-col gap-4">
+          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-7 bg-[#1c1842] dark:bg-[#120e33] text-white border border-indigo-900/60 shadow-xl backdrop-blur-xl mt-4">
+            <div className="relative z-10 flex flex-col gap-3.5">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2 text-amber-300">
                   <Sparkles className="w-4 h-4 shrink-0" />
@@ -979,11 +842,15 @@ export default function TuVi() {
                 “Giáp Tý 1984 - Hải Trung Kim: Vàng ròng lắng đọng trong lòng biển cả, nội lực thâm sâu, trọng chữ Tín, lấy Tâm làm gốc và kiên định kiến tạo giá trị dài lâu.”
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-300 font-medium italic">
+              <p className="text-xs sm:text-sm text-slate-300 font-normal italic">
                 Trí tuệ - Nhân tâm - Kỷ luật - Phát triển - Thành công bền vững
               </p>
             </div>
           </div>
+
+        </div>
+      </div>
     </section>
   );
 }
+

@@ -1,240 +1,195 @@
 import React from "react";
 import {
-  Globe,
-  Scale,
-  HeartPulse,
-  UserCheck,
-  Network,
-  Target,
-  Crown,
-  BookOpen,
+  Server,
   Headphones,
-  PieChart,
   Bot,
-  Store,
-  LogIn,
-  Calculator,
-  Eye,
-  Settings,
+  BarChart3,
+  Workflow,
+  Users,
+  ShieldCheck,
+  FileCheck,
+  Activity,
   Layers,
-  Gem,
-  GraduationCap,
-  TrendingUp,
-  Sparkles,
-  CreditCard,
+  Database,
+  Radio,
+  Cpu,
+  Globe2,
   LucideIcon
 } from "lucide-react";
 
-export type SystemCategory = "all" | "cskh" | "management" | "data-ai";
-
-export interface SystemCategoryMeta {
-  id: SystemCategory;
-  labelVi: string;
-  labelEn: string;
-  count: number;
-  colorClass: string;
-}
+export type SystemCategory = "all" | "ops" | "cx" | "tech" | "data" | "security";
 
 export interface SystemItem {
   id: string;
-  category: "cskh" | "management" | "data-ai";
   code: string;
   nameVi: string;
   nameEn: string;
   descVi: string;
   descEn: string;
-  url: string | null;
-  gradientClass: string;
+  category: SystemCategory;
   icon: LucideIcon;
-  watermarkIcon: LucideIcon;
+  gradientClass: string;
+  url: string | null;
 }
 
-export const SYSTEM_CATEGORIES: SystemCategoryMeta[] = [
-  {
-    id: "all",
-    labelVi: "Tất cả hệ thống",
-    labelEn: "All Systems",
-    count: 12,
-    colorClass: "from-blue-600 to-indigo-600"
-  },
-  {
-    id: "cskh",
-    labelVi: "Chăm sóc khách hàng",
-    labelEn: "Customer Service",
-    count: 4,
-    colorClass: "from-indigo-600 to-rose-600"
-  },
-  {
-    id: "management",
-    labelVi: "Quản trị & Điều hành",
-    labelEn: "Management & ERP",
-    count: 5,
-    colorClass: "from-emerald-600 to-amber-600"
-  },
-  {
-    id: "data-ai",
-    labelVi: "Dữ liệu & Trí tuệ nhân tạo",
-    labelEn: "Data & AI Platform",
-    count: 3,
-    colorClass: "from-purple-600 to-cyan-600"
-  }
+export interface SystemCategoryOption {
+  id: SystemCategory;
+  labelVi: string;
+  labelEn: string;
+}
+
+export const SYSTEM_CATEGORIES: SystemCategoryOption[] = [
+  { id: "all", labelVi: "Tất cả hệ thống", labelEn: "All Systems" },
+  { id: "ops", labelVi: "Vận hành & Tổng đài", labelEn: "Ops & Contact Center" },
+  { id: "cx", labelVi: "Trải nghiệm khách hàng (CX)", labelEn: "Customer Experience" },
+  { id: "tech", labelVi: "Công nghệ & AI Bots", labelEn: "Tech & AI Automation" },
+  { id: "data", labelVi: "Dữ liệu & Báo cáo BI", labelEn: "Data & BI Analytics" },
+  { id: "security", labelVi: "Bảo mật & Kiểm toán QA", labelEn: "Security & QA Governance" },
 ];
 
 export const SYSTEMS_DATA: SystemItem[] = [
   {
-    id: "sdp",
-    category: "cskh",
-    code: "SDP",
-    nameVi: "Cổng làm việc CSKH",
-    nameEn: "Service Delivery Platform",
-    descVi: "Cổng làm việc tập trung chính của Phòng CSKH, cổng truy cập trung tâm cho mọi quy trình nghiệp vụ.",
-    descEn: "Service Delivery Platform: Centered portal for all Customer Service operations and integrations.",
-    url: "https://www.sdpplatfrom.powerservice.one",
-    gradientClass: "from-[#6366f1] via-[#4f46e5] to-[#3730a3]",
-    icon: Globe,
-    watermarkIcon: LogIn
-  },
-  {
-    id: "erp",
-    category: "management",
-    code: "ERP",
-    nameVi: "Tài chính kế toán",
-    nameEn: "Enterprise Resource Planning",
-    descVi: "Quản lý nguồn lực doanh nghiệp, tài chính kế toán, kho và sản xuất tập trung.",
-    descEn: "Enterprise Resource Planning: Central business finance, accounting, and resource planning.",
-    url: "https://www.erpplatfrom.powerservice.one",
-    gradientClass: "from-[#059669] via-[#0d9488] to-[#115e59]",
-    icon: Scale,
-    watermarkIcon: Calculator
-  },
-  {
-    id: "crm",
-    category: "cskh",
+    id: "crm-omni",
     code: "CRM",
-    nameVi: "Quản lý Quan hệ Khách hàng",
-    nameEn: "Customer Relationship Management",
-    descVi: "Quản lý thông tin khách hàng 360 độ, tối ưu hóa tương tác đa kênh và hành trình trải nghiệm.",
-    descEn: "Customer Relationship Management: 360-degree customer profiling, workflow and journey optimization.",
-    url: "https://www.crmplatfrom.powerservice.one",
-    gradientClass: "from-[#e11d48] via-[#be123c] to-[#881337]",
-    icon: HeartPulse,
-    watermarkIcon: Eye
+    nameVi: "Hệ thống Quản lý Quan hệ Khách hàng Đa kênh",
+    nameEn: "Omnichannel Customer Relationship Management",
+    descVi: "Quản lý dữ liệu tập trung 360 độ chân dung khách hàng, đồng bộ lịch sử tương tác qua Voice, Chat, Email, Social.",
+    descEn: "Unified 360-degree customer identity and interaction timeline across Voice, Chat, Email, and Social media channels.",
+    category: "cx",
+    icon: Users,
+    gradientClass: "from-blue-600 via-indigo-600 to-cyan-500",
+    url: "https://crm.powerservice.internal",
   },
   {
-    id: "hrm",
-    category: "management",
-    code: "HRM",
-    nameVi: "Quản lý Nguồn nhân lực",
-    nameEn: "Human Resource Management",
-    descVi: "Quản lý vòng đời nhân sự, tuyển dụng, đào tạo phát triển và chấm công tự động.",
-    descEn: "Human Resource Management: Seamless tracking of human assets, payroll, and recruitment workflows.",
-    url: "https://www.hrmplatfrom.powerservice.one",
-    gradientClass: "from-[#d97706] via-[#b45309] to-[#78350f]",
-    icon: UserCheck,
-    watermarkIcon: Settings
-  },
-  {
-    id: "bpm",
-    category: "management",
-    code: "BPM",
-    nameVi: "Quản lý Quy trình Nghiệp vụ",
-    nameEn: "Business Process Management",
-    descVi: "Số hóa và tự động hóa quy trình phối hợp liên phòng ban nhằm tăng cao hiệu suất.",
-    descEn: "Business Process Management: Digitize operational procedures for frictionless departmental collaboration.",
-    url: "https://www.bmpplatform.powerservice.one",
-    gradientClass: "from-[#0284c7] via-[#0369a1] to-[#075985]",
-    icon: Network,
-    watermarkIcon: Layers
-  },
-  {
-    id: "okr",
-    category: "management",
-    code: "OKR",
-    nameVi: "Quản lý Mục tiêu & Kết quả",
-    nameEn: "Objectives & Key Results",
-    descVi: "Thiết lập mục tiêu chiến lược và theo dõi kết quả then chốt minh bạch.",
-    descEn: "Objectives & Key Results: Set strategic targets and transparent progress measurement frameworks.",
-    url: "https://www.okrplatfrom.powerservice.one",
-    gradientClass: "from-[#7c3aed] via-[#6d28d9] to-[#4c1d95]",
-    icon: Target,
-    watermarkIcon: Target
-  },
-  {
-    id: "clp",
-    category: "cskh",
-    code: "CLP",
-    nameVi: "Khách hàng Thân thiết (Loyalty)",
-    nameEn: "Customer Loyalty Program",
-    descVi: "Xây dựng chương trình thành viên, tích lũy điểm thưởng và tối ưu ưu đãi voucher.",
-    descEn: "Customer Loyalty Program: Member programs, rewarding actions, and tailored promotional retention.",
-    url: "https://www.clpplatform.powerservice.one",
-    gradientClass: "from-[#ea580c] via-[#c2410c] to-[#9a3412]",
-    icon: Crown,
-    watermarkIcon: Gem
-  },
-  {
-    id: "lms",
-    category: "management",
-    code: "LMS",
-    nameVi: "Quản lý Đào tạo (Learning)",
-    nameEn: "Learning Management System",
-    descVi: "Kho khóa học trực tuyến, tự động hóa kiểm tra đánh giá chất lượng nhân sự.",
-    descEn: "Learning Management System: Automated training platform, online exams, and talent upskilling.",
-    url: "https://www.lmsplatfrom.powerservice.one",
-    gradientClass: "from-[#0d9488] via-[#0f766e] to-[#134e4a]",
-    icon: BookOpen,
-    watermarkIcon: GraduationCap
-  },
-  {
-    id: "csc",
-    category: "cskh",
-    code: "CSC",
-    nameVi: "Trung tâm Chăm sóc Khách hàng",
-    nameEn: "Customer Service Center",
-    descVi: "Hệ thống quản trị tương tác đa kênh, phân loại Ticket tự động và giám sát cam kết SLA.",
-    descEn: "Customer Service Center: Centralized ticketing engine and customer helpdesk with strict SLA monitoring.",
-    url: "https://www.cscplatform.powerservice.one",
-    gradientClass: "from-[#2563eb] via-[#1d4ed8] to-[#1e40af]",
+    id: "cc-cloud",
+    code: "PBX",
+    nameVi: "Tổng đài Cloud Contact Center & Định tuyến Thông minh",
+    nameEn: "Cloud Contact Center & Intelligent ACD Routing",
+    descVi: "Hệ thống phân phối cuộc gọi tự động (ACD), định tuyến theo kỹ năng nhân sự (Skill-based) và giám sát Real-time Dashboard.",
+    descEn: "Elastic cloud PBX with intelligent skill-based routing, interactive IVR workflows, and real-time supervisor console.",
+    category: "ops",
     icon: Headphones,
-    watermarkIcon: Headphones
+    gradientClass: "from-indigo-600 via-purple-600 to-pink-500",
+    url: "https://contactcenter.powerservice.internal",
   },
   {
-    id: "bi",
-    category: "data-ai",
-    code: "BI Dashboard",
-    nameVi: "Báo cáo & Phân tích",
-    nameEn: "Business Intelligence",
-    descVi: "Trực quan hóa chỉ số dữ liệu theo thời gian thực (Real-time Wallboard) hỗ trợ quản trị.",
-    descEn: "Business Intelligence: Real-time visual metrics dashboard to accelerate data-backed decisions.",
-    url: null,
-    gradientClass: "from-[#334155] via-[#1e293b] to-[#0f172a]",
-    icon: PieChart,
-    watermarkIcon: TrendingUp
+    id: "wfm-workforce",
+    code: "WFM",
+    nameVi: "Quản trị Lực lượng Lao động & Dự báo Tải cuộc gọi",
+    nameEn: "Workforce Management & Load Forecasting",
+    descVi: "Thuật toán Erlang-C tự động dự báo lưu lượng tiếp nhận, xếp ca làm việc thông minh và đo lường độ tuân thủ (Adherence).",
+    descEn: "Erlang-C AI forecasting algorithms, automated shift scheduling, and real-time agent adherence monitoring.",
+    category: "ops",
+    icon: Workflow,
+    gradientClass: "from-emerald-600 via-teal-600 to-cyan-600",
+    url: "https://wfm.powerservice.internal",
   },
   {
-    id: "ai",
-    category: "data-ai",
-    code: "AI Assistant",
-    nameVi: "Trợ lý Trí tuệ Nhân tạo",
-    nameEn: "Artificial Intelligence Platform",
-    descVi: "Hỗ trợ nhân sự bằng AI thông minh trong tra cứu, tự động hóa phản hồi và xử lý tác vụ 24/7.",
-    descEn: "Artificial Intelligence Platform: Automated intelligence, content lookup, and seamless 24/7 assistance.",
-    url: "https://www.aiplatfrom.powerservice.one",
-    gradientClass: "from-[#9333ea] via-[#7928ca] to-[#4c0519]",
+    id: "ai-chatbot",
+    code: "BOT",
+    nameVi: "Hệ thống AI Chatbot & Trợ lý Ảo Tự phục vụ",
+    nameEn: "Generative AI Chatbot & Virtual Assistants",
+    descVi: "Trợ lý ảo NLP/LLM giải quyết tự động đến 65% thắc mắc thường gặp (FCR), tích hợp tra cứu hóa đơn và xử lý đơn hàng tức thì.",
+    descEn: "LLM-driven conversational bots resolving up to 65% tier-1 inquiries automatically with real-time transactional integrations.",
+    category: "tech",
     icon: Bot,
-    watermarkIcon: Sparkles
+    gradientClass: "from-cyan-600 via-blue-600 to-indigo-600",
+    url: "https://aibot.powerservice.internal",
   },
   {
-    id: "pos",
-    category: "management",
-    code: "POS",
-    nameVi: "Quản lý Bán hàng tại Quầy",
-    nameEn: "Point of Sale",
-    descVi: "Quản lý giao dịch, bán lẻ, thanh toán hóa đơn và đồng bộ hóa tồn kho thời gian thực.",
-    descEn: "Point of Sale: Smooth billing, payment processes, and real-time inventory synchronization.",
-    url: "https://www.posplatform.powerservice.one",
-    gradientClass: "from-[#f97316] via-[#ea580c] to-[#c2410c]",
-    icon: Store,
-    watermarkIcon: CreditCard
-  }
+    id: "bi-analytics",
+    code: "BI",
+    nameVi: "Nền tảng Phân tích Dữ liệu BI & Giám sát SLA Thời gian thực",
+    nameEn: "Executive BI Analytics & Real-time SLA Dashboard",
+    descVi: "Bảng điều khiển trực quan hóa chỉ số CSAT, NPS, FCR, AHT, Service Level và phát hiện bất thường tự động theo thời gian thực.",
+    descEn: "Enterprise executive dashboards monitoring CSAT, NPS, FCR, AHT, and SL metrics with automated anomaly alerts.",
+    category: "data",
+    icon: BarChart3,
+    gradientClass: "from-violet-600 via-purple-600 to-indigo-600",
+    url: "https://analytics.powerservice.internal",
+  },
+  {
+    id: "qa-audit",
+    code: "QA",
+    nameVi: "Hệ thống Kiểm soát Chất lượng & Đánh giá Cuộc gọi",
+    nameEn: "Quality Assurance & Speech Analytics Auditing",
+    descVi: "Chấm điểm chất lượng tương tác đa kênh, phân tích sắc thái giọng nói (Speech-to-Text sentiment) và cảnh báo vi phạm quy trình.",
+    descEn: "AI speech-to-text sentiment auditing, automated scoring rubrics, and procedural compliance tracking.",
+    category: "security",
+    icon: ShieldCheck,
+    gradientClass: "from-amber-600 via-orange-600 to-rose-600",
+    url: "https://qa.powerservice.internal",
+  },
+  {
+    id: "km-portal",
+    code: "KM",
+    nameVi: "Cổng Quản trị Tri thức & Thư viện Quy trình SOP",
+    nameEn: "Knowledge Management & SOP Process Repository",
+    descVi: "Cơ sở dữ liệu tri thức nội bộ với tìm kiếm AI Semantic, phân quyền văn bản và cập nhật quy trình nghiệp vụ tức thì.",
+    descEn: "Semantic search knowledge base providing instant procedure guidance, policy updates, and training scripts.",
+    category: "cx",
+    icon: FileCheck,
+    gradientClass: "from-emerald-500 via-green-600 to-teal-600",
+    url: "https://wiki.powerservice.internal",
+  },
+  {
+    id: "rpa-automation",
+    code: "RPA",
+    nameVi: "Hệ sinh thái Tự động hoá Quy trình Robot (RPA)",
+    nameEn: "Robotic Process Automation & Bot Orchestration",
+    descVi: "Tự động hóa tác vụ back-office lặp lại như đối soát dữ liệu, hoàn tiền, cấp lại tài khoản với độ chính xác 99.99%.",
+    descEn: "End-to-end automation of back-office reconciliation, refunds, and account provisioning with 99.99% accuracy.",
+    category: "tech",
+    icon: Cpu,
+    gradientClass: "from-fuchsia-600 via-pink-600 to-rose-600",
+    url: "https://rpa.powerservice.internal",
+  },
+  {
+    id: "nps-feedback",
+    code: "NPS",
+    nameVi: "Hệ thống Khảo sát Đo lường Phản hồi Khách hàng",
+    nameEn: "Real-time Customer VOC & NPS Closed-Loop System",
+    descVi: "Thu thập khảo sát tức thì sau mỗi giao dịch (CSAT/CES/NPS) và kích hoạt quy trình gọi lại xử lý khiếu nại trong 60 phút.",
+    descEn: "Post-interaction survey collection and automated closed-loop escalations triggering callback to detractors within 60 mins.",
+    category: "cx",
+    icon: Activity,
+    gradientClass: "from-rose-500 via-red-600 to-orange-500",
+    url: "https://voc.powerservice.internal",
+  },
+  {
+    id: "soc-security",
+    code: "SOC",
+    nameVi: "Giám sát Tuân thủ An toàn Thông tin & Quyền Riêng tư",
+    nameEn: "Security Operations & PII Data Protection",
+    descVi: "Mã hóa dữ liệu nhạy cảm của khách hàng, che mặt số thanh toán (PCI-DSS/GDPR) và quản lý phân quyền vai trò bảo mật nghiêm ngặt.",
+    descEn: "PCI-DSS compliance masking, automated PII redaction on voice recordings, and role-based access audit logs.",
+    category: "security",
+    icon: Server,
+    gradientClass: "from-slate-700 via-indigo-900 to-slate-900",
+    url: "https://security.powerservice.internal",
+  },
+  {
+    id: "lms-training",
+    code: "LMS",
+    nameVi: "Hệ thống Đào tạo Trực tuyến & Quản lý Năng lực",
+    nameEn: "Learning Management System & Skill Matrix",
+    descVi: "Khung đào tạo hội nhập nhân viên mới (Onboarding), kiểm tra trắc nghiệm định kỳ và lộ trình thăng tiến cá nhân hóa.",
+    descEn: "Interactive onboarding workflows, skill certification exams, and individualized professional growth roadmaps.",
+    category: "ops",
+    icon: Database,
+    gradientClass: "from-blue-700 via-teal-700 to-indigo-800",
+    url: "https://lms.powerservice.internal",
+  },
+  {
+    id: "omni-gateway",
+    code: "API",
+    nameVi: "Cổng Tích hợp Dịch vụ Mở & Webhooks Gateway",
+    nameEn: "Enterprise API Gateway & Event Bus Stream",
+    descVi: "Cổng kết nối API đồng bộ dữ liệu hai chiều với hệ thống Core ERP, Cổng thanh toán và các đối tác thương mại điện tử.",
+    descEn: "High-throughput API gateway facilitating two-way transactional webhooks between Core ERP, Payment Gateways, and 3P services.",
+    category: "tech",
+    icon: Globe2,
+    gradientClass: "from-indigo-600 via-sky-600 to-blue-700",
+    url: "https://api.powerservice.internal",
+  },
 ];

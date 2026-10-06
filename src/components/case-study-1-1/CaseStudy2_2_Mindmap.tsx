@@ -333,3 +333,6 @@ export function CaseStudy2_2_Mindmap({
     </section>
   );
 }
+
+
+export default CaseStudy2_2_Mindmap;

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Scan, X, Copy, Check, Sparkles, Layers, Crosshair, Terminal, FolderTree, ChevronDown, ChevronRight, Edit3, Trash2, PlusCircle, ArrowRightLeft, ExternalLink, Globe, Tag, Target, Zap, RefreshCw, Sun, Moon, Info, CheckCircle2, ListPlus, AlertCircle, FileCode, RotateCw, Filter, Layout, Code2, Image, Boxes, Wrench, ShieldCheck, Play, Sliders, Palette, BookOpen, Save, User, Home, GraduationCap, Briefcase, Brain, ClipboardList, Video, LayoutGrid, MessagesSquare, Film, Navigation, Search, Eye, Grid, List, Type, Baseline, SlidersHorizontal, Columns, Heading } from "lucide-react";
+import { Scan, X, Copy, Check, Sparkles, Layers, Crosshair, Terminal, FolderTree, ChevronDown, ChevronRight, Edit3, Trash2, PlusCircle, ArrowRightLeft, ExternalLink, Globe, Tag, Target, Zap, RefreshCw, Sun, Moon, Info, CheckCircle2, ListPlus, AlertCircle, FileCode, RotateCw, Filter, Layout, Code2, Image, Boxes, Wrench, ShieldCheck, Play, Sliders, Palette, BookOpen, Save, User, Monitor, GraduationCap, Briefcase, Brain, ClipboardList, Video, LayoutGrid, MessagesSquare, Film, Navigation, Search, Eye, Grid, List, Type, Baseline, SlidersHorizontal, Columns, Heading } from "lucide-react";
 import { playUiSound } from "../lib/sound";
 import { cn } from "../lib/utils";
-import { persistentStorageService, XRayTemplateRecord } from "../services/persistentStorageService";
 
 export interface TypographyTokenDef {
   id: string;
@@ -356,7 +355,7 @@ interface ElementInfo {
   fullSelector: string;
 }
 
-type InspectorMode = "site_structure" | "element" | "tree";
+type InspectorMode = "site_structure" | "element" | "tree" | "full_website";
 
 export interface SiteStructureNode {
   id: string;
@@ -920,7 +919,7 @@ export const WEBSITE_PAGES_META: WebsitePageInfo[] = [
     category: "main",
     categoryVi: "Trang chính",
     categoryColor: "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/30",
-    icon: Home,
+    icon: Monitor,
     descriptionVi: "Khu vực đón tiếp, chức danh CX/CS Leader, các chỉ số thành tựu cốt lõi và nút kêu gọi hành động.",
     childCount: 5
   },
@@ -1345,121 +1344,7 @@ export default function XRayInspector() {
       return [];
     }
   });
-  const [savedModalTab, setSavedModalTab] = useState<"saved" | "history" | "cloud_templates">("saved");
-
-  // Cloud Database X-Ray Templates State (Long-term persistent storage)
-  const [cloudXRayTemplates, setCloudXRayTemplates] = useState<XRayTemplateRecord[]>([]);
-  const [isLoadingCloudTemplates, setIsLoadingCloudTemplates] = useState<boolean>(true);
-
-  // Load X-Ray templates from Cloud Database on mount
-  useEffect(() => {
-    let isMounted = true;
-    persistentStorageService.loadXRayTemplates()
-      .then((templates) => {
-        if (isMounted) {
-          setCloudXRayTemplates(templates);
-          setIsLoadingCloudTemplates(false);
-        }
-      })
-      .catch((err) => {
-        console.warn("Could not load cloud X-Ray templates:", err);
-        if (isMounted) setIsLoadingCloudTemplates(false);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // Save current configuration & design as an X-Ray Template to Cloud Database
-  const handleSaveXRayTemplateToCloud = async (customName?: string) => {
-    try {
-      playUiSound("success");
-      const name = customName || (selectedElement ? `Mẫu X-RAY: ${selectedElement.componentType} (${selectedElement.sectionName})` : `Mẫu X-RAY ${new Date().toLocaleDateString("vi-VN")}`);
-      
-      let bgUrl = "";
-      let bgName = "Hình nền mặc định";
-      try {
-        const bgConf = localStorage.getItem("portfolio_persistent_background_config_v2");
-        if (bgConf) {
-          const parsed = JSON.parse(bgConf);
-          bgUrl = parsed.activeUrl || "";
-          bgName = parsed.items?.find((i: any) => i.id === parsed.activeId)?.name || "Hình nền hiện tại";
-        }
-      } catch (e) {}
-
-      const newTemplate = await persistentStorageService.saveXRayTemplate({
-        name,
-        description: userInstruction.trim() || "Cấu hình Mẫu X-RAY thiết kế lưu trữ lâu dài trên Cloud Database.",
-        wallpaperName: bgName,
-        wallpaperUrl: bgUrl,
-        uiConfig: {
-          theme: document.documentElement.classList.contains("dark") ? "dark" : "light",
-          editPreset,
-          addPreset
-        },
-        colors: {
-          accent: "#06b6d4",
-          border: "rgba(255,255,255,0.2)"
-        },
-        font: "Plus Jakarta Sans / Play",
-        layout: "Bento Grid 12 Columns",
-        content: {
-          actionQueue,
-          selectedElement: selectedElement?.fullSelector,
-          userInstruction
-        },
-        settings: {
-          deleteMode,
-          timestamp: new Date().toISOString()
-        },
-        status: "active"
-      });
-
-      setCloudXRayTemplates((prev) => {
-        const filtered = prev.filter((t) => t.id !== newTemplate.id);
-        return [newTemplate, ...filtered];
-      });
-
-      showToast(`Đã lưu Mẫu X-RAY "${name}" (v${newTemplate.version}) vào Cloud Database lâu dài!`);
-    } catch (err) {
-      console.error("Save template error:", err);
-      showToast("Lỗi khi lưu Mẫu X-RAY vào Cloud Database!");
-    }
-  };
-
-  // Delete / Archive template in Cloud Database
-  const handleDeleteCloudTemplate = async (templateId: string) => {
-    try {
-      playUiSound("pop");
-      await persistentStorageService.deleteXRayTemplate(templateId);
-      setCloudXRayTemplates((prev) => prev.filter((t) => t.id !== templateId));
-      showToast("Đã xóa Mẫu X-RAY khỏi Cloud Database!");
-    } catch (err) {
-      showToast("Lỗi khi xóa Mẫu X-RAY!");
-    }
-  };
-
-  // Restore earlier version of template from Cloud Database
-  const handleRestoreCloudTemplateVersion = async (templateId: string, version: number) => {
-    try {
-      playUiSound("success");
-      const restored = await persistentStorageService.restoreTemplateVersion(templateId, version);
-      if (restored) {
-        setCloudXRayTemplates((prev) => prev.map((t) => (t.id === restored.id ? restored : t)));
-        showToast(`Đã khôi phục thành công Mẫu X-RAY về phiên bản v${version}!`);
-      }
-    } catch (err) {
-      showToast("Không thể khôi phục phiên bản!");
-    }
-  };
-
-  // Apply template content directly to prompt
-  const handleApplyCloudTemplate = (template: XRayTemplateRecord) => {
-    playUiSound("click");
-    setUserInstruction(template.description || `Áp dụng Mẫu X-RAY [${template.name}]`);
-    showToast(`Đã nạp Mẫu X-RAY "${template.name}" vào bảng yêu cầu!`);
-    setShowSavedListModal(false);
-  };
+  const [savedModalTab, setSavedModalTab] = useState<"saved" | "history">("saved");
 
   const [showSavedListModal, setShowSavedListModal] = useState<boolean>(false);
   const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
@@ -1545,7 +1430,7 @@ export default function XRayInspector() {
     playUiSound("success");
 
     const totalCount = savedPrompts.length;
-    // Sao chép toàn bộ danh sách prompt nguyên vẹn, không lọc trùng
+    // Sao chép toàn bộ danh sách prompt nguyên vẹn, lưu trữ lâu dài không xóa
     const formattedText = savedPrompts.map(item => item.prompt).join("\n\n");
 
     navigator.clipboard.writeText(formattedText);
@@ -1566,13 +1451,11 @@ export default function XRayInspector() {
       setChatHistory(updatedHist);
     } catch (e) {}
 
-    // Auto clear saved list after copy as requested
-    setSavedPrompts([]);
-    try {
-      localStorage.removeItem("xray_saved_prompts");
-    } catch {}
+    // Auto close popup modal as requested
+    setShowSavedListModal(false);
+    handleCloseAllXRay(); // Automatically closes the entire X-Ray panel!
 
-    showToast(`Đã sao chép toàn bộ ${totalCount} prompt (lưu trữ đầy đủ, không lọc trùng)! Đã lưu vào Lịch sử Chat.`);
+    showToast(`Đã sao chép toàn bộ ${totalCount} prompt, lưu vào Lịch sử Chat và đóng X-Ray!`);
   };
 
   const handleClearAllSavedPrompts = () => {
@@ -2597,18 +2480,18 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
 
           <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 shrink-0" />
 
-          {/* Open X-Ray Panel Button */}
+          {/* Toàn bộ Website Button */}
           <button
             onClick={() => {
               playUiSound("click");
-              setMode("element");
+              setMode("full_website");
               setInspectorOpen(true);
             }}
             onMouseEnter={() => playUiSound("hover")}
-            className="px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 text-2xs font-bold flex items-center gap-1.5 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+            className="px-3 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 border border-sky-500/30 text-2xs font-bold flex items-center gap-1 shrink-0 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 hover:shadow-md hover:shadow-sky-500/10"
           >
-            <Scan className="w-3.5 h-3.5" />
-            <span>X-Ray Inspector</span>
+            <Globe className="w-3.5 h-3.5" />
+            <span>Toàn Bộ Website</span>
           </button>
 
 
@@ -2794,69 +2677,50 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
         </div>
       )}
 
-      {/* 4. MAIN X-RAY INSPECTOR POPUP MODAL (WITH LIGHT & DARK THEME SUPPORT) */}
+      {/* 4. MAIN X-RAY INSPECTOR POPUP MODAL (POPUP BẰNG KÍCH THƯỚC THẺ CHÍNH Ở MỌI THIẾT BỊ) */}
       {inspectorOpen && (
-        <div className="fixed inset-0 z-[10000] bg-white/70 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[10000] bg-black/75 backdrop-blur-md flex items-center justify-center p-0 animate-in fade-in duration-200">
           <div 
             className={cn(
-              "w-full max-w-5xl xl:max-w-6xl rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-300 max-h-[92vh] border",
+              "w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] rounded-[var(--theme-radius-card,10px)] shadow-2xl overflow-hidden flex flex-col transition-colors duration-300 h-[calc(100vh-180px)] max-h-[calc(100vh-180px)] border mx-auto my-auto",
               isLight
                 ? "bg-white text-slate-900 border-slate-200 shadow-[0_25px_70px_rgba(0,0,0,0.2)]"
-                : "bg-slate-900 text-slate-100 border-emerald-500/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)]"
+                : "bg-slate-900 text-slate-100 border-indigo-500/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)]"
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header with Theme Switcher & Close */}
+            {/* Header with Close */}
             <div className={cn(
-              "p-3.5 sm:p-4 px-4 sm:px-6 border-b flex items-center justify-between transition-colors",
+              "p-3 sm:p-4 px-4 sm:px-6 border-b flex items-center justify-between transition-colors shrink-0",
               isLight ? "bg-slate-50/95 border-slate-200" : "bg-slate-950 border-slate-800"
             )}>
               <div className="flex items-center gap-3">
                 <div className={cn(
-                  "w-10 h-10 rounded-xl border flex items-center justify-center shadow-xs shrink-0",
-                  isLight ? "bg-emerald-50 border-emerald-200 text-emerald-600" : "bg-emerald-950/60 border-emerald-500/30 text-emerald-400"
+                  "p-2 rounded-xl border flex items-center justify-center shadow-xs",
+                  "bg-indigo-500/20 text-indigo-500 border-indigo-500/30"
                 )}>
-                  <Scan className="w-5.5 h-5.5 stroke-[2.2]" />
+                  <Scan className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm sm:text-base font-black tracking-tight flex items-center gap-1.5">
-                      <span>X-Ray Inspector</span>
+                    <h3 className="text-sm sm:text-base font-black tracking-tight">
+                      X-Ray Inspector • Trình Quản Lý & Xuất Lệnh AI
                     </h3>
                     <span className={cn(
-                      "px-2 py-0.5 rounded-full text-3xs font-mono font-bold border",
-                      isLight ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
+                      "px-2 py-0.5 rounded-full text-3xs font-bold border",
+                      isLight ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-indigo-950/60 text-indigo-300 border-indigo-500/30"
                     )}>
                       v3.0 Pro
                     </span>
                   </div>
-                  <p className={cn("text-xs mt-0.5 font-medium", isLight ? "text-slate-500" : "text-slate-400")}>
-                    Định danh & tinh chỉnh phần tử giao diện
+                  <p className={cn("text-xs", isLight ? "text-slate-500" : "text-slate-400")}>
+                    Định danh chính xác phần tử và tạo prompt thay đổi riêng biệt cho trang hoặc toàn bộ website
                   </p>
                 </div>
               </div>
 
-              {/* Header Right Actions (Popup Theme Toggle & Close) */}
-              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
-
-                {/* Popup Theme Switch Button: Sáng / Tối */}
-                <button
-                  onClick={() => {
-                    playUiSound("switch");
-                    setPopupTheme(isLight ? "dark" : "light");
-                  }}
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer",
-                    isLight 
-                      ? "bg-slate-200/80 hover:bg-slate-300 text-slate-800 border-slate-300" 
-                      : "bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700"
-                  )}
-                  title={isLight ? "Chuyển sang Giao diện Tối cho popup" : "Chuyển sang Giao diện Sáng cho popup"}
-                >
-                  {isLight ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
-                  <span className="hidden sm:inline">{isLight ? "Bản Sáng" : "Bản Tối"}</span>
-                </button>
-
+              {/* Header Right Actions (Close Only) */}
+              <div className="flex items-center gap-2">
                 <button
                   onClick={handleCloseAllXRay}
                   className={cn(
@@ -2870,29 +2734,8 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
               </div>
             </div>
 
-            {/* Scope Selection Header Bar */}
-            <div className={cn(
-              "flex items-center border-b p-1.5 sm:p-2 gap-2 transition-colors",
-              isLight ? "bg-slate-100/90 border-slate-200" : "bg-slate-950/70 border-slate-800"
-            )}>
-              <div className="flex-1 py-2 px-3.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all bg-white dark:bg-slate-900 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 shadow-xs">
-                <div className="flex items-center gap-2">
-                  <Crosshair className="w-4 h-4 text-emerald-500" />
-                  <span>Kiểm tra Phần tử đã chọn</span>
-                </div>
-                {selectedElement && (
-                  <span className={cn(
-                    "text-3xs px-2.5 py-0.5 rounded-full font-mono font-bold border",
-                    isLight ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-emerald-500/30 text-emerald-300 border-emerald-500/40"
-                  )}>
-                    &lt;{selectedElement.tag}&gt; {selectedElement.componentType}
-                  </span>
-                )}
-              </div>
-            </div>
-
             {/* Modal Body Container */}
-            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto max-h-[68vh] custom-scrollbar">
+            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto max-h-[calc(88vh-130px)] custom-scrollbar flex-1">
 
               {/* ================= TAB 0: SITE STRUCTURE (CẤU TRÚC SITE THEO CẤP) ================= */}
               {mode === "site_structure" && (
@@ -3364,9 +3207,18 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <div>
                         <h4 className="font-black text-sm text-slate-900 dark:text-white">Chưa chọn phần tử nào</h4>
                         <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-                          Vui lòng nhấp chọn trực tiếp bất kỳ phần tử nào trên giao diện để kiểm tra và tùy chỉnh.
+                          Vui lòng bật X-Ray trên màn hình và nhấp trực tiếp vào bất kỳ phần tử nào trên website để kiểm tra và tùy chỉnh, hoặc chuyển qua tab "Toàn bộ Website".
                         </p>
                       </div>
+                      <button
+                        onClick={() => {
+                          playUiSound("click");
+                          setMode("full_website");
+                        }}
+                        className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+                      >
+                        Chuyển sang Tab Toàn Bộ Website
+                      </button>
                     </div>
                   ) : (
                     <div className="space-y-3.5">
@@ -3375,10 +3227,33 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                         "p-3.5 rounded-2xl border space-y-2.5",
                         isLight ? "bg-slate-50 border-slate-200" : "bg-slate-950/80 border-slate-800"
                       )}>
-                        <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
-                          <Layers className="w-4 h-4 text-purple-500" />
-                          <span>1. Tên đối tượng:</span>
-                        </label>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
+                            <Layers className="w-4 h-4 text-purple-500" />
+                            <span>1. Tên đối tượng:</span>
+                          </label>
+
+                          {/* Tùy chọn phạm vi website: chọn nhiều trang hay tất cả website */}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-3xs font-bold text-slate-500">Mục website:</span>
+                            <select
+                              value={websiteCategoryFilter}
+                              onChange={(e) => {
+                                playUiSound("click");
+                                setWebsiteCategoryFilter(e.target.value);
+                              }}
+                              className={cn(
+                                "px-2.5 py-1 rounded-lg text-xs font-semibold border focus:outline-none cursor-pointer",
+                                isLight ? "bg-white border-slate-300 text-slate-900" : "bg-slate-900 border-slate-700 text-slate-100"
+                              )}
+                            >
+                              <option value="all">🌐 Tất cả website (13 trang toàn bộ)</option>
+                              <option value="main">📄 Các trang chính (Trang chủ, Giới thiệu, Dự án, Kỹ năng, Học vấn)</option>
+                              <option value="specialty">🎯 Các trang chuyên đề (Tử vi, Phỏng vấn, Thư ngỏ)</option>
+                              <option value="systems">⚙️ Hệ sinh thái & Tùy biến (Hệ thống, Cài đặt)</option>
+                            </select>
+                          </div>
+                        </div>
 
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -3454,213 +3329,324 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                         })()}
                       </div>
 
-                      {/* 2. ÁP DỤNG CHO (SCOPE SELECTION - NGẮN GỌN) */}
-                      <div className={cn(
-                        "p-3 rounded-2xl border space-y-2",
-                        isLight ? "bg-white border-purple-200" : "bg-slate-900 border-purple-500/30"
-                      )}>
-                        <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
-                          <Target className="w-4 h-4 text-purple-500" />
-                          <span>2. Áp dụng cho:</span>
-                        </label>
+                      {/* MASTER ROW: 2. ÁP DỤNG CHO & 3. THỰC HIỆN CÙNG 1 HÀNG */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+                        {/* 2. ÁP DỤNG CHO (SCOPE SELECTION - NGẮN GỌN) */}
+                        <div className={cn(
+                          "p-3 rounded-2xl border space-y-2 h-full flex flex-col justify-between",
+                          isLight ? "bg-white border-purple-200" : "bg-slate-900 border-purple-500/30"
+                        )}>
+                          <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
+                            <Target className="w-4 h-4 text-purple-500" />
+                            <span>2. Áp dụng cho:</span>
+                          </label>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                          {[
-                            {
-                              id: "single",
-                              label: "Riêng đối tượng này",
-                              desc: "Chỉ cập nhật phần tử đang chọn",
-                              icon: "🎯"
-                            },
-                            {
-                              id: "similar_page",
-                              label: "Cùng loại trong trang",
-                              desc: "Áp dụng cho các phần tử cùng loại trên trang này",
-                              icon: "📄"
-                            },
-                            {
-                              id: "similar_all",
-                              label: "Toàn bộ website",
-                              desc: "Đồng bộ tất cả phần tử tương tự trên toàn trang",
-                              icon: "🌐"
-                            }
-                          ].map((sc) => (
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            {[
+                              {
+                                id: "single",
+                                label: "Riêng đối tượng này",
+                                desc: "Chỉ cập nhật phần tử đang chọn",
+                                icon: "🎯"
+                              },
+                              {
+                                id: "similar_page",
+                                label: "Cùng loại trong trang",
+                                desc: "Áp dụng cho các phần tử cùng loại trên trang này",
+                                icon: "📄"
+                              },
+                              {
+                                id: "similar_all",
+                                label: "Toàn bộ website",
+                                desc: "Đồng bộ tất cả phần tử tương tự trên toàn trang",
+                                icon: "🌐"
+                              }
+                            ].map((sc) => (
+                              <button
+                                key={sc.id}
+                                type="button"
+                                onClick={() => {
+                                  playUiSound("click");
+                                  setElementAppScope(sc.id as any);
+                                }}
+                                className={cn(
+                                  "p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-1",
+                                  elementAppScope === sc.id
+                                    ? "bg-purple-600 text-white border-purple-500 shadow-md ring-2 ring-purple-400/50"
+                                    : isLight
+                                      ? "bg-slate-50 hover:bg-purple-50 text-slate-800 border-slate-200"
+                                      : "bg-slate-950 hover:bg-purple-950/60 text-slate-200 border-slate-800"
+                                )}
+                              >
+                                <div className="flex items-center gap-1.5 text-xs font-bold">
+                                  <span>{sc.icon}</span>
+                                  <span>{sc.label}</span>
+                                </div>
+                                <p className={cn(
+                                  "text-3xs leading-tight",
+                                  elementAppScope === sc.id ? "text-purple-100" : "text-slate-500 dark:text-slate-400"
+                                )}>
+                                  {sc.desc}
+                                </p>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 3. THỰC HIỆN (CHỌN CHỨC NĂNG: CHỈNH SỬA / XÓA / ĐỊNH DẠNG / THÊM / LÀM SẠCH) */}
+                        <div className={cn(
+                          "p-3 rounded-2xl border space-y-2 h-full flex flex-col justify-between",
+                          isLight ? "bg-white border-purple-200" : "bg-slate-900 border-purple-500/30"
+                        )}>
+                          <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
+                            <Wrench className="w-4 h-4 text-purple-500" />
+                            <span>3. Thực hiện:</span>
+                          </label>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             <button
-                              key={sc.id}
                               type="button"
-                              onClick={() => {
-                                playUiSound("click");
-                                setElementAppScope(sc.id as any);
-                              }}
+                              onClick={() => { playUiSound("click"); setElementActionMode("edit"); }}
                               className={cn(
-                                "p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-1",
-                                elementAppScope === sc.id
-                                  ? "bg-purple-600 text-white border-purple-500 shadow-md ring-2 ring-purple-400/50"
-                                  : isLight
-                                    ? "bg-slate-50 hover:bg-purple-50 text-slate-800 border-slate-200"
-                                    : "bg-slate-950 hover:bg-purple-950/60 text-slate-200 border-slate-800"
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "edit"
+                                  ? "bg-amber-500 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
                               )}
                             >
-                              <div className="flex items-center gap-1.5 text-xs font-bold">
-                                <span>{sc.icon}</span>
-                                <span>{sc.label}</span>
-                              </div>
-                              <p className={cn(
-                                "text-3xs leading-tight",
-                                elementAppScope === sc.id ? "text-purple-100" : "text-slate-500 dark:text-slate-400"
-                              )}>
-                                {sc.desc}
-                              </p>
+                              <Edit3 className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">1. Chỉnh sửa</span>
                             </button>
-                          ))}
+
+                            <button
+                              type="button"
+                              onClick={() => { playUiSound("click"); setElementActionMode("delete"); }}
+                              className={cn(
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "delete"
+                                  ? "bg-rose-500 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              )}
+                            >
+                              <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">2. Xóa</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => { playUiSound("click"); setElementActionMode("clone_format"); }}
+                              className={cn(
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "clone_format"
+                                  ? "bg-purple-600 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              )}
+                            >
+                              <Palette className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">3. Định dạng</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => { playUiSound("click"); setElementActionMode("add"); }}
+                              className={cn(
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "add"
+                                  ? "bg-emerald-600 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              )}
+                            >
+                              <PlusCircle className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">4. Thêm mới</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => { playUiSound("click"); setElementActionMode("clean_code"); }}
+                              className={cn(
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "clean_code"
+                                  ? "bg-cyan-600 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              )}
+                            >
+                              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">5. Làm sạch</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => { playUiSound("click"); setElementActionMode("change_font"); }}
+                              className={cn(
+                                "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
+                                elementActionMode === "change_font"
+                                  ? "bg-indigo-600 text-white shadow-md"
+                                  : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              )}
+                            >
+                              <Type className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate">6. Chỉnh font</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
 
-                      {/* 3. THỰC HIỆN (CHỌN CHỨC NĂNG: CHỈNH SỬA / XÓA / ĐỊNH DẠNG / THÊM / LÀM SẠCH) */}
-                      <div className="space-y-3">
-                        <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
-                          <Wrench className="w-4 h-4 text-purple-500" />
-                          <span>3. Thực hiện:</span>
-                        </label>
+                      {/* CHI TIẾT CÁC TAB THỰC HIỆN */}
+                      <div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("edit"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "edit"
-                                ? "bg-amber-500 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <Edit3 className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">1. Chỉnh sửa</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("delete"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "delete"
-                                ? "bg-rose-500 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <Trash2 className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">2. Xóa</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("clone_format"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "clone_format"
-                                ? "bg-purple-600 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <Palette className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">3. Định dạng</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("add"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "add"
-                                ? "bg-emerald-600 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <PlusCircle className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">4. Thêm mới</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("clean_code"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "clean_code"
-                                ? "bg-cyan-600 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">5. Làm sạch</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => { playUiSound("click"); setElementActionMode("change_font"); }}
-                            className={cn(
-                              "px-2.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 w-full",
-                              elementActionMode === "change_font"
-                                ? "bg-indigo-600 text-white shadow-md"
-                                : isLight ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                            )}
-                          >
-                            <Type className="w-3.5 h-3.5 shrink-0" />
-                            <span className="truncate">6. Chỉnh font</span>
-                          </button>
-                        </div>
-
-                        {/* TAB 1: CHỈNH SỬA NỘI DUNG -> MẪU ÁP DỤNG CHUYÊN DỤNG (PROMPT PRESET) */}
+                        {/* TAB 1: CHỈNH SỬA NỘI DUNG -> MẪU ÁP DỤNG CHUYÊN DỤNG (PROMPT PRESET 2 LEVELS) */}
                         {elementActionMode === "edit" && (
                           <div className={cn(
                             "p-3.5 rounded-2xl border space-y-3 animate-in fade-in duration-150",
                             isLight ? "bg-amber-50/40 border-amber-200" : "bg-amber-950/20 border-amber-500/30"
                           )}>
-                            <div className="flex items-center justify-between">
-                              <label className="text-xs font-bold flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
-                                <Sparkles className="w-4 h-4 text-amber-500" />
-                                <span>Chọn mẫu áp dụng chuyên dụng (Prompt preset):</span>
-                              </label>
-                              {selectedPreset && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    playUiSound("click");
-                                    setSelectedPreset(null);
-                                  }}
-                                  className="text-2xs font-bold text-rose-500 hover:underline cursor-pointer flex items-center gap-1"
-                                >
-                                  <X className="w-3 h-3" />
-                                  <span>Bỏ chọn mẫu</span>
-                                </button>
-                              )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 w-full">
+                              {/* Left Column: Dropdown Template Selection */}
+                              <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                  <label className="text-xs font-bold flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
+                                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                                    <span>Chọn mẫu áp dụng chuyên dụng (2 Level Phân Loại):</span>
+                                  </label>
+                                  {selectedPreset && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        playUiSound("click");
+                                        setSelectedPreset(null);
+                                      }}
+                                      className="text-[10px] font-bold text-rose-500 hover:underline cursor-pointer flex items-center gap-1"
+                                    >
+                                      <X className="w-3 h-3" />
+                                      <span>Bỏ chọn</span>
+                                    </button>
+                                  )}
+                                </div>
+                                <div className="relative w-full">
+                                  <select
+                                    value={selectedPreset || ""}
+                                    onChange={(e) => {
+                                      playUiSound("click");
+                                      const val = e.target.value;
+                                      setSelectedPreset(val || null);
+                                    }}
+                                    className={cn(
+                                      "w-full px-3 py-2 rounded-xl border text-xs font-semibold appearance-none cursor-pointer transition-all shadow-xs focus:outline-none focus:ring-2 pr-8",
+                                      isLight
+                                        ? "bg-white border-slate-300 text-slate-900 focus:border-indigo-500 focus:ring-indigo-200"
+                                        : "bg-slate-950 border-slate-700 text-slate-100 focus:border-indigo-500 focus:ring-indigo-900/40"
+                                    )}
+                                  >
+                                    <option value="">-- Chọn mẫu áp dụng (2 Level Phân loại) --</option>
+                                    <optgroup label="📂 I. CHUYỂN ĐỔI MÃ NGUỒN & HÌNH ẢNH (CODE & VISUAL RECONSTRUCTION)">
+                                      {PRESET_TEMPLATES.slice(0, 5).map((tmpl) => (
+                                        <option key={tmpl.id} value={tmpl.id} className={isLight ? "bg-white text-slate-900" : "bg-slate-900 text-slate-100"}>
+                                          ↳ {tmpl.label} ({tmpl.shortDesc})
+                                        </option>
+                                      ))}
+                                    </optgroup>
+                                    <optgroup label="📐 II. TỐI ƯU BỐ CỤC & LƯỚI THỂ (LAYOUT & GRID ARCHITECTURE)">
+                                      {PRESET_TEMPLATES.slice(5, 10).map((tmpl) => (
+                                        <option key={tmpl.id} value={tmpl.id} className={isLight ? "bg-white text-slate-900" : "bg-slate-900 text-slate-100"}>
+                                          ↳ {tmpl.label} ({tmpl.shortDesc})
+                                        </option>
+                                      ))}
+                                    </optgroup>
+                                    <optgroup label="🎨 III. TỐI ƯU UI/UX, THEME & SỬA LỖI (UI/UX, THEME & REPAIR)">
+                                      {PRESET_TEMPLATES.slice(10).map((tmpl) => (
+                                        <option key={tmpl.id} value={tmpl.id} className={isLight ? "bg-white text-slate-900" : "bg-slate-900 text-slate-100"}>
+                                          ↳ {tmpl.label} ({tmpl.shortDesc})
+                                        </option>
+                                      ))}
+                                    </optgroup>
+                                  </select>
+                                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                                    <ChevronDown className="w-3.5 h-3.5" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Right Column: User Instruction Textarea */}
+                              <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                  <label className="text-xs font-bold flex items-center gap-1.5 text-indigo-700 dark:text-cyan-300">
+                                    <Edit3 className="w-3.5 h-3.5 text-indigo-500" />
+                                    <span>Yêu cầu thực thi hoặc ghi chú bổ sung:</span>
+                                  </label>
+                                  {userInstruction && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        playUiSound("click");
+                                        setUserInstruction("");
+                                      }}
+                                      className={cn(
+                                        "text-[10px] font-extrabold flex items-center gap-1 hover:underline cursor-pointer",
+                                        isLight ? "text-slate-500 hover:text-slate-800" : "text-slate-400 hover:text-slate-200"
+                                      )}
+                                    >
+                                      <X className="w-3 h-3" />
+                                      <span>Xóa</span>
+                                    </button>
+                                  )}
+                                </div>
+                                <textarea
+                                  value={userInstruction}
+                                  onChange={(e) => setUserInstruction(e.target.value)}
+                                  placeholder={
+                                    (mode as string) === "tree"
+                                      ? "Ví dụ: Áp dụng các thay đổi trong danh sách trên, đồng thời làm nổi bật các thẻ tiêu đề..."
+                                      : "Ví dụ: Đổi màu nút thành xanh ngọc gradient, làm đậm chữ..."
+                                  }
+                                  rows={1}
+                                  className={cn(
+                                    "w-full border rounded-xl px-3.5 py-2 text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none leading-normal",
+                                    isLight
+                                      ? "bg-white border-slate-300 text-slate-900 focus:border-indigo-500 focus:ring-indigo-200"
+                                      : "bg-slate-950 border-slate-700 text-white focus:border-emerald-500 focus:ring-emerald-900/40"
+                                  )}
+                                />
+                              </div>
                             </div>
 
-                            {/* Option Dropdown List */}
-                            <div className="relative">
-                              <select
-                                value={selectedPreset || ""}
-                                onChange={(e) => {
+                            {/* Option Dropdown Buttons Underneath */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-200/50 dark:border-slate-800/40">
+                              {/* Nút Prompt Mẫu cùng hàng */}
+                              <button
+                                type="button"
+                                onClick={() => {
                                   playUiSound("click");
-                                  const val = e.target.value;
-                                  setSelectedPreset(val || null);
+                                  setShowSamplePromptsList(prev => !prev);
                                 }}
                                 className={cn(
-                                  "w-full px-3.5 py-2.5 rounded-xl border text-xs font-semibold appearance-none cursor-pointer transition-all shadow-xs focus:outline-none focus:ring-2",
-                                  isLight
-                                    ? "bg-white border-slate-300 text-slate-900 focus:border-indigo-500 focus:ring-indigo-200"
-                                    : "bg-slate-950 border-slate-700 text-slate-100 focus:border-indigo-500 focus:ring-indigo-900/40"
+                                  "px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 border transition-all cursor-pointer shrink-0 active:scale-95 shadow-xs",
+                                  showSamplePromptsList
+                                    ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
+                                    : isLight
+                                      ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200"
+                                      : "bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border-indigo-500/30"
                                 )}
                               >
-                                <option value="">-- Chọn mẫu áp dụng (Prompt preset) --</option>
-                                {PRESET_TEMPLATES.map((tmpl) => (
-                                  <option key={tmpl.id} value={tmpl.id} className={isLight ? "bg-white text-slate-900" : "bg-slate-900 text-slate-100"}>
-                                    {tmpl.label} ({tmpl.shortDesc})
-                                  </option>
-                                ))}
-                              </select>
-                              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                                <ChevronDown className="w-4 h-4" />
-                              </div>
+                                <BookOpen className="w-3 h-3 text-amber-500 shrink-0" />
+                                <span className="whitespace-nowrap">Prompt Mẫu ({samplePromptTemplates.length})</span>
+                                <ChevronDown className={cn("w-3 h-3 transition-transform shrink-0", showSamplePromptsList && "rotate-180")} />
+                              </button>
+
+                              {/* Nút Lưu Mẫu cùng hàng */}
+                              <button
+                                type="button"
+                                onClick={handleSaveSamplePrompt}
+                                disabled={!userInstruction.trim()}
+                                className={cn(
+                                  "px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 border transition-all cursor-pointer shrink-0 active:scale-95 shadow-xs",
+                                  userInstruction.trim()
+                                    ? "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500 shadow-xs"
+                                    : "bg-slate-200 dark:bg-slate-800 text-slate-400 border-slate-300 dark:border-slate-700 cursor-not-allowed opacity-60"
+                                )}
+                              >
+                                <Save className="w-3 h-3 shrink-0" />
+                                <span className="whitespace-nowrap">Lưu Mẫu</span>
+                              </button>
                             </div>
 
                             {/* Active preset details snippet preview */}
@@ -4600,8 +4586,8 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 </div>
               )}
 
-              {/* ================= TAB 3: FULL WEBSITE MODE (REMOVED AS REQUESTED) ================= */}
-              {false && (
+              {/* ================= TAB 3: FULL WEBSITE MODE ================= */}
+              {mode === "full_website" && (
                 <div className={cn(
                   "p-4 rounded-2xl border space-y-3.5 animate-in fade-in duration-200 shadow-sm",
                   isLight ? "bg-slate-50/80 border-indigo-200/80" : "bg-slate-950/90 border-indigo-500/30"
@@ -4936,156 +4922,6 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                 </div>
               )}
 
-              {/* Instruction Prompt Textarea with Sample Prompts Buttons & Dropdown */}
-              <div className="space-y-2 relative">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <label className="text-xs font-bold flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
-                    <Terminal className="w-4 h-4 text-emerald-500" />
-                    <span>4. Nhập yêu cầu thực thi hoặc ghi chú bổ sung:</span>
-                  </label>
-
-                  <div className="flex items-center gap-1.5">
-                    {/* Nút Xóa Nhanh Instruction */}
-                    {userInstruction && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          playUiSound("click");
-                          setUserInstruction("");
-                        }}
-                        className="px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1 border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all cursor-pointer"
-                        title="Xóa nhanh nội dung yêu cầu"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                        <span>Xóa</span>
-                      </button>
-                    )}
-
-                    {/* Nút Prompt Mẫu (Mở danh sách prompt mẫu) */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        playUiSound("click");
-                        setShowSamplePromptsList(prev => !prev);
-                      }}
-                      className={cn(
-                        "px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 border transition-all cursor-pointer active:scale-95",
-                        showSamplePromptsList
-                          ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                          : isLight
-                            ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200"
-                            : "bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border-indigo-500/30"
-                      )}
-                      title="Hiển thị danh sách câu prompt mẫu"
-                    >
-                      <BookOpen className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Prompt Mẫu ({samplePromptTemplates.length})</span>
-                      <ChevronDown className={cn("w-3 h-3 transition-transform", showSamplePromptsList && "rotate-180")} />
-                    </button>
-
-                    {/* Nút Lưu (Lưu nội dung đang nhập thành Prompt Mẫu) */}
-                    <button
-                      type="button"
-                      onClick={handleSaveSamplePrompt}
-                      disabled={!userInstruction.trim()}
-                      className={cn(
-                        "px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 border transition-all cursor-pointer active:scale-95",
-                        userInstruction.trim()
-                          ? "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500 shadow-xs"
-                          : "bg-slate-200 dark:bg-slate-800 text-slate-400 border-slate-300 dark:border-slate-700 cursor-not-allowed opacity-60"
-                      )}
-                      title="Lưu câu lệnh hiện tại vào danh sách Prompt Mẫu"
-                    >
-                      <Save className="w-3.5 h-3.5" />
-                      <span>Lưu Mẫu</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Popup Menu / Dropdown Danh sách Prompt Mẫu */}
-                {showSamplePromptsList && (
-                  <div className={cn(
-                    "p-3 rounded-2xl border shadow-2xl space-y-2 animate-in fade-in zoom-in-95 duration-150 relative z-30",
-                    isLight ? "bg-white border-indigo-200 text-slate-900" : "bg-slate-900 border-indigo-500/40 text-white"
-                  )}>
-                    <div className="flex items-center justify-between border-b border-indigo-500/20 pb-2">
-                      <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                        Danh Sách Prompt Mẫu (Nhấp để chọn & hiển thị vào khung nhập):
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setShowSamplePromptsList(false)}
-                        className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    <div className="max-h-52 overflow-y-auto custom-scrollbar space-y-1.5 pr-1">
-                      {samplePromptTemplates.map((tmpl) => (
-                        <div
-                          key={tmpl.id}
-                          onClick={() => handleSelectSamplePrompt(tmpl.content)}
-                          className={cn(
-                            "p-2.5 rounded-xl border flex items-start justify-between gap-2 cursor-pointer transition-all hover:scale-[1.01] group",
-                            isLight
-                              ? "bg-slate-50 hover:bg-indigo-50/80 border-slate-200 hover:border-indigo-300 text-slate-800"
-                              : "bg-slate-950 hover:bg-indigo-950/60 border-slate-800 hover:border-indigo-500/40 text-slate-200"
-                          )}
-                        >
-                          <div className="space-y-0.5 flex-1">
-                            <div className="text-xs font-bold text-indigo-600 dark:text-indigo-300 group-hover:text-indigo-500 flex items-center gap-1.5">
-                              <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                              <span>{tmpl.title}</span>
-                            </div>
-                            <p className="text-2xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                              {tmpl.content}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center gap-1 shrink-0">
-                            <span className="text-3xs font-bold px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                              Chọn
-                            </span>
-                            {tmpl.isCustom && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteSamplePrompt(tmpl.id);
-                                }}
-                                className="p-1 rounded text-rose-400 hover:text-rose-600 hover:bg-rose-500/10"
-                                title="Xóa mẫu này"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <textarea
-                  value={userInstruction}
-                  onChange={(e) => setUserInstruction(e.target.value)}
-                  placeholder={
-                    mode === "tree"
-                      ? "Ví dụ: Áp dụng các thay đổi trong danh sách trên, đồng thời làm nổi bật các thẻ tiêu đề và tối ưu khoảng cách..."
-                      : "Ví dụ: Đổi màu nút thành xanh ngọc gradient, làm đậm chữ và thêm hiệu ứng hover..."
-                  }
-                  rows={2}
-                  className={cn(
-                    "w-full border rounded-xl p-3 text-xs sm:text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none",
-                    isLight
-                      ? "bg-slate-50 border-slate-300 text-slate-900 focus:border-indigo-500 focus:ring-indigo-200"
-                      : "bg-slate-950 border-slate-700 text-white focus:border-emerald-500 focus:ring-emerald-900/40"
-                  )}
-                />
-              </div>
-
               {/* ACTION: GENERATE OR COPY PROMPT BUTTON & PROMPT LƯU TRỮ */}
               <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-800">
                 <label className="text-xs font-black text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
@@ -5093,36 +4929,43 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                   <span>5. Thực hiện:</span>
                 </label>
 
-                <div className="flex flex-col sm:flex-row items-center gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 w-full">
                   {!generatedPrompt ? (
                     <button
                       onClick={handleGeneratePrompt}
-                      className="flex-1 w-full py-3 px-4 rounded-xl text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 shadow-indigo-500/25 cursor-pointer"
+                      className="w-full py-3 px-3 rounded-xl text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 shadow-indigo-500/25 cursor-pointer"
                     >
-                      <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                      <span>Tạo prompt</span>
-                    </button>
-                  ) : copied ? (
-                    <button
-                      onClick={handleCloseAllXRay}
-                      className="flex-1 w-full py-3 px-4 rounded-xl text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-rose-600 hover:bg-rose-500 cursor-pointer border border-rose-500 shadow-rose-500/20"
-                      title="Đóng toàn bộ X-Ray ngay"
-                    >
-                      <X className="w-4 h-4 animate-spin-slow" />
-                      <span>Đóng X-Ray</span>
+                      <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
+                      <span className="truncate">Tạo prompt</span>
                     </button>
                   ) : (
                     <button
                       onClick={handleCopyPrompt}
-                      className={cn(
-                        "flex-1 w-full py-3 px-4 rounded-xl text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all hover:scale-[1.01] active:scale-95 cursor-pointer",
-                        "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-500/25"
-                      )}
+                      className="w-full py-3 px-3 rounded-xl text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 shadow-indigo-500/25 cursor-pointer"
                     >
-                      <Copy className="w-4 h-4 animate-bounce" />
-                      <span>Sao chép prompt đã lưu</span>
+                      <Copy className="w-4 h-4 text-white shrink-0" />
+                      <span className="truncate">Sao chép Prompt</span>
                     </button>
                   )}
+
+                  <button
+                    onClick={handleCopyAllSavedPrompts}
+                    disabled={savedPrompts.length === 0}
+                    className="w-full py-3 px-3 rounded-xl text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-500/25 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                    title="Sao chép tất cả prompt đã lưu vào Lịch sử & Clipboard rồi đóng X-Ray"
+                  >
+                    <Copy className="w-4 h-4 text-white shrink-0 animate-pulse" />
+                    <span className="truncate">Sao chép tất cả ({savedPrompts.length})</span>
+                  </button>
+
+                  <button
+                    onClick={handleCloseAllXRay}
+                    className="w-full py-3 px-3 rounded-xl text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all hover:scale-[1.01] active:scale-95 bg-rose-600 hover:bg-rose-500 cursor-pointer border border-rose-500 shadow-rose-500/20"
+                    title="Đóng toàn bộ X-Ray ngay"
+                  >
+                    <X className="w-4 h-4 text-white shrink-0" />
+                    <span className="truncate">Đóng X-Ray</span>
+                  </button>
 
                   <button
                     onClick={() => {
@@ -5130,13 +4973,13 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       setShowSavedListModal(true);
                     }}
                     className={cn(
-                      "py-3 px-4 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0 w-full sm:w-auto",
+                      "w-full py-3 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer",
                       isLight ? "bg-purple-100 hover:bg-purple-200 text-purple-800 border-purple-300" : "bg-purple-950/80 hover:bg-purple-900 text-purple-200 border-purple-500/40"
                     )}
                     title="Xem danh sách prompt đã lưu"
                   >
-                    <ListPlus className="w-4 h-4 text-purple-500" />
-                    <span>Prompt lưu trữ ({savedPrompts.length})</span>
+                    <ListPlus className="w-4 h-4 text-purple-500 shrink-0" />
+                    <span className="truncate">Prompt lưu trữ ({savedPrompts.length})</span>
                   </button>
                 </div>
               </div>
@@ -5643,34 +5486,11 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
                       <Terminal className="w-3 h-3 text-amber-400" />
                       <span>Lịch Sử Chat ({chatHistory.length})</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => { playUiSound("click"); setSavedModalTab("cloud_templates"); }}
-                      className={cn(
-                        "px-2.5 py-0.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
-                        savedModalTab === "cloud_templates"
-                          ? "bg-cyan-600 text-white shadow-xs"
-                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                      )}
-                    >
-                      <Sparkles className="w-3 h-3 text-cyan-400" />
-                      <span>Mẫu X-RAY Cloud ({cloudXRayTemplates.length})</span>
-                    </button>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                {savedModalTab === "cloud_templates" && (
-                  <button
-                    onClick={() => handleSaveXRayTemplateToCloud()}
-                    className="px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-                    title="Lưu cấu hình hiện tại thành Mẫu X-RAY lưu trữ đám mây lâu dài"
-                  >
-                    <PlusCircle className="w-3.5 h-3.5" />
-                    <span>Lưu Mẫu Hiện Tại</span>
-                  </button>
-                )}
                 {savedModalTab === "saved" && savedPrompts.length > 0 && (
                   <>
                     <button
@@ -5768,164 +5588,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             )}
 
             <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh] custom-scrollbar">
-              {savedModalTab === "cloud_templates" ? (
-                /* TAB 3: MẪU X-RAY LƯU TRỮ CLOUD DATABASE LÂU DÀI */
-                cloudXRayTemplates.length === 0 ? (
-                  <div className="text-center py-12 space-y-3">
-                    <div className="w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto">
-                      <Sparkles className="w-6 h-6" />
-                    </div>
-                    <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Chưa có Mẫu X-RAY nào trên Cloud Database.</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                      Bấm nút "Lưu Mẫu Hiện Tại" để lưu cấu hình thiết kế, hình nền, màu sắc và layout lên Cloud Database lâu dài!
-                    </p>
-                  </div>
-                ) : (
-                  cloudXRayTemplates.map((tmpl) => (
-                    <div
-                      key={tmpl.id}
-                      className={cn(
-                        "p-4 rounded-2xl border space-y-3 transition-all",
-                        isLight ? "bg-slate-50 border-slate-200" : "bg-slate-950 border-slate-800"
-                      )}
-                    >
-                      {/* Top Header of Template */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 dark:border-white/10 pb-2.5">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="font-mono text-3xs font-bold text-slate-400 bg-slate-200/60 dark:bg-white/10 px-2 py-0.5 rounded">
-                            {tmpl.id}
-                          </span>
-                          <h4 className="font-extrabold text-sm text-cyan-600 dark:text-cyan-400 truncate">
-                            {tmpl.name}
-                          </h4>
-                          <span className="px-2 py-0.5 rounded-full text-3xs font-extrabold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30">
-                            v{tmpl.version}
-                          </span>
-                          <span className={cn(
-                            "px-2 py-0.5 rounded-full text-3xs font-bold uppercase",
-                            tmpl.status === "active" ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30" : "bg-slate-500/15 text-slate-500"
-                          )}>
-                            {tmpl.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-3xs font-mono text-slate-400">
-                          <span>Tạo: {new Date(tmpl.createdAt).toLocaleDateString("vi-VN")}</span>
-                          <span>·</span>
-                          <span>Cập nhật: {new Date(tmpl.updatedAt).toLocaleDateString("vi-VN")}</span>
-                        </div>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        {tmpl.description}
-                      </p>
-
-                      {/* Full Specifications Grid (All 15 Required Metadata Fields) */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 p-2.5 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/5 text-[11px]">
-                        <div>
-                          <span className="text-slate-400 font-semibold">Hình nền: </span>
-                          <span className="font-bold text-slate-700 dark:text-slate-200 truncate block">
-                            {tmpl.wallpaperName || "Mặc định"}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold">URL Hình nền: </span>
-                          <span className="font-mono text-slate-600 dark:text-slate-400 truncate block text-[10px]" title={tmpl.wallpaperUrl}>
-                            {tmpl.wallpaperUrl ? `${tmpl.wallpaperUrl.slice(0, 32)}...` : "N/A"}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold">Cấu hình Giao diện: </span>
-                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
-                            {tmpl.uiConfig?.themeId || "Chuẩn Glass Bento"}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold">Màu sắc: </span>
-                          <span className="font-bold text-cyan-600 dark:text-cyan-400 block truncate">
-                            {tmpl.colors?.presetId || tmpl.colors?.primary || "Đa sắc Cyan/Indigo"}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold">Bộ Font: </span>
-                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
-                            {tmpl.font}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold">Bố cục (Layout): </span>
-                          <span className="font-bold text-slate-700 dark:text-slate-200 block truncate">
-                            {tmpl.layout}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Version History & Restore (Yêu cầu khôi phục phiên bản) */}
-                      {tmpl.versionHistory && tmpl.versionHistory.length > 0 && (
-                        <div className="p-2 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/40 dark:border-indigo-800/30 text-3xs space-y-1.5">
-                          <span className="font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
-                            Lịch sử phiên bản trước ({tmpl.versionHistory.length}):
-                          </span>
-                          <div className="flex flex-wrap gap-2">
-                            {tmpl.versionHistory.map((hist) => (
-                              <button
-                                key={hist.version}
-                                type="button"
-                                onClick={() => handleRestoreCloudTemplateVersion(tmpl.id, hist.version)}
-                                className="px-2 py-1 rounded bg-white dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300/40 dark:border-indigo-700/40 text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-1 cursor-pointer transition-all active:scale-95"
-                                title={`Khôi phục về phiên bản v${hist.version}`}
-                              >
-                                <RotateCw className="w-2.5 h-2.5 text-indigo-500" />
-                                <span>Khôi phục v{hist.version} ({new Date(hist.updatedAt).toLocaleDateString("vi-VN")})</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Actions */}
-                      <div className="flex items-center justify-between pt-1 border-t border-slate-200/50 dark:border-white/5">
-                        <span className="text-3xs text-slate-400 font-mono">
-                          Người tạo: {tmpl.authorName || "Hệ thống"}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              playUiSound("success");
-                              navigator.clipboard.writeText(JSON.stringify(tmpl, null, 2));
-                              showToast("Đã sao chép cấu hình JSON mẫu X-RAY!");
-                            }}
-                            className="px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
-                            title="Sao chép JSON mẫu X-RAY"
-                          >
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>JSON</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleApplyCloudTemplate(tmpl)}
-                            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-                          >
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>Áp Dụng Mẫu</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteCloudTemplate(tmpl.id)}
-                            className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
-                            title="Xóa mẫu X-RAY khỏi Cloud Database"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )
-              ) : savedModalTab === "saved" ? (
+              {savedModalTab === "saved" ? (
                 savedPrompts.length === 0 ? (
                   <div className="text-center py-12 space-y-3">
                     <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
@@ -6064,11 +5727,7 @@ Vui lòng áp dụng các thay đổi tổng thể, đồng bộ trên toàn b�
             )}>
               <div className="flex items-center gap-3">
                 <span className="text-slate-500">
-                  {savedModalTab === "cloud_templates"
-                    ? `Tổng số: ${cloudXRayTemplates.length} Mẫu X-RAY Cloud Database (Lưu trữ lâu dài)`
-                    : savedModalTab === "saved"
-                    ? `Tổng số: ${savedPrompts.length} prompt`
-                    : `Tổng số: ${chatHistory.length} lịch sử chat`}
+                  {savedModalTab === "saved" ? `Tổng số: ${savedPrompts.length} prompt` : `Tổng số: ${chatHistory.length} lịch sử chat`}
                 </span>
                 {savedModalTab === "saved" && savedPrompts.length > 0 && (
                   <button

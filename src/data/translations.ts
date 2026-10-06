@@ -2,9 +2,19 @@ export type Language = 'vi' | 'en';
 
 export const translations: Record<Language, Record<string, string>> = {
   vi: {
+    'nav.nec': 'Trang UI NEC',
+    'nav.bento': 'Bento Dark Dashboard',
+    'nav.glass_dashboard': 'Trang mẫu',
+    'nav.template': 'Trang mẫu',
+    'nav.components': 'UI Components',
+    'nav.ui_glass': 'UI Glass',
     'nav.home': 'Trang chủ',
+    'nav.home1': 'Trang chủ 1',
+    'nav.home2': 'Trang chủ 2',
+    'nav.home3': 'Trang chủ 3',
     'nav.letter': 'Thư ngỏ',
     'nav.about': 'Giới thiệu',
+    'nav.about2': 'Giới thiệu 2',
     'nav.domains': 'Lĩnh vực',
     'nav.skills': 'Kỹ năng',
     'nav.education': 'Học vấn',
@@ -17,6 +27,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.tuvi': 'Tử vi',
     'nav.systems': 'Hệ thống',
     'nav.customization': 'Tùy chỉnh',
+    'nav.errors': 'Báo cáo lỗi',
     'nav.downloadCV': 'Tải CV',
 
     'hero.badge': 'Chuyên gia & Quản lý CSKH',
@@ -81,9 +92,19 @@ export const translations: Record<Language, Record<string, string>> = {
     'footer.rights': '© 2026 Nguyễn Hùng Thái. Mọi quyền được bảo lưu.'
   },
   en: {
+    'nav.nec': 'UI NEC Page',
+    'nav.bento': 'Bento Dark Dashboard',
+    'nav.glass_dashboard': 'Sample Template',
+    'nav.template': 'Sample Template',
+    'nav.components': 'UI Template',
+    'nav.ui_glass': 'UI Glass',
     'nav.home': 'Home',
+    'nav.home1': 'Home 1',
+    'nav.home2': 'Home 2',
+    'nav.home3': 'Home 3',
     'nav.letter': 'Open letter',
     'nav.about': 'About',
+    'nav.about2': 'About 2',
     'nav.domains': 'Domains',
     'nav.skills': 'Skills',
     'nav.education': 'Education',
@@ -96,6 +117,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.tuvi': 'Astrology',
     'nav.systems': 'Systems',
     'nav.customization': 'Customization',
+    'nav.errors': 'Tab Errors',
     'nav.downloadCV': 'Download CV',
 
     'hero.badge': 'CX & CS Leader',

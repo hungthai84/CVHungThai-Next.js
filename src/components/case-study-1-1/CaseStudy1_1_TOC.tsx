@@ -220,3 +220,6 @@ export function CaseStudy1_1_TOC({
     </div>
   );
 }
+
+
+export default CaseStudy1_1_TOC;

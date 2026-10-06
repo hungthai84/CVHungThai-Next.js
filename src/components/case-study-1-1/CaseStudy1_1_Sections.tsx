@@ -73,7 +73,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
     const results = cs?.results || [];
 
     return (
-      <div id="article-section" className="space-y-4 md:space-y-5 flex flex-col gap-4 md:gap-5 bg-transparent">
+      <div id="article-section" className="space-y-[15px] flex flex-col gap-[15px] bg-transparent">
         {/* 01 · Tổng quan dự án & EXECUTIVE OVERVIEW */}
         <section id="sec-01" className="p-5 sm:p-7 rounded-3xl bg-[#f0f9ff]/90 dark:bg-[#0c1e35]/90 border border-sky-200/80 dark:border-sky-800/60 shadow-md hover:shadow-lg space-y-4 transition duration-300">
           <div className="flex items-center space-x-3 border-b border-sky-200/80 dark:border-sky-800/80 pb-3.5 sm:pb-4">
@@ -401,9 +401,7 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
             <h2 className="text-base sm:text-xl md:text-2xl font-bold text-sky-600 dark:text-sky-400 tracking-wide flex items-center gap-2 sm:gap-2.5 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-lg bg-sky-500 text-white font-mono text-xs shadow-xs">01</span>
               <span className="text-sky-400 dark:text-sky-500 font-normal">·</span>
-              <div className="p-1.5 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-xs">
-                <FolderKanban className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-              </div>
+              <FolderKanban className="w-5 h-5 sm:w-6 sm:h-6 text-sky-500 dark:text-sky-400 shrink-0" />
               <span className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 dark:from-sky-400 dark:to-indigo-300 bg-clip-text text-transparent">Tổng quan dự án & Executive Summary</span>
             </h2>
           </div>
@@ -411,31 +409,31 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             <div className="p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-sky-300/80 dark:border-sky-800/70 shadow-xs space-y-1.5 hover:border-sky-400 transition-all">
               <span className="text-2xs font-extrabold text-sky-700 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="p-1 rounded-md bg-sky-500/15 text-sky-600"><FileText className="w-3.5 h-3.5" /></span> Tên Dự Án
+                <FileText className="w-3.5 h-3.5 text-sky-500 shrink-0" /> Tên Dự Án
               </span>
               <p className="text-h6 text-slate-900 dark:text-white font-bold">Case Study 1.1: Xây Dựng & Vận Hành Phòng Dịch Vụ Khách Hàng</p>
             </div>
             <div className="p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-indigo-300/80 dark:border-indigo-800/70 shadow-xs space-y-1.5 hover:border-indigo-400 transition-all">
               <span className="text-2xs font-extrabold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="p-1 rounded-md bg-indigo-500/15 text-indigo-600"><Tag className="w-3.5 h-3.5" /></span> Nhóm & Hashtags
+                <Tag className="w-3.5 h-3.5 text-indigo-500 shrink-0" /> Nhóm & Hashtags
               </span>
               <p className="text-h6 text-indigo-900 dark:text-indigo-200 font-bold">🧭 Chiến lược & Quản lý <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">#CS_Strategy</span></p>
             </div>
             <div className="p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-purple-300/80 dark:border-purple-800/70 shadow-xs space-y-1.5 hover:border-purple-400 transition-all">
               <span className="text-2xs font-extrabold text-purple-700 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="p-1 rounded-md bg-purple-500/15 text-purple-600"><Calendar className="w-3.5 h-3.5" /></span> Vai Trò & Giai Đoạn
+                <Calendar className="w-3.5 h-3.5 text-purple-500 shrink-0" /> Vai Trò & Giai Đoạn
               </span>
               <p className="text-h6 text-slate-900 dark:text-white font-bold">Senior CX Architect • Giai đoạn 1 (Khởi tạo nền tảng)</p>
             </div>
             <div className="p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-blue-300/80 dark:border-blue-800/70 shadow-xs space-y-1.5 md:col-span-2 lg:col-span-1 hover:border-blue-400 transition-all">
               <span className="text-2xs font-extrabold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="p-1 rounded-md bg-blue-500/15 text-blue-600"><Target className="w-3.5 h-3.5" /></span> Mục Tiêu Chiến Lược
+                <Target className="w-3.5 h-3.5 text-blue-500 shrink-0" /> Mục Tiêu Chiến Lược
               </span>
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-relaxed">Xây dựng bộ máy CSKH chuẩn hóa, chủ động nâng cao trải nghiệm và tạo kết nối bền vững với khách hàng.</p>
             </div>
             <div className="p-4.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-emerald-300/80 dark:border-emerald-800/70 shadow-xs space-y-1.5 md:col-span-2 lg:col-span-2 hover:border-emerald-400 transition-all">
               <span className="text-2xs font-extrabold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="p-1 rounded-md bg-emerald-500/15 text-emerald-600"><Globe className="w-3.5 h-3.5" /></span> Phạm Vi & Đối Tượng Hưởng Lợi
+                <Globe className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Phạm Vi & Đối Tượng Hưởng Lợi
               </span>
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-relaxed">Toàn bộ máy CSKH đa kênh, Ban Giám đốc, Đội ngũ Tuyển dụng/HR, Tư vấn viên & Khách hàng người dùng trong hệ sinh thái.</p>
             </div>
@@ -846,3 +844,6 @@ export function CaseStudy1_1_Sections({ project }: { project?: ProjectCard }) {
     </div>
   );
 }
+
+
+export default CaseStudy1_1_Sections;

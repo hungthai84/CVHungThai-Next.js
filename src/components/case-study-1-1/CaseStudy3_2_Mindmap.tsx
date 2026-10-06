@@ -378,3 +378,5 @@ export function CaseStudy3_2_Mindmap({
     </section>
   );
 }
+
+export default CaseStudy3_2_Mindmap;

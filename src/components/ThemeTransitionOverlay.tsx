@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useTheme } from "../context/ThemeContext";
 
 export function ThemeTransitionOverlay() {
-  const { isThemeTransitioning, themeSnapshot } = useTheme();
+  const { isThemeTransitioning, themeSnapshot, theme } = useTheme();
   const [activeSnapshot, setActiveSnapshot] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,12 +26,12 @@ export function ThemeTransitionOverlay() {
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           onAnimationComplete={handleAnimationComplete}
-          className="fixed inset-0 pointer-events-none z-[999999] overflow-hidden"
+          className="fixed inset-0 pointer-events-none z-[999999] overflow-hidden select-none"
           style={{ willChange: "opacity, transform, filter" }}
         >
-          {/* Captured Screenshot Snapshot */}
+          {/* Captured Screenshot Snapshot for seamless cross-dissolve */}
           {activeSnapshot ? (
             <img
               src={activeSnapshot}
@@ -44,15 +44,15 @@ export function ThemeTransitionOverlay() {
               }}
             />
           ) : (
-            <div className="w-full h-full bg-slate-900/10 backdrop-blur-[2px]" />
+            <div className="w-full h-full bg-slate-900/15 backdrop-blur-[4px]" />
           )}
 
-          {/* Futuristic ambient liquid dissolve light wave */}
+          {/* High-fidelity ambient cross-dissolve gradient aura */}
           <motion.div
-            initial={{ opacity: 0.6, scale: 0.95 }}
-            animate={{ opacity: 0, scale: 1.08 }}
-            transition={{ duration: 0.42, ease: "easeOut" }}
-            className="absolute inset-0 bg-gradient-to-tr from-[rgba(var(--color-primary-rgb),0.15)] via-[rgba(var(--color-accent-rgb),0.1)] to-transparent pointer-events-none"
+            initial={{ opacity: 0.8, scale: 0.98 }}
+            animate={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+            className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-transparent pointer-events-none"
           />
         </motion.div>
       )}

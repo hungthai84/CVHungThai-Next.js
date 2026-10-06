@@ -209,3 +209,6 @@ export function CaseStudy1_1_Mindmap({ jumpToSection, project }: { jumpToSection
     </article>
   );
 }
+
+
+export default CaseStudy1_1_Mindmap;

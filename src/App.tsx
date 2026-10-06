@@ -10,10 +10,35 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
+import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
-import LeftSidebar from "./components/LeftSidebar";
-import RightSidebar from "./components/RightSidebar";
-import { AuthProvider } from "./context/AuthContext";
+import About from "./components/About";
+import Domains from "./components/Domains";
+import Skills from "./components/Skills";
+import Education from "./components/Education";
+import Experience from "./components/Experience";
+import Projects from "./components/Projects";
+import Interview from "./components/Interview";
+import TuVi from "./components/TuVi";
+import Memories from "./components/Memories";
+import Contact from "./components/Contact";
+import Wallpapers from "./components/Wallpapers";
+import Systems from "./components/Systems";
+import Customization from "./components/Customization";
+import Letter from "./components/Letter";
+import TabErrorsPage from "./components/TabErrorsPage";
+import ErrorBoundaryHandler from "./components/ErrorBoundaryHandler";
+import XRayInspector from "./components/XRayInspector";
+import AIAssistant from "./components/ai/AIAssistant";
+import ColorSystemModal from "./components/ColorSystemModal";
+import CursorSettingsModal from "./components/CursorSettingsModal";
+import SoundSettingsModal from "./components/SoundSettingsModal";
+import FooterSettingsModal from "./components/FooterSettingsModal";
+import TypographySettings from "./components/TypographySettings";
+import ExecutiveResumeExportModal from "./components/ExecutiveResumeExportModal";
+import ThemeModal from "./components/ThemeModal";
+import CommandPalette from "./components/CommandPalette";
+import ImageStudioModal from "./components/ai/ImageStudioModal";
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -21,16 +46,15 @@ import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { CursorProvider } from "./context/CursorContext";
 import { SoundProvider, useSound } from "./context/SoundContext";
-import { playUiSound } from "./lib/sound";
 import { FooterProvider, useFooter } from "./context/FooterContext";
 import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
-  Home, MailOpen, User, GraduationCap, Compass, 
+  Monitor, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
   Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
-  LayoutTemplate, Sliders, ChevronLeft, ChevronRight
+  LayoutTemplate, Sliders, ShieldAlert
 } from "lucide-react";
 
 // Helper function to dynamically import modules with automatic retry on chunk load errors
@@ -62,38 +86,14 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
   });
 }
 
-// Keep the initial shell focused on the Hero. Secondary sections and tools are
-// loaded only when selected/opened, preserving all existing functionality while
-// reducing the first-load JavaScript cost.
-const Letter = lazyWithRetry(() => import("./components/Letter"));
-const About = lazyWithRetry(() => import("./components/About"));
-const Domains = lazyWithRetry(() => import("./components/Domains"));
-const Skills = lazyWithRetry(() => import("./components/Skills"));
-const Education = lazyWithRetry(() => import("./components/Education"));
-const Experience = lazyWithRetry(() => import("./components/Experience"));
-const Projects = lazyWithRetry(() => import("./components/Projects"));
-const Interview = lazyWithRetry(() => import("./components/Interview"));
-const TuVi = lazyWithRetry(() => import("./components/TuVi"));
-const Memories = lazyWithRetry(() => import("./components/Memories"));
-const Systems = lazyWithRetry(() => import("./components/Systems"));
-const Contact = lazyWithRetry(() => import("./components/Contact"));
-const Wallpapers = lazyWithRetry(() => import("./components/Wallpapers"));
-const Customization = lazyWithRetry(() => import("./components/Customization"));
-
-const XRayInspector = lazyWithRetry(() => import("./components/XRayInspector"));
-const AIAssistant = lazyWithRetry(() => import("./components/ai/AIAssistant"));
-const ColorSystemModal = lazyWithRetry(() => import("./components/ColorSystemModal"));
-const CursorSettingsModal = lazyWithRetry(() => import("./components/CursorSettingsModal"));
-const SoundSettingsModal = lazyWithRetry(() => import("./components/SoundSettingsModal"));
-const FooterSettingsModal = lazyWithRetry(() => import("./components/FooterSettingsModal"));
-const TypographySettings = lazyWithRetry(() => import("./components/TypographySettings"));
-const ExecutiveResumeExportModal = lazyWithRetry(() => import("./components/ExecutiveResumeExportModal"));
+// Lazy load non-hero sections for dynamic code splitting & reduced initial bundle
+// Statically imported section components above
 
 // Memoize Hero component
 const MemoHero = memo(Hero);
 
 const SECTIONS: SectionMeta[] = [
-  { id: "home", labelKey: "nav.home", Icon: Home, Component: MemoHero, padding: "p-0 overflow-hidden" },
+  { id: "home", labelKey: "nav.home", Icon: Monitor, Component: MemoHero, padding: "p-0 overflow-hidden" },
   { id: "letter", labelKey: "nav.letter", Icon: MailOpen, Component: Letter, padding: "p-0 overflow-y-auto" },
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
   { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: Domains, padding: "p-0 overflow-y-auto" },
@@ -108,10 +108,12 @@ const SECTIONS: SectionMeta[] = [
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
   { id: "customization", labelKey: "nav.customization", Icon: Sliders, Component: Customization, padding: "p-0 overflow-y-auto" },
+  { id: "errors", labelKey: "nav.errors", Icon: ShieldAlert, Component: TabErrorsPage, padding: "p-0 overflow-y-auto" },
 ];
 
 function MainContent() {
-  const { theme, setTheme } = useTheme();
+  const themeContext = useTheme();
+  const { theme, setTheme } = themeContext;
   const { t, lang } = useLanguage();
   const { isSwitching } = useLayout();
   const { footerConfig, isFooterHovered } = useFooter();
@@ -130,8 +132,6 @@ function MainContent() {
     }
     return "home";
   });
-
-  const hasSlides = activeSection === "home" || activeSection === "about";
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
 
@@ -160,25 +160,13 @@ function MainContent() {
 
   // States for Proactive Feature Modals
   const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
-  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    const handleOpenLeft = () => setIsLeftSidebarOpen(true);
-    const handleOpenRight = () => setIsRightSidebarOpen(true);
-    window.addEventListener("open-left-sidebar", handleOpenLeft);
-    window.addEventListener("open-right-sidebar", handleOpenRight);
-    return () => {
-      window.removeEventListener("open-left-sidebar", handleOpenLeft);
-      window.removeEventListener("open-right-sidebar", handleOpenRight);
-    };
-  }, []);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isImageStudioOpen, setIsImageStudioOpen] = useState(false);
 
   const { playTransition } = useSound();
 
   // State for Keyboard Shortcut Toast notification
   const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
-  const [clickedRippleSec, setClickedRippleSec] = useState<string | null>(null);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
@@ -209,20 +197,18 @@ function MainContent() {
   // Atomic synchronization of theme classes on root element to prevent layout shifts & hydration mismatches
   useEffect(() => {
     const root = document.documentElement;
-    const allThemeClasses = [
-      "dark",
-      "theme-light",
-      "theme-glass-dark-neon",
-      "theme-modern-light-glass",
-      "theme-mritech-aurora-glass",
-      "theme-mritech-digital-growth",
-      "theme-dark"
-    ];
 
-    root.classList.remove(...allThemeClasses);
+    // Cleanly strip all previous theme classes (e.g. theme-*, dark)
+    Array.from(root.classList).forEach((cls) => {
+      if (cls === "dark" || cls.startsWith("theme-")) {
+        root.classList.remove(cls);
+      }
+    });
+
     root.setAttribute("data-theme", theme);
+    root.dataset.theme = theme;
 
-    if (theme === "glass-dark-neon") {
+    if (theme === "dark" || theme === "glass-dark-neon") {
       root.classList.add("dark", `theme-${theme}`);
     } else {
       root.classList.add(`theme-${theme}`);
@@ -231,7 +217,8 @@ function MainContent() {
 
   // Smoothly switch to specific section with direct instant transition (không hiển thị màn hình loader)
   const navigateToSection = (id: string) => {
-    const cleanId = id.replace(/^#/, "");
+    let cleanId = id.replace(/^#/, "");
+    if (cleanId === "tab-errors") cleanId = "errors";
     const targetSection = SECTIONS.find((s) => s.id === cleanId);
     if (targetSection && cleanId !== activeSection) {
       playTransition();
@@ -258,24 +245,6 @@ function MainContent() {
     setShowScrollReminder(false);
   };
 
-  const handlePrevSection = () => {
-    const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-    if (currentIndex > 0) {
-      navigateToSection(SECTIONS[currentIndex - 1].id);
-    } else {
-      navigateToSection(SECTIONS[SECTIONS.length - 1].id);
-    }
-  };
-
-  const handleNextSection = () => {
-    const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-    if (currentIndex < SECTIONS.length - 1) {
-      navigateToSection(SECTIONS[currentIndex + 1].id);
-    } else {
-      navigateToSection(SECTIONS[0].id);
-    }
-  };
-
   // Listen for custom app-navigate & feature modal events
   useEffect(() => {
     const handleAppNavigate = (e: Event) => {
@@ -285,24 +254,29 @@ function MainContent() {
       }
     };
     const handleOpenResumeExport = () => setIsResumeExportOpen(true);
+    const handleOpenCommandPalette = () => setIsCommandPaletteOpen(true);
+    const handleOpenImageStudio = () => setIsImageStudioOpen(true);
 
     window.addEventListener("app-navigate", handleAppNavigate);
     window.addEventListener("open-resume-export", handleOpenResumeExport);
+    window.addEventListener("open-command-palette", handleOpenCommandPalette);
+    window.addEventListener("open-image-studio", handleOpenImageStudio);
 
     return () => {
       window.removeEventListener("app-navigate", handleAppNavigate);
       window.removeEventListener("open-resume-export", handleOpenResumeExport);
+      window.removeEventListener("open-command-palette", handleOpenCommandPalette);
+      window.removeEventListener("open-image-studio", handleOpenImageStudio);
     };
   }, [activeSection]);
 
 
-  // Keyboard navigation & direct section jump shortcuts (1..9 and 0)
+  // Keyboard navigation & direct section jump shortcuts (1..9, 0, and Ctrl+K / Cmd+K)
   useEffect(() => {
     const shortcutMap: Record<string, { id: string; nameVi: string; nameEn: string }> = {
       "1": { id: "home", nameVi: "Trang chủ", nameEn: "Home" },
       "2": { id: "letter", nameVi: "Thư ngỏ", nameEn: "Open Letter" },
       "3": { id: "about", nameVi: "Giới thiệu", nameEn: "About" },
-      "4": { id: "education", nameVi: "Học vấn & Bằng cấp", nameEn: "Education" },
       "5": { id: "skills", nameVi: "Kỹ năng chuyên môn", nameEn: "Skills" },
       "6": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
       "7": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
@@ -314,6 +288,20 @@ function MainContent() {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Global Quick Search / Command Palette shortcut (Ctrl+K or Cmd+K)
+      if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+        return;
+      }
+
+      // Global AI Image Studio shortcut (Ctrl+I or Cmd+I)
+      if ((e.ctrlKey || e.metaKey) && (e.key === "i" || e.key === "I")) {
+        e.preventDefault();
+        setIsImageStudioOpen((prev) => !prev);
+        return;
+      }
+
       const activeEl = document.activeElement;
       if (
         activeEl &&
@@ -451,79 +439,21 @@ function MainContent() {
   const currentSection = SECTIONS[activeIndex] || SECTIONS[0];
   const CurrentComponent = currentSection.Component;
 
-  const prevIndex = activeIndex > 0 ? activeIndex - 1 : SECTIONS.length - 1;
-  const nextIndex = activeIndex < SECTIONS.length - 1 ? activeIndex + 1 : 0;
-  const prevSection = SECTIONS[prevIndex];
-  const nextSection = SECTIONS[nextIndex];
-
-  // Keyboard navigation support (ArrowLeft / ArrowRight)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) return;
-      const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-      if (e.key === "ArrowLeft") {
-        if (currentIndex > 0) {
-          navigateToSection(SECTIONS[currentIndex - 1].id);
-        } else {
-          navigateToSection(SECTIONS[SECTIONS.length - 1].id);
-        }
-      } else if (e.key === "ArrowRight") {
-        if (currentIndex < SECTIONS.length - 1) {
-          navigateToSection(SECTIONS[currentIndex + 1].id);
-        } else {
-          navigateToSection(SECTIONS[0].id);
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSection]);
-
   const getMainCardStyle = () => {
     return getUnifiedSurfaceStyle(theme);
   };
 
-  const isLastSection = activeSection === SECTIONS[SECTIONS.length - 1].id;
-
-  const handleScreenClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isFooterPinned || isLastSection) return;
-    const target = e.target as HTMLElement;
-    if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("textarea") || target.closest("dialog") || target.closest("nav") || target.closest("header") || target.closest("footer") || target.closest(".modal")) {
-      return;
-    }
-    const clientY = e.clientY;
-    const windowHeight = window.innerHeight;
-    if (clientY < windowHeight / 2) {
-      handlePrevSection();
-    } else {
-      handleNextSection();
-    }
-  };
-
-  const handleSlideAdvanceAction = (direction: "prev" | "next") => {
-    playUiSound("click");
-    if (activeSection === "home") {
-      window.dispatchEvent(new CustomEvent(direction === "next" ? "app-slide-next" : "app-slide-prev"));
-    } else {
-      // Find scrollable card container inside active page and scroll to next card
-      const mainEl = cardContainerRef.current?.querySelector("main > div");
-      if (mainEl) {
-        const delta = direction === "next" ? 380 : -380;
-        mainEl.scrollBy({ top: delta, behavior: "smooth" });
-      }
-    }
-  };
-
   return (
     <SectionProvider activeSection={activeSection} setActiveSection={setActiveSection} sections={SECTIONS}>
-      <div 
-        onClick={handleScreenClick}
-        className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent"
-        style={{
-          borderTopLeftRadius: "var(--theme-radius-card, 16px)",
-          borderTopRightRadius: "var(--theme-radius-card, 16px)"
-        }}
-      >
+      <div className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent">
+        {/* CodePen Glassmorphism Ambient Floating Layer */}
+        <div className="codepen-glass-wrap">
+          <div className="codepen-glass-drop codepen-glass-drop-1 hidden md:block opacity-60" />
+          <div className="codepen-glass-drop codepen-glass-drop-2 opacity-70" />
+          <div className="codepen-glass-drop codepen-glass-drop-3 opacity-60" />
+          <div className="codepen-glass-drop codepen-glass-drop-4 opacity-75" />
+        </div>
+
         {/* Dynamic Persistent Background Renderer (Video / Image / Gradient) */}
         <BackgroundRenderer />
 
@@ -535,76 +465,74 @@ function MainContent() {
           onNavigate={navigateToSection}
         />
 
-        {/* Center Main Container Wrapper with Left & Right 15px Peek Slides */}
+        {/* Center Main Container Wrapper (Cách Header đúng 15px, cách Footer đúng 15px khi ghim hoặc trượt) */}
         <div 
           className={cn(
-            "mx-auto flex items-center justify-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            isHeaderSlidUp ? "mt-[24px]" : "mt-[70px] sm:mt-[74px]",
-            isFooterSlidDown ? "mb-[24px]" : "mb-[70px] sm:mb-[74px]"
+            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isHeaderSlidUp ? "mt-[24px]" : "mt-[90px]",
+            isFooterSlidDown ? "mb-[24px]" : "mb-[90px]"
           )}
         >
-          {/* Left Peek Slide (Previous) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
-          {hasSlides && (
-            <div 
-              onClick={() => handleSlideAdvanceAction("prev")}
-              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
-              className="hidden sm:flex absolute right-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
-              title={lang === "vi" ? "Chuyển thẻ / slide tiếp theo trong trang" : "Next card / slide in page"}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-transparent pointer-events-none" />
-              <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:-translate-x-1.5 transition-transform font-play">
-                <ChevronLeft className="w-5 h-5 text-blue-600 dark:text-cyan-400 shrink-0" />
-                <span className="capitalize truncate font-bold text-slate-900 dark:text-white">{lang === "vi" ? "Slide trước" : "Prev"}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 10px) */}
+          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 15px) */}
           <div 
             ref={cardContainerRef}
             className={cn(
-              "w-full rounded-[10px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
+              "w-full rounded-[14px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
               isHeaderSlidUp && isFooterSlidDown
                 ? "h-[calc(100vh-48px)]"
                 : isHeaderSlidUp || isFooterSlidDown
-                ? "h-[calc(100vh-94px)] sm:h-[calc(100vh-98px)]" 
-                : "h-[calc(100vh-140px)] sm:h-[calc(100vh-148px)]",
+                ? "h-[calc(100vh-105px)]" 
+                : "h-[calc(100vh-180px)]",
               getMainCardStyle(),
               isSwitching ? "opacity-80" : "opacity-100"
             )}
             style={{
-              borderRadius: "var(--theme-radius-card, 10px)",
+              borderRadius: "var(--theme-radius-card, 14px)",
               boxShadow: "none"
             }}
           >
-            <main className="relative w-full h-full overflow-hidden flex-grow">
+            <main className="relative w-full h-full overflow-hidden flex-grow select-auto">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeSection}
-                  id={activeSection}
-                  initial={{ 
-                    x: 60, 
-                    opacity: 0, 
-                    scale: 1,
-                    filter: "blur(4px)" 
-                  }}
+                  id={`panel-${activeSection}`}
+                  role="tabpanel"
+                  aria-labelledby={`tab-${activeSection}`}
+                  tabIndex={0}
+                  className={`w-full h-full min-h-full flex flex-col focus:outline-none ${currentSection.padding} no-scrollbar scroll-smooth`}
+                  initial={
+                    theme === "soft-floating-bento"
+                      ? { y: 28, opacity: 0, scale: 0.97, filter: "blur(8px)" }
+                      : { y: 35, opacity: 0, scale: 1, filter: "blur(4px)" }
+                  }
                   animate={{ 
-                    x: 0, 
+                    y: 0, 
                     opacity: 1, 
-                    scale: 1,
+                    scale: 1, 
                     filter: "blur(0px)" 
                   }}
-                  exit={{ 
-                    x: -60, 
-                    opacity: 0, 
-                    scale: 1,
-                    filter: "blur(4px)" 
-                  }}
-                  transition={{ 
-                    duration: 0.4, 
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
-                  className={`w-full h-full ${currentSection.padding} no-scrollbar scroll-smooth`}
+                  exit={
+                    theme === "soft-floating-bento"
+                      ? { y: -20, opacity: 0, scale: 0.97, filter: "blur(6px)" }
+                      : { y: -25, opacity: 0, scale: 1, filter: "blur(4px)" }
+                  }
+                  transition={
+                    theme === "soft-floating-bento"
+                      ? {
+                          type: "spring",
+                          damping: 22,
+                          stiffness: 240,
+                          mass: 0.8,
+                          staggerChildren: 0.09,
+                          delayChildren: 0.05
+                        }
+                      : {
+                          duration: 0.4, 
+                          ease: [0.16, 1, 0.3, 1],
+                          staggerChildren: 0.08,
+                          delayChildren: 0.04
+                        }
+                  }
                 >
                   <Suspense fallback={null}>
                     <CurrentComponent />
@@ -614,21 +542,6 @@ function MainContent() {
             </main>
           </div>
 
-          {/* Right Peek Slide (Next) - 15px gap - Hiển thị ở mọi kích thước trừ mobile, nền giống header */}
-          {hasSlides && (
-            <div 
-              onClick={() => handleSlideAdvanceAction("next")}
-              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
-              className="hidden sm:flex absolute left-[calc(100%+15px)] top-0 bottom-0 w-[140px] md:w-[180px] xl:w-[220px] overflow-hidden cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 shadow-md hover:shadow-xl border border-white/70 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl items-center justify-center p-3 sm:p-4 group select-none z-10 text-slate-800 dark:text-slate-100"
-              title={lang === "vi" ? "Chuyển thẻ / slide tiếp theo trong trang" : "Next card / slide in page"}
-            >
-              <div className="absolute inset-0 bg-gradient-to-l from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
-              <div className="text-center font-bold text-xs sm:text-sm tracking-wide flex items-center gap-2 group-hover:translate-x-1.5 transition-transform font-play">
-                <span className="capitalize truncate font-bold text-slate-900 dark:text-white">{lang === "vi" ? "Slide sau" : "Next"}</span>
-                <ChevronRight className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
@@ -636,27 +549,6 @@ function MainContent() {
           theme={theme}
           activeSection={activeSection}
           onNavigate={navigateToSection}
-        />
-
-        {/* Left and Right Sidebars */}
-        <LeftSidebar
-          isOpen={isLeftSidebarOpen}
-          onClose={() => setIsLeftSidebarOpen(false)}
-          activeSection={activeSection}
-          onNavigate={navigateToSection}
-          onPrev={handlePrevSection}
-          onNext={handleNextSection}
-          isHeaderSlidUp={isHeaderSlidUp}
-          isFooterSlidDown={isFooterSlidDown}
-        />
-        <RightSidebar
-          isOpen={isRightSidebarOpen}
-          onClose={() => setIsRightSidebarOpen(false)}
-          onNavigate={navigateToSection}
-          onPrev={handlePrevSection}
-          onNext={handleNextSection}
-          isHeaderSlidUp={isHeaderSlidUp}
-          isFooterSlidDown={isFooterSlidDown}
         />
 
         {/* Lazy Loaded Heavy Overlays & Modals */}
@@ -671,6 +563,19 @@ function MainContent() {
           <ExecutiveResumeExportModal
             isOpen={isResumeExportOpen}
             onClose={() => setIsResumeExportOpen(false)}
+          />
+          <ThemeModal
+            isOpen={themeContext.isThemeModalOpen}
+            onClose={themeContext.closeThemeModal}
+          />
+          <CommandPalette
+            isOpen={isCommandPaletteOpen}
+            onClose={() => setIsCommandPaletteOpen(false)}
+            onNavigate={navigateToSection}
+          />
+          <ImageStudioModal
+            isOpen={isImageStudioOpen}
+            onClose={() => setIsImageStudioOpen(false)}
           />
         </Suspense>
 
@@ -736,8 +641,8 @@ function MainContent() {
           )}
         </AnimatePresence>
 
-        {/* Futuristic Custom Cursor is disabled/removed as requested */}
-        {/* <CustomCursor /> */}
+        {/* Futuristic Custom Cursor */}
+        <CustomCursor />
 
         {/* Global Smooth Theme Snapshot Dissolve Overlay */}
         <ThemeTransitionOverlay />
@@ -748,7 +653,7 @@ function MainContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
+    <ErrorBoundaryHandler>
       <ThemeProvider>
         <NotificationProvider>
           <BackgroundProvider>
@@ -758,7 +663,9 @@ export default function App() {
                   <SoundProvider>
                     <FooterProvider>
                       <HeaderProvider>
-                        <MainContent />
+                        <ErrorBoundaryHandler>
+                          <MainContent />
+                        </ErrorBoundaryHandler>
                       </HeaderProvider>
                     </FooterProvider>
                   </SoundProvider>
@@ -768,7 +675,8 @@ export default function App() {
           </BackgroundProvider>
         </NotificationProvider>
       </ThemeProvider>
-    </AuthProvider>
+    </ErrorBoundaryHandler>
   );
 }
+
 

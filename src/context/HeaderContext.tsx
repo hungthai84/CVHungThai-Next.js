@@ -12,6 +12,8 @@ interface HeaderContextType {
   isHeaderHovered: boolean;
   setIsHeaderHovered: React.Dispatch<React.SetStateAction<boolean>>;
   isHeaderSlidUp: boolean;
+  persistedPillStyle: React.CSSProperties;
+  setPersistedPillStyle: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
@@ -42,6 +44,7 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
   });
 
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [persistedPillStyle, setPersistedPillStyle] = useState<React.CSSProperties>({ opacity: 0 });
 
   // Sync to localStorage
   useEffect(() => {
@@ -80,6 +83,8 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
         isHeaderHovered,
         setIsHeaderHovered,
         isHeaderSlidUp,
+        persistedPillStyle,
+        setPersistedPillStyle,
       }}
     >
       {children}

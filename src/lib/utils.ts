@@ -17,11 +17,13 @@ export function cn(...classes: (string | boolean | undefined | null | Record<str
 
 export function getUnifiedSurfaceStyle(theme: string): string {
   switch (theme) {
+    case "glass-light-multicolor":
+      return "bg-white/62 border border-white/75 text-[#172033] shadow-[0_24px_60px_rgba(80,100,130,0.12),0_4px_16px_rgba(80,100,130,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-[26px] backdrop-saturate-[140%]";
     case "glass-dark-neon":
       return "bg-[#121218]/60 dark:bg-[#121218]/60 border border-white/12 text-slate-100 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-[16px] backdrop-saturate-[180%]";
-    case "mritech-digital-growth":
+    case "glass-light-multicolor":
     default:
-      return "bg-white/55 dark:bg-[#121218]/60 border border-white/50 dark:border-white/12 text-slate-800 dark:text-slate-100 shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-[16px] backdrop-saturate-[180%]";
+      return "bg-white/62 border border-white/75 text-[#172033] shadow-[0_24px_60px_rgba(80,100,130,0.12),0_4px_16px_rgba(80,100,130,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-[26px] backdrop-saturate-[140%]";
   }
 }
 
