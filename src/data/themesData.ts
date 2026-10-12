@@ -137,6 +137,44 @@ export const THEME_LIST: ThemeConfig[] = [
       "High glass translucency paired with meticulous 14px corners",
       "100% original cyberpunk cybernetic interaction design"
     ]
+  },
+  {
+    id: "glass-ui-layout",
+    num: "04",
+    name: "Glass UI Layout",
+    nameVi: "Giao diện Kính Mờ Đa Sắc",
+    tagline: "Ultra-Clear Translucent Glass + Soft Multicolor Glow + Refined Clay Depth",
+    taglineVi: "Lớp kính trong suốt, hiệu ứng nền mờ 16–24px, dải màu đa sắc & chiều sâu tinh tế",
+    description: "Modern Glass UI with crystal translucent cards, 16px-24px backdrop blur, delicate luminous borders, and multicolor ambient glow (Lavender, Blue, Mint, Peach, Purple).",
+    descriptionVi: "Phong cách Glass UI hiện đại: các lớp kính trong suốt với backdrop-filter blur 16px–24px, viền sáng mảnh phản quang, bóng đổ mềm mại, kết hợp ánh sáng môi trường đa sắc (Lavender #F5F3FF, Blue #60A5FA, Green #34D399, Yellow #FCD34D, Coral #FB7185, Purple #A78BFA, Ink #1E1B4B).",
+    badge: "Glass UI",
+    badgeVi: "Kính Mờ Đa Sắc",
+    isDark: false,
+    colors: {
+      primary: "#60A5FA",
+      secondary: "#A78BFA",
+      accent: "#34D399",
+      background: "#F5F3FF",
+      surface: "rgba(255, 255, 255, 0.72)",
+      surfaceSecondary: "rgba(255, 255, 255, 0.45)",
+      text: "#1E1B4B",
+      textSecondary: "#475569",
+      border: "rgba(255, 255, 255, 0.8)",
+    },
+    featuresVi: [
+      "Nền kính trong suốt với backdrop-filter: blur(20px) và viền sáng mảnh phản quang",
+      "Bảng màu đa sắc tinh tế: Lavender (#F5F3FF), Blue (#60A5FA), Green (#34D399), Yellow (#FCD34D), Coral (#FB7185), Purple (#A78BFA), Ink (#1E1B4B)",
+      "Vùng chuyển màu nền đa sắc nhẹ nhàng tạo chiều sâu không gian cao cấp",
+      "Đầy đủ 2 chế độ Sáng (Light - Kính Trắng/Lavender) và Tối (Dark - Kính Xanh Tím Tối) đồng bộ 100%",
+      "Tương tác vi mô hover nhẹ nhàng, chuyển trạng thái mượt mà, bảo toàn 100% dữ liệu"
+    ],
+    featuresEn: [
+      "Crystal translucent glass cards with backdrop-filter: blur(20px) and delicate hairline borders",
+      "Refined multicolor palette: Lavender, Blue, Mint Green, Yellow, Coral, Purple, Ink",
+      "Ambient multicolor gradient field with soft atmospheric depth",
+      "Full Light (White/Lavender glass) and Dark (Deep indigo-violet glass) synchronized modes",
+      "Smooth micro-interactions and hover states, preserving 100% data integrity"
+    ]
   }
 ];
 

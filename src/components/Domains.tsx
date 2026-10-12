@@ -352,7 +352,7 @@ export function Domains() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex flex-wrap items-center gap-2">
                     {selectedDomain.logos.map((logo, idx) => (
                       <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
                     ))}
@@ -362,9 +362,9 @@ export function Domains() {
             </motion.div>
           ) : (
             /* ========================================================================= */
-            /* 6 COMPACT BENTO DOMAIN CARDS (Grid View)                                  */
+            /* 6 COMPACT BENTO DOMAIN CARDS (Responsive Grid View)                       */
             /* ========================================================================= */
-            <div className="w-full h-full flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[15px] auto-rows-fr items-stretch pb-1">
+            <div className="responsive-grid-container w-full h-full flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-4.5 auto-rows-fr items-stretch pb-2 min-w-0 max-w-full @container">
               {filteredDomains.map((domain, index) => {
                 const Icon = getIconComponent(domain.iconName);
 
@@ -375,9 +375,9 @@ export function Domains() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, delay: index * 0.05 }}
                     onClick={() => setSelectedDomainId(domain.id)}
-                    style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+                    style={{ borderRadius: "var(--theme-radius-card, 12px)" }}
                     className={cn(
-                      "h-full p-[15px] border flex flex-col items-center text-center justify-between gap-3 shadow-sm hover:shadow-xl cursor-pointer group/card overflow-hidden relative transition-all duration-500 hover:-translate-y-1.5",
+                      "content-fit-card h-full p-3.5 sm:p-4 md:p-5 border flex flex-col items-center text-center justify-between gap-3 shadow-sm hover:shadow-xl cursor-pointer group/card overflow-hidden relative transition-all duration-300 hover:-translate-y-1.5 w-full max-w-full min-w-0 box-border",
                       getGlassCardClass(),
                       domain.colorTheme.border
                     )}
@@ -393,8 +393,8 @@ export function Domains() {
                       style={{ background: `linear-gradient(135deg, ${domain.colorTheme.glow || "rgba(59,130,246,0.3)"}, transparent)` }}
                     />
 
-                    {/* Top Icon Centered with Distinct Color and Floating Animation (Bỏ khung, mỗi icon màu khác nhau) */}
-                    <div className="relative z-10 pt-2 pb-1">
+                    {/* Top Icon Centered with Distinct Color and Floating Animation */}
+                    <div className="relative z-10 pt-1 sm:pt-2 pb-1 shrink-0">
                       <motion.div
                         animate={{
                           y: [0, -5, 0],
@@ -410,7 +410,7 @@ export function Domains() {
                       >
                         <Icon 
                           className={cn(
-                            "w-11 h-11 sm:w-12 sm:h-12 stroke-[2.2] drop-shadow-md",
+                            "w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 stroke-[2.2] drop-shadow-md",
                             domain.id === "01" ? "text-blue-500 dark:text-blue-400" :
                             domain.id === "02" ? "text-amber-500 dark:text-amber-400" :
                             domain.id === "03" ? "text-emerald-500 dark:text-emerald-400" :
@@ -422,31 +422,29 @@ export function Domains() {
                       </motion.div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="flex-1 min-w-0 flex flex-col items-center justify-between gap-2 relative z-10 w-full">
-                      <div className="space-y-1.5 w-full">
-                        <h6 className={cn("text-h6 font-bold tracking-tight font-play line-clamp-1", domain.colorTheme.text)}>
+                    {/* Content Section with Content Fit System */}
+                    <div className="flex-1 min-w-0 max-w-full flex flex-col items-center justify-between gap-2.5 relative z-10 w-full">
+                      <div className="space-y-1.5 w-full min-w-0 max-w-full">
+                        <h6 className={cn("card-title text-sm sm:text-base font-bold tracking-tight font-play break-words [overflow-wrap:anywhere] line-clamp-2", domain.colorTheme.text)}>
                           {isVi ? domain.titleVi : domain.titleEn}
                         </h6>
 
-                        <div className="flex items-center justify-center">
-                          <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black tracking-wide border shadow-3xs", domain.colorTheme.badgeBg, domain.colorTheme.badgeText)}>
+                        <div className="badge-group flex items-center justify-center flex-wrap gap-1 max-w-full">
+                          <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-mono font-black tracking-wide border shadow-3xs break-words max-w-full", domain.colorTheme.badgeBg, domain.colorTheme.badgeText)}>
                             {isVi ? domain.experienceVi : domain.experienceEn}
                           </span>
                         </div>
 
-                        <p className="text-body-sm font-normal text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                        <p className="text-xs sm:text-sm font-normal text-slate-600 dark:text-slate-300 break-words [overflow-wrap:anywhere] line-clamp-2 sm:line-clamp-3 leading-relaxed">
                           {isVi ? domain.orientationVi : domain.orientationEn}
                         </p>
                       </div>
 
-                      {/* Bottom Row: Connected Brand Logos Centered */}
-                      <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-center gap-2 mt-auto">
-                        <div className="flex items-center gap-1.5 justify-center overflow-hidden">
-                          {domain.logos.map((logo, idx) => (
-                            <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
-                          ))}
-                        </div>
+                      {/* Bottom Row: Connected Brand Logos Centered & Wrapped */}
+                      <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-white/10 flex flex-wrap items-center justify-center gap-1.5 mt-auto max-w-full">
+                        {domain.logos.map((logo, idx) => (
+                          <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
+                        ))}
                       </div>
                     </div>
                   </motion.div>

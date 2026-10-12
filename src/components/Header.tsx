@@ -59,6 +59,9 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const setTheme = propSetTheme || themeContext.setTheme;
 
   let isHeaderSlidUp = false;
+  let isHeaderPinned = false;
+  let togglePin: (() => void) | undefined;
+  let isHeaderHovered = false;
   let setIsHeaderHovered: ((hovered: boolean) => void) | undefined;
   let contextPillStyle: React.CSSProperties = { opacity: 0 };
   let setContextPillStyle: React.Dispatch<React.SetStateAction<React.CSSProperties>> | undefined;
@@ -66,6 +69,9 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   try {
     const headerCtx = useHeader();
     isHeaderSlidUp = headerCtx.isHeaderSlidUp;
+    isHeaderPinned = headerCtx.isHeaderPinned;
+    togglePin = headerCtx.togglePin;
+    isHeaderHovered = headerCtx.isHeaderHovered;
     setIsHeaderHovered = headerCtx.setIsHeaderHovered;
     contextPillStyle = headerCtx.persistedPillStyle;
     setContextPillStyle = headerCtx.setPersistedPillStyle;
@@ -74,9 +80,30 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   }
 
   const { lang, setLang, t } = useLanguage();
-  const { orientation, toggleOrientation } = useLayout();
+  const isVi = lang === "vi";
+  const { orientation, toggleOrientation, layoutMode, toggleLayoutMode } = useLayout();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredNavId, setHoveredNavId] = useState<string | null>(null);
+  
+  const [isHeaderThemeOpen, setIsHeaderThemeOpen] = useState(false);
+  const [isHeaderLayoutOpen, setIsHeaderLayoutOpen] = useState(false);
+  const [isHeaderLangOpen, setIsHeaderLangOpen] = useState(false);
+  const [isHeaderStackExpanded, setIsHeaderStackExpanded] = useState(false);
+
+  useEffect(() => {
+    const handleOutside = (e: any) => {
+      const target = e.target as HTMLElement;
+      const headerEl = document.getElementById("header");
+      if (headerEl && !headerEl.contains(target)) {
+        setIsHeaderThemeOpen(false);
+        setIsHeaderLayoutOpen(false);
+        setIsHeaderLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
   const isHorizontal = orientation === "horizontal";
   
   const navRef = useRef<HTMLElement>(null);
@@ -284,9 +311,8 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
         onMouseEnter={() => setIsHeaderHovered?.(true)}
         onMouseLeave={() => setIsHeaderHovered?.(false)}
         className={cn(
-          "fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] border-t-0 rounded-b-[14px] rounded-t-none p-[5px] flex flex-row items-center justify-between transition-all duration-300 ease-in-out shadow-none !shadow-none",
-          isHeaderSlidUp ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100",
-          getHeaderContainerStyle()
+          "fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] border-t-0 rounded-b-[14px] rounded-t-none p-[5px] flex flex-row items-center justify-between transition-all duration-300 ease-in-out shadow-none !shadow-none bg-transparent border-transparent",
+          isHeaderPinned ? "translate-y-0 opacity-100" : (isHeaderHovered ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%-14px)] opacity-95")
         )}
         style={{
           height: "var(--header-height, 75px)",
@@ -295,14 +321,32 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           borderTopRightRadius: "0px",
           borderBottomLeftRadius: "var(--theme-radius-card, 14px)",
           borderBottomRightRadius: "var(--theme-radius-card, 14px)",
-          boxShadow: "none"
+          boxShadow: "none",
+          background: "transparent"
         }}
       >
+        {/* Peeking Colored Line Handle (Double click to pin/unpin) */}
+        {!isHeaderPinned && (
+          <div
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              togglePin?.();
+            }}
+            onClick={() => setIsHeaderHovered?.(true)}
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center justify-center cursor-pointer py-1 z-30"
+            title={isVi ? "Double click để ghim/bỏ ghim Header, click để mở" : "Double click to pin/unpin Header, click to expand"}
+          >
+            <div className="h-1.5 w-20 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)] animate-pulse hover:scale-110 transition-transform" />
+          </div>
+        )}
         {/* Hidden dummy svg to satisfy selector verification while keeping menu icons active */}
         <svg className="hidden" aria-hidden="true" />
 
         {/* 1. LEFT CONTAINER: Avatar only (Trái chứa Avatar, padding 5px) */}
-        <div className="flex items-center shrink-0 p-[5px]">
+        <div className={cn(
+          "flex items-center shrink-0 p-[5px] transition-opacity duration-300",
+          isHeaderStackExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
+        )}>
           <a 
             href="#home" 
             onClick={(e) => handleNavClick(e, "home")}
@@ -328,11 +372,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           id="nb-10-bar"
           role="tablist"
           aria-label={lang === "vi" ? "Thanh điều hướng trang" : "Primary Navigation"}
-          onMouseEnter={handleNavMouseEnter}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => setHoveredNavId(null)}
-          style={{ padding: "5px" }}
-          className="flex flex-1 w-full max-w-full items-center justify-start md:justify-center gap-1 sm:gap-1.5 p-[5px] mx-1 relative z-20 select-none overflow-x-auto no-scrollbar transition-all duration-300"
+          className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 relative z-20 select-none overflow-x-auto no-scrollbar py-1"
         >
           {navItems.map((item, idx) => {
             const isActive = activeSection === item.id;
@@ -371,42 +411,24 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 aria-label={item.label}
                 title={item.label}
                 aria-current={isActive ? "page" : undefined}
-                onMouseEnter={() => setHoveredNavId(item.id)}
-                onMouseLeave={() => setHoveredNavId(null)}
                 className={cn(
-                  "header-nav-btn h-8 sm:h-9 min-h-[32px] flex items-center justify-center cursor-pointer relative shrink-0 p-[5px] px-2.5 sm:px-3 rounded-[999px] group/navbtn transition-all duration-300",
+                  "header-nav-btn h-8 sm:h-9 min-h-[32px] flex items-center justify-center cursor-pointer relative shrink-0 px-3 rounded-[999px] transition-all duration-300 border backdrop-blur-md shadow-md active:scale-95",
                   isActive
-                    ? "header-nav-btn-active bg-white/20 dark:bg-white/10 shadow-xs"
-                    : "hover:bg-white/10 dark:hover:bg-white/5"
+                    ? "bg-white/50 dark:bg-white/25 shadow-xs border-white/70 dark:border-white/30 font-bold scale-105"
+                    : "bg-white/20 dark:bg-white/10 border-white/25 dark:border-white/10 hover:bg-white/30 dark:hover:bg-white/15"
                 )}
               >
-                {/* Icon với hiệu ứng chuyển động Morph biến đổi linh hoạt khi chọn trang */}
-                <motion.div
-                  key={`morph-icon-${item.id}-${isActive}`}
-                  initial={isActive ? { scale: 0.4, rotate: -60, filter: "blur(4px)", opacity: 0.4 } : false}
-                  animate={{ scale: 1, rotate: 0, filter: "blur(0px)", opacity: 1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 420,
-                    damping: 20,
-                    mass: 0.6
-                  }}
-                  className="relative flex items-center justify-center shrink-0 z-10"
-                >
+                <div className="relative flex items-center justify-center shrink-0 z-10">
                   <item.Icon 
                     className={cn(
-                      "header-nav-icon w-4.5 h-4.5 sm:w-5 sm:h-5 shrink-0 transition-all duration-300",
-                      isActive 
-                        ? "stroke-[2.6] scale-110 drop-shadow-[0_0_8px_currentColor]" 
-                        : "group-hover/navbtn:scale-110",
+                      "w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform",
+                      isActive ? "scale-110 drop-shadow-[0_0_6px_currentColor]" : "hover:scale-110",
                       getNavItemTheme(item.id, isActive)
                     )} 
                   />
-                </motion.div>
-                
-                {/* Header menu icon title label - formatted with the exact SAME color as the icon & 15px font */}
+                </div>
                 <span className={cn(
-                  "header-nav-label text-[15px] font-bold whitespace-nowrap ml-1.5 relative z-10 transition-colors",
+                  "text-[13px] sm:text-[14px] font-bold whitespace-nowrap ml-1.5 relative z-10",
                   getNavItemTheme(item.id, isActive)
                 )}>
                   {item.label}
@@ -416,10 +438,50 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
           })}
         </nav>
 
+        {/* 3. RIGHT CONTAINER: Language, Theme, Layout buttons with dropdown list boxes, Menu Icon & AI Assistant Avatar (padding 5px) */}
+        <div className={cn(
+          "flex items-center justify-end shrink-0 p-[5px] z-40 gap-1.5 sm:gap-2 transition-opacity duration-300",
+          isHeaderStackExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
+        )}>
+          {/* NÚT MENU ICON ÁP DỤNG NAV GLASS LIQUID */}
+          <button
+            type="button"
+            onClick={() => {
+              try { playUiSound("click"); } catch {}
+              setIsMobileMenuOpen((prev) => !prev);
+            }}
+            aria-label={isMobileMenuOpen ? (isVi ? "Đóng danh mục menu" : "Close navigation menu") : (isVi ? "Mở danh mục menu (Nav Glass Liquid)" : "Open navigation menu")}
+            aria-expanded={isMobileMenuOpen}
+            className={cn(
+              "nav-glass-liquid-btn relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full",
+              "cursor-pointer group select-none transition-all duration-300",
+              isMobileMenuOpen
+                ? "bg-rose-500/20 dark:bg-rose-500/30 border-rose-400/60 text-rose-600 dark:text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.35)]"
+                : "text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-300 hover:border-cyan-400/50"
+            )}
+            title={isMobileMenuOpen ? (isVi ? "Đóng danh mục" : "Close menu") : (isVi ? "Danh mục điều hướng (Nav Glass Liquid)" : "Navigation Menu")}
+          >
+            {/* Lớp phản quang thủy tinh lỏng (Liquid Specular Shine) */}
+            <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/70 via-transparent to-transparent opacity-60 dark:opacity-25 pointer-events-none" />
+            
+            {/* Biến hình Morph icon giữa Menu và X với hiệu ứng đàn hồi Spring */}
+            <motion.div
+              key={isMobileMenuOpen ? "liquid-menu-close" : "liquid-menu-open"}
+              initial={{ rotate: -90, scale: 0.6, opacity: 0 }}
+              animate={{ rotate: 0, scale: 1, opacity: 1 }}
+              exit={{ rotate: 90, scale: 0.6, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 450, damping: 22 }}
+              className="relative z-10 flex items-center justify-center"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-4.5 h-4.5 stroke-[2.4] drop-shadow-xs" />
+              ) : (
+                <Menu className="w-4.5 h-4.5 stroke-[2.4] group-hover:scale-110 transition-transform duration-200 drop-shadow-xs" />
+              )}
+            </motion.div>
+          </button>
 
-
-        {/* 3. RIGHT CONTAINER: AI Assistant Avatar only (Bên phải: chỉ hiển thị Avata, padding 5px) */}
-        <div className="flex items-center justify-end shrink-0 p-[5px] z-40">
+          {/* AI Assistant Avatar Button */}
           <button
             type="button"
             onClick={() => {
@@ -427,7 +489,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
               window.dispatchEvent(new CustomEvent('open-ai-assistant'));
             }}
             className="flex items-center justify-center p-1 sm:p-1.5 rounded-full bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-blue-500/15 dark:from-purple-500/25 dark:to-cyan-500/25 border border-purple-400/40 dark:border-cyan-400/30 backdrop-blur-xl shadow-xs hover:scale-110 active:scale-95 transition-all cursor-pointer group"
-            title={lang === "vi" ? "Mở Trợ lý AI Hỗ trợ & Hỏi đáp hồ sơ" : "Open AI Assistant"}
+            title={isVi ? "Mở Trợ lý AI Hỗ trợ & Hỏi đáp hồ sơ" : "Open AI Assistant"}
           >
             <div className="relative flex items-center justify-center">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 dark:from-cyan-500 dark:to-blue-600 text-white flex items-center justify-center shadow-xs">
@@ -477,6 +539,24 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
                 >
                   <Sparkles className="w-3 h-3 text-cyan-400" />
                   <span>Neon</span>
+                </button>
+
+                {/* Divider */}
+                <span className="text-slate-300 dark:text-slate-700 mx-0.5 font-normal">|</span>
+
+                {/* Bố cục: Bento Grid / Slide Card */}
+                <button
+                  onClick={toggleLayoutMode}
+                  className={cn(
+                    "flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer",
+                    layoutMode === "bento"
+                      ? "bg-cyan-500/20 text-cyan-400 border-cyan-400/50 shadow-sm shadow-cyan-500/20"
+                      : "bg-blue-500/15 text-blue-400 border-blue-400/30"
+                  )}
+                  title={isVi ? "Chuyển đổi Bố cục (Slide / Bento Grid)" : "Toggle Layout (Slide / Bento Grid)"}
+                >
+                  {layoutMode === "bento" ? <LayoutGrid className="w-3.5 h-3.5" /> : <LayoutTemplate className="w-3.5 h-3.5" />}
+                  <span>{layoutMode === "bento" ? "Bento Grid" : (lang === "vi" ? "Thẻ Slide" : "Slide")}</span>
                 </button>
 
                 {/* Divider */}

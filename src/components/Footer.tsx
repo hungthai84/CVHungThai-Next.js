@@ -17,11 +17,14 @@ import {
   Moon,
   Check,
   Sparkles,
-  Images
+  Images,
+  FileText,
+  Settings
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme, ThemeType, COLOR_PRESETS } from "../context/ThemeContext";
+import { useLayout, LAYOUT_OPTIONS } from "../context/LayoutContext";
 import { THEME_LIST } from "../data/themesData";
 import { useFooter } from "../context/FooterContext";
 import { useSound } from "../context/SoundContext";
@@ -57,13 +60,20 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
   const isVi = lang === "vi";
 
   // Quick settings state variables
+  const [isPdfDropdownOpen, setIsPdfDropdownOpen] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isWallpaperDropdownOpen, setIsWallpaperDropdownOpen] = useState(false);
+  const [isSettingsDropdownOpen, setIsSettingsDropdownOpen] = useState(false);
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+  const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
   const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
   const [isStackHovered, setIsStackHovered] = useState(false);
   const [isStackPinned, setIsStackPinned] = useState(false);
   const stackTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const isStackExpanded = isStackHovered || isStackPinned || isThemeDropdownOpen || isColorDropdownOpen;
+  const { layoutMode, setLayoutMode } = useLayout();
+
+  const isStackExpanded = isStackHovered || isStackPinned || isPdfDropdownOpen || isLangDropdownOpen || isThemeDropdownOpen || isLayoutDropdownOpen || isColorDropdownOpen || isWallpaperDropdownOpen || isSettingsDropdownOpen;
 
   const handleStackMouseEnter = () => {
     if (stackTimerRef.current) {
@@ -77,8 +87,13 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     stackTimerRef.current = setTimeout(() => {
       setIsStackHovered(false);
       setIsStackPinned(false);
+      setIsPdfDropdownOpen(false);
+      setIsLangDropdownOpen(false);
       setIsThemeDropdownOpen(false);
+      setIsLayoutDropdownOpen(false);
       setIsColorDropdownOpen(false);
+      setIsWallpaperDropdownOpen(false);
+      setIsSettingsDropdownOpen(false);
     }, 450);
   };
 
@@ -106,10 +121,31 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     const handleOutsideInteraction = (e: MouseEvent | TouchEvent) => {
       const footerEl = document.getElementById("footer");
       const themePopupEl = document.getElementById("footer-theme-popover");
+      const layoutPopupEl = document.getElementById("footer-layout-popover");
       const target = e.target as Node;
       
+      const pdfPopupEl = document.getElementById("footer-pdf-popover");
+      const langPopupEl = document.getElementById("footer-lang-popover");
+      const wallpaperPopupEl = document.getElementById("footer-wallpaper-popover");
+      const settingsPopupEl = document.getElementById("footer-settings-popover");
+
+      if (pdfPopupEl && !pdfPopupEl.contains(target) && !footerEl?.contains(target)) {
+        setIsPdfDropdownOpen(false);
+      }
+      if (langPopupEl && !langPopupEl.contains(target) && !footerEl?.contains(target)) {
+        setIsLangDropdownOpen(false);
+      }
       if (themePopupEl && !themePopupEl.contains(target) && !footerEl?.contains(target)) {
         setIsThemeDropdownOpen(false);
+      }
+      if (layoutPopupEl && !layoutPopupEl.contains(target) && !footerEl?.contains(target)) {
+        setIsLayoutDropdownOpen(false);
+      }
+      if (wallpaperPopupEl && !wallpaperPopupEl.contains(target) && !footerEl?.contains(target)) {
+        setIsWallpaperDropdownOpen(false);
+      }
+      if (settingsPopupEl && !settingsPopupEl.contains(target) && !footerEl?.contains(target)) {
+        setIsSettingsDropdownOpen(false);
       }
       if (isPinned || !isHovered) return;
       if (footerEl && !footerEl.contains(target)) {
@@ -122,7 +158,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
       document.removeEventListener("mousedown", handleOutsideInteraction as any);
       document.removeEventListener("touchstart", handleOutsideInteraction as any);
     };
-  }, [isPinned, isHovered, isThemeDropdownOpen]);
+  }, [isPinned, isHovered, isThemeDropdownOpen, isLayoutDropdownOpen]);
 
   const handleTogglePin = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -189,7 +225,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
     switch (footerConfig.placement) {
       case "floating-pill":
         return cn(
-          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] h-[60px] sm:h-[64px] min-[1250px]:h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
+          "fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] min-h-[56px] sm:min-h-[64px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none",
           isPinned
             ? "bottom-2.5 sm:bottom-3.5 translate-y-0 opacity-100"
             : cn(
@@ -202,7 +238,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
       case "full-width":
         return cn(
           "fixed bottom-0 left-0 right-0 z-40 w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none !overflow-visible",
-          isThemeDropdownOpen || isColorDropdownOpen ? "!z-[999] !opacity-100 !translate-y-0" : "",
+          isPdfDropdownOpen || isLangDropdownOpen || isThemeDropdownOpen || isLayoutDropdownOpen || isColorDropdownOpen || isWallpaperDropdownOpen || isSettingsDropdownOpen ? "!z-[999] !opacity-100 !translate-y-0" : "",
           isSlidDown && !isThemeDropdownOpen && !isColorDropdownOpen
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
@@ -212,7 +248,7 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
       default:
         return cn(
           "fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-none !shadow-none !overflow-visible",
-          isThemeDropdownOpen || isColorDropdownOpen ? "!z-[999] !opacity-100 !translate-y-0" : "",
+          isPdfDropdownOpen || isLangDropdownOpen || isThemeDropdownOpen || isLayoutDropdownOpen || isColorDropdownOpen || isWallpaperDropdownOpen || isSettingsDropdownOpen ? "!z-[999] !opacity-100 !translate-y-0" : "",
           isSlidDown && !isThemeDropdownOpen && !isColorDropdownOpen
             ? "translate-y-[calc(100%-14px)] opacity-90 hover:translate-y-0 hover:opacity-100"
             : "translate-y-0 opacity-100"
@@ -223,13 +259,16 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
   const isFloatingPillPinned = footerConfig.placement === "floating-pill" && isPinned;
 
   const footerCustomStyle: React.CSSProperties = {
-    height: "var(--header-height, 75px)",
-    padding: "5px",
+    minHeight: "var(--header-height, 64px)",
+    height: "auto",
+    padding: "6px 8px",
     borderTopLeftRadius: "var(--theme-radius-card, 14px)",
     borderTopRightRadius: "var(--theme-radius-card, 14px)",
     borderBottomLeftRadius: isFloatingPillPinned ? "var(--theme-radius-card, 14px)" : "0px",
     borderBottomRightRadius: isFloatingPillPinned ? "var(--theme-radius-card, 14px)" : "0px",
-    overflow: "visible"
+    overflow: "visible",
+    background: "transparent",
+    boxShadow: "none"
   };
 
   const getActionCircleStyle = (_type?: "ai" | "sound" | "cursor" | "settings") => {
@@ -256,21 +295,20 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
           }
         }}
         style={footerCustomStyle}
-        className={`group p-[5px] footer-bento-container flex flex-col justify-center cursor-default !overflow-visible ${getPlacementClass()} ${getFooterSurfaceStyle()}`}
+        className={`group p-[5px] footer-bento-container flex flex-col justify-center cursor-default !overflow-visible bg-transparent border-transparent shadow-none ${getPlacementClass()}`}
       >
-        {/* Unpinned / Auto-hide Grab Handle & Peek Indicator */}
-        {(!isPinned || footerConfig.placement === "auto-hide") && (
+        {/* Unpinned / Auto-hide Grab Handle & Peek Indicator with double click to pin */}
+        {!isPinned && (
           <div 
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              togglePin();
+            }}
             onClick={() => setIsHovered((prev) => !prev)}
-            className="absolute top-1 left-1/2 -translate-x-1/2 flex items-center justify-center cursor-pointer group/handle py-0.5 z-20"
-            title={isSlidDown ? (isVi ? "Rê chuột hoặc chạm để mở footer" : "Hover or tap to expand footer") : undefined}
+            className="absolute top-1 left-1/2 -translate-x-1/2 flex items-center justify-center cursor-pointer group/handle py-1 z-30"
+            title={isVi ? "Double click để ghim/bỏ ghim Footer, click để mở" : "Double click to pin/unpin Footer, click to expand"}
           >
-            <div className={cn(
-              "h-1 sm:h-1.5 rounded-full transition-all duration-300",
-              isSlidDown 
-                ? "w-14 sm:w-18 bg-blue-500/80 dark:bg-cyan-400/80 shadow-[0_0_10px_rgba(59,130,246,0.6)] animate-pulse" 
-                : "w-8 bg-slate-300/80 dark:bg-slate-600/80 hover:bg-slate-400 dark:hover:bg-slate-500"
-            )} />
+            <div className="h-1.5 w-20 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)] animate-pulse hover:scale-110 transition-transform" />
           </div>
         )}
 
@@ -282,76 +320,279 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
           />
         )}
 
-      <div className="w-full h-full flex flex-row items-center justify-between relative px-0.5 sm:px-1">
-        {/* 1. BÊN TRÁI: Ngày giờ và thời tiết (padding 5px, co giãn tự động theo nội dung) */}
-        <div className="flex-1 flex items-center justify-start gap-1.5 sm:gap-2 min-w-0 p-[5px] z-10">
-          {(footerConfig.showWeather || footerConfig.showClock) && (
-            <FooterWeather layoutMode="vertical" timeString={timeString} dateString={dateString} />
+      <div className="w-full h-full flex flex-row items-center justify-end relative px-2 sm:px-4">
+        {/* FOOTER STACK CONTAINER: Print PDF, Ngôn ngữ, Giao diện, Bố cục xếp chồng ngang nằm bên phải */}
+        <div 
+          onMouseEnter={handleStackMouseEnter}
+          onMouseLeave={handleStackMouseLeave}
+          className={cn(
+            "flex items-center justify-end ml-auto transition-all duration-300 min-w-0 p-[5px] z-10 select-none overflow-visible group/footerstack",
+            isStackExpanded ? "space-x-1.5 sm:space-x-2" : "-space-x-[74px] sm:-space-x-[78px]"
           )}
-        </div>
-
-        {/* LINE VÁCH NGĂN 1 (Giữa Bên Trái và Chính Giữa) */}
-        <div className="h-6 w-[1px] bg-slate-300/80 dark:bg-white/20 mx-1 sm:mx-1.5 shrink-0" aria-hidden="true" />
-
-        {/* 2. CHÍNH GIỮA: Nút tới trang và Nút hướng dẫn (Luôn nằm chính giữa Footer ở mọi kích thước thiết bị, padding 5px) */}
-        <div className="flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 p-[5px] z-10 pointer-events-auto">
-          {footerConfig.showNextPageButton && (
+        >
+          {/* 1. Nút In PDF kèm Menu lựa chọn */}
+          <div className="relative z-10 hover:z-50 shrink-0">
             <button
               type="button"
-              onClick={currentIndex === SECTION_ORDER.length - 1 ? () => {
-                if (onNavigate) {
-                  onNavigate("home");
-                } else {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }
-              } : handleNextPage}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:via-blue-500 hover:to-indigo-500 text-white border border-sky-300/90 shadow-md hover:shadow-sky-500/50 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer group/nextbtn relative shrink-0"
-              title={currentIndex === SECTION_ORDER.length - 1 ? (isVi ? "Lên đầu trang" : "To top") : (isVi ? "Tới trang tiếp theo" : "Next page")}
-            >
-              <span className="absolute -inset-0.5 rounded-full bg-sky-400/40 blur-xs group-hover/nextbtn:opacity-100 opacity-60 transition-opacity pointer-events-none -z-10" />
-              {currentIndex === SECTION_ORDER.length - 1 ? (
-                <ChevronUp className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white group-hover/nextbtn:-translate-y-0.5 transition-transform duration-200" />
-              ) : (
-                <ChevronDown className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white group-hover/nextbtn:translate-y-0.5 transition-transform duration-200 animate-pulse" />
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsLangDropdownOpen(false);
+                setIsThemeDropdownOpen(false);
+                setIsLayoutDropdownOpen(false);
+                setIsWallpaperDropdownOpen(false);
+                setIsSettingsDropdownOpen(false);
+                setIsPdfDropdownOpen((prev) => !prev);
+              }}
+              className={cn(
+                "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                isStackExpanded
+                  ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                  : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
+                isPdfDropdownOpen
+                  ? "border-rose-500 bg-rose-500/30 text-rose-600 dark:text-rose-400 font-bold z-50 scale-105"
+                  : "border-rose-500/40 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400"
               )}
+              title={isVi ? "In PDF & Xuất hồ sơ" : "Print PDF & Export Resume"}
+            >
+              <Printer className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
+              <span className={cn(
+                "text-[14px] sm:text-[15px] font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap transition-opacity duration-300",
+                isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+              )}>
+                {isVi ? "In PDF" : "Print PDF"}
+              </span>
             </button>
-          )}
-        </div>
 
-        {/* LINE VÁCH NGĂN 2 (Giữa Chính Giữa và Bên Phải) */}
-        <div className="h-6 w-[1px] bg-slate-300/80 dark:bg-white/20 mx-1 sm:mx-1.5 shrink-0" aria-hidden="true" />
+            {/* FLOATING PDF EXPORT POPOVER */}
+            <AnimatePresence>
+              {isPdfDropdownOpen && (
+                <motion.div
+                  id="footer-pdf-popover"
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-[290px] sm:w-[320px] max-w-[92vw] overflow-hidden rounded-2xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_20px_rgba(244,63,94,0.15)] z-[100] flex flex-col text-left font-sans"
+                >
+                  <div className="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-600 text-white flex items-center justify-center shadow-xs">
+                        <Printer className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                          {isVi ? "Tùy chọn Xuất & In PDF" : "PDF Export Options"}
+                        </h4>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                          {isVi ? "Hồ sơ Executive C-Level" : "C-Level Executive Resume"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-        {/* 3. BÊN PHẢI: Menu icon Nav Bar Glass xếp chồng theo chiều ngang, vẫn thấy icon, nút bo cong 999px */}
-        <div className="flex-1 flex items-center justify-end -space-x-4 sm:-space-x-5 hover:space-x-1.5 sm:hover:space-x-2 transition-all duration-300 min-w-0 p-[5px] z-10 select-none overflow-x-auto no-scrollbar group/footerstack">
-          {/* 1. Nút In PDF */}
-          <button
-            type="button"
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent("open-resume-export"));
-            }}
-            className="w-[98px] sm:w-[106px] h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-600 dark:text-rose-400 backdrop-blur-md shadow-md transition-all duration-200 cursor-pointer active:scale-95 shrink-0 relative z-10 hover:z-50 hover:-translate-y-1 hover:scale-105"
-            title={isVi ? "In PDF" : "Print PDF"}
-          >
-            <Printer className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-            <span className="text-[14px] sm:text-[15px] font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
-              {isVi ? "In PDF" : "Print PDF"}
-            </span>
-          </button>
+                  <div className="p-2 space-y-1.5">
+                    <div
+                      onClick={() => {
+                        setIsPdfDropdownOpen(false);
+                        window.dispatchEvent(new CustomEvent("open-resume-export"));
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-rose-500/10 dark:hover:bg-rose-500/15 hover:border-rose-500/40 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate group-hover:text-rose-600 dark:group-hover:text-rose-400">
+                            {isVi ? "Hồ sơ Giám đốc Điều hành (A4 Chuẩn)" : "Executive Resume (Standard A4)"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Tùy chỉnh font, màu, bố cục chuyên nghiệp" : "Full customization & print styling"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-rose-500 font-bold shrink-0">{isVi ? "Mở" : "Open"}</span>
+                    </div>
 
-          {/* 2. Nút Ngôn ngữ */}
-          <button
-            type="button"
-            onClick={() => {
-              setLang(lang === "vi" ? "en" : "vi");
-            }}
-            className="w-[98px] sm:w-[106px] h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-600 dark:text-emerald-400 backdrop-blur-md shadow-md transition-all duration-200 cursor-pointer active:scale-95 shrink-0 relative z-20 hover:z-50 hover:-translate-y-1 hover:scale-105"
-            title={isVi ? "Ngôn ngữ" : "Language"}
-          >
-            <Globe className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-[14px] sm:text-[15px] font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
-              {isVi ? "Ngôn ngữ" : "Language"}
-            </span>
-          </button>
+                    <div
+                      onClick={() => {
+                        setIsPdfDropdownOpen(false);
+                        window.print();
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center shrink-0">
+                          <Printer className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "In nhanh trang hiện tại (Trình duyệt)" : "Quick Browser Print"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Lệnh Ctrl + P chuẩn trình duyệt" : "Native browser print dialog"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-slate-600 font-bold shrink-0">{isVi ? "In" : "Print"}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2 border-t border-slate-200/60 dark:border-white/10 bg-slate-50/70 dark:bg-white/5 flex items-center justify-between">
+                    <span className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? "Định dạng PDF chuyên nghiệp" : "Professional PDF"}</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsPdfDropdownOpen(false)}
+                      className="text-3xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
+                    >
+                      {isVi ? "Đóng" : "Close"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* 2. Nút Ngôn ngữ kèm Menu lựa chọn */}
+          <div className="relative z-20 hover:z-50 shrink-0">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPdfDropdownOpen(false);
+                setIsThemeDropdownOpen(false);
+                setIsLayoutDropdownOpen(false);
+                setIsWallpaperDropdownOpen(false);
+                setIsSettingsDropdownOpen(false);
+                setIsLangDropdownOpen((prev) => !prev);
+              }}
+              className={cn(
+                "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                isStackExpanded
+                  ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                  : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
+                isLangDropdownOpen
+                  ? "border-emerald-500 bg-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold z-50 scale-105"
+                  : "border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400"
+              )}
+              title={isVi ? "Chọn ngôn ngữ hiển thị" : "Select language"}
+            >
+              <Globe className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <span className={cn(
+                "text-[14px] sm:text-[15px] font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap transition-opacity duration-300",
+                isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+              )}>
+                {isVi ? "Ngôn ngữ" : "Language"}
+              </span>
+            </button>
+
+            {/* FLOATING LANGUAGE POPOVER */}
+            <AnimatePresence>
+              {isLangDropdownOpen && (
+                <motion.div
+                  id="footer-lang-popover"
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 w-[270px] sm:w-[290px] max-w-[92vw] overflow-hidden rounded-2xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_20px_rgba(16,185,129,0.15)] z-[100] flex flex-col text-left font-sans"
+                >
+                  <div className="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-xs">
+                        <Globe className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                          {isVi ? "Chọn Ngôn ngữ" : "Select Language"}
+                        </h4>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                          {isVi ? "Hỗ trợ Tiếng Việt & English" : "Vietnamese & English"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2 space-y-1.5">
+                    {/* Tiếng Việt */}
+                    <div
+                      onClick={() => {
+                        setLang("vi");
+                        setIsLangDropdownOpen(false);
+                      }}
+                      className={cn(
+                        "p-2.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-2.5 group",
+                        lang === "vi"
+                          ? "bg-emerald-600 text-white dark:bg-emerald-500/25 dark:text-white border-emerald-600 dark:border-emerald-400 shadow-md scale-[1.01]"
+                          : "bg-slate-50/60 dark:bg-white/5 border-slate-200/60 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="text-lg">🇻🇳</span>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">Tiếng Việt</h5>
+                          <p className={cn("text-[10px] truncate", lang === "vi" ? "text-white/80 dark:text-emerald-200" : "text-slate-500 dark:text-slate-400")}>
+                            Ngôn ngữ mặc định
+                          </p>
+                        </div>
+                      </div>
+                      {lang === "vi" ? (
+                        <span className="w-5 h-5 rounded-full bg-white text-emerald-600 dark:bg-emerald-400 dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 group-hover:text-emerald-500 font-bold shrink-0">Chọn</span>
+                      )}
+                    </div>
+
+                    {/* English */}
+                    <div
+                      onClick={() => {
+                        setLang("en");
+                        setIsLangDropdownOpen(false);
+                      }}
+                      className={cn(
+                        "p-2.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-2.5 group",
+                        lang === "en"
+                          ? "bg-emerald-600 text-white dark:bg-emerald-500/25 dark:text-white border-emerald-600 dark:border-emerald-400 shadow-md scale-[1.01]"
+                          : "bg-slate-50/60 dark:bg-white/5 border-slate-200/60 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="text-lg">🇬🇧</span>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">English</h5>
+                          <p className={cn("text-[10px] truncate", lang === "en" ? "text-white/80 dark:text-emerald-200" : "text-slate-500 dark:text-slate-400")}>
+                            International language
+                          </p>
+                        </div>
+                      </div>
+                      {lang === "en" ? (
+                        <span className="w-5 h-5 rounded-full bg-white text-emerald-600 dark:bg-emerald-400 dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 group-hover:text-emerald-500 font-bold shrink-0">Select</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="p-2 border-t border-slate-200/60 dark:border-white/10 bg-slate-50/70 dark:bg-white/5 flex items-center justify-between">
+                    <span className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? "Tự động dịch tức thì" : "Instant switch"}</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsLangDropdownOpen(false)}
+                      className="text-3xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
+                    >
+                      {isVi ? "Đóng" : "Close"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
             {/* 3. Nút Giao diện (Theme) */}
             <div className="relative z-30 hover:z-50 shrink-0">
@@ -362,7 +603,10 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
                   setIsThemeDropdownOpen((prev) => !prev);
                 }}
                 className={cn(
-                  "w-[98px] sm:w-[106px] h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-200 cursor-pointer shadow-md active:scale-95 shrink-0 hover:-translate-y-1 hover:scale-105",
+                  "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                  isStackExpanded
+                    ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                    : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
                   isThemeDropdownOpen
                     ? "border-indigo-500 bg-indigo-500/30 text-indigo-600 dark:text-cyan-400 font-bold z-50 scale-105"
                     : "border-indigo-500/40 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-600 dark:text-cyan-400"
@@ -370,7 +614,10 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
                 title={isVi ? "Giao diện" : "Select Theme"}
               >
                 <Palette className="w-4 h-4 shrink-0 text-indigo-600 dark:text-cyan-400" />
-                <span className="text-[14px] sm:text-[15px] font-bold text-indigo-600 dark:text-cyan-400 whitespace-nowrap">
+                <span className={cn(
+                  "text-[14px] sm:text-[15px] font-bold text-indigo-600 dark:text-cyan-400 whitespace-nowrap transition-opacity duration-300",
+                  isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+                )}>
                   {isVi ? "Giao diện" : "Theme"}
                 </span>
               </button>
@@ -529,41 +776,469 @@ function Footer({ theme: propTheme, activeSection = "home", onNavigate }: Footer
               </AnimatePresence>
             </div>
 
-          {/* 4. Nút Hình nền */}
-          <button
-            type="button"
-            onClick={() => handleNavigate("wallpapers")}
-            className={cn(
-              "w-[98px] sm:w-[106px] h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-200 cursor-pointer shadow-md active:scale-95 shrink-0 relative z-40 hover:z-50 hover:-translate-y-1 hover:scale-105",
-              activeSection === "wallpapers"
-                ? "border-sky-500 bg-sky-500/25 text-sky-600 dark:text-sky-400 font-bold z-50 scale-105"
-                : "border-sky-500/40 bg-sky-500/15 hover:bg-sky-500/25 text-sky-600 dark:text-sky-400"
-            )}
-            title={isVi ? "Hình nền" : "Wallpapers"}
-          >
-            <Images className="w-4 h-4 shrink-0 text-sky-600 dark:text-sky-400" />
-            <span className="text-[14px] sm:text-[15px] font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">
-              {isVi ? "Hình nền" : "Wallpapers"}
-            </span>
-          </button>
+            {/* 4. Nút Bố cục (Layout: Slide vs Bento Grid) */}
+            <div className="relative z-35 hover:z-50 shrink-0">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsThemeDropdownOpen(false);
+                  setIsLayoutDropdownOpen((prev) => !prev);
+                }}
+                className={cn(
+                  "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                  isStackExpanded
+                    ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                    : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
+                  isLayoutDropdownOpen
+                    ? "border-cyan-500 bg-cyan-500/30 text-cyan-600 dark:text-cyan-400 font-bold z-50 scale-105"
+                    : layoutMode === "bento"
+                    ? "border-cyan-500/50 bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 font-bold"
+                    : "border-blue-500/40 bg-blue-500/15 hover:bg-blue-500/25 text-blue-600 dark:text-cyan-400"
+                )}
+                title={isVi ? "Bố cục website" : "Select Layout Mode"}
+              >
+                {layoutMode === "bento" ? (
+                  <LayoutGrid className="w-4 h-4 shrink-0 text-cyan-600 dark:text-cyan-400" />
+                ) : (
+                  <LayoutTemplate className="w-4 h-4 shrink-0 text-blue-600 dark:text-cyan-400" />
+                )}
+                <span className={cn(
+                  "text-[14px] sm:text-[15px] font-bold text-blue-600 dark:text-cyan-400 whitespace-nowrap transition-opacity duration-300",
+                  isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+                )}>
+                  {isVi ? "Bố cục" : "Layout"}
+                </span>
+              </button>
 
-          {/* 5. Nút Tùy chỉnh */}
-          <button
-            type="button"
-            onClick={() => handleNavigate("customization")}
-            className={cn(
-              "w-[98px] sm:w-[106px] h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-200 cursor-pointer shadow-md active:scale-95 shrink-0 relative z-50 hover:z-50 hover:-translate-y-1 hover:scale-105",
-              activeSection === "customization"
-                ? "border-amber-500 bg-amber-500/25 text-amber-600 dark:text-amber-400 font-bold z-50 scale-105"
-                : "border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400"
-            )}
-            title={isVi ? "Tùy chỉnh" : "Settings"}
-          >
-            <Sliders className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
-            <span className="text-[14px] sm:text-[15px] font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap">
-              {isVi ? "Tùy chỉnh" : "Settings"}
-            </span>
-          </button>
+              {/* FLOATING LAYOUT SELECTION POPOVER */}
+              <AnimatePresence>
+                {isLayoutDropdownOpen && (
+                  <motion.div
+                    id="footer-layout-popover"
+                    initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 w-[290px] sm:w-[320px] max-w-[92vw] overflow-hidden rounded-2xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_20px_rgba(0,240,255,0.15)] z-[100] flex flex-col text-left font-sans"
+                  >
+                    {/* Header */}
+                    <div className="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-white/5">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-xs">
+                          <LayoutGrid className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                            {isVi ? "Chọn Bố cục" : "Select Layout Mode"}
+                          </h4>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                            {isVi ? "2 phong cách hiển thị" : "2 presentation styles"}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 font-bold">
+                        {layoutMode === "bento" ? "Bento Grid" : "Slide Card"}
+                      </span>
+                    </div>
+
+                    {/* Options list */}
+                    <div className="p-2 space-y-1.5">
+                      {LAYOUT_OPTIONS.map((opt) => {
+                        const isSelected = layoutMode === opt.id;
+                        const Icon = opt.id === "bento" ? LayoutGrid : LayoutTemplate;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              try { playClick(); } catch {}
+                              setLayoutMode(opt.id);
+                              setIsLayoutDropdownOpen(false);
+                            }}
+                            className={cn(
+                              "p-2.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-2.5 group",
+                              isSelected
+                                ? "bg-cyan-600 text-white dark:bg-cyan-500/25 dark:text-white border-cyan-600 dark:border-cyan-400 shadow-md scale-[1.01]"
+                                : "bg-slate-50/60 dark:bg-white/5 border-slate-200/60 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200"
+                            )}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className={cn(
+                                "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs",
+                                isSelected ? "bg-white/20 text-white" : "bg-slate-200 dark:bg-white/10 text-cyan-600 dark:text-cyan-400"
+                              )}>
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <h5 className="text-xs font-bold truncate">
+                                  {isVi ? opt.nameVi : opt.nameEn}
+                                </h5>
+                                <p className={cn(
+                                  "text-[10px] truncate",
+                                  isSelected ? "text-white/80 dark:text-cyan-200" : "text-slate-500 dark:text-slate-400"
+                                )}>
+                                  {isVi ? opt.taglineVi : opt.taglineEn}
+                                </p>
+                              </div>
+                            </div>
+                            {isSelected ? (
+                              <span className="w-5 h-5 rounded-full bg-white text-cyan-600 dark:bg-cyan-400 dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
+                                <Check className="w-3 h-3 stroke-[3]" />
+                              </span>
+                            ) : (
+                              <span className="text-[10px] text-slate-400 group-hover:text-cyan-500 font-bold shrink-0">
+                                {isVi ? "Chọn" : "Select"}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Footer in popover */}
+                    <div className="p-2 border-t border-slate-200/60 dark:border-white/10 bg-slate-50/70 dark:bg-white/5 flex items-center justify-between">
+                      <span className="text-3xs text-slate-500 dark:text-slate-400">
+                        {isVi ? "Độc lập với Light/Dark Mode" : "Independent of theme"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsLayoutDropdownOpen(false)}
+                        className="text-3xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
+                      >
+                        {isVi ? "Đóng" : "Close"}
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+          {/* 5. Nút Hình nền kèm Menu chọn nhanh */}
+          <div className="relative z-40 hover:z-50 shrink-0">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPdfDropdownOpen(false);
+                setIsLangDropdownOpen(false);
+                setIsThemeDropdownOpen(false);
+                setIsLayoutDropdownOpen(false);
+                setIsSettingsDropdownOpen(false);
+                setIsWallpaperDropdownOpen((prev) => !prev);
+              }}
+              className={cn(
+                "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                isStackExpanded
+                  ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                  : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
+                isWallpaperDropdownOpen
+                  ? "border-sky-500 bg-sky-500/30 text-sky-600 dark:text-sky-400 font-bold z-50 scale-105"
+                  : activeSection === "wallpapers"
+                  ? "border-sky-500 bg-sky-500/25 text-sky-600 dark:text-sky-400 font-bold"
+                  : "border-sky-500/40 bg-sky-500/15 hover:bg-sky-500/25 text-sky-600 dark:text-sky-400"
+              )}
+              title={isVi ? "Bộ sưu tập Hình nền & Background" : "Wallpapers & Backgrounds"}
+            >
+              <Images className="w-4 h-4 shrink-0 text-sky-600 dark:text-sky-400" />
+              <span className={cn(
+                "text-[14px] sm:text-[15px] font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap transition-opacity duration-300",
+                isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+              )}>
+                {isVi ? "Hình nền" : "Wallpapers"}
+              </span>
+            </button>
+
+            {/* FLOATING WALLPAPERS POPOVER */}
+            <AnimatePresence>
+              {isWallpaperDropdownOpen && (
+                <motion.div
+                  id="footer-wallpaper-popover"
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 w-[300px] sm:w-[330px] max-w-[92vw] overflow-hidden rounded-2xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_20px_rgba(14,165,233,0.15)] z-[100] flex flex-col text-left font-sans"
+                >
+                  <div className="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center shadow-xs">
+                        <Images className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                          {isVi ? "Tùy chọn Hình nền" : "Wallpaper Selector"}
+                        </h4>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                          {isVi ? "Kho shader, video & ảnh 4K" : "Shaders, video & 4K arts"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2 space-y-1.5">
+                    <div
+                      onClick={() => {
+                        setIsWallpaperDropdownOpen(false);
+                        handleNavigate("wallpapers");
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-sky-500/10 dark:hover:bg-sky-500/15 hover:border-sky-500/40 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                          <Images className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate group-hover:text-sky-600 dark:group-hover:text-sky-400">
+                            {isVi ? "Thư viện Hình nền Đầy đủ" : "Full Wallpaper Gallery"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Mở trang Hình nền để chọn chi tiết" : "Go to section #wallpapers"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-sky-500 font-bold shrink-0">{isVi ? "Xem" : "View"}</span>
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        setIsWallpaperDropdownOpen(false);
+                        themeContext.openColorModal();
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                          <Palette className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "Bảng màu Gradient Nền (15 Mẫu)" : "15 Gradient Presets"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Bảng pha màu gradient chuẩn Glass" : "Select ambient glass gradient"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-indigo-500 font-bold shrink-0">{isVi ? "Mở" : "Open"}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2 border-t border-slate-200/60 dark:border-white/10 bg-slate-50/70 dark:bg-white/5 flex items-center justify-between">
+                    <span className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? "Hiệu ứng Glass mềm mại" : "Soft Glass Background"}</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsWallpaperDropdownOpen(false)}
+                      className="text-3xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
+                    >
+                      {isVi ? "Đóng" : "Close"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* 6. Nút Tùy chỉnh kèm Menu chọn nhanh */}
+          <div className="relative z-50 hover:z-50 shrink-0">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPdfDropdownOpen(false);
+                setIsLangDropdownOpen(false);
+                setIsThemeDropdownOpen(false);
+                setIsLayoutDropdownOpen(false);
+                setIsWallpaperDropdownOpen(false);
+                setIsSettingsDropdownOpen((prev) => !prev);
+              }}
+              className={cn(
+                "h-8 sm:h-8.5 pl-2.5 pr-2 py-1 rounded-[999px] flex items-center justify-start gap-1.5 border backdrop-blur-md transition-all duration-300 cursor-pointer shadow-md active:scale-95 shrink-0 overflow-hidden",
+                isStackExpanded
+                  ? "w-[98px] sm:w-[106px] z-50 scale-105"
+                  : "w-10 sm:w-11 group-hover/footerstack:w-[98px] group-hover/footerstack:sm:w-[106px]",
+                isSettingsDropdownOpen
+                  ? "border-amber-500 bg-amber-500/30 text-amber-600 dark:text-amber-400 font-bold z-50 scale-105"
+                  : activeSection === "customization"
+                  ? "border-amber-500 bg-amber-500/25 text-amber-600 dark:text-amber-400 font-bold"
+                  : "border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400"
+              )}
+              title={isVi ? "Tùy chỉnh hệ thống & Giao diện" : "System Settings & Studio"}
+            >
+              <Sliders className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
+              <span className={cn(
+                "text-[14px] sm:text-[15px] font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap transition-opacity duration-300",
+                isStackExpanded ? "opacity-100" : "opacity-0 group-hover/footerstack:opacity-100"
+              )}>
+                {isVi ? "Tùy chỉnh" : "Settings"}
+              </span>
+            </button>
+
+            {/* FLOATING SETTINGS POPOVER */}
+            <AnimatePresence>
+              {isSettingsDropdownOpen && (
+                <motion.div
+                  id="footer-settings-popover"
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-full mb-3 right-0 w-[300px] sm:w-[330px] max-w-[92vw] overflow-hidden rounded-2xl bg-white/95 dark:bg-[#0c101d]/95 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_20px_rgba(245,158,11,0.15)] z-[100] flex flex-col text-left font-sans"
+                >
+                  <div className="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-xs">
+                        <Sliders className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                          {isVi ? "Bảng Điều khiển Tùy chỉnh" : "Customization Control"}
+                        </h4>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                          {isVi ? "Chọn mục cần thiết lập" : "Choose configuration category"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2 space-y-1.5 max-h-[320px] overflow-y-auto custom-scrollbar">
+                    {/* Mục 1: Studio Tùy chỉnh toàn diện */}
+                    <div
+                      onClick={() => {
+                        setIsSettingsDropdownOpen(false);
+                        handleNavigate("customization");
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-amber-500/10 dark:hover:bg-amber-500/15 hover:border-amber-500/40 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                          <Sliders className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate group-hover:text-amber-600 dark:group-hover:text-amber-400">
+                            {isVi ? "Studio Tùy chỉnh Toàn diện" : "Full Customization Page"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Mở đầy đủ trang Tùy chỉnh #customization" : "Open #customization page"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-amber-500 font-bold shrink-0">{isVi ? "Mở" : "Open"}</span>
+                    </div>
+
+                    {/* Mục 2: Tùy chỉnh Cỡ chữ & Typography */}
+                    <div
+                      onClick={() => {
+                        setIsSettingsDropdownOpen(false);
+                        themeContext.openTypographyModal();
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                          <span className="font-serif font-black text-xs">Aa</span>
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "Cỡ chữ & Typography Font Play" : "Font & Typography Sizes"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Tỷ lệ co giãn font-scale & 20 thẻ text" : "Adjust font sizes & line-height"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-blue-500 font-bold shrink-0">{isVi ? "Chỉnh" : "Edit"}</span>
+                    </div>
+
+                    {/* Mục 3: Cài đặt Thanh Chân trang (Footer Settings) */}
+                    <div
+                      onClick={() => {
+                        setIsSettingsDropdownOpen(false);
+                        openFooterModal();
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                          <Pin className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "Vị trí & Ghim Thanh Chân trang" : "Footer Dock Placement"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Ghim, tự động ẩn, thanh nổi tròn" : "Pin, auto-hide, floating pill"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-purple-500 font-bold shrink-0">{isVi ? "Cấu hình" : "Config"}</span>
+                    </div>
+
+                    {/* Mục 4: Con trỏ chuột tương tác */}
+                    <div
+                      onClick={() => {
+                        setIsSettingsDropdownOpen(false);
+                        setIsCursorModalOpen(true);
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-pink-500/15 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0">
+                          <MousePointer className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "Hiệu ứng Con trỏ Chuột" : "Custom Interactive Cursor"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Neon Trail, Vệt sáng mờ, Kính lúp" : "Cursor styles & particle trail"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-pink-500 font-bold shrink-0">{isVi ? "Chọn" : "Select"}</span>
+                    </div>
+
+                    {/* Mục 5: Âm thanh & Nhạc nền Ambient */}
+                    <div
+                      onClick={() => {
+                        setIsSettingsDropdownOpen(false);
+                        setIsSoundModalOpen(true);
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                          <Volume2 className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-bold truncate">
+                            {isVi ? "Âm thanh Tương tác & Âm nền" : "Sound FX & Ambient Audio"}
+                          </h5>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isVi ? "Hiệu ứng click, phím đàn, sóng biển" : "Click feedback & ambient pack"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 group-hover:text-cyan-500 font-bold shrink-0">{isVi ? "Bật/Tắt" : "Toggle"}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2 border-t border-slate-200/60 dark:border-white/10 bg-slate-50/70 dark:bg-white/5 flex items-center justify-between">
+                    <span className="text-3xs text-slate-500 dark:text-slate-400">{isVi ? "Lưu cài đặt tức thì" : "Auto-saved settings"}</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsSettingsDropdownOpen(false)}
+                      className="text-3xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
+                    >
+                      {isVi ? "Đóng" : "Close"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </footer>

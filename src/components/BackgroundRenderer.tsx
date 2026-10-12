@@ -245,7 +245,79 @@ export default function BackgroundRenderer() {
       {/* 1. Default Dynamic Glass Gradient with Dark/Light Mesh & Vivid Bleeding Multi-Color Light Orbs */}
       {activeType === "gradient" && (
         <div className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] pointer-events-none overflow-hidden scale-105">
-          {theme === "soft-floating-bento" ? (
+          {theme === "glass-ui-layout" ? (
+            <div className="absolute inset-0 overflow-hidden pointer-events-none transition-all duration-700">
+              {/* Light Mode Glass UI Background Canvas */}
+              <div className="dark:hidden absolute inset-0">
+                {/* Soft Lavender Background Base */}
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(ellipse at 50% 20%, #FFFFFF 0%, #F5F3FF 50%, #ECE9FE 100%)"
+                  }}
+                />
+
+                {/* Ambient Multi-Color Light Glows (Lavender, Blue, Mint, Coral, Purple, Yellow) */}
+                <div 
+                  className="absolute -top-[12%] -left-[8%] w-[58vw] h-[58vw] rounded-full bg-gradient-to-br from-[#60A5FA]/20 via-[#A78BFA]/18 to-transparent blur-[100px] animate-[pulse_10s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute top-[8%] -right-[12%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-bl from-[#34D399]/18 via-[#FCD34D]/14 to-transparent blur-[110px] animate-[pulse_12s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute -bottom-[15%] left-[8%] w-[62vw] h-[58vw] rounded-full bg-gradient-to-tr from-[#FB7185]/16 via-[#F5F3FF]/20 to-transparent blur-[120px] animate-[pulse_14s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute bottom-[10%] right-[8%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tl from-[#A78BFA]/18 via-[#60A5FA]/15 to-transparent blur-[100px] animate-[pulse_11s_ease-in-out_infinite]"
+                />
+
+                {/* Floating Translucent Glass Orbs / Soft Clay Shapes */}
+                <div 
+                  className="absolute top-[18%] left-[10%] w-48 h-48 rounded-[32px] rotate-6 bg-white/45 border border-white/80 shadow-[0_12px_36px_rgba(100,110,140,0.08),inset_0_1px_1px_rgba(255,255,255,0.95)] backdrop-blur-[20px] animate-[bounce_11s_ease-in-out_infinite]"
+                  style={{ animationDelay: '0s' }}
+                />
+                <div 
+                  className="absolute bottom-[22%] right-[12%] w-56 h-56 rounded-full bg-white/40 border border-white/80 shadow-[0_16px_40px_rgba(100,110,140,0.08),inset_0_1px_1px_rgba(255,255,255,0.95)] backdrop-blur-[20px] animate-[bounce_13s_ease-in-out_infinite]"
+                  style={{ animationDelay: '-5s' }}
+                />
+              </div>
+
+              {/* Dark Mode Glass UI Background Canvas (Nền tối xanh tím #0F0E26) */}
+              <div className="hidden dark:block absolute inset-0">
+                {/* Deep Indigo-Violet Canvas Base */}
+                <div 
+                  className="absolute inset-0 bg-[#0F0E26]"
+                  style={{
+                    background: "radial-gradient(ellipse at 50% 25%, #18163D 0%, #0F0E26 60%, #09081A 100%)"
+                  }}
+                />
+
+                {/* Dark Mode Ambient Neon-Soft Radial Blobs */}
+                <div 
+                  className="absolute -top-[12%] -left-[8%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-[#60A5FA]/22 via-[#A78BFA]/18 to-transparent blur-[130px] animate-[pulse_10s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute top-[10%] -right-[10%] w-[58vw] h-[58vw] rounded-full bg-gradient-to-bl from-[#34D399]/18 via-[#60A5FA]/15 to-transparent blur-[130px] animate-[pulse_12s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute -bottom-[15%] left-[10%] w-[65vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#FB7185]/18 via-[#A78BFA]/20 to-transparent blur-[140px] animate-[pulse_14s_ease-in-out_infinite]"
+                />
+                <div 
+                  className="absolute bottom-[10%] right-[10%] w-[52vw] h-[52vw] rounded-full bg-gradient-to-tl from-[#A78BFA]/20 via-[#60A5FA]/18 to-transparent blur-[120px] animate-[pulse_11s_ease-in-out_infinite]"
+                />
+
+                {/* Floating Translucent Dark Glass Shapes with Hairline Luminous Borders */}
+                <div 
+                  className="absolute top-[20%] left-[12%] w-48 h-48 rounded-[32px] rotate-6 bg-white/[0.04] border border-white/[0.12] shadow-[0_16px_45px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-[20px] animate-[bounce_11s_ease-in-out_infinite]"
+                  style={{ animationDelay: '0s' }}
+                />
+                <div 
+                  className="absolute bottom-[20%] right-[14%] w-56 h-56 rounded-full bg-white/[0.04] border border-white/[0.12] shadow-[0_18px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-[20px] animate-[bounce_13s_ease-in-out_infinite]"
+                  style={{ animationDelay: '-5s' }}
+                />
+              </div>
+            </div>
+          ) : theme === "soft-floating-bento" ? (
             <div className="absolute inset-0 overflow-hidden pointer-events-none transition-all duration-700">
               {/* Soft Lavender Periwinkle Sky Pastel Gradient Base */}
               <div 

@@ -3,7 +3,7 @@ import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/foot
 export const DEFAULT_FOOTER_CONFIG: FooterConfig = {
   placement: "fixed-bottom",
   styleVariant: "glass",
-  isPinned: true,
+  isPinned: false,
   showWeather: true,
   showClock: true,
   showQuickNav: true,

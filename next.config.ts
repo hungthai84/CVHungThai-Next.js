@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: any = {
+  output: 'standalone',
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
@@ -10,6 +11,8 @@ const nextConfig: any = {
     '*.asia-southeast1.run.app',
     'localhost:3000',
     '127.0.0.1:3000',
+    'ais-dev-43xbbmkkudg67hdmt3eayd-498435453400.asia-southeast1.run.app',
+    'ais-pre-43xbbmkkudg67hdmt3eayd-498435453400.asia-southeast1.run.app',
     'ais-dev-fmejtg4y3uyocqkt3l6gdp-414821367668.asia-southeast1.run.app',
     'ais-pre-fmejtg4y3uyocqkt3l6gdp-414821367668.asia-southeast1.run.app',
     'ais-dev-7ghvj636yajd5nl4bvlahp-414821367668.asia-southeast1.run.app',

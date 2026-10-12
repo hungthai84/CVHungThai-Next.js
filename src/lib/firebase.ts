@@ -13,27 +13,71 @@ import {
   limit,
   updateDoc,
   enableIndexedDbPersistence,
-  enableMultiTabIndexedDbPersistence
+  enableMultiTabIndexedDbPersistence,
+  disableNetwork,
+  enableNetwork
 } from 'firebase/firestore';
 import { getAnalytics, isSupported, logEvent, Analytics } from 'firebase/analytics';
-import firebaseConfig from '../../firebase-applet-config.json';
+import rawConfig from '@/firebase-applet-config.json';
 import { TabError, BugStatus } from '../types/tabErrors';
+
+const firebaseConfig = {
+  apiKey: rawConfig.apiKey,
+  authDomain: rawConfig.authDomain,
+  projectId: rawConfig.projectId,
+  storageBucket: rawConfig.storageBucket,
+  messagingSenderId: rawConfig.messagingSenderId,
+  appId: rawConfig.appId,
+  measurementId: rawConfig.measurementId,
+};
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize Firestore with specific database ID from config
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, rawConfig.firestoreDatabaseId);
 
-// Enable Firestore Offline Persistence for seamless offline query & mutations
+// Disable Firestore Server Connection as requested ("tắt server Firebase Firestore")
+let isFirestoreServerDisabled = true;
+
+export async function disableFirestoreNetwork(): Promise<boolean> {
+  try {
+    await disableNetwork(db);
+    isFirestoreServerDisabled = true;
+    console.info('[Firestore] Server network disconnected. Running local-only mode.');
+    return true;
+  } catch (err) {
+    console.warn('[Firestore] Error disabling server network:', err);
+    return false;
+  }
+}
+
+export async function enableFirestoreNetwork(): Promise<boolean> {
+  try {
+    await enableNetwork(db);
+    isFirestoreServerDisabled = false;
+    return true;
+  } catch (err) {
+    console.warn('[Firestore] Error enabling server network:', err);
+    return false;
+  }
+}
+
+export function isFirestoreNetworkDisabled(): boolean {
+  return isFirestoreServerDisabled;
+}
+
+// Enable Firestore Offline Persistence and disconnect remote server
 if (typeof window !== 'undefined') {
-  enableMultiTabIndexedDbPersistence(db).catch((err) => {
-    if (err.code === 'failed-precondition') {
-      // Fallback if multiple tabs fail multi-tab mode
-      enableIndexedDbPersistence(db).catch(() => {});
-    } else if (err.code === 'unimplemented') {
-      console.warn('[Firestore Persistence] Browser does not support IndexedDB persistence');
-    }
-  });
+  enableMultiTabIndexedDbPersistence(db)
+    .catch((err) => {
+      if (err.code === 'failed-precondition') {
+        enableIndexedDbPersistence(db).catch(() => {});
+      }
+    })
+    .finally(() => {
+      // Disconnect from Firebase Firestore remote server
+      disableNetwork(db).catch(() => {});
+    });
 }
 
 export const auth = getAuth(app);

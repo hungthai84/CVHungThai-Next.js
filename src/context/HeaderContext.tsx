@@ -21,7 +21,7 @@ const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
 const STORAGE_KEY = "thai_portfolio_header_config";
 
 const DEFAULT_HEADER_CONFIG: HeaderConfig = {
-  isPinned: true,
+  isPinned: false,
 };
 
 export function HeaderProvider({ children }: { children: ReactNode }) {

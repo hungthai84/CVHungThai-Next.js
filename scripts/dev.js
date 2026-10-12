@@ -17,48 +17,45 @@ try {
 
 // Process arguments and translate/remove unsupported flags for Next.js
 const rawArgs = process.argv.slice(2);
-const nextArgs = ["dev", "-p", "3000", "-H", "0.0.0.0"];
+let port = process.env.PORT || "3000";
+let host = "0.0.0.0";
+const extraArgs = [];
 
 for (let i = 0; i < rawArgs.length; i++) {
   const arg = rawArgs[i];
-  if (arg === "--host") {
-    // If followed by a hostname value (e.g. --host 0.0.0.0), consume it
+  if (arg === "--host" || arg === "-H" || arg === "--hostname") {
     if (rawArgs[i + 1] && !rawArgs[i + 1].startsWith("-")) {
-      i++;
+      host = rawArgs[++i];
     }
     continue;
   }
-  if (arg.startsWith("--host=")) {
+  if (arg.startsWith("--host=") || arg.startsWith("-H=") || arg.startsWith("--hostname=")) {
+    host = arg.split("=")[1];
     continue;
   }
-  // Avoid duplicating port or hostname if already specified
   if (arg === "-p" || arg === "--port") {
     if (rawArgs[i + 1] && !rawArgs[i + 1].startsWith("-")) {
-      i++;
+      port = rawArgs[++i];
     }
     continue;
   }
   if (arg.startsWith("-p=") || arg.startsWith("--port=")) {
+    port = arg.split("=")[1];
     continue;
   }
-  if (arg === "-H" || arg === "--hostname") {
-    if (rawArgs[i + 1] && !rawArgs[i + 1].startsWith("-")) {
-      i++;
-    }
-    continue;
-  }
-  if (arg.startsWith("-H=") || arg.startsWith("--hostname=")) {
-    continue;
-  }
-  nextArgs.push(arg);
+  extraArgs.push(arg);
 }
 
-const child = spawn("npx", ["next", ...nextArgs], {
+const nextBin = path.join(process.cwd(), "node_modules", "next", "dist", "bin", "next");
+const child = spawn(process.execPath, [nextBin, "dev", "-p", port, "-H", host, ...extraArgs], {
   stdio: "inherit",
-  shell: true,
   env: process.env,
 });
 
-child.on("exit", (code) => {
-  process.exit(code ?? 0);
+child.on("exit", (code, signal) => {
+  process.exit(code ?? (signal ? 1 : 0));
 });
+
+process.on("SIGINT", () => child.kill("SIGINT"));
+process.on("SIGTERM", () => child.kill("SIGTERM"));
+

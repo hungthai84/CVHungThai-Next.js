@@ -94,6 +94,10 @@ export default function About() {
     query: string;
   } | null>(null);
 
+  // Profile View Mode State (Bento vs Grid)
+  const [profileViewMode, setProfileViewMode] = useState<"bento" | "grid">("bento");
+
+
   // Video State & Controls
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlayingIntro, setIsPlayingIntro] = useState(false);
@@ -181,397 +185,426 @@ export default function About() {
           <PageCardHeader pageId="about" className="w-full mb-1" />
         </header>
 
-        {/* ========================================================================= */}
-        {/* 1. CARD BOX: HỒ SƠ GIỚI THIỆU (Video, Thông Tin Cá Nhân, Hồ Sơ Quản Trị)  */}
-        {/* ========================================================================= */}
-        <div id="card-box-ho-so-gioi-thieu" className="w-full flex flex-col gap-[15px]">
-          {/* HERO PROFILE VIDEO & PERSONAL INFORMATION ROW */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[15px] items-stretch w-full">
-            
-            {/* Left Column: Video Card (7 columns out of 12) */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-              className="lg:col-span-7 relative overflow-hidden border border-white/60 dark:border-white/15 bg-slate-950/90 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] min-h-[360px] sm:min-h-[480px] lg:min-h-[520px] flex items-center justify-center group"
-            >
-              {/* The Portrait Video */}
-              <video
-                ref={videoRef}
-                src={isPlayingIntro ? ABOUT_INTRO_VIDEO_URL : ABOUT_IDLE_VIDEO_URL}
-                className="w-full h-full object-cover object-center absolute inset-0 brightness-105"
-                autoPlay
-                loop={!isPlayingIntro}
-                muted={isVideoMuted}
-                playsInline
-                onTimeUpdate={handleTimeUpdate}
-                onEnded={handleVideoEnded}
-              />
-
-              {/* Dynamic Video Story Overlay when intro video is active */}
-              {isPlayingIntro && (
-                <DynamicVideoStoryOverlay
-                  currentTime={videoCurrentTime}
-                  duration={videoRef.current?.duration || 210}
-                  isPlaying={!isVideoPaused}
-                  isMuted={isVideoMuted}
-                  onToggleMute={toggleVideoMute}
-                  onTogglePlay={togglePlayPause}
-                  onClose={handleCancelIntro}
-                  onSeek={handleSeek}
-                />
+        {/* Profile View Format Toggle (Bento View vs Grid View) */}
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            {isVi ? "Định dạng hiển thị hồ sơ:" : "Profile view format:"}
+          </span>
+          <div className="flex items-center gap-1 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md p-1 rounded-xl border border-blue-200/50 dark:border-white/10 shadow-xs">
+            <button
+              onClick={() => { playUiSound("click"); setProfileViewMode("bento"); }}
+              className={cn(
+                "px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5",
+                profileViewMode === "bento"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
               )}
-
-              {/* Subtle Gradient vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
-
-              {/* CÁC THẺ DẤU ẤN VẬN HÀNH LƠ LỬNG XUNG QUANH VIDEO TỪ DATA */}
-              {ABOUT_PROFILE_STATS.map((stat) => {
-                const StatIcon = getLucideIcon(stat.iconName);
-                return (
-                  <motion.div
-                    key={stat.id}
-                    animate={{ y: [0, stat.id === "environments" || stat.id === "csat" ? 4 : -4, 0] }}
-                    transition={{ repeat: Infinity, duration: 4.2 + stat.animationDelay, ease: "easeInOut", delay: stat.animationDelay }}
-                    className={cn(
-                      "absolute z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-white/80 dark:border-white/20 p-2 sm:p-2.5 md:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-2.5 sm:gap-3 max-w-[135px] xs:max-w-[155px] sm:max-w-[185px] md:max-w-[210px]",
-                      "rounded-[var(--theme-radius-inner,14px)]",
-                      stat.positionClass
-                    )}
-                  >
-                    <div 
-                      className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 shadow-inner"
-                      style={{ backgroundColor: `${stat.color}18`, color: stat.color }}
-                    >
-                      <StatIcon className="w-4 h-4 sm:w-5.5 sm:h-5.5 stroke-[2.5]" />
-                    </div>
-                    <div className="flex flex-col min-w-0 text-left">
-                      <span className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
-                        {isVi ? stat.labelVi : stat.labelEn}
-                      </span>
-                      <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                        <span className="text-sm xs:text-base sm:text-lg md:text-xl font-black tracking-tight leading-none" style={{ color: stat.color }}>
-                          {stat.metric}
-                        </span>
-                        <span className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-bold tracking-wider" style={{ color: stat.color }}>
-                          {isVi ? stat.unitVi : stat.unitEn}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-
-              {/* Bottom Left Video Intro Controls */}
-              <div className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5 z-20 pointer-events-auto">
-                <HeroIntroButton
-                  isPlayingIntro={isPlayingIntro}
-                  isAudioOn={!isVideoMuted}
-                  onToggleAudio={toggleVideoMute}
-                  onPlayIntro={handlePlayIntro}
-                  onCancelIntro={handleCancelIntro}
-                  lang={lang}
-                  className="shadow-[0_8px_30px_rgba(78,86,246,0.6)]"
-                />
-              </div>
-            </motion.div>
-
-            {/* Right Column: 2 Cards (Personal Profile & Executive Highlights) with 15px Gap */}
-            <div className="lg:col-span-5 flex flex-col gap-[15px] h-full justify-between">
-              {/* Card 1: Hồ sơ giới thiệu - Thông tin cá nhân (Primary Profile Card with 15px bottom margin) */}
-              <motion.div 
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                style={{ borderRadius: "var(--theme-radius-card, 10px)", marginBottom: "15px" }}
-                className={cn(
-                  "p-[16px] sm:p-5 mb-[15px] transition-all duration-300 flex flex-col justify-start gap-3.5 min-w-0 border text-left flex-1",
-                  "rounded-[var(--theme-radius-card,10px)]",
-                  getGlassCardClass()
-                )}
-              >
-                {/* Header with Title & Animated Floating Icon: 4 chữ, font 15px, màu giống icon */}
-                <div className="w-full flex flex-col gap-2 pb-1.5 mb-0.5">
-                  <div className="flex items-center gap-2.5">
-                    <motion.div
-                      animate={{
-                        y: [0, -3.5, 0],
-                        rotate: [0, 3, -3, 0],
-                        scale: [1, 1.06, 1],
-                      }}
-                      transition={{
-                        duration: 3.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      whileHover={{ scale: 1.2, rotate: 8 }}
-                      className="relative flex items-center justify-center shrink-0 cursor-pointer select-none bg-transparent border-0 p-0 shadow-none"
-                    >
-                      <User className="w-5 h-5 text-blue-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
-                    </motion.div>
-                    <h3 className="text-[15px] font-bold tracking-tight font-play">
-                      <span className="text-blue-600 dark:text-cyan-400 font-play font-bold text-[15px]">
-                        {isVi ? "Thông tin cá nhân" : "Personal profile info"}
-                      </span>
-                    </h3>
-                  </div>
-                  {/* Line cùng màu icon */}
-                  <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400/30" />
-                </div>
-
-                {/* Sub card view 2 cột (Grid 2 columns) for demographic info from DATA */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 pr-0.5">
-                  {PERSONAL_DEMOGRAPHICS.map((item) => {
-                    const ItemIcon = getLucideIcon(item.iconName);
-
-                    if (item.type === "map") {
-                      return (
-                        <div 
-                          key={item.id}
-                          onClick={() => {
-                            playUiSound("click");
-                            setSelectedMapLocation({
-                              isOpen: true,
-                              type: item.id === "perm_address" ? "cu_tru" : "tam_tru",
-                              title: item.mapTitle || item.labelVi,
-                              address: item.href || item.valueVi,
-                              query: item.mapQuery || item.valueVi
-                            });
-                          }}
-                          className={cn(
-                            "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item cursor-pointer shadow-2xs",
-                            item.colorTheme.bg,
-                            item.colorTheme.border
-                          )}
-                          style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                          title={isVi ? `Click để xem bản đồ Google Maps: ${item.href}` : "Click to view Google Maps"}
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs group-hover/item:scale-105 transition-transform", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
-                              <ItemIcon className="w-4 h-4" />
-                            </div>
-                            <div className="flex flex-col min-w-0">
-                              <span className={cn("text-[10px] font-bold tracking-wider flex items-center gap-1 truncate", item.colorTheme.labelColor)}>
-                                <span>{isVi ? item.labelVi : item.labelEn}</span>
-                                <span className="text-[8px] px-1 py-0.2 rounded bg-purple-500/20 text-purple-700 dark:text-purple-300 font-normal">Map 📍</span>
-                              </span>
-                              <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)} title={isVi ? item.valueVi : item.valueEn}>
-                                {isVi ? item.valueVi : item.valueEn}
-                              </span>
-                            </div>
-                          </div>
-                          <ChevronRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
-                        </div>
-                      );
-                    }
-
-                    if (item.type === "email" || item.type === "phone" || item.type === "link") {
-                      return (
-                        <a 
-                          key={item.id}
-                          href={item.href}
-                          target={item.type === "link" ? "_blank" : undefined}
-                          rel={item.type === "link" ? "noopener noreferrer" : undefined}
-                          className={cn(
-                            "col-span-1 sm:col-span-2 p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item hover:shadow-xs",
-                            item.colorTheme.bg,
-                            item.colorTheme.border
-                          )}
-                          style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                          title={isVi ? `${item.labelVi}: ${item.valueVi}` : `${item.labelEn}: ${item.valueEn}`}
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
-                              <ItemIcon className="w-4 h-4" />
-                            </div>
-                            <div className="flex flex-col min-w-0">
-                              <span className={cn("text-[10px] font-bold tracking-wider truncate", item.colorTheme.labelColor)}>
-                                {isVi ? item.labelVi : item.labelEn}
-                              </span>
-                              <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)}>
-                                {isVi ? item.valueVi : item.valueEn}
-                              </span>
-                            </div>
-                          </div>
-                          {item.type === "link" ? (
-                            <ExternalLink className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
-                          ) : (
-                            <ArrowRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
-                          )}
-                        </a>
-                      );
-                    }
-
-                    // Default text item
-                    return (
-                      <div 
-                        key={item.id}
-                        className={cn(
-                          "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item",
-                          item.colorTheme.bg,
-                          item.colorTheme.border
-                        )}
-                        style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
-                            <ItemIcon className="w-4 h-4" />
-                          </div>
-                          <div className="flex flex-col min-w-0">
-                            <span className={cn("text-[10px] font-bold tracking-wider truncate", item.colorTheme.labelColor)}>
-                              {isVi ? item.labelVi : item.labelEn}
-                            </span>
-                            <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)}>
-                              {isVi ? item.valueVi : item.valueEn}
-                            </span>
-                          </div>
-                        </div>
-                        <ChevronRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-
-              {/* Card 2: Hồ sơ giới thiệu - Năng lực điều hành & Quản trị (bento-section-card-duplicate với style marginBottom: 15px) */}
-              <motion.div 
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.15 }}
-                style={{ borderRadius: "var(--theme-radius-card, 10px)", marginBottom: "15px" }}
-                className={cn(
-                  "bento-section-card-duplicate mb-[15px] transition-all duration-300 flex flex-col justify-start gap-3.5 min-w-0 border text-left flex-1 p-[16px] sm:p-5",
-                  "rounded-[var(--theme-radius-card,10px)]",
-                  getGlassCardClass()
-                )}
-              >
-                {/* Header with Title & Animated Floating Icon: 4 chữ, font 15px, màu giống icon */}
-                <div className="w-full flex flex-col gap-2 pb-1.5 mb-0.5">
-                  <div className="flex items-center gap-2.5">
-                    <motion.div
-                      animate={{
-                        y: [0, -3.5, 0],
-                        rotate: [0, 3, -3, 0],
-                        scale: [1, 1.06, 1],
-                      }}
-                      transition={{
-                        duration: 3.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      whileHover={{ scale: 1.2, rotate: 8 }}
-                      className="relative flex items-center justify-center shrink-0 cursor-pointer select-none bg-transparent border-0 p-0 shadow-none"
-                    >
-                      <Briefcase className="w-5 h-5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
-                    </motion.div>
-                    <h3 className="text-[15px] font-bold tracking-tight font-play">
-                      <span className="text-indigo-600 dark:text-cyan-400 font-play font-bold text-[15px]">
-                        {isVi ? "Hồ sơ quản trị" : "Executive leadership profile"}
-                      </span>
-                    </h3>
-                  </div>
-                  {/* Line cùng màu icon */}
-                  <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-400/30" />
-                </div>
-
-                {/* Grid 2 columns for Executive & Operational Highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 pr-0.5">
-                  <div 
-                    className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-blue-50/60 dark:bg-blue-950/30 border-blue-200/60 dark:border-blue-800/40"
-                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-blue-500/15 text-blue-600 dark:bg-blue-500/25 dark:text-cyan-300">
-                        <Briefcase className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-bold tracking-wider text-blue-800/80 dark:text-blue-300/80 truncate">
-                          {isVi ? "Kinh nghiệm" : "Experience"}
-                        </span>
-                        <span className="text-xs font-black text-blue-950 dark:text-cyan-200 truncate">
-                          {isVi ? "22+ Năm Quản trị" : "22+ Years Management"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div 
-                    className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-purple-50/60 dark:bg-purple-950/30 border-purple-200/60 dark:border-purple-800/40"
-                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-purple-500/15 text-purple-600 dark:bg-purple-500/25 dark:text-purple-300">
-                        <Users className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-bold tracking-wider text-purple-800/80 dark:text-purple-300/80 truncate">
-                          {isVi ? "Quy mô nhân sự" : "Team Size"}
-                        </span>
-                        <span className="text-xs font-black text-purple-950 dark:text-purple-200 truncate">
-                          {isVi ? "500+ Nhân sự CX" : "500+ CX Staff"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div 
-                    className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-cyan-50/60 dark:bg-cyan-950/30 border-cyan-200/60 dark:border-cyan-800/40"
-                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/25 dark:text-cyan-300">
-                        <Bot className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-bold tracking-wider text-cyan-800/80 dark:text-cyan-300/80 truncate">
-                          {isVi ? "Giải pháp AI" : "AI Solutions"}
-                        </span>
-                        <span className="text-xs font-black text-cyan-950 dark:text-cyan-200 truncate">
-                          {isVi ? "100+ Dự án CX & AI" : "100+ CX & AI Projects"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div 
-                    className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200/60 dark:border-emerald-800/40"
-                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-emerald-500/15 text-emerald-600 dark:bg-emerald-500/25 dark:text-emerald-300">
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-bold tracking-wider text-emerald-800/80 dark:text-emerald-300/80 truncate">
-                          {isVi ? "Chất lượng dịch vụ" : "Service Quality"}
-                        </span>
-                        <span className="text-xs font-black text-emerald-950 dark:text-emerald-200 truncate">
-                          {isVi ? "CSAT & NPS > 98%" : "CSAT & NPS > 98%"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
+            >
+              <span>🧩 Bento View</span>
+            </button>
+            <button
+              onClick={() => { playUiSound("click"); setProfileViewMode("grid"); }}
+              className={cn(
+                "px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5",
+                profileViewMode === "grid"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
+              )}
+            >
+              <span>📐 Grid View</span>
+            </button>
           </div>
         </div>
 
-        {/* ========================================================================================================= */}
-        {/* 2. CARD BOX: TRIẾT LÝ LÃNH ĐẠO (Giới Thiệu Bản Thân, Ba Trụ Cột, Giá Trị Cốt Lõi, Triết Lý, Banner CTA) */}
-        {/* ========================================================================================================= */}
-        <div id="card-box-triet-ly-lanh-dao" className="w-full flex flex-col gap-[15px]">
-          
-          {/* 2.1 THẺ GIỚI THIỆU BẢN THÂN TÔI (Chuyển từ trang Liên hệ) */}
+        {/* ========================================================================= */}
+        {/* BENTO / GRID RESPONSIVE VIEW: HỒ SƠ GIỚI THIỆU & TRIẾT LÝ LÃNH ĐẠO          */}
+        {/* ========================================================================= */}
+        <div 
+          id="about-bento-grid-container" 
+          className={cn(
+            "bento-about-grid responsive-grid-container w-full items-stretch @container min-w-0 max-w-full",
+            profileViewMode === "bento"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-4.5"
+              : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          )}
+        >
+          {/* 1. BENTO CARD LỚN: VIDEO PORTRAIT & DẤU ẤN VẬN HÀNH */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className={cn(
+              "bento-card bento-card-hero content-fit-card relative overflow-hidden border border-white/60 dark:border-white/15 bg-slate-950/90 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] min-h-[380px] sm:min-h-[460px] lg:min-h-[520px] flex items-center justify-center group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 w-full min-w-0 max-w-full box-border",
+              profileViewMode === "bento" ? "col-span-1 md:col-span-2 lg:col-span-7" : "col-span-1 md:col-span-2 lg:col-span-2",
+              "rounded-[var(--theme-radius-card,14px)]"
+            )}
+          >
+            {/* The Portrait Video */}
+            <video
+              ref={videoRef}
+              src={isPlayingIntro ? ABOUT_INTRO_VIDEO_URL : ABOUT_IDLE_VIDEO_URL}
+              className="w-full h-full object-cover object-center absolute inset-0 brightness-105"
+              autoPlay
+              loop={!isPlayingIntro}
+              muted={isVideoMuted}
+              playsInline
+              onTimeUpdate={handleTimeUpdate}
+              onEnded={handleVideoEnded}
+            />
+
+            {/* Dynamic Video Story Overlay when intro video is active */}
+            {isPlayingIntro && (
+              <DynamicVideoStoryOverlay
+                currentTime={videoCurrentTime}
+                duration={videoRef.current?.duration || 210}
+                isPlaying={!isVideoPaused}
+                isMuted={isVideoMuted}
+                onToggleMute={toggleVideoMute}
+                onTogglePlay={togglePlayPause}
+                onClose={handleCancelIntro}
+                onSeek={handleSeek}
+              />
+            )}
+
+            {/* Subtle Gradient vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-black/35 pointer-events-none" />
+
+            {/* CÁC THẺ DẤU ẤN VẬN HÀNH LƠ LỬNG XUNG QUANH VIDEO TỪ DATA */}
+            {ABOUT_PROFILE_STATS.map((stat) => {
+              const StatIcon = getLucideIcon(stat.iconName);
+              return (
+                <motion.div
+                  key={stat.id}
+                  animate={{ y: [0, stat.id === "environments" || stat.id === "csat" ? 4 : -4, 0] }}
+                  transition={{ repeat: Infinity, duration: 4.2 + stat.animationDelay, ease: "easeInOut", delay: stat.animationDelay }}
+                  className={cn(
+                    "absolute z-20 pointer-events-auto bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-white/80 dark:border-white/20 p-2 sm:p-2.5 md:p-3 shadow-lg hover:scale-105 transition-all flex items-center gap-2.5 sm:gap-3 max-w-[135px] xs:max-w-[155px] sm:max-w-[185px] md:max-w-[210px]",
+                    "rounded-[var(--theme-radius-inner,12px)]",
+                    stat.positionClass
+                  )}
+                >
+                  <div 
+                    className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 shadow-inner"
+                    style={{ backgroundColor: `${stat.color}18`, color: stat.color }}
+                  >
+                    <StatIcon className="w-4 h-4 sm:w-5.5 sm:h-5.5 stroke-[2.5]" />
+                  </div>
+                  <div className="flex flex-col min-w-0 text-left">
+                    <span className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-extrabold text-slate-500 dark:text-slate-400 truncate leading-none uppercase">
+                      {isVi ? stat.labelVi : stat.labelEn}
+                    </span>
+                    <div className="flex items-baseline gap-1 mt-0.5 sm:mt-1">
+                      <span className="text-sm xs:text-base sm:text-lg md:text-xl font-black tracking-tight leading-none" style={{ color: stat.color }}>
+                        {stat.metric}
+                      </span>
+                      <span className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-bold tracking-wider" style={{ color: stat.color }}>
+                        {isVi ? stat.unitVi : stat.unitEn}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+
+            {/* Bottom Left Video Intro Controls */}
+            <div className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5 z-20 pointer-events-auto">
+              <HeroIntroButton
+                isPlayingIntro={isPlayingIntro}
+                isAudioOn={!isVideoMuted}
+                onToggleAudio={toggleVideoMute}
+                onPlayIntro={handlePlayIntro}
+                onCancelIntro={handleCancelIntro}
+                lang={lang}
+                className="shadow-[0_8px_30px_rgba(78,86,246,0.6)]"
+              />
+            </div>
+          </motion.div>
+
+          {/* 2. BENTO CARD VỪA: THÔNG TIN CÁ NHÂN & NHÂN KHẨU HỌC (Span 5 trên Desktop) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className={cn(
+              "bento-card content-fit-card p-4 sm:p-5 transition-all duration-300 flex flex-col justify-start gap-3.5 min-w-0 max-w-full w-full box-border border text-left hover:-translate-y-1 hover:shadow-lg",
+              profileViewMode === "bento" ? "col-span-1 md:col-span-1 lg:col-span-5" : "col-span-1 md:col-span-1 lg:col-span-1",
+              "rounded-[var(--theme-radius-card,14px)]",
+              getGlassCardClass()
+            )}
+          >
+            {/* Header with Title & Animated Floating Icon */}
+            <div className="w-full flex flex-col gap-2 pb-1.5 mb-0.5">
+              <div className="flex items-center gap-2.5">
+                <motion.div
+                  animate={{
+                    y: [0, -3.5, 0],
+                    rotate: [0, 3, -3, 0],
+                    scale: [1, 1.06, 1],
+                  }}
+                  transition={{
+                    duration: 3.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ scale: 1.2, rotate: 8 }}
+                  className="relative flex items-center justify-center shrink-0 cursor-pointer select-none bg-transparent border-0 p-0 shadow-none"
+                >
+                  <User className="w-5 h-5 text-blue-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                </motion.div>
+                <h3 className="text-[15px] font-bold tracking-tight font-play">
+                  <span className="text-blue-600 dark:text-cyan-400 font-play font-bold text-[15px]">
+                    {isVi ? "Thông tin cá nhân" : "Personal profile info"}
+                  </span>
+                </h3>
+              </div>
+              <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400/30" />
+            </div>
+
+            {/* Sub card view 2 cột cho các mục thông tin */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 pr-0.5">
+              {PERSONAL_DEMOGRAPHICS.map((item) => {
+                const ItemIcon = getLucideIcon(item.iconName);
+
+                if (item.type === "map") {
+                  return (
+                    <div 
+                      key={item.id}
+                      onClick={() => {
+                        playUiSound("click");
+                        setSelectedMapLocation({
+                          isOpen: true,
+                          type: item.id === "perm_address" ? "cu_tru" : "tam_tru",
+                          title: item.mapTitle || item.labelVi,
+                          address: item.href || item.valueVi,
+                          query: item.mapQuery || item.valueVi
+                        });
+                      }}
+                      className={cn(
+                        "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item cursor-pointer shadow-2xs hover:scale-[1.02]",
+                        item.colorTheme.bg,
+                        item.colorTheme.border
+                      )}
+                      style={{ borderRadius: "var(--theme-radius, 12px)" }}
+                      title={isVi ? `Click để xem bản đồ Google Maps: ${item.href}` : "Click to view Google Maps"}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs group-hover/item:scale-105 transition-transform", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
+                          <ItemIcon className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className={cn("text-[10px] font-bold tracking-wider flex items-center gap-1 truncate", item.colorTheme.labelColor)}>
+                            <span>{isVi ? item.labelVi : item.labelEn}</span>
+                            <span className="text-[8px] px-1 py-0.2 rounded bg-purple-500/20 text-purple-700 dark:text-purple-300 font-normal">Map 📍</span>
+                          </span>
+                          <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)} title={isVi ? item.valueVi : item.valueEn}>
+                            {isVi ? item.valueVi : item.valueEn}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
+                    </div>
+                  );
+                }
+
+                if (item.type === "email" || item.type === "phone" || item.type === "link") {
+                  return (
+                    <a 
+                      key={item.id}
+                      href={item.href}
+                      target={item.type === "link" ? "_blank" : undefined}
+                      rel={item.type === "link" ? "noopener noreferrer" : undefined}
+                      className={cn(
+                        "col-span-1 sm:col-span-2 p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item hover:shadow-xs hover:scale-[1.01]",
+                        item.colorTheme.bg,
+                        item.colorTheme.border
+                      )}
+                      style={{ borderRadius: "var(--theme-radius, 12px)" }}
+                      title={isVi ? `${item.labelVi}: ${item.valueVi}` : `${item.labelEn}: ${item.valueEn}`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
+                          <ItemIcon className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className={cn("text-[10px] font-bold tracking-wider truncate", item.colorTheme.labelColor)}>
+                            {isVi ? item.labelVi : item.labelEn}
+                          </span>
+                          <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)}>
+                            {isVi ? item.valueVi : item.valueEn}
+                          </span>
+                        </div>
+                      </div>
+                      {item.type === "link" ? (
+                        <ExternalLink className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
+                      ) : (
+                        <ArrowRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
+                      )}
+                    </a>
+                  );
+                }
+
+                return (
+                  <div 
+                    key={item.id}
+                    className={cn(
+                      "p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item",
+                      item.colorTheme.bg,
+                      item.colorTheme.border
+                    )}
+                    style={{ borderRadius: "var(--theme-radius, 12px)" }}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", item.colorTheme.iconBg, item.colorTheme.iconColor)}>
+                        <ItemIcon className="w-4 h-4" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className={cn("text-[10px] font-bold tracking-wider truncate", item.colorTheme.labelColor)}>
+                          {isVi ? item.labelVi : item.labelEn}
+                        </span>
+                        <span className={cn("text-xs font-black truncate", item.colorTheme.valueColor)}>
+                          {isVi ? item.valueVi : item.valueEn}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className={cn("w-3.5 h-3.5 group-hover/item:translate-x-1 transition-transform shrink-0 ml-1", item.colorTheme.arrowColor)} />
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* 3. BENTO CARD VỪA: HỒ SƠ QUẢN TRỊ & NĂNG LỰC ĐIỀU HÀNH (Span 5 trên Desktop) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className={cn(
+              "bento-card content-fit-card transition-all duration-300 flex flex-col justify-start gap-3.5 min-w-0 max-w-full w-full box-border border text-left p-4 sm:p-5 hover:-translate-y-1 hover:shadow-lg",
+              profileViewMode === "bento" ? "col-span-1 md:col-span-1 lg:col-span-5" : "col-span-1 md:col-span-1 lg:col-span-1",
+              "rounded-[var(--theme-radius-card,14px)]",
+              getGlassCardClass()
+            )}
+          >
+            {/* Header with Title & Animated Floating Icon */}
+            <div className="w-full flex flex-col gap-2 pb-1.5 mb-0.5">
+              <div className="flex items-center gap-2.5">
+                <motion.div
+                  animate={{
+                    y: [0, -3.5, 0],
+                    rotate: [0, 3, -3, 0],
+                    scale: [1, 1.06, 1],
+                  }}
+                  transition={{
+                    duration: 3.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ scale: 1.2, rotate: 8 }}
+                  className="relative flex items-center justify-center shrink-0 cursor-pointer select-none bg-transparent border-0 p-0 shadow-none"
+                >
+                  <Briefcase className="w-5 h-5 text-indigo-600 dark:text-cyan-400 stroke-[2.2] drop-shadow-sm" />
+                </motion.div>
+                <h3 className="text-[15px] font-bold tracking-tight font-play">
+                  <span className="text-indigo-600 dark:text-cyan-400 font-play font-bold text-[15px]">
+                    {isVi ? "Hồ sơ quản trị" : "Executive leadership profile"}
+                  </span>
+                </h3>
+              </div>
+              <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-400/30" />
+            </div>
+
+            {/* Grid 4 Micro Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 pr-0.5">
+              <div 
+                className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-blue-50/60 dark:bg-blue-950/30 border-blue-200/60 dark:border-blue-800/40 hover:scale-[1.02]"
+                style={{ borderRadius: "var(--theme-radius, 12px)" }}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-blue-500/15 text-blue-600 dark:bg-blue-500/25 dark:text-cyan-300">
+                    <Briefcase className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-bold tracking-wider text-blue-800/80 dark:text-blue-300/80 truncate">
+                      {isVi ? "Kinh nghiệm" : "Experience"}
+                    </span>
+                    <span className="text-xs font-black text-blue-950 dark:text-cyan-200 truncate">
+                      {isVi ? "22+ Năm Quản trị" : "22+ Years Management"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-purple-50/60 dark:bg-purple-950/30 border-purple-200/60 dark:border-purple-800/40 hover:scale-[1.02]"
+                style={{ borderRadius: "var(--theme-radius, 12px)" }}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-purple-500/15 text-purple-600 dark:bg-purple-500/25 dark:text-purple-300">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-bold tracking-wider text-purple-800/80 dark:text-purple-300/80 truncate">
+                      {isVi ? "Quy mô nhân sự" : "Team Size"}
+                    </span>
+                    <span className="text-xs font-black text-purple-950 dark:text-purple-200 truncate">
+                      {isVi ? "500+ Nhân sự CX" : "500+ CX Staff"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-cyan-50/60 dark:bg-cyan-950/30 border-cyan-200/60 dark:border-cyan-800/40 hover:scale-[1.02]"
+                style={{ borderRadius: "var(--theme-radius, 12px)" }}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/25 dark:text-cyan-300">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-bold tracking-wider text-cyan-800/80 dark:text-cyan-300/80 truncate">
+                      {isVi ? "Giải pháp AI" : "AI Solutions"}
+                    </span>
+                    <span className="text-xs font-black text-cyan-950 dark:text-cyan-200 truncate">
+                      {isVi ? "100+ Dự án CX & AI" : "100+ CX & AI Projects"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className="p-2.5 sm:p-3 border flex items-center justify-between transition-all min-w-0 group/item bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200/60 dark:border-emerald-800/40 hover:scale-[1.02]"
+                style={{ borderRadius: "var(--theme-radius, 12px)" }}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs bg-emerald-500/15 text-emerald-600 dark:bg-emerald-500/25 dark:text-emerald-300">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-bold tracking-wider text-emerald-800/80 dark:text-emerald-300/80 truncate">
+                      {isVi ? "Chất lượng dịch vụ" : "Service Quality"}
+                    </span>
+                    <span className="text-xs font-black text-emerald-950 dark:text-emerald-200 truncate">
+                      {isVi ? "CSAT & NPS > 98%" : "CSAT & NPS > 98%"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* 4. BENTO CARD: GIỚI THIỆU BẢN THÂN - LÃNH ĐẠO BẰNG SỰ THẤU CẢM (Span 7 trên Desktop) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
             style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
             className={cn(
-              "w-full p-6 flex flex-col justify-between relative overflow-hidden border text-left bg-gradient-to-br from-[#F5F8FF] to-[#E9F0FE] dark:from-[#131B2E] dark:to-[#1B2845]",
+              "bento-card about-interactive-card content-fit-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border text-left bg-gradient-to-br from-[#F5F8FF] to-[#E9F0FE] dark:from-[#131B2E] dark:to-[#1B2845] transition-all duration-300 min-w-0 max-w-full w-full box-border",
+              profileViewMode === "bento" ? "col-span-1 md:col-span-2 lg:col-span-7" : "col-span-1 md:col-span-2 lg:col-span-2",
               theme === "glass-dark-neon"
                 ? "border-cyan-500/30 shadow-[0_12px_40px_rgba(0,240,255,0.08)]"
                 : "border-blue-100 dark:border-white/10 shadow-[0_12px_40px_rgba(31,38,135,0.06)]"
@@ -586,42 +619,56 @@ export default function About() {
               muted
               playsInline
             />
-            {/* Visual glow backdrop */}
             <div className="absolute top-0 right-0 w-60 h-60 bg-blue-400/10 dark:bg-cyan-500/15 rounded-full filter blur-[80px] pointer-events-none" />
 
-            <div className="space-y-4 relative z-10">
-              {/* Header Title with Animated Icon: 4 chữ, font 15px, màu giống icon */}
-              <AnimatedCardTitle
-                icon={User}
-                title={isVi ? "Giới thiệu bản thân" : "Personal profile story"}
-                colorPreset="cyan"
-              />
+            <div className="space-y-4 relative z-10 w-full">
+              {/* Header Title block */}
+              <div className="flex flex-col gap-1.5">
+                <AnimatedCardTitle
+                  icon={User}
+                  title={isVi ? "Giới thiệu bản thân" : "Personal profile story"}
+                  colorPreset="cyan"
+                />
+              </div>
 
-              {/* Narrative Text: font 15px */}
-              <p className="text-[15px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-                {isVi ? (
-                  <>
-                    Một chuyên gia dịch vụ khách hàng với hơn{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
-                      22 năm kinh nghiệm
-                    </span>{" "}
-                    thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
-                  </>
-                ) : (
-                  <>
-                    A customer service expert with over{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
-                      22 years of experience
-                    </span>{" "}
-                    hands-on. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations.
-                  </>
-                )}
-              </p>
+              {/* Masonry-Style Column Layout for 'Lãnh đạo bằng sự thấu hiểu' content */}
+              <div className="about-empathy-masonry pt-1">
+                {/* Masonry Column Item 1: Quote Block */}
+                <div className="p-3.5 sm:p-4 rounded-xl bg-white/70 dark:bg-white/5 border border-blue-200/50 dark:border-cyan-500/20 shadow-xs backdrop-blur-md">
+                  <p className="text-xs sm:text-sm font-bold text-blue-700 dark:text-cyan-300 italic font-play tracking-wide leading-relaxed">
+                    {isVi 
+                      ? "“Lãnh đạo bằng sự thấu cảm, tối ưu hóa hiệu suất vận hành và gắn kết con người.”" 
+                      : "“Leading with empathy, optimizing operations, and fostering human connections.”"}
+                  </p>
+                </div>
+
+                {/* Masonry Column Item 2: Core Philosophy & Experience Details */}
+                <div className="p-3.5 sm:p-4 rounded-xl bg-white/60 dark:bg-white/5 border border-blue-200/40 dark:border-white/10 shadow-xs backdrop-blur-md">
+                  <p className="text-[14px] sm:text-[15px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                    {isVi ? (
+                      <>
+                        Một chuyên gia dịch vụ khách hàng với hơn{" "}
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
+                          22 năm kinh nghiệm
+                        </span>{" "}
+                        thực chiến. Với tôi, Chăm Sóc Khách Hàng không chỉ là phục vụ, mà là sự đồng hành. Mỗi cuộc trò chuyện, mỗi khoảnh khắc, dù là nhỏ nhất, đều là một cơ hội quý giá để lắng nghe, để thấu hiểu, và để tạo ra những trải nghiệm vượt trên cả sự mong đợi.
+                      </>
+                    ) : (
+                      <>
+                        A customer service expert with over{" "}
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-cyan-300 font-extrabold text-sm border border-blue-200/40 dark:border-cyan-500/20">
+                          22 years of experience
+                        </span>{" "}
+                        hands-on. For me, Customer Care is not just service, but true companionship. Every conversation, every single moment is a precious opportunity: to listen, to understand, and to create experiences that exceed expectations.
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* Bottom Graphic & Cursive signature row */}
-            <div className="flex items-end justify-between mt-8 pt-4 border-t border-blue-200/20 relative z-10">
-              <div className="pb-2">
+            <div className="flex items-end justify-between mt-5 pt-3 border-t border-blue-200/20 relative z-10">
+              <div className="pb-1">
                 <span className="block font-[Caveat,cursive] text-[#1E56EC] dark:text-cyan-400 text-2xl tracking-wide select-none transform -rotate-3 leading-none">
                   Luôn bên bạn ♡
                 </span>
@@ -630,54 +677,49 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* 2.2 BA TRỤ CỘT VẬN HÀNH (STANDALONE CARD) */}
+          {/* 5. BENTO CARD: BA TRỤ CỘT CHÍNH (Span 12 trên Desktop) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.1 }}
             style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
             className={cn(
-              "w-full p-5 sm:p-6 flex flex-col gap-4 border text-left",
+              "bento-card content-fit-card p-5 sm:p-6 flex flex-col gap-4 border text-left hover:-translate-y-1 hover:shadow-xl transition-all duration-300 min-w-0 max-w-full w-full box-border",
+              profileViewMode === "bento" ? "col-span-1 md:col-span-2 lg:col-span-12" : "col-span-1 md:col-span-2 lg:col-span-3",
               "rounded-[var(--theme-radius-card,14px)]",
               getGlassCardClass()
             )}
           >
-            {/* Header Title with Target/Bullseye Icon: 4 chữ, font 15px, màu giống icon */}
             <AnimatedCardTitle
               icon={Target}
               title={isVi ? "Ba trụ cột chính" : "Core operational pillars"}
               colorPreset="blue"
             />
 
-            {/* Grid 3 Pillars (Blue, Pink, Green) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              
-              {/* Trụ cột 1: Hiệu quả (Xanh biển) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 min-w-0 max-w-full">
+              {/* Trụ cột 1: Hiệu quả */}
               <div 
-                className="bg-gradient-to-b from-[#1E82FF] to-[#125CE6] border border-blue-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                className="bg-gradient-to-b from-[#1E82FF] to-[#125CE6] border border-blue-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[220px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 content-fit-card min-w-0 max-w-full"
                 style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
               >
-                {/* Top Double Ring Icon */}
                 <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                     <MessagesSquare className="w-5 h-5 text-white" />
                   </div>
                 </div>
 
-                {/* Text Content */}
-                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
-                  <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center min-w-0 max-w-full">
+                  <h5 className="text-sm font-black tracking-wider uppercase font-play break-words [overflow-wrap:anywhere]">
                     01. HIỆU QUẢ
                   </h5>
-                  <p className="text-3xs text-blue-100 font-extrabold uppercase tracking-wide">
+                  <p className="text-3xs text-blue-100 font-extrabold uppercase tracking-wide break-words">
                     Tối ưu & Kết quả
                   </p>
-                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1 break-words [overflow-wrap:anywhere]">
                     Tối ưu hiệu suất, tạo kết quả đo lường được.
                   </p>
                 </div>
 
-                {/* Bottom Double Ring Icon */}
                 <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
                   <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
                     <BarChart3 className="w-4 h-4 text-white" />
@@ -685,32 +727,29 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Trụ cột 2: Nhân văn (Hồng tím) */}
+              {/* Trụ cột 2: Nhân văn */}
               <div 
-                className="bg-gradient-to-b from-[#FF568A] to-[#A838F5] border border-pink-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                className="bg-gradient-to-b from-[#FF568A] to-[#A838F5] border border-pink-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[220px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 content-fit-card min-w-0 max-w-full"
                 style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
               >
-                {/* Top Double Ring Icon */}
                 <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                     <Heart className="w-5 h-5 text-white" />
                   </div>
                 </div>
 
-                {/* Text Content */}
-                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
-                  <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center min-w-0 max-w-full">
+                  <h5 className="text-sm font-black tracking-wider uppercase font-play break-words [overflow-wrap:anywhere]">
                     02. NHÂN VĂN
                   </h5>
-                  <p className="text-3xs text-pink-100 font-extrabold uppercase tracking-wide">
+                  <p className="text-3xs text-pink-100 font-extrabold uppercase tracking-wide break-words">
                     Đồng cảm & Thấu hiểu
                   </p>
-                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1 break-words [overflow-wrap:anywhere]">
                     Lắng nghe, thấu hiểu và đặt con người làm trung tâm.
                   </p>
                 </div>
 
-                {/* Bottom Double Ring Icon */}
                 <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
                   <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
                     <Users className="w-4 h-4 text-white" />
@@ -718,168 +757,149 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Trụ cột 3: Bền vững (Xanh lá) */}
+              {/* Trụ cột 3: Bền vững */}
               <div 
-                className="bg-gradient-to-b from-[#0FC271] to-[#109B53] border border-emerald-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[240px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                className="bg-gradient-to-b from-[#0FC271] to-[#109B53] border border-emerald-400/20 text-white p-5 flex flex-col items-center text-center justify-between min-h-[220px] shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 content-fit-card min-w-0 max-w-full"
                 style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
               >
-                {/* Top Double Ring Icon */}
                 <div className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs">
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                 </div>
 
-                {/* Text Content */}
-                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center">
-                  <h5 className="text-sm font-black tracking-wider uppercase font-play">
+                <div className="my-3 space-y-1 flex-1 flex flex-col justify-center min-w-0 max-w-full">
+                  <h5 className="text-sm font-black tracking-wider uppercase font-play break-words [overflow-wrap:anywhere]">
                     03. BỀN VỮNG
                   </h5>
-                  <p className="text-3xs text-emerald-100 font-extrabold uppercase tracking-wide">
+                  <p className="text-3xs text-emerald-100 font-extrabold uppercase tracking-wide break-words">
                     Giá trị & Tin cậy
                   </p>
-                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1">
+                  <p className="text-2xs text-white/95 leading-relaxed font-semibold pt-1 break-words [overflow-wrap:anywhere]">
                     Xây dựng niềm tin và giá trị bền vững.
                   </p>
                 </div>
 
-                {/* Bottom Double Ring Icon */}
                 <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center relative shadow-xs shrink-0">
                   <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
                     <Globe className="w-4 h-4 text-white" />
                   </div>
                 </div>
               </div>
-
             </div>
           </motion.div>
 
-          {/* 2.3 GIÁ TRỊ CỐT LÕI & TRIẾT LÝ VÀ TẦM NHÌN ROW */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-            
-            {/* Card Trái: Giá trị cốt lõi */}
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.45, delay: 0.15 }}
-              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
-              className="p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#FFF9F2] dark:bg-[#201712] border-orange-200/60 dark:border-orange-950/40 min-h-[200px]"
-            >
-              <div className="space-y-3 flex-grow mb-6">
-                {/* Title Row with Animated Unframed Icon */}
-                <AnimatedCardTitle
-                  icon={Sparkles}
-                  title={isVi ? "Giá trị cốt lõi" : "Core foundational values"}
-                  colorPreset="orange"
-                  className="mb-2"
-                />
-                
-                {/* Content Paragraph: font 15px */}
-                <p className="text-[15px] text-slate-800 dark:text-slate-300 font-semibold leading-relaxed">
-                  {isVi ? (
-                    <>
-                      Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
-                      <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
-                        sự tận tâm kịp thời
-                      </span>{" "}
-                      và{" "}
-                      <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
-                        đồng cảm chân thành
-                      </span>
-                      .
-                    </>
-                  ) : (
-                    <>
-                      I believe satisfaction comes not from absolute perfection, but from{" "}
-                      <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
-                        timely dedication
-                      </span>{" "}
-                      and{" "}
-                      <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
-                        sincere empathy
-                      </span>
-                      .
-                    </>
-                  )}
-                </p>
+          {/* 6. BENTO CARD: GIÁ TRỊ CỐT LÕI (Span 6 trên Desktop) */}
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: 0.15 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className="bento-card content-fit-card col-span-1 md:col-span-1 lg:col-span-6 p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#FFF9F2] dark:bg-[#201712] border-orange-200/60 dark:border-orange-950/40 min-h-[200px] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 min-w-0 max-w-full w-full box-border"
+          >
+            <div className="space-y-3 flex-grow mb-6 min-w-0 max-w-full">
+              <AnimatedCardTitle
+                icon={Sparkles}
+                title={isVi ? "Giá trị cốt lõi" : "Core foundational values"}
+                colorPreset="orange"
+                className="mb-2"
+              />
+              
+              <p className="text-[15px] text-slate-800 dark:text-slate-300 font-semibold leading-relaxed break-words [overflow-wrap:anywhere]">
+                {isVi ? (
+                  <>
+                    Tôi tin rằng sự hài lòng không đến từ sự hoàn hảo tuyệt đối, mà đến từ{" "}
+                    <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                      sự tận tâm kịp thời
+                    </span>{" "}
+                    và{" "}
+                    <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                      đồng cảm chân thành
+                    </span>
+                    .
+                  </>
+                ) : (
+                  <>
+                    I believe satisfaction comes not from absolute perfection, but from{" "}
+                    <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                      timely dedication
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-extrabold text-[#D95F1A] dark:text-orange-400 underline decoration-orange-500/35 decoration-2 underline-offset-2">
+                      sincere empathy
+                    </span>
+                    .
+                  </>
+                )}
+              </p>
+            </div>
+
+            <div className="self-end mr-2">
+              <span className="font-[Caveat,cursive] text-amber-700 dark:text-amber-400 text-lg sm:text-xl select-none transform -rotate-2 block leading-none">
+                Khách hàng là trọng tâm ♡
+              </span>
+            </div>
+          </motion.div>
+
+          {/* 7. BENTO CARD: TRIẾT LÝ VÀ TẦM NHÌN (Span 6 trên Desktop) */}
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            className="bento-card content-fit-card col-span-1 md:col-span-1 lg:col-span-6 p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#F2F7FF] dark:bg-[#121B2D] border-blue-200/60 dark:border-blue-950/40 min-h-[200px] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 min-w-0 max-w-full w-full box-border"
+          >
+            <div className="space-y-3 min-w-0 max-w-full">
+              <AnimatedCardTitle
+                icon={Users}
+                title={isVi ? "Triết lý tầm nhìn" : "Philosophy and vision"}
+                colorPreset="indigo"
+                className="mb-2"
+              />
+              
+              <div className="relative text-center py-2 px-1 rounded-[14px] bg-blue-100/20 dark:bg-blue-900/10 border border-blue-200/20 min-w-0 max-w-full">
+                <span className="absolute -top-3 left-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">“</span>
+                <h4 className="text-[15px] font-black italic text-blue-700 dark:text-cyan-300 leading-snug tracking-wide break-words [overflow-wrap:anywhere]">
+                  “Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”
+                </h4>
+                <span className="absolute -bottom-5 right-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">”</span>
               </div>
 
-              {/* Hand-written cursive signature at the bottom right */}
-              <div className="self-end mr-2">
-                <span className="font-[Caveat,cursive] text-amber-700 dark:text-amber-400 text-lg sm:text-xl select-none transform -rotate-2 block leading-none">
-                  Khách hàng là trọng tâm ♡
-                </span>
-              </div>
-            </motion.div>
+              <p className="text-[15px] text-slate-700 dark:text-slate-350 leading-relaxed font-semibold pt-1 break-words [overflow-wrap:anywhere]">
+                {isVi ? (
+                  "Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi: Họ luôn được lắng nghe."
+                ) : (
+                  "I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth: They are always listened to."
+                )}
+              </p>
+            </div>
+          </motion.div>
 
-            {/* Card Phải: Triết lý và tầm nhìn */}
-            <motion.div
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.45, delay: 0.2 }}
-              style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
-              className="p-5 flex flex-col justify-between relative overflow-hidden border text-left bg-[#F2F7FF] dark:bg-[#121B2D] border-blue-200/60 dark:border-blue-950/40 min-h-[200px]"
-            >
-              <div className="space-y-3">
-                {/* Title Row with Animated Unframed Icon */}
-                <AnimatedCardTitle
-                  icon={Users}
-                  title={isVi ? "Triết lý tầm nhìn" : "Philosophy and vision"}
-                  colorPreset="indigo"
-                  className="mb-2"
-                />
-                
-                {/* Centered Quotation Phrase: 15px font */}
-                <div className="relative text-center py-2 px-1 rounded-[14px] bg-blue-100/20 dark:bg-blue-900/10 border border-blue-200/20">
-                  <span className="absolute -top-3 left-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">“</span>
-                  <h4 className="text-[15px] font-black italic text-blue-700 dark:text-cyan-300 leading-snug tracking-wide">
-                    “Tận Tâm & Đồng Hành Cùng Trải Nghiệm Khách Hàng”
-                  </h4>
-                  <span className="absolute -bottom-5 right-1 text-2xl font-serif text-blue-300 dark:text-blue-700/50 select-none">”</span>
-                </div>
-
-                {/* Core Vision Description: 15px font */}
-                <p className="text-[15px] text-slate-700 dark:text-slate-350 leading-relaxed font-semibold pt-1">
-                  {isVi ? (
-                    "Tôi luôn nỗ lực để mang lại sản phẩm, dịch vụ chất lượng cao với chi phí hợp lý. Và trên hết, để mỗi khách hàng cảm nhận được một điều đơn giản mà cốt lõi: Họ luôn được lắng nghe."
-                  ) : (
-                    "I always strive to deliver high-quality products and services at reasonable costs. And above all, so that every customer feels one simple yet core truth: They are always listened to."
-                  )}
-                </p>
-              </div>
-            </motion.div>
-
-          </div>
-
-          {/* 2.4 BANNER CÙNG TẠO RA TRẢI NGHIỆM KHÁCH HÀNG */}
+          {/* 8. BENTO BANNER: CÙNG TẠO RA TRẢI NGHIỆM KHÁCH HÀNG (Span 12 trên Desktop) */}
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
-            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
+            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
             className={cn(
-              "w-full relative overflow-hidden p-[15px] flex flex-col lg:flex-row items-center justify-between gap-4 group/ctabanner border text-left",
-              "rounded-[var(--theme-radius-card,10px)]",
+              "bento-card content-fit-card col-span-1 md:col-span-2 lg:col-span-12 w-full min-w-0 max-w-full box-border relative overflow-hidden p-4 sm:p-5 flex flex-col lg:flex-row items-center justify-between gap-4 group/ctabanner border text-left hover:-translate-y-1 hover:shadow-xl transition-all duration-300",
+              "rounded-[var(--theme-radius-card,14px)]",
               getGlassCardClass()
             )}
           >
-            {/* Ambient glow decoration */}
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-rose-500 rounded-3xl blur-xl opacity-10 group-hover/ctabanner:opacity-20 transition-opacity duration-700 pointer-events-none" />
             
-            {/* Left Portion: Icon + Badge + Title + Subtitle */}
             <div className="relative z-10 flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-blue-500/30 dark:border-cyan-400/30 bg-blue-500/10 dark:bg-cyan-500/20 backdrop-blur-md flex items-center justify-center text-blue-600 dark:text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(37,99,235,0.15)] transition-transform duration-300 group-hover/ctabanner:scale-110">
                 <Send className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 stroke-[2] text-blue-600 dark:text-cyan-300" />
               </div>
 
               <div className="flex flex-col min-w-0 text-left">
-                {/* Top Pill */}
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-cyan-500/20 border border-blue-500/20 dark:border-cyan-400/30 text-blue-700 dark:text-cyan-200 text-[10px] font-bold tracking-wider mb-2 self-start uppercase font-mono">
                   <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-300 animate-pulse" />
                   <span>{isVi ? "Hợp tác & Đồng hành" : "Collaboration & Partnership"}</span>
                 </div>
 
-                {/* Title and subtitle */}
                 <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight text-blue-950 dark:text-white leading-tight font-play">
                   {isVi ? "Cùng tạo ra trải nghiệm khách hàng tốt hơn" : "Let's shape better customer experiences"}
                 </h3>
@@ -891,7 +911,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Right Portion: Connect button */}
             <div className="relative z-10 flex items-center shrink-0 lg:ml-auto">
               <button
                 type="button"
@@ -917,9 +936,7 @@ export default function About() {
               </button>
             </div>
           </motion.div>
-
         </div>
-
       </div>
 
       {/* Google Maps Location Popup Modal */}

@@ -21,7 +21,7 @@ export interface SystemItemHTML {
   shadow: string;
 }
 
-const SYSTEMS_12_DATA: SystemItemHTML[] = [
+export const SYSTEMS_12_DATA: SystemItemHTML[] = [
   {
     id: "crm",
     cls: "c1",

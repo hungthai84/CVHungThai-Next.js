@@ -27,6 +27,10 @@ import Systems from "./components/Systems";
 import Customization from "./components/Customization";
 import Letter from "./components/Letter";
 import TabErrorsPage from "./components/TabErrorsPage";
+import BentoGridLayout from "./components/BentoGridLayout";
+import GlassStackedCardSlide from "./components/GlassStackedCardSlide";
+import PrismGlassSlideLayout from "./components/PrismGlassSlideLayout";
+import LandingPageLayout from "./components/LandingPageLayout";
 import ErrorBoundaryHandler from "./components/ErrorBoundaryHandler";
 import XRayInspector from "./components/XRayInspector";
 import AIAssistant from "./components/ai/AIAssistant";
@@ -113,9 +117,9 @@ const SECTIONS: SectionMeta[] = [
 
 function MainContent() {
   const themeContext = useTheme();
-  const { theme, setTheme } = themeContext;
+  const { theme, setTheme, themeMode, resolvedTheme } = themeContext;
   const { t, lang } = useLanguage();
-  const { isSwitching } = useLayout();
+  const { isSwitching, layoutMode } = useLayout();
   const { footerConfig, isFooterHovered } = useFooter();
   const { isHeaderPinned, isHeaderSlidUp } = useHeader();
   const isFooterPinned = footerConfig.isPinned !== false;
@@ -157,6 +161,40 @@ function MainContent() {
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, [activeSection]);
+
+  // Scrollspy navigation feature using IntersectionObserver
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.IntersectionObserver) return;
+
+    const observerOptions = {
+      root: cardContainerRef.current || null,
+      rootMargin: "-20% 0px -60% 0px",
+      threshold: 0.15,
+    };
+
+    const handleIntersect: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          let mappedId = id.replace(/^landing-/, "").replace(/^section-/, "");
+          if (SECTIONS.some((s) => s.id === mappedId)) {
+            setActiveSection(mappedId);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    SECTIONS.forEach((section) => {
+      const el = document.getElementById(section.id) || document.getElementById(`landing-${section.id}`) || document.getElementById(`section-${section.id}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [layoutMode]);
 
   // States for Proactive Feature Modals
   const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
@@ -207,13 +245,15 @@ function MainContent() {
 
     root.setAttribute("data-theme", theme);
     root.dataset.theme = theme;
+    root.setAttribute("data-theme-mode", themeMode);
 
-    if (theme === "dark" || theme === "glass-dark-neon") {
+    const isDark = resolvedTheme === "dark" || theme === "dark" || theme === "glass-dark-neon";
+    if (isDark) {
       root.classList.add("dark", `theme-${theme}`);
     } else {
       root.classList.add(`theme-${theme}`);
     }
-  }, [theme]);
+  }, [theme, themeMode, resolvedTheme]);
 
   // Smoothly switch to specific section with direct instant transition (không hiển thị màn hình loader)
   const navigateToSection = (id: string) => {
@@ -492,53 +532,79 @@ function MainContent() {
             }}
           >
             <main className="relative w-full h-full overflow-hidden flex-grow select-auto">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={activeSection}
-                  id={`panel-${activeSection}`}
-                  role="tabpanel"
-                  aria-labelledby={`tab-${activeSection}`}
-                  tabIndex={0}
-                  className={`w-full h-full min-h-full flex flex-col focus:outline-none ${currentSection.padding} no-scrollbar scroll-smooth`}
-                  initial={
-                    theme === "soft-floating-bento"
-                      ? { y: 28, opacity: 0, scale: 0.97, filter: "blur(8px)" }
-                      : { y: 35, opacity: 0, scale: 1, filter: "blur(4px)" }
-                  }
-                  animate={{ 
-                    y: 0, 
-                    opacity: 1, 
-                    scale: 1, 
-                    filter: "blur(0px)" 
-                  }}
-                  exit={
-                    theme === "soft-floating-bento"
-                      ? { y: -20, opacity: 0, scale: 0.97, filter: "blur(6px)" }
-                      : { y: -25, opacity: 0, scale: 1, filter: "blur(4px)" }
-                  }
-                  transition={
-                    theme === "soft-floating-bento"
-                      ? {
-                          type: "spring",
-                          damping: 22,
-                          stiffness: 240,
-                          mass: 0.8,
-                          staggerChildren: 0.09,
-                          delayChildren: 0.05
-                        }
-                      : {
-                          duration: 0.4, 
-                          ease: [0.16, 1, 0.3, 1],
-                          staggerChildren: 0.08,
-                          delayChildren: 0.04
-                        }
-                  }
-                >
+              {layoutMode === "landing" ? (
+                <div className="w-full h-full overflow-hidden">
                   <Suspense fallback={null}>
-                    <CurrentComponent />
+                    <LandingPageLayout onNavigate={navigateToSection} />
                   </Suspense>
-                </motion.div>
-              </AnimatePresence>
+                </div>
+              ) : layoutMode === "prism-glass" ? (
+                <div className="w-full h-full overflow-hidden">
+                  <Suspense fallback={null}>
+                    <PrismGlassSlideLayout onNavigate={navigateToSection} />
+                  </Suspense>
+                </div>
+              ) : layoutMode === "glass-stacked" ? (
+                <div className="w-full h-full overflow-hidden">
+                  <Suspense fallback={null}>
+                    <GlassStackedCardSlide onNavigate={navigateToSection} />
+                  </Suspense>
+                </div>
+              ) : layoutMode === "bento" ? (
+                <div className="w-full h-full overflow-hidden">
+                  <Suspense fallback={null}>
+                    <BentoGridLayout onNavigate={navigateToSection} />
+                  </Suspense>
+                </div>
+              ) : (
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={activeSection}
+                    id={`panel-${activeSection}`}
+                    role="tabpanel"
+                    aria-labelledby={`tab-${activeSection}`}
+                    tabIndex={0}
+                    className={`w-full h-full min-h-full flex flex-col focus:outline-none ${currentSection.padding} no-scrollbar scroll-smooth`}
+                    initial={
+                      theme === "soft-floating-bento"
+                        ? { y: 28, opacity: 0, scale: 0.97, filter: "blur(8px)" }
+                        : { y: 35, opacity: 0, scale: 1, filter: "blur(4px)" }
+                    }
+                    animate={{ 
+                      y: 0, 
+                      opacity: 1, 
+                      scale: 1, 
+                      filter: "blur(0px)" 
+                    }}
+                    exit={
+                      theme === "soft-floating-bento"
+                        ? { y: -20, opacity: 0, scale: 0.97, filter: "blur(6px)" }
+                        : { y: -25, opacity: 0, scale: 1, filter: "blur(4px)" }
+                    }
+                    transition={
+                      theme === "soft-floating-bento"
+                        ? {
+                            type: "spring",
+                            damping: 22,
+                            stiffness: 240,
+                            mass: 0.8,
+                            staggerChildren: 0.09,
+                            delayChildren: 0.05
+                          }
+                        : {
+                            duration: 0.4, 
+                            ease: [0.16, 1, 0.3, 1],
+                            staggerChildren: 0.08,
+                            delayChildren: 0.04
+                          }
+                    }
+                  >
+                    <Suspense fallback={null}>
+                      <CurrentComponent />
+                    </Suspense>
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </main>
           </div>
 
