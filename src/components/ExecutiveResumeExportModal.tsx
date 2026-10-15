@@ -28,16 +28,16 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
   return (
     <>
       <AnimatePresence>
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+        <div className="modal-backdrop fixed inset-0 z-[100] grid place-items-center p-3 sm:p-6 overflow-y-auto overscroll-contain bg-black/75 backdrop-blur-md">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.25 }}
-            className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-indigo-500/30 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
+            className="modal-window relative w-full max-w-4xl max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)] bg-slate-900 border border-indigo-500/30 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
           >
             {/* Header Bar */}
-            <div className="flex flex-wrap items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80 gap-3">
+            <div className="modal-header flex flex-wrap items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80 gap-3 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
                   <Sparkles className="w-5 h-5" />
@@ -83,7 +83,7 @@ export default function ExecutiveResumeExportModal({ isOpen, onClose }: Executiv
             </div>
 
             {/* Printable Resume Canvas */}
-            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar bg-slate-950 space-y-4">
+            <div className="modal-body p-6 overflow-y-auto flex-1 min-h-0 custom-scrollbar bg-slate-950 space-y-4 overscroll-contain">
               {/* Floating Header info on top of Preview Container */}
               <div className="sticky top-0 z-20 w-full max-w-3xl mx-auto p-2.5 px-4 rounded-2xl bg-slate-900/95 border border-slate-800 backdrop-blur-md shadow-lg flex items-center justify-between gap-3 print:hidden">
                 <div className="flex items-center gap-2 text-xs font-bold text-slate-300">

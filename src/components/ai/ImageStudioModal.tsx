@@ -148,7 +148,7 @@ export default function ImageStudioModal({
     setErrorMsg(null);
     setExplanation(null);
     setGenerationStep(1);
-    playUiSound("open");
+    playUiSound("pop");
 
     const timer1 = setTimeout(() => setGenerationStep(2), 1500);
     const timer2 = setTimeout(() => setGenerationStep(3), 3500);
@@ -188,7 +188,7 @@ export default function ImageStudioModal({
     } catch (err: any) {
       console.error("Error generating image:", err);
       setErrorMsg(err.message || (isVi ? "Lỗi trong quá trình kết nối AI. Vui lòng thử lại." : "Error during AI generation. Please try again."));
-      playUiSound("error");
+      playUiSound("haptic");
     } finally {
       clearTimeout(timer1);
       clearTimeout(timer2);
@@ -247,13 +247,13 @@ export default function ImageStudioModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/60 backdrop-blur-md">
+      <div className="modal-backdrop fixed inset-0 z-[100] grid place-items-center p-3 sm:p-6 overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="relative w-full max-w-5xl my-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-[24px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+          className="modal-window relative w-full max-w-5xl my-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-[24px] shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)]"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/60 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50">

@@ -159,7 +159,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
 
         <div className="flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 self-stretch sm:self-auto">
           <button
-            onClick={() => { setActiveTab("search"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("search"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "search"
                 ? "bg-white dark:bg-teal-600 text-teal-600 dark:text-white shadow-md"
@@ -169,7 +169,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
             <Search className="w-3.5 h-3.5" /> Tra Cứu Tự Phục Vụ
           </button>
           <button
-            onClick={() => { setActiveTab("portal"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("portal"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "portal"
                 ? "bg-white dark:bg-teal-600 text-teal-600 dark:text-white shadow-md"
@@ -179,7 +179,7 @@ Lưu ý: Nếu tài khoản bị khóa do nhập sai quá 5 lần, hệ thống 
             <Send className="w-3.5 h-3.5" /> Cổng Ticket Minh Bạch
           </button>
           <button
-            onClick={() => { setActiveTab("roi"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("roi"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "roi"
                 ? "bg-white dark:bg-teal-600 text-teal-600 dark:text-white shadow-md"

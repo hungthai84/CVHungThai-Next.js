@@ -127,9 +127,41 @@ export function Domains() {
   return (
     <section
       id="domains"
-      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-900 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-3 sm:p-4 md:p-5 font-sans text-slate-900 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar box-border min-w-0 max-w-full"
     >
-      <div className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-[15px] mx-auto justify-start">
+      <style>{`
+        .domains-container-root {
+          container-type: inline-size;
+          container-name: domains-root;
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+        }
+        .domains-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(1, minmax(0, 1fr));
+          gap: clamp(10px, 1.8cqi, 18px);
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+          align-items: stretch;
+          justify-content: center;
+          justify-items: center;
+        }
+        @container domains-root (min-width: 480px) {
+          .domains-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @container domains-root (min-width: 768px) {
+          .domains-cards-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+      `}</style>
+      <div className="domains-container-root w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-3 sm:gap-4 mx-auto justify-start box-border min-w-0">
         
         {/* Navigation & Breadcrumbs Header */}
         <PageCardHeader pageId="domains">
@@ -362,9 +394,9 @@ export function Domains() {
             </motion.div>
           ) : (
             /* ========================================================================= */
-            /* 6 COMPACT BENTO DOMAIN CARDS (Responsive Grid View)                       */
+            /* 6 COMPACT BENTO DOMAIN CARDS (Container Query Auto-Fit Grid View)         */
             /* ========================================================================= */
-            <div className="responsive-grid-container w-full h-full flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-4.5 auto-rows-fr items-stretch pb-2 min-w-0 max-w-full @container">
+            <div className="domains-cards-grid w-full h-full flex-1 auto-rows-fr items-stretch pb-2 min-w-0 max-w-full box-border">
               {filteredDomains.map((domain, index) => {
                 const Icon = getIconComponent(domain.iconName);
 
@@ -377,7 +409,7 @@ export function Domains() {
                     onClick={() => setSelectedDomainId(domain.id)}
                     style={{ borderRadius: "var(--theme-radius-card, 12px)" }}
                     className={cn(
-                      "content-fit-card h-full p-3.5 sm:p-4 md:p-5 border flex flex-col items-center text-center justify-between gap-3 shadow-sm hover:shadow-xl cursor-pointer group/card overflow-hidden relative transition-all duration-300 hover:-translate-y-1.5 w-full max-w-full min-w-0 box-border",
+                      "content-fit-card h-full p-3 sm:p-4 border flex flex-col items-center text-center justify-between gap-2.5 shadow-sm hover:shadow-xl cursor-pointer group/card overflow-hidden relative transition-all duration-300 hover:-translate-y-1 w-full max-w-[360px] sm:max-w-none mx-auto min-w-0 box-border",
                       getGlassCardClass(),
                       domain.colorTheme.border
                     )}

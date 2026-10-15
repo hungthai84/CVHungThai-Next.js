@@ -6,7 +6,7 @@ import { AISampleQuestionsModal } from './AISampleQuestionsModal';
 import { AIMultiLevelDropdown } from './AIMultiLevelDropdown';
 import { safeStorage } from '../../lib/utils';
 
-const AI_AVATAR_URL = 'https://i.ibb.co/S4Ddv53M/Avata-Chu-t-Tr-Nh-n.gif';
+const AI_AVATAR_URL = 'https://i.ibb.co/YqTwLXG/Avata-Ti-chuoi-2.gif';
 
 interface AIPanelProps {
   isOpen: boolean;

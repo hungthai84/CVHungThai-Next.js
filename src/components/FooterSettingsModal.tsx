@@ -8,7 +8,6 @@ import {
   EyeOff, 
   RotateCcw, 
   Check, 
-  Pin,
   Sliders
 } from "lucide-react";
 import { useFooter } from "../context/FooterContext";
@@ -24,7 +23,6 @@ export default function FooterSettingsModal() {
     setIsFooterModalOpen, 
     footerConfig, 
     setPlacement, 
-    togglePin, 
     toggleElementVisibility, 
     resetFooterConfig 
   } = useFooter();
@@ -46,14 +44,14 @@ export default function FooterSettingsModal() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-        {/* Backdrop */}
+      <div className="modal-backdrop fixed inset-0 z-[100] grid place-items-center p-3 sm:p-5 overflow-y-auto overscroll-contain bg-slate-950/75 backdrop-blur-md">
+        {/* Backdrop Overlay Hit-area */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsFooterModalOpen(false)}
-          className="fixed inset-0 bg-slate-950/75 backdrop-blur-md"
+          className="fixed inset-0 bg-transparent cursor-pointer"
         />
 
         {/* Modal Window */}
@@ -63,7 +61,7 @@ export default function FooterSettingsModal() {
           exit={{ scale: 0.95, opacity: 0, y: 15 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col text-left"
+          className="modal-window relative w-full max-w-xl max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)] bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col text-left m-auto"
         >
           {/* Header */}
           <div className="p-5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 text-white flex items-center justify-between">
@@ -76,7 +74,7 @@ export default function FooterSettingsModal() {
                   {isVi ? "Cài Đặt Chân Trang (Footer Dock)" : "Footer Dock Settings"}
                 </h3>
                 <p className="text-xs text-blue-100">
-                  {isVi ? "Tùy biến vị trí hiển thị, ghim thanh điều hướng và biểu tượng" : "Customize dock placement, pin status, and quick icons"}
+                  {isVi ? "Tùy biến vị trí hiển thị và biểu tượng tiện ích" : "Customize dock placement and quick icons"}
                 </p>
               </div>
             </div>
@@ -137,36 +135,6 @@ export default function FooterSettingsModal() {
                   );
                 })}
               </div>
-            </div>
-
-            {/* Pin Toggle */}
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                  <Pin className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white">
-                    {isVi ? "Ghim Footer cố định (Pin Dock)" : "Pin Footer Dock"}
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    {isVi ? "Giữ footer luôn hiển thị cố định ở chân trang" : "Keep dock always visible at bottom edge"}
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  togglePin();
-                  playClick();
-                }}
-                className={cn(
-                  "w-11 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center",
-                  footerConfig.isPinned !== false ? "bg-blue-600 dark:bg-blue-500 justify-end" : "bg-slate-300 dark:bg-slate-700 justify-start"
-                )}
-              >
-                <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-              </button>
             </div>
           </div>
 

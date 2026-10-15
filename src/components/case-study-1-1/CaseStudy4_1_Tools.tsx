@@ -184,7 +184,7 @@ export function CaseStudy4_1_Tools() {
       setQuizScore(prev => prev + 1);
       playUiSound("success");
     } else {
-      playUiSound("toggle");
+      playUiSound("haptic");
     }
   };
 
@@ -195,7 +195,7 @@ export function CaseStudy4_1_Tools() {
       setIsSubmitted(false);
     } else {
       setQuizFinished(true);
-      playUiSound("special");
+      playUiSound("pop");
     }
   };
 
@@ -236,7 +236,7 @@ export function CaseStudy4_1_Tools() {
 
         <div className="flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 self-stretch sm:self-auto">
           <button
-            onClick={() => { setActiveTab("lms"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("lms"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "lms"
                 ? "bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-md"
@@ -246,7 +246,7 @@ export function CaseStudy4_1_Tools() {
             <BookOpen className="w-3.5 h-3.5" /> Học Viện LMS
           </button>
           <button
-            onClick={() => { setActiveTab("quiz"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("quiz"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "quiz"
                 ? "bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-md"
@@ -256,7 +256,7 @@ export function CaseStudy4_1_Tools() {
             <HelpCircle className="w-3.5 h-3.5" /> Thử Thách Tình Huống
           </button>
           <button
-            onClick={() => { setActiveTab("roi"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("roi"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "roi"
                 ? "bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-md"

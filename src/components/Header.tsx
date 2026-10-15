@@ -43,8 +43,9 @@ import { useLayout } from "../context/LayoutContext";
 import { useTheme, ThemeType, COLOR_PRESETS } from "../context/ThemeContext";
 import { useHeader } from "../context/HeaderContext";
 import { THEME_LIST } from "../data/themesData";
-import { getUnifiedSurfaceStyle } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
+import { getUnifiedSurfaceStyle } from "../lib/utils";
+import NotchedTabBar from "./NotchedTabBar";
 
 interface HeaderProps {
   theme?: ThemeType;
@@ -82,7 +83,6 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const { lang, setLang, t } = useLanguage();
   const isVi = lang === "vi";
   const { orientation, toggleOrientation, layoutMode, toggleLayoutMode } = useLayout();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredNavId, setHoveredNavId] = useState<string | null>(null);
   
   const [isHeaderThemeOpen, setIsHeaderThemeOpen] = useState(false);
@@ -164,37 +164,19 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     nav.style.setProperty("--y", `${y}px`);
   };
 
-  // Close mobile menu on resize to desktop
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
-  // Prevent background scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
 
-  // Unified theme toggle utility that synchronizes ThemeContext, localStorage, and triggers Tailwind 'dark' class on root atomically
+
+
+  const isDark = themeContext.resolvedTheme === "dark" || theme === "dark";
+
+  // Unified theme toggle utility that synchronizes ThemeContext and triggers Tailwind 'dark' class
   const handleThemeToggle = (targetTheme?: ThemeType) => {
     let nextTheme: ThemeType;
     if (targetTheme) {
       nextTheme = targetTheme;
     } else {
-      if (theme === "glass-dark-neon") nextTheme = "glass-light-multicolor";
-      else nextTheme = "glass-dark-neon";
+      nextTheme = isDark ? "glass-light-multicolor" : "dark";
     }
     setTheme(nextTheme);
   };
@@ -204,35 +186,140 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
     { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Open Letter", Icon: MailOpen, key: "L" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "domains", num: "04", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass, key: "D" },
-    { id: "skills", num: "05", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
+    { id: "education", num: "04", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+    { id: "domains", num: "05", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass, key: "D" },
     { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
+    { id: "skills", num: "07", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
     { id: "projects", num: "08", labelVi: "Dự án", labelEn: "Projects", Icon: ClipboardList, key: "7" },
-    { id: "interview", num: "09", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
-    { id: "tuvi", num: "10", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
-    { id: "memories", num: "11", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
-    { id: "contact", num: "12", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
-    { id: "systems", num: "13", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
+    { id: "systems", num: "09", labelVi: "Hệ thống", labelEn: "Systems", Icon: Server, key: "S" },
+    { id: "interview", num: "10", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", Icon: Video, key: "8" },
+    { id: "tuvi", num: "11", labelVi: "Tử Vi & Chiêm Tinh", labelEn: "TuVi & Astrology", Icon: Sparkles, key: "9" },
+    { id: "memories", num: "12", labelVi: "Kỷ niệm", labelEn: "Memories", Icon: Images, key: "M" },
+    { id: "contact", num: "13", labelVi: "Liên hệ", labelEn: "Contact", Icon: MessagesSquare, key: "C" },
     { id: "wallpapers", num: "14", labelVi: "Hình nền & Video", labelEn: "Wallpapers", Icon: Images, key: "W" },
     { id: "customization", num: "15", labelVi: "Tùy chỉnh", labelEn: "Customization", Icon: Sliders, key: "U" },
     { id: "errors", num: "16", labelVi: "Báo cáo lỗi", labelEn: "Tab Errors", Icon: ShieldAlert, key: "E" },
   ];
 
-  // Navigation Items for Top Header Center with bilingual titles for accessibility tooltips
+  // Navigation Items for Top Header Center with distinct colors and hover-expand title
   const navItems = [
-    { id: "home", labelVi: "Trang chủ", labelEn: "Home", label: t("nav.home"), Icon: Monitor },
-    { id: "letter", labelVi: "Thư ngỏ", labelEn: "Open Letter", label: t("nav.letter"), Icon: MailOpen },
-    { id: "about", labelVi: "Giới thiệu", labelEn: "About Me", label: t("nav.about"), Icon: User },
-    { id: "education", labelVi: "Học vấn", labelEn: "Academic Path", label: t("nav.education"), Icon: GraduationCap },
-    { id: "domains", labelVi: "Lĩnh vực", labelEn: "Core Domains", label: t("nav.domains"), Icon: Compass },
-    { id: "skills", labelVi: "Kỹ năng", labelEn: "Core Skills", label: t("nav.skills"), Icon: Brain },
-    { id: "experience", labelVi: "Kinh nghiệm", labelEn: "Career Journey", label: t("nav.experience"), Icon: Briefcase },
-    { id: "projects", labelVi: "Dự án", labelEn: "Key Projects", label: t("nav.projects"), Icon: ClipboardList },
-    { id: "interview", labelVi: "Phỏng vấn AI", labelEn: "AI Interview", label: t("nav.interview"), Icon: Video },
-    { id: "tuvi", labelVi: "Tử vi", labelEn: "Wisdom Profile", label: t("nav.tuvi"), Icon: Sparkles },
-    { id: "systems", labelVi: "Hệ thống", labelEn: "Systems Hub", label: t("nav.systems"), Icon: Server },
-    { id: "memories", labelVi: "Kỷ niệm", labelEn: "Team Memories", label: t("nav.memories"), Icon: Images },
-    { id: "contact", labelVi: "Liên hệ", labelEn: "Contact Hub", label: t("nav.contact"), Icon: MessagesSquare },
+    { 
+      id: "home", 
+      labelVi: "Trang chủ", 
+      labelEn: "Home", 
+      Icon: Monitor, 
+      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-sky-400/50 text-sky-700 dark:text-sky-300 backdrop-blur-md shadow-[0_0_15px_rgba(14,165,233,0.3)]", 
+      hoverBorder: "hover:border-sky-400/60 hover:text-sky-600 dark:hover:text-sky-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
+      themeColor: "#0ea5e9" 
+    },
+    { 
+      id: "letter", 
+      labelVi: "Thư Ngỏ", 
+      labelEn: "Letter", 
+      Icon: MailOpen, 
+      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-emerald-400/50 text-emerald-700 dark:text-emerald-300 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.3)]", 
+      hoverBorder: "hover:border-emerald-400/60 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
+      themeColor: "#10b981" 
+    },
+    { 
+      id: "about", 
+      labelVi: "Giới thiệu", 
+      labelEn: "About", 
+      Icon: User, 
+      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-blue-400/50 text-blue-700 dark:text-blue-300 backdrop-blur-md shadow-[0_0_15px_rgba(37,99,235,0.3)]", 
+      hoverBorder: "hover:border-blue-400/60 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
+      themeColor: "#2563eb" 
+    },
+    { 
+      id: "education", 
+      labelVi: "Học vấn", 
+      labelEn: "Education", 
+      Icon: GraduationCap, 
+      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-indigo-400/50 text-indigo-700 dark:text-indigo-300 backdrop-blur-md shadow-[0_0_15px_rgba(99,102,241,0.3)]", 
+      hoverBorder: "hover:border-indigo-400/60 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
+      themeColor: "#6366f1" 
+    },
+    { 
+      id: "domains", 
+      labelVi: "Lĩnh vực", 
+      labelEn: "Domains", 
+      Icon: Compass, 
+      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-amber-400/50 text-amber-700 dark:text-amber-300 backdrop-blur-md shadow-[0_0_15px_rgba(245,158,11,0.3)]", 
+      hoverBorder: "hover:border-amber-400/60 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
+      themeColor: "#f59e0b" 
+    },
+    { 
+      id: "experience", 
+      labelVi: "Kinh nghiệm", 
+      labelEn: "Experience", 
+      Icon: Briefcase, 
+      activeBg: "bg-gradient-to-r from-orange-500 to-amber-600 text-white border-orange-300 dark:border-orange-400 shadow-[0_0_18px_rgba(249,115,22,0.65)] ring-2 ring-orange-400/40", 
+      hoverBorder: "hover:border-orange-400/60 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-500/10",
+      themeColor: "#f97316" 
+    },
+    { 
+      id: "skills", 
+      labelVi: "Kỹ năng", 
+      labelEn: "Skills", 
+      Icon: Brain, 
+      activeBg: "bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-300 dark:border-violet-400 shadow-[0_0_18px_rgba(124,58,237,0.65)] ring-2 ring-violet-400/40", 
+      hoverBorder: "hover:border-violet-400/60 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-500/10",
+      themeColor: "#7c3aed" 
+    },
+    { 
+      id: "projects", 
+      labelVi: "Dự án", 
+      labelEn: "Projects", 
+      Icon: ClipboardList, 
+      activeBg: "bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-purple-300 dark:border-purple-400 shadow-[0_0_18px_rgba(168,85,247,0.65)] ring-2 ring-purple-400/40", 
+      hoverBorder: "hover:border-purple-400/60 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-500/10",
+      themeColor: "#a855f7" 
+    },
+    { 
+      id: "systems", 
+      labelVi: "Hệ thống", 
+      labelEn: "Systems", 
+      Icon: Server, 
+      activeBg: "bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black border-teal-300 dark:border-teal-400 shadow-[0_0_18px_rgba(20,184,166,0.65)] ring-2 ring-teal-400/40", 
+      hoverBorder: "hover:border-teal-400/60 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-teal-500/10",
+      themeColor: "#14b8a6" 
+    },
+    { 
+      id: "interview", 
+      labelVi: "Phỏng vấn", 
+      labelEn: "Interview", 
+      Icon: Video, 
+      activeBg: "bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-300 dark:border-cyan-400 shadow-[0_0_18px_rgba(6,182,212,0.65)] ring-2 ring-cyan-400/40", 
+      hoverBorder: "hover:border-cyan-400/60 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/10",
+      themeColor: "#06b6d4" 
+    },
+    { 
+      id: "tuvi", 
+      labelVi: "Tử vi", 
+      labelEn: "Astrology", 
+      Icon: Sparkles, 
+      activeBg: "bg-gradient-to-r from-pink-500 to-rose-600 text-white border-pink-300 dark:border-pink-400 shadow-[0_0_18px_rgba(236,72,153,0.65)] ring-2 ring-pink-400/40", 
+      hoverBorder: "hover:border-pink-400/60 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-500/10",
+      themeColor: "#ec4899" 
+    },
+    { 
+      id: "memories", 
+      labelVi: "Kỷ niệm", 
+      labelEn: "Memories", 
+      Icon: Images, 
+      activeBg: "bg-gradient-to-r from-rose-500 to-pink-600 text-white border-rose-300 dark:border-rose-400 shadow-[0_0_18px_rgba(244,63,94,0.65)] ring-2 ring-rose-400/40", 
+      hoverBorder: "hover:border-rose-400/60 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-500/10",
+      themeColor: "#f43f5e" 
+    },
+    { 
+      id: "contact", 
+      labelVi: "Liên hệ", 
+      labelEn: "Contact", 
+      Icon: MessagesSquare, 
+      activeBg: "bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white border-fuchsia-300 dark:border-fuchsia-400 shadow-[0_0_18px_rgba(217,70,239,0.65)] ring-2 ring-fuchsia-400/40", 
+      hoverBorder: "hover:border-fuchsia-400/60 hover:text-fuchsia-600 dark:hover:text-fuchsia-400 hover:bg-fuchsia-500/10",
+      themeColor: "#d946ef" 
+    },
   ];
 
   const handleTabKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>, index: number) => {
@@ -284,8 +371,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   };
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    setIsMobileMenuOpen(false);
+    e?.preventDefault?.();
     if (onNavigate) {
       onNavigate(id);
     } else {
@@ -306,338 +392,126 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
 
   return (
     <>
-      <header 
+      <header
         id="header"
         onMouseEnter={() => setIsHeaderHovered?.(true)}
         onMouseLeave={() => setIsHeaderHovered?.(false)}
         className={cn(
-          "fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] border-t-0 rounded-b-[14px] rounded-t-none p-[5px] flex flex-row items-center justify-between transition-all duration-300 ease-in-out shadow-none !shadow-none bg-transparent border-transparent",
-          isHeaderPinned ? "translate-y-0 opacity-100" : (isHeaderHovered ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%-14px)] opacity-95")
+          "fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-50px)] max-w-[1280px] rounded-b-[24px] rounded-t-none backdrop-blur-[20px] transition-all duration-300 flex items-center justify-between border-x border-b border-t-0 border-white/20 dark:border-white/10 shadow-xl px-2 sm:px-4 py-1.5 h-[68px] select-none box-border",
+          getHeaderContainerStyle()
         )}
-        style={{
-          height: "var(--header-height, 75px)",
-          padding: "5px",
-          borderTopLeftRadius: "0px",
-          borderTopRightRadius: "0px",
-          borderBottomLeftRadius: "var(--theme-radius-card, 14px)",
-          borderBottomRightRadius: "var(--theme-radius-card, 14px)",
-          boxShadow: "none",
-          background: "transparent"
-        }}
       >
-        {/* Peeking Colored Line Handle (Double click to pin/unpin) */}
-        {!isHeaderPinned && (
+        {/* 1. KHU VỰC TRÁI: 10% chứa Avatar Hùng Thái - Bấm vào sẽ mở vCard QR */}
+        <div className="basis-[10%] w-[10%] min-w-[56px] max-w-[10%] h-full flex items-center justify-center p-1 z-40 shrink-0">
           <div
-            onDoubleClick={(e) => {
-              e.stopPropagation();
-              togglePin?.();
-            }}
-            onClick={() => setIsHeaderHovered?.(true)}
-            className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center justify-center cursor-pointer py-1 z-30"
-            title={isVi ? "Double click để ghim/bỏ ghim Header, click để mở" : "Double click to pin/unpin Header, click to expand"}
-          >
-            <div className="h-1.5 w-20 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)] animate-pulse hover:scale-110 transition-transform" />
-          </div>
-        )}
-        {/* Hidden dummy svg to satisfy selector verification while keeping menu icons active */}
-        <svg className="hidden" aria-hidden="true" />
-
-        {/* 1. LEFT CONTAINER: Avatar only (Trái chứa Avatar, padding 5px) */}
-        <div className={cn(
-          "flex items-center shrink-0 p-[5px] transition-opacity duration-300",
-          isHeaderStackExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
-        )}>
-          <a 
-            href="#home" 
-            onClick={(e) => handleNavClick(e, "home")}
-            className="flex items-center group cursor-pointer shrink-0"
-            title="Nguyễn Hùng Thái - Trang chủ"
-          >
-            <div className="relative">
-              <img 
-                src="https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif" 
-                alt="Hùng Thái Avata Gif"
-                decoding="async"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-brand-primary/80 shadow-md group-hover:scale-105 transition-transform duration-300 ring-2 ring-brand-primary/25"
-                referrerPolicy="no-referrer"
-              />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-brand-card rounded-full" title="Online" />
-            </div>
-          </a>
-        </div>
-
-        {/* 2. CENTER CONTAINER: Direct Navigation Menu Items (Xóa bỏ wrapper ul/li, đưa nội dung ra ngoài) */}
-        <nav 
-          ref={navRef}
-          id="nb-10-bar"
-          role="tablist"
-          aria-label={lang === "vi" ? "Thanh điều hướng trang" : "Primary Navigation"}
-          className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 relative z-20 select-none overflow-x-auto no-scrollbar py-1"
-        >
-          {navItems.map((item, idx) => {
-            const isActive = activeSection === item.id;
-
-            const getNavItemTheme = (id: string, active: boolean) => {
-              switch (id) {
-                case "home": return active ? "text-blue-600 dark:text-cyan-400" : "text-blue-600 dark:text-cyan-400 hover:scale-110";
-                case "letter": return active ? "text-amber-600 dark:text-amber-400" : "text-amber-600 dark:text-amber-400 hover:scale-110";
-                case "about": return active ? "text-purple-600 dark:text-purple-400" : "text-purple-600 dark:text-purple-400 hover:scale-110";
-                case "education": return active ? "text-violet-600 dark:text-violet-400" : "text-violet-600 dark:text-violet-400 hover:scale-110";
-                case "domains": return active ? "text-emerald-600 dark:text-emerald-400" : "text-emerald-600 dark:text-emerald-400 hover:scale-110";
-                case "skills": return active ? "text-indigo-600 dark:text-indigo-400" : "text-indigo-600 dark:text-indigo-400 hover:scale-110";
-                case "experience": return active ? "text-rose-600 dark:text-rose-400" : "text-rose-600 dark:text-rose-400 hover:scale-110";
-                case "projects": return active ? "text-teal-600 dark:text-teal-400" : "text-teal-600 dark:text-teal-400 hover:scale-110";
-                case "interview": return active ? "text-pink-600 dark:text-pink-400" : "text-pink-600 dark:text-pink-400 hover:scale-110";
-                case "tuvi": return active ? "text-orange-600 dark:text-orange-400" : "text-orange-600 dark:text-orange-400 hover:scale-110";
-                case "systems": return active ? "text-sky-600 dark:text-sky-400" : "text-sky-600 dark:text-sky-400 hover:scale-110";
-                case "memories": return active ? "text-fuchsia-600 dark:text-fuchsia-400" : "text-fuchsia-600 dark:text-fuchsia-400 hover:scale-110";
-                case "contact": return active ? "text-red-600 dark:text-red-400" : "text-red-600 dark:text-red-400 hover:scale-110";
-                default: return active ? "text-indigo-600 dark:text-indigo-400" : "text-slate-600 dark:text-slate-300 hover:scale-110";
-              }
-            };
-
-            return (
-              <a
-                key={item.id}
-                id={`tab-${item.id}`}
-                role="tab"
-                aria-selected={isActive ? "true" : "false"}
-                aria-controls={`panel-${item.id}`}
-                tabIndex={isActive ? 0 : -1}
-                ref={(el) => { itemRefs.current[item.id] = el; }}
-                href={`#${item.id}`}
-                onClick={(e) => handleNavClick(e, item.id)}
-                onKeyDown={(e) => handleTabKeyDown(e, idx)}
-                aria-label={item.label}
-                title={item.label}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "header-nav-btn h-8 sm:h-9 min-h-[32px] flex items-center justify-center cursor-pointer relative shrink-0 px-3 rounded-[999px] transition-all duration-300 border backdrop-blur-md shadow-md active:scale-95",
-                  isActive
-                    ? "bg-white/50 dark:bg-white/25 shadow-xs border-white/70 dark:border-white/30 font-bold scale-105"
-                    : "bg-white/20 dark:bg-white/10 border-white/25 dark:border-white/10 hover:bg-white/30 dark:hover:bg-white/15"
-                )}
-              >
-                <div className="relative flex items-center justify-center shrink-0 z-10">
-                  <item.Icon 
-                    className={cn(
-                      "w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform",
-                      isActive ? "scale-110 drop-shadow-[0_0_6px_currentColor]" : "hover:scale-110",
-                      getNavItemTheme(item.id, isActive)
-                    )} 
-                  />
-                </div>
-                <span className={cn(
-                  "text-[13px] sm:text-[14px] font-bold whitespace-nowrap ml-1.5 relative z-10",
-                  getNavItemTheme(item.id, isActive)
-                )}>
-                  {item.label}
-                </span>
-              </a>
-            );
-          })}
-        </nav>
-
-        {/* 3. RIGHT CONTAINER: Language, Theme, Layout buttons with dropdown list boxes, Menu Icon & AI Assistant Avatar (padding 5px) */}
-        <div className={cn(
-          "flex items-center justify-end shrink-0 p-[5px] z-40 gap-1.5 sm:gap-2 transition-opacity duration-300",
-          isHeaderStackExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
-        )}>
-          {/* NÚT MENU ICON ÁP DỤNG NAV GLASS LIQUID */}
-          <button
-            type="button"
+            className="relative h-full flex items-center justify-center cursor-pointer group"
+            title={isVi ? "Anh Nguyễn Hùng Thái - Bấm xem danh thiếp vCard & Mã QR" : "Mr. Nguyen Hung Thai - Click for vCard QR"}
             onClick={() => {
               try { playUiSound("click"); } catch {}
-              setIsMobileMenuOpen((prev) => !prev);
+              window.dispatchEvent(new CustomEvent('open-vcard-qr'));
             }}
-            aria-label={isMobileMenuOpen ? (isVi ? "Đóng danh mục menu" : "Close navigation menu") : (isVi ? "Mở danh mục menu (Nav Glass Liquid)" : "Open navigation menu")}
-            aria-expanded={isMobileMenuOpen}
-            className={cn(
-              "nav-glass-liquid-btn relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full",
-              "cursor-pointer group select-none transition-all duration-300",
-              isMobileMenuOpen
-                ? "bg-rose-500/20 dark:bg-rose-500/30 border-rose-400/60 text-rose-600 dark:text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.35)]"
-                : "text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-300 hover:border-cyan-400/50"
-            )}
-            title={isMobileMenuOpen ? (isVi ? "Đóng danh mục" : "Close menu") : (isVi ? "Danh mục điều hướng (Nav Glass Liquid)" : "Navigation Menu")}
           >
-            {/* Lớp phản quang thủy tinh lỏng (Liquid Specular Shine) */}
-            <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/70 via-transparent to-transparent opacity-60 dark:opacity-25 pointer-events-none" />
-            
-            {/* Biến hình Morph icon giữa Menu và X với hiệu ứng đàn hồi Spring */}
-            <motion.div
-              key={isMobileMenuOpen ? "liquid-menu-close" : "liquid-menu-open"}
-              initial={{ rotate: -90, scale: 0.6, opacity: 0 }}
-              animate={{ rotate: 0, scale: 1, opacity: 1 }}
-              exit={{ rotate: 90, scale: 0.6, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 450, damping: 22 }}
-              className="relative z-10 flex items-center justify-center"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-4.5 h-4.5 stroke-[2.4] drop-shadow-xs" />
-              ) : (
-                <Menu className="w-4.5 h-4.5 stroke-[2.4] group-hover:scale-110 transition-transform duration-200 drop-shadow-xs" />
-              )}
-            </motion.div>
-          </button>
+            <div className="relative h-[48px] w-[48px] sm:h-[54px] sm:w-[54px] rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 shadow-lg shadow-cyan-500/30 flex items-center justify-center overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <img
+                src="https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif"
+                alt="Hùng Thái Avata Gif"
+                className="w-full h-full object-cover rounded-full"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse shadow-sm z-10" title="Online" />
+          </div>
+        </div>
 
-          {/* AI Assistant Avatar Button */}
+        {/* 2. KHU VỰC GIỮA: Menu icon với hiệu ứng Over Mouse & Chọn trang màu sắc riêng biệt */}
+        <nav
+          ref={navRef}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleNavMouseEnter}
+          className="flex-1 flex items-center justify-center h-full px-1 overflow-x-auto no-scrollbar scroll-smooth py-1 w-full max-w-full z-30"
+          aria-label="Navigation Header Menu"
+        >
+          <div className="flex items-center h-full justify-center gap-1 sm:gap-1.5 min-w-0 p-[2px] select-none">
+            {navItems.map((item, idx) => {
+              const isActive = activeSection === item.id;
+              const displayTitle = isVi ? item.labelVi : item.labelEn;
+
+              return (
+                <a
+                  key={item.id}
+                  ref={(el) => { itemRefs.current[item.id] = el; }}
+                  href={`#${item.id}`}
+                  onClick={(e) => handleNavClick(e, item.id)}
+                  onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                  title={displayTitle}
+                  className={cn(
+                    "group/btn relative h-9 min-h-[36px] rounded-full flex items-center transition-all duration-300 cursor-pointer select-none shrink-0 border outline-none",
+                    isActive
+                      ? cn(
+                          "px-3 z-30 font-bold scale-[1.03]",
+                          item.activeBg
+                        )
+                      : cn(
+                          "px-2.5 z-10 bg-white/50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 border-slate-200/70 dark:border-white/10 shadow-2xs backdrop-blur-md",
+                          item.hoverBorder,
+                          "hover:z-20 hover:scale-[1.04] hover:shadow-md hover:px-3"
+                        )
+                  )}
+                  style={{
+                    boxSizing: "border-box"
+                  }}
+                >
+                  {/* Icon with glow */}
+                  <div className="relative flex items-center justify-center shrink-0 w-4 h-4 z-10">
+                    <item.Icon className={cn("w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-300 group-hover/btn:scale-110", isActive && "drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]")} />
+                  </div>
+
+                  {/* Tiêu đề bên phải icon: Luôn hiển thị khi chọn trang (active), hoặc trượt mở rộng hiển thị khi over mouse (hover) */}
+                  <span 
+                    className={cn(
+                      "relative z-10 text-[11px] sm:text-[12px] font-bold whitespace-nowrap transition-all duration-300 ease-out font-play tracking-tight",
+                      isActive 
+                        ? "max-w-[140px] opacity-100 ml-1.5" 
+                        : "max-w-0 opacity-0 overflow-hidden ml-0 group-hover/btn:max-w-[130px] group-hover/btn:opacity-100 group-hover/btn:ml-1.5"
+                    )}
+                  >
+                    {displayTitle}
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </nav>
+
+        {/* 3. KHU VỰC PHẢI: 10% chứa Avatar AI hỗ trợ */}
+        <div className="basis-[10%] w-[10%] min-w-[56px] max-w-[10%] h-full flex items-center justify-center p-1 z-40 shrink-0">
           <button
             type="button"
             onClick={() => {
               try { playUiSound("click"); } catch {}
               window.dispatchEvent(new CustomEvent('open-ai-assistant'));
+              window.dispatchEvent(new CustomEvent('toggle-ai-chat'));
             }}
-            className="flex items-center justify-center p-1 sm:p-1.5 rounded-full bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-blue-500/15 dark:from-purple-500/25 dark:to-cyan-500/25 border border-purple-400/40 dark:border-cyan-400/30 backdrop-blur-xl shadow-xs hover:scale-110 active:scale-95 transition-all cursor-pointer group"
-            title={isVi ? "Mở Trợ lý AI Hỗ trợ & Hỏi đáp hồ sơ" : "Open AI Assistant"}
+            className="h-full flex items-center justify-center cursor-pointer group p-0.5"
+            title={isVi ? "Mở Trợ lý AI Hỗ trợ - Trao đổi thông minh" : "Open AI Support Assistant"}
           >
-            <div className="relative flex items-center justify-center">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 dark:from-cyan-500 dark:to-blue-600 text-white flex items-center justify-center shadow-xs">
-                <Bot className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+            <div className="relative h-full flex items-center justify-center">
+              <div className="relative h-[48px] w-[48px] sm:h-[54px] sm:w-[54px] rounded-full p-[2.5px] bg-gradient-to-tr from-purple-500 via-pink-500 to-cyan-400 shadow-lg shadow-purple-500/30 flex items-center justify-center overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <img
+                  src="https://i.ibb.co/YqTwLXG/Avata-Ti-chuoi-2.gif"
+                  alt="Avata Ti chuoi 2"
+                  className="w-full h-full object-cover rounded-full"
+                  referrerPolicy="no-referrer"
+                />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse" />
+              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-cyan-400 border-2 border-white dark:border-slate-900 animate-pulse shadow-sm z-10" title="AI Support Ready" />
             </div>
           </button>
         </div>
       </header>
-
-      {/* Mobile Drawer Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden flex flex-col justify-between pt-20 pb-8 px-6 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-2xl animate-in fade-in slide-in-from-top-4 duration-300 overflow-y-auto">
-          {/* Menu Items */}
-          <div className="space-y-2 pt-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between px-3 pb-2 gap-2 border-b border-slate-200/10 dark:border-white/10 mb-2">
-              <span className="text-2xs font-bold uppercase tracking-wider text-brand-primary/80">
-                {lang === "vi" ? "Giao diện & Bố cục" : "Themes & Layout"}
-              </span>
-              <div className="flex flex-wrap items-center gap-1.5">
-                {/* Theme options on mobile */}
-                <button
-                  onClick={() => {
-                    setTheme("glass-light-multicolor");
-                  }}
-                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
-                    theme === "glass-light-multicolor"
-                      ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-400/50 font-black shadow-sm"
-                      : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
-                  }`}
-                  title="☀️ Giao diện Sáng"
-                >
-                  <Sun className="w-3 h-3 text-amber-500" />
-                  <span>{lang === "vi" ? "Sáng" : "Light"}</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setTheme("glass-dark-neon");
-                  }}
-                  className={`flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer ${
-                    theme === "glass-dark-neon"
-                      ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/50 font-black shadow-sm shadow-cyan-500/20"
-                      : "bg-slate-200/40 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border-transparent"
-                  }`}
-                  title="⚡ Neon Tối"
-                >
-                  <Sparkles className="w-3 h-3 text-cyan-400" />
-                  <span>Neon</span>
-                </button>
-
-                {/* Divider */}
-                <span className="text-slate-300 dark:text-slate-700 mx-0.5 font-normal">|</span>
-
-                {/* Bố cục: Bento Grid / Slide Card */}
-                <button
-                  onClick={toggleLayoutMode}
-                  className={cn(
-                    "flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 cursor-pointer",
-                    layoutMode === "bento"
-                      ? "bg-cyan-500/20 text-cyan-400 border-cyan-400/50 shadow-sm shadow-cyan-500/20"
-                      : "bg-blue-500/15 text-blue-400 border-blue-400/30"
-                  )}
-                  title={isVi ? "Chuyển đổi Bố cục (Slide / Bento Grid)" : "Toggle Layout (Slide / Bento Grid)"}
-                >
-                  {layoutMode === "bento" ? <LayoutGrid className="w-3.5 h-3.5" /> : <LayoutTemplate className="w-3.5 h-3.5" />}
-                  <span>{layoutMode === "bento" ? "Bento Grid" : (lang === "vi" ? "Thẻ Slide" : "Slide")}</span>
-                </button>
-
-                {/* Divider */}
-                <span className="text-slate-300 dark:text-slate-700 mx-0.5 font-normal">|</span>
-
-                <button
-                  onClick={toggleOrientation}
-                  className="flex items-center gap-1 text-2xs font-bold text-indigo-400 bg-indigo-500/15 border border-indigo-500/30 px-2.5 py-1 rounded-full active:scale-95 cursor-pointer"
-                >
-                  <Columns3 className="w-3.5 h-3.5" />
-                  <span>{isHorizontal ? (lang === "vi" ? "Ngang" : "Horiz") : (lang === "vi" ? "Dọc" : "Vert")}</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {ALL_14_SECTIONS.map((item) => {
-                const isActive = activeSection === item.id;
-                const Icon = item.Icon;
-                return (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    onClick={(e) => handleNavClick(e, item.id)}
-                    className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? "bg-brand-primary/15 border-brand-primary/40 text-brand-primary font-bold shadow-md"
-                        : "bg-white/5 border-white/10 text-slate-200 hover:bg-white/10 font-medium"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-xl shrink-0 ${
-                        isActive ? "bg-brand-primary text-white" : "bg-white/10 text-slate-300"
-                      }`}>
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-semibold truncate">
-                          {lang === "vi" ? item.labelVi : item.labelEn}
-                        </span>
-                        <span className="text-3xs text-slate-400 font-mono">
-                          #{item.num} {item.key ? `[Phím ${item.key}]` : ""}
-                        </span>
-                      </div>
-                    </div>
-                    {isActive && <span className="w-2.5 h-2.5 rounded-full bg-brand-primary animate-pulse shrink-0" />}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Quick Action Box in Mobile Menu */}
-          <div className="pt-6 space-y-3">
-            <button
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('open-ai-assistant'));
-                setIsMobileMenuOpen(false);
-              }}
-              className="glow-btn w-full py-3 text-sm flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Sparkles className="w-4.5 h-4.5" />
-              <span>{lang === "vi" ? "Mở Trợ lý AI" : "Open AI Assistant"}</span>
-            </button>
-
-            <div className="flex items-center justify-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200/10 dark:border-white/10">
-              <a href="mailto:thai.hung.cs@gmail.com" className="flex items-center gap-1.5 hover:text-slate-900 dark:text-white transition-colors">
-                <Mail className="w-4 h-4 text-brand-primary" />
-                thai.hung.cs@gmail.com
-              </a>
-              <span>•</span>
-              <a href="tel:0909097882" className="flex items-center gap-1.5 hover:text-slate-900 dark:text-white transition-colors">
-                <Phone className="w-4 h-4 text-brand-primary" />
-                0909 097 882
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
 
 export default memo(Header);
+

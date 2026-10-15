@@ -27,10 +27,14 @@ import {
   CheckCircle2, 
   Layers, 
   LayoutGrid, 
-  Send 
+  Send,
+  Film,
+  Sliders,
+  ShieldAlert
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
+import { useLayout } from "../context/LayoutContext";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { playUiSound } from "../lib/sound";
 import profileData from "../data/profile.json";
@@ -38,6 +42,7 @@ import { DOMAINS_DATA } from "../data/domainsData";
 import { SYSTEMS_12_DATA } from "./Systems";
 
 interface BentoGridLayoutProps {
+  activeSection?: string;
   onNavigate?: (sectionId: string) => void;
 }
 
@@ -68,9 +73,11 @@ const bentoItemVariants = {
 };
 
 export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) => {
-  const { lang } = useLanguage();
-  const { theme } = useTheme();
+  const { lang, setLang } = useLanguage();
+  const { theme, openThemeModal } = useTheme();
+  const { setLayoutMode } = useLayout();
   const isVi = lang === "vi";
+  const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = React.useState(false);
 
   const handleGoTo = (id: string) => {
     try {
@@ -114,7 +121,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
         variants={bentoContainerVariants}
         initial="hidden"
         animate="show"
-        className="w-full max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4.5 auto-rows-min"
+        className="w-full max-w-[1280px] mx-auto columns-1 md:columns-2 lg:columns-3 gap-4.5 [column-fill:_balance] pb-28"
       >
         {/* ========================================================================= */}
         {/* CARD 1: HERO & EXECUTIVE IDENTITY (Span 8 trên Desktop)                   */}
@@ -123,7 +130,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           variants={bentoItemVariants}
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           className={cn(
-            "bento-card col-span-1 md:col-span-2 lg:col-span-8 p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group",
             getGlassStyle()
           )}
         >
@@ -210,7 +217,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           variants={bentoItemVariants}
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           className={cn(
-            "bento-card col-span-1 md:col-span-2 lg:col-span-4 p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
             getGlassStyle()
           )}
         >
@@ -287,7 +294,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("experience")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -345,7 +352,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("domains")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -398,7 +405,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("skills")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -462,7 +469,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("projects")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -529,7 +536,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("education")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-4 p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -585,7 +592,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("systems")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-4 p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -635,7 +642,7 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           onClick={() => handleGoTo("letter")}
           className={cn(
-            "bento-card col-span-1 md:col-span-1 lg:col-span-4 p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group",
             getGlassStyle()
           )}
         >
@@ -676,13 +683,82 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
         </motion.div>
 
         {/* ========================================================================= */}
-        {/* CARD 10: BANNER LIÊN HỆ & KẾT NỐI HỢP TÁC (Span 12 trên Desktop)          */}
+        {/* CARD 10: TÙY BIẾN, HÌNH NỀN & SỰ CỐ HỆ THỐNG (Span 4 trên Desktop)         */}
         {/* ========================================================================= */}
         <motion.div
           variants={bentoItemVariants}
           style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
           className={cn(
-            "bento-card col-span-1 md:col-span-2 lg:col-span-12 p-5 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-5 relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl",
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 flex flex-col justify-between relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
+            getGlassStyle()
+          )}
+        >
+          <div>
+            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200/60 dark:border-white/10">
+              <div className="w-8 h-8 rounded-xl bg-violet-500/15 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+                <Sliders className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
+                  {isVi ? "Bộ Tiện Ích & Tùy Biến" : "Utilities & Studio"}
+                </h3>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                  {isVi ? "Hình nền, font chữ & sự cố" : "Wallpapers, themes, issues"}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2 my-2 text-left">
+              {/* Wallpapers */}
+              <button
+                type="button"
+                onClick={() => handleGoTo("wallpapers")}
+                className="w-full p-2.5 rounded-xl bg-slate-100/70 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 hover:border-purple-400/50 flex items-center justify-between text-xs font-bold transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2">
+                  <Film className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
+                  <span className="text-slate-800 dark:text-slate-200">{isVi ? "Thư Viện Hình Nền" : "Wallpapers Gallery"}</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              {/* Customization */}
+              <button
+                type="button"
+                onClick={() => handleGoTo("customization")}
+                className="w-full p-2.5 rounded-xl bg-slate-100/70 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 hover:border-cyan-400/50 flex items-center justify-between text-xs font-bold transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform" />
+                  <span className="text-slate-800 dark:text-slate-200">{isVi ? "Tùy Biến Giao Diện & Font" : "Theme & Font Studio"}</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              {/* Errors System Status */}
+              <button
+                type="button"
+                onClick={() => handleGoTo("errors")}
+                className="w-full p-2.5 rounded-xl bg-slate-100/70 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 hover:border-rose-400/50 flex items-center justify-between text-xs font-bold transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 text-rose-500 group-hover:scale-110 transition-transform" />
+                  <span className="text-slate-800 dark:text-slate-200">{isVi ? "Sự Cố System Status" : "System Issues Tracker"}</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ========================================================================= */}
+        {/* CARD 11: BANNER LIÊN HỆ & KẾT NỐI HỢP TÁC (Span 12 trên Desktop)          */}
+        {/* ========================================================================= */}
+        <motion.div
+          variants={bentoItemVariants}
+          style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
+          className={cn(
+            "bento-card break-inside-avoid mb-4.5 w-full inline-block p-5 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-5 relative overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl",
             getGlassStyle()
           )}
         >
@@ -715,6 +791,114 @@ export const BentoGridLayout: React.FC<BentoGridLayoutProps> = ({ onNavigate }) 
           </div>
         </motion.div>
       </motion.div>
+
+      {/* ========================================================================= */}
+      {/* BENTO PINTEREST FLOATING QUICK ACCESS DOCK (Thay thế Header & Footer)     */}
+      {/* ========================================================================= */}
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-1.5 px-3.5 rounded-full bg-slate-900/90 dark:bg-black/92 backdrop-blur-2xl border border-cyan-400/40 shadow-[0_15px_40px_rgba(0,0,0,0.6),0_0_25px_rgba(0,229,255,0.25)] text-white select-none">
+        {/* Avatar Mini */}
+        <div 
+          onClick={() => handleGoTo("home")}
+          className="flex items-center gap-2 cursor-pointer pr-2 border-r border-white/20 group"
+          title="Trang Chủ"
+        >
+          <img 
+            src="https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif"
+            alt="Avatar"
+            className="w-7 h-7 rounded-full object-cover border border-cyan-400/50 group-hover:scale-105 transition-transform"
+            referrerPolicy="no-referrer"
+          />
+          <span className="text-xs font-black font-play hidden sm:inline">Hùng Thái</span>
+        </div>
+
+        {/* Nút Đổi Bố Cục Popover */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsLayoutDropdownOpen((prev) => !prev)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-500/25 hover:bg-purple-500/40 text-purple-200 border border-purple-400/40 text-xs font-bold cursor-pointer transition-all"
+            title="Đổi Bố Cục"
+          >
+            <LayoutGrid className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{isVi ? "Bố Cục (Bento)" : "Layout"}</span>
+          </button>
+
+          {isLayoutDropdownOpen && (
+            <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-[240px] rounded-2xl bg-slate-950/95 border border-cyan-400/40 p-2 shadow-2xl z-50 text-left space-y-1 backdrop-blur-2xl">
+              <span className="text-[10px] font-mono font-bold text-slate-400 px-2 block">
+                {isVi ? "Chọn 5 Bố Cục:" : "Choose 5 Layouts:"}
+              </span>
+              <button
+                type="button"
+                onClick={() => { setLayoutMode("card-page"); setIsLayoutDropdownOpen(false); }}
+                className="w-full text-left px-2 py-1.5 rounded-lg text-xs font-bold hover:bg-white/10 text-white flex items-center justify-between"
+              >
+                <span>1. Card Page</span>
+                <span className="text-[9px] text-cyan-400">Mặc định</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setLayoutMode("dashboard"); setIsLayoutDropdownOpen(false); }}
+                className="w-full text-left px-2 py-1.5 rounded-lg text-xs font-bold hover:bg-white/10 text-white"
+              >
+                2. Dashboard
+              </button>
+              <button
+                type="button"
+                onClick={() => { setLayoutMode("slide-stack"); setIsLayoutDropdownOpen(false); }}
+                className="w-full text-left px-2 py-1.5 rounded-lg text-xs font-bold hover:bg-white/10 text-white"
+              >
+                3. Slide Stack
+              </button>
+              <button
+                type="button"
+                onClick={() => { setLayoutMode("landing"); setIsLayoutDropdownOpen(false); }}
+                className="w-full text-left px-2 py-1.5 rounded-lg text-xs font-bold hover:bg-white/10 text-white"
+              >
+                4. Landing Page
+              </button>
+              <button
+                type="button"
+                onClick={() => { setLayoutMode("bento-pinterest"); setIsLayoutDropdownOpen(false); }}
+                className="w-full text-left px-2 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/25 text-cyan-300 flex items-center justify-between"
+              >
+                <span>5. Bento Pinterest</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* In PDF */}
+        <button
+          type="button"
+          onClick={() => { window.dispatchEvent(new CustomEvent("open-resume-export")); }}
+          className="p-1.5 rounded-full hover:bg-white/15 text-rose-300 transition-colors"
+          title="In PDF"
+        >
+          <Printer className="w-4 h-4" />
+        </button>
+
+        {/* Ngôn ngữ */}
+        <button
+          type="button"
+          onClick={() => setLang(isVi ? "en" : "vi")}
+          className="px-2 py-1 rounded-full hover:bg-white/15 text-xs font-bold font-mono text-emerald-300 transition-colors"
+          title="Đổi ngôn ngữ"
+        >
+          {lang.toUpperCase()}
+        </button>
+
+        {/* AI Assistant */}
+        <button
+          type="button"
+          onClick={() => { window.dispatchEvent(new CustomEvent("open-ai-assistant")); }}
+          className="p-1.5 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-md hover:scale-105 transition-transform"
+          title="Trợ lý AI"
+        >
+          <Bot className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 };

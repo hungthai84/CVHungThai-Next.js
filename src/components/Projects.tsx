@@ -506,7 +506,7 @@ export default function Projects() {
               <button
                 type="button"
                 onClick={() => {
-                  playUiSound("toggle");
+                  playUiSound("click");
                   setIsFilterOpen((prev) => !prev);
                 }}
                 className={cn(
@@ -551,7 +551,7 @@ export default function Projects() {
                           key={f.id}
                           type="button"
                           onClick={() => {
-                            playUiSound("toggle");
+                            playUiSound("click");
                             setSelectedPhase(f.id);
                             setIsFilterOpen(false);
                           }}
@@ -624,7 +624,7 @@ export default function Projects() {
                 id="card-projects-list-content"
                 className="w-full flex flex-col gap-4"
               >
-                <div id="projects-grid-content" className="p-[var(--grid-margin,15px)] grid grid-cols-12 gap-[var(--grid-gutter,16px)] w-full items-start">
+                <>
                   {filteredProjects.map((card, cardIndex) => {
                     const theme = getCardColorTheme(card, cardIndex);
                     const isSelected = selectedCardId === card.id;
@@ -725,7 +725,7 @@ export default function Projects() {
                         </motion.div>
                       );
                     })}
-                </div>
+                </>
                 </div>
             )}
           </div>

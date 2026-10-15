@@ -227,12 +227,12 @@ export const AISampleQuestionsModal: React.FC<AISampleQuestionsModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 bg-slate-50/70 dark:bg-slate-950/70 backdrop-blur-md animate-fade-in">
+      <div className="modal-backdrop fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-5 overflow-y-auto overscroll-contain bg-slate-50/70 dark:bg-slate-950/70 backdrop-blur-md animate-fade-in">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-4xl max-h-[90vh] glass-surface backdrop-blur-2xl rounded-3xl border border-slate-200/50 dark:border-slate-800/80 shadow-2xl overflow-hidden flex flex-col"
+          className="modal-window relative w-full max-w-4xl max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)] m-auto glass-surface backdrop-blur-2xl rounded-3xl border border-slate-200/50 dark:border-slate-800/80 shadow-2xl overflow-hidden flex flex-col"
         >
           {/* TOP HEADER */}
           <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white flex items-center justify-between gap-3 shrink-0">

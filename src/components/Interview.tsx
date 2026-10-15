@@ -15,7 +15,12 @@ import {
   Layers,
   Award,
   RotateCcw,
-  ListVideo
+  ListVideo,
+  Mic,
+  MicOff,
+  Radio,
+  Square,
+  Trash2
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { cn } from "../lib/utils";
@@ -41,6 +46,77 @@ export function Interview() {
 
   // Active Question State (0 to 13)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  // Voice Recording & Practice Mode state
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [recordedAudios, setRecordedAudios] = useState<{ [key: number]: string }>({});
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isSpeakingTts, setIsSpeakingTts] = useState(false);
+
+  const handleToggleTts = (textToRead: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    if (isSpeakingTts) {
+      window.speechSynthesis.cancel();
+      setIsSpeakingTts(false);
+    } else {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = isVi ? "vi-VN" : "en-US";
+      utterance.rate = 1.0;
+      utterance.onend = () => setIsSpeakingTts(false);
+      utterance.onerror = () => setIsSpeakingTts(false);
+      setIsSpeakingTts(true);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const url = URL.createObjectURL(blob);
+        setRecordedAudios((prev) => ({ ...prev, [currentQuestionIndex]: url }));
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      setRecordingSeconds(0);
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
+    } catch (_err) {
+      alert(isVi ? "Vui lòng cấp quyền truy cập Micro để thực hành thu âm!" : "Please grant Microphone permission to practice recording!");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+    }
+  };
+
+  const deleteRecording = (qIdx: number) => {
+    setRecordedAudios((prev) => {
+      const next = { ...prev };
+      delete next[qIdx];
+      return next;
+    });
+  };
 
   // Category Filter State with sessionStorage persistence
   const [activeTab, setActiveTab] = useState(() => {
@@ -201,11 +277,8 @@ export function Interview() {
           </div>
         </PageCardHeader>
 
-        {/* Optimised grid layout: Left for Video Presentation (70%), Right for Response Details (30%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 sm:gap-5 w-full items-stretch flex-1 p-[15px] h-full min-h-[520px] lg:h-[600px] overflow-hidden rounded-2xl max-w-full">
-
-          {/* LEFT AREA: Video Presentation Screen Card (70% on Desktop) */}
-          <div className="w-full lg:col-span-7 flex flex-col h-full min-h-0">
+        {/* 1. Video Presentation Screen Card */}
+        <div className="w-full flex flex-col h-auto min-h-0">
             
             {/* 1. Video Player Hero Card */}
             <div 
@@ -417,6 +490,86 @@ export function Interview() {
                       </div>
                     </div>
                   )}
+
+                  {/* Voice Practice & Recording Section */}
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-900/90 text-white border border-cyan-500/30 shadow-lg space-y-2.5 my-2">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+                        <span className="text-xs font-black uppercase tracking-wider text-cyan-300">
+                          {isVi ? "🎤 Luyện tập Giọng nói Thực tế" : "🎤 Voice Practice Mode"}
+                        </span>
+                      </div>
+
+                      {/* TTS Play Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleTts(isVi ? currentQ.answerVi : currentQ.answerEn)}
+                        className={cn(
+                          "px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer border",
+                          isSpeakingTts
+                            ? "bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse"
+                            : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30 hover:bg-indigo-500/30"
+                        )}
+                        title={isVi ? "Nghe AI đọc câu trả lời chuẩn" : "Listen to AI voice answer"}
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                        <span>{isSpeakingTts ? (isVi ? "Dừng đọc" : "Stop Voice") : (isVi ? "Nghe AI Đọc" : "Listen AI Voice")}</span>
+                      </button>
+                    </div>
+
+                    {/* Mic Recording Controls */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                      {!isRecording ? (
+                        <button
+                          type="button"
+                          onClick={startRecording}
+                          className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs font-black shadow-md shadow-cyan-500/20 flex items-center gap-2 cursor-pointer transition"
+                        >
+                          <Mic className="w-4 h-4" />
+                          <span>{isVi ? "Thu Âm Trả Lời" : "Record Your Answer"}</span>
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={stopRecording}
+                            className="px-3 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-black shadow-md shadow-rose-500/30 flex items-center gap-2 cursor-pointer transition animate-pulse"
+                          >
+                            <Square className="w-4 h-4 fill-current" />
+                            <span>{isVi ? "Dừng Thu" : "Stop"}</span>
+                          </button>
+                          <span className="text-xs font-mono font-bold text-rose-400 animate-pulse flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full bg-rose-500" />
+                            <span>00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}</span>
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Display Recorded Audio Player if available for this question */}
+                      {recordedAudios[currentQuestionIndex] && (
+                        <div className="flex items-center gap-2 bg-slate-800/80 p-1.5 px-3 rounded-xl border border-slate-700">
+                          <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
+                            <Mic className="w-3 h-3" />
+                            <span>{isVi ? "Bản ghi:" : "Recorded:"}</span>
+                          </span>
+                          <audio
+                            src={recordedAudios[currentQuestionIndex]}
+                            controls
+                            className="h-7 w-36 sm:w-44 accent-cyan-500"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => deleteRecording(currentQuestionIndex)}
+                            className="p-1 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition"
+                            title={isVi ? "Xóa bản thu âm" : "Delete recording"}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
               </div>
@@ -456,10 +609,8 @@ export function Interview() {
               </div>
             </div>
           </div>
-
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
 

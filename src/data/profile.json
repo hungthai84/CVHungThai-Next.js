@@ -1,180 +1,328 @@
 {
   "profile": {
     "name": "Nguyễn Hùng Thái",
-    "title": "Senior Customer Experience & Customer Service Leader (CX / CS Manager)",
-    "introduction": "Xin chào! Tôi là Nguyễn Hùng Thái, chuyên gia Lãnh đạo Vận hành Chăm sóc Khách hàng (CS) & Trải nghiệm Khách hàng (CX) với hơn 22 năm kinh nghiệm thực chiến trong việc quản lý Call Center, tối ưu hóa quy trình dịch vụ và chuyển đổi số CRM.",
-    "professional_summary": "Chuyên gia hoạch định chiến lược và điều hành hệ thống CSKH quy mô lớn. Tối ưu hóa các chỉ số CSAT, NPS, FCR, AHT và Service Level. Lãnh đạo và đào tạo đội ngũ nhân sự từ 50 - 500+ nhân sự, tiên phong ứng dụng công nghệ AI Chatbot và Omni-channel Contact Center.",
-    "career_summary": "Hơn 22 năm cống hiến trong ngành Dịch vụ Khách hàng, kinh qua các vị trí từ Chuyên viên Vận hành, Trưởng nhóm, Trưởng phòng CSKH đến Giám đốc/Truyền trưởng CX tại các tập đoàn và doanh nghiệp hàng đầu.",
+    "title": "Trưởng Phòng Dịch vụ Khách hàng / Head of CX / CS Director",
+    "introduction": "Tôi là Nguyễn Hùng Thái – Chuyên gia Trải nghiệm Khách hàng | Nhà lãnh đạo Chăm sóc Khách hàng | Chăm sóc tận tâm | Vận hành hiệu quả | 22 năm thực chiến cống hiến.",
+    "avatarUrl": "https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif",
+    "professional_summary": "Chuyên gia hoạch định chiến lược và điều hành hệ thống CSKH quy mô lớn. Tối ưu hóa các chỉ số CSAT, NPS, FCR, AHT và Service Level. Lãnh đạo và đào tạo đội ngũ nhân sự từ 50 - 150+ nhân sự, tiên phong ứng dụng công nghệ AI Chatbot, RAG & Automation CRM thế hệ mới.",
+    "career_summary": "Hơn 22 năm cống hiến trong ngành Dịch vụ Khách hàng qua các mốc son: MobiFone (2003), Viễn Liên V247 (2007), LBC HTVC (2011), Garena / VED / Shopee (2013), Prudential (2016), MoMo (2018), Ví ECO (2023), và sẵn sàng đón nhận thử thách mới (2026+).",
     "core_values": [
-      "Tận tâm (Dedication) - Lấy khách hàng làm trung tâm",
-      "Thấu cảm (Empathy) - Lắng nghe và thấu hiểu góc nhìn người dùng",
-      "Hiệu quả (Efficiency) - Tối ưu hóa quy trình dựa trên dữ liệu thực tế",
-      "Sáng tạo (Innovation) - Ứng dụng công nghệ và AI vào trải nghiệm dịch vụ"
+      "Quy trình tạo nền tảng",
+      "Con người tạo giá trị",
+      "Công nghệ tạo đòn bẩy",
+      "Lấy khách hàng làm trung tâm trong mọi quyết định"
     ],
-    "philosophy": "Chăm sóc khách hàng không chỉ là giải quyết sự cố, mà là nghệ thuật xây dựng lòng tin bền vững và gia tăng giá trị thương hiệu thông qua từng điểm chạm dịch vụ.",
-    "mission": "Kiến tạo hệ thống CSKH chuẩn quốc tế, giúp doanh nghiệp nâng tầm trải nghiệm người dùng và chuyển đổi đội ngũ CS từ trung tâm chi phí thành trung tâm gia tăng doanh thu.",
+    "philosophy": "Sự hài lòng của khách hàng không đến từ sự hoàn hảo, mà đến từ sự đồng cảm kịp thời.",
+    "mission": "Kiến tạo hệ thống CSKH chuẩn quốc tế, giúp doanh nghiệp nâng tầm trải nghiệm người dùng và chuyển đổi đội ngũ CS từ trung tâm chi phí thành trung tâm gia tăng giá trị.",
     "years_experience": 22
   },
   "experiences": [
     {
       "id": "exp-1",
-      "company": "Tập đoàn Vận hành & Công nghệ Dịch vụ",
-      "position": "Trưởng phòng Vận hành CSKH & Trải nghiệm Khách hàng (CX Manager)",
-      "period": "2018 - Hiện tại",
+      "company": "Sẵn sàng cho thử thách mới",
+      "position": "Head of CX / CS Director / Trưởng Phòng Dịch vụ Khách hàng",
+      "period": "2026+ đến hiện tại",
       "responsibilities": [
-        "Quản lý và điều hành trực tiếp Contact Center quy mô 150+ nhân sự trên các kênh Hotline, Live Chat, Email và Social Media.",
-        "Xây dựng và chuẩn hóa toàn bộ bộ quy trình SOP (Standard Operating Procedure), kịch bản xử lý khiếu nại nâng cao.",
-        "Xây dựng bộ chỉ số KPI hàng tháng: CSAT (>92%), NPS (>65), FCR (>85%), SLA (98%), AHT (<180s).",
-        "Triển khai dự án tích hợp AI Chatbot & Auto Routing giúp giảm 35% khối lượng cuộc gọi lặp lại."
+        "Hoạch định và thực thi chiến lược CX Strategy 2026+;",
+        "Tích hợp Generative AI, RAG & Automation CRM thế hệ mới;",
+        "Chuẩn hóa và tối ưu hóa vận hành Contact Center đa kênh;",
+        "Kiến tạo bộ chỉ số KPI, CSAT, NPS, FCR, SLA chuẩn quốc tế COPC;",
+        "Đào tạo phát triển lãnh đạo kế thừa."
       ],
-      "team_size": "150+ nhân sự",
+      "team_size": "100 – 150+ nhân sự",
       "achievements": [
-        "Nâng chỉ số hài lòng khách hàng CSAT từ 82% lên 94.5% trong vòng 12 tháng.",
-        "Tối ưu hóa chi phí vận hành Contact Center 22% nhờ tự động hóa quy trình phân loại vé hỗ trợ.",
-        "Đạt giải thưởng Đội ngũ Chăm sóc Khách hàng Xuất sắc nhất năm."
+        "Đảm bảo tính liên tục của dịch vụ 24/7",
+        "Duy trì tiêu chuẩn CSAT/NPS tối thiểu 95% - 98%, chuẩn hóa 100% tài liệu quy trình vận hành SOP."
       ],
-      "domain": "Contact Center / E-Commerce / FinTech"
+      "domain": "Công nghệ / FinTech / Bảo hiểm / Bưu chính / Game & eSports / Viễn thông / CRM & Chuyển đổi số"
     },
     {
       "id": "exp-2",
-      "company": "Tập đoàn Viễn thông & Dịch vụ Khách hàng",
-      "position": "Trưởng nhóm Quản lý Chất lượng (QA & Training Leader)",
-      "period": "2012 - 2018",
+      "company": "Công ty Cổ phần Công nghệ Finviet (Ví điện tử ECO)",
+      "position": "Trưởng Phòng Dịch vụ Khách hàng",
+      "period": "2023 - 2024",
       "responsibilities": [
-        "Thiết lập hệ thống đánh giá chất lượng cuộc gọi (QA Scorecard) và chuẩn mực giao tiếp khách hàng.",
-        "Tổ chức đào tạo định kỳ về kỹ năng mềm, kỹ năng lắng nghe thấu cảm, xử lý khủng hoảng truyền thông.",
-        "Trực tiếp thẩm định và giải quyết các case khiếu nại phức tạp cấp độ cao."
+        "Quản lý và điều hành toàn diện phòng CSKH đa kênh (Phone, Chat, Email, Social);",
+        "Xây dựng cơ cấu tổ chức và mục tiêu phòng ban;",
+        "Thiết lập hệ thống tự động hóa xử lý ticket;",
+        "Chuẩn hóa quy trình tra soát giao dịch ví;",
+        "Kiểm soát rủi ro gian lận;",
+        "Phân tích dữ liệu nghe ghi âm phục vụ đào tạo;",
+        "Triển khai AI Bot hỗ trợ 24/7."
       ],
-      "team_size": "50+ Chuyên viên QA & Trainer",
+      "team_size": "17 nhân sự trực tiếp",
       "achievements": [
-        "Đào tạo thành công hơn 1,200 nhân sự CSKH đầu vào đạt chuẩn nghiệp vụ.",
-        "Giảm tỷ lệ khiếu nại leo thang (Escalated Complaints) xuống dưới 1.2%."
+        "Đảm bảo xử lý 100% khiếu nại cước và tra soát tài chính đúng quy trình SLA",
+        "Nâng cao tỷ lệ giải quyết triệt để và minh bạch giao dịch ví điện tử."
       ],
-      "domain": "Telecommunications & Call Center"
+      "domain": "FinTech / Ví điện tử / Công nghệ tài chính"
+    },
+    {
+      "id": "exp-3",
+      "company": "Công ty Cổ phần Mservice (Ví điện tử MoMo)",
+      "position": "Trưởng Phòng Dịch vụ Khách hàng",
+      "period": "2018 - 2021",
+      "responsibilities": [
+        "Quản lý điều hành phòng CSKH đa kênh trong giai đoạn người dùng bùng nổ mạnh mẽ;",
+        "Kiến trúc hệ thống CRM MoMo Admin tích hợp Core Banking;",
+        "Phối hợp phòng Sản phẩm & Pháp lý thiết lập quy trình xử lý sự cố công nghệ mới;",
+        "Quản trị toàn bộ KPIs phòng ban;",
+        "Thành lập Trung tâm Hỗ trợ Khách hàng (Helpdesk/FAQ);",
+        "Giám sát tiêu chuẩn SLA đối tác BPO Mắt Bảo."
+      ],
+      "team_size": "60 nhân sự nội bộ + Hàng trăm nhân sự BPO",
+      "achievements": [
+        "Đảm bảo SLA tiếp nhận cuộc gọi > 98%",
+        "Duy trì trải nghiệm liền mạch không ma sát cho hàng triệu người dùng ví ngay cả trong các đợt cao điểm Lễ/Tết & chiến dịch Mega-sale."
+      ],
+      "domain": "FinTech / Ví điện tử / Thanh toán số"
+    },
+    {
+      "id": "exp-4",
+      "company": "Công ty Bảo hiểm Nhân thọ Prudential Vietnam",
+      "position": "Trưởng Phòng Call Center",
+      "period": "2016 - 2018",
+      "responsibilities": [
+        "Quản lý hệ thống Call Center cao cấp trên nền tảng AS400 & CRM Prudential Life;",
+        "Sắp xếp nhân sự vận hành hệ thống mới;",
+        "Kết nối E-Commerce với Call Center;",
+        "Xây dựng quy trình tư vấn VideoCall tiên phong;",
+        "Hiệu chỉnh hệ thống kế hoạch liên tục kinh doanh (BCP);",
+        "Phối hợp giải quyết quyền lợi bảo hiểm và đáo hạn hợp đồng."
+      ],
+      "team_size": "12 nhân sự trực tiếp + 40+ Chuyên viên tư vấn",
+      "achievements": [
+        "Đảm bảo tính chính xác tuyệt đối trong tư vấn hợp đồng bảo hiểm",
+        "Kiến tạo trải nghiệm khách hàng 5 sao và đạt tỷ lệ FCR > 92%."
+      ],
+      "domain": "Bảo hiểm nhân thọ / Tài chính cao cấp"
+    },
+    {
+      "id": "exp-5",
+      "company": "Công ty Cổ phần Việt Nam eSport (VED, Shopee, Garena, ShopeePay)",
+      "position": "Trưởng Phòng Dịch vụ Khách hàng",
+      "period": "2013 - 2016",
+      "responsibilities": [
+        "Tham gia xây dựng hệ thống CSKH cho các sản phẩm mới từ giai đoạn khởi tạo (Shopee, AirPay, Liên Quân Mobile, LMHT);",
+        "Quản lý tổ chức bộ máy 130 nhân sự;",
+        "Chuẩn hóa Visual SOP;",
+        "Kiến trúc CRM nội bộ Garena Customer Desk;",
+        "Đào tạo đội ngũ quản lý cấp trung;",
+        "Giải quyết khiếu nại đơn hàng TMĐT & sự cố tài khoản game lượng truy cập khủng; phối hợp CSKH tại các giải đấu eSports lớn."
+      ],
+      "team_size": "130 nhân sự trực tiếp",
+      "achievements": [
+        "Đảm bảo tốc độ phản hồi Ticket/Chat cực nhanh (> 50,000 ticket/ngày)",
+        "Bảo mật tài khoản người dùng và khả năng chịu tải siêu cao trong các sự kiện game & Mega-sale."
+      ],
+      "domain": "eSports / Game Online / E-commerce / Ví điện tử"
+    },
+    {
+      "id": "exp-6",
+      "company": "Công ty CPTT Băng Rộng Cuộc Sống - LBC HTVC",
+      "position": "Trưởng Phòng Dịch vụ Khách hàng",
+      "period": "2011 - 2013",
+      "responsibilities": [
+        "Quản lý điều hành toàn diện phòng CSKH;",
+        "Cải thiện sản phẩm dịch vụ;",
+        "Thực hiện khảo sát độ hài lòng khách hàng;",
+        "Phối hợp phòng Marketing triển khai chương trình khuyến mãi;",
+        "Phân tích đối thủ cạnh tranh, lập kế hoạch và trực tiếp thăm hỏi khách hàng VIP;",
+        "Xây dựng và kiểm soát ngân sách CSKH hàng năm."
+      ],
+      "team_size": "12 nhân sự trực tiếp",
+      "achievements": [
+        "Đảm bảo quy trình xử lý sự cố tín hiệu truyền hình & internet nhanh chóng",
+        "Gia tăng chỉ số giữ chân khách hàng (Retention Rate) và sự gắn kết thương hiệu."
+      ],
+      "domain": "Truyền thông / Truyền hình cáp HTVC / Internet Băng rộng"
+    },
+    {
+      "id": "exp-7",
+      "company": "Công ty Viễn Liên V247",
+      "position": "Giám sát Chăm sóc Khách hàng",
+      "period": "2007 - 2011",
+      "responsibilities": [
+        "Quản lý và giám sát vận hành đội ngũ CSKH đa kênh (Email, Fax, Phone, Live Chat);",
+        "Phân bổ cuộc gọi theo lưu lượng thực tế;",
+        "Đánh giá chất lượng cuộc gọi (QA Call Scoring);",
+        "Huấn luyện kỹ năng cho nhân viên;",
+        "Lập lịch trực ca 24/7;",
+        "Giải quyết khiếu nại cước viễn thông quốc tế."
+      ],
+      "team_size": "12 nhân sự trực tiếp",
+      "achievements": [
+        "Đảm bảo chất lượng thoại và thời gian kết nối thông suốt 24/7",
+        "Hỗ trợ kịp thời cho kiều bào và khách hàng quốc tế."
+      ],
+      "domain": "Viễn thông quốc tế / Contact Center 24/7"
+    },
+    {
+      "id": "exp-8",
+      "company": "Công ty Viễn thông Mobifone",
+      "position": "Nhân viên CSKH",
+      "period": "2003 - 2007",
+      "responsibilities": [
+        "Tiếp nhận và tư vấn cước, dịch vụ viễn thông di động MobiFone;",
+        "Xử lý các khiếu nại phức tạp;",
+        "Thực hiện cuộc gọi Outbound khảo sát chất lượng dịch vụ;",
+        "Hỗ trợ hướng dẫn nghiệp vụ cho nhân viên mới;",
+        "Xử lý các tình huống cuộc gọi quấy rối khẩn cấp."
+      ],
+      "team_size": "12 nhân sự nhóm",
+      "achievements": [
+        "Tuân thủ nghiêm ngặt chuẩn mực tác phong tư vấn",
+        "Quy trình chăm sóc khách hàng tiêu chuẩn tập đoàn viễn thông hàng đầu."
+      ],
+      "domain": "Viễn thông di động / Call Center tập đoàn"
     }
   ],
   "skills": [
     {
-      "category": "Lãnh đạo & Vận hành CS",
+      "category": "Điểm mạnh : Nền tảng vận hành & lãnh đạo",
       "skills": [
-        "Điều hành Call Center / Contact Center",
-        "Hoạch định Chiến lược CX (Customer Journey Mapping)",
-        "Quản lý Đội ngũ & Phát triển Nhân sự (50 - 500+ người)",
-        "Tối ưu hóa Bộ Chỉ số KPI: CSAT, NPS, FCR, AHT, SLA, Turnover Rate",
-        "Xây dựng & Chuẩn hóa Quy trình SOP"
+        "Trải nghiệm khách hàng (98%): Xây dựng và tối ưu hóa trải nghiệm khách hàng toàn diện",
+        "CRM Contact Center (96%): Quản trị và vận hành hệ thống CRM & Contact Center đa kênh",
+        "Quản trị Hiệu suất (96%): Thiết lập và theo dõi bộ chỉ số KPI/SLA vận hành",
+        "Lãnh đạo & Đội ngũ (95%): Lãnh đạo, đào tạo và phát triển đội ngũ quy mô lớn",
+        "SOP & Chuẩn hóa (95%): Xây dựng quy trình vận hành tiêu chuẩn chuẩn hóa 100%",
+        "Xử lý Khủng hoảng (94%): Quản trị sự cố và xử lý khủng hoảng dịch vụ khẩn cấp"
       ]
     },
     {
-      "category": "Công nghệ & Công cụ CRM",
+      "category": "Hoàn thiện : Nâng cao năng lực quản trị",
       "skills": [
-        "Hệ thống CRM: Salesforce, Zendesk, Freshdesk, HubSpot, Zoho",
-        "Omni-channel Contact Center: Genesys, Avaya, Cisco, Stringee",
-        "Ứng dụng AI & Automation: AI Chatbot, Voicebot, Auto Ticketing",
-        "Phân tích Dữ liệu CSKH: PowerBI, Google Looker Studio, Excel Pivot"
+        "Tư duy dịch vụ (92%): Định hướng triết lý phụng sự và văn hóa thấu cảm trong tổ chức",
+        "Giao tiếp & Đàm phán (90%): Kỹ năng truyền thông, thuyết phục và đàm phán cấp cao",
+        "Tư duy Chiến lược (88%): Hoạch định tầm nhìn dài hạn và chuyển đổi chiến lược CX",
+        "Quản trị Dự án (88%): Điều hành các dự án cải tiến theo phương pháp Agile/Kanban",
+        "Công nghệ Đổi mới (86%): Nghiên cứu và thử nghiệm công nghệ nâng cao hiệu suất",
+        "Thiết kế & Lập trình (78%): Tự phát triển kỹ năng kỹ thuật để làm chủ hệ thống số"
       ]
     },
     {
-      "category": "Quản trị Chất lượng & Đào tạo",
+      "category": "Cơ hội : Công nghệ & chuyển đổi dịch vụ",
       "skills": [
-        "Xây dựng Khung Đánh giá QA (QA Framework & Scorecard)",
-        "Thiết kế Chương trình Đào tạo Chuyên viên CSKH",
-        "Xử lý Khiếu nại Leo thang & Khủng hoảng Truyền thông",
-        "Quản lý Dự án Agile / Scrum / Kanban"
+        "AI & Tự động hóa (94%): Ứng dụng Generative AI và RPA tự động hóa thao tác",
+        "Kaizen & Cải tiến (94%): Tư duy cải tiến liên tục quy trình và loại bỏ lãng phí",
+        "Tối ưu Chi phí (93%): Tối ưu hóa Cost-to-Serve nhưng vẫn giữ vững chất lượng CSAT",
+        "Chuyển đổi Số (92%): Số hóa toàn diện kênh tương tác và luồng công việc CSKH",
+        "Quản trị Dữ liệu (91%): Khai thác dữ liệu hành vi và phân tích cảm xúc khách hàng VoC",
+        "Thiết kế Hệ thống (87%): Kiến trúc hạ tầng Contact Center linh hoạt và mở rộng dễ dàng"
+      ]
+    },
+    {
+      "category": "Thách thức : Thích ứng & quản trị biến động",
+      "skills": [
+        "Tối ưu Chi phí (94%): Áp lực giảm chi phí vận hành nhưng phải duy trì hiệu năng cao",
+        "AI & Thay đổi CSKH (92%): Tốc độ chuyển đổi AI nhanh đòi hỏi tái đào tạo nhân sự kịp thời",
+        "Công nghệ Đổi mới (90%): Sự xuất hiện liên tục của các công cụ số mới trên thị trường",
+        "Quản trị Rủi ro (90%): Rủi ro biến động nhân sự, an toàn thông tin và khủng hoảng CSKH",
+        "Cạnh tranh Nhân sự (88%): Tỷ lệ xoay dòng nhân sự ngành CSKH cao, đòi hỏi chính sách giữ chân tốt",
+        "Phối hợp Liên phòng (86%): Xung đột điểm nghẽn quy trình giữa CSKH, Sản phẩm và Kinh doanh"
       ]
     }
   ],
   "projects": [
     {
       "id": "proj-1",
-      "name": "Chuyển đổi Số Hệ thống Contact Center Đa kênh (Omni-channel CX Transformation)",
-      "role": "Trưởng Dự án Chuyển đổi Vận hành",
-      "description": "Tích hợp toàn bộ các kênh liên lạc (Hotline, Zalo OA, Facebook Messenger, Email, Web Chat) về một màn hình điều khiển hợp nhất (Single Pane of Glass).",
+      "name": "Xây dựng và vận hành Phòng Dịch vụ Khách hàng",
+      "role": "Head of CX / CS Director / Strategic CX Lead",
+      "description": "Áp dụng phương pháp tiếp cận linh hoạt: Xây dựng mới hoàn chỉnh (Greenfield) cho các doanh nghiệp tăng trưởng nhanh hoặc Tái cấu trúc & Chuẩn hóa (Restructuring/Standardization).",
       "responsibilities": [
-        "Lựa chọn đối tác giải pháp công nghệ và thiết kế luồng xử lý thông tin.",
-        "Đào tạo 150+ nhân sự chuyển đổi thao tác từ hệ thống cũ sang nền tảng Omni-channel.",
-        "Thiết lập kịch bản phân luồng tự động theo phân hạng khách hàng V.I.P."
+        "Khảo sát & Đánh giá hiện trạng",
+        "Thiết kế Sơ đồ tổ chức 6 khối & Mô hình phối hợp 3 tuyến",
+        "Chuẩn hóa Quy trình SOP & Ma trận OLA/SLA",
+        "Tích hợp Công nghệ & Hệ thống CRM Omnichannel"
       ],
-      "technology": ["Zendesk Omni-channel", "AI Auto-routing", "VoIP SIP Trunk", "PowerBI"],
-      "result": "Tăng tốc độ phản hồi ban đầu (First Response Time) gấp 3 lần, tăng FCR thêm 18%."
-    },
-    {
-      "id": "proj-2",
-      "name": "Triển khai Trợ lý AI Chatbot & Tự động hóa Phản hồi Khách hàng",
-      "role": "Cố vấn Trải nghiệm Khách hàng & Kịch bản AI",
-      "description": "Xây dựng hệ thống Trợ lý AI tự động giải đáp 80+ câu hỏi thường gặp (FAQ) 24/7 và hỗ trợ tra cứu trạng thái đơn hàng.",
-      "responsibilities": [
-        "Xây dựng ma trận intent và kịch bản hội thoại tự nhiên cho AI Chatbot.",
-        "Kiểm thử và tinh chỉnh phản hồi theo tiêu chuẩn thấu cảm và thân thiện."
-      ],
-      "technology": ["Generative AI", "NLP Bot", "Webhook Integration", "CRM API"],
-      "result": "Giải phóng 35% lưu lượng cuộc gọi lặp lại cho tổng đài viên, tiết kiệm hơn 400 triệu VNĐ/năm chi phí vận hành."
+      "technology": ["Zendesk", "Salesforce", "Omnichannel", "Smart Routing"],
+      "result": "Rút ngắn thời gian phản hồi đầu tiên (FRT) từ 45 phút xuống 2.8 phút (giảm 93.7%)."
     }
   ],
   "education": [
     {
-      "year": "2005",
-      "degree": "Quản trị hệ thống MCSA",
-      "details": "học Học phần quản trị hệ thống máy chủ"
+      "institution": "GitHub & Dự án thực tế",
+      "degree": "Thiết kế Web, UI/UX & AI Automation",
+      "year": "2026",
+      "details": "Kỹ thuật lập trình web, thiết kế giao diện UI/UX chuẩn Responsive và ứng dụng AI Agent Workflows trong tự động hóa vận hành."
     },
     {
-      "year": "2006",
-      "degree": "Quản trị hệ thống CCNA",
-      "details": "học Học phần quản lý mạng"
-    },
-    {
-      "year": "2007",
-      "degree": "Chứng nhận Tổng đài viên Mobifone.",
-      "details": "Hoàn thành khoá đào tạo nội bộ chuẩn hoá tổng đài viên Do mobifone chứng nhận"
-    },
-    {
-      "year": "2007",
-      "degree": "Bằng Đại học CNTT",
-      "details": "Hoàn thành khóa học chính quy trường ĐH Công Nghệ STU"
-    },
-    {
-      "year": "2013",
-      "degree": "Thuyết trình",
-      "details": "Hoàn thành kỹ năng thuyết trình từ Vietnam Work"
-    },
-    {
-      "year": "2013",
-      "degree": "Đào tạo",
-      "details": "Hoàn thành kỹ năng Đào tạo và từ Vietnam Work"
-    },
-    {
-      "year": "2013",
-      "degree": "Phỏng vấn",
-      "details": "Hoàn thành kỹ năng phỏng vấn từ Vietnam Work"
-    },
-    {
-      "year": "2014",
-      "degree": "Quản lý cấp trung",
-      "details": "Được hỗ trợ học phần từ Cty VED hoàn tất khoá học quản lý"
-    },
-    {
-      "year": "2015",
-      "degree": "Quản lý cấp cao",
-      "details": "Được hỗ trợ học phần từ Cty VED hoàn tất khoá học quản lý"
-    },
-    {
-      "year": "2016",
-      "degree": "Quản lý Dự án",
-      "details": "Được đào tạo quản lý dự án và rủi ro từ Cty Prudential"
-    },
-    {
-      "year": "2017",
-      "degree": "Quản lý rủi ro",
-      "details": "Được đào tạo quản lý dự án và rủi ro từ Cty Prudential"
-    },
-    {
+      "institution": "Prudential Vietnam",
+      "degree": "Phân tích dữ liệu",
       "year": "2019",
-      "degree": "Phân tích dữ liệu Bigdata",
-      "details": "Cập nhật thêm học phần phân tích dữ liệu cho báo cáo"
+      "details": "Chương trình đào tạo chuyên sâu về khai thác, xử lý và mô hình hóa dữ liệu lớn nhằm phục vụ công tác quản trị doanh nghiệp."
     },
     {
-      "year": "2024",
-      "degree": "Thiết kế hệ thống Webpages",
-      "details": "Cập nhật các ngôn ngữ C++ / PHP / CSS / HTML"
+      "institution": "Prudential Vietnam",
+      "degree": "Quản trị rủi ro",
+      "year": "2017",
+      "details": "Đào tạo nâng cao năng lực nhận diện, đánh giá và kiểm soát rủi ro trong hoạt động vận hành và dịch vụ khách hàng."
+    },
+    {
+      "institution": "Prudential Vietnam",
+      "degree": "Quản lý dự án",
+      "year": "2016",
+      "details": "Khóa học quản trị dự án theo phương pháp luận chuẩn quốc tế, kiểm soát toàn diện vòng đời dự án."
+    },
+    {
+      "institution": "Dale Carnegie & VED",
+      "degree": "Quản lý cấp cao",
+      "year": "2015",
+      "details": "Chương trình phát triển năng lực điều hành và tư duy lãnh đạo chiến lược dành cho quản lý cấp cao."
+    },
+    {
+      "institution": "Dale Carnegie & VED",
+      "degree": "Quản lý cấp trung",
+      "year": "2014",
+      "details": "Khóa đào tạo kỹ năng quản lý thực chiến và điều hành đội ngũ phòng ban hiệu quả."
+    },
+    {
+      "institution": "VietnamWorks",
+      "degree": "Kỹ năng Đào tạo",
+      "year": "2013",
+      "details": "Khóa học phương pháp sư phạm doanh nghiệp, thiết kế bài giảng và nghệ thuật làm chủ sân khấu truyền cảm hứng."
+    },
+    {
+      "institution": "VietnamWorks",
+      "degree": "Kỹ năng Thuyết trình",
+      "year": "2013",
+      "details": "Phương pháp xây dựng bài thuyết trình chuyên nghiệp, truyền đạt ý tưởng mạch lạc."
+    },
+    {
+      "institution": "VietnamWorks",
+      "degree": "Kỹ năng Phỏng vấn",
+      "year": "2013",
+      "details": "Chương trình đào tạo kỹ thuật phỏng vấn và đánh giá tiềm năng nhân sự chuyên nghiệp."
+    },
+    {
+      "institution": "VietnamWorks",
+      "degree": "Kỹ năng Tuyển dụng",
+      "year": "2013",
+      "details": "Chương trình đào tạo chiến lược tuyển dụng và xây dựng thương hiệu tuyển dụng chuyên nghiệp."
+    },
+    {
+      "institution": "Trường ĐH Công nghệ Sài Gòn (STU)",
+      "degree": "Cử nhân CNTT",
+      "year": "2007",
+      "details": "Chương trình đào tạo đại học chính quy về khoa học máy tính, kỹ thuật phần mềm và hệ thống thông tin."
+    },
+    {
+      "institution": "MobiFone",
+      "degree": "Tổng đài viên chuyên nghiệp",
+      "year": "2007",
+      "details": "Chương trình đào tạo chuẩn hóa nghiệp vụ vận hành Contact Center và chăm sóc khách hàng viễn thông."
+    },
+    {
+      "institution": "Trường Nghề Nhất Nghệ",
+      "degree": "Quản trị mạng CCNA",
+      "year": "2006",
+      "details": "Chương trình đào tạo quản trị hạ tầng mạng Cisco tiêu chuẩn quốc tế."
+    },
+    {
+      "institution": "Trường Nghề Nhất Nghệ",
+      "degree": "Quản trị hệ thống MCSA",
+      "year": "2005",
+      "details": "Khóa đào tạo chuyên sâu về quản trị hạ tầng hệ thống máy chủ doanh nghiệp Microsoft Windows Server."
     }
   ],
   "certifications": [
@@ -198,14 +346,17 @@
     "gender": "Nam giới",
     "ethnicity": "Kinh",
     "maritalStatus": "Độc thân",
-    "birthDate": "22/06/1984",
-    "temporaryResidence": "Q7, Hồ Chí Minh",
-    "permanentResidence": "Mỹ Tho, Tiền Giang",
+    "birthDate": "22/06/1984 (Giáp Tý - Mệnh Hải Trung Kim, Cung Đoài Kim)",
+    "temporaryResidence": "Quận 7, TP. Hồ Chí Minh",
+    "permanentResidence": "TP. Mỹ Tho, Tỉnh Tiền Giang",
     "email": "hungthai84@gmail.com",
-    "phone": "0909097882",
+    "phone": "+84 0909097882",
+    "zalo": "https://zalo.me/0909097882",
     "linkedin": "https://www.linkedin.com/in/hungthai84/",
     "github": "https://github.com/hungthai84",
     "website": "https://nguyenhungthai.powerservice.one/",
-    "location": "Q7, Hồ Chí Minh"
+    "portfolioNetlify": "https://nguyenhungthaiportfolio.netlify.app/",
+    "googleCalendar": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1a3Mw_pkdsalTQ8K30r6bUr8UJ1591ZRowrMZn07qSE1n9QBEoQ06TGv9p3MCKctU-tQ2Z-0ma?gv=true",
+    "location": "Quận 7, TP. Hồ Chí Minh"
   }
 }

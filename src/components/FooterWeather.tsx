@@ -7,7 +7,8 @@ import {
   ChevronDown,
   Navigation,
   X,
-  Umbrella
+  Umbrella,
+  Sparkles
 } from "lucide-react";
 import GlassWeatherIcon from "./GlassWeatherIcon";
 import FlipClock from "./FlipClock";
@@ -314,14 +315,14 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "relative group flex items-center gap-2 xs:gap-2.5 px-3 py-1.5 rounded-[14px] overflow-hidden text-left cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-[0_4px_16px_rgba(0,0,0,0.18)] border border-white/30 active:scale-95 shrink-0 select-none",
+            "relative group flex items-center gap-2 xs:gap-2.5 px-3 py-1.5 rounded-[999px] overflow-hidden text-left cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-[0_4px_16px_rgba(0,0,0,0.18)] border border-white/30 active:scale-95 shrink-0 select-none",
             weatherCard.gradient
           )}
-          style={{ height: "46px" }}
+          style={{ height: "46px", borderRadius: "999px" }}
           title={lang === "vi" ? `Thời tiết: ${weather.temp}°C tại ${weather.city}` : `Weather: ${weather.temp}°C in ${weather.city}`}
         >
           {/* Top glossy glass reflection highlight line */}
-          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 via-white/10 to-transparent pointer-events-none rounded-t-[14px]" />
+          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 via-white/10 to-transparent pointer-events-none rounded-t-[999px]" />
 
           {/* Left: 3D Weather Icon visual with soft aura */}
           <div className="relative flex items-center justify-center shrink-0">
@@ -528,6 +529,21 @@ export default function FooterWeather({ layoutMode = "vertical", timeString, dat
                 );
               })}
             </div>
+          </div>
+
+          {/* 3D Weather Cards Collection Trigger */}
+          <div className="pt-2 mt-2 border-t border-slate-100 dark:border-white/10">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                window.dispatchEvent(new CustomEvent("open-3d-weather-modal"));
+              }}
+              className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-pink-500 to-cyan-500 hover:from-amber-400 hover:to-cyan-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-slate-950 animate-spin-slow" />
+              <span>{lang === "vi" ? "Bộ sưu tập Thẻ Thời Tiết 3D" : "3D Glass Weather Gallery"}</span>
+            </button>
           </div>
 
         </div>

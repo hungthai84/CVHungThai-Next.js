@@ -14,7 +14,6 @@ import {
   Clock,
   ShieldCheck,
   Sparkles,
-  HelpCircle,
   ChevronDown,
   Briefcase,
   Building2,
@@ -58,7 +57,6 @@ export function Contact() {
   const [formSuccess, setFormSuccess] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Topics list matching specification
@@ -88,28 +86,6 @@ export function Contact() {
       labelEn: "AI & Omni-channel Integration",
       textVi: "Tôi cần tư vấn tích hợp AI Chatbot và Omni-channel Contact Center (Zendesk / Salesforce).",
       textEn: "I need advice on integrating AI Chatbot and Omni-channel Contact Center (Zendesk / Salesforce)."
-    }
-  ];
-
-  // FAQ Data
-  const faqs = [
-    {
-      qVi: "Thời gian phản hồi sau khi gửi yêu cầu liên hệ là bao lâu?",
-      qEn: "How quickly do you respond to inquiry submissions?",
-      aVi: "Tôi luôn ưu tiên phản hồi trong vòng 24 giờ làm việc. Với các đề xuất khẩn cấp hoặc dự án chiến lược, thời gian phản hồi thường trong vòng 2–4 giờ làm việc.",
-      aEn: "I prioritize responding within 24 business hours. For urgent proposals or strategic advisory, response time is usually within 2–4 hours during office hours."
-    },
-    {
-      qVi: "Anh Thái có nhận tư vấn dự án ngắn hạn hoặc đào tạo doanh nghiệp không?",
-      qEn: "Do you offer short-term advisory or customized corporate training?",
-      aVi: "Có. Tôi nhận tư vấn chiến lược CX/CSKH, thẩm định hệ thống Contact Center, xây dựng bộ tiêu chuẩn QA Scorecard và đào tạo nâng cao kỹ năng cho đội ngũ lãnh đạo & nhân sự CSKH.",
-      aEn: "Yes. I offer CX/CS strategic advisory, Contact Center audits, QA Scorecard framework development, and specialized training for CS leaders and operational teams."
-    },
-    {
-      qVi: "Thông tin dự án và ý tưởng trao đổi có được cam kết bảo mật không?",
-      qEn: "Are project details and discussion ideas guaranteed to be confidential?",
-      aVi: "Cam kết bảo mật 100%. Mọi dữ liệu trao đổi, số liệu vận hành và ý tưởng chiến lược của doanh nghiệp đều được bảo mật tuyệt đối. Sẵn sàng ký kết thỏa thuận NDA (Non-Disclosure Agreement) trước khi đi vào chi tiết.",
-      aEn: "100% Confidentiality guaranteed. All business operational metrics, strategies, and project details remain strictly confidential with NDA agreements signed upon request."
     }
   ];
 
@@ -221,7 +197,6 @@ export function Contact() {
         </PageCardHeader>
 
         {/* Two Separate Contact Cards Side-by-Side (or stacked on mobile) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
           
           {/* CARD 1: Contact Hub, Direct Channels & Illustration (lg:col-span-5) */}
           <motion.div
@@ -573,54 +548,6 @@ export function Contact() {
             </form>
 
           </motion.div>
-
-        </div>
-
-        {/* FAQ Accordion Section */}
-        <div className={cn("p-5 sm:p-7 rounded-3xl border space-y-4", getGlassCardClass())}>
-          <div className="flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
-            <h3 className="text-base sm:text-lg font-bold font-play text-slate-800 dark:text-white">
-              {isVi ? "Câu hỏi thường gặp khi liên hệ" : "Frequently Asked Questions"}
-            </h3>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaqIndex === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 overflow-hidden transition-all"
-                >
-                  <button
-                    onClick={() => {
-                      try { playUiSound("click"); } catch {}
-                      setOpenFaqIndex(isOpen ? null : idx);
-                    }}
-                    className="w-full px-4 py-3.5 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors"
-                  >
-                    <span>{isVi ? faq.qVi : faq.qEn}</span>
-                    <ChevronDown className={cn("w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0", isOpen && "rotate-180 text-indigo-500")} />
-                  </button>
-
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="px-4 pb-4 text-xs font-semibold leading-relaxed text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-700/50 pt-3"
-                      >
-                        {isVi ? faq.aVi : faq.aEn}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-        </div>
 
       </div>
     </section>

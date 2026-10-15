@@ -1,150 +1,46 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { 
-  getFirestore, 
-  doc, 
-  getDocFromServer,
-  collection,
-  setDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  orderBy,
-  limit,
-  updateDoc,
-  enableIndexedDbPersistence,
-  enableMultiTabIndexedDbPersistence,
-  disableNetwork,
-  enableNetwork
-} from 'firebase/firestore';
-import { getAnalytics, isSupported, logEvent, Analytics } from 'firebase/analytics';
-import rawConfig from '@/firebase-applet-config.json';
+// Firebase disabled as requested ("tắt FIREBASE_API_KEY")
 import { TabError, BugStatus } from '../types/tabErrors';
 
-const firebaseConfig = {
-  apiKey: rawConfig.apiKey,
-  authDomain: rawConfig.authDomain,
-  projectId: rawConfig.projectId,
-  storageBucket: rawConfig.storageBucket,
-  messagingSenderId: rawConfig.messagingSenderId,
-  appId: rawConfig.appId,
-  measurementId: rawConfig.measurementId,
+export const db: any = null;
+export const auth: any = {
+  currentUser: null,
 };
+export const googleAuthProvider: any = null;
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Initialize Firestore with specific database ID from config
-export const db = getFirestore(app, rawConfig.firestoreDatabaseId);
-
-// Disable Firestore Server Connection as requested ("tắt server Firebase Firestore")
 let isFirestoreServerDisabled = true;
 
 export async function disableFirestoreNetwork(): Promise<boolean> {
-  try {
-    await disableNetwork(db);
-    isFirestoreServerDisabled = true;
-    console.info('[Firestore] Server network disconnected. Running local-only mode.');
-    return true;
-  } catch (err) {
-    console.warn('[Firestore] Error disabling server network:', err);
-    return false;
-  }
+  isFirestoreServerDisabled = true;
+  return true;
 }
 
 export async function enableFirestoreNetwork(): Promise<boolean> {
-  try {
-    await enableNetwork(db);
-    isFirestoreServerDisabled = false;
-    return true;
-  } catch (err) {
-    console.warn('[Firestore] Error enabling server network:', err);
-    return false;
-  }
+  isFirestoreServerDisabled = true;
+  return false;
 }
 
 export function isFirestoreNetworkDisabled(): boolean {
-  return isFirestoreServerDisabled;
+  return true;
 }
 
-// Enable Firestore Offline Persistence and disconnect remote server
-if (typeof window !== 'undefined') {
-  enableMultiTabIndexedDbPersistence(db)
-    .catch((err) => {
-      if (err.code === 'failed-precondition') {
-        enableIndexedDbPersistence(db).catch(() => {});
-      }
-    })
-    .finally(() => {
-      // Disconnect from Firebase Firestore remote server
-      disableNetwork(db).catch(() => {});
-    });
-}
+export const getFirebaseAnalytics = () => null;
 
-export const auth = getAuth(app);
-export const googleAuthProvider = new GoogleAuthProvider();
-
-// Initialize Firebase Analytics safely (with environment & browser capability check)
-let analyticsInstance: Analytics | null = null;
-let isAnalyticsReady = false;
-
-if (typeof window !== 'undefined') {
-  isSupported().then((supported) => {
-    if (supported && firebaseConfig.measurementId) {
-      try {
-        analyticsInstance = getAnalytics(app);
-        isAnalyticsReady = true;
-      } catch (err) {
-        console.warn('Firebase Analytics init note:', err);
-      }
-    }
-  }).catch(() => {});
-}
-
-export const getFirebaseAnalytics = () => analyticsInstance;
-
-/**
- * Log custom analytics event to Firebase Analytics & local analytics dispatcher
- */
 export function logTabAnalyticsEvent(eventName: string, params: Record<string, any> = {}) {
-  const enrichedParams = {
-    ...params,
-    timestamp: new Date().toISOString(),
-    url: typeof window !== 'undefined' ? window.location.href : '',
-    online: typeof navigator !== 'undefined' ? navigator.onLine : true,
-  };
-
-  if (analyticsInstance && isAnalyticsReady) {
-    try {
-      logEvent(analyticsInstance, eventName, enrichedParams);
-    } catch (err) {
-      console.warn('Firebase Analytics logEvent error:', err);
-    }
-  }
-
-  // Also dispatch a custom browser event for live UI reaction
   if (typeof window !== 'undefined') {
     try {
       window.dispatchEvent(new CustomEvent('firebase_analytics_event', {
-        detail: { eventName, params: enrichedParams }
+        detail: { eventName, params: { ...params, timestamp: new Date().toISOString() } }
       }));
     } catch {}
   }
 }
 
-/**
- * Track when a tab error report is submitted
- */
 export function logErrorCategoryReported(category: string, tabId: string, severity: string, syncedOffline = false) {
   logTabAnalyticsEvent('tab_error_reported', {
     error_category: category,
     tab_id: tabId,
     severity: severity,
     synced_offline: syncedOffline,
-  });
-
-  logTabAnalyticsEvent(`bug_category_${category.toLowerCase().replace(/[^a-z0-9]/g, '_')}`, {
-    tab_id: tabId,
-    severity: severity,
   });
 }
 
@@ -167,77 +63,30 @@ export interface FirestoreErrorInfo {
     emailVerified?: boolean | null;
     isAnonymous?: boolean | null;
     tenantId?: string | null;
-    providerInfo?: {
-      providerId?: string | null;
-      email?: string | null;
-    }[];
+    providerInfo?: any[];
   };
 }
 
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
-      emailVerified: auth.currentUser?.emailVerified,
-      isAnonymous: auth.currentUser?.isAnonymous,
-      tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData?.map(provider => ({
-        providerId: provider.providerId,
-        email: provider.email,
-      })) || []
-    },
+    authInfo: { userId: null, email: null },
     operationType,
     path
   };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
+  console.warn('Firebase is disabled. Firestore Error skipped: ', JSON.stringify(errInfo));
 }
 
-// Save tab error directly to Firestore
 export async function saveTabErrorToFirestore(errorItem: TabError): Promise<boolean> {
-  try {
-    const errorRef = doc(db, 'tabErrors', errorItem.id);
-    await setDoc(errorRef, {
-      ...errorItem,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
-
-    logErrorCategoryReported(errorItem.category, errorItem.tabId, errorItem.severity, !!errorItem.syncedOffline);
-    return true;
-  } catch (err) {
-    console.warn('Direct Firestore save failed, will queue for offline sync:', err);
-    return false;
-  }
+  logErrorCategoryReported(errorItem.category, errorItem.tabId, errorItem.severity, !!errorItem.syncedOffline);
+  return true;
 }
 
-// Update error status (e.g., investigating / resolved / pending / in_progress / fixed)
 export async function updateTabErrorStatusInFirestore(errorId: string, status: BugStatus): Promise<boolean> {
-  try {
-    const errorRef = doc(db, 'tabErrors', errorId);
-    await updateDoc(errorRef, {
-      status,
-      resolvedAt: status === 'resolved' ? new Date().toISOString() : null,
-      updatedAt: new Date().toISOString()
-    });
-    logTabAnalyticsEvent('tab_error_status_updated', { errorId, status });
-    return true;
-  } catch (err) {
-    console.warn('Update tab error status in Firestore failed:', err);
-    return false;
-  }
+  logTabAnalyticsEvent('tab_error_status_updated', { errorId, status });
+  return true;
 }
 
-// Validate connection to Firestore on initialization
 export async function testConnection(): Promise<boolean> {
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-    return true;
-  } catch (error: any) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.warn('Firebase client is offline. Check Firebase configuration.');
-    }
-    return false;
-  }
+  return false;
 }

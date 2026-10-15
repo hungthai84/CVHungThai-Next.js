@@ -31,7 +31,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { playUiSound } from "../lib/sound";
 import { PageCardHeader } from "./PageCardHeader";
-import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
+import { cn } from "../lib/utils";
 import { AnimatedCardTitle } from "./AnimatedCardTitle";
 import { 
   CAREER_MILESTONES_DATA, 
@@ -39,6 +39,7 @@ import {
   OPERATIONAL_PRINCIPLES_DATA, 
   CareerMilestoneItem 
 } from "../data/letterData";
+import { HeroRobotCompanion } from "./ai/HeroRobotCompanion";
 
 // Authentic Signature vector for Nguyễn Hùng Thái
 const SignatureSvg = () => (
@@ -88,16 +89,8 @@ export default function OpenLetter() {
 
   // Dynamic theme-aware Glass Card classes for both Light and Dark modes
   const getGlassCardClass = useCallback(() => {
-    switch (theme as string) {
-      case "glass-dark-neon":
-        return "bg-[#121218]/85 dark:bg-[#121218]/85 border-cyan-400/25 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_0_20px_rgba(0,240,255,0.15)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.25)]";
-      case "modern-light-glass":
-        return "bg-white/70 dark:bg-slate-900/75 border-white/80 dark:border-white/15 backdrop-blur-[20px] backdrop-saturate-[180%] shadow-[0_10px_30px_0_rgba(100,110,140,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_14px_40px_0_rgba(100,110,140,0.15)]";
-      case "glass-light-multicolor":
-      default:
-        return "bg-white/75 dark:bg-[#121218]/80 border-white/70 dark:border-white/12 backdrop-blur-[18px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_12px_40px_0_rgba(31,38,135,0.12)]";
-    }
-  }, [theme]);
+    return "bg-white/75 dark:bg-[#121218]/80 border-white/70 dark:border-white/12 backdrop-blur-[18px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:shadow-[0_12px_40px_0_rgba(31,38,135,0.12)]";
+  }, []);
 
   // Collapse/Expand state for career milestones
   const [expandedCard, setExpandedCard] = useState<Record<string, boolean>>({
@@ -206,7 +199,7 @@ export default function OpenLetter() {
 
         {/* Body: Text with full width readability */}
         <div className="w-full flex-1 my-1.5 text-left relative z-10">
-          <p className="text-[15px] leading-relaxed text-slate-800 dark:text-slate-200 text-left font-medium">
+          <p className="text-[13.5px] sm:text-[14.5px] leading-relaxed text-slate-800 dark:text-slate-200 text-left font-medium">
             {renderFormattedText(isVi ? item.descVi : item.descEn)}
           </p>
 
@@ -252,15 +245,12 @@ export default function OpenLetter() {
   return (
     <section 
       id="letter" 
-      className={cn(
-        "relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 overflow-y-auto no-scrollbar",
-        getUnifiedSurfaceStyle(theme)
-      )}
+      className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-sans text-slate-800 dark:text-slate-100 transition-all duration-300 bg-transparent overflow-y-auto no-scrollbar"
     >
       {/* Container Thư ngỏ chính */}
       <div 
         id="info-card-open-letter"
-        className="w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-[15px] mx-auto justify-start relative z-10"
+        className="w-full max-w-full flex-grow flex flex-col gap-[15px] justify-start relative z-10 px-2 sm:px-4 md:px-6"
       >
         {/* Header Card */}
         <PageCardHeader pageId="letter" className="w-full mb-1" />
@@ -276,74 +266,49 @@ export default function OpenLetter() {
         >
           <div
             id="card-main-letter-content"
-            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={cn(
-              "w-full relative overflow-hidden p-5 sm:p-7 md:p-8 transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch justify-center group z-10 border",
-              "rounded-[var(--theme-radius-card,14px)]",
+              "w-full relative overflow-hidden p-5 sm:p-7 md:p-8 transition-all duration-300 flex flex-col justify-center gap-4 group z-10 border",
+              "rounded-[var(--theme-radius-card,10px)]",
               getGlassCardClass()
             )}
           >
-            {/* Left: Text Content */}
-            <div className="w-full lg:w-2/3 flex flex-col justify-center relative z-10 text-left">
-              {/* Header Title with Animated Icon: 4 chữ, font 15px, màu giống icon */}
-              <AnimatedCardTitle
-                icon={BookCheck}
-                title={isVi ? "Thông điệp hợp tác" : "Strategic Cooperation Message"}
-                colorPreset="emerald"
-              />
-
-              {/* Salutation Line in Vibrant Orange */}
-              <p className="text-[#f95700] dark:text-[#f97316] font-extrabold text-[16px] sm:text-[18px] md:text-[20px] leading-snug mb-3 font-play">
-                {isVi ? "Kính gửi Quý đối tác, Quý khách hàng và toàn thể cộng sự." : "Dear Valued Partners, Customers, and Colleagues."}
-              </p>
-
-              {/* Body Content: font 15px */}
-              <p className="text-slate-800 dark:text-slate-200 text-[15px] leading-relaxed font-semibold text-left">
-                {isVi ? (
-                  <>
-                    Tôi là <strong className="font-black text-[#0f172a] dark:text-white">Nguyễn Hùng Thái</strong>, Trưởng phòng Chăm sóc khách hàng với hơn <strong className="font-black text-[#0f172a] dark:text-white">22 năm kinh nghiệm</strong> trong lĩnh vực xây dựng, vận hành và phát triển hệ thống dịch vụ khách hàng chuyên nghiệp.
-                  </>
-                ) : (
-                  <>
-                    I am <strong className="font-black text-[#0f172a] dark:text-white">Nguyen Hung Thai</strong>, Customer Service Manager with over <strong className="font-black text-[#0f172a] dark:text-white">22 years of experience</strong> in building, operating, and advancing professional customer care systems.
-                  </>
-                )}
-              </p>
-            </div>
-
-            {/* Right: Standalone Video Showcase / Extracted HeroRobotCompanion */}
-            <div
-              id="card-letter-video-showcase"
-              className="w-full lg:w-1/3 relative overflow-hidden transition-all duration-300 flex flex-col justify-center items-stretch rounded-xl border border-slate-200/40 dark:border-white/5 min-h-[260px] md:min-h-0"
-            >
-              {/* Extracted content of HeroRobotCompanion to keep the visual effect intact */}
-              <div className="relative w-full h-full select-none overflow-hidden flex items-center justify-center pointer-events-auto absolute inset-0">
-                {/* Background aura circle */}
-                <div className="absolute top-[30%] left-[20%] w-[420px] h-[420px] bg-sky-400/15 rounded-full blur-[110px] -z-10 animate-pulse duration-[7000ms]" />
-
-                {/* Concentric orbital ring lines */}
-                <div className="absolute w-[620px] h-[620px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-[52%] -z-10 opacity-35 pointer-events-none">
-                  <svg
-                    viewBox="0 0 620 620"
-                    className="w-full h-full"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="310" cy="310" r="290" stroke="#60B1FF" strokeWidth="1.2" strokeDasharray="6 8" />
-                    <ellipse cx="310" cy="310" rx="230" ry="180" transform="rotate(-25 310 310)" stroke="#319AFF" strokeWidth="1.5" strokeDasharray="12 6 4 6" />
-                    <circle cx="310" cy="310" r="140" stroke="#60B1FF" strokeWidth="0.8" strokeOpacity="0.4" strokeDasharray="4 4" />
-                    <circle cx="200" cy="80" r="3.5" fill="#60B1FF" />
-                    <circle cx="490" cy="220" r="2.5" fill="#319AFF" />
-                    <circle cx="120" cy="400" r="3" fill="#60B1FF" />
-                  </svg>
-                </div>
-
-                <img 
-                  src="https://i.ibb.co/bRCZdj3Y/33ee5161485a49b6b0c986088425c2cb-1.gif" 
-                  alt="Robot Companion" 
-                  className="select-none block max-h-full w-auto h-[90%] m-auto rounded-2xl border border-white/20 shadow-2xl object-contain absolute inset-0"
-                  referrerPolicy="no-referrer"
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+              {/* Left Column: Text Content */}
+              <div className="lg:col-span-8 w-full flex flex-col justify-center relative z-10 text-left">
+                {/* Header Title with Animated Icon */}
+                <AnimatedCardTitle
+                  icon={BookCheck}
+                  title={isVi ? "Thông điệp hợp tác chiến lược" : "Strategic Cooperation Message"}
+                  subtitle={isVi ? "Tầm nhìn & Định hướng phát triển bền vững" : "Vision & Strategic Growth Orientation"}
+                  colorPreset="emerald"
                 />
+
+                {/* Salutation Line in Vibrant Orange */}
+                <p className="text-[#f95700] dark:text-[#f97316] font-extrabold text-[16px] sm:text-[18px] md:text-[20px] leading-snug mb-3 font-play">
+                  {isVi ? "Kính gửi Quý đối tác, Quý khách hàng và toàn thể cộng sự." : "Dear Valued Partners, Customers, and Colleagues."}
+                </p>
+
+                {/* Body Content */}
+                <p className="text-slate-800 dark:text-slate-200 text-[14.5px] sm:text-[15.5px] leading-relaxed font-semibold text-left">
+                  {isVi ? (
+                    <>
+                      Tôi là <strong className="font-black text-[#0f172a] dark:text-white">Nguyễn Hùng Thái</strong>, Trưởng phòng Chăm sóc khách hàng với hơn <strong className="font-black text-[#0f172a] dark:text-white">22 năm kinh nghiệm</strong> trong lĩnh vực xây dựng, vận hành và phát triển hệ thống dịch vụ khách hàng chuyên nghiệp.
+                    </>
+                  ) : (
+                    <>
+                      I am <strong className="font-black text-[#0f172a] dark:text-white">Nguyen Hung Thai</strong>, Customer Service Manager with over <strong className="font-black text-[#0f172a] dark:text-white">22 years of experience</strong> in building, operating, and advancing professional customer care systems.
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {/* Right Column: Standalone Video Showcase / HeroRobotCompanion */}
+              <div
+                id="card-letter-video-showcase"
+                className="lg:col-span-4 w-full relative overflow-hidden transition-all duration-300 flex flex-col justify-center items-stretch rounded-xl border border-slate-200/40 dark:border-white/5 min-h-[260px] md:min-h-0"
+              >
+                <HeroRobotCompanion fillCard={true} className="absolute inset-0 w-full h-full pointer-events-auto" />
               </div>
             </div>
           </div>
@@ -357,18 +322,18 @@ export default function OpenLetter() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
           id="card-career-milestones"
-          style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+          style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
           className={cn(
             "w-full transition-all duration-300 flex flex-col relative overflow-hidden p-[15px] z-10 border",
-            "rounded-[var(--theme-radius-card,14px)]",
+            "rounded-[var(--theme-radius-card,10px)]",
             getGlassCardClass()
           )}
         >
           <div className="relative z-10 w-full">
-            {/* Header with Animated Icon: đúng 4 chữ */}
+            {/* Header with Animated Icon */}
             <AnimatedCardTitle
               icon={Rocket}
-              title={isVi ? "Hành trình sự nghiệp" : "Career Journey Milestones"}
+              title={isVi ? "Hành trình sự nghiệp đột phá" : "Breakthrough Career Journey Milestones"}
               colorPreset="cyan"
               actionRight={
                 <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-sky-100/80 dark:bg-sky-950/50 border border-sky-200/80 dark:border-sky-800/60 shadow-2xs">
@@ -444,10 +409,10 @@ export default function OpenLetter() {
         >
           <div 
             id="card-philosophy-gratitude"
-            style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+            style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={cn(
               "w-full relative overflow-hidden p-6 sm:p-8 transition-all duration-300 group text-left border flex flex-col gap-6",
-              "rounded-[var(--theme-radius-card,14px)]",
+              "rounded-[var(--theme-radius-card,10px)]",
               getGlassCardClass()
             )}
           >
@@ -463,12 +428,12 @@ export default function OpenLetter() {
                 <div className="flex flex-col items-start text-left mb-2 w-full">
                   <AnimatedCardTitle
                     icon={Sparkles}
-                    title={isVi ? "Triết lý quản trị" : "Operational Management Philosophy"}
+                    title={isVi ? "Triết lý quản trị vận hành" : "Operational Management Philosophy"}
                     colorPreset="purple"
                   />
 
-                  {/* Description Paragraph: font 15px */}
-                  <p className="text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed font-semibold mt-1">
+                  {/* Description Paragraph */}
+                  <p className="text-[14px] sm:text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed font-semibold mt-1">
                     {isVi 
                       ? "Qua hơn hai thập kỷ làm việc trong nhiều lĩnh vực khác nhau, tôi nhận ra rằng chăm sóc khách hàng không chỉ là giải quyết vấn đề mà là xây dựng một hệ thống giúp doanh nghiệp phát triển bền vững."
                       : "Through over two decades of working across diverse industries, I realized that customer care is not just about solving issues, but about building a system that fosters sustainable business growth."}
@@ -513,15 +478,15 @@ export default function OpenLetter() {
               {/* Right Column: SINCERE APPRECIATION LETTER */}
               <div className="flex flex-col justify-between gap-5">
                 <div className="flex flex-col gap-3.5">
-                  {/* Header title with Animated Icon: đúng 4 chữ */}
+                  {/* Header title with Animated Icon */}
                   <AnimatedCardTitle
                     icon={Heart}
-                    title={isVi ? "Tâm thư tri ân" : "Sincere Appreciation Letter"}
+                    title={isVi ? "Tâm thư tri ấn phụng sự" : "Sincere Appreciation Letter"}
                     colorPreset="rose"
                   />
 
-                  {/* Sincere message: font 15px */}
-                  <div className="text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed space-y-3.5 font-semibold">
+                  {/* Sincere message */}
+                  <div className="text-[14px] sm:text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed space-y-3.5 font-semibold">
                     <p>
                       {isVi ? (
                         <>
@@ -550,13 +515,17 @@ export default function OpenLetter() {
                   </div>
                 </div>
 
-                {/* Sincere Quote text rendered directly */}
-                <div className="w-full relative z-10 text-left py-1">
-                  <p className="text-sm sm:text-base font-extrabold text-indigo-700 dark:text-cyan-400 italic">
-                    {isVi 
-                      ? "“Sự hài lòng của khách hàng không đến từ sự hoàn hảo, mà đến từ sự đồng cảm kịp thời.”"
-                      : "“Customer satisfaction does not come from perfection, but from timely empathy.”"}
-                  </p>
+                {/* Quote box synthesis */}
+                <div className="w-full bg-[#fcfcff]/80 dark:bg-slate-900/40 p-4.5 rounded-xl border border-indigo-100 dark:border-indigo-900/40 relative flex flex-col justify-center shadow-xs">
+                  <Quote className="absolute top-3 left-3 w-5 h-5 text-indigo-400/30 dark:text-indigo-400/15 rotate-180" />
+                  
+                  <div className="relative z-10 text-left pl-5">
+                    <p className="text-sm sm:text-base font-extrabold text-indigo-700 dark:text-cyan-400 italic">
+                      {isVi 
+                        ? "“Sự hài lòng của khách hàng không đến từ sự hoàn hảo, mà đến từ sự đồng cảm kịp thời.”"
+                        : "“Customer satisfaction does not come from perfection, but from timely empathy.”"}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Bottom - Signature Block */}
@@ -594,17 +563,17 @@ export default function OpenLetter() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.25 }}
           id="card-core-values-pursued"
-          style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
+          style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
           className={cn(
             "w-full p-5 sm:p-6 shadow-md transition-all duration-300 flex flex-col items-start group/values z-10 border text-left",
-            "rounded-[var(--theme-radius-card,14px)]",
+            "rounded-[var(--theme-radius-card,10px)]",
             getGlassCardClass()
           )}
         >
-          {/* Tiêu đề Khối with Animated Icon: đúng 4 chữ */}
+          {/* Tiêu đề Khối with Animated Icon */}
           <AnimatedCardTitle
             icon={Award}
-            title={isVi ? "Giá trị cốt lõi" : "Core Values Pursued"}
+            title={isVi ? "Giá trị cốt lõi phát triển" : "Core Values Pursued"}
             colorPreset="orange"
           />
 
@@ -639,7 +608,7 @@ export default function OpenLetter() {
                     <h4 className={cn("text-lg font-black tracking-normal mb-1.5 font-play", val.colorTheme.titleText)}>
                       {isVi ? val.titleVi : val.titleEn}
                     </h4>
-                    <p className="text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed max-w-[28ch] font-semibold">
+                    <p className="text-[13.5px] sm:text-[14px] text-slate-700 dark:text-slate-300 leading-relaxed max-w-[28ch] font-semibold">
                       {isVi ? val.descVi : val.descEn}
                     </p>
                   </div>
@@ -712,3 +681,5 @@ export default function OpenLetter() {
     </section>
   );
 }
+
+export { OpenLetter as Letter };

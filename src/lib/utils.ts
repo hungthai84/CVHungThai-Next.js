@@ -15,19 +15,8 @@ export function cn(...classes: (string | boolean | undefined | null | Record<str
     .trim();
 }
 
-export function getUnifiedSurfaceStyle(theme: string): string {
-  switch (theme) {
-    case "glass-ui-layout":
-      return "bg-white/72 dark:bg-[#151336]/65 border border-white/80 dark:border-white/18 text-[#1E1B4B] dark:text-[#F8F7FF] shadow-[0_10px_35px_0_rgba(100,110,140,0.1),0_2px_8px_0_rgba(100,110,140,0.05),inset_0_1px_1px_rgba(255,255,255,0.95)] dark:shadow-[0_12px_40px_0_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-[20px] backdrop-saturate-[160%]";
-    case "soft-floating-bento":
-      return "bg-white/78 dark:bg-[#181b36]/70 border border-white/65 dark:border-white/15 text-[#202858] dark:text-slate-100 shadow-[0_12px_36px_0_rgba(100,110,180,0.12),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_12px_36px_0_rgba(0,0,0,0.4)] backdrop-blur-[18px]";
-    case "glass-light-multicolor":
-      return "bg-white/62 border border-white/75 text-[#172033] shadow-[0_24px_60px_rgba(80,100,130,0.12),0_4px_16px_rgba(80,100,130,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-[26px] backdrop-saturate-[140%]";
-    case "glass-dark-neon":
-      return "bg-[#121218]/60 dark:bg-[#121218]/60 border border-white/12 text-slate-100 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-[16px] backdrop-saturate-[180%]";
-    default:
-      return "bg-white/62 border border-white/75 text-[#172033] shadow-[0_24px_60px_rgba(80,100,130,0.12),0_4px_16px_rgba(80,100,130,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-[26px] backdrop-saturate-[140%]";
-  }
+export function getUnifiedSurfaceStyle(_theme?: string): string {
+  return "bg-white/62 dark:bg-[#121218]/70 border border-white/75 dark:border-white/12 text-[#172033] dark:text-slate-100 shadow-[0_24px_60px_rgba(80,100,130,0.12),0_4px_16px_rgba(80,100,130,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_12px_40px_0_rgba(0,0,0,0.45)] backdrop-blur-[26px] backdrop-saturate-[140%]";
 }
 
 export function getGlassCardClass(variant: "default" | "blue" | "indigo" | "purple" | "cyan" | "emerald" | "amber" | "rose" = "default"): string {

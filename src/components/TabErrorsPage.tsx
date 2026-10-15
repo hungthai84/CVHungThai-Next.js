@@ -28,7 +28,8 @@ import {
   X,
   ArrowUpRight,
   ShieldAlert,
-  AlertCircle
+  AlertCircle,
+  Download
 } from "lucide-react";
 import { 
   ResponsiveContainer, 
@@ -115,6 +116,23 @@ export function formatErrorTimestamp(dateInput: string | number | Date | undefin
       relative: isVi ? "vừa xong" : "just now",
       exact: String(dateInput)
     };
+  }
+}
+
+/**
+ * Returns severity-specific border and shadow styling
+ */
+export function getSeverityCardStyle(severity: BugSeverity) {
+  switch (severity) {
+    case "critical":
+      return "border-l-4 border-l-rose-500 border-rose-500/50 dark:border-rose-500/50 shadow-rose-500/10 hover:border-rose-400";
+    case "high":
+      return "border-l-4 border-l-orange-500 border-orange-500/50 dark:border-orange-500/50 shadow-orange-500/10 hover:border-orange-400";
+    case "medium":
+      return "border-l-4 border-l-amber-500 border-amber-500/50 dark:border-amber-500/50 shadow-amber-500/10 hover:border-amber-400";
+    case "low":
+    default:
+      return "border-l-4 border-l-blue-500 border-blue-500/50 dark:border-blue-500/50 shadow-blue-500/10 hover:border-blue-400";
   }
 }
 
@@ -213,27 +231,29 @@ export default function TabErrorsPage() {
     });
 
     // Firestore real-time listener for live sync
-    try {
-      const q = query(collection(db, "tabErrors"), orderBy("createdAt", "desc"));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        if (!snapshot.empty) {
-          const liveData = snapshot.docs.map(d => ({ ...d.data() } as TabError));
-          setReports(liveData);
-          cacheLiveReports(liveData);
-        }
-      }, (err) => {
-        console.warn("Firestore tabErrors snapshot note (offline/fallback mode):", err);
-      });
+    if (db) {
+      try {
+        const q = query(collection(db, "tabErrors"), orderBy("createdAt", "desc"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          if (!snapshot.empty) {
+            const liveData = snapshot.docs.map(d => ({ ...d.data() } as TabError));
+            setReports(liveData);
+            cacheLiveReports(liveData);
+          }
+        }, (err) => {
+          console.warn("Firestore tabErrors snapshot note (offline/fallback mode):", err);
+        });
 
-      return () => {
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-        window.removeEventListener("offline_error_queue_changed", updateQueueCount);
-        window.removeEventListener("tab_errors_synced", updateQueueCount);
-        unsubscribe();
-      };
-    } catch (err) {
-      console.warn("Firestore setup note:", err);
+        return () => {
+          window.removeEventListener("online", handleOnline);
+          window.removeEventListener("offline", handleOffline);
+          window.removeEventListener("offline_error_queue_changed", updateQueueCount);
+          window.removeEventListener("tab_errors_synced", updateQueueCount);
+          unsubscribe();
+        };
+      } catch (err) {
+        console.warn("Firestore setup note:", err);
+      }
     }
 
     return () => {
@@ -267,6 +287,84 @@ export default function TabErrorsPage() {
     }
     const pending = await getPendingOfflineReports();
     setPendingCount(pending.length);
+  };
+
+  // Filtered reports list calculation
+  const filteredReports = useMemo(() => {
+    return reports.filter(r => {
+      const matchCat = activeCategoryFilter === "all" || r.category === activeCategoryFilter;
+      const matchSev = activeSeverityFilter === "all" || r.severity === activeSeverityFilter;
+      const matchStat = activeStatusFilter === "all" || 
+        r.status === activeStatusFilter ||
+        (activeStatusFilter === "pending" && (r.status === "pending" || r.status === "open")) ||
+        (activeStatusFilter === "in_progress" && (r.status === "in_progress" || r.status === "investigating")) ||
+        (activeStatusFilter === "fixed" && (r.status === "fixed" || r.status === "resolved"));
+      
+      const queryStr = searchQuery.trim().toLowerCase();
+      if (!queryStr) return matchCat && matchSev && matchStat;
+
+      const matchSearch = 
+        r.title.toLowerCase().includes(queryStr) ||
+        r.description.toLowerCase().includes(queryStr) ||
+        r.tabId.toLowerCase().includes(queryStr) ||
+        r.category.toLowerCase().includes(queryStr) ||
+        (r.reporterName || "").toLowerCase().includes(queryStr);
+
+      return matchCat && matchSev && matchStat && matchSearch;
+    });
+  }, [reports, activeCategoryFilter, activeSeverityFilter, activeStatusFilter, searchQuery]);
+
+  // Export filtered errors to CSV
+  const handleDownloadCSV = () => {
+    try {
+      playUiSound("click");
+    } catch {}
+
+    if (!filteredReports || filteredReports.length === 0) {
+      showToast(isVi ? "Không có dữ liệu báo cáo lỗi để xuất CSV!" : "No error reports to export!");
+      return;
+    }
+
+    const headers = [
+      "ID",
+      "Tab ID",
+      "Title",
+      "Description",
+      "Category",
+      "Severity",
+      "Status",
+      "Reporter Name",
+      "Reporter Email",
+      "Created At",
+      "Device Info"
+    ];
+
+    const rows = filteredReports.map(r => [
+      `"${(r.id || '').replace(/"/g, '""')}"`,
+      `"${(r.tabId || '').replace(/"/g, '""')}"`,
+      `"${(r.title || '').replace(/"/g, '""')}"`,
+      `"${(r.description || '').replace(/\n/g, ' ').replace(/"/g, '""')}"`,
+      `"${(r.category || '').replace(/"/g, '""')}"`,
+      `"${(r.severity || '').replace(/"/g, '""')}"`,
+      `"${normalizeBugStatus(r.status)}"`,
+      `"${(r.reporterName || '').replace(/"/g, '""')}"`,
+      `"${(r.reporterEmail || '').replace(/"/g, '""')}"`,
+      `"${r.createdAt || ''}"`,
+      `"${(r.deviceInfo || '').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `tab-errors-filtered-export-${format(new Date(), "yyyy-MM-dd-HHmm")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast(isVi ? `Đã xuất ${filteredReports.length} báo cáo lỗi ra file CSV thành công!` : `Successfully exported ${filteredReports.length} error reports to CSV!`);
   };
 
   // Handle Form Submission
@@ -418,7 +516,7 @@ export default function TabErrorsPage() {
       }
     });
 
-    // Chart Data for Status Category Frequency Bar Chart (pending, in_progress, fixed)
+    // Chart Data for Status Category Frequency Bar Chart
     const statusChartData = [
       {
         statusKey: "pending",
@@ -500,31 +598,6 @@ export default function TabErrorsPage() {
     };
   }, [reports, isVi]);
 
-  // Filtered reports list
-  const filteredReports = useMemo(() => {
-    return reports.filter(r => {
-      const matchCat = activeCategoryFilter === "all" || r.category === activeCategoryFilter;
-      const matchSev = activeSeverityFilter === "all" || r.severity === activeSeverityFilter;
-      const matchStat = activeStatusFilter === "all" || 
-        r.status === activeStatusFilter ||
-        (activeStatusFilter === "pending" && (r.status === "pending" || r.status === "open")) ||
-        (activeStatusFilter === "in_progress" && (r.status === "in_progress" || r.status === "investigating")) ||
-        (activeStatusFilter === "fixed" && (r.status === "fixed" || r.status === "resolved"));
-      
-      const queryStr = searchQuery.trim().toLowerCase();
-      if (!queryStr) return matchCat && matchSev && matchStat;
-
-      const matchSearch = 
-        r.title.toLowerCase().includes(queryStr) ||
-        r.description.toLowerCase().includes(queryStr) ||
-        r.tabId.toLowerCase().includes(queryStr) ||
-        r.category.toLowerCase().includes(queryStr) ||
-        (r.reporterName || "").toLowerCase().includes(queryStr);
-
-      return matchCat && matchSev && matchStat && matchSearch;
-    });
-  }, [reports, activeCategoryFilter, activeSeverityFilter, activeStatusFilter, searchQuery]);
-
   return (
     <div id="tab-errors" className="relative w-full h-full flex flex-col justify-start items-stretch p-[15px] font-play text-slate-800 dark:text-slate-100 transition-colors duration-300 bg-transparent overflow-y-auto no-scrollbar">
       
@@ -580,6 +653,17 @@ export default function TabErrorsPage() {
                   <span>{isVi ? `Chờ đồng bộ (${pendingCount})` : `Pending Sync (${pendingCount})`}</span>
                 </button>
               )}
+
+              {/* Download CSV Button */}
+              <button
+                type="button"
+                onClick={handleDownloadCSV}
+                className="py-1.5 px-3 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-950 font-bold text-caption rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 border border-slate-700 dark:border-slate-300"
+                title={isVi ? "Xuất danh sách lỗi hiện tại ra file CSV" : "Export current filtered bug list to CSV"}
+              >
+                <Download className="w-3.5 h-3.5 text-emerald-400 dark:text-emerald-600" />
+                <span>{isVi ? "Tải CSV" : "Export CSV"}</span>
+              </button>
 
               {/* Simulate Offline Toggle */}
               <button
@@ -935,7 +1019,7 @@ export default function TabErrorsPage() {
 
         </div>
 
-        {/* 4. BUG REPORTS FEED & MANAGEMENT LIST */}
+        {/* 5. BUG REPORTS FEED & MANAGEMENT LIST */}
         <div className="p-5 sm:p-6 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl shadow-sm space-y-4">
           
           {/* Header & Filter Controls */}
@@ -1006,10 +1090,21 @@ export default function TabErrorsPage() {
                   <option value="fixed">{isVi ? "✅ Đã khắc phục (Fixed Only)" : "✅ Fixed Only"} ({analyticsSummary.statusCounts.fixed})</option>
                 </select>
               </div>
+
+              {/* CSV Export Button */}
+              <button
+                type="button"
+                onClick={handleDownloadCSV}
+                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+                title={isVi ? "Tải xuống tập tin CSV" : "Download CSV file"}
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>{isVi ? "Xuất CSV" : "Download CSV"}</span>
+              </button>
             </div>
           </div>
 
-          {/* Quick Tabbed Status Filter System (Allows switching between all, pending, in_progress, fixed) */}
+          {/* Quick Tabbed Status Filter System */}
           <div className="flex flex-wrap items-center justify-between gap-2 pt-1 pb-1 border-b border-slate-200/50 dark:border-slate-800/50">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-3xs font-bold uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline-block">
@@ -1093,7 +1188,7 @@ export default function TabErrorsPage() {
             )}
           </div>
 
-          {/* List Items */}
+          {/* List Items with Severity Border Coloring */}
           <div className="space-y-2.5">
             {filteredReports.length === 0 ? (
               <div className="py-12 text-center text-xs text-slate-500 dark:text-slate-400 space-y-2 bg-slate-50/50 dark:bg-slate-800/20 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-6">
@@ -1121,14 +1216,15 @@ export default function TabErrorsPage() {
                 const severityDef = SEVERITY_CONFIG[item.severity] || SEVERITY_CONFIG.medium;
                 const normalizedStatus = normalizeBugStatus(item.status);
                 
-                // Format relative time elapsed (e.g., '2 hours ago') alongside exact timestamp
+                // Format relative time elapsed alongside exact timestamp
                 const timeInfo = formatErrorTimestamp(item.createdAt, isVi);
                 const resolvedTimeInfo = item.resolvedAt ? formatErrorTimestamp(item.resolvedAt, isVi) : null;
+                const severityStyle = getSeverityCardStyle(item.severity);
 
                 return (
                   <div
                     key={item.id}
-                    className="p-3.5 sm:p-4 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/70 dark:border-slate-800/70 hover:border-blue-400/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
+                    className={`p-3.5 sm:p-4 rounded-2xl bg-white/70 dark:bg-slate-900/70 border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm ${severityStyle}`}
                   >
                     {/* Left Info */}
                     <div className="flex-1 space-y-1.5">
@@ -1196,7 +1292,7 @@ export default function TabErrorsPage() {
                         {item.description}
                       </p>
 
-                      {/* Timestamp Display with Relative Time Elapsed (e.g. '2 hours ago') alongside Exact Timestamp */}
+                      {/* Timestamp Display */}
                       <div className="flex flex-wrap items-center gap-2 pt-1 text-3xs text-slate-500 dark:text-slate-400">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
                           <Clock className="w-3 h-3 text-blue-500 shrink-0" />
@@ -1224,7 +1320,7 @@ export default function TabErrorsPage() {
                       </div>
                     </div>
 
-                    {/* Right Actions & Status Selector (pending, in_progress, fixed) */}
+                    {/* Right Actions & Status Selector */}
                     <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                       <button
                         type="button"
@@ -1235,7 +1331,7 @@ export default function TabErrorsPage() {
                         <Eye className="w-3.5 h-3.5" />
                       </button>
 
-                      {/* Status Selector Dropdown for this item */}
+                      {/* Status Selector Dropdown */}
                       <select
                         value={normalizedStatus}
                         onChange={(e) => handleUpdateStatus(item, e.target.value as BugStatus)}
@@ -1264,7 +1360,7 @@ export default function TabErrorsPage() {
 
       </div>
 
-      {/* MODAL: REPORT NEW BUG (WITH OFFLINE-FIRST AND SERVICE WORKER SYNC) */}
+      {/* MODAL: REPORT NEW BUG */}
       {isModalOpen && (
         <div 
           onClick={() => setIsModalOpen(false)}

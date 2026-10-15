@@ -1,3 +1,4 @@
+'use client';
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -24,25 +25,29 @@ import Memories from "./components/Memories";
 import Contact from "./components/Contact";
 import Wallpapers from "./components/Wallpapers";
 import Systems from "./components/Systems";
-import Customization from "./components/Customization";
 import Letter from "./components/Letter";
 import TabErrorsPage from "./components/TabErrorsPage";
 import BentoGridLayout from "./components/BentoGridLayout";
 import GlassStackedCardSlide from "./components/GlassStackedCardSlide";
-import PrismGlassSlideLayout from "./components/PrismGlassSlideLayout";
+import DashboardLayout from "./components/DashboardLayout";
 import LandingPageLayout from "./components/LandingPageLayout";
+import CardPageLayout from "./components/CardPageLayout";
+import TopRightLayoutSwitcher from "./components/TopRightLayoutSwitcher";
 import ErrorBoundaryHandler from "./components/ErrorBoundaryHandler";
-import XRayInspector from "./components/XRayInspector";
-import AIAssistant from "./components/ai/AIAssistant";
-import ColorSystemModal from "./components/ColorSystemModal";
-import CursorSettingsModal from "./components/CursorSettingsModal";
-import SoundSettingsModal from "./components/SoundSettingsModal";
+
 import FooterSettingsModal from "./components/FooterSettingsModal";
-import TypographySettings from "./components/TypographySettings";
 import ExecutiveResumeExportModal from "./components/ExecutiveResumeExportModal";
 import ThemeModal from "./components/ThemeModal";
 import CommandPalette from "./components/CommandPalette";
 import ImageStudioModal from "./components/ai/ImageStudioModal";
+import VCardQrCodeModal from "./components/VCardQrCodeModal";
+import QuickCalendarBooking from "./components/QuickCalendarBooking";
+import BpoVideoVoiceHighlightsModal from "./components/BpoVideoVoiceHighlightsModal";
+import AiSalaryCalculatorModal from "./components/AiSalaryCalculatorModal";
+import VoiceCommandAssistantWidget from "./components/VoiceCommandAssistantWidget";
+import BlockchainDigitalBadgesModal from "./components/BlockchainDigitalBadgesModal";
+import Weather3DCardsShowcase from "./components/Weather3DCardsShowcase";
+
 import { LanguageProvider, useLanguage } from "./i18n";
 import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
@@ -58,40 +63,8 @@ import {
   Monitor, MailOpen, User, GraduationCap, Compass, 
   Briefcase, Brain, ClipboardList, Video,
   Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
-  LayoutTemplate, Sliders, ShieldAlert
+  Sliders, ShieldAlert, Tv, QrCode
 } from "lucide-react";
-
-// Helper function to dynamically import modules with automatic retry on chunk load errors
-function lazyWithRetry<T extends React.ComponentType<any>>(
-  factory: () => Promise<{ default: T }>
-) {
-  return lazy(async () => {
-    try {
-      return await factory();
-    } catch (error) {
-      console.warn("Retrying dynamic module import failure:", error);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      try {
-        return await factory();
-      } catch (retryErr) {
-        try {
-          const hasReloaded = typeof window !== "undefined" && window.sessionStorage
-            ? window.sessionStorage.getItem("dynamic_import_reloaded")
-            : null;
-          if (!hasReloaded && typeof window !== "undefined") {
-            window.sessionStorage?.setItem("dynamic_import_reloaded", "true");
-            window.location.reload();
-            return new Promise<{ default: T }>(() => {});
-          }
-        } catch {}
-        throw retryErr;
-      }
-    }
-  });
-}
-
-// Lazy load non-hero sections for dynamic code splitting & reduced initial bundle
-// Statically imported section components above
 
 // Memoize Hero component
 const MemoHero = memo(Hero);
@@ -111,17 +84,16 @@ const SECTIONS: SectionMeta[] = [
   { id: "systems", labelKey: "nav.systems", Icon: Server, Component: Systems, padding: "p-0 overflow-y-auto" },
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
-  { id: "customization", labelKey: "nav.customization", Icon: Sliders, Component: Customization, padding: "p-0 overflow-y-auto" },
   { id: "errors", labelKey: "nav.errors", Icon: ShieldAlert, Component: TabErrorsPage, padding: "p-0 overflow-y-auto" },
 ];
 
 function MainContent() {
   const themeContext = useTheme();
   const { theme, setTheme, themeMode, resolvedTheme } = themeContext;
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
   const { isSwitching, layoutMode } = useLayout();
   const { footerConfig, isFooterHovered } = useFooter();
-  const { isHeaderPinned, isHeaderSlidUp } = useHeader();
+  const { isHeaderSlidUp } = useHeader();
   const isFooterPinned = footerConfig.isPinned !== false;
   const isFooterSlidDown = !isFooterPinned && !isFooterHovered;
 
@@ -138,6 +110,48 @@ function MainContent() {
   });
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollReminder, setShowScrollReminder] = useState(false);
+
+  // States for Feature Modals & Widgets
+  const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isImageStudioOpen, setIsImageStudioOpen] = useState(false);
+  const [isVCardQrOpen, setIsVCardQrOpen] = useState(false);
+  const [isCalendarBookingOpen, setIsCalendarBookingOpen] = useState(false);
+  const [isBpoVideoOpen, setIsBpoVideoOpen] = useState(false);
+  const [isSalaryCalcOpen, setIsSalaryCalcOpen] = useState(false);
+  const [isBadgesOpen, setIsBadgesOpen] = useState(false);
+  const [is3DWeatherModalOpen, setIs3DWeatherModalOpen] = useState(false);
+
+  const { playTransition } = useSound();
+
+  // State for Keyboard Shortcut Toast notification
+  const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setShortcutToast({ key, nameVi, nameEn });
+    toastTimerRef.current = setTimeout(() => {
+      setShortcutToast(null);
+    }, 2500);
+  };
+
+  // Apply default color theme per layout mode
+  useEffect(() => {
+    setTheme("glass-light-multicolor");
+  }, [layoutMode]);
+
+  // Header and Footer visibility based on layout rules
+  const firstSectionId = SECTIONS[0]?.id || "home";
+  const lastSectionId = SECTIONS[SECTIONS.length - 1]?.id || "errors";
+
+  const isHeaderVisible = 
+    layoutMode === "card-page" || 
+    (layoutMode === "slide-stack" && activeSection === firstSectionId);
+
+  const isFooterVisible = 
+    layoutMode === "card-page" || 
+    (layoutMode === "slide-stack" && activeSection === lastSectionId);
 
   // Sync active section to sessionStorage, localStorage and URL hash
   useEffect(() => {
@@ -196,26 +210,7 @@ function MainContent() {
     };
   }, [layoutMode]);
 
-  // States for Proactive Feature Modals
-  const [isResumeExportOpen, setIsResumeExportOpen] = useState(false);
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [isImageStudioOpen, setIsImageStudioOpen] = useState(false);
-
-  const { playTransition } = useSound();
-
-  // State for Keyboard Shortcut Toast notification
-  const [shortcutToast, setShortcutToast] = useState<{ key: string; nameVi: string; nameEn: string } | null>(null);
-  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const triggerShortcutToast = (key: string, nameVi: string, nameEn: string) => {
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    setShortcutToast({ key, nameVi, nameEn });
-    toastTimerRef.current = setTimeout(() => {
-      setShortcutToast(null);
-    }, 2500);
-  };
-
-  // Trigger scroll reminder after 10s of no action/navigation (PROMPT #8), auto-hide after 5s
+  // Trigger scroll reminder after 10s of no action
   useEffect(() => {
     setShowScrollReminder(false);
     let hideTimer: NodeJS.Timeout;
@@ -223,8 +218,8 @@ function MainContent() {
       setShowScrollReminder(true);
       hideTimer = setTimeout(() => {
         setShowScrollReminder(false);
-      }, 5000); // Auto hide after 5 seconds
-    }, 10000); // 10 seconds delay before showing
+      }, 5000);
+    }, 10000);
 
     return () => {
       clearTimeout(showTimer);
@@ -232,11 +227,10 @@ function MainContent() {
     };
   }, [activeSection]);
 
-  // Atomic synchronization of theme classes on root element to prevent layout shifts & hydration mismatches
+  // Synchronize theme classes on root
   useEffect(() => {
     const root = document.documentElement;
 
-    // Cleanly strip all previous theme classes (e.g. theme-*, dark)
     Array.from(root.classList).forEach((cls) => {
       if (cls === "dark" || cls.startsWith("theme-")) {
         root.classList.remove(cls);
@@ -247,31 +241,28 @@ function MainContent() {
     root.dataset.theme = theme;
     root.setAttribute("data-theme-mode", themeMode);
 
-    const isDark = resolvedTheme === "dark" || theme === "dark" || theme === "glass-dark-neon";
+    const isDark = resolvedTheme === "dark" || theme === "dark";
     if (isDark) {
-      root.classList.add("dark", `theme-${theme}`);
+      root.classList.add("dark");
     } else {
-      root.classList.add(`theme-${theme}`);
+      root.classList.remove("dark");
+    }
+
+    if (theme.startsWith("theme-")) {
+      root.classList.add(theme);
     }
   }, [theme, themeMode, resolvedTheme]);
 
-  // Smoothly switch to specific section with direct instant transition (không hiển thị màn hình loader)
   const navigateToSection = (id: string) => {
-    let cleanId = id.replace(/^#/, "");
-    if (cleanId === "tab-errors") cleanId = "errors";
-    const targetSection = SECTIONS.find((s) => s.id === cleanId);
-    if (targetSection && cleanId !== activeSection) {
-      playTransition();
-      setActiveSection(cleanId);
-      if (cardContainerRef.current) {
-        cardContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    if (id === activeSection) return;
+    playTransition();
+    setActiveSection(id);
+
+    if (layoutMode === "card-page") {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-      setTimeout(() => {
-        const activeEl = document.getElementById(cleanId);
-        if (activeEl) {
-          activeEl.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 50);
     }
   };
 
@@ -296,343 +287,114 @@ function MainContent() {
     const handleOpenResumeExport = () => setIsResumeExportOpen(true);
     const handleOpenCommandPalette = () => setIsCommandPaletteOpen(true);
     const handleOpenImageStudio = () => setIsImageStudioOpen(true);
+    const handleOpenVCardQr = () => setIsVCardQrOpen(true);
+    const handleOpenCalendarBooking = () => setIsCalendarBookingOpen(true);
+    const handleOpenBpoVideo = () => setIsBpoVideoOpen(true);
+    const handleOpenSalaryCalc = () => setIsSalaryCalcOpen(true);
+    const handleOpenBadges = () => setIsBadgesOpen(true);
+    const handleOpen3DWeather = () => setIs3DWeatherModalOpen(true);
 
     window.addEventListener("app-navigate", handleAppNavigate);
     window.addEventListener("open-resume-export", handleOpenResumeExport);
     window.addEventListener("open-command-palette", handleOpenCommandPalette);
     window.addEventListener("open-image-studio", handleOpenImageStudio);
+    window.addEventListener("open-vcard-qr", handleOpenVCardQr);
+    window.addEventListener("open-calendar-booking", handleOpenCalendarBooking);
+    window.addEventListener("open-bpo-video", handleOpenBpoVideo);
+    window.addEventListener("open-salary-calc", handleOpenSalaryCalc);
+    window.addEventListener("open-digital-badges", handleOpenBadges);
+    window.addEventListener("open-3d-weather-modal", handleOpen3DWeather);
 
     return () => {
       window.removeEventListener("app-navigate", handleAppNavigate);
       window.removeEventListener("open-resume-export", handleOpenResumeExport);
       window.removeEventListener("open-command-palette", handleOpenCommandPalette);
       window.removeEventListener("open-image-studio", handleOpenImageStudio);
+      window.removeEventListener("open-vcard-qr", handleOpenVCardQr);
+      window.removeEventListener("open-calendar-booking", handleOpenCalendarBooking);
+      window.removeEventListener("open-bpo-video", handleOpenBpoVideo);
+      window.removeEventListener("open-salary-calc", handleOpenSalaryCalc);
+      window.removeEventListener("open-digital-badges", handleOpenBadges);
+      window.removeEventListener("open-3d-weather-modal", handleOpen3DWeather);
     };
-  }, [activeSection]);
-
-
-  // Keyboard navigation & direct section jump shortcuts (1..9, 0, and Ctrl+K / Cmd+K)
-  useEffect(() => {
-    const shortcutMap: Record<string, { id: string; nameVi: string; nameEn: string }> = {
-      "1": { id: "home", nameVi: "Trang chủ", nameEn: "Home" },
-      "2": { id: "letter", nameVi: "Thư ngỏ", nameEn: "Open Letter" },
-      "3": { id: "about", nameVi: "Giới thiệu", nameEn: "About" },
-      "5": { id: "skills", nameVi: "Kỹ năng chuyên môn", nameEn: "Skills" },
-      "6": { id: "experience", nameVi: "Kinh nghiệm làm việc", nameEn: "Experience" },
-      "7": { id: "projects", nameVi: "Dự án tiêu biểu", nameEn: "Projects" },
-      "8": { id: "interview", nameVi: "Phỏng vấn AI", nameEn: "AI Interview" },
-      "9": { id: "tuvi", nameVi: "Tử Vi & Chiêm Tinh", nameEn: "TuVi & Astrology" },
-      "0": { id: "contact", nameVi: "Liên hệ", nameEn: "Contact" },
-      "u": { id: "customization", nameVi: "Tùy chỉnh hệ thống", nameEn: "Customization" },
-      "U": { id: "customization", nameVi: "Tùy chỉnh hệ thống", nameEn: "Customization" },
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Global Quick Search / Command Palette shortcut (Ctrl+K or Cmd+K)
-      if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
-        e.preventDefault();
-        setIsCommandPaletteOpen((prev) => !prev);
-        return;
-      }
-
-      // Global AI Image Studio shortcut (Ctrl+I or Cmd+I)
-      if ((e.ctrlKey || e.metaKey) && (e.key === "i" || e.key === "I")) {
-        e.preventDefault();
-        setIsImageStudioOpen((prev) => !prev);
-        return;
-      }
-
-      const activeEl = document.activeElement;
-      if (
-        activeEl &&
-        (activeEl.tagName === "INPUT" ||
-          activeEl.tagName === "TEXTAREA" ||
-          activeEl.tagName === "SELECT" ||
-          (activeEl as HTMLElement).isContentEditable)
-      ) {
-        return;
-      }
-
-      const key = e.key;
-      if (shortcutMap[key]) {
-        const item = shortcutMap[key];
-        navigateToSection(item.id);
-        triggerShortcutToast(key, item.nameVi, item.nameEn);
-        return;
-      }
-
-      const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-      if ((e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown") && currentIndex < SECTIONS.length - 1) {
-        navigateToSection(SECTIONS[currentIndex + 1].id);
-      } else if ((e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") && currentIndex > 0) {
-        navigateToSection(SECTIONS[currentIndex - 1].id);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSection]);
-
-  // Touch Swipe Navigation for Responsive Web (Mobile & Tablet)
-  // Handles high-velocity swipes, varying screen aspect ratios, and dynamic thresholds
-  useEffect(() => {
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchStartTime = 0;
-    let isIgnoredTarget = false;
-    
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return; // Only track single-finger gestures
-      
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-      touchStartTime = Date.now();
-
-      // Check if user initiated touch inside an element that handles its own horizontal scroll
-      const target = e.target as HTMLElement | null;
-      if (target) {
-        const scrollableParent = target.closest(
-          '.no-swipe, [data-no-swipe], pre, code, .overflow-x-auto, input, textarea, select, [role="slider"]'
-        );
-        isIgnoredTarget = Boolean(scrollableParent);
-      } else {
-        isIgnoredTarget = false;
-      }
-    };
-    
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (isIgnoredTarget || e.changedTouches.length === 0) return;
-      
-      const touch = e.changedTouches[0];
-      const touchEndX = touch.clientX;
-      const touchEndY = touch.clientY;
-      const touchEndTime = Date.now();
-      
-      handleSwipeGesture(touchEndX, touchEndY, touchEndTime);
-    };
-    
-    const handleSwipeGesture = (touchEndX: number, touchEndY: number, touchEndTime: number) => {
-      const deltaX = touchEndX - touchStartX;
-      const deltaY = touchEndY - touchStartY;
-      const absDeltaX = Math.abs(deltaX);
-      const absDeltaY = Math.abs(deltaY);
-      const elapsedTime = Math.max(1, touchEndTime - touchStartTime); // in milliseconds
-      
-      // Calculate velocity in pixels per millisecond
-      const velocityX = absDeltaX / elapsedTime;
-
-      // Screen aspect ratio normalization (tall phone ~2.0+, tablet ~1.3, landscape < 1.0)
-      const viewportWidth = window.innerWidth || 390;
-      const viewportHeight = window.innerHeight || 844;
-      const screenAspectRatio = viewportHeight / Math.max(1, viewportWidth);
-
-      // Adaptive distance threshold: proportional to viewport width but capped
-      // Normal swipe: ~14% of width (min 45px, max 85px)
-      // Fast flick (velocity > 0.42 px/ms): lower threshold (35px) for quick responsiveness
-      const isHighVelocity = velocityX >= 0.42 && elapsedTime < 400;
-      const dynamicSwipeThreshold = isHighVelocity 
-        ? 35 
-        : Math.min(85, Math.max(45, viewportWidth * 0.14));
-
-      // Adaptive vertical tolerance based on aspect ratio
-      // Taller screens have a more natural diagonal thumb arc, so relax horizontal dominance ratio slightly
-      const horizontalDominanceRatio = screenAspectRatio > 1.8 ? 1.35 : 1.65;
-      const maxVerticalTolerance = isHighVelocity 
-        ? Math.min(140, viewportHeight * 0.22) 
-        : Math.min(90, viewportHeight * 0.15);
-
-      // Validate gesture intentionality
-      const isHorizontalIntent = absDeltaX >= dynamicSwipeThreshold && 
-                                 absDeltaX > absDeltaY * horizontalDominanceRatio &&
-                                 absDeltaY < maxVerticalTolerance;
-
-      if (isHorizontalIntent) {
-        const currentIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-        
-        if (deltaX < 0) {
-          // Swipe left -> Next section
-          if (currentIndex < SECTIONS.length - 1) {
-            navigateToSection(SECTIONS[currentIndex + 1].id);
-          }
-        } else if (deltaX > 0) {
-          // Swipe right -> Previous section
-          if (currentIndex > 0) {
-            navigateToSection(SECTIONS[currentIndex - 1].id);
-          }
-        }
-      }
-    };
-
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
-    
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [activeSection]);
-
-
-
-
-  const activeIndex = SECTIONS.findIndex((s) => s.id === activeSection);
-  const currentSection = SECTIONS[activeIndex] || SECTIONS[0];
-  const CurrentComponent = currentSection.Component;
-
-  const getMainCardStyle = () => {
-    return getUnifiedSurfaceStyle(theme);
-  };
+  }, []);
 
   return (
-    <SectionProvider activeSection={activeSection} setActiveSection={setActiveSection} sections={SECTIONS}>
-      <div className="min-h-screen h-screen w-full flex flex-col items-center justify-between relative overflow-hidden p-0 bg-transparent">
-        {/* CodePen Glassmorphism Ambient Floating Layer */}
-        <div className="codepen-glass-wrap">
-          <div className="codepen-glass-drop codepen-glass-drop-1 hidden md:block opacity-60" />
-          <div className="codepen-glass-drop codepen-glass-drop-2 opacity-70" />
-          <div className="codepen-glass-drop codepen-glass-drop-3 opacity-60" />
-          <div className="codepen-glass-drop codepen-glass-drop-4 opacity-75" />
-        </div>
-
-        {/* Dynamic Persistent Background Renderer (Video / Image / Gradient) */}
+    <SectionProvider activeSection={activeSection} setActiveSection={navigateToSection} sections={SECTIONS}>
+      <div className="relative min-h-screen w-full overflow-hidden bg-slate-950 text-slate-100 font-play">
+        {/* Animated Dynamic Background */}
         <BackgroundRenderer />
 
-        {/* Global Header (Bám sát bên trên website 0px, cách thẻ 10px, chiều dài bằng chiều dài thẻ, bo cong góc dưới trái & phải) */}
-        <Header 
-          theme={theme} 
-          setTheme={setTheme} 
-          activeSection={activeSection}
-          onNavigate={navigateToSection}
-        />
+        {/* Right-Edge Vertically Centered Controls Dock - Clings flush against the right edge */}
+        <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[95] flex flex-col items-end gap-2.5 pointer-events-auto select-none">
+          {/* 1. Nút Bố Cục (Layout Switcher Button - Clings flush right) */}
+          <TopRightLayoutSwitcher />
 
-        {/* Center Main Container Wrapper (Cách Header đúng 15px, cách Footer đúng 15px khi ghim hoặc trượt) */}
-        <div 
-          className={cn(
-            "mx-auto flex flex-col items-center relative z-10 w-[calc(100%-16px)] sm:w-[94%] md:w-[90%] lg:w-[88%] xl:w-[85%] max-w-[1250px] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            isHeaderSlidUp ? "mt-[24px]" : "mt-[90px]",
-            isFooterSlidDown ? "mb-[24px]" : "mb-[90px]"
-          )}
-        >
-          {/* Glass Container with Fluid Responsive Height (Kéo dài khi header/footer trượt ẩn để đảm bảo cách đúng 15px) */}
-          <div 
-            ref={cardContainerRef}
-            className={cn(
-              "w-full rounded-[14px] overflow-hidden relative flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] floating-glass-main-card z-20 shadow-none !shadow-none",
-              isHeaderSlidUp && isFooterSlidDown
-                ? "h-[calc(100vh-48px)]"
-                : isHeaderSlidUp || isFooterSlidDown
-                ? "h-[calc(100vh-105px)]" 
-                : "h-[calc(100vh-180px)]",
-              getMainCardStyle(),
-              isSwitching ? "opacity-80" : "opacity-100"
-            )}
-            style={{
-              borderRadius: "var(--theme-radius-card, 14px)",
-              boxShadow: "none"
-            }}
-          >
-            <main className="relative w-full h-full overflow-hidden flex-grow select-auto">
-              {layoutMode === "landing" ? (
-                <div className="w-full h-full overflow-hidden">
-                  <Suspense fallback={null}>
-                    <LandingPageLayout onNavigate={navigateToSection} />
-                  </Suspense>
-                </div>
-              ) : layoutMode === "prism-glass" ? (
-                <div className="w-full h-full overflow-hidden">
-                  <Suspense fallback={null}>
-                    <PrismGlassSlideLayout onNavigate={navigateToSection} />
-                  </Suspense>
-                </div>
-              ) : layoutMode === "glass-stacked" ? (
-                <div className="w-full h-full overflow-hidden">
-                  <Suspense fallback={null}>
-                    <GlassStackedCardSlide onNavigate={navigateToSection} />
-                  </Suspense>
-                </div>
-              ) : layoutMode === "bento" ? (
-                <div className="w-full h-full overflow-hidden">
-                  <Suspense fallback={null}>
-                    <BentoGridLayout onNavigate={navigateToSection} />
-                  </Suspense>
-                </div>
-              ) : (
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={activeSection}
-                    id={`panel-${activeSection}`}
-                    role="tabpanel"
-                    aria-labelledby={`tab-${activeSection}`}
-                    tabIndex={0}
-                    className={`w-full h-full min-h-full flex flex-col focus:outline-none ${currentSection.padding} no-scrollbar scroll-smooth`}
-                    initial={
-                      theme === "soft-floating-bento"
-                        ? { y: 28, opacity: 0, scale: 0.97, filter: "blur(8px)" }
-                        : { y: 35, opacity: 0, scale: 1, filter: "blur(4px)" }
-                    }
-                    animate={{ 
-                      y: 0, 
-                      opacity: 1, 
-                      scale: 1, 
-                      filter: "blur(0px)" 
-                    }}
-                    exit={
-                      theme === "soft-floating-bento"
-                        ? { y: -20, opacity: 0, scale: 0.97, filter: "blur(6px)" }
-                        : { y: -25, opacity: 0, scale: 1, filter: "blur(4px)" }
-                    }
-                    transition={
-                      theme === "soft-floating-bento"
-                        ? {
-                            type: "spring",
-                            damping: 22,
-                            stiffness: 240,
-                            mass: 0.8,
-                            staggerChildren: 0.09,
-                            delayChildren: 0.05
-                          }
-                        : {
-                            duration: 0.4, 
-                            ease: [0.16, 1, 0.3, 1],
-                            staggerChildren: 0.08,
-                            delayChildren: 0.04
-                          }
-                    }
-                  >
-                    <Suspense fallback={null}>
-                      <CurrentComponent />
-                    </Suspense>
-                  </motion.div>
-                </AnimatePresence>
-              )}
-            </main>
-          </div>
-
+          {/* 2. Nút Ra lệnh Trợ lý AI (Voice Command Assistant Button) */}
+          <VoiceCommandAssistantWidget 
+            onNavigateTab={navigateToSection}
+            onOpenSalaryCalc={() => setIsSalaryCalcOpen(true)}
+            onOpenVideoHighlights={() => setIsBpoVideoOpen(true)}
+            onOpenBadges={() => setIsBadgesOpen(true)}
+          />
         </div>
 
-        {/* Global Footer (Full on Home / Collapsed Edge with Slide-up on Other Pages) */}
-        <Footer 
-          theme={theme}
-          activeSection={activeSection}
-          onNavigate={navigateToSection}
-        />
+        {/* Header */}
+        {isHeaderVisible && <Header activeSection={activeSection} onNavigate={navigateToSection} />}
 
-        {/* Lazy Loaded Heavy Overlays & Modals */}
+        {/* Dynamic Multi-Layout Rendering Core */}
+        <main className="relative w-full h-full overflow-hidden">
+          {layoutMode === "card-page" && (
+            <CardPageLayout 
+              activeSection={activeSection} 
+              onNavigate={navigateToSection} 
+            />
+          )}
+
+          {layoutMode === "landing" && (
+            <LandingPageLayout 
+              activeSection={activeSection} 
+              onNavigate={navigateToSection} 
+            />
+          )}
+
+          {layoutMode === "dashboard" && (
+            <DashboardLayout 
+              activeSection={activeSection} 
+              onNavigate={navigateToSection} 
+            />
+          )}
+
+          {layoutMode === "bento-pinterest" && (
+            <BentoGridLayout 
+              activeSection={activeSection} 
+              onNavigate={navigateToSection} 
+            />
+          )}
+
+          {layoutMode === "slide-stack" && (
+            <GlassStackedCardSlide 
+              activeSection={activeSection} 
+              onNavigate={navigateToSection} 
+            />
+          )}
+        </main>
+
+        {/* Footer */}
+        {isFooterVisible && (
+          <Footer 
+            activeSection={activeSection} 
+            onNavigate={navigateToSection} 
+            showScrollReminder={showScrollReminder}
+            onScrollReminderClick={handleScrollReminderClick}
+          />
+        )}
+
+        {/* Modals & Dialogs */}
         <Suspense fallback={null}>
-          <XRayInspector />
-          <AIAssistant />
-          <ColorSystemModal />
-          <CursorSettingsModal />
-          <SoundSettingsModal />
-          <FooterSettingsModal />
-          <TypographySettings />
           <ExecutiveResumeExportModal
             isOpen={isResumeExportOpen}
             onClose={() => setIsResumeExportOpen(false)}
-          />
-          <ThemeModal
-            isOpen={themeContext.isThemeModalOpen}
-            onClose={themeContext.closeThemeModal}
           />
           <CommandPalette
             isOpen={isCommandPaletteOpen}
@@ -643,9 +405,47 @@ function MainContent() {
             isOpen={isImageStudioOpen}
             onClose={() => setIsImageStudioOpen(false)}
           />
+          <VCardQrCodeModal
+            isOpen={isVCardQrOpen}
+            onClose={() => setIsVCardQrOpen(false)}
+          />
+          <QuickCalendarBooking
+            isOpen={isCalendarBookingOpen}
+            onClose={() => setIsCalendarBookingOpen(false)}
+          />
+          <BpoVideoVoiceHighlightsModal
+            isOpen={isBpoVideoOpen}
+            onClose={() => setIsBpoVideoOpen(false)}
+          />
+          <AiSalaryCalculatorModal
+            isOpen={isSalaryCalcOpen}
+            onClose={() => setIsSalaryCalcOpen(false)}
+          />
+          <BlockchainDigitalBadgesModal
+            isOpen={isBadgesOpen}
+            onClose={() => setIsBadgesOpen(false)}
+          />
+
+          {/* 3D Weather Glass Cards Modal */}
+          <AnimatePresence>
+            {is3DWeatherModalOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl overflow-y-auto"
+                onClick={() => setIs3DWeatherModalOpen(false)}
+              >
+                <div onClick={(e) => e.stopPropagation()} className="w-full my-auto">
+                  <Weather3DCardsShowcase isModal onClose={() => setIs3DWeatherModalOpen(false)} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Suspense>
 
-        {/* Floating Keyboard Shortcut Notification Toast */}
+
+        {/* Keyboard Shortcut Toast */}
         <AnimatePresence>
           {shortcutToast && (
             <motion.div
@@ -671,47 +471,14 @@ function MainContent() {
           )}
         </AnimatePresence>
 
-        {/* Dynamic Scroll Reminder Button centered, footer-level, displayed after 10s (PROMPT #8) */}
-        <AnimatePresence>
-          {showScrollReminder && (
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.9 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className={cn(
-                "fixed left-1/2 -translate-x-1/2 z-[45] pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                isFooterSlidDown 
-                  ? "bottom-[34px] sm:bottom-[38px] md:bottom-[42px]" 
-                  : "bottom-[74px] sm:bottom-[80px] md:bottom-[84px]"
-              )}
-            >
-              <div className="relative inline-flex items-center rounded-full p-[1.5px] overflow-hidden select-none group/scrollrem transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_8px_25px_rgba(99,102,241,0.55)]">
-                {/* Rotating border aura */}
-                <div className="absolute -inset-[220%] animate-[spin_5s_linear_infinite] pointer-events-none bg-[conic-gradient(from_0deg,transparent_0_180deg,#6366f1_240deg,#d946ef_300deg,#ffffff_340deg,#6366f1_360deg)] opacity-90" />
-                
-                <button
-                  type="button"
-                  onClick={handleScrollReminderClick}
-                  className="relative z-10 px-5 py-2 sm:py-2.5 rounded-full bg-slate-900/90 dark:bg-slate-950/90 border border-white/10 text-white font-extrabold text-3xs sm:text-xs uppercase tracking-wider backdrop-blur-md cursor-pointer flex items-center justify-center gap-1.5"
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                  </span>
-                  <span>{lang === "vi" ? "Khám phá tiếp" : "Explore More"}</span>
-                  <ChevronDown className="w-4 h-4 text-indigo-400 animate-bounce" />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* Futuristic Custom Cursor */}
+
+        {/* Custom Cursor */}
         <CustomCursor />
 
-        {/* Global Smooth Theme Snapshot Dissolve Overlay */}
+        {/* Theme Transition Overlay */}
         <ThemeTransitionOverlay />
+
       </div>
     </SectionProvider>
   );
@@ -719,30 +486,24 @@ function MainContent() {
 
 export default function App() {
   return (
-    <ErrorBoundaryHandler>
-      <ThemeProvider>
-        <NotificationProvider>
-          <BackgroundProvider>
-            <LayoutProvider>
-              <LanguageProvider>
-                <CursorProvider>
-                  <SoundProvider>
-                    <FooterProvider>
-                      <HeaderProvider>
-                        <ErrorBoundaryHandler>
-                          <MainContent />
-                        </ErrorBoundaryHandler>
-                      </HeaderProvider>
-                    </FooterProvider>
-                  </SoundProvider>
-                </CursorProvider>
-              </LanguageProvider>
-            </LayoutProvider>
-          </BackgroundProvider>
-        </NotificationProvider>
-      </ThemeProvider>
-    </ErrorBoundaryHandler>
+    <ThemeProvider>
+      <NotificationProvider>
+        <BackgroundProvider>
+          <LayoutProvider>
+            <LanguageProvider>
+              <CursorProvider>
+                <SoundProvider>
+                  <FooterProvider>
+                    <HeaderProvider>
+                      <MainContent />
+                    </HeaderProvider>
+                  </FooterProvider>
+                </SoundProvider>
+              </CursorProvider>
+            </LanguageProvider>
+          </LayoutProvider>
+        </BackgroundProvider>
+      </NotificationProvider>
+    </ThemeProvider>
   );
 }
-
-

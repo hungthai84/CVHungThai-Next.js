@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
+import CandidateCompetencyRadar from "./CandidateCompetencyRadar";
 import { 
   STRENGTHS_DATA, 
   WEAKNESSES_DATA, 
@@ -460,6 +461,11 @@ export function Skills() {
         </div>
 
         {/* ========================================================================= */}
+        {/* INTERACTIVE CANDIDATE COMPETENCY RADAR CHART                             */}
+        {/* ========================================================================= */}
+        <CandidateCompetencyRadar />
+
+        {/* ========================================================================= */}
         {/* SECTION 7.5: NĂNG LỰC NGÔN NGỮ (LANGUAGES PROFICIENCY)                   */}
         {/* ========================================================================= */}
         <motion.div 
@@ -502,8 +508,6 @@ export function Skills() {
                 key={langItem.id}
                 className="flex items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:scale-[1.02] transition-all relative overflow-hidden group/lang"
               >
-
-
                 {/* SVG Progress Circle */}
                 <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shrink-0 z-10">
                   <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">

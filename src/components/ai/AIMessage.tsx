@@ -11,7 +11,8 @@ interface AIMessageProps {
   onSuggestionClick?: (suggestion: string) => void;
 }
 
-const AI_AVATAR_URL = "https://i.ibb.co/S4Ddv53M/Avata-Chu-t-Tr-Nh-n.gif";
+const AI_AVATAR_URL = "https://i.ibb.co/YqTwLXG/Avata-Ti-chuoi-2.gif";
+const HUNG_THAI_AVATAR_URL = "https://i.ibb.co/RT3jX4Mv/H-ng-Th-i-Avata-Gif.gif";
 
 export const AIMessage: React.FC<AIMessageProps> = ({
   message,
@@ -146,6 +147,17 @@ export const AIMessage: React.FC<AIMessageProps> = ({
       {!isAI && (
         <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xs shrink-0 mt-0.5">
           <User className="w-4 h-4" />
+        </div>
+      )}
+      {/* Avatar for User: Circular Hùng Thái Avatar Gif */}
+      {!isAI && (
+        <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-tr from-blue-600 to-indigo-600 border border-blue-300/40 dark:border-blue-400/40 shadow-sm shrink-0 mt-0.5 flex items-center justify-center order-2">
+          <img
+            src={HUNG_THAI_AVATAR_URL}
+            alt="Hùng Thái Avatar"
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover rounded-full"
+          />
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type LayoutOrientation = "vertical" | "horizontal";
-export type LayoutMode = "slide" | "bento" | "glass-stacked" | "prism-glass" | "landing";
+export type LayoutMode = "card-page" | "dashboard" | "slide-stack" | "landing" | "bento-pinterest";
 
 export interface LayoutOption {
   id: LayoutMode;
@@ -10,50 +10,72 @@ export interface LayoutOption {
   taglineVi: string;
   taglineEn: string;
   icon: string;
+  defaultThemeDark?: string;
+  defaultThemeLight?: string;
 }
 
 export const LAYOUT_OPTIONS: LayoutOption[] = [
   {
-    id: "slide",
-    nameVi: "Bố cục Thẻ Slide",
-    nameEn: "Slide Card Layout",
-    taglineVi: "Duyệt từng trang slide mượt mà, trực quan & tập trung",
-    taglineEn: "Smooth section-by-section slide navigation",
+    id: "card-page",
+    nameVi: "Card Page",
+    nameEn: "Card Page",
+    taglineVi: "Header phía trên, Center Card ở giữa và Footer phía dưới (cách 15px)",
+    taglineEn: "Top Header, Center Card & Bottom Footer with 15px gap",
     icon: "LayoutTemplate",
+    defaultThemeDark: "glass-light-multicolor",
+    defaultThemeLight: "glass-light-multicolor",
   },
   {
-    id: "bento",
-    nameVi: "Bố cục Bento Grid",
-    nameEn: "Bento Grid Layout",
-    taglineVi: "Lưới thẻ đa kích thước hiện đại, trực quan toàn diện",
-    taglineEn: "Modern multi-scale card grid overview",
-    icon: "LayoutGrid",
+    id: "dashboard",
+    nameVi: "Dashboard",
+    nameEn: "Dashboard",
+    taglineVi: "Sidebar trái, Center Card ở giữa và Sidebar phải trong thẻ bao padding 1px",
+    taglineEn: "Dual-sidebar unified dashboard inside 1px padding container",
+    icon: "LayoutDashboard",
+    defaultThemeDark: "glass-light-multicolor",
+    defaultThemeLight: "glass-light-multicolor",
   },
   {
-    id: "glass-stacked",
-    nameVi: "Glass Stacked Card Slide",
-    nameEn: "Glass Stacked Card Slide",
-    taglineVi: "Hiệu ứng thẻ xếp lớp Glassmorphism 3D mượt mà",
-    taglineEn: "Smooth 3D stacked glass card carousel slide",
+    id: "slide-stack",
+    nameVi: "Slide Stack",
+    nameEn: "Slide Stack",
+    taglineVi: "Các slide xếp lớp 3D nhô ra 4 hướng trên, dưới, trái, phải (cách 15px)",
+    taglineEn: "3D layered slides peeking in 4 directions (top, bottom, left, right)",
     icon: "Layers",
-  },
-  {
-    id: "prism-glass",
-    nameVi: "Prism Glass Slide",
-    nameEn: "Prism Glass Slide",
-    taglineVi: "Trình chiếu kính đa sắc Prism Glassmorphism mượt mà",
-    taglineEn: "Multicolor prism glassmorphism slide presentation",
-    icon: "Sparkles",
+    defaultThemeDark: "glass-light-multicolor",
+    defaultThemeLight: "glass-light-multicolor",
   },
   {
     id: "landing",
-    nameVi: "Landing Page Layout Portfolio",
-    nameEn: "Landing Page Portfolio Layout",
-    taglineVi: "Bố cục cuộn dọc xuyên suốt chuyên nghiệp cho nhà tuyển dụng",
-    taglineEn: "Professional continuous vertical landing page layout",
+    nameVi: "Landing Page Portfolio",
+    nameEn: "Landing Page Portfolio",
+    taglineVi: "Website giới thiệu năng lực theo chiều dọc với Nav Glass Liquid",
+    taglineEn: "Continuous vertical executive portfolio with Liquid Glass Navbar",
     icon: "FileText",
+    defaultThemeDark: "glass-light-multicolor",
+    defaultThemeLight: "glass-light-multicolor",
+  },
+  {
+    id: "bento-pinterest",
+    nameVi: "Bento Pinterest",
+    nameEn: "Bento Pinterest",
+    taglineVi: "Lưới card đa màu sắc Bento Masonry tự co chiều cao, ẩn Header/Footer",
+    taglineEn: "Multicolor masonry card grid with dynamic height & zero whitespace",
+    icon: "LayoutGrid",
+    defaultThemeDark: "glass-light-multicolor",
+    defaultThemeLight: "glass-light-multicolor",
   },
 ];
+
+export const normalizeLayoutMode = (mode: string | null | undefined): LayoutMode => {
+  if (!mode) return "card-page";
+  if (mode === "card-page" || mode === "slide") return "card-page";
+  if (mode === "dashboard") return "dashboard";
+  if (mode === "slide-stack" || mode === "glass-stacked" || mode === "prism-glass") return "slide-stack";
+  if (mode === "landing") return "landing";
+  if (mode === "bento-pinterest" || mode === "bento") return "bento-pinterest";
+  return "card-page";
+};
 
 interface LayoutContextType {
   orientation: LayoutOrientation;
@@ -89,14 +111,12 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       if (typeof window !== "undefined") {
         const saved = localStorage.getItem(LAYOUT_MODE_STORAGE_KEY);
-        if (saved === "slide" || saved === "bento" || saved === "glass-stacked" || saved === "prism-glass" || saved === "landing") {
-          return saved;
-        }
+        return normalizeLayoutMode(saved);
       }
     } catch (e) {
       console.error("Failed to read layout mode preference", e);
     }
-    return "slide";
+    return "card-page";
   });
 
   const [isSwitching, setIsSwitching] = useState(false);
@@ -144,7 +164,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const toggleLayoutMode = () => {
     setIsSwitching(true);
-    setLayoutModeState((prev) => (prev === "slide" ? "bento" : "slide"));
+    setLayoutModeState((prev) => (prev === "card-page" ? "dashboard" : "card-page"));
     setTimeout(() => {
       setIsSwitching(false);
     }, 600);
@@ -171,7 +191,7 @@ const fallbackLayoutContext: LayoutContextType = {
   orientation: "vertical",
   toggleOrientation: () => {},
   setOrientation: () => {},
-  layoutMode: "slide",
+  layoutMode: "card-page",
   setLayoutMode: () => {},
   toggleLayoutMode: () => {},
   isSwitching: false,

@@ -13,20 +13,15 @@ import {
   X,
   Bookmark,
   Sparkles,
-  Check,
   Trophy,
   Wrench,
-  ArrowUpRight,
   Presentation,
   UserCheck,
   UserPlus,
   BookOpen,
-  Palette,
   ExternalLink,
-  CheckCircle,
   Building2,
   Calendar,
-  Layers,
   Search,
   CheckCircle2,
   FileCheck2,
@@ -39,7 +34,7 @@ import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { PageCardHeader } from "./PageCardHeader";
 import { cn } from "../lib/utils";
-import { EducationFlipBook } from "./EducationFlipBook";
+import { playUiSound } from "../lib/sound";
 
 // ==========================================
 // DATA TYPES
@@ -249,23 +244,23 @@ export const EDUCATION_BOOKS_DATA: CareerMilestoneItem[] = [
     iconName: "Users",
     category: "management",
     year: "2014",
-    org: "Dale Carnegie & VED",
-    format: "Quản lý thực chiến",
-    focus: "Kỹ năng quản lý thực chiến và điều hành đội ngũ phòng ban hiệu quả.",
-    desc: "Khóa đào tạo kỹ năng quản lý thực chiến và điều hành đội ngũ phòng ban hiệu quả.",
+    org: "Prudential Vietnam",
+    format: "Đào tạo quản lý",
+    focus: "Phát triển kỹ năng quản lý vận hành đội ngũ, giám sát hiệu suất và điều phối công việc.",
+    desc: "Chương trình đào tạo kỹ năng quản lý vận hành đội ngũ, giám sát hiệu suất và điều phối công việc.",
     modules: [
-      "Kỹ năng quản trị nhân sự",
-      "Giao việc và ủy quyền",
-      "Giám sát hiệu suất",
-      "Huấn luyện đội ngũ và hợp tác liên phòng ban"
+      "Kỹ năng giám sát và điều hành",
+      "Đánh giá năng lực nhân sự",
+      "Giải quyết vấn đề trong vận hành",
+      "Kỹ năng giao tiếp và phản hồi hiệu quả"
     ],
-    practice: "Chuẩn hóa công cụ phân rã mục tiêu (OKRs/KPIs), thiết lập quy trình ủy quyền hiệu quả và xây dựng tinh thần phối hợp đồng đội vượt mục tiêu.",
-    techStack: "Performance Monitoring • Delegation Matrix • Team Coaching",
-    outcome: "Tối ưu hóa năng lực quản lý đội nhóm, nâng cao chỉ số hoàn thành mục tiêu và duy trì sự gắn kết nhân sự.",
-    bannerImg: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
-    certImg: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
-    courseImg: "https://i.ibb.co/jkHkZ1pd/Qu-n-l-c-p-trung.png",
-    bannerLink: "https://ibb.co/xq3q8R4y",
+    practice: "Xây dựng lịch trình vận hành hàng tuần, tổ chức họp 1-on-1 coaching định kỳ và tối ưu hóa năng suất xử lý công việc của đội ngũ.",
+    techStack: "Supervisory Skills • Team Coaching • Performance Review • Workflow Management",
+    outcome: "Cấp chứng chỉ mã PRU-ML-2014-089; trang bị vững chắc kỹ năng điều hành cấp trung và phát triển con người.",
+    bannerImg: "https://i.ibb.co/9R9z554b/Qu-n-l-c-p-trung.png",
+    certImg: "https://i.ibb.co/9R9z554b/Qu-n-l-c-p-trung.png",
+    courseImg: "https://i.ibb.co/9R9z554b/Qu-n-l-c-p-trung.png",
+    bannerLink: "https://ibb.co/mCbH516S",
     theme: {
       color: "#4f46e5",
       gradient: "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
@@ -278,92 +273,27 @@ export const EDUCATION_BOOKS_DATA: CareerMilestoneItem[] = [
   {
     id: 7,
     code: "5.7",
-    title: "Kỹ năng Đào tạo",
-    iconName: "Teacher",
-    category: "skills",
-    year: "2013",
-    org: "VietnamWorks",
-    format: "Sư phạm doanh nghiệp",
-    focus: "Phương pháp sư phạm doanh nghiệp, thiết kế bài giảng và nghệ thuật làm chủ sân khấu truyền cảm hứng.",
-    desc: "Khóa học phương pháp sư phạm doanh nghiệp, thiết kế bài giảng và nghệ thuật làm chủ sân khấu truyền cảm hứng.",
-    modules: [
-      "Xây dựng giáo trình đào tạo nội bộ",
-      "Phương pháp truyền đạt sư phạm",
-      "Kỹ năng đứng lớp",
-      "Nghệ thuật thuyết trình trước đám đông"
-    ],
-    practice: "Đóng gói bộ giáo trình chuẩn hóa Train-The-Trainer (TTT), nâng cao kỹ năng tương tác sinh động và đánh giá hiệu quả tiếp thu học viên.",
-    techStack: "TTT Framework • Curriculum Design • Instructional Techniques",
-    outcome: "Thành thạo việc chuẩn hóa và trực tiếp đứng lớp các chương trình đào tạo nhân sự nội bộ quy mô lớn.",
-    bannerImg: "https://i.ibb.co/GQVw12Vb/o-t-o.png",
-    certImg: "https://i.ibb.co/GQVw12Vb/o-t-o.png",
-    courseImg: "https://i.ibb.co/GQVw12Vb/o-t-o.png",
-    bannerLink: "https://ibb.co/SwKT1nK9",
-    theme: {
-      color: "#ea580c",
-      gradient: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)",
-      glow: "rgba(249, 115, 22, 0.35)",
-      bgSoft: "rgba(249, 115, 22, 0.08)",
-      cardBgLight: "linear-gradient(145deg, rgba(255, 247, 237, 0.92) 0%, rgba(254, 215, 170, 0.76) 100%)",
-      border: "rgba(249, 115, 22, 0.4)"
-    }
-  },
-  {
-    id: 8,
-    code: "5.8",
-    title: "Kỹ năng Thuyết trình",
+    title: "Kỹ năng giảng dạy & Đào tạo nội bộ",
     iconName: "Presentation",
     category: "skills",
     year: "2013",
-    org: "VietnamWorks",
-    format: "Truyền thông & Thuyết phục",
-    focus: "Phương pháp sư phạm doanh nghiệp, thiết kế bài giảng và nghệ thuật làm chủ sân khấu truyền cảm hứng.",
-    desc: "Khóa học phương pháp sư phạm doanh nghiệp, thiết kế bài giảng và nghệ thuật làm chủ sân khấu truyền cảm hứng.",
+    org: "Prudential Vietnam",
+    format: "Train the Trainer",
+    focus: "Phương pháp sư phạm, thiết kế tài liệu đào tạo và kỹ năng truyền đạt kiến thức thực chiến.",
+    desc: "Chương trình Train the Trainer chuyên nghiệp trang bị phương pháp sư phạm và kỹ năng truyền đạt kiến thức.",
     modules: [
-      "Xây dựng giáo trình đào tạo nội bộ",
-      "Phương pháp truyền đạt sư phạm",
-      "Kỹ năng đứng lớp",
-      "Nghệ thuật thuyết trình trước đám đông"
+      "Thiết kế chương trình đào tạo",
+      "Kỹ năng đứng lớp và truyền cảm hứng",
+      "Phương pháp tương tác học viên",
+      "Đánh giá hiệu quả sau đào tạo"
     ],
-    practice: "Kỹ thuật kiểm soát ngôn ngữ hình thể, điều hòa giọng nói chuyên nghiệp và cấu trúc bài thuyết trình tạo động lực mạnh mẽ cho người nghe.",
-    techStack: "Stage Mastery • Non-verbal Delivery • Persuasive Storytelling",
-    outcome: "Thành thạo việc chuẩn hóa và trực tiếp đứng lớp các chương trình đào tạo nhân sự nội bộ quy mô lớn.",
-    bannerImg: "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
-    certImg: "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
-    courseImg: "https://i.ibb.co/WvK6BvgL/Thuy-t-tr-nh.png",
-    bannerLink: "https://ibb.co/wh6RphMf",
-    theme: {
-      color: "#c026d3",
-      gradient: "linear-gradient(135deg, #e879f9 0%, #a21caf 100%)",
-      glow: "rgba(232, 121, 249, 0.35)",
-      bgSoft: "rgba(232, 121, 249, 0.08)",
-      cardBgLight: "linear-gradient(145deg, rgba(253, 244, 255, 0.92) 0%, rgba(250, 232, 255, 0.78) 100%)",
-      border: "rgba(232, 121, 249, 0.4)"
-    }
-  },
-  {
-    id: 9,
-    code: "5.9",
-    title: "Kỹ năng Phỏng vấn",
-    iconName: "UserCheck",
-    category: "skills",
-    year: "2013",
-    org: "VietnamWorks",
-    format: "Đánh giá nhân tài",
-    focus: "Kỹ thuật phỏng vấn hành vi (BEI) và đánh giá chuẩn xác năng lực ứng viên.",
-    desc: "Chương trình đào tạo kỹ thuật phỏng vấn và đánh giá tiềm năng nhân sự chuyên nghiệp.",
-    modules: [
-      "Kỹ thuật phỏng vấn hành vi (BEI)",
-      "Đánh giá ứng viên theo khung ASK",
-      "Kỹ năng giao tiếp trong phỏng vấn"
-    ],
-    practice: "Ứng dụng mô hình phỏng vấn tình huống STAR, bộ câu hỏi đào sâu hành vi và thang điểm đánh giá khách quan phù hợp văn hóa tổ chức.",
-    techStack: "STAR Methodology • Competency Scoring • Behavioral Assessment",
-    outcome: "Nâng cao khả năng đánh giá chính xác năng lực và sự phù hợp của ứng viên trong các buổi phỏng vấn.",
-    bannerImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
-    certImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
-    courseImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
-    bannerLink: "https://ibb.co/Z18LFBrn",
+    practice: "Thiết kế giáo án đào tạo nghiệp vụ chuẩn hóa, thực hành giảng dạy trước hội đồng và xây dựng hệ thống đánh giá năng lực học viên.",
+    techStack: "Train the Trainer • Instructional Design • Public Speaking • Assessment",
+    outcome: "Cấp chứng chỉ mã PRU-TTT-2013-034; trở thành giảng viên nội bộ chủ lực đào tạo hàng trăm nhân sự mới.",
+    bannerImg: "https://i.ibb.co/5gfJg84s/K-n-ng-gi-ng-d-y.png",
+    certImg: "https://i.ibb.co/5gfJg84s/K-n-ng-gi-ng-d-y.png",
+    courseImg: "https://i.ibb.co/5gfJg84s/K-n-ng-gi-ng-d-y.png",
+    bannerLink: "https://ibb.co/6c2m46Yc",
     theme: {
       color: "#2563eb",
       gradient: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
@@ -374,28 +304,94 @@ export const EDUCATION_BOOKS_DATA: CareerMilestoneItem[] = [
     }
   },
   {
-    id: 10,
-    code: "5.10",
-    title: "Kỹ năng Tuyển dụng",
+    id: 8,
+    code: "5.8",
+    title: "Huấn luyện chuyên sâu (Coaching)",
+    iconName: "UserCheck",
+    category: "skills",
+    year: "2012",
+    org: "Prudential Vietnam",
+    format: "Đào tạo chuyên gia",
+    focus: "Phương pháp coaching 1-1, khai phóng tiềm năng nhân sự và định hướng phát triển cá nhân.",
+    desc: "Đào tạo phương pháp coaching chuyên sâu giúp khai phóng tiềm năng nhân sự và định hướng phát triển cá nhân.",
+    modules: [
+      "Mô hình Coaching GROW",
+      "Kỹ năng đặt câu hỏi mở",
+      "Lắng nghe sâu (Active Listening)",
+      "Phản hồi mang tính xây dựng"
+    ],
+    practice: "Thực hành các phiên coaching 1-1 định kỳ với nhân sự, hỗ trợ giải quyết điểm nghẽn tâm lý và phát triển năng lực tự chủ trong công việc.",
+    techStack: "GROW Model • Active Listening • 1-on-1 Mentorship • Empathy Mapping",
+    outcome: "Nâng cao năng lực kèm cặp nhân sự, thúc đẩy tỷ lệ gắn kết và giữ chân nhân tài xuất sắc.",
+    bannerImg: "https://i.ibb.co/h15rW7qB/Hu-n-luy-n-chuy-n-s-u.png",
+    certImg: "https://i.ibb.co/h15rW7qB/Hu-n-luy-n-chuy-n-s-u.png",
+    courseImg: "https://i.ibb.co/h15rW7qB/Hu-n-luy-n-chuy-n-s-u.png",
+    bannerLink: "https://ibb.co/5gmwW77R",
+    theme: {
+      color: "#db2777",
+      gradient: "linear-gradient(135deg, #ec4899 0%, #be185d 100%)",
+      glow: "rgba(236, 72, 153, 0.35)",
+      bgSoft: "rgba(236, 72, 153, 0.08)",
+      cardBgLight: "linear-gradient(145deg, rgba(253, 242, 248, 0.92) 0%, rgba(252, 231, 243, 0.78) 100%)",
+      border: "rgba(236, 72, 153, 0.4)"
+    }
+  },
+  {
+    id: 9,
+    code: "5.9",
+    title: "Kỹ năng tuyển dụng (Interviewing)",
     iconName: "UserPlus",
     category: "skills",
-    year: "2013",
-    org: "VietnamWorks",
-    format: "Chiến lược nhân sự",
-    focus: "Chiến lược tuyển dụng và xây dựng thương hiệu tuyển dụng.",
-    desc: "Chương trình đào tạo chiến lược tuyển dụng và xây dựng thương hiệu tuyển dụng.",
+    year: "2011",
+    org: "Prudential Vietnam",
+    format: "Nghiệp vụ nhân sự",
+    focus: "Kỹ thuật phỏng vấn hành vi (Behavioral Interviewing) và thẩm định năng lực ứng viên.",
+    desc: "Chương trình huấn luyện kỹ thuật phỏng vấn hành vi chuyên sâu và thẩm định năng lực ứng viên toàn diện.",
     modules: [
-      "Xây dựng tiêu chí tuyển dụng",
-      "Quy trình thu hút nhân tài",
-      "Lập kế hoạch tuyển dụng",
-      "Tối ưu hóa chi phí tuyển dụng"
+      "Kỹ thuật phỏng vấn hành vi STAR",
+      "Đánh giá năng lực cốt lõi",
+      "Nhận diện văn hóa phù hợp",
+      "Thiết kế thang điểm phỏng vấn"
     ],
-    practice: "Tối ưu hóa kênh nguồn ứng viên (Sourcing Channels), rút ngắn thời gian lấp đầy vị trí (Time-to-hire) và hạ thấp chi phí tuyển dụng (Cost-per-hire).",
-    techStack: "Talent Acquisition • Sourcing Optimization • Employer Branding",
-    outcome: "Chuẩn hóa quy trình tuyển dụng, gia tăng tỷ lệ thu hút và tuyển dụng nhân sự chất lượng cao.",
-    bannerImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
-    certImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
-    courseImg: "https://i.ibb.co/1JqvPrND/Ph-ng-v-n.png",
+    practice: "Trực tiếp tham gia thiết kế tiêu chí tuyển dụng, thực hành phỏng vấn hàng trăm ứng viên và chọn lọc nhân sự tối ưu cho bộ phận CS.",
+    techStack: "STAR Methodology • Competency Framework • Cultural Fit Assessment",
+    outcome: "Xây dựng đội ngũ nhân sự chất lượng cao, giảm thiểu tỷ lệ biến động nhân sự trong năm đầu tiên.",
+    bannerImg: "https://i.ibb.co/KzsZ602S/K-n-ng-tuy-n-d-ng.png",
+    certImg: "https://i.ibb.co/KzsZ602S/K-n-ng-tuy-n-d-ng.png",
+    courseImg: "https://i.ibb.co/KzsZ602S/K-n-ng-tuy-n-d-ng.png",
+    bannerLink: "https://ibb.co/h1Ww4Tqj",
+    theme: {
+      color: "#9333ea",
+      gradient: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)",
+      glow: "rgba(168, 85, 247, 0.35)",
+      bgSoft: "rgba(168, 85, 247, 0.08)",
+      cardBgLight: "linear-gradient(145deg, rgba(250, 245, 255, 0.92) 0%, rgba(243, 232, 255, 0.78) 100%)",
+      border: "rgba(168, 85, 247, 0.4)"
+    }
+  },
+  {
+    id: 10,
+    code: "5.10",
+    title: "Chăm sóc khách hàng chuyên nghiệp",
+    iconName: "GraduationCap",
+    category: "skills",
+    year: "2009",
+    org: "Prudential Vietnam",
+    format: "Chứng nhận chuyên ngành",
+    focus: "Nền tảng chuẩn mực dịch vụ khách hàng xuất sắc và xử lý tình huống phức tạp.",
+    desc: "Khóa đào tạo nền tảng chuẩn mực dịch vụ khách hàng xuất sắc và kỹ thuật xử lý tình huống phức tạp.",
+    modules: [
+      "Tiêu chuẩn dịch vụ khách hàng cao cấp",
+      "Kỹ thuật giao tiếp qua điện thoại & trực tiếp",
+      "Xử lý khiếu nại và xoa dịu khách hàng",
+      "Đo lường độ hài lòng CSAT & NPS"
+    ],
+    practice: "Mô phỏng tình huống giả định (Role-play), thực hành xoa dịu khách hàng bức xúc và chuyển hóa phản hồi tiêu cực thành lòng trung thành.",
+    techStack: "Customer Delight • De-escalation Scripts • SLA Standards • NPS Tracking",
+    outcome: "Đạt chứng nhận chuyên môn CS, đặt nền móng vững chắc cho hành trình hơn 22 năm gắn bó với ngành.",
+    bannerImg: "https://i.ibb.co/Z18LFBrn/Ch-m-s-c-kh-ch-h-ng.png",
+    certImg: "https://i.ibb.co/Z18LFBrn/Ch-m-s-c-kh-ch-h-ng.png",
+    courseImg: "https://i.ibb.co/Z18LFBrn/Ch-m-s-c-kh-ch-h-ng.png",
     bannerLink: "https://ibb.co/Z18LFBrn",
     theme: {
       color: "#0d9488",
@@ -568,32 +564,21 @@ export function Education() {
   const { theme } = useTheme();
   const isVi = lang === "vi";
 
-  // State Management
-  const [viewMode, setViewMode] = useState<"flipbook" | "grid">("flipbook");
-  const [selectedBookCourseId, setSelectedBookCourseId] = useState<number | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [certModalItem, setCertModalItem] = useState<CareerMilestoneItem | null>(null);
-  const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
 
   const toggleFlip = (id: number, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    try { playUiSound("click"); } catch {}
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   // Dynamic Glass Card style
   const getGlassCardClass = useCallback(() => {
-    switch (theme as string) {
-      case "glass-dark-neon":
-        return "bg-[#0f1422]/90 dark:bg-[#0c101d]/95 border-cyan-400/25 dark:border-white/12 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,0,0,0.6)] hover:border-cyan-400/60 hover:shadow-[0_0_25px_rgba(0,240,255,0.2)]";
-      case "modern-light-glass":
-        return "bg-white/85 dark:bg-slate-900/85 border-white/80 dark:border-white/15 backdrop-blur-2xl shadow-[0_10px_30px_0_rgba(100,110,140,0.08)] dark:shadow-[0_10px_30px_0_rgba(0,0,0,0.4)] hover:shadow-[0_16px_45px_0_rgba(100,110,140,0.16)]";
-      case "glass-light-multicolor":
-      default:
-        return "bg-white/85 dark:bg-[#0e1322]/90 border-white/70 dark:border-white/12 backdrop-blur-2xl shadow-[0_10px_30px_0_rgba(31,38,135,0.08)] dark:shadow-[0_10px_30px_0_rgba(0,0,0,0.45)] hover:shadow-[0_16px_40px_0_rgba(31,38,135,0.15)]";
-    }
-  }, [theme]);
+    return "bg-white/85 dark:bg-[#0e1322]/90 border-white/70 dark:border-white/12 backdrop-blur-2xl shadow-[0_10px_30px_0_rgba(31,38,135,0.08)] dark:shadow-[0_10px_30px_0_rgba(0,0,0,0.45)] hover:shadow-[0_16px_40px_0_rgba(31,38,135,0.15)]";
+  }, []);
 
   // Categories definition
   const CATEGORIES = [
@@ -621,10 +606,6 @@ export function Education() {
     });
   }, [selectedCategory, searchKeyword]);
 
-  const toggleExpand = (id: number) => {
-    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
   return (
     <section 
       id="education" 
@@ -639,107 +620,69 @@ export function Education() {
 
       <div className="section-container relative z-10 w-full max-w-full h-full min-h-full flex-grow flex-1 flex flex-col gap-4 sm:gap-5 mx-auto justify-start">
         
-        {/* 1. Page Card Header with Filters inside */}
+        {/* 1. Page Card Header with Filters & Search inside */}
         <header className="section-header">
           <PageCardHeader pageId="education">
             <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-3 pt-1">
-              {/* Left: View Mode Toggle (FlipBook 3D vs Grid Cards) */}
-              <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-200/70 dark:bg-white/10 border border-slate-300/80 dark:border-white/10 shadow-2xs shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("flipbook")}
-                  className={cn(
-                    "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
-                    viewMode === "flipbook"
-                      ? "bg-amber-500 text-stone-950 font-black shadow-sm"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  <BookOpen className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Sách Lật 3D (FlipBook)" : "3D FlipBook"}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode("grid")}
-                  className={cn(
-                    "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
-                    viewMode === "grid"
-                      ? "bg-blue-600 text-white font-black shadow-sm"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>{isVi ? "Lưới Thẻ (Grid)" : "Grid Cards"}</span>
-                </button>
+              
+              {/* Left: Category Filter Chips */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1 lg:pb-0">
+                {CATEGORIES.map((cat) => {
+                  const isActive = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        playUiSound("click");
+                        setSelectedCategory(cat.id);
+                      }}
+                      className={cn(
+                        "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 shrink-0 border",
+                        isActive
+                          ? "bg-blue-600 dark:bg-cyan-500 text-white dark:text-slate-950 border-blue-600 dark:border-cyan-400 shadow-md font-black scale-105"
+                          : "bg-white/60 dark:bg-white/5 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10"
+                      )}
+                    >
+                      <span>{isVi ? cat.labelVi : cat.labelEn}</span>
+                      <span className={cn(
+                        "px-1.5 py-0.2 text-[10px] rounded-md font-mono",
+                        isActive ? "bg-white/25 dark:bg-slate-950/20 text-white dark:text-slate-950 font-black" : "bg-slate-200/80 dark:bg-white/10 text-slate-500 dark:text-slate-400"
+                      )}>
+                        {cat.count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Right: Category Filter Chips & Search Input (when in Grid mode) */}
-              {viewMode === "grid" && (
-                <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
-                  {/* Category Filter Chips */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full sm:w-auto pb-1 sm:pb-0">
-                    {CATEGORIES.map((cat) => {
-                      const isActive = selectedCategory === cat.id;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => setSelectedCategory(cat.id)}
-                          className={cn(
-                            "px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 shrink-0 border",
-                            isActive
-                              ? "bg-blue-600 dark:bg-cyan-500 text-white dark:text-slate-950 border-blue-600 dark:border-cyan-400 shadow-md font-black"
-                              : "bg-white/60 dark:bg-white/5 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10"
-                          )}
-                        >
-                          <span>{isVi ? cat.labelVi : cat.labelEn}</span>
-                          <span className={cn(
-                            "px-1.5 py-0.2 text-[10px] rounded-md font-mono",
-                            isActive ? "bg-white/25 dark:bg-slate-950/20 text-white dark:text-slate-950 font-black" : "bg-slate-200/80 dark:bg-white/10 text-slate-500 dark:text-slate-400"
-                          )}>
-                            {cat.count}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
+              {/* Right: Search Input Filter */}
+              <div className="relative w-full sm:w-60 shrink-0">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  placeholder={isVi ? "Tìm khóa học, chứng chỉ..." : "Search course, cert..."}
+                  className="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-sans"
+                />
+                {searchKeyword && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchKeyword("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white p-0.5 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
 
-                  {/* Search Input Filter */}
-                  <div className="relative w-full sm:w-56 shrink-0">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none" />
-                    <input
-                      type="text"
-                      value={searchKeyword}
-                      onChange={(e) => setSearchKeyword(e.target.value)}
-                      placeholder={isVi ? "Tìm khóa học..." : "Search course..."}
-                      className="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-sans"
-                    />
-                    {searchKeyword && (
-                      <button
-                        type="button"
-                        onClick={() => setSearchKeyword("")}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white p-0.5 cursor-pointer"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
           </PageCardHeader>
         </header>
 
-        {/* 2. Main Content: FlipBook 3D or Responsive Grid Cards */}
-        {viewMode === "flipbook" ? (
-          <div className="w-full flex flex-col items-center">
-            <EducationFlipBook 
-              onSelectCert={setCertModalItem} 
-              initialCourseId={selectedBookCourseId} 
-            />
-          </div>
-        ) : (
-          <div className="content-grid w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 items-start">
+        {/* 2. Main Content: Responsive Card Grid View */}
+        <div className="content-grid w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 items-start">
           {filteredCourses.map((course, idx) => {
             const CourseIcon = getCourseIcon(course.iconName);
             const isFlipped = !!flippedCards[course.id];
@@ -753,10 +696,11 @@ export function Education() {
                 transition={{ duration: 0.35, delay: idx * 0.04 }}
                 className="w-full h-auto min-h-fit [perspective:1200px]"
               >
-                <div 
+                {/* 3D Card Container */}
+                <div
                   className={cn(
-                    "relative w-full h-auto min-h-fit transition-transform duration-700 [transform-style:preserve-3d]",
-                    isFlipped && "[transform:rotateY(180deg)]"
+                    "w-full h-full relative transition-transform duration-700 [transform-style:preserve-3d]",
+                    isFlipped ? "[transform:rotateY(180deg)]" : ""
                   )}
                 >
                   {/* ========================================================= */}
@@ -778,7 +722,7 @@ export function Education() {
 
                     {/* Top Section */}
                     <div className="relative z-10 w-full flex flex-col gap-2.5">
-                      {/* Top Bar: Category badge & Year (Bỏ mã số 5.1) */}
+                      {/* Top Bar: Category badge & Year */}
                       <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-white/10">
                         <div className="flex items-center gap-1.5">
                           <span className="text-3xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10 font-mono">
@@ -863,30 +807,16 @@ export function Education() {
                       )}
                     </div>
 
-                    {/* Bottom Action Bar: Flip Card button + Cert Button + Open in FlipBook */}
-                    <div className="relative z-10 w-full pt-2.5 mt-2 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-1.5 flex-wrap">
+                    {/* Bottom Action Bar: Flip Card button + Cert Button */}
+                    <div className="relative z-10 pt-2.5 mt-2 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between gap-1.5 flex-wrap">
                       <button
                         type="button"
                         onClick={(e) => toggleFlip(course.id, e)}
-                        className="px-2 py-1.5 rounded-xl text-3xs font-bold bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 transition-all flex items-center gap-1 cursor-pointer border border-slate-200/80 dark:border-white/10 active:scale-95 shadow-2xs"
+                        className="px-2.5 py-1.5 rounded-xl text-3xs font-bold bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 transition-all flex items-center gap-1 cursor-pointer border border-slate-200/80 dark:border-white/10 active:scale-95 shadow-2xs"
                         title={isVi ? "Lật thẻ xem chi tiết học phần & thực hành" : "Flip card to view modules & practice"}
                       >
                         <RotateCw className="w-3.5 h-3.5 text-indigo-500 dark:text-cyan-400" />
                         <span>{isVi ? "Chi tiết ↺" : "Details ↺"}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedBookCourseId(course.id);
-                          setViewMode("flipbook");
-                        }}
-                        className="px-2 py-1.5 rounded-xl text-3xs font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
-                        title={isVi ? "Mở khóa học này trong Sách Lật 3D FlipBook" : "Open in 3D FlipBook"}
-                      >
-                        <BookOpen className="w-3.5 h-3.5 text-amber-500" />
-                        <span>{isVi ? "Lật Sách" : "Book"}</span>
                       </button>
 
                       <button
@@ -1011,7 +941,6 @@ export function Education() {
             );
           })}
         </div>
-      )}
 
       </div>
 

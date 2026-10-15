@@ -125,7 +125,7 @@ export function CaseStudy6_1_Tools() {
 
         <div className="flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 self-stretch sm:self-auto">
           <button
-            onClick={() => { setActiveTab("tiers"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("tiers"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "tiers"
                 ? "bg-white dark:bg-amber-600 text-amber-600 dark:text-white shadow-md"
@@ -135,7 +135,7 @@ export function CaseStudy6_1_Tools() {
             <Gem className="w-3.5 h-3.5" /> Phân Hạng Đặc Quyền
           </button>
           <button
-            onClick={() => { setActiveTab("routing"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("routing"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "routing"
                 ? "bg-white dark:bg-amber-600 text-amber-600 dark:text-white shadow-md"
@@ -145,7 +145,7 @@ export function CaseStudy6_1_Tools() {
             <Zap className="w-3.5 h-3.5" /> Giả Lập Định Tuyến VIP
           </button>
           <button
-            onClick={() => { setActiveTab("roi"); playUiSound("switch"); }}
+            onClick={() => { setActiveTab("roi"); playUiSound("click"); }}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "roi"
                 ? "bg-white dark:bg-amber-600 text-amber-600 dark:text-white shadow-md"

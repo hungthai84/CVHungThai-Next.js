@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Palette, 
@@ -11,8 +11,6 @@ import {
   SlidersHorizontal,
   Eye,
   LayoutGrid,
-  ChevronDown,
-  ChevronUp,
   Sun,
   Moon,
   Monitor
@@ -20,7 +18,6 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../i18n";
 import { THEME_LIST } from "../data/themesData";
-import SoftFloatingBentoVisualPreview from "./SoftFloatingBentoVisualPreview";
 
 interface ThemeModalProps {
   isOpen: boolean;
@@ -28,9 +25,8 @@ interface ThemeModalProps {
 }
 
 export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
-  const { theme, setTheme, resetTheme, themeMode, setThemeMode } = useTheme();
+  const { theme, setTheme, resetTheme, themeMode, setThemeMode, resolvedTheme } = useTheme();
   const { lang } = useLanguage();
-  const [showBentoPreview, setShowBentoPreview] = useState(true);
 
   // Close on Escape key press
   useEffect(() => {
@@ -151,7 +147,7 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                       setTheme("glass-light-multicolor");
                     }}
                     className={`px-2.5 py-1 rounded-lg text-2xs font-extrabold flex items-center gap-1 transition-all cursor-pointer ${
-                      themeMode === "light" || theme === "glass-light-multicolor"
+                      resolvedTheme === "light"
                         ? "bg-amber-500 text-white shadow-xs"
                         : "text-slate-600 dark:text-slate-300 hover:text-slate-900"
                     }`}
@@ -163,10 +159,9 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                     type="button"
                     onClick={() => {
                       setThemeMode("dark");
-                      setTheme("glass-dark-neon");
                     }}
                     className={`px-2.5 py-1 rounded-lg text-2xs font-extrabold flex items-center gap-1 transition-all cursor-pointer ${
-                      themeMode === "dark" || theme === "glass-dark-neon"
+                      resolvedTheme === "dark"
                         ? "bg-cyan-600 text-white shadow-xs"
                         : "text-slate-600 dark:text-slate-300 hover:text-slate-900"
                     }`}
@@ -175,59 +170,6 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                     <span>{lang === "vi" ? "Tối" : "Dark"}</span>
                   </button>
                 </div>
-              </div>
-
-              {/* Soft Floating Bento Visual Preview Showcase Banner / Card */}
-              <div className="rounded-3xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 p-3 sm:p-3.5 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-[#5865E8] to-[#7C5CDB] text-white flex items-center justify-center shadow-xs">
-                      <LayoutGrid className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                        {lang === "vi" ? "Trực Quan Theme: Soft Floating Bento" : "Visual Preview: Soft Floating Bento"}
-                      </h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        {lang === "vi" ? "Bố cục mẫu Bento Kính Mờ Nổi & Nền Pastel" : "Dummy Bento Layout with Soft Floating Cards"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    {theme !== "soft-floating-bento" && (
-                      <button
-                        type="button"
-                        onClick={() => setTheme("soft-floating-bento" as any)}
-                        className="px-2.5 py-1 rounded-xl text-3xs font-extrabold bg-[#5865E8] text-white hover:bg-[#4752c4] shadow-xs transition-all cursor-pointer"
-                      >
-                        {lang === "vi" ? "Áp dụng" : "Apply"}
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setShowBentoPreview(!showBentoPreview)}
-                      className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors cursor-pointer"
-                      title={showBentoPreview ? "Thu gọn preview" : "Mở rộng preview"}
-                    >
-                      {showBentoPreview ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <AnimatePresence>
-                  {showBentoPreview && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
-                      <SoftFloatingBentoVisualPreview showDetails={false} className="mt-1" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
 
               {/* Section Title */}
@@ -243,7 +185,6 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
               <div className="space-y-3">
                 {THEME_LIST.map((themeItem) => {
                   const isSelected = theme === themeItem.id;
-                  const isBento = themeItem.id === "soft-floating-bento";
 
                   return (
                     <div
@@ -282,18 +223,13 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                       </p>
 
                       {/* Mini Layout Thumbnail Preview */}
-                      {isBento ? (
-                        <div className="mb-2">
-                          <SoftFloatingBentoVisualPreview compact />
-                        </div>
-                      ) : (
-                        <div 
-                          className="w-full h-20 rounded-xl p-2 mb-2 flex flex-col justify-between border transition-all duration-200 overflow-hidden relative"
-                          style={{ 
-                            backgroundColor: themeItem.colors.background,
-                            borderColor: themeItem.colors.border,
-                          }}
-                        >
+                      <div 
+                        className="w-full h-20 rounded-xl p-2 mb-2 flex flex-col justify-between border transition-all duration-200 overflow-hidden relative"
+                        style={{ 
+                          backgroundColor: themeItem.colors.background,
+                          borderColor: themeItem.colors.border,
+                        }}
+                      >
                           {/* Mini Header Bar */}
                           <div 
                             className="w-full h-4 rounded px-1.5 flex items-center justify-between border shadow-2xs"
@@ -340,7 +276,6 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                             {themeItem.badge}
                           </div>
                         </div>
-                      )}
 
                       {/* Swatches & Features Footer */}
                       <div className="flex items-center justify-between pt-2 border-t border-slate-200/50 dark:border-white/10 text-3xs">

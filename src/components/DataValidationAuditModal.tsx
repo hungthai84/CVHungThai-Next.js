@@ -107,16 +107,16 @@ export default function DataValidationAuditModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md">
+      <div className="modal-backdrop fixed inset-0 z-[120] grid place-items-center p-3 sm:p-6 overflow-y-auto overscroll-contain bg-black/80 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 15 }}
           transition={{ duration: 0.25 }}
-          className="relative w-full max-w-2xl bg-slate-900 border border-emerald-500/40 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
+          className="modal-window relative w-full max-w-2xl max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)] bg-slate-900 border border-emerald-500/40 rounded-3xl shadow-2xl text-white flex flex-col overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/90">
+          <div className="modal-header flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/90 shrink-0">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20">
                 <ShieldCheck className="w-5 h-5" />
@@ -143,7 +143,7 @@ export default function DataValidationAuditModal({
           </div>
 
           {/* Body Content */}
-          <div className="p-6 overflow-y-auto max-h-[75vh] custom-scrollbar space-y-5 bg-slate-950/60">
+          <div className="modal-body p-6 overflow-y-auto flex-1 min-h-0 custom-scrollbar space-y-5 bg-slate-950/60 overscroll-contain">
             {/* Progress Bar Header */}
             <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
               <div className="flex justify-between items-center text-xs font-bold">

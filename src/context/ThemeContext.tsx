@@ -1,21 +1,13 @@
+'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { USER_GRADIENTS, UserGradientItem, WEBSITE_BASE_BACKGROUND } from "../data/userGradientsData";
 
 export const THEMES = [
-  "default",
-  "flat",
-  "soft",
-  "bento",
-  "minimal",
-  "dark",
-  "soft-floating-bento",
-  "pastel-glass",
-  "glass-dark-neon",
   "glass-light-multicolor",
-  "glass-ui-layout"
+  "dark"
 ] as const;
 
-export type ThemeType = typeof THEMES[number];
+export type ThemeType = (typeof THEMES)[number] | string;
 export type ThemeMode = "light" | "dark" | "system";
 
 export interface ColorTokenItem {
@@ -560,12 +552,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const getResolvedThemeName = (mode: ThemeMode): ThemeType => {
     if (mode === "dark") return "dark";
-    if (mode === "light") return "default";
+    if (mode === "light") return "glass-light-multicolor";
     // System Mode: Detect OS preference
     if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
       return "dark";
     }
-    return "default";
+    return "glass-light-multicolor";
   };
 
   // 2. Theme State
@@ -738,7 +730,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.setAttribute("data-theme-mode", themeMode);
     
     const isSystemDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDarkTheme = themeName === "dark" || themeName === "glass-dark-neon" || (themeName === "glass-ui-layout" ? (themeMode === "dark" || (themeMode === "system" && isSystemDark)) : themeMode === "dark");
+    const isDarkTheme = themeName === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDark);
     if (isDarkTheme) {
       root.classList.add("dark", `theme-${themeName}`);
     } else {
@@ -750,56 +742,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
 
-    if (themeName === "glass-ui-layout") {
-      const isSystemDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const isDarkGlass = themeMode === "dark" || (themeMode === "system" && isSystemDark);
-
-      const primary = "#60A5FA";
-      const secondary = "#A78BFA";
-      const accent = "#34D399";
-      const highlight = "#FB7185";
-      const soft = "#FCD34D";
-
-      root.style.setProperty("--primary", primary);
-      root.style.setProperty("--primary-hover", "#3B82F6");
-      root.style.setProperty("--color-primary", primary);
-      root.style.setProperty("--color-secondary", secondary);
-      root.style.setProperty("--color-accent", accent);
-      root.style.setProperty("--color-highlight", highlight);
-      root.style.setProperty("--color-soft", soft);
-      root.style.setProperty("--color-primary-rgb", "96, 165, 250");
-      root.style.setProperty("--color-secondary-rgb", "167, 139, 250");
-      root.style.setProperty("--color-accent-rgb", "52, 211, 153");
-      root.style.setProperty("--color-highlight-rgb", "251, 113, 133");
-      root.style.setProperty("--color-soft-rgb", "252, 211, 77");
-      root.style.setProperty("--color-primary-foreground", isDarkGlass ? "#0F0E26" : "#ffffff");
-      root.style.setProperty("--theme-primary-foreground", isDarkGlass ? "#0F0E26" : "#ffffff");
-      root.style.setProperty("--primary-foreground", isDarkGlass ? "#0F0E26" : "#ffffff");
-      root.style.setProperty("--color-secondary-foreground", "#ffffff");
-      root.style.setProperty("--secondary-foreground", "#ffffff");
-      return;
-    }
-
-    if (themeName === "soft-floating-bento" && presetId === "default") {
-      root.style.setProperty("--primary", "#5865E8");
-      root.style.setProperty("--primary-hover", "#4853cc");
-      root.style.setProperty("--color-primary", "#5865E8");
-      root.style.setProperty("--color-secondary", "#7C5CDB");
-      root.style.setProperty("--color-accent", "#39BFC5");
-      root.style.setProperty("--color-highlight", "#4D8EF7");
-      root.style.setProperty("--color-soft", "#D778E8");
-      root.style.setProperty("--color-primary-rgb", "88, 101, 232");
-      root.style.setProperty("--color-secondary-rgb", "124, 92, 219");
-      root.style.setProperty("--color-accent-rgb", "57, 191, 197");
-      root.style.setProperty("--color-primary-foreground", "#ffffff");
-      root.style.setProperty("--theme-primary-foreground", "#ffffff");
-      root.style.setProperty("--primary-foreground", "#ffffff");
-      return;
-    }
-
     const selectedPreset = COLOR_PRESETS.find((p) => p.id === presetId) || COLOR_PRESETS[0];
       
-    const isDark = themeName === "dark" || themeName === "glass-dark-neon";
+    const isSystemDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = themeName === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDark);
     const colors = isDark ? selectedPreset.dark : selectedPreset.light;
 
     root.style.setProperty("--primary", colors.primary);
@@ -914,24 +860,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
     } catch {}
 
-    if (theme === "glass-ui-layout") {
-      applyThemeToDOM("glass-ui-layout");
-      applyColorsToDOM("glass-ui-layout", colorPreset);
-      return;
-    }
-
-    if (mode === "dark") {
-      setTheme("glass-dark-neon");
-    } else if (mode === "light") {
-      setTheme("glass-light-multicolor");
-    } else {
-      // system
-      if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setTheme("glass-dark-neon");
-      } else {
-        setTheme("glass-light-multicolor");
-      }
-    }
+    applyThemeToDOM(theme);
+    applyColorsToDOM(theme, colorPreset);
   };
 
   const setBorderRadius = (radius: number) => {
@@ -1018,7 +948,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const isSystemDarkPref = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = theme === "glass-dark-neon" || theme === "dark" || (theme === "glass-ui-layout" ? (themeMode === "dark" || (themeMode === "system" && isSystemDarkPref)) : themeMode === "dark");
+  const isDark = theme === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDarkPref);
   const resolvedTheme: "light" | "dark" = isDark ? "dark" : "light";
   const selectedPresetObj = (COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0]);
   const activeColorSet = isDark ? selectedPresetObj.dark : selectedPresetObj.light;
@@ -1123,10 +1053,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const handleChange = () => {
       if (themeMode === "system") {
-        const newResolvedTheme = mediaQuery.matches ? "glass-dark-neon" : "glass-light-multicolor";
-        setThemeState(newResolvedTheme);
-        applyThemeToDOM(newResolvedTheme);
-        applyColorsToDOM(newResolvedTheme, colorPreset);
+        applyThemeToDOM(theme);
+        applyColorsToDOM(theme, colorPreset);
       }
     };
 
@@ -1208,7 +1136,7 @@ export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     return {
-      theme: "default",
+      theme: "glass-light-multicolor",
       setTheme: () => {},
       themeMode: "system",
       setThemeMode: () => {},

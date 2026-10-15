@@ -29,6 +29,19 @@
   animation: flip-bottom 0.25s ease-out 0.25s forwards;
 }
 
+@keyframes border-beam-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam-spin 2.6s linear infinite;
+}
+
 @media screen and (min-width: 1750px) { :root { --columns: 8; } }
 @media screen and (max-width: 1750px) { :root { --columns: 7; } }
 @media screen and (max-width: 1500px) { :root { --columns: 6; } }
@@ -5422,33 +5435,73 @@ html.theme-glass-dark-neon body::before {
 
 
 
-/* Top rounded corners (bo cong góc trên trái và trên phải chính xác 20px trên mọi kích thước màn hình để tránh square-corner overflow) */
+/* Header: Flush top, rounded bottom corners matching site card radius */
+header#header {
+  border-bottom-left-radius: var(--theme-radius-card, 18px) !important;
+  border-bottom-right-radius: var(--theme-radius-card, 18px) !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-radius: 0 0 var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) !important;
+  border-top: 0px !important;
+}
+
+/* Top rounded corners only matching site card theme radius, flat flush bottom */
 footer#footer,
-.footer-bento-container,
+.footer-bento-container {
+  border-top-left-radius: var(--theme-radius-card, 18px) !important;
+  border-top-right-radius: var(--theme-radius-card, 18px) !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-radius: var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) 0 0 !important;
+  border-bottom: 0px !important;
+}
+
 .major-site-wrapper,
 .site-wrapper {
-  border-top-left-radius: 10px !important;
-  border-top-right-radius: 10px !important;
+  border-top-left-radius: var(--theme-radius-card, 20px) !important;
+  border-top-right-radius: var(--theme-radius-card, 20px) !important;
   overflow: hidden !important;
 }
 
 @media (min-width: 640px) {
+  header#header {
+    border-radius: 0 0 var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) !important;
+    border-top: 0px !important;
+  }
   footer#footer,
-  .footer-bento-container,
+  .footer-bento-container {
+    border-top-left-radius: var(--theme-radius-card, 18px) !important;
+    border-top-right-radius: var(--theme-radius-card, 18px) !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-radius: var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) 0 0 !important;
+    border-bottom: 0px !important;
+  }
   .major-site-wrapper,
   .site-wrapper {
-    border-top-left-radius: 10px !important;
-    border-top-right-radius: 10px !important;
+    border-top-left-radius: var(--theme-radius-card, 18px) !important;
+    border-top-right-radius: var(--theme-radius-card, 18px) !important;
   }
 }
 
 @media (min-width: 1024px) {
+  header#header {
+    border-radius: 0 0 var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) !important;
+    border-top: 0px !important;
+  }
   footer#footer,
-  .footer-bento-container,
+  .footer-bento-container {
+    border-top-left-radius: var(--theme-radius-card, 18px) !important;
+    border-top-right-radius: var(--theme-radius-card, 18px) !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-radius: var(--theme-radius-card, 18px) var(--theme-radius-card, 18px) 0 0 !important;
+    border-bottom: 0px !important;
+  }
   .major-site-wrapper,
   .site-wrapper {
-    border-top-left-radius: 10px !important;
-    border-top-right-radius: 10px !important;
+    border-top-left-radius: var(--theme-radius-card, 18px) !important;
+    border-top-right-radius: var(--theme-radius-card, 18px) !important;
   }
 }
 
@@ -6615,31 +6668,229 @@ html, body {
   .bento-grid, .projects-grid, .skills-grid, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
     grid-template-columns: 1fr !important;
   }
-  /* Modal / Popup responsiveness for mobile 375x667 */
-  [role="dialog"], .modal-container, [class*="bg-white/80"], [class*="bg-slate-900/80"] {
-    width: 100% !important;
+  /* Responsive Modal / Popup Auto-Fit System for mobile & all screen sizes */
+  .modal-backdrop,
+  [data-modal-backdrop],
+  .app-modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+    display: grid !important;
+    place-items: center !important;
+    box-sizing: border-box !important;
+    padding: max(12px, env(safe-area-inset-top, 12px)) max(12px, env(safe-area-inset-right, 12px)) max(12px, env(safe-area-inset-bottom, 12px)) max(12px, env(safe-area-inset-left, 12px)) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    background: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+
+  .modal,
+  .modal-window,
+  .modal-container,
+  [data-modal-window],
+  .app-modal-window {
+    display: flex !important;
+    flex-direction: column !important;
+    width: min(760px, 100%) !important;
     max-width: 100% !important;
-    height: 100% !important;
-    max-height: 100vh !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
+    max-height: calc(100vh - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: auto !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border-radius: var(--theme-radius-card, 20px) !important;
   }
 }
 
-/* General Modal / Popup Safe Sizing */
-.glass-modal, .app-modal {
-  width: min(94vw, 760px);
-  max-height: 90vh;
-  overflow-y: auto;
+/* ==========================================================================
+/* ==========================================================================
+   RESPONSIVE AUTO-FIT CARD & PERFECT CENTER ALIGNMENT SYSTEM
+   ========================================================================== */
+
+/* 1. POPUP / MODAL: PERFECT CENTER ALIGNMENT & RESPONSIVE AUTO-FIT */
+.modal-backdrop,
+[data-modal-backdrop],
+.app-modal-backdrop,
+.popup-backdrop,
+.modal-overlay,
+.popover-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: grid !important;
+  place-items: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  padding: max(16px, env(safe-area-inset-top, 16px)) max(16px, env(safe-area-inset-right, 16px)) max(16px, env(safe-area-inset-bottom, 16px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
-@media (max-width: 767px) {
-  .glass-modal, .app-modal {
-    width: 100vw !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    border-radius: 0 !important;
-  }
+.modal,
+.modal-window,
+.modal-container,
+[data-modal-window],
+.app-modal-window,
+.glass-modal,
+.app-modal,
+.popup-window,
+.popup-card,
+[role="dialog"] {
+  display: flex !important;
+  flex-direction: column !important;
+  width: min(760px, 100%) !important;
+  max-width: 100% !important;
+  max-height: calc(100vh - 32px) !important;
+  max-height: calc(100dvh - 32px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: auto !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  border-radius: var(--theme-radius-card, 24px) !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45), 0 0 35px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* MODAL HEADER */
+.modal-header,
+[data-modal-header] {
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+/* MODAL CONTENT / BODY */
+.modal-body,
+[data-modal-body] {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  box-sizing: border-box !important;
+}
+
+/* MODAL FOOTER */
+.modal-footer,
+[data-modal-footer] {
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. CARD: RESPONSIVE AUTO-FIT SYSTEM (CHỐNG TRÀN & TỰ ĐỘNG THÍCH ỨNG) */
+.card,
+.glass-card,
+.glass-surface,
+.bento-card,
+.profile-card,
+.expert-section,
+.info-box,
+.content-fit-card,
+.design-card,
+.metric-card,
+[data-card],
+.card-auto-fit,
+.responsive-auto-fit-card {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Ngăn hình ảnh, video, iframe làm tràn card */
+.card img,
+.glass-card img,
+.bento-card img,
+.profile-card img,
+.card video,
+.glass-card video,
+.bento-card video,
+.card iframe,
+.glass-card iframe {
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover;
+  box-sizing: border-box !important;
+}
+
+/* Bảng dữ liệu trong card tự động cuộn ngang chống tràn */
+.card table,
+.glass-card table,
+.bento-card table,
+.profile-card table {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.table-responsive,
+.card .overflow-x-auto,
+.bento-card .overflow-x-auto {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
+}
+
+/* 3. CARD: PERFECT CENTER ALIGNMENT SYSTEM */
+.card-perfect-center,
+.card-center-align,
+.card-center,
+.center-content-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+.card-center-header,
+.card-title-center {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+/* 4. RESPONSIVE AUTO-FIT GRID LAYOUT */
+.responsive-card-grid,
+.card-auto-fit-grid,
+.auto-fit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important;
+  gap: clamp(12px, 2vw, 24px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* ==========================================================================
@@ -7322,7 +7573,11 @@ html[data-theme="soft-floating-bento"],
 /* Custom Header and Footer height, alignment, and glassmorphism specifications */
 #header,
 #footer {
-  height: 75px !important;
+  height: 68px !important;
+  min-height: 68px !important;
+  max-height: 68px !important;
+  padding: 5px !important;
+  box-sizing: border-box !important;
 }
 
 #header > div,
@@ -7516,13 +7771,14 @@ html.dark body,
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Apply 3-level system on top-level glassmorphism selectors */
+/* Apply 3-level system on top-level glassmorphism selectors - Header, Footer, Main Card share exact same glass background */
 #header,
-#footer {
+#footer,
+.floating-glass-main-card {
   background: var(--glass-main-bg) !important;
-  backdrop-filter: blur(var(--glass-main-blur)) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(var(--glass-main-blur)) saturate(160%) !important;
-  border: 1px solid var(--glass-main-border) !important;
+  backdrop-filter: blur(var(--glass-main-blur, 20px)) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(var(--glass-main-blur, 20px)) saturate(160%) !important;
+  border-color: var(--glass-main-border) !important;
 }
 
 .header-nav-container,
@@ -7534,7 +7790,6 @@ html.dark body,
   box-shadow: none !important;
 }
 
-.floating-glass-main-card,
 .glass-card,
 .bento-card {
   background: var(--glass-parent-bg) !important;
@@ -7682,15 +7937,130 @@ body, *, p, span, h1, h2, h3, h4, h5, h6, article, section, div, li, a {
   user-select: text !important;
 }
 
+/* ==========================================================================
+   RESPONSIVE LAYOUT RATIOS: HEADER (10% - FLEX-1 - 10%) & FOOTER (40% - 20% - 40%)
+   ========================================================================== */
+div:nth-of-type(2) > header#header:nth-of-type(1) > div:nth-of-type(1) {
+  width: 10% !important;
+  min-width: 56px !important;
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+div:nth-of-type(2) > header#header:nth-of-type(1) > nav#nb-10-bar:nth-of-type(1) {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+div:nth-of-type(2) > header#header:nth-of-type(1) > div:nth-of-type(2) {
+  width: 10% !important;
+  min-width: 56px !important;
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+div:nth-of-type(2) > footer#footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) {
+  width: 40% !important;
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+div:nth-of-type(2) > footer#footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) {
+  width: 20% !important;
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+div:nth-of-type(2) > footer#footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) {
+  width: 40% !important;
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Focus Mode: Hide targeted element */
+div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) {
+  display: none !important;
+}
+
+div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) {
+  display: none !important;
+}
 
 
 
 
 
+/* PowerService 12 Systems Card Styles from HTML Template */
+.system-item {
+  position: relative;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
 
+.system-item:hover {
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25), 0 10px 15px -5px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.45);
+}
 
+.card-watermark {
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  font-size: 110px;
+  color: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  z-index: 1;
+  transform: rotate(-10deg);
+  transition: transform 0.5s ease;
+}
 
+.system-item:hover .card-watermark {
+  transform: rotate(0deg) scale(1.15);
+}
 
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(4deg);
+  }
+}
 
+.animated-service-icon {
+  animation: floatIcon 3.5s ease-in-out infinite;
+  display: inline-block;
+}
 
+@keyframes haloPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
 
+.video-circle-halo {
+  animation: haloPulse 2.8s infinite;
+}

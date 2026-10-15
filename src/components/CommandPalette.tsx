@@ -28,7 +28,9 @@ import {
   FileText,
   ShieldCheck,
   ChevronRight,
-  Wand2
+  Wand2,
+  Calculator,
+  Mic
 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
@@ -90,6 +92,39 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
       action: () => {
         window.dispatchEvent(new CustomEvent('open-image-studio'));
         onClose();
+      }
+    },
+    {
+      id: "action-bpo-video",
+      titleVi: "Video Case Study BPO & Voice Highlights",
+      titleEn: "Interactive BPO Video Case Study & Voice Highlights",
+      category: "Interactive",
+      icon: Video,
+      action: () => {
+        onClose();
+        window.dispatchEvent(new CustomEvent("open-bpo-video"));
+      }
+    },
+    {
+      id: "action-salary-calc",
+      titleVi: "Công cụ Tính Lương & Đãi ngộ AI",
+      titleEn: "AI Salary & Executive Compensation Calculator",
+      category: "Tools",
+      icon: Calculator,
+      action: () => {
+        onClose();
+        window.dispatchEvent(new CustomEvent("open-salary-calc"));
+      }
+    },
+    {
+      id: "action-digital-badges",
+      titleVi: "Xác thực Chứng nhận Digital Badge Blockchain",
+      titleEn: "Digital Badge Blockchain Verification",
+      category: "Certifications",
+      icon: ShieldCheck,
+      action: () => {
+        onClose();
+        window.dispatchEvent(new CustomEvent("open-digital-badges"));
       }
     },
     {
@@ -196,16 +231,16 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
   return (
     <AnimatePresence>
       <div 
-        className="fixed inset-0 z-[99999] flex items-start justify-center pt-[10vh] sm:pt-[14vh] px-4 bg-black/60 backdrop-blur-md"
+        className="modal-backdrop fixed inset-0 z-[99999] grid place-items-center p-3 sm:p-6 overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-md"
         onClick={onClose}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: -20 }}
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: -20 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
           transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-2xl bg-white/95 dark:bg-slate-900/95 border border-white/80 dark:border-white/15 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col max-h-[75vh] backdrop-blur-2xl"
+          className="modal-window relative w-full max-w-2xl my-auto bg-white/95 dark:bg-slate-900/95 border border-white/80 dark:border-white/15 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col max-h-[calc(100vh-32px)] max-h-[calc(100dvh-32px)] backdrop-blur-2xl"
         >
           {/* Header Input Search */}
           <div className="flex items-center px-4 sm:px-5 py-3.5 border-b border-slate-200/80 dark:border-white/10 gap-3">
