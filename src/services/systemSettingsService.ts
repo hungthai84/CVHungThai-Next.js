@@ -7,8 +7,6 @@ import { SoundConfig } from "../types/sound";
 import { DEFAULT_SOUND_CONFIG } from "../data/soundData";
 import { FooterConfig } from "../types/footer";
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
-import { CursorConfig } from "../types/cursor";
-import { DEFAULT_CURSOR_CONFIG } from "../data/cursorData";
 import { ThemeType, ThemeMode, COLOR_PRESETS, getAutoContrastForeground } from "../context/ThemeContext";
 
 export const PRODUCTION_DEFAULTS_STORAGE_KEY = "thai_portfolio_production_defaults";
@@ -26,7 +24,6 @@ export interface SystemProductionConfig {
   borderRadius: number; // 0 - 28
   borderRadiusCard: number; // 0 - 32
   sound: SoundConfig;
-  cursor?: CursorConfig;
   footer: FooterConfig;
   header: {
     isPinned: boolean;
@@ -45,7 +42,6 @@ export const FACTORY_DEFAULTS: SystemProductionConfig = {
   borderRadius: 22,
   borderRadiusCard: 22,
   sound: DEFAULT_SOUND_CONFIG,
-  cursor: DEFAULT_CURSOR_CONFIG,
   footer: DEFAULT_FOOTER_CONFIG,
   header: {
     isPinned: true,
@@ -221,7 +217,7 @@ export function importConfigurationFromJson(jsonStr: string): {
 
 export interface DiagnosticItem {
   id: string;
-  category: "color" | "typography" | "radius" | "sound" | "cursor" | "dock" | "storage";
+  category: "color" | "typography" | "radius" | "sound" | "dock" | "storage";
   titleVi: string;
   titleEn: string;
   status: "perfect" | "repaired" | "warning";
@@ -467,20 +463,6 @@ export function runSystemDiagnosticAndRepair(): DiagnosticReport {
         metric: soundCfg.isMuted ? "Tắt tiếng" : "Hoạt động"
       });
     }
-  } catch {}
-
-  // 6. Interactive Cursor FX Audit
-  try {
-    items.push({
-      id: "cursor-fx",
-      category: "cursor",
-      titleVi: "Hiệu ứng con trỏ chuột công nghệ FX",
-      titleEn: "Interactive Cursor FX Engine",
-      status: "perfect",
-      detailVi: `Kiểu con trỏ mặc định hệ thống.`,
-      detailEn: `Standard system cursor enabled.`,
-      metric: "Đã tối ưu"
-    });
   } catch {}
 
   // 7. Navigation Dock (Header & Footer) Layout

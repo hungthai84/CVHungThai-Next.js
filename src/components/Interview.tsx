@@ -277,8 +277,11 @@ export function Interview() {
           </div>
         </PageCardHeader>
 
-        {/* 1. Video Presentation Screen Card */}
-        <div className="w-full flex flex-col h-auto min-h-0">
+        {/* 1. Master Grid Container: 2 columns on Desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[15px] items-stretch flex-grow min-h-0">
+          
+          {/* LEFT AREA: Video Presentation Screen Card */}
+          <div className="w-full flex flex-col h-full min-h-0">
             
             {/* 1. Video Player Hero Card */}
             <div 
@@ -397,8 +400,8 @@ export function Interview() {
             </div>
           </div>
 
-          {/* RIGHT AREA: Active Response details Card (30% on Desktop, matching height) */}
-          <div className="w-full lg:col-span-3 flex flex-col h-full min-h-0">
+          {/* RIGHT AREA: Active Response details Card */}
+          <div className="w-full lg:col-span-1 flex flex-col h-full min-h-0">
             <div 
               style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
               className="w-full h-full flex-1 rounded-[var(--theme-radius-card,14px)] border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 p-4.5 backdrop-blur-2xl shadow-md transition-all duration-300 text-left flex flex-col justify-between gap-3.5 relative overflow-hidden min-h-0"
@@ -608,6 +611,7 @@ export function Interview() {
                 </button>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>

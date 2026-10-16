@@ -3,7 +3,7 @@ import { FooterConfig, FooterPlacement, FooterStyleVariant } from "../types/foot
 import { DEFAULT_FOOTER_CONFIG } from "../data/footerData";
 import { getSavedProductionDefaults } from "../services/systemSettingsService";
 
-export type FooterModalTab = "customization" | "colors" | "radius" | "cursor" | "sound" | "footer" | "typography";
+export type FooterModalTab = "customization" | "colors" | "radius" | "sound" | "footer" | "typography";
 
 interface FooterContextType {
   footerConfig: FooterConfig;

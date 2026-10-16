@@ -66,9 +66,8 @@ export const CardPageLayout: React.FC<CardPageLayoutProps> = ({
       {/* Main Single Fit-100vh Center Card */}
       <div
         className={cn(
-          "relative z-10 w-full h-full rounded-[24px] border flex flex-col overflow-hidden shadow-2xl backdrop-blur-2xl transition-all duration-500 box-border",
-          getUnifiedSurfaceStyle(theme),
-          getPresetBgClass()
+          "relative z-10 w-full h-full rounded-[24px] border flex flex-col overflow-hidden shadow-2xl transition-all duration-500 box-border",
+          getUnifiedSurfaceStyle(theme)
         )}
         style={{
           borderRadius: "24px",

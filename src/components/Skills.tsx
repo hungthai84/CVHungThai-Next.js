@@ -36,7 +36,6 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { PageCardHeader } from "./PageCardHeader";
-import CandidateCompetencyRadar from "./CandidateCompetencyRadar";
 import { 
   STRENGTHS_DATA, 
   WEAKNESSES_DATA, 
@@ -459,11 +458,6 @@ export function Skills() {
 
           </div>
         </div>
-
-        {/* ========================================================================= */}
-        {/* INTERACTIVE CANDIDATE COMPETENCY RADAR CHART                             */}
-        {/* ========================================================================= */}
-        <CandidateCompetencyRadar />
 
         {/* ========================================================================= */}
         {/* SECTION 7.5: NĂNG LỰC NGÔN NGỮ (LANGUAGES PROFICIENCY)                   */}

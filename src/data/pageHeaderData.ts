@@ -47,18 +47,6 @@ export const PAGE_HEADER_DATA: Record<string, PageHeaderItem> = {
     accentColorClass: "text-[var(--color-primary,#2563eb)] dark:text-[var(--color-secondary,#22d3ee)]",
     lineColorClass: "bg-gradient-to-r from-blue-500/50 via-cyan-400/50 to-indigo-500/50",
   },
-  errors: {
-    id: "errors",
-    titleVi: "Báo cáo sự cố",
-    titleEn: "System Error Reports Hub",
-    quoteVi: "Giám sát chất lượng vận hành, phát hiện sự cố đơ lag và đồng bộ hóa chạy nền ngoại tuyến.",
-    quoteEn: "Monitoring operational health, error frequency tracking, and Service Worker background sync.",
-    readingTimeVi: "~1 phút đọc",
-    readingTimeEn: "~1 min read",
-    icon: ShieldAlert,
-    accentColorClass: "text-[var(--color-primary,#2563eb)] dark:text-[var(--color-secondary,#22d3ee)]",
-    lineColorClass: "bg-gradient-to-r from-rose-500/50 via-amber-400/50 to-indigo-500/50",
-  },
   glass_dashboard: {
     id: "glass_dashboard",
     titleVi: "Trang mẫu giao diện",

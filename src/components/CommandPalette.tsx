@@ -35,7 +35,6 @@ import {
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
 import { useSound } from "../context/SoundContext";
-import { useCursor } from "../context/CursorContext";
 import { playUiSound } from "../lib/sound";
 import { THEME_LIST } from "../data/themesData";
 
@@ -49,7 +48,6 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
   const { lang, setLang } = useLanguage();
   const { theme, setTheme } = useTheme();
   const { soundConfig, toggleMute } = useSound();
-  const { setIsCursorModalOpen } = useCursor();
   const isVi = lang === "vi";
 
   const [query, setQuery] = useState("");
@@ -152,14 +150,6 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
       action: () => { toggleMute(); onClose(); }
     },
     {
-      id: "action-toggle-cursor",
-      titleVi: "Cấu hình con trỏ chuột (Cursor Settings)",
-      titleEn: "Configure Custom Cursor Settings",
-      category: "Settings",
-      icon: MousePointer,
-      action: () => { setIsCursorModalOpen(true); onClose(); }
-    },
-    {
       id: "action-toggle-lang",
       titleVi: lang === "vi" ? "Đổi sang Tiếng Anh (English)" : "Switch to Vietnamese (Tiếng Việt)",
       titleEn: lang === "vi" ? "Switch to English" : "Chuyển sang Tiếng Việt",
@@ -178,7 +168,7 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
         window.dispatchEvent(new CustomEvent("open-ai-assistant"));
       }
     }
-  ], [soundConfig.isMuted, lang, setTheme, toggleMute, setIsCursorModalOpen, setLang, onClose]);
+  ], [soundConfig.isMuted, lang, setTheme, toggleMute, setLang, onClose]);
 
   const filteredItems = useMemo(() => {
     const q = query.trim().toLowerCase();

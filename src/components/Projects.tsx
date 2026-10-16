@@ -622,7 +622,7 @@ export default function Projects() {
             ) : (
               <div 
                 id="card-projects-list-content"
-                className="w-full flex flex-col gap-4"
+                className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 items-stretch"
               >
                 <>
                   {filteredProjects.map((card, cardIndex) => {
@@ -637,7 +637,7 @@ export default function Projects() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
-                        className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 min-w-0 flex flex-col h-auto"
+                        className="w-full h-full flex flex-col min-w-0"
                       >
                       <KeyframersTiltCard
                         role="button"
@@ -652,7 +652,7 @@ export default function Projects() {
                         }}
                         style={{ borderRadius: "var(--theme-radius-card, 14px)" }}
                         className={cn(
-                          "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full min-w-0 flex flex-col h-auto relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20 rounded-[14px]",
+                          "card-item project-card project-edu-glass-card overflow-hidden transition-all duration-300 cursor-pointer w-full h-full min-w-0 flex flex-col justify-between relative border shadow-md hover:shadow-xl hover:scale-[1.02] hover:z-20 rounded-[14px]",
                           theme.border,
                           theme.cardBg,
                           theme.shadow,

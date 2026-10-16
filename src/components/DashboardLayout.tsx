@@ -49,7 +49,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const { lang, setLang } = useLanguage();
   const { theme, setThemeMode, themeMode, openThemeModal } = useTheme();
-  const toggleThemeMode = () => setThemeMode(themeMode === "light" ? "dark" : "light");
+  const toggleThemeMode = () => setThemeMode("light");
   const { setLayoutMode } = useLayout();
   const isVi = lang === "vi";
 

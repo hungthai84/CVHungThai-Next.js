@@ -6,7 +6,6 @@ import { BackgroundProvider } from "../context/BackgroundContext";
 import { LayoutProvider } from "../context/LayoutContext";
 import { ThemeProvider } from "../context/ThemeContext";
 import { NotificationProvider } from "../context/NotificationContext";
-import { CursorProvider } from "../context/CursorContext";
 import { SoundProvider } from "../context/SoundContext";
 import { FooterProvider } from "../context/FooterContext";
 import { HeaderProvider } from "../context/HeaderContext";
@@ -20,17 +19,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <BackgroundProvider>
             <LayoutProvider>
               <LanguageProvider>
-                <CursorProvider>
-                  <SoundProvider>
-                    <FooterProvider>
-                      <HeaderProvider>
-                        <ErrorBoundaryHandler>
-                          {children}
-                        </ErrorBoundaryHandler>
-                      </HeaderProvider>
-                    </FooterProvider>
-                  </SoundProvider>
-                </CursorProvider>
+                <SoundProvider>
+                  <FooterProvider>
+                    <HeaderProvider>
+                      <ErrorBoundaryHandler>
+                        {children}
+                      </ErrorBoundaryHandler>
+                    </HeaderProvider>
+                  </FooterProvider>
+                </SoundProvider>
               </LanguageProvider>
             </LayoutProvider>
           </BackgroundProvider>

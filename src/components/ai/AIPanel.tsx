@@ -59,7 +59,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
 
   // Check if running in DEV mode
   const isDevMode = Boolean(
-    (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) ||
+    ((import.meta as unknown as { env?: { DEV?: boolean } })?.env?.DEV) ||
     process.env.NODE_ENV !== 'production' ||
     (typeof window !== 'undefined' && (window.location.search.includes('dev=true') || safeStorage.getItem('dev_mode') === 'true'))
   );

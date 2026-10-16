@@ -8,7 +8,6 @@ import Letter from "./Letter";
 import About from "./About";
 import Domains from "./Domains";
 import Skills from "./Skills";
-import Education from "./Education";
 import Experience from "./Experience";
 import Projects from "./Projects";
 import Interview from "./Interview";
@@ -17,7 +16,6 @@ import Memories from "./Memories";
 import Systems from "./Systems";
 import Contact from "./Contact";
 import Wallpapers from "./Wallpapers";
-import TabErrorsPage from "./TabErrorsPage";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 import { 
   Sparkles, 
@@ -232,15 +230,7 @@ export const LandingPageLayout: React.FC<LandingPageLayoutProps> = ({ activeSect
           <About />
         </section>
 
-        {/* 4. Education */}
-        <section id="landing-section-education" className="relative rounded-[26px] overflow-hidden border border-white/40 dark:border-white/10 shadow-xl backdrop-blur-2xl p-4 sm:p-8">
-          <div className="mb-4 pb-2 border-b border-white/10 flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/20 text-violet-600 dark:text-violet-400 text-xs font-mono font-bold">
-              04 · {isVi ? "Học Vấn & Chứng Chỉ" : "Education"}
-            </span>
-          </div>
-          <Education />
-        </section>
+
 
         {/* 5. Domains */}
         <section id="landing-section-domains" className="relative rounded-[26px] overflow-hidden border border-white/40 dark:border-white/10 shadow-xl backdrop-blur-2xl p-4 sm:p-8">
@@ -340,17 +330,6 @@ export const LandingPageLayout: React.FC<LandingPageLayoutProps> = ({ activeSect
             </span>
           </div>
           <Wallpapers />
-        </section>
-
-
-        {/* 16. Issues / Errors */}
-        <section id="landing-section-errors" className="relative rounded-[26px] overflow-hidden border border-white/40 dark:border-white/10 shadow-xl backdrop-blur-2xl p-4 sm:p-8">
-          <div className="mb-4 pb-2 border-b border-white/10 flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-mono font-bold">
-              16 · {isVi ? "Trạng Thái Hệ Thống & Sự Cố" : "System Status & Issues"}
-            </span>
-          </div>
-          <TabErrorsPage />
         </section>
 
       </div>

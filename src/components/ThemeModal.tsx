@@ -155,20 +155,6 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                     <Sun className="w-3 h-3" />
                     <span>{lang === "vi" ? "Sáng" : "Light"}</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setThemeMode("dark");
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-2xs font-extrabold flex items-center gap-1 transition-all cursor-pointer ${
-                      resolvedTheme === "dark"
-                        ? "bg-cyan-600 text-white shadow-xs"
-                        : "text-slate-600 dark:text-slate-300 hover:text-slate-900"
-                    }`}
-                  >
-                    <Moon className="w-3 h-3" />
-                    <span>{lang === "vi" ? "Tối" : "Dark"}</span>
-                  </button>
                 </div>
               </div>
 

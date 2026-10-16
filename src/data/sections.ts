@@ -4,7 +4,6 @@ import Letter from "../components/Letter";
 import About from "../components/About";
 import Domains from "../components/Domains";
 import Skills from "../components/Skills";
-import Education from "../components/Education";
 import Experience from "../components/Experience";
 import Projects from "../components/Projects";
 import Interview from "../components/Interview";
@@ -74,15 +73,7 @@ export const SECTIONS: SectionItem[] = [
     Component: About, 
     padding: "p-0 overflow-y-auto" 
   },
-  { 
-    id: "education", 
-    labelKey: "nav.education", 
-    labelVi: "Học Vấn", 
-    labelEn: "Education", 
-    Icon: GraduationCap, 
-    Component: Education, 
-    padding: "p-0 overflow-y-auto" 
-  },
+
   { 
     id: "domains", 
     labelKey: "nav.domains", 

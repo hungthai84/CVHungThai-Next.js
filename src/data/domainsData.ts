@@ -34,6 +34,7 @@ export interface DomainItem {
     badgeText: string;
     glow: string;
   };
+  gifUrl?: string;
   logos: {
     name: string;
     src: string;
@@ -47,6 +48,7 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.1",
     titleVi: "Viễn thông & Quốc tế",
     titleEn: "Telecom & International",
+    gifUrl: "https://i.ibb.co/4wf232nR/D-ch-v-vi-n-th-ng.gif",
     experienceVi: "10+ Năm thâm niên",
     experienceEn: "10+ Years Frontline",
     orientationVi: "Vận hành Contact Center viễn thông quốc tế 24/7",
@@ -100,6 +102,7 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.2",
     titleVi: "Thương mại điện tử",
     titleEn: "E-Commerce",
+    gifUrl: "https://i.ibb.co/60gzCy0P/Th-ng-m-i-i-n-t.gif",
     experienceVi: "6+ Năm quản trị vận hành",
     experienceEn: "6+ Years Ops Management",
     orientationVi: "Quản trị vận hành tốc độ cao",
@@ -151,12 +154,13 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.3",
     titleVi: "Bảo hiểm & Tài chính",
     titleEn: "Insurance & Finance",
+    gifUrl: "https://i.ibb.co/3Y8fvsSL/D-ch-v-b-o-hi-m.gif",
     experienceVi: "3+ Năm quản trị trải nghiệm",
     experienceEn: "3+ Years Experience Management",
     orientationVi: "Quản trị chất lượng & trải nghiệm 5 sao",
     orientationEn: "5-star quality experience management",
-    descVi: "Quản lý 12 nhân sự trực tiếp + 40+ TV Call Center cao cấp, phục vụ hàng trăm nghìn hợp đồng bảo hiểm giá trị cao.",
-    descEn: "Managing 12 direct staff + 40 Call Center consultants for high-value insurance contracts.",
+    descVi: "Xây dựng quy chuẩn quản trị chất lượng chặt chẽ, tối ưu luồng tư vấn tài chính và liên tục kinh doanh.",
+    descEn: "Building tight quality management standards, optimizing financial consulting flows and continuous business.",
     quyMoVi: "Quản lý 12 nhân sự trực tiếp + 40+ Chuyên viên tư vấn.",
     quyMoEn: "Manage 12 direct staff + 40+ premium consultants.",
     thachThucVi: "Tính chính xác minh bạch tuyệt đối pháp lý hợp đồng, BCP.",
@@ -175,9 +179,9 @@ export const DOMAINS_DATA: DomainItem[] = [
     ],
     roleVi: "Call Center Project & Quality Manager",
     roleEn: "Call Center Project & Quality Manager",
-    teamSizeVi: "12 nhân sự + 40+ Chuyên viên",
-    teamSizeEn: "12 staff + 40+ consultants",
-    toolsVi: "CRM Prudential Life (AS400), VideoCall tư vấn, QA Voice Recording",
+    teamSizeVi: "12 nhân sự trực tiếp + 40+ Chuyên viên tư vấn",
+    teamSizeEn: "12 direct staff + 40+ consultants",
+    toolsVi: "Tích hợp CRM Prudential Life (AS400), VideoCall tư vấn, QA Voice Recording",
     toolsEn: "Prudential Life CRM (AS400), VideoCall consulting, QA Voice Recording",
     partnersVi: "Prudential Vietnam",
     partnersEn: "Prudential Vietnam",
@@ -201,6 +205,7 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.4",
     titleVi: "Game & eSports",
     titleEn: "Game & eSports",
+    gifUrl: "https://i.ibb.co/Cs7VR39M/Game-e-Sport.gif",
     experienceVi: "5+ Năm điều hành quy mô siêu lớn",
     experienceEn: "5+ Years Massive Scale Ops",
     orientationVi: "Điều hành quy mô siêu lớn, hỗ trợ triệu người dùng",
@@ -253,6 +258,7 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.5",
     titleVi: "FinTech & Ví điện tử",
     titleEn: "FinTech & Wallets",
+    gifUrl: "https://i.ibb.co/GfNc1hxs/V-i-n-t.gif",
     experienceVi: "5+ Năm kiến tạo giải pháp",
     experienceEn: "5+ Years Solution Creation",
     orientationVi: "Kiến tạo giải pháp tài chính số",
@@ -304,6 +310,7 @@ export const DOMAINS_DATA: DomainItem[] = [
     code: "6.6",
     titleVi: "Tư vấn CX/CS",
     titleEn: "CX/CS Consulting",
+    gifUrl: "https://i.ibb.co/WNLbJnGb/X-y-d-ng-h-th-ng.gif",
     experienceVi: "22+ Năm thực chiến",
     experienceEn: "22+ Years Track Record",
     orientationVi: "Đóng gói & chuyển giao giải pháp toàn diện",

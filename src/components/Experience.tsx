@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import AppIcon from "./AppIcon";
 import PageBanner from "./PageBanner";
-import { Calendar, Users, Camera, Star, Gamepad2, MapPin, Trophy, ClipboardList, Folder, CheckCircle2, Quote, Building2, X, Maximize2, Minimize2, Sparkles, ChevronRight, ChevronsRight, ChevronLeft, ArrowLeft, ArrowRight, Monitor, Smartphone, Megaphone, ClipboardCheck, FileText, Layers, Filter, ChevronDown, Briefcase, Image as ImageIcon, Target, Server, Award, Clock, TrendingUp, Check, Phone, ShoppingBag, Heart, Radio, Tv, Activity, CreditCard, ShieldCheck, Bot, Zap, ZoomIn, ZoomOut, RotateCcw, User, FolderKanban, List } from "lucide-react";
+import { Calendar, Users, Camera, Star, Gamepad2, MapPin, Trophy, ClipboardList, Folder, CheckCircle2, Quote, Building2, X, Maximize2, Minimize2, Sparkles, ChevronRight, ChevronsRight, ChevronLeft, ArrowLeft, ArrowRight, Monitor, Smartphone, Megaphone, ClipboardCheck, FileText, Layers, Filter, ChevronDown, Briefcase, Image as ImageIcon, Target, Server, Award, Clock, TrendingUp, Check, Phone, ShoppingBag, Heart, Radio, Tv, Activity, CreditCard, ShieldCheck, Bot, Zap, ZoomIn, ZoomOut, RotateCcw, User, FolderKanban, List, ShoppingCart, Wallet, Wrench, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useTheme } from "../context/ThemeContext";
@@ -1911,12 +1911,11 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
               >
                   
                   {/* 1. Header / Icon / Title / Period Badge */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/15">
-                    <div className="flex items-center gap-3 min-w-0">
-                      {/* Logo Frame with Accent Ring */}
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-slate-200/80 dark:border-white/15">
+                    <div className="flex items-center gap-4 min-w-0">
                       <div className="relative shrink-0">
-                        <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 p-0.5 shadow-md">
-                          <div className="w-full h-full rounded-full bg-white dark:bg-slate-950 p-1 flex items-center justify-center overflow-hidden">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 p-0.5 shadow-xl">
+                          <div className="w-full h-full rounded-full bg-white dark:bg-slate-950 p-1.5 flex items-center justify-center overflow-hidden">
                             <img 
                               src={current.logo} 
                               alt={current.company} 
@@ -1929,642 +1928,311 @@ const TimelineRoadmapView: React.FC<TimelineRoadmapViewProps> = ({
                             />
                           </div>
                         </div>
-                        <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-2xs" />
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-md flex items-center justify-center">
+                           <Check className="w-3 h-3 text-white stroke-[4]" />
+                        </div>
                       </div>
 
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2.5">
-                          <motion.div
-                            animate={{
-                              y: [0, -3.5, 0],
-                              rotate: [0, 3.5, -3.5, 0],
-                              scale: [1, 1.05, 1],
-                            }}
-                            transition={{
-                              duration: 3.8,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                            whileHover={{ scale: 1.15, rotate: 10 }}
-                            className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                          >
-                            <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] text-blue-600 dark:text-cyan-400 drop-shadow-sm" />
-                          </motion.div>
-                          <motion.h2 
-                            animate={{ opacity: [0.96, 1, 0.96] }}
-                            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                            className="text-h6 tracking-tight font-bold font-play truncate select-none"
-                          >
-                            <span className="bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-300">
+                        <div className="flex items-center gap-3">
+                           <Building2 className="w-6 h-6 text-blue-600 dark:text-cyan-400" />
+                           <h2 className="text-xl sm:text-2xl font-black font-play tracking-tight truncate">
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-300">
                               {current.company}
                             </span>
-                          </motion.h2>
+                          </h2>
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 mt-1.5">
                           {current.subCompanies && (
-                            <span className="text-[11px] sm:text-xs text-indigo-700 dark:text-indigo-300 font-extrabold bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-0.5 rounded-lg border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
+                            <span className="text-xs text-indigo-700 dark:text-indigo-300 font-black bg-indigo-50 dark:bg-indigo-950/80 px-3 py-1 rounded-lg border border-indigo-200/80 dark:border-indigo-800/60 shadow-sm">
                               {current.subCompanies}
                             </span>
                           )}
-                          <span className="text-[10.5px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black shadow-xs font-mono uppercase tracking-wider">
+                          <span className="text-[10px] px-3 py-1 rounded-full bg-indigo-600 text-white font-black shadow-md font-mono uppercase tracking-widest">
                             {current.tag}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Huy hiệu thời gian & Nút quay lại Lộ trình khi đang xem chi tiết */}
-                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto flex-wrap">
+                    <div className="flex items-center gap-3 shrink-0">
                       <button
                         type="button"
                         onClick={handleCloseJobFocus}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:text-slate-950 font-black text-xs shadow-md transition-all cursor-pointer active:scale-95"
-                        title={isVi ? "Quay lại Lộ trình Dòng thời gian" : "Back to Timeline Roadmap"}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-lg transition-all cursor-pointer active:scale-95"
                       >
-                        <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <ArrowLeft className="w-4 h-4 stroke-[3]" />
                         <span>{isVi ? "Xem Lộ trình Timeline" : "Back to Timeline"}</span>
                       </button>
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 border border-blue-200/80 dark:border-blue-700/50 shadow-xs text-blue-700 dark:text-cyan-300 backdrop-blur-md">
-                        <Calendar className="w-4 h-4 text-blue-600 dark:text-cyan-400 stroke-[2.5]" />
-                        <span className="font-extrabold text-xs sm:text-sm tracking-wide font-mono">
-                          {current.period || `Từ ${current.cardYearLabel}`}
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-700 shadow-sm text-blue-700 dark:text-cyan-300">
+                        <Calendar className="w-4 h-4" />
+                        <span className="font-black text-xs sm:text-sm font-mono">
+                          {isVi ? `Từ ${current.cardYearLabel}` : `From ${current.cardYearLabel}`}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* 2. MASTER ROW: Thẻ Thông Tin Vị Trí CÙNG HÀNG với Thẻ Lĩnh Vực Hoạt Động */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 items-stretch mb-3.5">
+                  {/* Master Info Row: Job Info & Domains */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     
-                    {/* Cột 1: Thẻ Thông Tin Vị Trí (Job Information Overview) */}
-                    <div className="glass-surface p-4 sm:p-5 rounded-3xl border border-blue-200/80 dark:border-white/15 bg-gradient-to-br from-white/90 via-blue-50/40 to-indigo-50/50 dark:from-slate-950/90 dark:via-slate-900/90 dark:to-slate-950/90 shadow-lg backdrop-blur-2xl text-left flex flex-col justify-between">
-                      <div>
-                        {/* Header Bar */}
-                        {(() => {
-                          const chosen = getCardHeaderTheme(current.company, 0);
-                          return (
-                            <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-blue-100 dark:border-white/10">
-                              <div className="flex items-center gap-2.5">
-                                <motion.div
-                                  animate={chosen.animate}
-                                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                  className="shrink-0"
-                                >
-                                  <Briefcase className={cn("w-6 h-6 stroke-[2.2]", chosen.icon)} />
-                                </motion.div>
-                                <div>
-                                  <motion.h3 
-                                    animate={{ opacity: [0.94, 1, 0.94] }}
-                                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                                    className="text-sm sm:text-base font-black font-play tracking-tight"
-                                  >
-                                    <span className={cn("bg-clip-text text-transparent font-bold bg-gradient-to-r", chosen.text)}>
-                                      {isVi ? "Thông Tin Vị Trí" : "Job Information Overview"}
-                                    </span>
-                                  </motion.h3>
-                                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block mt-0.5">
-                                    {isVi ? "Chi tiết thông số & vai trò điều hành" : "Executive position details"}
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="text-xs font-bold text-indigo-700 dark:text-cyan-300 uppercase tracking-wider font-mono truncate max-w-[150px] sm:max-w-none">
-                                {current.company}
-                              </span>
-                            </div>
-                          );
-                        })()}
-
-                        {/* 4-Subcard Grid */}
-                        <div className="grid grid-cols-12 gap-3 items-stretch">
-                          
-                          {/* Sub-card 1: Quy mô quản lý */}
-                          <div 
-                            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                            className="col-span-12 sm:col-span-6 glass-card-portal group p-3.5 flex flex-col justify-between border border-blue-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-blue-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div 
-                                style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                className="w-11 h-11 bg-gradient-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md"
-                              >
-                                <Users className="w-5.5 h-5.5 stroke-[2.2]" />
-                              </div>
-                              <div className="min-w-0">
-                                <span className="text-[10px] font-extrabold text-blue-600 dark:text-cyan-400 block tracking-wider uppercase font-mono">
-                                  {isVi ? "Quy mô quản lý" : "Team Scale"}
-                                </span>
-                                <span className="text-sm sm:text-base font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
-                                  {current.headcount || 20} {isVi ? "Nhân sự" : "Members"}
-                                </span>
-                              </div>
-                            </div>
+                    {/* Information Summary */}
+                    <div className="lg:col-span-8 p-5 sm:p-6 rounded-[32px] border border-blue-200/60 dark:border-white/10 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:to-slate-950 shadow-xl relative overflow-hidden">
+                       <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+                       
+                       <div className="flex items-center gap-3 mb-6">
+                          <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                             <List className="w-6 h-6" />
                           </div>
-
-                          {/* Sub-card 2: Vai trò chính */}
-                          <div 
-                            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                            className="col-span-12 sm:col-span-6 glass-card-portal group p-3.5 flex flex-col justify-between border border-pink-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-pink-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div 
-                                style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                className="w-11 h-11 bg-gradient-to-br from-pink-500 to-rose-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md"
-                              >
-                                <Award className="w-5.5 h-5.5 stroke-[2.2]" />
-                              </div>
-                              <div className="min-w-0">
-                                <span className="text-[10px] font-extrabold text-pink-600 dark:text-pink-400 block tracking-wider uppercase truncate font-mono">
-                                  {isVi ? "Vai trò chính" : "Primary Role"}
-                                </span>
-                                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
-                                  {current.cardRoleTitle || current.role}
-                                </span>
-                              </div>
-                            </div>
+                          <div>
+                             <h3 className="text-lg font-black font-play text-blue-900 dark:text-white leading-tight">
+                                {isVi ? "Thông Tin Vị Trí" : "Executive Position Info"}
+                             </h3>
+                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                                {isVi ? "Chi tiết điều hành & vai trò" : "Management & Role details"}
+                             </p>
                           </div>
+                       </div>
 
-                          {/* Sub-card 3: Thời gian cống hiến */}
-                          <div 
-                            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                            className="col-span-12 sm:col-span-6 glass-card-portal group p-3.5 flex flex-col justify-between border border-indigo-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-indigo-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div 
-                                style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md"
-                              >
-                                <Clock className="w-5.5 h-5.5 stroke-[2.2]" />
-                              </div>
-                              <div className="min-w-0">
-                                <span className="text-[10px] font-extrabold text-indigo-600 dark:text-indigo-400 block tracking-wider uppercase font-mono">
-                                  {isVi ? "Thời gian" : "Tenure"}
-                                </span>
-                                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
-                                  {current.cardYearLabel || current.year}
-                                </span>
-                              </div>
+                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                          {[
+                            { label: isVi ? "QUY MÔ QUẢN LÝ" : "TEAM SIZE", value: `${current.headcount || 20} ${isVi ? "Nhân sự" : "Members"}`, icon: Users, color: "blue" },
+                            { label: isVi ? "VAI TRÒ CHÍNH" : "CORE ROLE", value: current.cardRoleTitle || current.role, icon: Award, color: "rose" },
+                            { label: isVi ? "THỜI GIAN" : "TIME", value: current.cardYearLabel || current.year, icon: Clock, color: "indigo" },
+                            { label: isVi ? "ĐỊA ĐIỂM" : "LOCATION", value: current.location || "Hồ Chí Minh", icon: MapPin, color: "fuchsia" }
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex flex-col gap-2">
+                               <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-md", 
+                                 item.color === "blue" ? "bg-blue-500 text-white" : 
+                                 item.color === "rose" ? "bg-rose-500 text-white" : 
+                                 item.color === "indigo" ? "bg-indigo-500 text-white" : "bg-fuchsia-500 text-white")}>
+                                  <item.icon className="w-6 h-6" />
+                               </div>
+                               <div>
+                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-tighter mb-0.5">{item.label}</p>
+                                  <p className="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-play leading-tight line-clamp-2">{item.value}</p>
+                               </div>
                             </div>
-                          </div>
-
-                          {/* Sub-card 4: Địa điểm làm việc */}
-                          <div 
-                            style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                            className="col-span-12 sm:col-span-6 glass-card-portal group p-3.5 flex flex-col justify-between border border-fuchsia-200/80 dark:border-white/15 bg-white/80 dark:bg-slate-900/80 shadow-xs hover:border-fuchsia-500 hover:shadow-md hover:-translate-y-0.5 transition-all backdrop-blur-xl h-auto min-h-fit"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div 
-                                style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                className="w-11 h-11 bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md"
-                              >
-                                <MapPin className="w-5.5 h-5.5 stroke-[2.2]" />
-                              </div>
-                              <div className="min-w-0">
-                                <span className="text-[10px] font-extrabold text-fuchsia-600 dark:text-fuchsia-400 block tracking-wider uppercase font-mono">
-                                  {isVi ? "Địa điểm" : "Location"}
-                                </span>
-                                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white block leading-tight truncate font-play mt-0.5">
-                                  {current.location || "Hồ Chí Minh, VN"}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
+                          ))}
+                       </div>
                     </div>
 
-                    {/* Cột 2: THẺ LĨNH VỰC HOẠT ĐỘNG (NẰM CÙNG HÀNG VỚI THÔNG TIN VỊ TRÍ) */}
-                    <div 
-                      style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                      className="glass-surface p-4 sm:p-5 border border-white/60 dark:border-white/10 shadow-xs flex flex-col justify-between"
-                    >
-                      <div>
-                        {(() => {
-                          const chosen = getCardHeaderTheme(current.company, 1);
-                          return (
-                            <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-white/30 dark:border-white/10">
-                              <div className="flex items-center gap-2.5 min-w-0">
-                                <motion.div
-                                  animate={chosen.animate}
-                                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                  className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                                >
-                                  <Layers className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[2.2] drop-shadow-sm", chosen.icon)} />
-                                </motion.div>
-                                <motion.h3 
-                                  animate={{ opacity: [0.96, 1, 0.96] }}
-                                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                                  className="text-h6 font-bold font-play tracking-tight select-none"
-                                >
-                                  <span className={cn("bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r", chosen.text)}>
-                                    {isVi ? "Lĩnh Vực Hoạt Động" : "Domains & Scope"}
-                                  </span>
-                                </motion.h3>
-                              </div>
-                            </div>
-                          );
-                        })()}
+                    {/* Domains / Activities */}
+                    <div className="lg:col-span-4 p-5 sm:p-6 rounded-[32px] border border-white/60 dark:border-white/10 glass-surface shadow-xl flex flex-col gap-4">
+                       <div className="flex items-center gap-3 mb-2">
+                          <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg">
+                             <Layers className="w-6 h-6" />
+                          </div>
+                          <h3 className="text-lg font-black font-play text-slate-900 dark:text-white">
+                             {isVi ? "Lĩnh Vực Hoạt Động" : "Domains of Activity"}
+                          </h3>
+                       </div>
 
-                        {/* List of Domain Products / Card Tags */}
-                        <div className="grid grid-cols-1 gap-2">
+                       <div className="space-y-3 flex-1 overflow-y-auto max-h-[160px] custom-scrollbar pr-1">
                           {(() => {
-                            const domainItems = (current.key === "2013" || current.key.startsWith("2013") || current.key.startsWith("2014")) ? [
-                              { title: "Garena", desc: "Nền tảng kết nối game trực tuyến", tag: "Platform" },
-                              { title: "LoL", desc: "Liên Minh Huyền Thoại - Game MOBA eSports hàng đầu", tag: "MOBA" },
-                              { title: "Shopee", desc: "Sàn thương mại điện tử đa kênh", tag: "TMĐT" },
-                              { title: "AirPay / ShopeePay", desc: "Ví điện tử FinTech & thanh toán số", tag: "FinTech" },
-                              { title: "AoV", desc: "Liên Quân Mobile - Game MOBA di động triệu người chơi", tag: "Gaming" },
-                              { title: "VED", desc: "Gcafe & Vietnam eSports - Vận hành giải đấu eSports & Cyber", tag: "eSports" }
-                            ] : current.key === "2003" ? [
-                              { title: "MobiFone Telecom", desc: "Dịch vụ khách hàng mạng di động MobiFone", tag: "TeleCom" },
-                              { title: "Tổng đài viên & Hotline", desc: "Tiếp nhận & tư vấn cước viễn thông 24/7", tag: "Inbound" },
-                              { title: "Xử lý sự cố cước", desc: "Quy trình giải quyết khiếu nại cước & FCR", tag: "Escalation" }
-                            ] : current.key === "2007" ? [
-                              { title: "Viễn Liên V247", desc: "Dịch vụ viễn thông quốc tế V247", tag: "TeleCom" },
-                              { title: "Giám sát Call Center", desc: "Quản lý đội ngũ & kiểm soát chất lượng QA", tag: "Supervisor" },
-                              { title: "Đào tạo nhân sự", desc: "Huấn luyện nghiệp vụ & SOP chăm sóc khách hàng", tag: "Coaching" }
-                            ] : current.key === "2011" ? [
-                              { title: "LBC - HTV Cable", desc: "Dịch vụ truyền hình cáp HTVC & Viễn thông", tag: "Media" },
-                              { title: "Trung tâm CSKH", desc: "Quản trị toàn diện phòng CSKH & Tổng đài", tag: "ContactCenter" },
-                              { title: "Phát triển thương hiệu", desc: "Nâng cao chỉ số hài lòng khách hàng CSAT", tag: "Branding" }
-                            ] : current.key === "2016" ? [
-                              { title: "Prudential Vietnam", desc: "Dịch vụ khách hàng bảo hiểm nhân thọ", tag: "Insurance" },
-                              { title: "Videocall CSKH", desc: "Tư vấn hợp đồng bảo hiểm qua Videocall", tag: "Video" },
-                              { title: "E-Commerce CSKH", desc: "Tích hợp kênh bảo hiểm trực tuyến & CallCenter", tag: "E-Com" }
-                            ] : current.key === "2018" ? [
-                              { title: "Ví điện tử MoMo", desc: "Hệ thống Dịch vụ Khách hàng Ví điện tử số 1", tag: "FinTech" },
-                              { title: "CRM & Omnichannel", desc: "Hệ thống CRM hỗ trợ đa kênh toàn diện", tag: "CRM" },
-                              { title: "Quản lý BPO", desc: "Điều hành đối tác BPO Mắt Bảo & SLA", tag: "Outsourcing" }
-                            ] : current.key === "2023" ? [
-                              { title: "Finviet - Ví ECO", desc: "Nền tảng thanh toán & ví điện tử ECO", tag: "FinTech" },
-                              { title: "AI Bot CSKH", desc: "Tích hợp Generative AI & Automation 24/7", tag: "AI Bot" },
-                              { title: "Tối ưu hóa CRM", desc: "Số hóa luồng tra soát & báo cáo phân tích", tag: "CRM" }
-                            ] : [
-                              { title: "AI CS Strategy 2026+", desc: "Ứng dụng Generative AI & Automation CRM", tag: "AI Gen" },
-                              { title: "CX Architecture", desc: "Chuyển đổi trải nghiệm khách hàng xuất sắc", tag: "CX Strategy" },
-                              { title: "Lãnh đạo CSKH", desc: "Quản trị đội ngũ & đào tạo thế hệ kế thừa", tag: "Leadership" }
-                            ];
-
-                            return domainItems.map((item, tIdx) => (
-                              <div 
-                                key={tIdx} 
-                                style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                                className="glass-surface-subtle p-2 px-2.5 border border-white/30 dark:border-white/10 flex items-center justify-between gap-2 hover:border-violet-400/50 transition-all group"
-                              >
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs group-hover:scale-105 transition-transform">
-                                    <Sparkles className="w-3.5 h-3.5" />
+                             const domainItems = (current.key === "2013" || current.key.startsWith("2013") || current.key.startsWith("2014")) ? [
+                               { title: "Garena", tag: "Platform", icon: Smartphone },
+                               { title: "LoL", tag: "MOBA", icon: Gamepad2 },
+                               { title: "Shopee", tag: "TMĐT", icon: ShoppingCart },
+                               { title: "AirPay", tag: "FinTech", icon: CreditCard },
+                               { title: "AoV", tag: "Gaming", icon: Gamepad2 },
+                               { title: "VED", tag: "eSports", icon: Trophy }
+                             ] : [
+                               { title: current.industry, tag: current.tag, icon: Briefcase },
+                               { title: current.company, tag: "HQ", icon: Building2 }
+                             ];
+                             return domainItems.map((item, idx) => (
+                               <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/40 dark:border-white/10 group hover:border-indigo-400 transition-all">
+                                  <div className="flex items-center gap-3">
+                                     <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center">
+                                        <item.icon className="w-4.5 h-4.5" />
+                                     </div>
+                                     <span className="text-xs font-black text-slate-900 dark:text-white">{item.title}</span>
                                   </div>
-                                  <div className="min-w-0">
-                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                      <span className="text-xs font-bold text-slate-900 dark:text-white block leading-tight truncate font-play">
-                                        {item.title}
-                                      </span>
-                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-violet-500/15 text-violet-600 dark:text-violet-300 font-extrabold border border-violet-500/25 shrink-0 font-mono">
-                                        {item.tag}
-                                      </span>
-                                    </div>
-                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1 mt-0.5">
-                                      {item.desc}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ));
+                                  <span className="text-[9px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black border border-indigo-500/20">{item.tag}</span>
+                               </div>
+                             ));
                           })()}
-                        </div>
-                      </div>
+                       </div>
                     </div>
-
                   </div>
 
-                {/* 3. Asymmetric 2-Column Grid: HÌNH KỶ NIỆM (col-span-4) + BANNER & GIỚI THIỆU (col-span-8) */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
-                  
-                  {/* LEFT COLUMN: HÌNH KỶ NIỆM (col-span-4) */}
-                  <div className="lg:col-span-4 flex flex-col gap-3.5 order-2 lg:order-1">
-                    {/* THẺ HÌNH KỶ NIỆM (CAROUSEL AUTO 3S) */}
-                    <CommemorativeCarousel 
-                      current={current} 
-                      isVi={isVi} 
-                      onOpenGallery={() => {
-                        if (current.memoryCompanyId) {
-                          const memoryCard = document.getElementById(`memory-card-${current.memoryCompanyId}`);
-                          if (memoryCard) {
-                            memoryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }
-                        }
-                      }}
-                    />
+                  {/* Pioneer Projects Banner */}
+                  <div className="relative w-full rounded-[32px] overflow-hidden group shadow-2xl border-4 border-white dark:border-slate-800">
+                     <div className="aspect-[21/6] sm:aspect-[24/6] w-full bg-slate-900">
+                        {current.bannerUrl && (
+                          <img src={current.bannerUrl} alt="" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-800/40 to-transparent flex flex-col justify-center p-6 sm:p-10">
+                           <div className="max-w-2xl space-y-2">
+                              <h4 className="text-white text-base sm:text-xl font-medium tracking-wide">
+                                 {isVi ? "Thực hiện và triển khai nhiều dự án" : "Executing and deploying multiple projects"}
+                              </h4>
+                              <h3 className="text-white text-2xl sm:text-5xl font-black font-play uppercase tracking-tight">
+                                 <span className="text-cyan-400">{isVi ? "TIÊN PHONG" : "PIONEER"}</span> {isVi ? "trong lĩnh vực" : "in the industry"}
+                              </h3>
+                              <div className="flex flex-wrap gap-2 mt-4">
+                                 {["Thương mại điện tử", "Ví điện tử", "Game eSport"].map((tag, idx) => (
+                                   <div key={idx} className="flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400 text-slate-950 font-black text-xs shadow-lg">
+                                      {idx === 0 ? <ShoppingCart size={14} /> : idx === 1 ? <Wallet size={14} /> : <Gamepad2 size={14} />}
+                                      {tag}
+                                   </div>
+                                 ))}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
 
-                  {/* RIGHT COLUMN: BANNER + GIỚI THIỆU (col-span-8) */}
-                  <div className="lg:col-span-8 flex flex-col gap-3.5 order-1 lg:order-2">
+                  {/* Split View: Photos & Overview */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div className="lg:col-span-4">
+                       <CommemorativeCarousel current={current} isVi={isVi} />
+                    </div>
                     
-                    {/* BANNER HÌNH ẢNH */}
-                    {current.bannerUrl && (
-                      <div 
-                        style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                        className="glass-surface p-2 sm:p-2.5 border border-white/60 dark:border-white/10 shadow-xs overflow-hidden group"
-                      >
-                        <div 
-                          style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                          className="relative w-full overflow-hidden aspect-[21/6] sm:aspect-[24/6] bg-slate-900/10 dark:bg-slate-950/40"
-                        >
-                          <img 
-                            src={current.bannerUrl} 
-                            alt={`${current.company} Banner`} 
-                            className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500 filter contrast-105"
-                            referrerPolicy="no-referrer"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2.5">
-                            <span className="text-[11px] font-bold text-white bg-slate-900/70 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">
-                              {current.company} • {isVi ? "Giai Đoạn Đột Phá" : "Breakthrough Milestone"}
-                            </span>
+                    <div className="lg:col-span-8 p-6 sm:p-8 rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-xl flex flex-col gap-6">
+                       <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                             <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg">
+                                <Target className="w-6 h-6" />
+                             </div>
+                             <h3 className="text-xl font-black font-play text-slate-900 dark:text-white">
+                                {isVi ? "Tổng Quan Giai Đoạn" : "Milestone Overview"}
+                             </h3>
                           </div>
-                        </div>
-                      </div>
-                    )}
+                          <span className="px-4 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black text-xs">
+                             {isVi ? `Giai đoạn ${current.year}` : `Phase ${current.year}`}
+                          </span>
+                       </div>
 
-                    {/* THẺ GIỚI THIỆU */}
-                    <div 
-                      style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                      className="glass-surface p-3.5 sm:p-4 border border-white/60 dark:border-white/10 shadow-xs text-left"
-                    >
-                      {(() => {
-                        const chosen = getCardHeaderTheme(current.company, 2);
-                        return (
-                          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/30 dark:border-white/10">
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <motion.div
-                                animate={chosen.animate}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                              >
-                                <Target className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[2.2] drop-shadow-sm", chosen.icon)} />
-                              </motion.div>
-                              <motion.h3 
-                                animate={{ opacity: [0.96, 1, 0.96] }}
-                                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                                className="text-h6 font-bold font-play tracking-tight select-none"
-                              >
-                                <span className={cn("bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r", chosen.text)}>
-                                  {isVi ? "Tổng Quan Giai Đoạn" : "Executive Career Overview"}
-                                </span>
-                              </motion.h3>
+                       <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base leading-relaxed text-justify font-medium">
+                          {current.cardDescription}
+                       </p>
+
+                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-800">
+                             <div className="flex items-center gap-2 mb-2">
+                                <div className="w-2 h-2 rounded-full bg-indigo-600" />
+                                <span className="text-[10px] font-black uppercase text-indigo-700 dark:text-indigo-400 tracking-widest">{isVi ? "MỞ RỘNG HỆ SINH THÁI" : "ECOSYSTEM EXPANSION"}</span>
+                             </div>
+                             <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                                {isVi ? "Gia nhập và quản lý hoạt động CSKH trong lĩnh vực game trực tuyến, TMĐT và ví điện tử." : "Joining and managing CS operations in gaming, e-commerce and e-wallets."}
+                             </p>
+                          </div>
+                          <div className="p-4 rounded-2xl bg-orange-50/50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-800">
+                             <div className="flex items-center gap-2 mb-2">
+                                <div className="w-2 h-2 rounded-full bg-orange-600" />
+                                <span className="text-[10px] font-black uppercase text-orange-700 dark:text-orange-400 tracking-widest">{isVi ? "CHUYỂN ĐỔI SỐ" : "DIGITAL TRANSFORMATION"}</span>
+                             </div>
+                             <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                                {isVi ? "Phát triển mạnh mẽ với các dòng sản phẩm tiên phong, đầu tư vào công nghệ và quy trình mới." : "Growing strongly with pioneer product lines, investing in new tech and processes."}
+                             </p>
+                          </div>
+                       </div>
+
+                       <div className="p-4 rounded-2xl bg-blue-600 text-white shadow-xl flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                             <Users className="w-7 h-7" />
+                          </div>
+                          <div>
+                             <p className="text-[10px] font-black uppercase tracking-widest text-white/70">{isVi ? "QUẢN TRỊ NGUỒN LỰC" : "RESOURCE MGMT"}</p>
+                             <p className="text-sm font-bold">{isVi ? `Bộ máy ${current.headcount || 130} nhân sự trực thuộc` : `Managing ${current.headcount || 130} direct staff`}</p>
+                             <p className="text-[10px] opacity-80 mt-0.5">{isVi ? "Xây dựng cơ cấu tổ chức, phát triển đội ngũ quản lý cấp trung." : "Building organizational structure, developing middle management."}</p>
+                          </div>
+                       </div>
+
+                       <div className="relative p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 italic">
+                          <Quote className="absolute top-2 left-2 w-8 h-8 text-slate-200 dark:text-slate-700 -z-10" />
+                          <p className="text-sm font-bold text-indigo-700 dark:text-indigo-400 leading-relaxed">
+                             {isVi 
+                               ? "TRIẾT LÝ QUẢN TRỊ: Xây dựng hệ thống vững chắc trước khi mở rộng quy mô — Con người song hành công nghệ — Luôn lấy trải nghiệm khách hàng làm kim chỉ nam."
+                               : "MGMT PHILOSOPHY: Build solid systems before scaling — People alongside technology — Always center around customer experience."}
+                          </p>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* 3-Column Execution & KPI Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Column 01 */}
+                    <div className="p-6 rounded-[32px] bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-white/10 flex flex-col gap-4">
+                       <div className="flex items-center gap-3">
+                          <span className="text-3xl font-black text-blue-600/30 font-mono italic">01</span>
+                          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+                             <ClipboardList className="w-5 h-5" />
+                          </div>
+                          <h4 className="text-base font-black font-play text-blue-900 dark:text-white uppercase tracking-tight">{isVi ? "Nhiệm Vụ Trọng Tâm" : "Core Tasks"}</h4>
+                       </div>
+                       <div className="space-y-3">
+                          {(current.tasks || []).slice(0, 6).map((task, idx) => (
+                            <div key={idx} className="flex items-start gap-3 group">
+                               <div className="w-5 h-5 rounded-full bg-white dark:bg-slate-800 text-blue-600 flex items-center justify-center text-[10px] font-black shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                  {idx + 1}
+                               </div>
+                               <span className="text-xs font-bold text-slate-700 dark:text-slate-300 leading-snug">{task}</span>
                             </div>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-300 font-bold border border-blue-500/20">
-                              {isVi ? `Giai Đoạn ${current.cardYearLabel || current.year}` : `Phase ${current.cardYearLabel || current.year}`}
-                            </span>
-                          </div>
-                        );
-                      })()}
-
-                      {/* Lead paragraph */}
-                      <p className="text-slate-700 dark:text-slate-200 text-xs sm:text-sm leading-relaxed mb-2.5 text-justify">
-                        {current.highlightText || current.cardDescription}
-                      </p>
-
-                      {/* 2 Strategic Highlight Cards */}
-                      <div className="grid grid-cols-12 gap-2 mb-2.5">
-                        <div 
-                          style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                          className="col-span-12 sm:col-span-6 glass-surface-subtle p-2.5 border border-white/40 dark:border-white/10"
-                        >
-                          <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-bold text-[11px] uppercase tracking-wider mb-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                            <span>{isVi ? "Mở Rộng Hệ Sinh Thái & Dịch Vụ" : "Ecosystem & Service Expansion"}</span>
-                          </div>
-                          <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-snug">
-                            {current.paragraphs && current.paragraphs[0] ? current.paragraphs[0].replace(/\*\*/g, '') : (isVi ? "Quản lý và vận hành toàn diện quy trình chăm sóc khách hàng đa kênh." : "Comprehensive management of omnichannel operations.")}
-                          </p>
-                        </div>
-
-                        <div 
-                          style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                          className="col-span-12 sm:col-span-6 glass-surface-subtle p-2.5 border border-white/40 dark:border-white/10"
-                        >
-                          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold text-[11px] uppercase tracking-wider mb-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                            <span>{isVi ? "Chuyển Đổi Số TMĐT & FinTech" : "Digital Transformation & FinTech"}</span>
-                          </div>
-                          <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-snug">
-                            {current.paragraphs && current.paragraphs[1] ? current.paragraphs[1].replace(/\*\*/g, '') : (isVi ? "Tối ưu hóa quy trình, tích hợp dữ liệu số và kiểm soát rủi ro." : "Optimizing workflows, integrating digital data, and managing risk.")}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Resource Management Box */}
-                      <div 
-                        style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                        className="glass-surface-subtle p-2.5 border-l-3 border-blue-600 dark:border-blue-400 mb-2.5 bg-gradient-to-r from-blue-500/10 via-transparent to-transparent"
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="px-1.5 py-0.5 rounded bg-blue-600 text-white font-black text-[9px]">
-                            {isVi ? "QUẢN TRỊ NGUỒN LỰC" : "RESOURCE MANAGEMENT"}
-                          </span>
-                          <span className="font-bold text-blue-700 dark:text-blue-300 text-xs">
-                            {isVi ? `Bộ máy ${current.headcount || 20} nhân sự trực thuộc` : `Managing team of ${current.headcount || 20} members`}
-                          </span>
-                        </div>
-                        <p className="text-slate-700 dark:text-slate-200 text-xs leading-relaxed">
-                          {current.paragraphs && current.paragraphs[2] ? current.paragraphs[2].replace(/\*\*/g, '') : (isVi ? "Trực tiếp chịu trách nhiệm tái cấu trúc phòng ban, đào tạo quản lý cấp trung, xây dựng KPI/SLA và kiểm soát quy trình xử lý khủng hoảng." : "Directly responsible for department restructuring, middle management coaching, KPI/SLA frameworks, and crisis escalation protocols.")}
-                        </p>
-                      </div>
-
-                      {/* Management Philosophy Callout */}
-                      <div 
-                        style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                        className="p-2.5 bg-gradient-to-r from-indigo-500/15 via-blue-500/10 to-teal-500/15 border border-indigo-400/30 text-slate-800 dark:text-slate-100"
-                      >
-                        <div className="flex items-start gap-2">
-                          <span className="text-lg leading-none text-indigo-600 dark:text-indigo-400 font-serif">“</span>
-                          <div className="text-xs leading-snug font-semibold">
-                            <span className="text-indigo-600 dark:text-indigo-400 font-extrabold uppercase tracking-wide inline">
-                              {isVi ? "Triết Lý Quản Trị: " : "Management Philosophy: "}
-                            </span>
-                            {isVi 
-                              ? "Xây dựng hệ thống vững chắc trước khi mở rộng quy mô — Con người song hành công nghệ — Luôn lấy trải nghiệm khách hàng làm kim chỉ nam."
-                              : "Build solid systems before scaling — People alongside technology — Always center decisions around customer experience."}
-                          </div>
-                        </div>
-                      </div>
+                          ))}
+                       </div>
                     </div>
 
-                  </div>
-
-                </div>
-
-                {/* 4. 3-Column Execution & KPI Grid (01 - 02 - 03) */}
-                <div className="grid grid-cols-12 gap-3.5 items-stretch">
-
-                  {/* KHUNG 01: CÔNG VIỆC */}
-                  <div 
-                    style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                    className="col-span-12 md:col-span-4 glass-surface p-3.5 sm:p-4 border border-white/40 dark:border-white/10 flex flex-col justify-between"
-                  >
-                    <div>
-                      {(() => {
-                        const chosen = getCardHeaderTheme(current.company, 4);
-                        return (
-                          <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
-                            <span className={cn("text-lg sm:text-xl font-black tracking-tight font-mono", chosen.icon)}>01</span>
-                            <motion.div
-                              animate={chosen.animate}
-                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                              className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                            >
-                              <ClipboardList className={cn("w-5 h-5 stroke-[2.2] drop-shadow-sm shrink-0", chosen.icon)} />
-                            </motion.div>
-                            <motion.h3 
-                              animate={{ opacity: [0.96, 1, 0.96] }}
-                              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                              className="text-h6 font-bold font-play tracking-tight select-none"
-                            >
-                              <span className={cn("bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r", chosen.text)}>
-                                {isVi ? "Nhiệm Vụ Trọng Tâm" : "Core Tasks & Duties"}
-                              </span>
-                            </motion.h3>
+                    {/* Column 02 */}
+                    <div className="p-6 rounded-[32px] bg-orange-50/50 dark:bg-orange-900/10 border border-orange-100 dark:border-white/10 flex flex-col gap-4">
+                       <div className="flex items-center gap-3">
+                          <span className="text-3xl font-black text-orange-600/30 font-mono italic">02</span>
+                          <div className="w-8 h-8 rounded-lg bg-orange-600 text-white flex items-center justify-center">
+                             <FolderKanban className="w-5 h-5" />
                           </div>
-                        );
-                      })()}
-
-                      <div className="space-y-1.5">
-                        {current.tasks && current.tasks.map((task, idx) => (
-                          <div key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-200">
-                            <span className="w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
-                              {idx + 1}
-                            </span>
-                            <span className="text-xs font-medium leading-snug">{task}</span>
-                          </div>
-                        ))}
-                      </div>
+                          <h4 className="text-base font-black font-play text-orange-900 dark:text-white uppercase tracking-tight">{isVi ? "Dự Án Triển Khai" : "Key Projects"}</h4>
+                       </div>
+                       <div className="space-y-3">
+                          {(current.projects || []).slice(0, 6).map((proj, idx) => (
+                            <div key={idx} className="flex items-start gap-3 group">
+                               <div className="w-5 h-5 rounded-lg bg-white dark:bg-slate-800 text-orange-600 flex items-center justify-center shadow-sm">
+                                  <Folder className="w-3 h-3" />
+                               </div>
+                               <span className="text-xs font-bold text-slate-700 dark:text-slate-300 leading-snug">{proj}</span>
+                            </div>
+                          ))}
+                       </div>
                     </div>
-                  </div>
 
-                  {/* KHUNG 02: DỰ ÁN */}
-                  <div 
-                    style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                    className="col-span-12 md:col-span-4 glass-surface p-3.5 sm:p-4 border border-white/40 dark:border-white/10 flex flex-col justify-between"
-                  >
-                    <div>
-                      {(() => {
-                        const chosen = getCardHeaderTheme(current.company, 5);
-                        return (
-                          <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
-                            <span className={cn("text-lg sm:text-xl font-black tracking-tight font-mono", chosen.icon)}>02</span>
-                            <motion.div
-                              animate={chosen.animate}
-                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                              className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                            >
-                              <FolderKanban className={cn("w-5 h-5 stroke-[2.2] drop-shadow-sm shrink-0", chosen.icon)} />
-                            </motion.div>
-                            <motion.h3 
-                              animate={{ opacity: [0.96, 1, 0.96] }}
-                              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                              className="text-h6 font-bold font-play tracking-tight select-none"
-                            >
-                              <span className={cn("bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r", chosen.text)}>
-                                {isVi ? "Dự Án Triển Khai" : "Featured Key Projects"}
-                              </span>
-                            </motion.h3>
+                    {/* Column 03 */}
+                    <div className="p-6 rounded-[32px] bg-purple-50/50 dark:bg-purple-900/10 border border-purple-100 dark:border-white/10 flex flex-col gap-4">
+                       <div className="flex items-center gap-3">
+                          <span className="text-3xl font-black text-purple-600/30 font-mono italic">03</span>
+                          <div className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center">
+                             <Trophy className="w-5 h-5" />
                           </div>
-                        );
-                      })()}
-                      
-                      <div className="grid grid-cols-1 gap-1.5 text-xs">
-                        {current.projects && current.projects.map((proj, idx) => (
-                          <div key={idx} style={{ borderRadius: "var(--theme-radius-inner, 8px)" }} className="flex items-center gap-2 p-1.5 bg-white/40 dark:bg-slate-800/40 border border-white/30 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-amber-400/50 transition-all">
-                            <FolderKanban className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                            <span className="truncate font-semibold text-xs text-slate-700 dark:text-slate-200">{proj}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* KHUNG 03: KẾT QUẢ */}
-                  <div 
-                    style={{ borderRadius: "var(--theme-radius-card, 16px)" }}
-                    className="col-span-12 md:col-span-4 glass-surface p-3.5 sm:p-4 border border-white/40 dark:border-white/10 flex flex-col justify-between"
-                  >
-                    <div>
-                      {(() => {
-                        const chosen = getCardHeaderTheme(current.company, 6);
-                        return (
-                          <div className="flex items-center gap-2 pb-2 mb-2.5 border-b border-white/20 dark:border-white/10">
-                            <span className={cn("text-lg sm:text-xl font-black tracking-tight font-mono", chosen.icon)}>03</span>
-                            <motion.div
-                              animate={chosen.animate}
-                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                              className="relative flex items-center justify-center shrink-0 cursor-pointer select-none"
-                            >
-                              <Trophy className={cn("w-5 h-5 stroke-[2.2] drop-shadow-sm shrink-0", chosen.icon)} />
-                            </motion.div>
-                            <motion.h3 
-                              animate={{ opacity: [0.96, 1, 0.96] }}
-                              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                              className="text-h6 font-bold font-play tracking-tight select-none"
-                            >
-                              <span className={cn("bg-clip-text text-transparent font-play font-bold text-h6 bg-gradient-to-r", chosen.text)}>
-                                {isVi ? "Hiệu Quả & KPI" : "Results & Key Metrics"}
-                              </span>
-                            </motion.h3>
-                          </div>
-                        );
-                      })()}
-                      
-                      <div className="space-y-2.5">
-                        {current.kpis && current.kpis.map((kpi, idx) => {
-                          const label = kpi.label.toLowerCase();
-                          let KpiIcon = CheckCircle2;
-                          if (label.includes("quy trình") || label.includes("sop") || label.includes("chuẩn hóa") || label.includes("phản hồi")) {
-                            KpiIcon = CheckCircle2;
-                          } else if (label.includes("hỗ trợ") || label.includes("cộng đồng") || label.includes("dịch vụ") || label.includes("khách hàng")) {
-                            KpiIcon = Heart;
-                          } else if (label.includes("chỉ số") || label.includes("csat") || label.includes("nps") || label.includes("kpi") || label.includes("hài lòng")) {
-                            KpiIcon = Star;
-                          } else if (label.includes("dự án") || label.includes("hoàn thành") || label.includes("nhiệm vụ") || label.includes("sự kiện")) {
-                            KpiIcon = Trophy;
-                          } else if (label.includes("ai") || label.includes("bot") || label.includes("tự động")) {
-                            KpiIcon = Bot;
-                          } else if (label.includes("vận hành") || label.includes("24/7") || label.includes("sẵn sàng") || label.includes("call")) {
-                            KpiIcon = ShieldCheck;
-                          } else if (label.includes("đào tạo") || label.includes("hướng dẫn")) {
-                            KpiIcon = Award;
-                          } else {
-                            KpiIcon = Target;
-                          }
-
-                          return (
-                            <div key={idx} className="group/kpi">
-                              <div className="flex justify-between items-center text-xs font-semibold mb-1 gap-2">
-                                <div className="flex items-center gap-2 min-w-0 pr-1">
-                                  <div className="w-5.5 h-5.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-2xs border border-emerald-500/25 group-hover/kpi:scale-110 transition-transform">
-                                    <KpiIcon className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <h4 className="text-base font-black font-play text-purple-900 dark:text-white uppercase tracking-tight">{isVi ? "Hiệu Quả & KPI" : "Results & KPI"}</h4>
+                       </div>
+                       <div className="space-y-4">
+                          {(current.kpis || []).map((kpi, idx) => (
+                            <div key={idx} className="space-y-1.5">
+                               <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                     <div className="w-4.5 h-4.5 rounded-md bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 flex items-center justify-center">
+                                        {idx === 0 ? <Wrench size={10} /> : idx === 1 ? <MessageSquare size={10} /> : <Activity size={10} />}
+                                     </div>
+                                     <span className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter">{kpi.label}</span>
                                   </div>
-                                  <span className="text-slate-800 dark:text-slate-200 truncate font-bold text-[11px] sm:text-xs">{kpi.label}</span>
-                                </div>
-                                <span className="text-emerald-600 dark:text-emerald-400 font-black font-mono text-[11px] shrink-0 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">{kpi.percent}%</span>
-                              </div>
-                              <div className="w-full bg-slate-200 dark:bg-slate-700/60 rounded-full h-1.5 overflow-hidden">
-                                <div 
-                                  className="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 h-1.5 rounded-full transition-all duration-500" 
-                                  style={{ width: `${kpi.percent}%` }} 
-                                />
-                              </div>
+                                  <span className="text-xs font-black text-purple-600 dark:text-purple-400">{kpi.percent}%</span>
+                               </div>
+                               <div className="w-full h-1.5 bg-white dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                                  <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${kpi.percent}%` }}
+                                    transition={{ duration: 1, delay: 0.5 }}
+                                    className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"
+                                  />
+                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
+                          ))}
+                       </div>
                     </div>
                   </div>
-
-                </div>
-              </motion.div>
-            )}
-        </AnimatePresence>
+                </motion.div>
+              )}
+          </AnimatePresence>
       </div>
 
       {/* Modal Tạo thẻ thêm vị trí và quản lý */}

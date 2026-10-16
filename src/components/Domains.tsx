@@ -223,171 +223,205 @@ export function Domains() {
               {/* Top Action Bar */}
               <div className="w-full flex items-center justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <motion.div
-                    animate={{ y: [0, -3, 0], rotate: [0, 3, -3, 0] }}
-                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative flex items-center justify-center shrink-0"
-                  >
-                    {(() => {
-                      const Icon = getIconComponent(selectedDomain.iconName);
-                      return <Icon className={cn("w-6 h-6 stroke-[2.2] drop-shadow-sm", selectedDomain.colorTheme.text)} />;
-                    })()}
-                  </motion.div>
-                  <h6 className="text-sm sm:text-base font-bold tracking-tight font-play">
-                    <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", (selectedDomain.colorTheme as { textGradient?: string }).textGradient || "from-blue-600 via-indigo-600 to-cyan-500")}>
-                      {isVi ? `Chi tiết lĩnh vực ${selectedDomain.code}: ${selectedDomain.titleVi}` : `Domain ${selectedDomain.code}: ${selectedDomain.titleEn}`}
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-blue-500/10 flex items-center justify-center p-1.5 shadow-inner border border-blue-200/30">
+                     {(() => {
+                        const Icon = getIconComponent(selectedDomain.iconName);
+                        return <Icon className={cn("w-7 h-7 stroke-[2.2] drop-shadow-sm", selectedDomain.colorTheme.text)} />;
+                      })()}
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] sm:text-xs font-mono font-black text-blue-600 dark:text-cyan-400 uppercase tracking-widest block">
+                      {isVi ? `Chi tiết lĩnh vực ${selectedDomain.code}:` : `Domain ${selectedDomain.code} Details:`}
                     </span>
-                  </h6>
+                    <h6 className="text-base sm:text-xl font-bold tracking-tight font-play">
+                      <span className={cn("bg-clip-text text-transparent bg-gradient-to-r", (selectedDomain.colorTheme as any).textGradient || "from-blue-600 via-indigo-600 to-cyan-500")}>
+                        {isVi ? selectedDomain.titleVi : selectedDomain.titleEn}
+                      </span>
+                    </h6>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+                      {isVi ? "Kinh nghiệm thực chiến • Kiến tạo giá trị bền vững" : "Practical Experience • Creating Sustainable Value"}
+                    </span>
+                  </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setSelectedDomainId(null)}
-                  className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-4 h-4" />
                   <span>{isVi ? "Đóng chi tiết" : "Close"}</span>
                 </button>
               </div>
 
-              {/* Colorful Bento Grid Layout */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 items-stretch">
-                {/* Bento Card 1: Title & 3D Icon Badge (lg:col-span-5) */}
+              {/* Colorful Bento Grid Layout matching the image reference */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                
+                {/* Bento Card 1: Title & Illustration (lg:col-span-6) */}
                 <div 
                   style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
                   className={cn(
-                    "lg:col-span-5 p-4 sm:p-5 border flex flex-col justify-between gap-4 text-left relative overflow-hidden backdrop-blur-xl shadow-xs",
-                    "bg-gradient-to-br from-white/90 via-white/70 to-blue-50/50 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-950/90",
+                    "lg:col-span-6 p-5 sm:p-6 border flex flex-col justify-between gap-5 text-left relative overflow-hidden backdrop-blur-xl shadow-xs",
+                    "bg-gradient-to-br from-white/95 via-white/80 to-blue-50/60 dark:from-slate-900/95 dark:via-slate-900/85 dark:to-slate-950/95",
                     selectedDomain.colorTheme.border
                   )}
                 >
-                  <div className="flex items-center gap-3.5">
-                    <Domain3DIcon 
-                      iconName={selectedDomain.iconName} 
-                      primaryColor={selectedDomain.colorTheme.primary}
-                      textClass={selectedDomain.colorTheme.text}
-                      glowColor={selectedDomain.colorTheme.glow}
-                    />
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <h3 className={cn("text-base sm:text-lg font-black tracking-tight leading-tight font-play", selectedDomain.colorTheme.text)}>
-                        {isVi ? selectedDomain.titleVi : selectedDomain.titleEn}
-                      </h3>
-                      <span className={cn("inline-block px-2.5 py-0.5 rounded-full text-xs font-mono font-bold shadow-3xs border", selectedDomain.colorTheme.badgeBg, selectedDomain.colorTheme.badgeText)}>
-                        {isVi ? selectedDomain.experienceVi : selectedDomain.experienceEn}
-                      </span>
+                  {/* Decorative background pattern/GIF if available */}
+                  {selectedDomain.gifUrl && (
+                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-30 pointer-events-none mix-blend-overlay">
+                       <img src={selectedDomain.gifUrl} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+
+                  <div className="relative z-10 flex flex-col gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center p-3 shadow-lg shadow-blue-500/20">
+                         {(() => {
+                            const Icon = getIconComponent(selectedDomain.iconName);
+                            return <Icon className="w-9 h-9 text-white stroke-[2.2]" />;
+                          })()}
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className={cn("text-xl sm:text-2xl font-black tracking-tight leading-tight font-play", selectedDomain.colorTheme.text)}>
+                          {isVi ? selectedDomain.titleVi : selectedDomain.titleEn}
+                        </h3>
+                        <span className={cn("inline-block px-3 py-0.5 rounded-full text-xs font-mono font-bold shadow-3xs border", selectedDomain.colorTheme.badgeBg, selectedDomain.colorTheme.badgeText)}>
+                          {isVi ? selectedDomain.experienceVi : selectedDomain.experienceEn}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-white/10 shadow-2xs space-y-1.5 mt-2">
+                      <div className="flex items-center gap-2 text-[10px] font-mono font-black tracking-wider text-blue-600 dark:text-cyan-400 uppercase">
+                        <Target className="w-4 h-4" />
+                        <span>{isVi ? "ĐỊNH HƯỚNG TẦM NHÌN & VẬN HÀNH" : "STRATEGIC ORIENTATION"}</span>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug">
+                        {isVi ? selectedDomain.orientationVi : selectedDomain.orientationEn}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Strategic Orientation Bento Subcard */}
-                  <div className="p-3.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-white/10 shadow-2xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-3xs font-mono font-black tracking-wider text-blue-600 dark:text-cyan-400 uppercase">
-                      <Target className="w-3.5 h-3.5" />
-                      <span>{isVi ? "ĐỊNH HƯỚNG TẦM NHÌN & VẬN HÀNH" : "STRATEGIC ORIENTATION"}</span>
-                    </div>
-                    <p className="text-body-sm font-normal text-slate-800 dark:text-slate-100 leading-snug">
-                      {isVi ? selectedDomain.orientationVi : selectedDomain.orientationEn}
-                    </p>
+                  {/* 3D Illustration representation on the right if needed, but the layout is already balanced */}
+                  <div className="absolute bottom-4 right-4 w-32 h-32 opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                     {(() => {
+                        const Icon = getIconComponent(selectedDomain.iconName);
+                        return <Icon className={cn("w-full h-full stroke-[1.5]", selectedDomain.colorTheme.text)} />;
+                      })()}
                   </div>
                 </div>
 
-                {/* Bento Card 2: 3-Col Meta Specs: Role, Team Size, Tech Stack (lg:col-span-7) */}
-                <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch">
-                  {/* Role Card */}
+                {/* Right Bento Cards: Meta Specs (lg:col-span-6) */}
+                <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 items-stretch">
+                   {/* Row of 3 mini cards if we want to follow the exact "VAI TRÒ", "QUY MÔ", "CÔNG NGHỆ" row */}
+                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 h-full">
+                      {/* Role Card */}
+                      <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between">
+                        <div className="flex items-center gap-2 text-[9px] font-mono font-black tracking-widest text-blue-600 dark:text-blue-400 uppercase mb-2">
+                          <Building2 className="w-5 h-5 bg-blue-100 dark:bg-blue-900/40 p-1 rounded-lg" />
+                          <span>{isVi ? "VAI TRÒ CHÍNH" : "ROLE"}</span>
+                        </div>
+                        <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight block font-play">
+                          {isVi ? selectedDomain.roleVi : selectedDomain.roleEn}
+                        </span>
+                        <div className="mt-2 flex justify-end">
+                           <ArrowRight className="w-4 h-4 text-blue-500 bg-blue-500/10 rounded-full p-1 cursor-pointer" />
+                        </div>
+                      </div>
+
+                      {/* Team Size Card */}
+                      <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-white/10 shadow-xs flex flex-col justify-between">
+                        <div className="flex items-center gap-2 text-[9px] font-mono font-black tracking-widest text-emerald-600 dark:text-emerald-400 uppercase mb-2">
+                          <Users className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/40 p-1 rounded-lg" />
+                          <span>{isVi ? "QUY MÔ ĐỘI NGŨ" : "TEAM SIZE"}</span>
+                        </div>
+                        <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight block font-play">
+                          {isVi ? selectedDomain.teamSizeVi : selectedDomain.teamSizeEn}
+                        </span>
+                        <div className="mt-2 flex justify-end">
+                           <ArrowRight className="w-4 h-4 text-emerald-500 bg-emerald-500/10 rounded-full p-1 cursor-pointer" />
+                        </div>
+                      </div>
+
+                      {/* Tools Card */}
+                      <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-white/10 shadow-xs flex flex-col justify-between">
+                        <div className="flex items-center gap-2 text-[9px] font-mono font-black tracking-widest text-purple-600 dark:text-purple-400 uppercase mb-2">
+                          <Zap className="w-5 h-5 bg-purple-100 dark:bg-purple-900/40 p-1 rounded-lg" />
+                          <span>{isVi ? "CÔNG NGHỆ" : "TECH STACK"}</span>
+                        </div>
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight block">
+                          {isVi ? selectedDomain.toolsVi : selectedDomain.toolsEn}
+                        </span>
+                        <div className="mt-2 flex justify-end">
+                           <ArrowRight className="w-4 h-4 text-purple-500 bg-purple-500/10 rounded-full p-1 cursor-pointer" />
+                        </div>
+                      </div>
+                   </div>
+                </div>
+
+                {/* Row 3: Professional Description & Highlights (Bento wide cards) */}
+                <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                   {/* Description Card */}
+                   <div 
+                    style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
+                    className="p-5 rounded-2xl bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col gap-3"
+                  >
+                    <span className="text-[10px] font-mono font-black tracking-wider text-blue-600 dark:text-cyan-400 uppercase flex items-center gap-2">
+                      <Star className="w-5 h-5 text-blue-500" />
+                      {isVi ? "Mô tả chuyên môn năng lực" : "Professional Description"}
+                    </span>
+                    <div className="flex gap-4">
+                       <div className="w-1.5 h-auto bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full opacity-50 shrink-0" />
+                       <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 leading-relaxed font-semibold">
+                        {isVi ? selectedDomain.descVi : selectedDomain.descEn}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Highlights Card */}
                   <div 
                     style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                    className="p-3.5 rounded-xl bg-gradient-to-br from-blue-50/80 via-white/80 to-indigo-50/80 dark:from-slate-900/90 dark:to-blue-950/50 border border-blue-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between"
+                    className="p-5 rounded-2xl bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col gap-3"
                   >
-                    <div className="flex items-center gap-2 text-3xs font-mono font-black tracking-wider text-blue-600 dark:text-blue-400 uppercase mb-2">
-                      <Briefcase className="w-4 h-4" />
-                      <span>{isVi ? "VAI TRÒ CHÍNH" : "ROLE"}</span>
-                    </div>
-                    <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight block font-play">
-                      {isVi ? selectedDomain.roleVi : selectedDomain.roleEn}
+                    <span className="text-[10px] font-mono font-black tracking-wider text-emerald-600 dark:text-emerald-400 uppercase flex items-center gap-2">
+                      <Trophy className="w-5 h-5 text-emerald-500" />
+                      {isVi ? "Kết quả & thành tựu nổi bật" : "Key Results & Highlights"}
                     </span>
-                  </div>
-
-                  {/* Team Size Card */}
-                  <div 
-                    style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                    className="p-3.5 rounded-xl bg-gradient-to-br from-emerald-50/80 via-white/80 to-teal-50/80 dark:from-slate-900/90 dark:to-emerald-950/50 border border-emerald-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between"
-                  >
-                    <div className="flex items-center gap-2 text-3xs font-mono font-black tracking-wider text-emerald-600 dark:text-emerald-400 uppercase mb-2">
-                      <Users className="w-4 h-4" />
-                      <span>{isVi ? "QUY MÔ ĐỘI NGŨ" : "TEAM SIZE"}</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                      {(isVi ? selectedDomain.highlightsVi : selectedDomain.highlightsEn).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 list-none">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
                     </div>
-                    <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight block font-play">
-                      {isVi ? selectedDomain.teamSizeVi : selectedDomain.teamSizeEn}
-                    </span>
-                  </div>
-
-                  {/* Tools Card */}
-                  <div 
-                    style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                    className="p-3.5 rounded-xl bg-gradient-to-br from-purple-50/80 via-white/80 to-fuchsia-50/80 dark:from-slate-900/90 dark:to-purple-950/50 border border-purple-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between"
-                  >
-                    <div className="flex items-center gap-2 text-3xs font-mono font-black tracking-wider text-purple-600 dark:text-purple-400 uppercase mb-2">
-                      <Wrench className="w-4 h-4" />
-                      <span>{isVi ? "CÔNG NGHỆ" : "TECH STACK"}</span>
-                    </div>
-                    <span className="text-xs font-bold font-mono text-purple-700 dark:text-purple-300 leading-tight block truncate">
-                      {isVi ? selectedDomain.toolsVi : selectedDomain.toolsEn}
-                    </span>
                   </div>
                 </div>
 
-                {/* Bento Card 3: Narrative & Professional Description (lg:col-span-6) */}
+                {/* Footer Banner: Partners & Brands */}
                 <div 
                   style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                  className="lg:col-span-6 p-4 sm:p-5 rounded-xl bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between gap-2"
+                  className="lg:col-span-12 p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-slate-800 dark:to-slate-900 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4"
                 >
-                  <span className="text-3xs font-mono font-black tracking-wider text-indigo-600 dark:text-cyan-400 uppercase flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    {isVi ? "Mô tả chuyên môn năng lực" : "Professional Description"}
-                  </span>
-                  <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-100 leading-relaxed font-semibold">
-                    {isVi ? selectedDomain.descVi : selectedDomain.descEn}
-                  </p>
-                </div>
-
-                {/* Bento Card 4: Key Results & Highlights (lg:col-span-6) */}
-                <div 
-                  style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                  className="lg:col-span-6 p-4 sm:p-5 rounded-xl bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col justify-between gap-2.5"
-                >
-                  <span className="text-3xs font-mono font-black tracking-wider text-emerald-600 dark:text-emerald-400 uppercase flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5" />
-                    {isVi ? "Kết quả & thành tựu nổi bật" : "Key Results & Highlights"}
-                  </span>
-                  <ul className="space-y-2">
-                    {(isVi ? selectedDomain.highlightsVi : selectedDomain.highlightsEn).map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Bento Card 5: Brand Partners Banner (lg:col-span-12) */}
-                <div 
-                  style={{ borderRadius: "var(--theme-radius-inner, 12px)" }}
-                  className="lg:col-span-12 p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-blue-50/80 via-white/90 to-cyan-50/80 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-950/90 border border-slate-200/80 dark:border-white/10 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Building2 className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center p-2">
+                      <Building2 className="w-full h-full text-white" />
+                    </div>
                     <div>
-                      <span className="text-3xs font-mono font-black uppercase tracking-wider text-slate-400 block">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-widest text-white/70 block">
                         {isVi ? "ĐỐI TÁC & THƯƠNG HIỆU TIÊU BIỂU" : "PARTNERS & BRANDS"}
                       </span>
-                      <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-play">
+                      <span className="text-sm sm:text-lg font-black font-play">
                         {isVi ? selectedDomain.partnersVi : selectedDomain.partnersEn}
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {selectedDomain.logos.map((logo, idx) => (
-                      <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
-                    ))}
+                  <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20">
+                    <div className="flex items-center gap-2">
+                       {selectedDomain.logos.map((logo, idx) => (
+                         <BrandLogoBadge key={idx} src={logo.src} alt={logo.alt} title={logo.name} />
+                       ))}
+                    </div>
                   </div>
                 </div>
               </div>

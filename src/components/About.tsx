@@ -173,22 +173,8 @@ export default function About() {
         {/* Header Card */}
         <PageCardHeader pageId="about" className="w-full mb-1" />
 
-        {/* 2. HERO PROFILE VIDEO & PERSONAL INFORMATION ROW CARD BOX */}
-        <div 
-          style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
-          className={cn(
-            "w-full h-full p-[15px] flex flex-col gap-3 border",
-            getGlassCardClass()
-          )}
-        >
-          {/* Header Card format matching header card */}
-          <AnimatedCardTitle
-            icon={User}
-            title={isVi ? "Hồ sơ chuyên gia & Thông tin cá nhân" : "Executive Profile & Personal Info"}
-            colorPreset="blue"
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[15px] items-stretch w-full flex-grow">
+        {/* 2. HERO PROFILE VIDEO & PERSONAL INFORMATION ROW */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[15px] items-stretch w-full flex-grow">
           
           {/* Left Column: Video Card (7 columns out of 12) */}
           <motion.div 
@@ -288,7 +274,7 @@ export default function About() {
             transition={{ duration: 0.4, delay: 0.1 }}
             style={{ borderRadius: "var(--theme-radius-card, 10px)" }}
             className={cn(
-              "lg:col-span-5 h-full p-[15px] transition-all duration-300 flex flex-col justify-start gap-3.5 min-w-0 border text-left",
+              "lg:col-span-5 h-full p-[15px] transition-all duration-300 flex flex-col justify-start gap-[15px] min-w-0 border text-left",
               "rounded-[var(--theme-radius-card,10px)]",
               getGlassCardClass()
             )}
@@ -415,7 +401,6 @@ export default function About() {
 
           </motion.div>
 
-        </div>
         </div>
 
         {/* 3. HERO HIGHLIGHT LANDSCAPE BANNER - GIỚI THIỆU CHUYÊN GIA */}

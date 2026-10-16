@@ -9,7 +9,6 @@ import {
   Moon,
   Globe,
   Monitor,
-  GraduationCap,
   LayoutGrid,
   MessagesSquare,
   Mail,
@@ -171,14 +170,9 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
   const isDark = themeContext.resolvedTheme === "dark" || theme === "dark";
 
   // Unified theme toggle utility that synchronizes ThemeContext and triggers Tailwind 'dark' class
-  const handleThemeToggle = (targetTheme?: ThemeType) => {
-    let nextTheme: ThemeType;
-    if (targetTheme) {
-      nextTheme = targetTheme;
-    } else {
-      nextTheme = isDark ? "glass-light-multicolor" : "dark";
-    }
-    setTheme(nextTheme);
+  const handleThemeToggle = () => {
+    // Force light theme
+    setTheme("glass-light-multicolor");
   };
 
   // Complete Sections for Quick Jump Menu & Direct Navigation
@@ -186,7 +180,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
     { id: "home", num: "01", labelVi: "Trang chủ", labelEn: "Home", Icon: Monitor, key: "1" },
     { id: "letter", num: "02", labelVi: "Thư ngỏ", labelEn: "Open Letter", Icon: MailOpen, key: "L" },
     { id: "about", num: "03", labelVi: "Giới thiệu", labelEn: "About", Icon: User, key: "3" },
-    { id: "education", num: "04", labelVi: "Học vấn", labelEn: "Education", Icon: GraduationCap, key: "4" },
+
     { id: "domains", num: "05", labelVi: "Lĩnh vực", labelEn: "Domains", Icon: Compass, key: "D" },
     { id: "experience", num: "06", labelVi: "Kinh nghiệm", labelEn: "Experience", Icon: Briefcase, key: "6" },
     { id: "skills", num: "07", labelVi: "Kỹ năng", labelEn: "Skills", Icon: Brain, key: "K" },
@@ -230,15 +224,7 @@ function Header({ theme: propTheme, setTheme: propSetTheme, activeSection = "hom
       hoverBorder: "hover:border-blue-400/60 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
       themeColor: "#2563eb" 
     },
-    { 
-      id: "education", 
-      labelVi: "Học vấn", 
-      labelEn: "Education", 
-      Icon: GraduationCap, 
-      activeBg: "bg-white/40 dark:bg-[#0c101d]/40 border-indigo-400/50 text-indigo-700 dark:text-indigo-300 backdrop-blur-md shadow-[0_0_15px_rgba(99,102,241,0.3)]", 
-      hoverBorder: "hover:border-indigo-400/60 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/50 dark:hover:bg-[#0c101d]/50",
-      themeColor: "#6366f1" 
-    },
+
     { 
       id: "domains", 
       labelVi: "Lĩnh vực", 

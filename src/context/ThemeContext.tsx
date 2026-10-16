@@ -3,12 +3,11 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, useCa
 import { USER_GRADIENTS, UserGradientItem, WEBSITE_BASE_BACKGROUND } from "../data/userGradientsData";
 
 export const THEMES = [
-  "glass-light-multicolor",
-  "dark"
+  "glass-light-multicolor"
 ] as const;
 
 export type ThemeType = (typeof THEMES)[number] | string;
-export type ThemeMode = "light" | "dark" | "system";
+export type ThemeMode = "light";
 
 export interface ColorTokenItem {
   id: string;
@@ -98,78 +97,7 @@ export const LIGHT_GLASS_PALETTE: ColorTokenItem[] = [
   }
 ];
 
-export const DARK_NEON_GLASS_PALETTE: ColorTokenItem[] = [
-  {
-    id: "primary",
-    name: "Neon Cyan",
-    nameVi: "Xanh Cyan Neon (Neon Cyan)",
-    hex: "#00F5FF",
-    rgb: "0, 245, 255",
-    variable: "--color-primary",
-    role: "Primary Button, CTA, Main Action",
-    roleVi: "Primary Button, CTA, Main Action",
-    usage: ["Primary Button", "CTA", "Main Action triggers"],
-    usageVi: ["Nút bấm chính", "Kêu gọi hành động CTA", "Hành động quan trọng nhất"],
-    contrastOnWhite: "4.5:1 (AA)",
-    contrastOnDark: "12.8:1 (AAA)"
-  },
-  {
-    id: "secondary",
-    name: "Electric Magenta",
-    nameVi: "Hồng Sen Điện Neon (Electric Magenta)",
-    hex: "#FF007F",
-    rgb: "255, 0, 127",
-    variable: "--color-secondary",
-    role: "Links, Icons, Information",
-    roleVi: "Links, Icons, Information",
-    usage: ["Links", "Active Icons", "Information chips"],
-    usageVi: ["Liên kết điều hướng", "Biểu tượng phát sáng", "Thẻ thông tin"],
-    contrastOnWhite: "4.6:1 (AA)",
-    contrastOnDark: "7.8:1 (AAA)"
-  },
-  {
-    id: "accent",
-    name: "Neon Violet",
-    nameVi: "Tím Neon (Neon Violet)",
-    hex: "#8B5CF6",
-    rgb: "139, 92, 246",
-    variable: "--color-accent",
-    role: "Active state, Gradient, Main highlight",
-    roleVi: "Active state, Gradient, Main highlight",
-    usage: ["Active state", "Neon gradients", "Main visual highlight"],
-    usageVi: ["Trạng thái Active", "Dải chuyển màu Neon", "Điểm nhấn trung tâm"],
-    contrastOnWhite: "4.7:1 (AA)",
-    contrastOnDark: "6.5:1 (AAA)"
-  },
-  {
-    id: "highlight",
-    name: "Neon Amber",
-    nameVi: "Vàng Hổ Phách Neon (Neon Amber)",
-    hex: "#FFB800",
-    rgb: "255, 184, 0",
-    variable: "--color-highlight",
-    role: "Special highlight, Hover, Decorative glow",
-    roleVi: "Special highlight, Hover, Decorative glow",
-    usage: ["Special highlights", "Hover glow halos", "Decorative lights"],
-    usageVi: ["Điểm nhấn đặc biệt", "Hiệu ứng Hover phát sáng", "Quầng sáng trang trí"],
-    contrastOnWhite: "4.5:1 (AA)",
-    contrastOnDark: "10.2:1 (AAA)"
-  },
-  {
-    id: "soft",
-    name: "Toxic Lime",
-    nameVi: "Xanh Chanh Neon (Toxic Lime)",
-    hex: "#00FF88",
-    rgb: "0, 255, 136",
-    variable: "--color-soft",
-    role: "Success, Completed, Positive status",
-    roleVi: "Success, Completed, Positive status",
-    usage: ["Success indicators", "Completed badges", "Positive indicators"],
-    usageVi: ["Trạng thái thành công", "Huy hiệu hoàn thành", "Chỉ số tích cực"],
-    contrastOnWhite: "4.6:1 (AA)",
-    contrastOnDark: "13.4:1 (AAA)"
-  }
-];
+
 
 export interface ColorGroupPreset {
   id: string;
@@ -539,26 +467,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const openThemeModal = () => setIsThemeModalOpen(true);
   const closeThemeModal = () => setIsThemeModalOpen(false);
 
-  // 1. Theme Mode State (light | dark | system)
-  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
-    try {
-      const savedMode = typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_MODE_STORAGE_KEY) : null;
-      if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
-        return savedMode;
-      }
-    } catch {}
-    return "system";
-  });
-
-  const getResolvedThemeName = (mode: ThemeMode): ThemeType => {
-    if (mode === "dark") return "dark";
-    if (mode === "light") return "glass-light-multicolor";
-    // System Mode: Detect OS preference
-    if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "glass-light-multicolor";
-  };
+  // 1. Theme Mode State (always light)
+  const [themeMode, setThemeModeState] = useState<ThemeMode>("light");
 
   // 2. Theme State
   const [theme, setThemeState] = useState<ThemeType>(() => {
@@ -623,40 +533,21 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   }, []);
 
-  // 4. Font Scale & Border Radius State
-  const [fontScale, setFontScaleState] = useState<number>(() => {
-    try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_font_scale") : null;
-      if (saved && !isNaN(Number(saved))) return Number(saved);
-    } catch {}
-    return 100;
-  });
+  // Fixed values for Typography & Scale (Restoring defaults as requested)
+  const fontScale = 100;
+  const borderRadius = 20;
+  const borderRadiusCard = 20;
+  const typoSizes = DEFAULT_TYPO_SIZES;
 
-  const [borderRadius, setBorderRadiusState] = useState<number>(() => {
-    try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius") : null;
-      if (saved && !isNaN(Number(saved))) return Number(saved);
-    } catch {}
-    return 20;
-  });
-
-  const [borderRadiusCard, setBorderRadiusCardState] = useState<number>(() => {
-    try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_border_radius_card") : null;
-      if (saved && !isNaN(Number(saved))) return Number(saved);
-    } catch {}
-    return 20; // Official Design System card radius is 20px
-  });
-
-  const [typoSizes, setTypoSizesState] = useState<TypoCustomSizes>(() => {
-    try {
-      const saved = typeof localStorage !== 'undefined' ? localStorage.getItem("portfolio_typo_sizes") : null;
-      if (saved) {
-        return { ...DEFAULT_TYPO_SIZES, ...JSON.parse(saved) };
-      }
-    } catch {}
-    return DEFAULT_TYPO_SIZES;
-  });
+  // No-op setters as we want to keep defaults
+  const setFontScale = () => {};
+  const resetFontScale = () => {};
+  const setBorderRadius = () => {};
+  const resetBorderRadius = () => {};
+  const setBorderRadiusCard = () => {};
+  const resetBorderRadiusCard = () => {};
+  const updateTypoSizes = () => {};
+  const resetTypoSizes = () => {};
 
   // DOM mutation helpers
   const applyRadiusToDom = (radius: number, cardRadius: number) => {
@@ -718,7 +609,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
     
-    // Cleanly strip all previous theme classes (e.g. theme-*, dark)
     Array.from(root.classList).forEach((cls) => {
       if (cls === "dark" || cls.startsWith("theme-")) {
         root.classList.remove(cls);
@@ -727,15 +617,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     
     root.dataset.theme = themeName;
     root.setAttribute("data-theme", themeName);
-    root.setAttribute("data-theme-mode", themeMode);
-    
-    const isSystemDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDarkTheme = themeName === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDark);
-    if (isDarkTheme) {
-      root.classList.add("dark", `theme-${themeName}`);
-    } else {
-      root.classList.add(`theme-${themeName}`);
-    }
+    root.setAttribute("data-theme-mode", "light");
+    root.classList.add(`theme-${themeName}`);
   };
 
   const applyColorsToDOM = (themeName: ThemeType, presetId: string) => {
@@ -743,10 +626,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const root = document.documentElement;
 
     const selectedPreset = COLOR_PRESETS.find((p) => p.id === presetId) || COLOR_PRESETS[0];
-      
-    const isSystemDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = themeName === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDark);
-    const colors = isDark ? selectedPreset.dark : selectedPreset.light;
+    const colors = selectedPreset.light;
 
     root.style.setProperty("--primary", colors.primary);
     root.style.setProperty("--primary-hover", `${colors.primary}e6`);
@@ -774,23 +654,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.style.setProperty("--color-secondary-foreground", secondaryContrast.fgColor);
     root.style.setProperty("--theme-secondary-foreground", secondaryContrast.fgColor);
     root.style.setProperty("--secondary-foreground", secondaryContrast.fgColor);
-  };
-
-  const captureSnapshot = async (): Promise<string | null> => {
-    try {
-      const html2canvasModule = await import("html2canvas");
-      const html2canvas = (html2canvasModule.default || html2canvasModule) as any;
-      const canvas = await html2canvas(document.body, {
-        scale: Math.min(window.devicePixelRatio || 1, 1.25),
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-      });
-      return canvas.toDataURL("image/webp", 0.85);
-    } catch {
-      return null;
-    }
   };
 
   const safeStartViewTransition = (callback: () => void) => {
@@ -855,57 +718,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setThemeMode = async (mode: ThemeMode) => {
-    setThemeModeState(mode);
+    setThemeModeState("light");
     try {
-      localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
+      localStorage.setItem(THEME_MODE_STORAGE_KEY, "light");
     } catch {}
 
     applyThemeToDOM(theme);
     applyColorsToDOM(theme, colorPreset);
-  };
-
-  const setBorderRadius = (radius: number) => {
-    const clamped = Math.max(0, Math.min(28, radius));
-    setBorderRadiusState(clamped);
-    try {
-      localStorage.setItem("portfolio_border_radius", clamped.toString());
-    } catch {}
-    applyRadiusToDom(clamped, borderRadiusCard);
-  };
-
-  const resetBorderRadius = () => {
-    setBorderRadius(14);
-  };
-
-  const setBorderRadiusCard = (radius: number) => {
-    const clamped = Math.max(0, Math.min(32, radius));
-    setBorderRadiusCardState(clamped);
-    try {
-      localStorage.setItem("portfolio_border_radius_card", clamped.toString());
-    } catch {}
-    applyRadiusToDom(borderRadius, clamped);
-  };
-
-  const resetBorderRadiusCard = () => {
-    setBorderRadiusCard(14);
-  };
-
-  const setFontScale = (scale: number) => {
-    const clamped = Math.max(80, Math.min(130, scale));
-    setFontScaleState(clamped);
-    try {
-      localStorage.setItem("portfolio_font_scale", clamped.toString());
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.fontSize = `${16 * (clamped / 100)}px`;
-      }
-    } catch {}
-  };
-
-  const resetFontScale = () => {
-    setFontScale(100);
-    if (typeof document !== 'undefined') {
-      document.documentElement.style.fontSize = "16px";
-    }
   };
 
   const applyTypoSizesToDom = (sizes: TypoCustomSizes) => {
@@ -935,30 +754,26 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const updateTypoSizes = (newSizes: TypoCustomSizes) => {
-    setTypoSizesState(newSizes);
-    try {
-      localStorage.setItem("portfolio_typo_sizes", JSON.stringify(newSizes));
-    } catch {}
-    applyTypoSizesToDom(newSizes);
-  };
+  useEffect(() => {
+    applyRadiusToDom(borderRadius, borderRadiusCard);
+    applyThemeToDOM(theme);
+    applyColorsToDOM(theme, colorPreset);
+    applyTypoSizesToDom(typoSizes);
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = "16px";
+    }
+  }, []);
 
-  const resetTypoSizes = () => {
-    updateTypoSizes(DEFAULT_TYPO_SIZES);
-  };
-
-  const isSystemDarkPref = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = theme === "dark" || themeMode === "dark" || (themeMode === "system" && isSystemDarkPref);
-  const resolvedTheme: "light" | "dark" = isDark ? "dark" : "light";
+  const resolvedTheme = "light";
   const selectedPresetObj = (COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0]);
-  const activeColorSet = isDark ? selectedPresetObj.dark : selectedPresetObj.light;
+  const activeColorSet = selectedPresetObj.light;
   const currentPrimaryContrast = getAutoContrastForeground(activeColorSet.primary);
 
   const activePalette: ColorTokenItem[] = [
     {
       id: "primary",
-      name: isDark ? "Electric / Primary Action" : "Primary Blue Action",
-      nameVi: isDark ? "Màu Chính (Primary Action)" : "Xanh Dương Chủ Đạo (Primary Blue)",
+      name: "Primary Blue Action",
+      nameVi: "Xanh Dương Chủ Đạo (Primary Blue)",
       hex: activeColorSet.primary,
       rgb: activeColorSet.primaryRgb,
       variable: "--color-primary",
@@ -971,8 +786,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     },
     {
       id: "secondary",
-      name: isDark ? "Neon Secondary / Links" : "Secondary Indigo",
-      nameVi: isDark ? "Màu Thứ Cấp (Secondary)" : "Chàm Thứ Cấp (Secondary Indigo)",
+      name: "Secondary Indigo",
+      nameVi: "Chàm Thứ Cấp (Secondary Indigo)",
       hex: activeColorSet.secondary,
       rgb: activeColorSet.secondaryRgb,
       variable: "--color-secondary",
@@ -985,8 +800,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     },
     {
       id: "accent",
-      name: isDark ? "Neon Accent Glow" : "Accent Cyan",
-      nameVi: isDark ? "Điểm Nhấn (Accent Glow)" : "Lục Lam Điểm Nhấn (Accent Cyan)",
+      name: "Accent Cyan",
+      nameVi: "Lục Lam Điểm Nhấn (Accent Cyan)",
       hex: activeColorSet.accent,
       rgb: activeColorSet.accentRgb,
       variable: "--color-accent",
@@ -999,8 +814,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     },
     {
       id: "highlight",
-      name: isDark ? "Neon Highlight" : "Highlight Violet",
-      nameVi: isDark ? "Tím Nổi Bật (Highlight)" : "Tím Nổi Bật (Highlight Violet)",
+      name: "Highlight Violet",
+      nameVi: "Tím Nổi Bật (Highlight Violet)",
       hex: activeColorSet.highlight,
       rgb: activeColorSet.highlightRgb,
       variable: "--color-highlight",
@@ -1013,8 +828,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     },
     {
       id: "soft",
-      name: isDark ? "Status / Soft Glow" : "Soft Sky",
-      nameVi: isDark ? "Trạng Thái Dịu (Soft)" : "Xanh Trời Dịu (Soft Sky)",
+      name: "Soft Sky",
+      nameVi: "Xanh Trời Dịu (Soft Sky)",
       hex: activeColorSet.soft,
       rgb: activeColorSet.softRgb,
       variable: "--color-soft",
@@ -1026,60 +841,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       contrastOnDark: `${calculateContrastRatio(calculateLuminance(activeColorSet.soft), calculateLuminance("#0b1020")).toFixed(1)}:1 (${calculateContrastRatio(calculateLuminance(activeColorSet.soft), calculateLuminance("#0b1020")) >= 7 ? "AAA" : "AA"})`
     }
   ];
-
-  // Effects
-  useEffect(() => {
-    applyRadiusToDom(borderRadius, borderRadiusCard);
-  }, [borderRadius, borderRadiusCard]);
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.style.fontSize = `${16 * (fontScale / 100)}px`;
-    }
-  }, [fontScale]);
-
-  useEffect(() => {
-    applyThemeToDOM(theme);
-    applyColorsToDOM(theme, colorPreset);
-  }, [theme, colorPreset]);
-
-  useEffect(() => {
-    applyTypoSizesToDom(typoSizes);
-  }, [typoSizes]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleChange = () => {
-      if (themeMode === "system") {
-        applyThemeToDOM(theme);
-        applyColorsToDOM(theme, colorPreset);
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [themeMode, colorPreset]);
-
-  useEffect(() => {
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      const reason = event.reason;
-      if (
-        reason &&
-        (reason.name === "AbortError" ||
-          reason.name === "InvalidStateError" ||
-          (typeof reason.message === "string" && reason.message.includes("Transition was")))
-      ) {
-        event.preventDefault();
-      }
-    };
-
-    window.addEventListener("unhandledrejection", handleUnhandledRejection);
-    return () => {
-      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
-    };
-  }, []);
 
   return (
     <ThemeContext.Provider value={{ 
@@ -1109,7 +870,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       buttonForeground: currentPrimaryContrast.fgColor,
       checkContrast: getAutoContrastForeground,
       isThemeTransitioning,
-      themeSnapshot,
+      themeSnapshot: null,
       isApplyingTheme: false,
       themeProgress: 0,
       currentStepTitle: "",
@@ -1138,16 +899,16 @@ export const useTheme = (): ThemeContextType => {
     return {
       theme: "glass-light-multicolor",
       setTheme: () => {},
-      themeMode: "system",
+      themeMode: "light",
       setThemeMode: () => {},
       resolvedTheme: "light",
       fontScale: 100,
       setFontScale: () => {},
       resetFontScale: () => {},
-      borderRadius: 14,
+      borderRadius: 20,
       setBorderRadius: () => {},
       resetBorderRadius: () => {},
-      borderRadiusCard: 14,
+      borderRadiusCard: 20,
       setBorderRadiusCard: () => {},
       resetBorderRadiusCard: () => {},
       typoSizes: DEFAULT_TYPO_SIZES,

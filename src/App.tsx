@@ -11,12 +11,11 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import BackgroundRenderer from "./components/BackgroundRenderer";
-import CustomCursor from "./components/CustomCursor";
 import ThemeTransitionOverlay from "./components/ThemeTransitionOverlay";
 import About from "./components/About";
 import Domains from "./components/Domains";
 import Skills from "./components/Skills";
-import Education from "./components/Education";
+
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
 import Interview from "./components/Interview";
@@ -26,7 +25,6 @@ import Contact from "./components/Contact";
 import Wallpapers from "./components/Wallpapers";
 import Systems from "./components/Systems";
 import Letter from "./components/Letter";
-import TabErrorsPage from "./components/TabErrorsPage";
 import BentoGridLayout from "./components/BentoGridLayout";
 import GlassStackedCardSlide from "./components/GlassStackedCardSlide";
 import DashboardLayout from "./components/DashboardLayout";
@@ -53,14 +51,13 @@ import { BackgroundProvider } from "./context/BackgroundContext";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationContext";
-import { CursorProvider } from "./context/CursorContext";
 import { SoundProvider, useSound } from "./context/SoundContext";
 import { FooterProvider, useFooter } from "./context/FooterContext";
 import { HeaderProvider, useHeader } from "./context/HeaderContext";
 import { SectionProvider, SectionMeta } from "./context/SectionContext";
 import { getUnifiedSurfaceStyle } from "./lib/utils";
 import { 
-  Monitor, MailOpen, User, GraduationCap, Compass, 
+  Monitor, MailOpen, User, Compass, 
   Briefcase, Brain, ClipboardList, Video,
   Sparkles, Images, LayoutGrid, MessagesSquare, Film, ChevronDown, Headphones, Server,
   Sliders, ShieldAlert, Tv, QrCode
@@ -75,7 +72,7 @@ const SECTIONS: SectionMeta[] = [
   { id: "about", labelKey: "nav.about", Icon: User, Component: About, padding: "p-0 overflow-y-auto" },
   { id: "domains", labelKey: "nav.domains", Icon: Compass, Component: Domains, padding: "p-0 overflow-y-auto" },
   { id: "skills", labelKey: "nav.skills", Icon: Brain, Component: Skills, padding: "p-0 overflow-y-auto" },
-  { id: "education", labelKey: "nav.education", Icon: GraduationCap, Component: Education, padding: "p-0 overflow-y-auto" },
+
   { id: "experience", labelKey: "nav.experience", Icon: Briefcase, Component: Experience, padding: "p-0 overflow-y-auto" },
   { id: "projects", labelKey: "nav.projects", Icon: ClipboardList, Component: Projects, padding: "p-0 overflow-y-auto" },
   { id: "interview", labelKey: "nav.interview", Icon: Video, Component: Interview, padding: "p-0 overflow-y-auto" },
@@ -84,7 +81,6 @@ const SECTIONS: SectionMeta[] = [
   { id: "systems", labelKey: "nav.systems", Icon: Server, Component: Systems, padding: "p-0 overflow-y-auto" },
   { id: "contact", labelKey: "nav.contact", Icon: MessagesSquare, Component: Contact, padding: "p-0 overflow-y-auto" },
   { id: "wallpapers", labelKey: "nav.wallpapers", Icon: Film, Component: Wallpapers, padding: "p-0 overflow-y-auto" },
-  { id: "errors", labelKey: "nav.errors", Icon: ShieldAlert, Component: TabErrorsPage, padding: "p-0 overflow-y-auto" },
 ];
 
 function MainContent() {
@@ -143,7 +139,7 @@ function MainContent() {
 
   // Header and Footer visibility based on layout rules
   const firstSectionId = SECTIONS[0]?.id || "home";
-  const lastSectionId = SECTIONS[SECTIONS.length - 1]?.id || "errors";
+  const lastSectionId = SECTIONS[SECTIONS.length - 1]?.id || "wallpapers";
 
   const isHeaderVisible = 
     layoutMode === "card-page" || 
@@ -473,8 +469,6 @@ function MainContent() {
 
 
 
-        {/* Custom Cursor */}
-        <CustomCursor />
 
         {/* Theme Transition Overlay */}
         <ThemeTransitionOverlay />
@@ -491,15 +485,13 @@ export default function App() {
         <BackgroundProvider>
           <LayoutProvider>
             <LanguageProvider>
-              <CursorProvider>
-                <SoundProvider>
-                  <FooterProvider>
-                    <HeaderProvider>
-                      <MainContent />
-                    </HeaderProvider>
-                  </FooterProvider>
-                </SoundProvider>
-              </CursorProvider>
+              <SoundProvider>
+                <FooterProvider>
+                  <HeaderProvider>
+                    <MainContent />
+                  </HeaderProvider>
+                </FooterProvider>
+              </SoundProvider>
             </LanguageProvider>
           </LayoutProvider>
         </BackgroundProvider>

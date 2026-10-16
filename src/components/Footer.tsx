@@ -46,7 +46,6 @@ import { THEME_LIST } from "../data/themesData";
 import { useFooter } from "../context/FooterContext";
 import { useSound } from "../context/SoundContext";
 import { playUiSound } from "../lib/sound";
-import { useCursor } from "../context/CursorContext";
 import FooterWeather from "./FooterWeather";
 import { cn, getUnifiedSurfaceStyle } from "../lib/utils";
 
@@ -63,7 +62,6 @@ const SECTION_ORDER = [
   "letter",
   "about",
   "experience",
-  "education",
   "domains",
   "skills",
   "projects",
@@ -164,7 +162,6 @@ function Footer({
     setIsFooterHovered: setIsHovered 
   } = useFooter();
   const { soundConfig, toggleMute, setIsSoundModalOpen, playClick } = useSound();
-  const { setIsCursorModalOpen } = useCursor();
 
   const [currentTime, setCurrentTime] = useState(new Date());
   const [hoveredFooterIcon, setHoveredFooterIcon] = useState<string | null>(null);
@@ -294,7 +291,7 @@ function Footer({
       case "home": return { label: isVi ? "Trang Chủ" : "Home", icon: Monitor };
       case "letter": return { label: isVi ? "Thư Ngỏ" : "Letter", icon: MailOpen };
       case "about": return { label: isVi ? "Giới Thiệu" : "About", icon: User };
-      case "education": return { label: isVi ? "Học Vấn" : "Edu", icon: GraduationCap };
+
       case "domains": return { label: isVi ? "Lĩnh Vực" : "Domains", icon: Compass };
       case "skills": return { label: isVi ? "Kỹ Năng" : "Skills", icon: Brain };
       case "experience": return { label: isVi ? "Kinh Nghiệm" : "Exp", icon: Briefcase };
@@ -556,7 +553,7 @@ function Footer({
           <div 
             onMouseEnter={handleStackMouseEnter}
             onMouseLeave={handleStackMouseLeave}
-            className="flex items-center justify-end transition-all duration-300 min-w-0 p-[5px] select-none overflow-visible group/footerstack -space-x-[68px] sm:-space-x-[72px] hover:space-x-1.5 sm:hover:space-x-2.5"
+            className="flex items-center justify-end transition-all duration-300 min-w-0 p-[5px] select-none overflow-visible group/footerstack space-x-1.5 sm:space-x-2.5"
           >
             {/* 1. Nút In PDF kèm Menu lựa chọn */}
             <div className="relative z-10 hover:z-50 shrink-0">
@@ -866,41 +863,7 @@ function Footer({
                         </div>
                       </div>
 
-                      {/* Quick Light/Dark Toggle */}
-                      <div className="flex items-center gap-1 p-0.5 bg-slate-200/60 dark:bg-white/10 rounded-lg">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            themeContext.setThemeMode("light");
-                            themeContext.setTheme("glass-light-multicolor");
-                          }}
-                          className={cn(
-                            "p-1 rounded-md text-3xs font-bold transition-all cursor-pointer",
-                            themeContext.themeMode === "light" || theme === "glass-light-multicolor"
-                              ? "bg-white dark:bg-slate-800 text-amber-600 shadow-xs"
-                              : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                          )}
-                          title={isVi ? "Giao diện Sáng" : "Light Theme"}
-                        >
-                          <Sun className="w-3 h-3 text-amber-500" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            themeContext.setThemeMode("dark");
-                            themeContext.setTheme("glass-dark-neon");
-                          }}
-                          className={cn(
-                            "p-1 rounded-md text-3xs font-bold transition-all cursor-pointer",
-                            themeContext.themeMode === "dark" || theme === "glass-dark-neon"
-                              ? "bg-white dark:bg-slate-800 text-cyan-400 shadow-xs"
-                              : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                          )}
-                          title={isVi ? "Giao diện Tối Neon" : "Dark Neon Theme"}
-                        >
-                          <Moon className="w-3 h-3 text-cyan-400" />
-                        </button>
-                      </div>
+
                     </div>
 
                     {/* Scrollable Themes List */}
@@ -1340,29 +1303,7 @@ function Footer({
                       <span className="text-[10px] text-amber-500 font-bold shrink-0">{isVi ? "Mở" : "Open"}</span>
                     </div>
 
-                    {/* Mục 2: Tùy chỉnh Cỡ chữ & Typography */}
-                    <div
-                      onClick={() => {
-                        setIsSettingsDropdownOpen(false);
-                        themeContext.openTypographyModal();
-                      }}
-                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                          <span className="font-serif font-black text-xs">Aa</span>
-                        </div>
-                        <div className="min-w-0">
-                          <h5 className="text-xs font-bold truncate">
-                            {isVi ? "Cỡ chữ & Typography Font Play" : "Font & Typography Sizes"}
-                          </h5>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                            {isVi ? "Tỷ lệ co giãn font-scale & 20 thẻ text" : "Adjust font sizes & line-height"}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-slate-400 group-hover:text-blue-500 font-bold shrink-0">{isVi ? "Chỉnh" : "Edit"}</span>
-                    </div>
+
 
                     {/* Mục 3: Cài đặt Thanh Chân trang (Footer Settings) */}
                     <div
@@ -1388,29 +1329,6 @@ function Footer({
                       <span className="text-[10px] text-slate-400 group-hover:text-purple-500 font-bold shrink-0">{isVi ? "Cấu hình" : "Config"}</span>
                     </div>
 
-                    {/* Mục 4: Con trỏ chuột tương tác */}
-                    <div
-                      onClick={() => {
-                        setIsSettingsDropdownOpen(false);
-                        setIsCursorModalOpen(true);
-                      }}
-                      className="p-2.5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50/60 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-xl bg-pink-500/15 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0">
-                          <MousePointer className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <h5 className="text-xs font-bold truncate">
-                            {isVi ? "Hiệu ứng Con trỏ Chuột" : "Custom Interactive Cursor"}
-                          </h5>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                            {isVi ? "Neon Trail, Vệt sáng mờ, Kính lúp" : "Cursor styles & particle trail"}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-slate-400 group-hover:text-pink-500 font-bold shrink-0">{isVi ? "Chọn" : "Select"}</span>
-                    </div>
 
                     {/* Mục 5: Âm thanh & Nhạc nền Ambient */}
                     <div
